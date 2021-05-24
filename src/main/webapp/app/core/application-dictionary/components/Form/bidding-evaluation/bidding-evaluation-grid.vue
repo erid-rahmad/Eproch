@@ -1,60 +1,70 @@
 <template>
     <div class="app-container">
-        <el-row v-if="index" class="main" ref="tableWrapper">
+        <el-row v-if="index===0" ref="tableWrapper" class="main">
             <el-col :span="24">
                 <el-tabs v-model="activeName" @tab-click="handleClick">
-                        <keep-alive>
-                            <el-col :span="24">
-                                <el-table size="mini" :data="bidding" :default-sort="{prop: 'date', order: 'descending'}" style="width: 100%">
-                                    <el-table-column min-width="30" label="No">
-                                        <template slot-scope="row">
-                                            {{ row.$index+1 }}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="documentNo" label="Bidding Number" sortable width="180">
-                                    </el-table-column>
-                                    <el-table-column prop="name" label="Title" sortable width="180">
-                                    </el-table-column>
-                                    <el-table-column prop="biddingTypeName" label="Biding Type" sortable width="180">
-                                    </el-table-column>
-                                    <el-table-column prop="costCenterName" label="Depertement type" sortable width="180">
-                                    </el-table-column>
-                                    <el-table-column prop="adUserUserName" label="Biding Schedule" sortable width="180">
-                                    </el-table-column>
-<!--                                    <el-table-column prop="5" label="Join Vendor" sortable width="180">-->
-<!--                                        <template slot-scope="{row}">-->
-<!--                                             <el-button class="button" size="mini" icon="el-icon-user" @click="dialogTableVisible = true">{{row.joinedVendorCount}}</el-button>-->
-<!--                                        </template>-->
-<!--                                    </el-table-column>-->
-                                    <el-table-column prop="documentStatus" label="Biding Status" sortable width="180">
-                                    </el-table-column>
-                                    <el-table-column min-width="120" sortable label="Summary">
-                                        <template slot-scope="{ row }">
-                                            <el-button class="button" icon="el el-download-alt" size="mini" type="primary" @click="evaluate(row)">
-                                                Evaluate
-                                            </el-button>
-                                        </template>
-                                    </el-table-column>
-                                </el-table>
-                            </el-col>
-                        </keep-alive>
+                    <keep-alive>
+                        <el-col :span="24">
+                            <el-table :data="bidding" :default-sort="{prop: 'date', order: 'descending'}" size="mini"
+                                      border
+                                      style="width: 100%">
+                                <el-table-column label="No" min-width="30">
+                                    <template slot-scope="row">
+                                        {{ row.$index + 1 }}
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="Bidding Number" prop="documentNo" sortable width="180">
+                                </el-table-column>
+                                <el-table-column label="Title" prop="name" sortable width="180">
+                                </el-table-column>
+                                <el-table-column label="Biding Type" prop="biddingTypeName" sortable width="180">
+                                </el-table-column>
+                                <el-table-column label="Depertement type" prop="costCenterName" sortable width="180">
+                                </el-table-column>
+                                <el-table-column label="Biding Schedule" prop="adUserUserName" sortable width="180">
+                                </el-table-column>
+                                <!--                                    <el-table-column prop="5" label="Join Vendor" sortable width="180">-->
+                                <!--                                        <template slot-scope="{row}">-->
+                                <!--                                             <el-button class="button" size="mini" icon="el-icon-user" @click="dialogTableVisible = true">{{row.joinedVendorCount}}</el-button>-->
+                                <!--                                        </template>-->
+                                <!--                                    </el-table-column>-->
+                                <el-table-column label="Biding Status" prop="documentStatus" sortable width="180">
+                                </el-table-column>
+                                <el-table-column label="Summary" min-width="120" sortable>
+                                    <template slot-scope="{ row }">
+                                        <el-button class="button" icon="el el-download-alt" size="mini" type="primary"
+                                                   @click="evaluate(row)">
+                                            Evaluate
+                                        </el-button>
+                                        <el-button class="button" icon="el el-download-alt" size="mini" type="primary"
+                                                   @click="result(row)">
+                                            Result
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-col>
+                    </keep-alive>
                 </el-tabs>
             </el-col>
         </el-row>
-        <el-row v-if="!index" class="main" ref="tableWrapper">
+        <el-row v-if="index===1" ref="tableWrapper" class="main">
             <el-col :span="24" class="tab-container">
-                <product-information :pickRow="pickRow" @close="close" />
+                <product-information :pickRow="pickRow" @close="close"/>
             </el-col>
         </el-row>
-        <el-row v-if="index" class="header">
+        <el-row v-if="index===2">
+            <EvaluationResult @close="close"></EvaluationResult>
         </el-row>
-        <el-dialog title="Shipping address" :visible.sync="dialogTableVisible">
+        <el-dialog :visible.sync="dialogTableVisible" title="Shipping address">
             <el-table :data="gridData">
-                <el-table-column property="no" label="no" width="150"><template slot-scope="row">
-                        {{ row.$index+1 }}
-                    </template></el-table-column>
-                <el-table-column property="name" label="Vendor Name" width="200"></el-table-column>
-                <el-table-column property="address" label="Address"></el-table-column>
+                <el-table-column label="no" property="no" width="150">
+                    <template slot-scope="row">
+                        {{ row.$index + 1 }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="Vendor Name" property="name" width="200"></el-table-column>
+                <el-table-column label="Address" property="address"></el-table-column>
             </el-table>
         </el-dialog>
     </div>
@@ -64,26 +74,22 @@
 </script>
 
 <style lang="scss">
-    .el-tabs__header {
-        margin: 0px;
-    }
+.el-tabs__header {
+    margin: 0px;
+}
 
-    .el-table__fixed {
-        box-shadow: none;
-    }
+.el-table__fixed {
+    box-shadow: none;
+}
 
-    .main {
-        padding: 0px;
-    }
-
-
-
-    .form-input {
-        width: 100%;
-    }
+.main {
+    padding: 0px;
+}
 
 
-
+.form-input {
+    width: 100%;
+}
 
 
 </style>

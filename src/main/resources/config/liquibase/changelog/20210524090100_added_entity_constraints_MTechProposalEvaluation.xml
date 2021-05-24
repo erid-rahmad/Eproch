@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity MTechProposalEvaluation.
+    -->
+    <changeSet id="20210524090100-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="m_tech_proposal_evaluation"
+                                 constraintName="fk_m_tech_proposal_evaluation_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="bidding_id"
+                                 baseTableName="m_tech_proposal_evaluation"
+                                 constraintName="fk_m_tech_proposal_evaluation_bidding_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_bidding"/>
+
+        <addForeignKeyConstraint baseColumnNames="evaluation_method_criteria_id"
+                                 baseTableName="m_tech_proposal_evaluation"
+                                 constraintName="fk_m_tech_proposal_evaluation_evaluation_method_criteria_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_evaluation_method_criteria"/>
+
+        <addForeignKeyConstraint baseColumnNames="eval_method_sub_criteria_id"
+                                 baseTableName="m_tech_proposal_evaluation"
+                                 constraintName="fk_m_tech_proposal_evaluation_eval_method_sub_criteria_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_eval_method_sub_criteria"/>
+
+        <addForeignKeyConstraint baseColumnNames="bidding_sub_criteria_line_id"
+                                 baseTableName="m_tech_proposal_evaluation"
+                                 constraintName="fk_m_tech_proposal_evaluation_bidding_sub_criteria_line_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_bidding_sub_criteria_line"/>
+
+    </changeSet>
+</databaseChangeLog>

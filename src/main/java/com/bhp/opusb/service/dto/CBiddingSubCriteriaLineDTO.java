@@ -23,12 +23,41 @@ public class CBiddingSubCriteriaLineDTO implements Serializable {
 
     private Boolean active;
 
+    private String evaluation;
+
+    private Integer averageScore;
+
+    private String passFail;
 
     private Long adOrganizationId;
     private String adOrganizationName;
 
     private Long biddingSubCriteriaId;
     private String biddingSubCriteriaName;
+
+    public String getEvaluation() {
+        return evaluation;
+    }
+
+    public void setEvaluation(String evaluation) {
+        this.evaluation = evaluation;
+    }
+
+    public Integer getAverageScore() {
+        return averageScore;
+    }
+
+    public void setAverageScore(Integer averageScore) {
+        this.averageScore = averageScore;
+    }
+
+    public String getPassFail() {
+        return passFail;
+    }
+
+    public void setPassFail(String passFail) {
+        this.passFail = passFail;
+    }
 
     public String getRequirement() {
         return requirement;
@@ -134,13 +163,16 @@ public class CBiddingSubCriteriaLineDTO implements Serializable {
     @Override
     public String toString() {
         return "CBiddingSubCriteriaLineDTO{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", score=" + getScore() +
-            ", uid='" + getUid() + "'" +
-            ", active='" + isActive() + "'" +
-            ", adOrganizationId=" + getAdOrganizationId() +
-            ", biddingSubCriteriaId=" + getBiddingSubCriteriaId() +
-            "}";
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", requirement='" + requirement + '\'' +
+            ", score=" + score +
+            ", uid=" + uid +
+            ", active=" + active +
+            ", adOrganizationId=" + adOrganizationId +
+            ", adOrganizationName='" + adOrganizationName + '\'' +
+            ", biddingSubCriteriaId=" + biddingSubCriteriaId +
+            ", biddingSubCriteriaName='" + biddingSubCriteriaName + '\'' +
+            '}';
     }
 }

@@ -1,33 +1,52 @@
 package com.bhp.opusb.service.dto;
 
+import javax.validation.constraints.*;
+import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import javax.validation.constraints.NotNull;
-
 /**
- * A DTO for the {@link com.bhp.opusb.domain.MVendorScoringCriteria} entity.
+ * A DTO for the {@link com.bhp.opusb.domain.MTechProposalEvaluation} entity.
  */
-public class MVendorScoringCriteriaDTO extends AbstractAuditingDTO {
+public class MTechProposalEvaluationDTO implements Serializable {
 
     private Long id;
 
+    private String notes;
+
     @NotNull
+    private String evaluation;
+
+    private Integer averageScore;
+
+    private String passFail;
+
     private String requirement;
+
     private UUID uid;
 
-    private Boolean active = true;
+    private Boolean active;
 
 
     private Long adOrganizationId;
+
+    private Long biddingId;
 
     private Long evaluationMethodCriteriaId;
 
     private Long evalMethodSubCriteriaId;
 
-    private Long vendorScoringLineId;
-
     private Long biddingSubCriteriaLineId;
+    private List<CEvalMethodSubCriteriaDTO> evalMethodSubCriteriaList ;
+
+    public List<CEvalMethodSubCriteriaDTO> getEvalMethodSubCriteriaList() {
+        return evalMethodSubCriteriaList;
+    }
+
+    public void setEvalMethodSubCriteriaList(List<CEvalMethodSubCriteriaDTO> evalMethodSubCriteriaList) {
+        this.evalMethodSubCriteriaList = evalMethodSubCriteriaList;
+    }
 
     public Long getId() {
         return id;
@@ -35,6 +54,38 @@ public class MVendorScoringCriteriaDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getEvaluation() {
+        return evaluation;
+    }
+
+    public void setEvaluation(String evaluation) {
+        this.evaluation = evaluation;
+    }
+
+    public Integer getAverageScore() {
+        return averageScore;
+    }
+
+    public void setAverageScore(Integer averageScore) {
+        this.averageScore = averageScore;
+    }
+
+    public String getPassFail() {
+        return passFail;
+    }
+
+    public void setPassFail(String passFail) {
+        this.passFail = passFail;
     }
 
     public String getRequirement() {
@@ -69,6 +120,14 @@ public class MVendorScoringCriteriaDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public Long getBiddingId() {
+        return biddingId;
+    }
+
+    public void setBiddingId(Long mBiddingId) {
+        this.biddingId = mBiddingId;
+    }
+
     public Long getEvaluationMethodCriteriaId() {
         return evaluationMethodCriteriaId;
     }
@@ -83,14 +142,6 @@ public class MVendorScoringCriteriaDTO extends AbstractAuditingDTO {
 
     public void setEvalMethodSubCriteriaId(Long cEvalMethodSubCriteriaId) {
         this.evalMethodSubCriteriaId = cEvalMethodSubCriteriaId;
-    }
-
-    public Long getVendorScoringLineId() {
-        return vendorScoringLineId;
-    }
-
-    public void setVendorScoringLineId(Long mVendorScoringLineId) {
-        this.vendorScoringLineId = mVendorScoringLineId;
     }
 
     public Long getBiddingSubCriteriaLineId() {
@@ -110,11 +161,11 @@ public class MVendorScoringCriteriaDTO extends AbstractAuditingDTO {
             return false;
         }
 
-        MVendorScoringCriteriaDTO mVendorScoringCriteriaDTO = (MVendorScoringCriteriaDTO) o;
-        if (mVendorScoringCriteriaDTO.getId() == null || getId() == null) {
+        MTechProposalEvaluationDTO mTechProposalEvaluationDTO = (MTechProposalEvaluationDTO) o;
+        if (mTechProposalEvaluationDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), mVendorScoringCriteriaDTO.getId());
+        return Objects.equals(getId(), mTechProposalEvaluationDTO.getId());
     }
 
     @Override
@@ -124,15 +175,19 @@ public class MVendorScoringCriteriaDTO extends AbstractAuditingDTO {
 
     @Override
     public String toString() {
-        return "MVendorScoringCriteriaDTO{" +
+        return "MTechProposalEvaluationDTO{" +
             "id=" + getId() +
+            ", notes='" + getNotes() + "'" +
+            ", evaluation='" + getEvaluation() + "'" +
+            ", averageScore=" + getAverageScore() +
+            ", passFail='" + getPassFail() + "'" +
             ", requirement='" + getRequirement() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", biddingId=" + getBiddingId() +
             ", evaluationMethodCriteriaId=" + getEvaluationMethodCriteriaId() +
             ", evalMethodSubCriteriaId=" + getEvalMethodSubCriteriaId() +
-            ", vendorScoringLineId=" + getVendorScoringLineId() +
             ", biddingSubCriteriaLineId=" + getBiddingSubCriteriaLineId() +
             "}";
     }

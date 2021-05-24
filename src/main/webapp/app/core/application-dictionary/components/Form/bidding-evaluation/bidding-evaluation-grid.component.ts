@@ -7,14 +7,16 @@ import {
 } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../ContextVariableAccessor";
-import CatalogGrid from './components/catalog-grid.vue';
-import ProductInformation from './bidding-evaliuation.vue';
+
+import ProductInformation from './bidding-evaluation.vue';
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
+import EvaluationResult from './bidding-evaliuation-result.vue';
 
 @Component({
   components: {
-    CatalogGrid,
-    ProductInformation
+    ProductInformation,
+    EvaluationResult
+
   }
 })
 export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,AccessLevelMixin, ContextVariableAccessor) {
@@ -22,7 +24,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
   private bidding: any= { };
   private pickRow:any={};
 
-  index:boolean=true;
+  index=0;
 
   created(){
     this.moreInformationData()
@@ -43,12 +45,16 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
   }
 
   evaluate(row){
-    this.index=false
+    this.index=1;
+    this.pickRow=row;
+  }
+  result(row){
+    this.index=2;
     this.pickRow=row;
   }
 
   close() {
-    this.index = true;
+    this.index = 0;
   }
 
 

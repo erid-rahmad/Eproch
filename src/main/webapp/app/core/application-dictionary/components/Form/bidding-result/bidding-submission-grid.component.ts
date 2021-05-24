@@ -8,7 +8,7 @@ import {
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../ContextVariableAccessor";
 import CatalogGrid from './components/catalog-grid.vue';
-// import ProductInformation from './bidding-evaliuation.vue';
+// import ProductInformation from './bidding-evaluation.vue';
 import submission from './bidding-submission.vue';
 
 

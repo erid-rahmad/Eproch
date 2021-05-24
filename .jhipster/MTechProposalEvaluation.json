@@ -1,0 +1,86 @@
+{
+    "name": "MTechProposalEvaluation",
+    "fields": [
+        {
+            "fieldName": "notes",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "evaluation",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "averageScore",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "passFail",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "requirement",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mTechProposalEvaluation",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBidding",
+            "otherEntityRelationshipName": "mTechProposalEvaluation",
+            "relationshipName": "bidding",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cEvaluationMethodCriteria",
+            "otherEntityRelationshipName": "mTechProposalEvaluation",
+            "relationshipName": "evaluationMethodCriteria",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cEvalMethodSubCriteria",
+            "otherEntityRelationshipName": "mTechProposalEvaluation",
+            "relationshipName": "evalMethodSubCriteria",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cBiddingSubCriteriaLine",
+            "otherEntityRelationshipName": "mTechProposalEvaluation",
+            "relationshipName": "biddingSubCriteriaLine",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210524090100",
+    "entityTableName": "m_tech_proposal_evaluation",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

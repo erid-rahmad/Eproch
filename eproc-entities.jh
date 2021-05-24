@@ -1265,6 +1265,16 @@ entity MDocumentSchedule {
 	active Boolean
 }
 
+entity MTechProposalEvaluation {
+	notes String
+	evaluation String required
+	averageScore Integer
+	passFail String
+	requirement String
+	uid UUID
+	active Boolean
+}
+
 entity MVendorInvitation {
 	uid UUID
 	active Boolean
@@ -1791,6 +1801,14 @@ relationship ManyToOne {
 	MDocumentSchedule{adOrganization required} to ADOrganization
 	MDocumentSchedule{vendorSubmission required} to MBiddingSchedule
 	MDocumentSchedule{vendorEvaluation required} to MBiddingSchedule
+
+	MTechProposalEvaluation{adOrganization required} to ADOrganization
+	MTechProposalEvaluation{bidding } to MBidding
+    MTechProposalEvaluation{evaluationMethodCriteria } to CEvaluationMethodCriteria
+   	MTechProposalEvaluation{evalMethodSubCriteria } to CEvalMethodSubCriteria
+   	MTechProposalEvaluation{biddingSubCriteriaLine } to CBiddingSubCriteriaLine
+
+
 
 	MVendorInvitation{bidding required} to MBidding
 	MVendorInvitation{adOrganization required} to ADOrganization

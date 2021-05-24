@@ -3,16 +3,14 @@ import Component, {
   mixins
 } from 'vue-class-component';
 import Vue2Filters from 'vue2-filters';
-import ContextVariableAccessor from "../../ContextVariableAccessor";
 import Vue from 'vue';
 import {Inject} from "vue-property-decorator";
 import DynamicWindowService from "@/core/application-dictionary/components/DynamicWindow/dynamic-window.service";
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 
-
 const ProductCatalogProp = Vue.extend({
   props: {
-    pickRow: {
+    data: {
       type: Object,
       default: () => {
         return {};
@@ -27,38 +25,42 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
-  private biddingSubmission:any={};
 
-  created(){
-    console.log(this.pickRow)
-    this.getbiddingSubmission();
-
+  private evaluation={
+    biddingNo:'BN 00001',
+    biddingName:'Pengadaan Kendaraan Operasional',
+    biddingTypeName:'Tender Goods',
+    eventTypeName:'Ingram',
+    total:'4.3',
+    vendorName:'Ingram'
   }
 
-  private getbiddingSubmission() {
-    this.commonService('/api/m-bidding-submissions')
-      .retrieve({
-        criteriaQuery: this.updateCriteria([
+  private biddingSubmission=[
 
-        ]),
-        paginationQuery: {
-          page: 0,
-          size: 10000,
-          sort: ['id']
-        }
-      })
-      .then(res => {
-        let biddingEvent:any=[];
-        res.data.forEach(result => {
-          if (result.biddingId===this.pickRow.id){
-            biddingEvent.push(result);
-          }
-        });
-        this.biddingSubmission = biddingEvent;
-      });
+    {
+      "1": "Administrasi Proposal",
+      "date": "2021-05-19T15:30:33.833453Z",
+      "3": "Pass",
+      "4": "",
+    },    {
+      "1": "Technical Proposal",
+      "date": "2021-05-19T15:30:33.833453Z",
+      "3": "Pass",
+      "4": "5",
+    },    {
+      "1": "Price Proposal",
+      "date": "2021-05-19T15:30:33.833453Z",
+      "3": "Pass",
+      "4": "4",
+    },
+
+  ]
+
+  created(){
   }
 
   close() {
     this.$emit("close");
   }
+
 }
