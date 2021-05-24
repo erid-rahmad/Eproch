@@ -3,8 +3,12 @@ package com.bhp.opusb.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.bhp.opusb.domain.CVendor;
+import com.bhp.opusb.domain.MBidding;
+import com.bhp.opusb.domain.MBiddingSchedule;
 import com.bhp.opusb.domain.MPreBidMeetingParticipant;
 import com.bhp.opusb.repository.MPreBidMeetingParticipantRepository;
+import com.bhp.opusb.repository.MPreBidMeetingRepository;
 import com.bhp.opusb.service.dto.MPreBidMeetingParticipantDTO;
 import com.bhp.opusb.service.mapper.MPreBidMeetingParticipantMapper;
 
@@ -24,12 +28,21 @@ public class MPreBidMeetingParticipantService {
 
     private final Logger log = LoggerFactory.getLogger(MPreBidMeetingParticipantService.class);
 
+    private final MPreBidMeetingRepository mPreBidMeetingRepository;
+
     private final MPreBidMeetingParticipantRepository mPreBidMeetingParticipantRepository;
+
+    private final MBiddingSubmissionService mBiddingSubmissionService;
 
     private final MPreBidMeetingParticipantMapper mPreBidMeetingParticipantMapper;
 
-    public MPreBidMeetingParticipantService(MPreBidMeetingParticipantRepository mPreBidMeetingParticipantRepository, MPreBidMeetingParticipantMapper mPreBidMeetingParticipantMapper) {
+    public MPreBidMeetingParticipantService(MPreBidMeetingRepository mPreBidMeetingRepository,
+            MPreBidMeetingParticipantRepository mPreBidMeetingParticipantRepository,
+            MBiddingSubmissionService mBiddingSubmissionService,
+            MPreBidMeetingParticipantMapper mPreBidMeetingParticipantMapper) {
+        this.mPreBidMeetingRepository = mPreBidMeetingRepository;
         this.mPreBidMeetingParticipantRepository = mPreBidMeetingParticipantRepository;
+        this.mBiddingSubmissionService = mBiddingSubmissionService;
         this.mPreBidMeetingParticipantMapper = mPreBidMeetingParticipantMapper;
     }
 
@@ -41,8 +54,20 @@ public class MPreBidMeetingParticipantService {
      */
     public MPreBidMeetingParticipantDTO save(MPreBidMeetingParticipantDTO mPreBidMeetingParticipantDTO) {
         log.debug("Request to save MPreBidMeetingParticipant : {}", mPreBidMeetingParticipantDTO);
-        MPreBidMeetingParticipant mPreBidMeetingParticipant = mPreBidMeetingParticipantMapper.toEntity(mPreBidMeetingParticipantDTO);
+        MPreBidMeetingParticipant mPreBidMeetingParticipant = mPreBidMeetingParticipantMapper
+                .toEntity(mPreBidMeetingParticipantDTO);
         mPreBidMeetingParticipant = mPreBidMeetingParticipantRepository.save(mPreBidMeetingParticipant);
+        final CVendor cVendor = mPreBidMeetingParticipant.getVendor();
+
+        if (mPreBidMeetingParticipant.isAttended()) {
+            mPreBidMeetingRepository.findById(mPreBidMeetingParticipant.getPreBidMeeting().getId())
+                .ifPresent(preBidMeeting -> {
+                    final MBiddingSchedule biddingSchedule = preBidMeeting.getBiddingSchedule();
+                    final Integer currentEventSequence = biddingSchedule.getEventTypeLine().getSequence();
+                    final MBidding mBidding = biddingSchedule.getBidding();
+                    mBiddingSubmissionService.createIfNotExists(mBidding, cVendor, currentEventSequence);
+                });
+        }
         return mPreBidMeetingParticipantMapper.toDto(mPreBidMeetingParticipant);
     }
 

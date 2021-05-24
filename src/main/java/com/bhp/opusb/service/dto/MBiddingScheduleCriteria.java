@@ -6,6 +6,7 @@ import java.util.Objects;
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
@@ -48,6 +49,8 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
     private LongFilter eventTypeLineId;
     private StringFilter formType;
 
+    private IntegerFilter sequence;
+
     public MBiddingScheduleCriteria() {
     }
 
@@ -66,6 +69,7 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.eventTypeLineId = other.eventTypeLineId == null ? null : other.eventTypeLineId.copy();
         this.formType = other.formType == null ? null : other.formType.copy();
+        this.sequence = other.sequence == null ? null : other.sequence.copy();
     }
 
     @Override
@@ -185,6 +189,14 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
         this.formType = formType;
     }
 
+    public IntegerFilter getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(IntegerFilter sequence) {
+        this.sequence = sequence;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -208,7 +220,8 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
             Objects.equals(biddingId, that.biddingId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(eventTypeLineId, that.eventTypeLineId) &&
-            Objects.equals(formType, that.formType);
+            Objects.equals(formType, that.formType) &&
+            Objects.equals(sequence, that.sequence);
     }
 
     @Override
@@ -227,7 +240,8 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
         biddingId,
         adOrganizationId,
         eventTypeLineId,
-        formType
+        formType,
+        sequence
         );
     }
 
@@ -248,6 +262,7 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (eventTypeLineId != null ? "eventTypeLineId=" + eventTypeLineId + ", " : "") +
                 (formType != null ? "formType=" + formType + ", " : "") +
+                (sequence != null ? "sequence=" + sequence + ", " : "") +
             "}";
     }
 

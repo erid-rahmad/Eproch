@@ -16,6 +16,7 @@ public interface MVendorScoringLineMapper extends EntityMapper<MVendorScoringLin
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "evaluationMethodLine.id", target = "evaluationMethodLineId")
+    @Mapping(source = "evaluationMethodLine.evaluation", target = "evaluation")
     @Mapping(source = "evaluationMethodLine.evaluation", target = "evaluationMethodLineName")
     @Mapping(source = "evaluationMethodLine.formType", target = "evaluationMethodLineFormType")
     @Mapping(source = "evaluationMethodLine.evaluationType", target = "evaluationMethodLineEvaluationType")

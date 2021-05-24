@@ -24,11 +24,11 @@ public class MBiddingSubmissionDTO extends AbstractAuditingDTO {
 
     @NotNull
     @Size(max = 10)
-    private String documentAction;
+    private String documentAction = "SMT";
 
     @NotNull
     @Size(max = 12)
-    private String documentStatus;
+    private String documentStatus = "DRF";
 
     private Boolean approved;
 

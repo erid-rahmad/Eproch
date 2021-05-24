@@ -1,35 +1,38 @@
 package com.bhp.opusb.web.rest;
 
-import com.bhp.opusb.service.MVendorScoringCriteriaService;
-import com.bhp.opusb.service.MVendorScoringService;
-import com.bhp.opusb.service.dto.*;
-import com.bhp.opusb.util.MapperJSONUtil;
-import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
-import com.bhp.opusb.service.MVendorScoringCriteriaQueryService;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
 
-import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import javax.validation.Valid;
+
+import com.bhp.opusb.service.MVendorScoringCriteriaQueryService;
+import com.bhp.opusb.service.MVendorScoringCriteriaService;
+import com.bhp.opusb.service.dto.MVendorScoringCriteriaCriteria;
+import com.bhp.opusb.service.dto.MVendorScoringCriteriaDTO;
+import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link com.bhp.opusb.domain.MVendorScoringCriteria}.
@@ -54,9 +57,6 @@ public class MVendorScoringCriteriaResource {
         this.mVendorScoringCriteriaQueryService = mVendorScoringCriteriaQueryService;
     }
 
-    @Autowired
-    MVendorScoringService mVendorScoringService;
-
     /**
      * {@code POST  /m-vendor-scoring-criteria} : Create a new mVendorScoringCriteria.
      *
@@ -76,13 +76,17 @@ public class MVendorScoringCriteriaResource {
             .body(result);
     }
 
-    @PostMapping("/m-vendor-scoring-criteria-answer")
-    @Transactional
-    public ResponseEntity<MVendorScoringNestedDTO> createMVendorScoringCriteria(@Valid @RequestBody MVendorScoringNestedDTO answer) throws URISyntaxException {
-//        log.debug("REST request to save MVendorScoringCriteria : {}", MapperJSONUtil.prettyLog(answer));
-        List<CEvaluationMethodCriteriaDTO> result2 =mVendorScoringCriteriaService.vendorScoringAnswer(answer.getEvaluationMethodCriteriaNested(),answer.getEvaluationMethodLineId());
-        log.info("ok {}",result2);
-        return ResponseEntity.ok(answer);
+    /**
+     * {@code POST  /m-proposal-administrations/requirements} : Create or update mVendorScoringCriteriaDTOs.
+     *
+     * @param mVendorScoringCriteriaDTOs the list of mVendorScoringCriteriaDTOs to create.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the mVendorScoringCriteriaDTOs.
+     */
+    @PostMapping("/m-vendor-scoring-criteria/requirements")
+    public ResponseEntity<List<MVendorScoringCriteriaDTO>> createMProposalAdministrations(@Valid @RequestBody List<MVendorScoringCriteriaDTO> mVendorScoringCriteriaDTOs) {
+        log.debug("REST request to save mVendorScoringCriteriaDTOs. size : {}", mVendorScoringCriteriaDTOs.size());
+        List<MVendorScoringCriteriaDTO> result = mVendorScoringCriteriaService.saveRequirements(mVendorScoringCriteriaDTOs);
+        return ResponseEntity.ok().body(result);
     }
 
     /**

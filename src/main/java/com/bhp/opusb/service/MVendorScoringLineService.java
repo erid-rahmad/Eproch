@@ -1,18 +1,19 @@
 package com.bhp.opusb.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.bhp.opusb.domain.MVendorScoringLine;
 import com.bhp.opusb.repository.MVendorScoringLineRepository;
 import com.bhp.opusb.service.dto.MVendorScoringLineDTO;
 import com.bhp.opusb.service.mapper.MVendorScoringLineMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link MVendorScoringLine}.
@@ -43,6 +44,24 @@ public class MVendorScoringLineService {
         MVendorScoringLine mVendorScoringLine = mVendorScoringLineMapper.toEntity(mVendorScoringLineDTO);
         mVendorScoringLine = mVendorScoringLineRepository.save(mVendorScoringLine);
         return mVendorScoringLineMapper.toDto(mVendorScoringLine);
+    }
+
+    /**
+     * Save a mVendorScoringLines.
+     *
+     * @param mVendorScoringLineDTOs the entity to save.
+     * @return the persisted entity.
+     */
+    public List<MVendorScoringLineDTO> saveAll(List<MVendorScoringLineDTO> mVendorScoringLineDTOs, Long mVendorScoringId) {
+        log.debug("Request to save MVendorScoringLines. count : {}", mVendorScoringLineDTOs);
+        if (mVendorScoringLineDTOs.isEmpty()) {
+            return mVendorScoringLineDTOs;
+        }
+        
+        mVendorScoringLineDTOs.forEach(line -> line.setVendorScoringId(mVendorScoringId));
+        List<MVendorScoringLine> mVendorScoringLines = mVendorScoringLineMapper.toEntity(mVendorScoringLineDTOs);
+        mVendorScoringLines = mVendorScoringLineRepository.saveAll(mVendorScoringLines);
+        return mVendorScoringLineMapper.toDto(mVendorScoringLines);
     }
 
     /**

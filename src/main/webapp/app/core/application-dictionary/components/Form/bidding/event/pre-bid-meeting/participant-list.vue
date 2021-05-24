@@ -47,6 +47,7 @@
           <template slot-scope="{ row }">
             <el-checkbox
               v-model="row.attended"
+              :disabled="row.attended"
               size="mini"
               @change="onAttendStatusChange(row)"
             ></el-checkbox>

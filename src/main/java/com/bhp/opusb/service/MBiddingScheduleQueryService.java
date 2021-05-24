@@ -140,6 +140,11 @@ public class MBiddingScheduleQueryService extends QueryService<MBiddingSchedule>
                         .join(MBiddingSchedule_.eventTypeLine, JoinType.INNER)
                         .join(CEventTypeline_.cEvent, JoinType.INNER).get(CEvent_.formType)));
             }
+            if (criteria.getSequence() != null) {
+                specification = specification.and(buildSpecification(criteria.getSequence(),
+                    root -> root
+                        .join(MBiddingSchedule_.eventTypeLine, JoinType.INNER).get(CEventTypeline_.sequence)));
+            }
         }
         return specification;
     }
