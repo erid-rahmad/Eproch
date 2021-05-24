@@ -1,0 +1,11 @@
+id;uid;active;ad_organization_id;auction_id;user_id;vendor_id
+1;d90e6ac6-756a-4380-9d4b-756b7f3f1b94;false;1;1;1;1
+2;fab70736-4780-46d1-8829-fd19dc0c4e69;true;2;2;2;2
+3;9f3940aa-31f8-4f70-88a6-e09e197816a7;false;3;3;3;3
+4;2e25a53b-a7d0-4ce9-8355-fed70554cad2;true;4;4;4;4
+5;b19c053c-8f5e-4cb3-af65-299a389a1925;false;5;5;5;5
+6;e547fa6b-4839-418f-b67e-3c387f2090b1;true;6;6;6;6
+7;bf56a804-62ab-4d8d-a966-5e2e99184ece;false;7;7;7;7
+8;29af8471-946b-4f13-bf82-69174c0b899e;false;8;8;8;8
+9;c7c86ead-d5b1-415b-9429-2731c0f9c640;true;9;9;9;9
+10;ad75b0ee-5233-4f85-86a6-f7705add5f44;false;10;10;10;10
