@@ -39,6 +39,9 @@ public class CGalleryItemDTO extends AbstractAuditingDTO {
     @JsonProperty("cAttachmentName")
     private String cAttachmentName;
 
+    @JsonProperty("cAttachmentUrl")
+    private String cAttachmentUrl;
+
     private Long adOrganizationId;
     private String adOrganizationName;
 
@@ -118,6 +121,14 @@ public class CGalleryItemDTO extends AbstractAuditingDTO {
 
     public void setCAttachmentName(String cAttachmentName) {
         this.cAttachmentName = cAttachmentName;
+    }
+
+    public String getCAttachmentUrl() {
+        return cAttachmentUrl;
+    }
+
+    public void setCAttachmentUrl(String cAttachmentUrl) {
+        this.cAttachmentUrl = cAttachmentUrl;
     }
 
     public Long getAdOrganizationId() {

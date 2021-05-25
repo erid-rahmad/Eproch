@@ -1,19 +1,14 @@
 <template>
-  <div class="app-container">
+  <div class="catalog-grid">
     <el-table
       v-loading="processing"
       ref="gridData"
-      highlight-current-row
       border
-      stripe
-      fit
-      size="mini"
-      style="width: 100%; height: 100%"
-      :height="gridSchema.height"
-      :max-height="gridSchema.maxHeight"
-      :default-sort="gridSchema.defaultSort"
-      :empty-text="gridSchema.emptyText"
       :data="gridData"
+      fit
+      highlight-current-row
+      size="mini"
+      stripe
       @sort-change="changeOrder"
       @selection-change="onSelectionChanged"
     >
@@ -25,11 +20,21 @@
         </template>
       </el-table-column>
 
-      <el-table-column min-width="100" sortable label="Image">
+      <el-table-column
+        min-width="100"
+        label="Image"
+      >
         <template slot-scope="{ row }">
           <div class="demo-image__preview">
-            <el-image fit="cover" :src="displayImage(row.imgList)" :preview-src-list="displayImageList(row.imgList)">
-              <div slot="error" class="image-slot">
+            <el-image
+              fit="cover"
+              :preview-src-list="displayImageList(row.imgList)"
+              :src="displayImage(row.imgList)"
+            >
+              <div
+                slot="error"
+                class="image-slot"
+              >
                 <em class="el-icon-picture-outline"></em>
               </div>
             </el-image>
@@ -44,7 +49,7 @@
       <el-table-column min-width="150" sortable prop="mproductSubCategoryName" label="Sub Category" />
       <el-table-column min-width="100" sortable prop="cuomName" label="UoM" />
       <el-table-column min-width="100" sortable prop="ccurrencyName" label="Currency" />
-      <el-table-column min-width="100" sortable prop="price" label="Price">
+      <el-table-column min-width="200" sortable prop="price" label="Price">
         <template slot-scope="{ row }">
           {{ row.price | formatCurrency }}
         </template>

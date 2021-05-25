@@ -65,7 +65,7 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
     @NotNull
     @Size(max = 10)
     @ApiModelProperty(value = "Next action for the document.", required = true)
-    private String documentAction;
+    private String documentAction = "SMT";
 
     /**
      * Current document status.
@@ -73,7 +73,7 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
     @NotNull
     @Size(max = 10)
     @ApiModelProperty(value = "Current document status.", required = true)
-    private String documentStatus;
+    private String documentStatus = "DRF";
 
     /**
      * Document is rejected if approved = false and processed = true.
@@ -96,7 +96,7 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
     @JsonProperty("cGallery")
     private CGalleryDTO cGallery;

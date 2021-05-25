@@ -1,19 +1,20 @@
-import { ElForm } from 'element-ui/types/form';
-import AlertMixin from '@/shared/alert/alert.mixin';
-import { mixins } from 'vue-class-component';
-import Vue2Filters from 'vue2-filters';
-import Component from 'vue-class-component';
-import ContextVariableAccessor from "../../ContextVariableAccessor";
-import ProductImages from './components/form/product-images.vue';
-import SpecialPrice from './components/form/special-price.vue';
-import ProductVideo from './components/form/product-video.vue';
-import Vue from 'vue';
+import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
+import settings from '@/settings';
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 import { IMProductCatalog } from '@/shared/model/m-product-catalog.model';
+import { ElForm } from 'element-ui/types/form';
+import { Component, Inject, Mixins, Vue } from 'vue-property-decorator';
+import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
+import ProductImages from './components/form/product-images.vue';
+import ProductVideo from './components/form/product-video.vue';
+import SpecialPrice from './components/form/special-price.vue';
+
+const baseApiCatalog = 'api/m-product-catalogs';
+const baseApiDocumentType = 'api/c-document-types';
 
 const ProductCatalogProp = Vue.extend({
   props: {
-    setRowProductCatalog: {
+    data: {
       type: Object,
       default: () => {
         return {};
@@ -29,9 +30,20 @@ const ProductCatalogProp = Vue.extend({
     ProductVideo
   }
 })
-export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor, ProductCatalogProp) {
+export default class ProductInformation extends Mixins(AccessLevelMixin, ProductCatalogProp) {
 
-  rules = {}
+  @Inject('dynamicWindowService')
+  protected commonService: (baseApiUrl: string) => DynamicWindowService;
+
+  rules = {
+    mProductCategory: { required: true, message: 'Product is required' },
+    name: { required: true, message: 'Name is required' },
+    mBrandId: { required: true, message: 'Brand is required' },
+    shortDescription: { required: true, message: 'Short Description is required' },
+    cUomId: { required: true, message: 'UoM is required' },
+    cCurrencyId: { required: true, message: 'Currency is required' },
+    price: { required: true, message: 'Price is required' },
+  };
 
   props = {
     lazy: true,
@@ -49,7 +61,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
   }
 
-  productCatalog: IMProductCatalog = {};
+  mainForm: IMProductCatalog = {};
   galleryId: number = 0;
   productGallery = {
     images: [],
@@ -65,100 +77,84 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   public brandOptions: any = {};
   columnSpacing = 32;
 
+  get dateDisplayFormat() {
+    return settings.dateDisplayFormat;
+  }
+
+  get dateValueFormat() {
+    return settings.dateValueFormat;
+  }
+
+  get formConfig() {
+    return settings.form;
+  }
+
+  get galleryName() {
+    const name = this.mainForm.name;
+    return name?.length > 30 ? name.substring(0, 29) : name;
+  }
+
   created() {
+    console.log('product-info created. data:', this.data);
+    this.mainForm = { ...this.data };
+
+    this.retrieveDocType('Product Catalog');
     this.retrieveProductCategories();
     this.retrieveUom();
     this.retrieveCurrency();
     this.retrieveBrand();
 
-    if(this.setRowProductCatalog != null){
-      this.productCatalog = this.setRowProductCatalog;
-      this.productCatalog.mProductCategory = [];
-      this.productCatalog.mProductCategory.push(this.productCatalog.mProductCategoryId);
-      this.productCatalog.mProductCategory.push(this.productCatalog.mProductSubCategoryId);
-      this.productCatalog.mProductCategory.push(this.productCatalog.mProductId);
-      console.log(this.productCatalog);
-    }else{
-      this.productCatalog = {};
+    if ( ! this.mainForm?.id) {
+      this.mainForm.mProductCategory = [
+        this.mainForm.mProductCategoryId,
+        this.mainForm.mProductSubCategoryId,
+        this.mainForm.mProductId
+      ];
     }
-  }
-
-  back() {
-    this.$emit("closeProductInformation");
   }
 
   setProductId(value){
     console.log(value);
-    this.productCatalog.mProductId = value[value.length-1];
+    this.mainForm.mProductId = value[value.length-1];
   }
 
   setGalleryId(value){
     this.galleryId = value;
   }
 
-  submit(){
-
+  submit() {
     this.fullscreenLoading = true;
 
+    console.log('mainForm:', this.mainForm);
+    if ( ! this.mainForm.id) {
+      this.mainForm.documentAction = "APR";
+      this.mainForm.documentStatus = "DRF";
+      this.mainForm.active = true;
+      this.mainForm.adOrganizationId = accountStore.organizationInfo.id;
+      this.mainForm.cVendorId = accountStore.userDetails.cVendorId;
 
-    if(this.setRowProductCatalog == null){
-      this.productCatalog.documentAction = "APR";
-      this.productCatalog.documentStatus = "DRF";
-      this.productCatalog.active = true;
-      this.productCatalog.adOrganizationId = 1;
-      this.productCatalog.cDocumentTypeId = 655951;
-      this.productCatalog.cVendorId = accountStore.userDetails.cVendorId;
-      this.productCatalog.cGalleryId = this.galleryId;
-
-      console.log(this.productGallery);
-      console.log(this.productCatalog);
-
-      this.dynamicWindowService(this.baseApiUrl)
-        .create(this.productCatalog)
-        .then(() => {
-
-          this.$notify({
-            title: 'Success',
-            message: 'Product Catalog submitted.',
-            type: 'success'
-          });
-
-          this.back();
-
-        }).catch(error => {
-          this.$notify({
-            title: 'Error',
-            message: error,
-            type: 'error',
-          });
-
+      this.commonService(baseApiCatalog)
+        .create(this.mainForm)
+        .then(res => {
+          this.$message.success('Product Catalog has been saved successfully');
+          this.$emit('saved', res);
+        }).catch(() => {
+          this.$message.error('Failed to save the product catalog');
         }).finally(() => {
           this.fullscreenLoading = false;
         });
-    }else{
-      if(this.galleryId != 0){
-        this.productCatalog.cGalleryId = this.galleryId;
+    } else {
+      if (this.galleryId != 0) {
+        this.mainForm.cGalleryId = this.galleryId;
       }
 
-      this.dynamicWindowService(this.baseApiUrl)
-        .update(this.productCatalog)
-        .then(() => {
-
-          this.$notify({
-            title: 'Success',
-            message: 'Product Catalog updated.',
-            type: 'success'
-          });
-
-          this.back();
-
+      this.commonService(baseApiCatalog)
+        .update(this.mainForm)
+        .then(res => {
+          this.$message.success('Product Catalog has been updated successfully');
+          this.$emit('saved', res);
         }).catch(error => {
-          this.$notify({
-            title: 'Error',
-            message: error,
-            type: 'error',
-          });
-
+          this.$message.error('Failed to update the product catalog');
         }).finally(() => {
           this.fullscreenLoading = false;
         });
@@ -166,8 +162,23 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
   }
 
+  private retrieveDocType(name: string) {
+    this.commonService(baseApiDocumentType)
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          `name.equals=${name}`
+        ]
+      })
+      .then(res => {
+        if (res.data.length) {
+          this.mainForm.cDocumentTypeId = res.data[0].id;
+        }
+      })
+  }
+
   private retrieveUom() {
-    this.dynamicWindowService('/api/c-unit-of-measures')
+    this.commonService('/api/c-unit-of-measures')
       .retrieve({
         paginationQuery: {
           page: 0,
@@ -181,7 +192,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   }
 
   private retrieveCurrency() {
-    this.dynamicWindowService('/api/c-currencies')
+    this.commonService('/api/c-currencies')
       .retrieve({
         paginationQuery: {
           page: 0,
@@ -195,7 +206,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   }
 
   private retrieveBrand() {
-    this.dynamicWindowService('/api/m-brands')
+    this.commonService('/api/m-brands')
       .retrieve({
         paginationQuery: {
           page: 0,
@@ -208,24 +219,8 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       });
   }
 
-  jsonEncode(data: any, fields: string[]) {
-    const record: Record<string, any> = {};
-    for (const field of fields) {
-      record[field] = data[field];
-    }
-    return JSON.stringify(record);
-  }
-
-  private getJsonField(json: string, field: string) {
-    if (json) {
-      const data = JSON.parse(json);
-      return data[field];
-    }
-    return null;
-  }
-
   retrieveProductCategories() {
-    this.dynamicWindowService('/api/c-product-categories')
+    this.commonService('/api/c-product-categories')
     .retrieve({
       criteriaQuery: [`parentCategoryId.specified=false`],
       paginationQuery: {
@@ -234,23 +229,21 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
           sort: ['name']
       }
     }).then(res => {
-        let categories = res.data.map(item => {
+      let categories = res.data.map(item => {
+        return {
+          value: item.id,
+          label: item.name,
+          parent: item.parentCategoryId
+        };
+      });
 
-          return {
-            value: item.id,
-            label: item.name,
-            parent: item.parentCategoryId
-          };
-        });
-
-        console.log(categories);
-        this.productCategoryOptions = categories;
+      this.productCategoryOptions = categories;
     });
   }
 
   retrieveProductSubCategories(productCategoryParent) {
     return new Promise((resolve, reject) => {
-      this.dynamicWindowService('/api/c-product-categories')
+      this.commonService('/api/c-product-categories')
       .retrieve({
         criteriaQuery: [`parentCategoryId.equals=`+productCategoryParent],
         paginationQuery: {
@@ -274,7 +267,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
   retrieveProduct(productSubCategory, level) {
     return new Promise((resolve, reject) => {
-      this.dynamicWindowService('/api/c-products')
+      this.commonService('/api/c-products')
       .retrieve({
         criteriaQuery: [`productSubCategoryId.equals=`+productSubCategory],
         paginationQuery: {
@@ -299,8 +292,8 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
   //=======================================================================
 
-  validate() {
-    (this.$refs.productCatalog as ElForm).validate((passed, errors) => {
+  save() {
+    (this.$refs.mainForm as ElForm).validate((passed, errors) => {
       if(passed){
         this.submit();
       }else{

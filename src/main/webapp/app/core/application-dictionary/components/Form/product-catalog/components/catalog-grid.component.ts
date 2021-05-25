@@ -61,14 +61,14 @@ export default class CatalogGrid extends mixins(Vue2Filters.mixin, AlertMixin, C
     let filterQuery = [];
 
     if (this.isVendor) {
-      filterQuery.push(`cVendorId.equals=${accountStore.userDetails.cVendorId}`);
+      filterQuery.push(`cVendorId.equals=${accountStore.vendorInfo.id}`);
     }
 
-    if (this.status === 'ARC') {
-      filterQuery.push('documentStatus.equals=DRF');
-    } else if (this.status === 'BLK') {
+    if (this.status === 'R') {
+      filterQuery.push('documentStatus.equals=VOD');
+    } else if (this.status === 'B') {
       filterQuery.push('documentStatus.equals=RJC');
-    } else if (this.status === 'LVE') {
+    } else if (this.status === 'L') {
       filterQuery = [
         filterQuery,
         ...[
@@ -137,7 +137,7 @@ export default class CatalogGrid extends mixins(Vue2Filters.mixin, AlertMixin, C
 
   public onSelectionChanged(value: any) {
     this.selectedRows = value;
-    this.$emit("selectedRows", this.selectedRows);
+    this.$emit("rows-selected", this.selectedRows);
     console.log(value);
   }
 
@@ -150,7 +150,7 @@ export default class CatalogGrid extends mixins(Vue2Filters.mixin, AlertMixin, C
 
   private editRow(row){
     this.selectedRow = row;
-    this.$emit("selectedRow", this.selectedRow);
+    this.$emit("row-selected", this.selectedRow);
   }
 
   public retrieveAllRecords(): void {
@@ -171,13 +171,10 @@ export default class CatalogGrid extends mixins(Vue2Filters.mixin, AlertMixin, C
         paginationQuery
       })
       .then(res => {
-        console.log(res);
-
         this.gridData = res.data.map((item: any) => {
-          if(item.cGallery != null){
-            if(item.cGallery.cGalleryItems.length){
-              //console.log(item.cGallery.cGalleryItems.length);
-							item.imgList = item.cGallery.cGalleryItems;
+          if (item.cGallery != null) {
+            if (item.cGallery.cGalleryItems.length) {
+              item.imgList = item.cGallery.cGalleryItems;
             }
           }
 
@@ -187,7 +184,6 @@ export default class CatalogGrid extends mixins(Vue2Filters.mixin, AlertMixin, C
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
         this.$emit('total-count-changed', this.queryCount);
-
       })
       .catch(err => {
         console.error('Failed getting the record. %O', err);

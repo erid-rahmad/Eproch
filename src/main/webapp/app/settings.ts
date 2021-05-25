@@ -1,4 +1,10 @@
-import { ZONED_DATE_TIME_FORMAT, DATE_TIME_FORMAT, DATE_FORMAT } from './shared/date/filters'
+import { ZONED_DATE_TIME_FORMAT, DATE_TIME_FORMAT, DATE_FORMAT } from './shared/date/filters';
+
+interface IFormSettings {
+  labelPosition: string;
+  labelWidth: string;
+  size: string;
+}
 
 interface ISettings {
   title: string; // Overrides the default title
@@ -6,6 +12,7 @@ interface ISettings {
   showTagsView: boolean; // Controls tagsview display
   showSidebarLogo: boolean; // Controls siderbar logo display
   fixedHeader: boolean; // If true, will fix the header component
+  form: IFormSettings;
   dateDisplayFormat: string;
   dateTimeDisplayFormat: string;
   dateValueFormat: string;
@@ -35,6 +42,11 @@ const settings: ISettings = {
   showSettings: false,
   showTagsView: true,
   fixedHeader: true,
+  form: {
+    labelPosition: 'left',
+    labelWidth: '200px',
+    size: 'mini'
+  },
   showSidebarLogo: true,
   dateDisplayFormat: DATE_FORMAT,
   dateTimeDisplayFormat: DATE_TIME_FORMAT,
