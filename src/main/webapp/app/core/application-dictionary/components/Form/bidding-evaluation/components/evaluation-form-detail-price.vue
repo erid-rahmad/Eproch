@@ -14,7 +14,7 @@
                                     {{ evaluation.biddingName }}
                                 </el-form-item>
                                 <el-form-item label="Currency">
-                                    {{ evaluation.biddingName }}
+                                    {{ evaluation.Currency }}
                                 </el-form-item>
                                 <el-form-item label="Proposal Price">
                                     {{ evaluation.price }}
@@ -52,7 +52,7 @@
                                     {{ evaluation.pic }}
                                 </el-form-item>
                                 <el-form-item label="Date Submit">
-                                    {{ evaluation.eventTypeName }}
+                                    {{ evaluation.date }}
                                 </el-form-item>
                                 <el-form-item label="Submission Deadline">
                                     {{ evaluation.date }}
@@ -110,6 +110,9 @@
                             </template>
                         </el-table-column>
                         <el-table-column label="Delivery Date" min-width="70" prop="deliveryDate">
+                            <template slot-scope="{ row }">
+                                {{ row.deliveryDate | formatDate }}
+                            </template>
                         </el-table-column>
                         <el-table-column label="Price submision/unit" min-width="110" prop="">
                             <template slot-scope="{ row, $index }">

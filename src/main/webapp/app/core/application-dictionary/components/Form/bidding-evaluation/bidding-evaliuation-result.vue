@@ -42,9 +42,9 @@
                 </el-table-column>
                 <el-table-column label="Status" min-width="180" prop="biddingStatus" sortable>
                 </el-table-column>
-                <el-table-column label="Total Score" min-width="180" prop="biddingId" sortable>
+                <el-table-column label="Total Score" min-width="180" prop="score" sortable>
                 </el-table-column>
-                <el-table-column label="Rank" min-width="180" prop="adOrganizationId" sortable>
+                <el-table-column label="Rank" min-width="180" prop="rank" sortable>
                 </el-table-column>
                 <el-table-column label="Summary" min-width="120" sortable>
                     <template slot-scope="{ row }">
