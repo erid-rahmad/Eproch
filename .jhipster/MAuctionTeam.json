@@ -1,0 +1,60 @@
+{
+    "name": "MAuctionTeam",
+    "fields": [
+        {
+            "fieldName": "role",
+            "javadoc": "Referenced from auctionRole",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mAuctionTeam",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adUser",
+            "otherEntityRelationshipName": "mAuctionTeam",
+            "relationshipValidateRules": "required",
+            "relationshipName": "user",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mAuction",
+            "otherEntityRelationshipName": "mAuctionTeam",
+            "relationshipValidateRules": "required",
+            "relationshipName": "auction",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210524031900",
+    "entityTableName": "m_auction_team",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

@@ -1,0 +1,11 @@
+id;description;uid;active;ad_organization_id;auction_id
+1;../fake-data/blob/hipster.txt;441ca629-e310-4d08-b509-4384e71c64c0;true;1;1
+2;../fake-data/blob/hipster.txt;ba937df1-c4f9-4951-b85f-37344a17c311;false;2;2
+3;../fake-data/blob/hipster.txt;5aa05430-4b35-4373-851a-17efc2e36f04;true;3;3
+4;../fake-data/blob/hipster.txt;cbf23f92-77a8-4b36-b82d-73ee5bbea8dc;false;4;4
+5;../fake-data/blob/hipster.txt;ec04b90d-f1d0-40d3-9a5a-92f3c32d2a1c;true;5;5
+6;../fake-data/blob/hipster.txt;70ee5655-2eda-44cd-9739-7008c8b74113;false;6;6
+7;../fake-data/blob/hipster.txt;e90c1a97-f856-472b-b80c-df959d459aaf;false;7;7
+8;../fake-data/blob/hipster.txt;844b2e62-be90-4a56-bd07-3d7fb108af0c;false;8;8
+9;../fake-data/blob/hipster.txt;8cb2187b-8e90-4095-9dd1-b2151170b887;true;9;9
+10;../fake-data/blob/hipster.txt;f07561cf-a47f-4684-9643-5e805a54c173;true;10;10

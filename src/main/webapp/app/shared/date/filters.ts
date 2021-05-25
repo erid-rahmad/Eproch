@@ -4,15 +4,22 @@ import { TranslationStoreModule as tranlationStore } from '@/shared/config/store
 
 export const DATE_FORMAT = 'yyyy-MM-dd';
 export const DATE_TIME_FORMAT = 'yyyy-MM-dd HH:mm';
+export const DATE_TIME_SECONDS_FORMAT = 'yyyy-MM-dd HH:mm:ss';
 
 export const DATE_TIME_LONG_FORMAT = "yyyy-MM-dd'T'HH:mm";
 export const INSTANT_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 export const ZONED_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXXXX";
 
 export function initFilters() {
-  Vue.filter('formatDate', function(value, dateOnly: boolean) {
+  Vue.filter('formatDate', function(value: string, dateOnly: boolean) {
     if (value) {
       return format(parseISO(value), dateOnly ? DATE_FORMAT : DATE_TIME_FORMAT);
+    }
+    return '';
+  });
+  Vue.filter('formatDateTime', function(value: string, seconds: boolean) {
+    if (value) {
+      return format(parseISO(value), seconds ? DATE_TIME_FORMAT : DATE_TIME_SECONDS_FORMAT);
     }
     return '';
   });

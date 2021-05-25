@@ -1,0 +1,87 @@
+{
+    "name": "MAuctionItem",
+    "fields": [
+        {
+            "fieldName": "quantity",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "ceilingPrice",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "amount",
+            "javadoc": "Is quantity * ceilingPrice",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "bidDecrement",
+            "javadoc": "The multiple of the amount allowed to bid.",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "protectBackBuffer",
+            "javadoc": "The minimum difference to bottom that is allowed in making bids.\\nie. When the participant #1 bids at the price of 1000, and protectBackBuffer\\nis set to 500, then the other participants can only bids at least started from 1500.",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "protectFrontBuffer",
+            "javadoc": "The minimum difference to top that is allowed in making bids.\\nie. When the participant #1 bids at the price of 1000, and protectBackBuffer\\nis set to 500, then the other participants can only bids at least started from 8500.",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mAuctionItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mAuction",
+            "otherEntityRelationshipName": "mAuctionItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "auction",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cProduct",
+            "otherEntityRelationshipName": "mAuctionItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "product",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cUnitOfMeasure",
+            "otherEntityRelationshipName": "mAuctionItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "uom",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210524032100",
+    "entityTableName": "m_auction_item",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

@@ -1,0 +1,11 @@
+id;role;uid;active;ad_organization_id;user_id;auction_id
+1;parallelis;10dd85b5-01b9-4cee-93be-27fcdace389d;false;1;1;1
+2;Indiana;d9634e0a-b435-458c-a9bd-45c9a4566278;false;2;2;2
+3;TCP Beauty;67d2f822-e95c-4b07-8856-4d2e30d3877b;true;3;3;3
+4;violet e-b;568778f6-fa45-4b93-a379-b557c691863f;true;4;4;4
+5;parse;68434d7f-23a6-4762-bf38-0b00fbbe9b8a;true;5;5;5
+6;monitor Ta;ec761e5b-b2d3-482f-845c-93a7df40012d;false;6;6;6
+7;Lead Centr;43c27c6a-f1a3-4e50-9472-23a99afc7de0;false;7;7;7
+8;Digitized ;287ad8d6-bec9-4db3-8496-7fabf2fab8e9;false;8;8;8
+9;Home;60a5066e-f62c-4e5a-8307-569205bce591;true;9;9;9
+10;content;c11c2d4c-aeda-4548-b60b-916ef15fb8b4;true;10;10;10

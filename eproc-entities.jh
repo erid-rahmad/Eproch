@@ -1065,6 +1065,74 @@ entity CVendorEvaluationLine {
 	active Boolean
 }
 
+entity MAuction {
+	name String required maxlength(30)
+	description String
+
+	// Common transactional fields.
+	dateTrx ZonedDateTime
+	documentNo String maxlength(30)
+	documentAction String required maxlength(10)
+	documentStatus String required maxlength(12)
+	approved Boolean
+	processed Boolean
+	dateApprove ZonedDateTime
+	dateReject ZonedDateTime
+	rejectedReason String
+
+	uid UUID
+	active Boolean
+}
+
+entity MAuctionTeam {
+	/** Referenced from auctionRole */
+	role String maxlength(10)
+
+	uid UUID
+	active Boolean
+}
+
+entity MAuctionParticipant {
+	uid UUID
+	active Boolean
+}
+
+entity MAuctionItem {
+	quantity BigDecimal
+
+	/* Specify the ceiling price of the item. */
+	ceilingPrice BigDecimal
+
+	/** Is quantity * ceilingPrice */
+	amount BigDecimal
+
+	/** The multiple of the amount allowed to bid. */
+	bidDecrement BigDecimal
+
+	/**
+	 * The minimum difference to bottom that is allowed in making bids.
+	 * ie. When the participant #1 bids at the price of 1000, and protectBackBuffer
+	 * is set to 500, then the other participants can only bids at least started from 1500.
+	 */
+	protectBackBuffer BigDecimal
+
+	/**
+	 * The minimum difference to top that is allowed in making bids.
+	 * ie. When the participant #1 bids at the price of 1000, and protectBackBuffer
+	 * is set to 500, then the other participants can only bids at least started from 8500.
+	 */
+	protectFrontBuffer BigDecimal
+
+	uid UUID
+	active Boolean
+}
+
+entity MAuctionContent {
+	description TextBlob
+	uid UUID
+	active Boolean
+}
+
 entity MBidding {
 	name String required
 	vendorSelection String
@@ -1196,14 +1264,14 @@ entity MBiddingSchedule {
 }
 
 entity MBiddingEvaluation {
-    evaluationStatus String
+	evaluationStatus String
 	uid UUID
 	active Boolean
 }
 
 entity MBiddingEvaluationLine {
-    Status String
-    evaluationStatus String
+	Status String
+	evaluationStatus String
 	uid UUID
 	active Boolean
 }
@@ -1752,6 +1820,29 @@ relationship ManyToOne {
 	CVendorEvaluationLine{adOrganization required} to ADOrganization
 	CVendorEvaluationLine{cQuestionCategory required} to CQuestionCategory
 	CVendorEvaluationLine{cVendorEvaluation required} to CVendorEvaluation
+
+	MAuction{adOrganization required} to ADOrganization
+	MAuction{currency} to CCurrency
+	MAuction{costCenter} to CCostCenter
+	MAuction{owner required} to AdUser
+
+	MAuctionTeam{adOrganization required} to ADOrganization
+	MAuctionTeam{adOrganization required} to ADOrganization
+	MAuctionTeam{user required} to AdUser
+	MAuctionTeam{auction required} to MAuction
+
+	MAuctionParticipant{adOrganization required} to ADOrganization
+	MAuctionParticipant{auction required} to MAuction
+	MAuctionParticipant{user required} to AdUser
+	MAuctionParticipant{vendor required} to CVendor
+
+	MAuctionItem{adOrganization required} to ADOrganization
+	MAuctionItem{auction required} to MAuction
+	MAuctionItem{product required} to CProduct
+	MAuctionItem{uom required} to CUnitOfMeasure
+
+	MAuctionContent{adOrganization required} to ADOrganization
+	MAuctionContent{auction required} to MAuction
 
 	MBidding{adOrganization required} to ADOrganization
 	MBidding{costCenter required} to CCostCenter
