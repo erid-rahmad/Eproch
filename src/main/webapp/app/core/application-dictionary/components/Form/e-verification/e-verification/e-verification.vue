@@ -242,7 +242,7 @@
               sortable
               label="Invoice Date"/>
             <el-table-column
-              min-width="140"
+              min-width="200"
               prop="taxInvoice"
               sortable
               label="Tax Invoice"

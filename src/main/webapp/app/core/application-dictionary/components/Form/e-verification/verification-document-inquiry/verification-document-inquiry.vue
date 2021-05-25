@@ -291,7 +291,7 @@
                             label="GL Date"/>
 
                         <el-table-column
-                            min-width="140"
+                            min-width="200"
                             sortable
                             label="Tax Invoice No.">
                             <template slot-scope="{ row }">
