@@ -1,7 +1,8 @@
 package com.bhp.opusb.service;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ import com.bhp.opusb.service.dto.VerificationDTO;
 import com.bhp.opusb.service.mapper.MVerificationMapper;
 import com.bhp.opusb.service.trigger.process.integration.MVerificationMessageDispatcher;
 import com.bhp.opusb.util.DocumentUtil;
+import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
+import com.bhp.opusb.web.rest.errors.ReportNotAvailableException;
 import com.bhp.opusb.web.websocket.DashboardService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -90,24 +93,41 @@ public class MVerificationService {
         organization = adOrganizationService.getDefaultOrganization();
     }
 
-    public JasperPrint exportVerification(Long verificationId, String key) throws IOException, SQLException, JRException {
-
+    public JasperPrint exportVerification(Long verificationId, String key) throws SQLException {
+        JasperPrint jasperPrint = null;
+        String templatePath = null;
         File file = null;
 
         if (key.equals("invoice-verification")) {
-            file = ResourceUtils.getFile("classpath:templates/report/invoice-verification.jrxml");
+            templatePath = "classpath:templates/report/invoice-verification.jrxml";
         } else if (key.equals("summary-invoice-verification")) {
-            file = ResourceUtils.getFile("classpath:templates/report/summary-invoice-verification.jrxml");
+            templatePath = "classpath:templates/report/summary-invoice-verification.jrxml";
         } else if (key.equals("invoice-verification-receipt")) {
-            file = ResourceUtils.getFile("classpath:templates/report/invoice-verification-receipt.jrxml");
+            templatePath = "classpath:templates/report/invoice-verification-receipt.jrxml";
         }
 
-        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+        if (templatePath == null) {
+            throw new BadRequestAlertException("Report for " + key + " is not yet implemented", MVerification.class.getSimpleName(), "reportNotImplemented");
+        }
 
+        try {
+            file = ResourceUtils.getFile(templatePath);
+        } catch (FileNotFoundException e) {
+            throw new ReportNotAvailableException("Failed to open report " + key, MVerification.class.getSimpleName(), "reportNotFound");
+        }
+        
+        JasperReport jasperReport;
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("verificationId", verificationId);
-        return JasperFillManager.fillReport(jasperReport, parameters, dataSource.getConnection());
 
+        try (Connection connection = dataSource.getConnection()) {
+            jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+            jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, connection);
+        } catch (JRException e) {
+            throw new ReportNotAvailableException("Failed to generate report. " + e.getLocalizedMessage(), MVerification.class.getSimpleName(), "reportFailed");
+        }
+
+        return jasperPrint;
     }
 
     /**

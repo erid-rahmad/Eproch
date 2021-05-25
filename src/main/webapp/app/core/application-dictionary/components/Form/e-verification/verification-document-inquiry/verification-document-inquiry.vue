@@ -78,8 +78,8 @@
                 </el-col>
             </el-row>
 
-            <el-row class="filter">
-                <el-form ref="form"  label-width="170px" size="mini">
+            <el-row class="filter" :gutter="24">
+                <el-form ref="form"  label-width="170px" label-position="left" size="mini">
                     <el-col :span="8">
                         <el-form-item label="Verification No." prop="documentNo">
                             <el-input class="form-input" clearable v-model="filter.documentNo"/>
@@ -88,7 +88,12 @@
                             <el-input class="form-input" clearable v-model="filter.invoiceNo"></el-input>
                         </el-form-item>
                         <el-form-item label="Tax Invoice No." prop="taxInvoiceNo">
-                            <el-input class="form-input" clearable v-model="filter.taxInvoiceNo"></el-input>
+                            <el-input
+                                v-model="filter.taxInvoiceNo"
+                                v-cleave="taxInvoicePattern"
+                                class="form-input"
+                                placeholder="___.___-__.________"
+                            ></el-input>
                         </el-form-item>
                         <el-form-item label="Vendor" prop="vendorName">
                             <el-select class="form-input" clearable filterable v-model="filter.vendorName" >
@@ -290,7 +295,7 @@
                             sortable
                             label="Tax Invoice No.">
                             <template slot-scope="{ row }">
-                                {{ row.taxInvoice | facade('###-##.########') }}
+                                {{ row.taxInvoice | facade('###.###-##.########') }}
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -442,6 +447,15 @@
 </script>
 
 <style lang="scss">
+.compact {
+    .verification-document-inquiry {
+        .el-table--mini {
+            th, td {
+                height: 35px;
+            }
+        }
+    }
+}
 .el-table__fixed, .el-table__fixed-right{
     box-shadow: none;
 }

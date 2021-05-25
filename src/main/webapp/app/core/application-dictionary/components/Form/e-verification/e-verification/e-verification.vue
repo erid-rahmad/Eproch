@@ -97,10 +97,9 @@
             <el-form-item label="Tax Invoice No." prop="taxInvoiceNo">
               <el-input
                 v-model="filter.taxInvoiceNo"
-                v-inputmask="{'mask': '999-99.99999999'}"
+                v-cleave="taxInvoicePattern"
                 class="form-input"
-                clearable
-                placeholder="___-__.________"
+                placeholder="___.___-__.________"
               />
             </el-form-item>
             <el-form-item label="Status" prop="documentStatus">
@@ -249,7 +248,7 @@
               label="Tax Invoice"
             >
               <template slot-scope="{ row }">
-                {{ row.taxInvoice | facade('###-##.########') }}
+                {{ row.taxInvoice | facade('###.###-##.########') }}
               </template>
             </el-table-column>
             <el-table-column
@@ -327,7 +326,7 @@
             ref="formUpdate"
             :form-update="selectedRow"
             :doc-status="documentStatuses"
-            @close-e-verification-update="closeEVerificationUpdate"
+            @close="closeEVerificationUpdate"
           />
         </el-col>
       </el-row>
@@ -426,6 +425,13 @@
 </script>
 
 <style lang="scss">
+.compact .e-verification {
+  .el-table--mini {
+    th, td {
+      height: 35px;
+    }
+  }
+}
 .e-verification {
     .el-pagination .el-input--mini .el-input__inner {
         height: 22px;
