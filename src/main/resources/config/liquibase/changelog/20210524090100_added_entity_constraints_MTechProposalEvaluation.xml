@@ -7,7 +7,7 @@
         Added the constraints for entity MTechProposalEvaluation.
     -->
     <changeSet id="20210524090100-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="ad_organization_id"
                                  baseTableName="m_tech_proposal_evaluation"
                                  constraintName="fk_m_tech_proposal_evaluation_ad_organization_id"
@@ -38,5 +38,12 @@
                                  referencedColumnNames="id"
                                  referencedTableName="c_bidding_sub_criteria_line"/>
 
+    </changeSet>
+    <changeSet id="202105250355" author="erid">
+        <addForeignKeyConstraint baseColumnNames="vendor_id"
+                                 baseTableName="m_tech_proposal_evaluation"
+                                 constraintName="fk_m_tech_proposal_evaluation_vendor_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_vendor"/>
     </changeSet>
 </databaseChangeLog>

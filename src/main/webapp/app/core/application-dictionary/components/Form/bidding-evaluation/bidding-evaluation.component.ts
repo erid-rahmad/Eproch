@@ -74,6 +74,7 @@ export default class BiddingEvaluation extends mixins(Vue2Filters.mixin, AlertMi
           }
         });
         this.biddingSubmission = biddingEvent;
+        console.log( "this biddingsubmission",this.biddingSubmission)
       });
   }
 }

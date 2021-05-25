@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity MTechProposalEvaluation.
     -->
@@ -84,6 +84,13 @@
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+    <changeSet id="20210525035611" author="erid">
+        <addColumn tableName="m_tech_proposal_evaluation">
+            <column name="vendor_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import {Inject, Mixins, Watch} from "vue-property-decorator";
 import Component from "vue-class-component";
-import {watch} from "fs";
 
 const DetailPriceProp = Vue.extend({
   props: {
@@ -16,9 +15,7 @@ const DetailPriceProp = Vue.extend({
 
 @Component
 export default class DetailPrice extends Mixins( DetailPriceProp) {
-
   menuPrice:boolean=false;
-
   private evaluation={
     biddingNo:'BN 00001',
     biddingName:'Pengadaan Kendaraan Operasional',
@@ -46,8 +43,6 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
       value: ''
     }
   }
-
-
     "biddingLineList"= [
       {
         "createdBy": "admin",
@@ -76,6 +71,7 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
         "productName": "HONDA 2020",
         "uomId": 46751,
         "uomName": "Each",
+        "doc": "checked",
         "delivery": "2021-03-29T03:30:16.503651Z",
         "totalpricesubmision":11950000000
       },
@@ -106,6 +102,7 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
         "productName": "HONDA CIVIC 2017",
         "uomId": 46751,
         "uomName": "Each",
+        "doc": "checked",
         "delivery": "2021-03-29T03:30:16.503651Z",
         "totalpricesubmision":13200000000
       },
@@ -136,25 +133,15 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
         "productName": "HONDA 2015",
         "uomId": 46751,
         "uomName": "Each",
+        "doc": "checked",
         "delivery": "2021-03-29T03:30:16.503651Z",
         "totalpricesubmision":4160000000
       }
     ];
-
-
   ///////////
-
   created(){
-
-
   }
-
-
-
-
   close() {
     this.$emit("close");
   }
-
-
 }

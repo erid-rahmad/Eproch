@@ -69,6 +69,10 @@ public class MTechProposalEvaluation implements Serializable {
     @JsonIgnoreProperties("mTechProposalEvaluations")
     private CBiddingSubCriteriaLine biddingSubCriteriaLine;
 
+    @ManyToOne
+    @JsonIgnoreProperties("mTechProposalEvaluations")
+    private CVendor vendor;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -232,6 +236,19 @@ public class MTechProposalEvaluation implements Serializable {
 
     public void setBiddingSubCriteriaLine(CBiddingSubCriteriaLine cBiddingSubCriteriaLine) {
         this.biddingSubCriteriaLine = cBiddingSubCriteriaLine;
+    }
+
+    public CVendor getVendor() {
+        return vendor;
+    }
+
+    public MTechProposalEvaluation vendor(CVendor cVendor) {
+        this.vendor = cVendor;
+        return this;
+    }
+
+    public void setVendor(CVendor cVendor) {
+        this.vendor = cVendor;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

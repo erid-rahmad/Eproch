@@ -25,7 +25,7 @@
                                 <el-form-item label="Evaluation">
                                     {{ evaluation.evaluation }}
                                 </el-form-item>
-                                <el-form-item label="Document ">
+                                <el-form-item label="Document " style="width: 50%">
                                     <el-button class="button"
                                                icon="el-icon-download"
                                                size="mini"
@@ -79,7 +79,9 @@
                     <el-table :data="biddingLineList"
                               size="mini"
                               border
-                              >
+                              style="width: 100%"
+                              max-height="250">
+
                         <el-table-column label="No" min-width="30">
                             <template slot-scope="row">
                                 {{ row.$index + 1 }}
@@ -128,7 +130,7 @@
                             </template>
                         </el-table-column>
                         <el-table-column label="Remark" min-width="50" prop="remark"/>
-                        <el-table-column label="Document" min-width="50" prop="remark"/>
+                        <el-table-column label="Document" min-width="50" prop="doc"/>
                     </el-table>
                 </div>
             </el-row>

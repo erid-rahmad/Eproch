@@ -69,6 +69,13 @@
             "otherEntityRelationshipName": "mTechProposalEvaluation",
             "relationshipName": "biddingSubCriteriaLine",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "mTechProposalEvaluation",
+            "relationshipName": "vendor",
+            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20210524090100",

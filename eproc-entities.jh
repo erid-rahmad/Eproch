@@ -1898,6 +1898,7 @@ relationship ManyToOne {
     MTechProposalEvaluation{evaluationMethodCriteria } to CEvaluationMethodCriteria
    	MTechProposalEvaluation{evalMethodSubCriteria } to CEvalMethodSubCriteria
    	MTechProposalEvaluation{biddingSubCriteriaLine } to CBiddingSubCriteriaLine
+   	MTechProposalEvaluation{vendor} to CVendor
 
 
 
