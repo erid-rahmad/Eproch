@@ -205,7 +205,7 @@
                 width="200"
               >
                 <template slot-scope="{ row }">
-                  {{ row.dateSubmit | formatDate }}
+                  {{ row.dateSubmit | formatDateTime }}
                 </template>
               </el-table-column>
             </el-table>

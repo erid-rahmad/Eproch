@@ -38,9 +38,9 @@ export default class BidSubmission extends Mixins(AccessLevelMixin, BidSubmissio
 
   gutterSize = 24;
 
-  auction = {
+  auction: any = {
     currencyName: 'IDR',
-    leadingBid: 43000,
+    leadingBid: null,
     decrement: 1000,
     actualEndDate: '2021-05-31T23:59:59'
   };
@@ -56,7 +56,7 @@ export default class BidSubmission extends Mixins(AccessLevelMixin, BidSubmissio
   selectedItem: any = {};
   selectedItemId: number = null;
 
-  rank: number = 1;
+  rank: string | number = null;
 
   loadingAuctionItems: boolean = false;
 
@@ -158,9 +158,20 @@ export default class BidSubmission extends Mixins(AccessLevelMixin, BidSubmissio
   }
 
   submitBid(amount: number) {
+    let price: number;
+
+    if (this.auction.leadingBid === null) {
+      price = this.selectedItem.ceilingPrice - amount;
+    } else {
+      price = this.auction.leadingBid - amount;
+    }
+
+    this.$set(this.auction, 'leadingBid', price);
+    this.rank = 1;
+
     this.bidLogs.push({
       vendorName: AccountStoreModule.vendorInfo.name,
-      price: amount,
+      price,
       dateSubmit: new Date().toISOString()
     })
   }
