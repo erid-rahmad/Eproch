@@ -60,8 +60,8 @@
 
         <el-table-column label="Joined Vendor" min-width="140">
           <template slot-scope="{ row }">
-            <el-button class="button" size="mini" style="width: 100%" @click="viewJoinVendor">
-              <svg-icon name="icomoo/115-users"></svg-icon> {{ row.vendorCount }}
+            <el-button class="button" size="mini" style="width: 100%" @click="viewJoinVendor(row.id)">
+              <svg-icon name="icomoo/115-users"></svg-icon> {{ row.joinedVendorCount }}
             </el-button>
           </template>
         </el-table-column>
@@ -104,14 +104,14 @@
     ></document-action-confirm>
 
     <el-dialog class="joined-vendor-dialog" width="40%" :visible.sync="showJoinedVendors" title="Joined Vendors">
-      <el-table border class="vendor-list" :data="joinedVendors" highlight-current-row size="mini">
+      <el-table v-loading="loadingJoinedVendors" border class="vendor-list" :data="joinedVendors" highlight-current-row size="mini">
         <el-table-column label="No." width="50">
           <template slot-scope="{ $index }">
             {{ $index + 1 }}
           </template>
         </el-table-column>
 
-        <el-table-column label="Vendor" min-width="150" show-overflow-tooltip sortable prop="name"></el-table-column>
+        <el-table-column label="Vendor" min-width="150" show-overflow-tooltip sortable prop="vendorName"></el-table-column>
 
         <el-table-column label="Address" min-width="200" show-overflow-tooltip prop="location"></el-table-column>
       </el-table>
