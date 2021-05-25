@@ -51,6 +51,8 @@ public class MTechProposalEvaluationCriteria implements Serializable, Criteria {
 
     private LongFilter biddingSubCriteriaLineId;
 
+    private LongFilter vendorId;
+
     public MTechProposalEvaluationCriteria() {
     }
 
@@ -68,6 +70,7 @@ public class MTechProposalEvaluationCriteria implements Serializable, Criteria {
         this.evaluationMethodCriteriaId = other.evaluationMethodCriteriaId == null ? null : other.evaluationMethodCriteriaId.copy();
         this.evalMethodSubCriteriaId = other.evalMethodSubCriteriaId == null ? null : other.evalMethodSubCriteriaId.copy();
         this.biddingSubCriteriaLineId = other.biddingSubCriteriaLineId == null ? null : other.biddingSubCriteriaLineId.copy();
+        this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
     }
 
     @Override
@@ -179,6 +182,14 @@ public class MTechProposalEvaluationCriteria implements Serializable, Criteria {
         this.biddingSubCriteriaLineId = biddingSubCriteriaLineId;
     }
 
+    public LongFilter getVendorId() {
+        return vendorId;
+    }
+
+    public void setVendorId(LongFilter vendorId) {
+        this.vendorId = vendorId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -202,7 +213,8 @@ public class MTechProposalEvaluationCriteria implements Serializable, Criteria {
             Objects.equals(biddingId, that.biddingId) &&
             Objects.equals(evaluationMethodCriteriaId, that.evaluationMethodCriteriaId) &&
             Objects.equals(evalMethodSubCriteriaId, that.evalMethodSubCriteriaId) &&
-            Objects.equals(biddingSubCriteriaLineId, that.biddingSubCriteriaLineId);
+            Objects.equals(biddingSubCriteriaLineId, that.biddingSubCriteriaLineId) &&
+            Objects.equals(vendorId, that.vendorId);
     }
 
     @Override
@@ -220,7 +232,8 @@ public class MTechProposalEvaluationCriteria implements Serializable, Criteria {
         biddingId,
         evaluationMethodCriteriaId,
         evalMethodSubCriteriaId,
-        biddingSubCriteriaLineId
+        biddingSubCriteriaLineId,
+        vendorId
         );
     }
 
@@ -240,6 +253,7 @@ public class MTechProposalEvaluationCriteria implements Serializable, Criteria {
                 (evaluationMethodCriteriaId != null ? "evaluationMethodCriteriaId=" + evaluationMethodCriteriaId + ", " : "") +
                 (evalMethodSubCriteriaId != null ? "evalMethodSubCriteriaId=" + evalMethodSubCriteriaId + ", " : "") +
                 (biddingSubCriteriaLineId != null ? "biddingSubCriteriaLineId=" + biddingSubCriteriaLineId + ", " : "") +
+                (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
             "}";
     }
 

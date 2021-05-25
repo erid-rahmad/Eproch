@@ -27,31 +27,31 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
 
   private evaluation={
-    biddingNo:'BN 00001',
-    biddingName:'Pengadaan Kendaraan Operasional',
-    biddingTypeName:'Tender Goods',
+    biddingNo:'BN-00008',
+    biddingName:'Pengadaan Mobil Operasional',
+    biddingTypeName:'Tender-Goods',
     eventTypeName:'Ingram',
-    total:'4.3',
-    vendorName:'Ingram'
+    total:'6.4',
+    vendorName:'supplier1'
   }
 
   private biddingSubmission=[
 
     {
-      "1": "Administrasi Proposal",
-      "date": "2021-05-19T15:30:33.833453Z",
+      "1": "Administrasi",
+      "date": "2021-05-25T15:30:33.833453Z",
       "3": "Pass",
-      "4": "",
+      "4": "6.5",
     },    {
-      "1": "Technical Proposal",
-      "date": "2021-05-19T15:30:33.833453Z",
+      "1": "Technical ",
+      "date": "2021-05-25T15:30:33.833453Z",
       "3": "Pass",
-      "4": "5",
+      "4": "6.2",
     },    {
-      "1": "Price Proposal",
-      "date": "2021-05-19T15:30:33.833453Z",
+      "1": "Price ",
+      "date": "2021-05-25T15:30:33.833453Z",
       "3": "Pass",
-      "4": "4",
+      "4": "7",
     },
 
   ]

@@ -132,6 +132,10 @@ public class MTechProposalEvaluationQueryService extends QueryService<MTechPropo
                 specification = specification.and(buildSpecification(criteria.getBiddingSubCriteriaLineId(),
                     root -> root.join(MTechProposalEvaluation_.biddingSubCriteriaLine, JoinType.LEFT).get(CBiddingSubCriteriaLine_.id)));
             }
+            if (criteria.getVendorId() != null) {
+                specification = specification.and(buildSpecification(criteria.getVendorId(),
+                    root -> root.join(MTechProposalEvaluation_.vendor, JoinType.LEFT).get(CVendor_.id)));
+            }
         }
         return specification;
     }

@@ -19,6 +19,8 @@ const PrequalificationFormProps = Vue.extend({
         return {};
       }
     },
+    vendorId:Number,
+
   }
 });
 
@@ -69,10 +71,13 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
     this.retrieveEvaluationMethodCriteria(this.SelectVendorScoringLine.evaluationMethodLineId,this.SelectVendorScoringLine.id);
     this.savebutton=true;
 
+
   }
   created() {
     this.retrieveEvaluationMethodCriteria(this.SelectVendorScoringLine.evaluationMethodLineId,this.SelectVendorScoringLine.id);
     this.savebutton=true;
+    console.log("select",this.SelectVendorScoringLine)
+    console.log("vendorID",this.vendorId)
   }
 
   @Watch('observableIdentifiers')
@@ -148,7 +153,8 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
     this.commonService(baseApiBiddingEvaluation)
       .retrieve({
         criteriaQuery: [
-          `biddingId.equals=${biddingId}`
+          `biddingId.equals=${biddingId}`,
+          `vendorId.equals=${this.vendorId}`
         ],
         paginationQuery: {
           page: 0,
@@ -186,6 +192,7 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
         biddingSubCriteriaId,
         biddingSubCriteriaName,
         uid,
+        vendorId,
         ...requirement
       } = question;
       requirement.id = question.evaluationid;
@@ -193,6 +200,7 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
       requirement.notes = question.notes;
       requirement.evaluation = question.evaluation;
       requirement.biddingId=this.SelectVendorScoringLine.biddingId;
+      requirement.vendorId=this.vendorId;
       data.push(requirement);
 
     });

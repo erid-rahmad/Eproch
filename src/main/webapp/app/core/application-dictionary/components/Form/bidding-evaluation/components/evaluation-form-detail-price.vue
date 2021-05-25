@@ -14,7 +14,7 @@
                                     {{ evaluation.biddingName }}
                                 </el-form-item>
                                 <el-form-item label="Currency">
-                                    {{ evaluation.biddingName }}
+                                    {{ evaluation.Currency }}
                                 </el-form-item>
                                 <el-form-item label="Proposal Price">
                                     {{ evaluation.price }}
@@ -25,7 +25,7 @@
                                 <el-form-item label="Evaluation">
                                     {{ evaluation.evaluation }}
                                 </el-form-item>
-                                <el-form-item label="Document ">
+                                <el-form-item label="Document " style="width: 50%">
                                     <el-button class="button"
                                                icon="el-icon-download"
                                                size="mini"
@@ -52,7 +52,7 @@
                                     {{ evaluation.pic }}
                                 </el-form-item>
                                 <el-form-item label="Date Submit">
-                                    {{ evaluation.eventTypeName }}
+                                    {{ evaluation.date }}
                                 </el-form-item>
                                 <el-form-item label="Submission Deadline">
                                     {{ evaluation.date }}
@@ -79,7 +79,9 @@
                     <el-table :data="biddingLineList"
                               size="mini"
                               border
-                              >
+                              style="width: 100%"
+                              max-height="250">
+
                         <el-table-column label="No" min-width="30">
                             <template slot-scope="row">
                                 {{ row.$index + 1 }}
@@ -108,6 +110,9 @@
                             </template>
                         </el-table-column>
                         <el-table-column label="Delivery Date" min-width="70" prop="deliveryDate">
+                            <template slot-scope="{ row }">
+                                {{ row.deliveryDate | formatDate }}
+                            </template>
                         </el-table-column>
                         <el-table-column label="Price submision/unit" min-width="110" prop="">
                             <template slot-scope="{ row, $index }">
@@ -128,7 +133,7 @@
                             </template>
                         </el-table-column>
                         <el-table-column label="Remark" min-width="50" prop="remark"/>
-                        <el-table-column label="Document" min-width="50" prop="remark"/>
+                        <el-table-column label="Document" min-width="50" prop="doc"/>
                     </el-table>
                 </div>
             </el-row>

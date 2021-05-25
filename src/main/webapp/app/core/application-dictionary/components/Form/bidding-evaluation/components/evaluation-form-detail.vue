@@ -80,6 +80,20 @@
                                         </template>
                                     </el-table-column>
                                     <el-table-column
+                                        label="Answer"
+                                        width="150"
+                                    >
+                                        <template slot-scope="{ row }">
+                                            <el-input
+                                                v-model="row.answer"
+
+                                                class="form-input"
+                                                clearable
+                                                size="mini"
+                                            ></el-input>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
                                         label="Evaluation"
                                         width="150"
                                     >
@@ -151,7 +165,6 @@
                 </el-row>
             </div>
         </el-form>
-
     </div>
 </template>
 <script lang="ts" src="./evaluation-form-detail.component.ts"></script>

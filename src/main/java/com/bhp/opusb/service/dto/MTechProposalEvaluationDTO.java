@@ -2,7 +2,6 @@ package com.bhp.opusb.service.dto;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -10,7 +9,7 @@ import java.util.UUID;
  * A DTO for the {@link com.bhp.opusb.domain.MTechProposalEvaluation} entity.
  */
 public class MTechProposalEvaluationDTO implements Serializable {
-
+    
     private Long id;
 
     private String notes;
@@ -38,16 +37,9 @@ public class MTechProposalEvaluationDTO implements Serializable {
     private Long evalMethodSubCriteriaId;
 
     private Long biddingSubCriteriaLineId;
-    private List<CEvalMethodSubCriteriaDTO> evalMethodSubCriteriaList ;
 
-    public List<CEvalMethodSubCriteriaDTO> getEvalMethodSubCriteriaList() {
-        return evalMethodSubCriteriaList;
-    }
-
-    public void setEvalMethodSubCriteriaList(List<CEvalMethodSubCriteriaDTO> evalMethodSubCriteriaList) {
-        this.evalMethodSubCriteriaList = evalMethodSubCriteriaList;
-    }
-
+    private Long vendorId;
+    
     public Long getId() {
         return id;
     }
@@ -152,6 +144,14 @@ public class MTechProposalEvaluationDTO implements Serializable {
         this.biddingSubCriteriaLineId = cBiddingSubCriteriaLineId;
     }
 
+    public Long getVendorId() {
+        return vendorId;
+    }
+
+    public void setVendorId(Long cVendorId) {
+        this.vendorId = cVendorId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -189,6 +189,7 @@ public class MTechProposalEvaluationDTO implements Serializable {
             ", evaluationMethodCriteriaId=" + getEvaluationMethodCriteriaId() +
             ", evalMethodSubCriteriaId=" + getEvalMethodSubCriteriaId() +
             ", biddingSubCriteriaLineId=" + getBiddingSubCriteriaLineId() +
+            ", vendorId=" + getVendorId() +
             "}";
     }
 }

@@ -45,6 +45,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   private SelectEvaluationMethodLines:any={};
   private VendorScoringLine:any={};
   private SelectVendorScoringLine:any={};
+  private vendorId:number;
   mainForm: any = {};
   private EvaluationMethod
 
@@ -72,6 +73,9 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
   @Watch('SelectVendorScoringLine')
   loaddata(){
+    console.log("from this",this.SelectVendorScoringLine);
+    this.vendorId=this.evaluation.vendorId;
+
     if (this.SelectVendorScoringLine.evaluationMethodLineEvaluation ==="P"){
       this.FormMenu=1;
     }

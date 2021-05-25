@@ -21,13 +21,13 @@
                                 </el-table-column>
                                 <el-table-column label="Depertement type" prop="costCenterName" sortable width="180">
                                 </el-table-column>
-                                <el-table-column label="Biding Schedule" prop="adUserUserName" sortable width="180">
+                                <el-table-column label="Biding Schedule" prop="" sortable width="180">
+                                    <template slot-scope="{ row }">
+                                        <el-button class="button" size="mini" style="width: 100%" @click="viewBidding(row, 1)">
+                                            <svg-icon name="icomoo/084-calendar"></svg-icon> View Schedule
+                                        </el-button>
+                                    </template>
                                 </el-table-column>
-                                <!--                                    <el-table-column prop="5" label="Join Vendor" sortable width="180">-->
-                                <!--                                        <template slot-scope="{row}">-->
-                                <!--                                             <el-button class="button" size="mini" icon="el-icon-user" @click="dialogTableVisible = true">{{row.joinedVendorCount}}</el-button>-->
-                                <!--                                        </template>-->
-                                <!--                                    </el-table-column>-->
                                 <el-table-column label="Biding Status" prop="documentStatus" sortable width="180">
                                 </el-table-column>
                                 <el-table-column label="Summary" min-width="120" sortable>

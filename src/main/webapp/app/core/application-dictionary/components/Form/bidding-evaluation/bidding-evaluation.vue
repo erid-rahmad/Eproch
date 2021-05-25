@@ -41,7 +41,7 @@
                         {{ row.dateSubmit | formatDate }}
                     </template>
                 </el-table-column>
-                <el-table-column label="Bidding Status" min-width="180" prop="biddingStatus" sortable>
+                <el-table-column label="Evaluation Status" min-width="180" prop="biddingStatus" sortable>
                 </el-table-column>
                 <el-table-column label="Summary" min-width="120" sortable>
                     <template slot-scope="{ row }">

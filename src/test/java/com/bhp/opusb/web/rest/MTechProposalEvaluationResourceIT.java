@@ -7,6 +7,7 @@ import com.bhp.opusb.domain.MBidding;
 import com.bhp.opusb.domain.CEvaluationMethodCriteria;
 import com.bhp.opusb.domain.CEvalMethodSubCriteria;
 import com.bhp.opusb.domain.CBiddingSubCriteriaLine;
+import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.repository.MTechProposalEvaluationRepository;
 import com.bhp.opusb.service.MTechProposalEvaluationService;
 import com.bhp.opusb.service.dto.MTechProposalEvaluationDTO;
@@ -882,6 +883,26 @@ public class MTechProposalEvaluationResourceIT {
 
         // Get all the mTechProposalEvaluationList where biddingSubCriteriaLine equals to biddingSubCriteriaLineId + 1
         defaultMTechProposalEvaluationShouldNotBeFound("biddingSubCriteriaLineId.equals=" + (biddingSubCriteriaLineId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMTechProposalEvaluationsByVendorIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mTechProposalEvaluationRepository.saveAndFlush(mTechProposalEvaluation);
+        CVendor vendor = CVendorResourceIT.createEntity(em);
+        em.persist(vendor);
+        em.flush();
+        mTechProposalEvaluation.setVendor(vendor);
+        mTechProposalEvaluationRepository.saveAndFlush(mTechProposalEvaluation);
+        Long vendorId = vendor.getId();
+
+        // Get all the mTechProposalEvaluationList where vendor equals to vendorId
+        defaultMTechProposalEvaluationShouldBeFound("vendorId.equals=" + vendorId);
+
+        // Get all the mTechProposalEvaluationList where vendor equals to vendorId + 1
+        defaultMTechProposalEvaluationShouldNotBeFound("vendorId.equals=" + (vendorId + 1));
     }
 
     /**
