@@ -19,6 +19,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   columnSpacing = 24;
   showDetail = false;
   showConfirmationForm = false;
+  showPoForm = false;
 
   mainForm = {};
 
@@ -76,5 +77,9 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
 
   openConfirmationForm(_row: any) {
     this.showConfirmationForm = true;
+  }
+
+  generatePo(_row: any) {
+    this.showPoForm = true;
   }
 }

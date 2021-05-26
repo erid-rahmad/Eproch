@@ -19,7 +19,7 @@
             :xl="8"
           >
             <el-form-item
-              label="Biding No."
+              label="Bidding No."
             >
               <el-input
                 v-model="mainForm.biddingNo"
@@ -70,13 +70,6 @@
             </el-form-item>
           </el-col>
         </el-row>
-        
-        <el-row>
-          <el-col
-            :xs="24"
-            :sm="20"
-            :lg="18"
-          >
             <el-table
               border
               :data="confirmations"
@@ -143,14 +136,41 @@
                   >
                     Action
                   </el-button>
+                  <div v-if="row.documentStatus==='Accepted'">
+                    <el-button
+                      class="button"
+                      icon="el-icon-document-checked"
+                      size="mini"
+                      style="width: 100%"
+                      type="primary"
+                      @click="generatePo(row)"
+                    >
+                      Generate PO
+                    </el-button>
+                  </div>
                 </template>
               </el-table-column>
             </el-table>
-          </el-col>
-        </el-row>
       </el-form>
     </el-scrollbar>
     
+    <el-dialog
+      width="50%"
+      :visible.sync="showPoForm"
+      title="Generate PO"
+    >
+      PO has been generated.
+      <div slot="footer">
+        <el-button
+          icon="el-icon-close"
+          size="mini"
+          @click="showPoForm = false"
+        >
+          Close
+        </el-button>
+      </div>
+    </el-dialog>
+
     <el-dialog
       width="50%"
       :visible.sync="showDetail"

@@ -50,7 +50,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="Biding No."
+        label="Bidding No."
         min-width="100"
         prop="biddingNo"
         sortable
