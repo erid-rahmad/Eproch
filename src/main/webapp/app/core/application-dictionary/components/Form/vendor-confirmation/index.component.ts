@@ -43,7 +43,7 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
       picName: 'Admin Tender',
       costCenterName: 'Marketing',
       selectedWinner: 1,
-      amount: 29570000000,
+      amount: 29310000000,
       confirmationStatus: 'Need Confirmation'
     },
     {
