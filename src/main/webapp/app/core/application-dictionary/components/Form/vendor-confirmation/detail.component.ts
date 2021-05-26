@@ -20,6 +20,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   showDetail = false;
   showConfirmationForm = false;
   showPoForm = false;
+  showHistory = false;
 
   mainForm = {};
 
@@ -32,10 +33,10 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
 
   confirmations = [
     {
-      vendorName: 'Sistech Kharisma',
+      vendorName: 'Supplier 3',
       amount: 29310000000,
       quantity: 180,
-      documentStatus: 'Draft',
+      documentStatus: 'Accepted',
       lines: [
         {
           item: 'Honda 2015',
@@ -59,6 +60,21 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
     }
   ];
 
+  history = [
+    {
+      contractNo: '112001',
+      lastModifiedDate: '2021-03-31',
+      status: 'Accepted',
+      reason: 'Sudah sesuai'
+    },
+    {
+      contractNo: '112001',
+      lastModifiedDate: '2021-03-28',
+      status: 'Need Revision',
+      reason: 'Mohon konfirmasi'
+    }
+  ];
+
   selectedConfirmation = {};
 
   created() {
@@ -73,6 +89,11 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   viewDetail(row: any) {
     this.selectedConfirmation = row;
     this.showDetail = true;
+  }
+
+  viewHistory(row: any) {
+    this.selectedConfirmation = row;
+    this.showHistory = true;
   }
 
   openConfirmationForm(_row: any) {

@@ -122,6 +122,21 @@
                 </template>
               </el-table-column>
               <el-table-column
+                label="View History"
+                width="140"
+              >
+                <template slot-scope="{ row }">
+                  <el-button
+                    class="button"
+                    icon="el-icon-more"
+                    size="mini"
+                    style="width: 100%"
+                    type="primary"
+                    @click="viewHistory(row)"
+                  ></el-button>
+                </template>
+              </el-table-column>
+              <el-table-column
                 label="Action"
                 width="140"
               >
@@ -264,6 +279,60 @@
       </div>
     </el-dialog>
     
+    <el-dialog
+      width="50%"
+      :visible.sync="showHistory"
+      title="History"
+    >
+      <el-table
+        border
+        :data="history"
+        highlight-current-row
+        :max-height="256"
+        size="mini"
+        stripe
+        style="margin-top: 16px; width: 100%"
+      >
+        <el-table-column
+          label="No."
+          width="50"
+        >
+          <template slot-scope="{ $index }">
+            {{ $index + 1 }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="Contract No."
+          prop="contractNo"
+          min-width="100"
+        ></el-table-column>
+        <el-table-column
+          label="Modified Date"
+          prop="lastModifiedDate"
+          min-width="100"
+        ></el-table-column>
+        <el-table-column
+          label="Status"
+          prop="status"
+          min-width="100"
+        ></el-table-column>
+        <el-table-column
+          label="Reason"
+          prop="reason"
+          min-width="200"
+        ></el-table-column>
+      </el-table>
+      <div slot="footer">
+        <el-button
+          icon="el-icon-close"
+          size="mini"
+          @click="showHistory = false"
+        >
+          Close
+        </el-button>
+      </div>
+    </el-dialog>
+
     <el-dialog
       width="50%"
       :visible.sync="showConfirmationForm"
