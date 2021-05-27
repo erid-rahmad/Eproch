@@ -46,14 +46,10 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
 
   ///////////
 
-
-  private recordsLoaded: boolean = false;
   savebutton:boolean=false;
 
   private evaluationMethodCriteria: any = [];
-  private MVendorScoringNestedDTO: any = {};
-  private vendorScoringCriteria: any = {};
-  private dataevaluationMethod:any={};
+
 
   private questions: Map<number, any> = new Map();
   private averageScore ="30";
@@ -75,9 +71,6 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
   }
   created() {
     this.retrieveEvaluationMethodCriteria(this.SelectVendorScoringLine.evaluationMethodLineId,this.SelectVendorScoringLine.id);
-    this.savebutton=true;
-    console.log("select",this.SelectVendorScoringLine)
-    console.log("vendorID",this.vendorId)
   }
 
   @Watch('observableIdentifiers')
@@ -204,8 +197,6 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
       data.push(requirement);
 
     });
-    // console.log('vendor scoring criteria:', data);
-    // Validate each record.
     const validator = new Schema(this.validationSchema);
     let valid = true;
 
@@ -226,7 +217,6 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
       return;
     }
 
-    this.$emit('update:loading', true);
     this.commonService(`${baseApiMTechproposal}/evaluation`)
       .create(data)
       .then(_res => this.$message.success(`Requirements has been saved successfully`))

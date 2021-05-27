@@ -8,6 +8,8 @@ import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMi
 import EvaluationForm from "./components/bidding-evaliuation-form.vue";
 import EvaluationResult from "./components/result-detail.vue"
 
+const baseApiEvalResults ='api/m-bidding-eval-results';
+const baseApiBiddingSubmission='/api/m-bidding-submissions';
 
 const BiddingEvaluationProp = Vue.extend({
   props: {
@@ -23,7 +25,6 @@ const BiddingEvaluationProp = Vue.extend({
 @Component({
   components: {
     EvaluationForm,
-
   }
 })
 export default class BiddingEvaluation extends mixins(Vue2Filters.mixin, AlertMixin, AccessLevelMixin, BiddingEvaluationProp) {
@@ -32,9 +33,9 @@ export default class BiddingEvaluation extends mixins(Vue2Filters.mixin, AlertMi
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
   private biddingSubmission: any = {};
+  private evaluationResult:any={};
   index=0;
   private data:any={};
-
 
   created() {
     console.log(this.pickRow)
@@ -52,12 +53,8 @@ export default class BiddingEvaluation extends mixins(Vue2Filters.mixin, AlertMi
     this.data.biddingSubmission=this.biddingSubmission;
   }
 
-  result(row){
-    this.index=2;
-  }
-
   private getbiddingSubmission() {
-    this.commonService('/api/m-bidding-submissions')
+    this.commonService(baseApiBiddingSubmission)
       .retrieve({
         criteriaQuery: this.updateCriteria([]),
         paginationQuery: {
@@ -74,7 +71,52 @@ export default class BiddingEvaluation extends mixins(Vue2Filters.mixin, AlertMi
           }
         });
         this.biddingSubmission = biddingEvent;
-        console.log( "this biddingsubmission",this.biddingSubmission)
       });
+  }
+
+  createEvaluateTable(biddingSubmissionId){
+    const data={
+      biddingSubmissionId:biddingSubmissionId,
+      adOrganizationId:1,
+      active:true,
+    }
+    this.commonService(baseApiEvalResults)
+      .create(data)
+      .then(res => {
+        this.evaluationResult = res.data;
+        // this.$message.success('create new record');
+      })
+      .catch(_err => this.$message.error('fail create record'));
+  }
+
+  retrieveEvaluateTable(row){
+    this.commonService(baseApiEvalResults)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `biddingSubmissionId.equals=${row.id}`
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        const data = res.data as any[];
+        if (data.length) {
+          this.evaluationResult = {...this.evaluationResult, ...data[0]};
+        }
+        else {
+          this.createEvaluateTable(row.id);
+        }
+      })
+      .catch(_err => this.$message.error('Error retrieve Evaluation Table'))
+      .finally(()=>{
+        this.index=1;
+        this.data.pickrow=row;
+        this.data.biddingSubmission=this.biddingSubmission;
+        this.data.evaluationResult=this.evaluationResult;
+      })
   }
 }

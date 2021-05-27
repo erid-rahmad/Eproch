@@ -46,11 +46,14 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   private VendorScoringLine:any={};
   private SelectVendorScoringLine:any={};
   private vendorId:number;
+  private evaluationResult:any={};
   mainForm: any = {};
   private EvaluationMethod
 
   created(){
     this.biddingSubmission=this.data.biddingSubmission;
+    this.evaluationResult=this.data.evaluationResult;
+    console.log(this.evaluationResult)
     this.evaluation=this.data.pickrow;
     this.retrieveVendorScoring(this.evaluation.biddingId)
   }
@@ -123,10 +126,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       })
       .then(res => {
         this.evaluationMethodLines = res.data;
-
-        // if (this.mainForm.id) {
-        //   this.retrieveVendorScoringLine(this.mainForm.id);
-        // }
+        console.log(this.evaluationMethodLines);
       });
   }
 

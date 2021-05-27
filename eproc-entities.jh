@@ -1003,14 +1003,12 @@ entity CEvaluationMethodCriteria {
     weight Integer
 	uid UUID
 	active Boolean
-
 }
 
 entity CEvalMethodCriteriaLine {
 	weight Integer
 	uid UUID
 	active Boolean
-
 }
 
 entity CEvalMethodSubCriteria {
@@ -1278,6 +1276,13 @@ entity MBiddingEvaluationLine {
 
 entity MBiddingEvalResult {
     status String
+	uid UUID
+	active Boolean
+}
+
+entity MBiddingEvalResultLine {
+    status String
+    score Integer
 	uid UUID
 	active Boolean
 }
@@ -1885,6 +1890,11 @@ relationship ManyToOne {
 
     MBiddingEvalResult{adOrganization required} to ADOrganization
     MBiddingEvalResult{biddingSubmission required} to MBiddingSubmission
+
+    MBiddingEvalResultLine{adOrganization required} to ADOrganization
+    MBiddingEvalResultLine{evaluationMethodLine required} to CEvaluationMethodLine
+    MBiddingEvalResultLine{biddingEvalResult required} to MBiddingEvalResult
+
 
 	MBiddingScheduleAttachment{adOrganization required} to ADOrganization
 

@@ -46,7 +46,7 @@
                 <el-table-column label="Summary" min-width="120" sortable>
                     <template slot-scope="{ row }">
                         <el-button class="button" icon="el el-download-alt" size="mini" type="primary"
-                                   @click="evaluate(row)">
+                                   @click="retrieveEvaluateTable(row)">
                             Evaluate
                         </el-button>
                     </template>
