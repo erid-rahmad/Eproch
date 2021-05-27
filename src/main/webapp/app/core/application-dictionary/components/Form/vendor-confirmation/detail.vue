@@ -103,9 +103,8 @@
               </el-table-column>
               <el-table-column
                 label="Status"
-                prop="documentStatus"
                 min-width="100"
-              ></el-table-column>
+              ><template slot-scope="{ row }">{{formatConfirmationStatus(row.documentStatus)}}</template></el-table-column>
               <el-table-column
                 label="View Detail"
                 width="140"

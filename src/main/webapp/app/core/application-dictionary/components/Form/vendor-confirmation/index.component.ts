@@ -3,6 +3,8 @@ import { AccountStoreModule } from '@/shared/config/store/account-store';
 import { ElTable } from 'element-ui/types/table';
 import Vue from 'vue';
 import Component, { mixins } from 'vue-class-component';
+import { Inject } from 'vue-property-decorator';
+import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import ConfirmationForm from './confirmation-form.vue';
 import VendorConfirmationDetail from './detail.vue';
 
@@ -19,6 +21,8 @@ const VendorConfirmationProp = Vue.extend({
   }
 })
 export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorConfirmationProp) {
+  @Inject('dynamicWindowService')
+  private commonService: (baseApiUrl: string) => DynamicWindowService;
 
   index = true;
   documentAction = null;
@@ -76,6 +80,19 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
         this.viewDetail(row);
       }
     }
+    this.commonService('/api/m-vendor-confirmations').retrieve({
+      criteriaQuery: this.updateCriteria([
+        'active.equals=true'
+      ]),
+      paginationQuery: {
+        page: 0,
+        size: 10000,
+        sort: ['id']
+      }
+    })
+    .then(res => {
+      this.vendorConfirmations = res.data;
+    });
   }
 
   mounted() {
