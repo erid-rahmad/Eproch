@@ -5,7 +5,7 @@ services:
     # volumes:
     #     - ~/volumes/jhipster/OpusWebApp/postgresql/:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=OpusWebApp
+      - POSTGRES_USER=eproc_demo
       - POSTGRES_PASSWORD=
     ports:
       - 5432:5432
