@@ -15,6 +15,7 @@ public interface CGalleryItemMapper extends EntityMapper<CGalleryItemDTO, CGalle
 
     @Mapping(source = "CAttachment.id", target = "CAttachmentId")
     @Mapping(source = "CAttachment.fileName", target = "CAttachmentName")
+    @Mapping(source = "CAttachment.downloadUrl", target = "CAttachmentUrl")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "CGallery.id", target = "CGalleryId")

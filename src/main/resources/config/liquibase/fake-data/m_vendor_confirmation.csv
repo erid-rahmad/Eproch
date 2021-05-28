@@ -1,0 +1,11 @@
+id;uid;active;bidding_id;ad_organization_id;cost_center_id;pic_id
+1;f49814dd-6add-4dec-b98d-33b5cbc4b20b;true;1;1;1;1
+2;ae5ad789-bf2b-4521-a314-42eeb0b59dda;false;2;2;2;2
+3;f0fa10d3-aa8f-4b5f-9864-52928e114c38;true;3;3;3;3
+4;dfc8afdc-ef94-45c7-9e4e-4bac65eeb689;true;4;4;4;4
+5;46c42f93-4bfb-41ea-b3cd-62d28c8272d2;false;5;5;5;5
+6;99f4ce6d-7798-4eef-9391-35f701e55c1e;false;6;6;6;6
+7;491dc141-b53c-42fb-a247-c775adeb69aa;true;7;7;7;7
+8;52658c0d-694d-477e-ac16-7b26de09caef;false;8;8;8;8
+9;7815e396-8fde-4b20-9a43-b4325a6d3426;true;9;9;9;9
+10;ad4da010-c5fb-42fb-bd85-10675045dd16;false;10;10;10;10

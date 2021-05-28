@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Formula;
 
 /**
  * A MBidding.
@@ -53,7 +54,10 @@ public class MBidding extends AbstractAuditingEntity {
     @Column(name = "bidding_status", nullable = false)
     private String biddingStatus;
 
-    @Column(name = "joined_vendor_count")
+    @Formula("(SELECT COUNT(i.vendor_id) " +
+        "FROM m_bidding_invitation i " +
+        "WHERE i.bidding_id = id " +
+        "AND i.invitation_status = 'R')")
     private Integer joinedVendorCount;
 
     @Column(name = "date_trx")

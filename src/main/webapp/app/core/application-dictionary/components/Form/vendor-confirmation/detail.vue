@@ -19,7 +19,7 @@
             :xl="8"
           >
             <el-form-item
-              label="Biding No."
+              label="Bidding No."
             >
               <el-input
                 v-model="mainForm.biddingNo"
@@ -70,13 +70,6 @@
             </el-form-item>
           </el-col>
         </el-row>
-        
-        <el-row>
-          <el-col
-            :xs="24"
-            :sm="20"
-            :lg="18"
-          >
             <el-table
               border
               :data="confirmations"
@@ -110,9 +103,8 @@
               </el-table-column>
               <el-table-column
                 label="Status"
-                prop="documentStatus"
                 min-width="100"
-              ></el-table-column>
+              ><template slot-scope="{ row }">{{formatConfirmationStatus(row.documentStatus)}}</template></el-table-column>
               <el-table-column
                 label="View Detail"
                 width="140"
@@ -125,6 +117,21 @@
                     style="width: 100%"
                     type="primary"
                     @click="viewDetail(row)"
+                  ></el-button>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="View History"
+                width="140"
+              >
+                <template slot-scope="{ row }">
+                  <el-button
+                    class="button"
+                    icon="el-icon-more"
+                    size="mini"
+                    style="width: 100%"
+                    type="primary"
+                    @click="viewHistory(row)"
                   ></el-button>
                 </template>
               </el-table-column>
@@ -143,14 +150,41 @@
                   >
                     Action
                   </el-button>
+                  <div v-if="row.documentStatus==='Accepted'">
+                    <el-button
+                      class="button"
+                      icon="el-icon-document-checked"
+                      size="mini"
+                      style="width: 100%"
+                      type="primary"
+                      @click="generatePo(row)"
+                    >
+                      Generate PO
+                    </el-button>
+                  </div>
                 </template>
               </el-table-column>
             </el-table>
-          </el-col>
-        </el-row>
       </el-form>
     </el-scrollbar>
     
+    <el-dialog
+      width="50%"
+      :visible.sync="showPoForm"
+      title="Generate PO"
+    >
+      PO has been generated.
+      <div slot="footer">
+        <el-button
+          icon="el-icon-close"
+          size="mini"
+          @click="showPoForm = false"
+        >
+          Close
+        </el-button>
+      </div>
+    </el-dialog>
+
     <el-dialog
       width="50%"
       :visible.sync="showDetail"
@@ -244,6 +278,60 @@
       </div>
     </el-dialog>
     
+    <el-dialog
+      width="50%"
+      :visible.sync="showHistory"
+      title="History"
+    >
+      <el-table
+        border
+        :data="history"
+        highlight-current-row
+        :max-height="256"
+        size="mini"
+        stripe
+        style="margin-top: 16px; width: 100%"
+      >
+        <el-table-column
+          label="No."
+          width="50"
+        >
+          <template slot-scope="{ $index }">
+            {{ $index + 1 }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="Contract No."
+          prop="contractNo"
+          min-width="100"
+        ></el-table-column>
+        <el-table-column
+          label="Modified Date"
+          prop="lastModifiedDate"
+          min-width="100"
+        ></el-table-column>
+        <el-table-column
+          label="Status"
+          prop="status"
+          min-width="100"
+        ></el-table-column>
+        <el-table-column
+          label="Reason"
+          prop="reason"
+          min-width="200"
+        ></el-table-column>
+      </el-table>
+      <div slot="footer">
+        <el-button
+          icon="el-icon-close"
+          size="mini"
+          @click="showHistory = false"
+        >
+          Close
+        </el-button>
+      </div>
+    </el-dialog>
+
     <el-dialog
       width="50%"
       :visible.sync="showConfirmationForm"

@@ -9,6 +9,7 @@ import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import StepForm from '../bidding/steps-form.vue';
 
 const baseApiUrl = 'api/m-biddings';
+const baseApiInvitation = 'api/m-bidding-invitations';
 
 @Component({
   components: {
@@ -43,6 +44,7 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
   public statusCatalog = '';
 
   processing = false;
+  loadingJoinedVendors = false;
 
   biddingStatuses: any[] = [];
   gridData: any[] = [];
@@ -58,20 +60,7 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
 
   terminationReason = null;
 
-  joinedVendors = [
-    {
-      name: 'INGRAM MICRO INDONESIA',
-      location: 'WISMA NUGRAHA SANTANA 9TH FLOOR SUITE#909, JL. JEND. SUDIRMAN KAV.7-8, 10220, JAKARTA PUSAT'
-    },
-    {
-      name: 'SISTECH KHARISMA',
-      location: 'JL. JUANDA 38-C, 10120, JAKARTA PUSAT'
-    },
-    {
-      name: 'WESTCON INTERNATIONAL INDONESIA',
-      location: 'GEDUNG MD PALACE TOWER 1, LT.5, JL. SETIABUDI SELATAN NO. 7 RT.05 RW.01, SETIABUDI, SETIABUDI, JAKARTA SELATAN'
-    }
-  ];
+  joinedVendors = [];
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -239,7 +228,22 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
     this.index = false;
   }
 
-  viewJoinVendor() {
+  viewJoinVendor(biddingId: number) {
     this.showJoinedVendors = true;
+    this.loadingJoinedVendors = true;
+    this.commonService(baseApiInvitation)
+      .retrieve({
+        criteriaQuery: [
+          `biddingId.equals=${biddingId}`,
+          'invitationStatus.equals=R'
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['vendorName']
+        }
+      })
+      .then(res => this.joinedVendors = res.data)
+      .finally(() => this.loadingJoinedVendors = false);
   }
 }

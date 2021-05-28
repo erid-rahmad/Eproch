@@ -1348,6 +1348,17 @@ entity MTechProposalEvaluation {
 	active Boolean
 }
 
+entity MVendorConfirmation {
+	uid UUID
+	active Boolean
+}
+
+entity MVendorConfirmationLine {
+	uid UUID
+	active Boolean
+	status String maxlength(10)
+}
+
 entity MVendorInvitation {
 	uid UUID
 	active Boolean
@@ -1910,7 +1921,16 @@ relationship ManyToOne {
    	MTechProposalEvaluation{biddingSubCriteriaLine } to CBiddingSubCriteriaLine
    	MTechProposalEvaluation{vendor} to CVendor
 
+	MVendorConfirmation{bidding required} to MBidding
+	MVendorConfirmation{adOrganization required} to ADOrganization
+	MVendorConfirmation{currency } to CCurrency
+	MVendorConfirmation{costCenter required} to CCostCenter
+	MVendorConfirmation{pic required} to AdUser
 
+	MVendorConfirmationLine{adOrganization required} to ADOrganization
+	MVendorConfirmationLine{vendor required} to CVendor
+	MVendorConfirmationLine{biddingEvalResult } to MBiddingEvalResult
+	MVendorConfirmationLine{vendorConfirmation required} to MVendorConfirmation
 
 	MVendorInvitation{bidding required} to MBidding
 	MVendorInvitation{adOrganization required} to ADOrganization

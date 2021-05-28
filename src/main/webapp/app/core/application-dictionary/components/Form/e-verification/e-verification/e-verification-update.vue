@@ -1,190 +1,191 @@
 <template>
-    <div class="app-container verification-update">
+  <div class="app-container verification-update">
 
-        <el-row class="header">
-            <el-col :span="24">
+    <el-row class="header">
+      <el-col :span="24">
 
-                <el-button
-                    v-if="isDraft"
-                    v-loading.fullscreen.lock="fullscreenLoading"
-                    class="button"
-                    style="margin-left: 0px;"
-                    size="mini"
-                    type="primary"
-                    icon="el-icon-check"
-                    @click="updateEVerification"
-                />
+        <el-button
+          v-if="editable"
+          v-loading.fullscreen.lock="fullscreenLoading"
+          class="button"
+          style="margin-left: 0px;"
+          size="mini"
+          type="primary"
+          icon="el-icon-check"
+          @click="updateEVerification"
+        />
 
-                <el-button
-                    class="button"
-                    style="margin-left: 0px;"
-                    size="mini"
-                    type="danger"
-                    icon="el-icon-close"
-                    @click="closeEVerificationUpdate"
-                />
+        <el-button
+          class="button"
+          style="margin-left: 0px;"
+          size="mini"
+          type="danger"
+          icon="el-icon-close"
+          @click="closeEVerificationUpdate"
+        />
 
-                <el-button
-                    v-if="isDraft"
-                    class="button"
-                    size="mini"
-                    type="primary"
-                    icon="el-icon-plus"
-                    @click="displayMatchPo(1)"
+        <el-button
+          v-if="editable"
+          class="button"
+          size="mini"
+          type="primary"
+          icon="el-icon-plus"
+          @click="displayMatchPo(1)"
+        >
+          Add
+        </el-button>
+
+        <el-button
+          v-if="editable"
+          class="button"
+          style="margin-left: 0px;"
+          size="mini"
+          type="primary"
+          icon="el-icon-plus"
+          @click="displayMatchPo(2)"
+        >
+          Add by Receipt No.
+        </el-button>
+
+      </el-col>
+    </el-row>
+
+    <el-row class="filter" :gutter="24">
+      <el-form
+        ref="eVerificationUpdate"
+        label-position="left"
+        label-width="170px"
+        :model="header"
+        :rules="validationRules"
+        size="mini"
+      >
+        <el-col :span="8">
+          <el-form-item label="Invoice No." prop="invoiceNo" required>
+            <el-input
+              v-model="header.invoiceNo"
+              :disabled="!editable"
+              class="form-input"
+              clearable
+            ></el-input>
+          </el-form-item>
+            <el-form-item label="Invoice Date" prop="invoiceDate" required>
+                <el-date-picker
+                    v-model="header.invoiceDate"
+                    class="form-input"
+                    clearable
+                    :disabled="!editable"
+                    type="date"
+                    :format="dateDisplayFormat"
+                    :value-format="dateValueFormat"
+                    placeholder="Pick a date" />
+            </el-form-item>
+            <el-form-item label="Currency" prop="currencyId" required>
+                <el-select
+                    v-model="header.currencyId"
+                    :disabled="!editable"
+                    class="form-input"
+                    clearable
+                    filterable
+                    placeholder="Currency"
                 >
-                    Add
-                </el-button>
-
-                <el-button
-                    v-if="isDraft"
-                    class="button"
-                    style="margin-left: 0px;"
-                    size="mini"
-                    type="primary"
-                    icon="el-icon-plus"
-                    @click="displayMatchPo(2)"
-                >
-                    Add by Receipt No.
-                </el-button>
-
-            </el-col>
-        </el-row>
-
-        <el-row class="filter" :gutter="24">
-            <el-form
-                ref="eVerificationUpdate"
-                label-position="left"
-                label-width="170px"
-                :model="header"
-                :rules="validationRules"
-                size="mini"
+                    <el-option
+                        v-for="item in currencyOptions"
+                        :key="item.key"
+                        :label="item.value"
+                        :value="item.key"
+                    />
+                </el-select>
+            </el-form-item>
+            <el-form-item
+                v-if="!editable"
+                label="Verification No"
+                prop="documentNo"
             >
-                <el-col :span="8">
-                    <el-form-item label="Invoice No." prop="invoiceNo" required>
-                        <el-input
-                            v-model="header.invoiceNo"
-                            :disabled="!isDraft"
-                            class="form-input"
-                            clearable
-                        />
-                    </el-form-item>
-                    <el-form-item label="Invoice Date" prop="invoiceDate" required>
-                        <el-date-picker
-                            v-model="header.invoiceDate"
-                            class="form-input"
-                            clearable
-                            :disabled="!isDraft"
-                            type="date"
-                            :format="dateDisplayFormat"
-                            :value-format="dateValueFormat"
-                            placeholder="Pick a date" />
-                    </el-form-item>
-                    <el-form-item label="Currency" prop="currencyId" required>
-                        <el-select
-                            v-model="header.currencyId"
-                            :disabled="!isDraft"
-                            class="form-input"
-                            clearable
-                            filterable
-                            placeholder="Currency"
-                        >
-                            <el-option
-                                v-for="item in currencyOptions"
-                                :key="item.key"
-                                :label="item.value"
-                                :value="item.key"
-                            />
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item
-                        v-if="!isDraft"
-                        label="Verification No"
-                        prop="documentNo"
-                    >
-                        <el-input class="form-input" disabled v-model="header.documentNo"/>
-                    </el-form-item>
-                    <el-form-item label="Verification Date" prop="dateTrx">
-                        <el-date-picker
-                            v-model="header.dateTrx"
-                            class="form-input"
-                            clearable
-                            :disabled="!isDraft"
-                            :format="dateDisplayFormat"
-                            type="date"
-                            :value-format="dateValueFormat"
-                            placeholder="Pick a date"
-                        />
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="Tax Invoice No." prop="taxInvoice" :required="header.taxable" >
-                        <el-input
-                            class="form-input"
-                            :disabled="!isDraft"
-                            v-model="header.taxInvoice"
-                            v-cleave="{blocks: [3, 2, 8], delimiters: ['-', '.'], numericOnly: true}"
-                            placeholder="___-__.________"
-                            @change="checkVerification"
-                        />
-                    </el-form-item>
-                    <el-form-item label="Tax Invoice Date" prop="taxDate" :required="header.taxable">
-                        <el-date-picker
-                            class="form-input"
-                            clearable
-                            v-model="header.taxDate"
-                            type="date"
-                            :disabled="!isDraft"
-                            :format="dateDisplayFormat"
-                            :value-format="dateValueFormat"
-                            placeholder="Pick a date" />
-                    </el-form-item>
-                    <el-form-item label="NPWP" prop="vendorName">
-                        <el-input class="form-input" disabled clearable v-model="header.vendorName"/>
-                    </el-form-item>
-                    <el-form-item v-if="!isDraft" label="Status" prop="documentStatus">
-                        <el-input class="form-input" disabled clearable :value="formatDocumentStatus(header.documentStatus)"/>
-                    </el-form-item>
-                    <el-form-item v-if="!isDraft" label="Status Date">
-                        <el-date-picker
-                            class="form-input"
-                            clearable disabled
-                            :value="dateStatus(header.documentStatus)"
-                            type="date"
-                            :format="dateDisplayFormat"
-                            :value-format="dateValueFormat"
-                            placeholder="Pick a date"
-                        />
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="Taxable Amount" prop="totalLines">
-                        <el-input
-                            class="form-input"
-                            disabled
-                            v-model="header.totalLines"
-                            v-inputmask="{'alias': 'currency'}"
-                        />
-                    </el-form-item>
-                    <el-form-item label="PPN" prop="taxAmount">
-                        <el-input
-                            class="form-input"
-                            disabled
-                            v-model="header.taxAmount"
-                            v-inputmask="{'alias': 'currency'}"
-                        />
-                    </el-form-item>
-                    <el-form-item label="Total Amount" prop="grandTotal">
-                        <el-input
-                            class="form-input"
-                            disabled
-                            v-model="header.grandTotal"
-                            v-inputmask="{'alias': 'currency'}"
-                        />
-                    </el-form-item>
-                </el-col>
-            </el-form>
+                <el-input class="form-input" disabled v-model="header.documentNo"/>
+            </el-form-item>
+            <el-form-item label="Verification Date" prop="dateTrx">
+                <el-date-picker
+                    v-model="header.dateTrx"
+                    class="form-input"
+                    clearable
+                    :disabled="!editable"
+                    :format="dateDisplayFormat"
+                    type="date"
+                    :value-format="dateValueFormat"
+                    placeholder="Pick a date"
+                />
+            </el-form-item>
+        </el-col>
+        <el-col :span="8">
+            <el-form-item label="Tax Invoice No." prop="taxInvoice" :required="header.taxable" >
+                <el-input
+                    v-model="header.taxInvoice"
+                    v-cleave="taxInvoicePattern"
+                    ref="taxInvoice"
+                    class="form-input"
+                    :disabled="!editable"
+                    placeholder="___.___-__.________"
+                    @change="checkVerification"
+                ></el-input>
+            </el-form-item>
+            <el-form-item label="Tax Invoice Date" prop="taxDate" :required="header.taxable">
+                <el-date-picker
+                    class="form-input"
+                    clearable
+                    v-model="header.taxDate"
+                    type="date"
+                    :disabled="!editable"
+                    :format="dateDisplayFormat"
+                    :value-format="dateValueFormat"
+                    placeholder="Pick a date" />
+            </el-form-item>
+            <el-form-item label="NPWP" prop="vendorName">
+                <el-input class="form-input" disabled clearable v-model="header.vendorName"/>
+            </el-form-item>
+            <el-form-item v-if="!editable" label="Status" prop="documentStatus">
+                <el-input class="form-input" disabled clearable :value="formatDocumentStatus(header.documentStatus)"/>
+            </el-form-item>
+            <el-form-item v-if="!editable" label="Status Date">
+                <el-date-picker
+                    class="form-input"
+                    clearable disabled
+                    :value="dateStatus(header.documentStatus)"
+                    type="date"
+                    :format="dateDisplayFormat"
+                    :value-format="dateValueFormat"
+                    placeholder="Pick a date"
+                />
+            </el-form-item>
+        </el-col>
+        <el-col :span="8">
+            <el-form-item label="Taxable Amount" prop="totalLines">
+                <el-input
+                    class="form-input"
+                    disabled
+                    v-model="header.totalLines"
+                    v-inputmask="{'alias': 'currency'}"
+                />
+            </el-form-item>
+            <el-form-item label="PPN" prop="taxAmount">
+                <el-input
+                    class="form-input"
+                    disabled
+                    v-model="header.taxAmount"
+                    v-inputmask="{'alias': 'currency'}"
+                />
+            </el-form-item>
+            <el-form-item label="Total Amount" prop="grandTotal">
+                <el-input
+                    class="form-input"
+                    disabled
+                    v-model="header.grandTotal"
+                    v-inputmask="{'alias': 'currency'}"
+                />
+            </el-form-item>
+        </el-col>
+      </el-form>
 
-        </el-row>
+    </el-row>
 
         <el-row class="main" ref="tableWrapper">
             <el-col :span="24">
@@ -192,18 +193,17 @@
                     v-loading="processing"
                     highlight-current-row
                     border stripe
-                    size="mini"
-                    style="width: 100%; height: 100%"
-                    :height="gridSchema.height"
+                    :data="gridData"
                     :default-sort="gridSchema.defaultSort"
                     :empty-text="gridSchema.emptyText"
-                    :data="gridData"
+                    :max-height="gridSchema.maxHeight"
                     :row-class-name="rowClassName"
+                    size="mini"
                     @sort-change="changeOrder"
                 >
 
                     <el-table-column
-                        v-if="isDraft"
+                        v-if="editable"
                         align="center"
                         fixed
                         width="55"
@@ -246,6 +246,7 @@
                         min-width="250"
                         prop="mProductName"
                         label="Item Description"
+                        show-overflow-tooltip
                     />
                     <el-table-column
                         min-width="100"
@@ -293,7 +294,6 @@
                     </el-table-column>
                     <el-table-column
                         min-width="150"
-                        prop="totalAmount"
                         label="Total Amount"
                         align="right"
                     >
@@ -303,14 +303,14 @@
                     </el-table-column>
                 </el-table>
                 <el-pagination
-                    ref="pagination"
-                    background mini
-                    layout="sizes, prev, pager, next"
+                    ref="pagination, sizes, prev, pager, next"
+                    background
                     :current-page.sync="page"
-                    :page-sizes="[10, 20, 50, 100]"
+                    layout="total"
                     :page-size="itemsPerPage"
+                    small
                     :total="queryCount"
-                    @size-change="changePageSize"/>
+                ></el-pagination>
             </el-col>
         </el-row>
 
@@ -361,6 +361,19 @@
 <style lang="scss">
 .compact .verification-update {
     padding: 0px;
+
+    .el-checkbox.is-bordered.el-checkbox--mini {
+        border: none;
+        height: 26px;
+        line-height: 26px;
+        margin-bottom: 0;
+        padding: 0;
+    }
+    .el-table--mini {
+        th, td {
+            height: 35px;
+        }
+    }
 }
 
 .header {

@@ -43,6 +43,10 @@ export default class ENofa extends mixins(Vue2Filters.mixin, AlertMixin, Context
     return settings.dateValueFormat;
   }
 
+  get taxInvoicePattern() {
+    return settings.taxNoPattern13digits;
+  }
+
   created(){
     this.retrieveEnofa();
   }

@@ -119,7 +119,7 @@ public class MVerificationResource {
 
     @GetMapping("/m-verifications/report/{verificationId}/{documentNo}/{key}")
     public void reportEVerification(@PathVariable Long verificationId, @PathVariable Long documentNo, @PathVariable String key, HttpServletResponse response)
-            throws IOException {
+            throws IOException, SQLException, JRException {
 
         JasperPrint jasperPrint = null;
         String fileName = "";
@@ -136,13 +136,8 @@ public class MVerificationResource {
         response.addHeader("Content-Disposition", "attachment; filename=\""+fileName+"\"");
         OutputStream out = response.getOutputStream();
 
-        try {
-            jasperPrint = mVerificationService.exportVerification(verificationId, key);
-
-            JasperExportManager.exportReportToPdfStream(jasperPrint, out);
-        } catch (SQLException | JRException e) {
-            e.printStackTrace();
-        }
+        jasperPrint = mVerificationService.exportVerification(verificationId, key);
+        JasperExportManager.exportReportToPdfStream(jasperPrint, out);
     }
 
     /**

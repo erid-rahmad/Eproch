@@ -149,11 +149,11 @@
             min-width="250"
             sortable
             v-if="isVendor==null"
-            prop="cVendorId"
+            prop="vendorId"
             label="Vendor"
           >
             <template slot-scope="{ row }">
-              {{ row.cVendorShortName }}
+              {{ row.vendorShortName }}
             </template>
           </el-table-column>
 

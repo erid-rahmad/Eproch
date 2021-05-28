@@ -1,10 +1,7 @@
-import AlertMixin from '@/shared/alert/alert.mixin';
-import { mixins } from 'vue-class-component';
-import { Component } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import ContextVariableAccessor from "../../ContextVariableAccessor";
+import { Component, Mixins, Inject } from 'vue-property-decorator';
 import CatalogGrid from './components/catalog-grid.vue';
 import ProductInformation from './product-information.vue';
+import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 
 @Component({
   components: {
@@ -12,7 +9,11 @@ import ProductInformation from './product-information.vue';
     ProductInformation
   }
 })
-export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
+export default class Catalog extends Mixins() {
+
+  @Inject('dynamicWindowService')
+  private commonService: (baseApiUrl: string) => DynamicWindowService;
+
   index: boolean = true;
   refresh: string = "";
   private tabTitleOptions = [];
@@ -24,7 +25,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   private baseApiUrlReferenceList = "/api/ad-reference-lists";
   private keyReferenceProductCatalog: string = "docStatProductCatalog";
 
-  activeName = 'ALL';
+  activeName = 'A';
   dialogConfirmationVisible: boolean = false;
   dialogTitle: string = "";
   dialogType: string = "";
@@ -43,15 +44,22 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
     { id: '2', type: '.xls', name: "XLS" },
   ]*/
 
+  onFormClosed() {
+    this.index = true;
+  }
+
+  onFormSaved() {
+    (<any>this.$refs.productForm).save();
+  }
+
   created() {
     const token = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
     this.importHeaders['Authorization'] = `Bearer ${token}`;
 
-    this.retrieveGetReferences(this.keyReferenceProductCatalog);
+    this.retrieveTabs();
   }
 
-  handleClick(tab, event) {
-    //console.log(tab)
+  onTabClicked(tab) {
     this.activeName = tab.name;
 
   }
@@ -74,7 +82,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
       this.dialogButton = "Export";
 
     } else if(value == 'filter') {
-      this.activeName = "ALL";
+      this.activeName = "A";
       (<any>this.$refs.catalogGrid[0]).retrieveAllRecords();
     } else if(value == 'add'){
       this.index = false;
@@ -119,7 +127,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   }
 
   private retrieveGetReferences(param: string) {
-    this.dynamicWindowService(this.baseApiUrlReference)
+    this.commonService(this.baseApiUrlReference)
     .retrieve({
       criteriaQuery: [`value.contains=`+param]
     })
@@ -136,7 +144,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   }
 
   private retrieveGetReferenceLists(param: any) {
-    this.dynamicWindowService(this.baseApiUrlReferenceList)
+    this.commonService(this.baseApiUrlReferenceList)
     .retrieve({
       criteriaQuery: [`adReferenceId.equals=`+param[0].id]
     })
@@ -154,12 +162,12 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
     });
   }
 
-  selectedRow(value){
-    this.index = false;
+  onRowSelected(value){
     this.setRow = value;
+    this.index = false;
   }
 
-  selectedRows(value){
+  onRowsSelected(value){
     this.setRows = value;
   }
 
@@ -199,7 +207,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
 
       this.importProductCatalog = "";
       this.dialogConfirmationVisible = false;
-      this.activeName = "ALL";
+      this.activeName = "A";
       (<any>this.$refs.catalogGrid[0]).retrieveAllRecords();
   }
 
@@ -248,7 +256,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
 
   removeCatalog(){
     Promise.allSettled(this.setRows.map((row: any) => {
-      return this.dynamicWindowService(this.baseApiUrlCatalog).delete(row.id);
+      return this.commonService(this.baseApiUrlCatalog).delete(row.id);
     })).then((results) => {
       const deletedCount = results.filter(res => res.status === 'fulfilled').length
 
@@ -261,7 +269,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
         //this.retrieveAllRecords();
         this.importProductCatalog = "";
         this.dialogConfirmationVisible = false;
-        this.activeName = "ALL";
+        this.activeName = "A";
         (<any>this.$refs.catalogGrid[0]).retrieveAllRecords();
 
         this.$notify({
@@ -288,4 +296,9 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
     });
   }
 
+  private retrieveTabs() {
+    this.commonService(null)
+      .retrieveReferenceLists('productCatalogTab')
+      .then(res => this.tabTitleOptions = res)
+  }
 }
