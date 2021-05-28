@@ -3,7 +3,7 @@ import {
   mixins
 } from 'vue-class-component';
 import {
-  Component
+  Component, Inject
 } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../ContextVariableAccessor";
@@ -11,6 +11,7 @@ import ContextVariableAccessor from "../../ContextVariableAccessor";
 import ProductInformation from './bidding-evaluation.vue';
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 import EvaluationResult from './bidding-evaliuation-result.vue';
+import DynamicWindowService from "@/core/application-dictionary/components/DynamicWindow/dynamic-window.service";
 
 @Component({
   components: {
@@ -21,13 +22,24 @@ import EvaluationResult from './bidding-evaliuation-result.vue';
 })
 export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,AccessLevelMixin, ContextVariableAccessor) {
 
-  private bidding: any= { };
-  private pickRow:any={};
+  @Inject('dynamicWindowService')
+  private commonService: (baseApiUrl: string) => DynamicWindowService;
 
+  private bidding: any= [];
+  private pickRow:any={};
+  private biddingStatuses:any=[];
   index=0;
 
   created(){
-    this.moreInformationData()
+    this.moreInformationData();
+    this.commonService(null)
+      .retrieveReferenceLists('biddingStatus')
+      .then(res => {
+        this.biddingStatuses = res.map(item => ({ key: item.value, value: item.name }));
+      });
+  }
+  formatBiddingStatus(value: string) {
+    return this.biddingStatuses.find(status => status.key === value)?.value;
   }
 
   private moreInformationData() {

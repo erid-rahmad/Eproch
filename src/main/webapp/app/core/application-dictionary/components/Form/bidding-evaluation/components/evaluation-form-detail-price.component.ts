@@ -29,13 +29,13 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
   menuPrice:boolean=false;
   isLoading:boolean=false;
 
-      options= [{
-        value: 'Pass',
-        label: 'Pass'
-      }, {
-        value: 'Fail',
-        label: 'Fail'
-      }];
+  options= [{
+    value: 'Pass',
+    label: 'Pass'
+   }, {
+    value: 'Fail',
+    label: 'Fail'
+  }];
 
   private proposalPrice:any={};
   private proposalPriceLine:any=[];
@@ -44,7 +44,6 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
   created(){
     this.retrieveProposal(this.evaluationFormProp.biddingSubmission.id);
     this.evaluationResultLine=this.evaluationFormProp.evaluationResultLine;
-    console.log("masuk",this.evaluationFormProp)
     this.biddingSubmission=this.evaluationFormProp.biddingSubmission;
   }
 

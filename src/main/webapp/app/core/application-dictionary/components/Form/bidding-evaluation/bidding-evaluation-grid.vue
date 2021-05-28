@@ -1,50 +1,54 @@
 <template>
-    <div class="app-container">
-        <el-row v-if="index===0" ref="tableWrapper" class="main">
+    <div class="app-container card-view bidding-process">
+        <el-row v-if="index===0" class="main">
             <el-col :span="24">
-                <el-tabs v-model="activeName" @tab-click="handleClick">
-                    <keep-alive>
+                <el-tabs class="card">
+
                         <el-col :span="24">
                             <el-table :data="bidding" :default-sort="{prop: 'date', order: 'descending'}" size="mini"
                                       border
                                       style="width: 100%">
-                                <el-table-column label="No" min-width="30">
+
+                                <el-table-column label="Action" align="center" fixed="right" min-width="180">
+                                    <template slot-scope="{ row }">
+                                        <el-button  icon="el el-download-alt" :underline="false" size="mini" type="primary"
+                                                   @click="evaluate(row)">
+                                            Evaluate
+                                        </el-button>
+                                        <el-button  icon="el el-download-alt" :underline="false" size="mini" type="primary"
+                                                   @click="result(row)">
+                                            Result
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column align="center" label="No" min-width="40">
                                     <template slot-scope="row">
                                         {{ row.$index + 1 }}
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="Bidding Number" prop="documentNo" sortable width="180">
+                                <el-table-column align="center" label="Bidding N0." prop="documentNo" sortable width="150">
                                 </el-table-column>
-                                <el-table-column label="Title" prop="name" sortable width="180">
+                                <el-table-column align="center" label="Title" prop="name" show-overflow-tooltip sortable width="180">
                                 </el-table-column>
-                                <el-table-column label="Biding Type" prop="biddingTypeName" sortable width="180">
+                                <el-table-column align="center" label="Biding Type" prop="biddingTypeName" sortable width="180">
                                 </el-table-column>
-                                <el-table-column label="Depertement type" prop="costCenterName" sortable width="180">
+                                <el-table-column align="center" label="Depertement type" prop="costCenterName" sortable width="180">
                                 </el-table-column>
-                                <el-table-column label="Biding Schedule" prop="" sortable width="180">
+                                <el-table-column align="center" label="Biding Schedule" prop="" sortable width="180">
                                     <template slot-scope="{ row }">
                                         <el-button class="button" size="mini" style="width: 100%" @click="viewBidding(row, 1)">
                                             <svg-icon name="icomoo/084-calendar"></svg-icon> View Schedule
                                         </el-button>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="Biding Status" prop="documentStatus" sortable width="180">
-                                </el-table-column>
-                                <el-table-column label="Summary" min-width="120" sortable>
+                                <el-table-column align="center" label="Bidding Status" min-width="140" sortable>
                                     <template slot-scope="{ row }">
-                                        <el-button class="button" icon="el el-download-alt" size="mini" type="primary"
-                                                   @click="evaluate(row)">
-                                            Evaluate
-                                        </el-button>
-                                        <el-button class="button" icon="el el-download-alt" size="mini" type="primary"
-                                                   @click="result(row)">
-                                            Result
-                                        </el-button>
+                                        {{ formatBiddingStatus(row.biddingStatus) }}
                                     </template>
                                 </el-table-column>
                             </el-table>
                         </el-col>
-                    </keep-alive>
+
                 </el-tabs>
             </el-col>
         </el-row>
@@ -74,22 +78,36 @@
 </script>
 
 <style lang="scss">
-.el-tabs__header {
-    margin: 0px;
+.compact .bidding-process {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 36px auto;
+
+    .joined-vendor-dialog .el-table.vendor-list {
+        td {
+            height: 35px;
+        }
+    }
 }
 
-.el-table__fixed {
+.el-table__fixed,
+.el-table__fixed-right {
     box-shadow: none;
 }
 
 .main {
     padding: 0px;
+
+    .button {
+        width: 100%;
+    }
 }
 
+.toolbar {
+    padding: 4px 16px;
+}
 
 .form-input {
     width: 100%;
 }
-
-
 </style>

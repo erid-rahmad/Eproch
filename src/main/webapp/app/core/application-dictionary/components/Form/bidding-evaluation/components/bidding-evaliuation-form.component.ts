@@ -11,6 +11,7 @@ import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMi
 import EvaluationFormDetail from './evaluation-form-detail.vue';
 import EvaluationTeamDetailPrice from './evaluation-form-detail-price.vue'
 
+
 const baseApiVendorScoring = 'api/m-vendor-scorings';
 const baseApiEvaluationMethodLine = 'api/c-evaluation-method-lines';
 const baseApiVendorScoringLine ='api/m-vendor-scoring-lines';
@@ -32,7 +33,8 @@ const ProductCatalogProp = Vue.extend({
 @Component({
   components: {
     EvaluationFormDetail,
-    EvaluationTeamDetailPrice
+    EvaluationTeamDetailPrice,
+
   }
 })
 export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertMixin,AccessLevelMixin, ProductCatalogProp) {
@@ -103,10 +105,8 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
         let AllEvalResultLine =res.data;
         let average=0,loop=0,status;
         AllEvalResultLine.forEach(data=>{
-          if(data.score.leght){
             average=average+data.score;
             ++loop;
-          }
           if(data.status==="Fail"){
             status="Fail";
           }{status="Pass"}
@@ -114,7 +114,6 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
         average=average/loop;
         this.evaluationResult.status=status;
         this.evaluationResult.score=average;
-
         this.updateEvalResult();
         });
   }
@@ -123,7 +122,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     this.commonService(baseApiEvalResults)
       .create( this.evaluationResult)
       .then(res => {
-        this.evaluationResult = res.data;
+        let evaluationResult = res.data;
       })
       .catch(_err => this.$message.error('fail create record'));
   }

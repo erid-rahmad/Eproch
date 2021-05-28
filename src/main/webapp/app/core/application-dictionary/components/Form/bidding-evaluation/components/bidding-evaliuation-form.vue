@@ -1,5 +1,5 @@
 <template>
-    <div v-if="" class="bidding-evaluation">
+    <div v-if="" class="bidding-evaluation card-view">
         <el-row  class="toolbar">
             <el-col :span="24">
                 <el-button  size="mini" style="margin-left: 10px"
@@ -12,8 +12,8 @@
                 </el-button>
             </el-col>
         </el-row>
-        <div class="card-view">
-            <el-form  v-if="FormMenu===0 || FormMenu===2" ref="productCatalog" label-position="left" label-width="130px"
+        <div class="card">
+            <el-form  v-if="FormMenu===0 || FormMenu===2|| FormMenu===3" ref="productCatalog" label-position="left" label-width="130px"
                      size="mini">
                 <el-form-item label="Bidding No">
                     {{ evaluation.biddingNo }}
@@ -32,13 +32,13 @@
                 </el-form-item>
             </el-form>
             <div v-if="FormMenu===1" >
-                <EvaluationTeamDetailPrice :evaluationFormProp="evaluationFormProp" :SelectVendorScoringLine="SelectVendorScoringLine" :vendorId="vendorId"></EvaluationTeamDetailPrice>
+                <EvaluationTeamDetailPrice ref="evaluationFormDetail" :evaluationFormProp="evaluationFormProp" ></EvaluationTeamDetailPrice>
             </div>
             <div v-if="FormMenu===2">
                 <el-divider content-position="left">
                     <h4>Evaluation</h4>
                 </el-divider>
-                <EvaluationFormDetail :evaluationFormProp="evaluationFormProp"  :SelectVendorScoringLine="SelectVendorScoringLine" :vendorId="vendorId"></EvaluationFormDetail>
+                <EvaluationFormDetail :evaluationFormProp="evaluationFormProp"  :SelectVendorScoringLine="SelectVendorScoringLine" ></EvaluationFormDetail>
             </div>
 
         </div>

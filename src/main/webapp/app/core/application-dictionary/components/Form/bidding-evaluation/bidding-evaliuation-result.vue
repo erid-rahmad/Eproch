@@ -1,13 +1,13 @@
 <template>
-    <div class="bidding-evaluation">
-        <el-row>
+    <div class="bidding-evaluation card-view">
+        <el-row v-if="index" class="toolbar">
             <el-col :span="24">
                 <el-button icon="el-icon-close" plain size="mini" type="danger" @click="close">
                     Back
                 </el-button>
             </el-col>
         </el-row>
-        <div v-if="index" class="card-view">
+        <div v-if="index" class="card">
             <el-form ref="productCatalog" label-position="left" label-width="130px"
                      size="mini">
                 <el-form-item label="Bidding No">
@@ -19,34 +19,17 @@
                 <el-form-item label="Bidding Type">
                     {{ pickRow.biddingTypeName }}
                 </el-form-item>
-                <el-divider content-position="left">
-                    <h4>Evaluation</h4>
-                </el-divider>
             </el-form>
 
-            <el-table :data="evaluationResult" :default-sort="{prop: 'date', order: 'descending'}"
+            <el-table :data="evaluationResult" align="center" :default-sort="{prop: 'date', order: 'descending'}"
                       size="mini"
                       border
                       style="width: 100%">
-                <el-table-column label="Winer Recomendation" min-width="100">
-                    <template slot-scope="row">
-                        <el-checkbox v-model="row.checked"></el-checkbox>
-                    </template>
-                </el-table-column>
-                <el-table-column label="Vendor Name" min-width="180" prop="vendorName" sortable>
-                </el-table-column>
-                <el-table-column label="date Submited" min-width="180" prop="dateSubmit" sortable>
-                    <template slot-scope="{row}">
-                        {{ row.dateSubmit | formatDate }}
-                    </template>
-                </el-table-column>
-                <el-table-column label="Status" min-width="180" prop="status" sortable>
-                </el-table-column>
-                <el-table-column label="Total Score" min-width="180" prop="score" sortable>
-                </el-table-column>
-                <el-table-column label="Rank" min-width="180" prop="rank" sortable>
-                </el-table-column>
-                <el-table-column label="Summary" min-width="120" sortable>
+                <el-table-column label="Summary"
+                                 min-width="120"
+                                 align="center"
+                                 fixed="right"
+                                 sortable>
                     <template slot-scope="{ row }">
                         <el-button class="button" icon="el el-download-alt" size="mini" type="primary"
                                    @click="detailScore(row)">
@@ -54,10 +37,29 @@
                         </el-button>
                     </template>
                 </el-table-column>
+                <el-table-column label="Winer Recomendation" align="center" show-overflow-tooltip  min-width="100">
+                    <template slot-scope="row">
+                        <el-checkbox v-model="row.checked"></el-checkbox>
+                    </template>
+                </el-table-column>
+                <el-table-column label="Vendor Name" align="center" min-width="180" prop="vendorName" sortable>
+                </el-table-column>
+                <el-table-column label="Date Submited" align="center" min-width="180" prop="dateSubmit" sortable>
+                    <template slot-scope="{row}">
+                        {{ row.dateSubmit | formatDate }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="Status" align="center" min-width="80" prop="status" sortable>
+                </el-table-column>
+                <el-table-column label="Score" align="center" min-width="80" prop="score" sortable>
+                </el-table-column>
+                <el-table-column label="Rank" align="center" min-width="80" prop="rank" sortable>
+                </el-table-column>
+
             </el-table>
         </div>
         <div>
-            <ResultDetail :evaluationResultProp="evaluationResultProp" v-if="!index"></ResultDetail>
+            <ResultDetail :evaluationResultProp="evaluationResultProp" v-if="!index" @close="close_"></ResultDetail>
         </div>
     </div>
 </template>

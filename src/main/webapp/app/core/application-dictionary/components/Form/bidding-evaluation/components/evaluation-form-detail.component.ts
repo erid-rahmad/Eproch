@@ -1,5 +1,5 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
-import { Component, Inject, Mixins, Vue, Watch } from "vue-property-decorator";
+import {Component, Inject, Mixins, Vue, Watch} from "vue-property-decorator";
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import Schema from 'async-validator';
 
@@ -7,7 +7,7 @@ const baseApiEvalMethodCriteria = 'api/c-evaluation-method-criteria';
 const baseApiVendorScoringCriteria = 'api/m-vendor-scoring-criteria';
 const baseApiMTechproposal = 'api/m-tech-proposal-evaluations';
 const baseApiBiddingEvaluation = 'api/m-tech-proposal-evaluations';
-const baseApiEvalResultLine='api/m-bidding-eval-result-lines';
+const baseApiEvalResultLine = 'api/m-bidding-eval-result-lines';
 
 const PrequalificationFormProps = Vue.extend({
   props: {
@@ -19,29 +19,31 @@ const PrequalificationFormProps = Vue.extend({
         return {};
       }
     },
+    SelectVendorScoringLine: {
+      type: Object,
+      default: () => {
+        return {};
+      }
+    },
   }
 });
 
 @Component
 export default class PrequalificationForm extends Mixins(AccessLevelMixin, PrequalificationFormProps) {
 
+  options = [{
+    value: 'Pass',
+    label: 'Pass'
+  }, {
+    value: 'Fail',
+    label: 'Fail'
+  }];
+  value: ''
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
-
-      options= [{
-        value: 'Pass',
-        label: 'Pass'
-      }, {
-        value: 'Fail',
-        label: 'Fail'
-      }];
-      value: ''
-
-
   private evaluationMethodCriteria: any = [];
   private questions: Map<number, any> = new Map();
-  private averageScore ="";
-  private evaluationResultLine:any={};
+  private evaluationResultLine: any = {};
 
   private validationSchema = {
     requirement: {
@@ -52,114 +54,19 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
   };
 
   @Watch('SelectVendorScoringLine')
-  loaddata(){
+  loaddata() {
+    console.log("load data")
     this.retrieveEvaluationMethodCriteria(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLineId,
       this.evaluationFormProp.SelectVendorScoringLine.id);
-    this.evaluationResultLine=this.evaluationFormProp.evaluationResultLine;
+    this.evaluationResultLine = this.evaluationFormProp.evaluationResultLine;
+
   }
+
   created() {
+    console.log("evaluationFormProp",this.evaluationFormProp)
     this.retrieveEvaluationMethodCriteria(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLineId,
       this.evaluationFormProp.SelectVendorScoringLine.id);
-    this.evaluationResultLine=this.evaluationFormProp.evaluationResultLine;
-  }
-
-  @Watch('observableIdentifiers')
-  private loadQuestions({ id: vendorScoringLineId, evaluationMethodLineId }) {
-    this.questions.clear();
-    this.retrieveEvaluationMethodCriteria(evaluationMethodLineId, vendorScoringLineId);
-  }
-
-
-
-  private retrieveEvaluationMethodCriteria(evaluationMethodLineId: number, vendorScoringLineId: number) {
-    this.commonService(baseApiEvalMethodCriteria)
-      .retrieve({
-        criteriaQuery: [
-          'active.equals=true',
-          `evaluationMethodLineId.equals=${evaluationMethodLineId}`
-        ],
-        paginationQuery: {
-          page: 0,
-          size: 100,
-          sort: ['id']
-        }
-      })
-      .then(res => {
-        this.evaluationMethodCriteria = res.data.map((evalMethodCriteria: any) => {
-          evalMethodCriteria.evalMethodSubCriteriaList.forEach((evalMethodSubCriteria: any) => {
-            evalMethodSubCriteria.biddingSubCriteriaDTO.forEach((biddingSubCriteria: any) => {
-              biddingSubCriteria.criteriaLineDTO.forEach((subCriteriaLine: any) => {
-                this.questions.set(subCriteriaLine.id, subCriteriaLine);
-              });
-            });
-          });
-          return evalMethodCriteria;
-        });
-        this.retrieveVendorScoringCriteria(vendorScoringLineId);
-        this.retrieveEvaluation(this.evaluationFormProp.SelectVendorScoringLine.biddingId);
-      })
-  }
-
-  /**
-   * First, we need to get the predefined questions from c_evaluation_method_criteria.
-   * Then, map the existing requirements from m-vendor-scoring-criteria to each question.
-   * @param vendorScoringLineId
-   * @param evaluationMethodLineId
-   */
-   private retrieveVendorScoringCriteria(vendorScoringLineId: number) {
-    this.commonService(baseApiVendorScoringCriteria)
-      .retrieve({
-        criteriaQuery: [
-          'active.equals=true',
-          `vendorScoringLineId.equals=${vendorScoringLineId}`
-        ],
-        paginationQuery: {
-          page: 0,
-          size: 100,
-          sort: ['id']
-        }
-      })
-      .then(res => {
-        res.data.forEach((criteria: any) => {
-          const question = this.questions.get(criteria.biddingSubCriteriaLineId);
-          question.requirement = criteria.requirement;
-          question.vendorScoringLineId = criteria.vendorScoringLineId;
-        });
-      })
-      .catch(err => {
-        const message = 'Failed to get vendor scoring requirements';
-        console.log(message, err);
-        this.$message.error(message);
-        // this.retrieveEvaluation(this.SelectVendorScoringLine.biddingId);
-      });
-  }
-
-  private retrieveEvaluation(biddingId: number) {
-    this.commonService(baseApiBiddingEvaluation)
-      .retrieve({
-        criteriaQuery: [
-          `biddingId.equals=${biddingId}`,
-          `vendorId.equals=${this.evaluationFormProp.vendorId}`
-        ],
-        paginationQuery: {
-          page: 0,
-          size: 100,
-          sort: ['id']
-        }
-      })
-      .then(res => {
-        res.data.forEach((criteria: any) => {
-          const question = this.questions.get(criteria.biddingSubCriteriaLineId);
-          question.evaluation = criteria.evaluation;
-          question.notes = criteria.notes;
-          question.evaluationid = criteria.id;
-        });
-      })
-      .catch(err => {
-        const message = 'Failed to get evaluation';
-        console.log(message, err);
-        this.$message.error(message);
-      });
+    this.evaluationResultLine = this.evaluationFormProp.evaluationResultLine;
   }
 
   save() {
@@ -184,8 +91,8 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
       requirement.biddingSubCriteriaLineId = question.id;
       requirement.notes = question.notes;
       requirement.evaluation = question.evaluation;
-      requirement.biddingId=this.evaluationFormProp.SelectVendorScoringLine.biddingId;
-      requirement.vendorId=this.evaluationFormProp.vendorId;
+      requirement.biddingId = this.evaluationFormProp.SelectVendorScoringLine.biddingId;
+      requirement.vendorId = this.evaluationFormProp.vendorId;
       data.push(requirement);
 
     });
@@ -222,7 +129,7 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
       .finally(() => this.$emit('update:loading', false));
   }
 
-  updateEvalResultLine(){
+  updateEvalResultLine() {
     this.commonService(baseApiEvalResultLine)
       .create(this.evaluationResultLine)
       .then(res => {
@@ -231,5 +138,112 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
       })
       .catch(_err => this.$message.error('fail create record'));
 
+  }
+
+  @Watch('observableIdentifiers')
+  private loadQuestions({id: vendorScoringLineId, evaluationMethodLineId}) {
+    this.questions.clear();
+    this.retrieveEvaluationMethodCriteria(evaluationMethodLineId, vendorScoringLineId);
+  }
+
+  private retrieveEvaluationMethodCriteria(evaluationMethodLineId: number, vendorScoringLineId: number) {
+
+    this.commonService(baseApiEvalMethodCriteria)
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          `evaluationMethodLineId.equals=${evaluationMethodLineId}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.evaluationMethodCriteria = res.data.map((evalMethodCriteria: any) => {
+          evalMethodCriteria.evalMethodSubCriteriaList.forEach((evalMethodSubCriteria: any) => {
+            evalMethodSubCriteria.biddingSubCriteriaDTO.forEach((biddingSubCriteria: any) => {
+              biddingSubCriteria.criteriaLineDTO.forEach((subCriteriaLine: any) => {
+                this.questions.set(subCriteriaLine.id, subCriteriaLine);
+              });
+            });
+          });
+          return evalMethodCriteria;
+        })
+
+
+      })
+      .finally(() => {
+        this.retrieveEvaluation(this.evaluationFormProp.SelectVendorScoringLine.biddingId);
+        this.retrieveVendorScoringCriteria(vendorScoringLineId);
+      });
+  }
+
+  /**
+   * First, we need to get the predefined questions from c_evaluation_method_criteria.
+   * Then, map the existing requirements from m-vendor-scoring-criteria to each question.
+   * @param vendorScoringLineId
+   * @param evaluationMethodLineId
+   */
+  private retrieveVendorScoringCriteria(vendorScoringLineId: number) {
+    this.commonService(baseApiVendorScoringCriteria)
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          `vendorScoringLineId.equals=${vendorScoringLineId}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        res.data.forEach((criteria: any) => {
+          let question = this.questions.get(criteria.biddingSubCriteriaLineId);
+          question.requirement = criteria.requirement;
+          question.vendorScoringLineId = criteria.vendorScoringLineId;
+        });
+      })
+      .catch(err => {
+        const message = 'Failed to get vendor scoring requirements';
+        console.log(message, err);
+        this.$message.error(message);
+        // this.retrieveEvaluation(this.SelectVendorScoringLine.biddingId);
+      });
+  }
+
+  private retrieveEvaluation(biddingId: number) {
+
+    this.commonService(baseApiBiddingEvaluation)
+      .retrieve({
+        criteriaQuery: [
+          `biddingId.equals=${biddingId}`,
+          `vendorId.equals=${this.evaluationFormProp.vendorId}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        res.data.forEach((criteria: any) => {
+          try {
+            const question = this.questions.get(criteria.biddingSubCriteriaLineId);
+            question.evaluation = criteria.evaluation;
+            question.notes = criteria.notes;
+            question.evaluationid = criteria.id;
+          } catch (er) {
+          }
+
+        });
+      })
+      .catch(err => {
+        const message = 'Failed to get evaluation';
+        console.log(message, err);
+        this.$message.error(message);
+      });
   }
 }

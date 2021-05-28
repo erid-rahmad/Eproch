@@ -38,14 +38,10 @@ export default class BiddingEvaluation extends mixins(Vue2Filters.mixin, AlertMi
   private data:any={};
 
   created() {
-    console.log(this.pickRow)
     this.getbiddingSubmission();
-
   }
 
-  close() {
-    this.$emit("close");
-  }
+
 
   evaluate(row){
     this.index=1;
@@ -118,5 +114,12 @@ export default class BiddingEvaluation extends mixins(Vue2Filters.mixin, AlertMi
         this.data.biddingSubmission=this.biddingSubmission;
         this.data.evaluationResult=this.evaluationResult;
       })
+  }
+
+  close() {
+    this.$emit("close");
+  }
+  close_() {
+    this.index=0;
   }
 }

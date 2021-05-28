@@ -34,7 +34,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
   index=true;
-  private evaluationResult:any={};
+  private evaluationResult:any=[];
   private evaluationResultProp:any={};
 
   created(){
@@ -67,5 +67,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   close() {
     this.$emit("close");
   }
-
+  close_() {
+    this.index=true;
+  }
 }

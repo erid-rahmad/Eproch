@@ -1,6 +1,13 @@
 <template>
-    <div class="bidding-evaluation">
-        <div class="card-view">
+    <div class="bidding-evaluation card-view">
+        <el-row class="toolbar">
+            <el-col :span="24">
+                <el-button icon="el-icon-close" plain size="mini" type="danger" @click="close">
+                    Back
+                </el-button>
+            </el-col>
+        </el-row>
+        <div class="card">
             <el-form ref="productCatalog" label-position="left" label-width="130px"
                      size="mini">
                 <el-form-item label="Bidding No">
