@@ -40,6 +40,7 @@
                 </el-divider>
                 <EvaluationFormDetail :evaluationFormProp="evaluationFormProp"  :SelectVendorScoringLine="SelectVendorScoringLine" :vendorId="vendorId"></EvaluationFormDetail>
             </div>
+
         </div>
     </div>
 </template>

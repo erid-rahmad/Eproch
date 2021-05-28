@@ -15,6 +15,7 @@ const baseApiVendorScoring = 'api/m-vendor-scorings';
 const baseApiEvaluationMethodLine = 'api/c-evaluation-method-lines';
 const baseApiVendorScoringLine ='api/m-vendor-scoring-lines';
 const baseApiEvalResultLine='api/m-bidding-eval-result-lines';
+const baseApiEvalResults ='api/m-bidding-eval-results';
 
 
 const ProductCatalogProp = Vue.extend({
@@ -54,11 +55,24 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     this.evaluationFormProp.biddingSubmission=this.data.pickrow;
     this.evaluationResult=this.data.evaluationResult;
     this.evaluation=this.data.pickrow;
-    this.retrieveVendorScoring(this.evaluation.biddingId)
+    this.retrieveVendorScoring(this.evaluation.biddingId);
+    this.SelectVendorScoringLine='';
+
   }
 
   setEvaluation(data :any){
     this.SelectVendorScoringLine=data;
+    this.vendorId=this.evaluation.vendorId;
+    this.evaluationFormProp.vendorId=this.evaluation.vendorId;
+    this.evaluationFormProp.SelectVendorScoringLine=this.SelectVendorScoringLine;
+    this.retrieveEvalResultLine(this.SelectVendorScoringLine.evaluationMethodLineId,this.evaluationResult.id);
+    this.retrieveAllEvalResultLine(this.evaluationResult.id);
+    if (this.SelectVendorScoringLine.evaluationMethodLineEvaluation ==="P"){
+      this.FormMenu=1;
+    }
+    else {
+      this.FormMenu=2;
+    }
   }
 
   changeCode(code :String){
@@ -73,20 +87,47 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     }
   }
 
-  @Watch('SelectVendorScoringLine')
-  loaddata(){
-    console.log("from this",this.SelectVendorScoringLine);
-    this.vendorId=this.evaluation.vendorId;
-    this.evaluationFormProp.vendorId=this.evaluation.vendorId;
-    this.evaluationFormProp.SelectVendorScoringLine=this.SelectVendorScoringLine;
-   this.retrieveEvalResultLine(this.SelectVendorScoringLine.evaluationMethodLineId,this.evaluationResult.id);
-    if (this.SelectVendorScoringLine.evaluationMethodLineEvaluation ==="P"){
-      this.FormMenu=1;
-    }
-    else {
-      this.FormMenu=2;
-    }
+  retrieveAllEvalResultLine(biddingEvalResultId:number){
+    this.commonService(baseApiEvalResultLine)
+      .retrieve({
+        criteriaQuery: [
+          `biddingEvalResultId.equals=${biddingEvalResultId}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        let AllEvalResultLine =res.data;
+        let average=0,loop=0,status;
+        AllEvalResultLine.forEach(data=>{
+          if(data.score.leght){
+            average=average+data.score;
+            ++loop;
+          }
+          if(data.status==="Fail"){
+            status="Fail";
+          }{status="Pass"}
+        })
+        average=average/loop;
+        this.evaluationResult.status=status;
+        this.evaluationResult.score=average;
+
+        this.updateEvalResult();
+        });
   }
+
+  updateEvalResult(){
+    this.commonService(baseApiEvalResults)
+      .create( this.evaluationResult)
+      .then(res => {
+        this.evaluationResult = res.data;
+      })
+      .catch(_err => this.$message.error('fail create record'));
+  }
+
   retrieveEvalResultLine(evaluationMethodLineId:number,biddingEvalResultId:number){
     this.commonService(baseApiEvalResultLine)
       .retrieve({
@@ -169,7 +210,6 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       })
       .then(res => {
         this.evaluationMethodLines = res.data;
-        console.log(this.evaluationMethodLines);
       });
   }
 

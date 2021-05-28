@@ -28,7 +28,7 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
 
-      options: [{
+      options= [{
         value: 'Pass',
         label: 'Pass'
       }, {

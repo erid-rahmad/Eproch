@@ -143,7 +143,7 @@
                     <el-col :span="6">
                         <div class="grid-content bg-purple">
                             <el-form-item label="Average Score">
-                                <el-input v-model="evaluationResultLine.score" placeholder="Please input" @change="updateData"></el-input>
+                                <el-input v-model="evaluationResultLine.score" placeholder="Please input" ></el-input>
                             </el-form-item>
                         </div>
                     </el-col>

@@ -60,7 +60,7 @@ public class MBiddingEvalResultResource {
     public ResponseEntity<MBiddingEvalResultDTO> createMBiddingEvalResult(@Valid @RequestBody MBiddingEvalResultDTO mBiddingEvalResultDTO) throws URISyntaxException {
         log.debug("REST request to save MBiddingEvalResult : {}", mBiddingEvalResultDTO);
         if (mBiddingEvalResultDTO.getId() != null) {
-            throw new BadRequestAlertException("A new mBiddingEvalResult cannot already have an ID", ENTITY_NAME, "idexists");
+            return updateMBiddingEvalResult(mBiddingEvalResultDTO);
         }
         MBiddingEvalResultDTO result = mBiddingEvalResultService.save(mBiddingEvalResultDTO);
         return ResponseEntity.created(new URI("/api/m-bidding-eval-results/" + result.getId()))
