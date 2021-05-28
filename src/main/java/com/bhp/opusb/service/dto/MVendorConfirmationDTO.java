@@ -34,9 +34,28 @@ public class MVendorConfirmationDTO extends AbstractAuditingDTO implements Seria
     private String picName;
 
     private Integer selectedWinners;
+    private String status;
+
+    private Long latestContractId;
     
     public Long getId() {
         return id;
+    }
+
+    public Long getLatestContractId() {
+        return latestContractId;
+    }
+
+    public void setLatestContractId(Long latestContractId) {
+        this.latestContractId = latestContractId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getCostCenterName() {

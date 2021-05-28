@@ -3,6 +3,7 @@ package com.bhp.opusb.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -55,6 +56,14 @@ public class MVendorConfirmation extends AbstractAuditingEntity implements Seria
     @NotNull
     @JsonIgnoreProperties("mVendorConfirmations")
     private AdUser pic;
+
+    @Formula("(select mvcl.status from m_vendor_confirmation_line mvcl where mvcl.vendor_confirmation_id = id)")
+    private String status;
+
+    @Formula("(select max(mvcc.id) from m_vendor_confirmation_contract mvcc where "
+    + "mvcc.active = false and "
+    +"mvcc.vendor_confirmation_line_id = (select mvcl.id from m_vendor_confirmation_line mvcl where mvcl.vendor_confirmation_id = id))")
+    private Long latestContractId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -154,6 +163,32 @@ public class MVendorConfirmation extends AbstractAuditingEntity implements Seria
 
     public void setPic(AdUser adUser) {
         this.pic = adUser;
+    }
+
+    public String getStatus(){
+        return this.status;
+    }
+
+    public MVendorConfirmation status(String status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(String status){
+        this.status = status;
+    }
+
+    public Long getLatestContractId(){
+        return this.latestContractId;
+    }
+
+    public MVendorConfirmation latestContractId(Long latestContractId) {
+        this.latestContractId = latestContractId;
+        return this;
+    }
+
+    public void setLatestContractId(Long latestContractId){
+        this.latestContractId = latestContractId;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

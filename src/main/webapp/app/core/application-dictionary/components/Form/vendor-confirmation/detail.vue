@@ -97,14 +97,12 @@
                 label="Contract Amount"
                 min-width="150"
               >
-                <template slot-scope="{ row }">
-                  {{ row.amount | formatCurrency }}
-                </template>
+                  {{ mainForm.amount | formatCurrency }}
               </el-table-column>
               <el-table-column
                 label="Status"
                 min-width="100"
-              ><template slot-scope="{ row }">{{formatConfirmationStatus(row.documentStatus)}}</template></el-table-column>
+              ><template slot-scope="{ row }">{{formatConfirmationStatus(row.status)}}</template></el-table-column>
               <el-table-column
                 label="View Detail"
                 width="140"
@@ -140,17 +138,19 @@
                 width="140"
               >
                 <template slot-scope="{ row }">
-                  <el-button
-                    class="button"
-                    icon="el-icon-document-checked"
-                    size="mini"
-                    style="width: 100%"
-                    type="primary"
-                    @click="openConfirmationForm(row)"
-                  >
-                    Action
-                  </el-button>
-                  <div v-if="row.documentStatus==='Accepted'">
+                  <div v-if="row.status!=='P' && row.status!=='A'">
+                    <el-button
+                      class="button"
+                      icon="el-icon-document-checked"
+                      size="mini"
+                      style="width: 100%"
+                      type="primary"
+                      @click="openConfirmationForm(row)"
+                    >
+                      Action
+                    </el-button>
+                  </div>
+                  <div v-if="row.status==='A'">
                     <el-button
                       class="button"
                       icon="el-icon-document-checked"
@@ -187,6 +187,30 @@
 
     <el-dialog
       width="50%"
+      :visible.sync="confirmPublish"
+      title="Confirm Publish"
+    >
+      Confirm publish contract?
+      <div slot="footer">
+        <el-button
+          icon="el-icon-close"
+          size="mini"
+          @click="confirmPublish = false"
+        >
+          No
+        </el-button>
+        <el-button
+          icon="el-icon-check"
+          size="mini"
+          @click="publish"
+        >
+          Yes
+        </el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog
+      width="50%"
       :visible.sync="showDetail"
       title="Detail"
     >
@@ -206,7 +230,7 @@
           >
             <el-form-item label="Amount Total">
               <el-input
-                v-model="selectedConfirmation.amount"
+                v-model="mainForm.amount"
                 v-inputmask="{'alias': 'currency'}"
                 disabled
               ></el-input>
@@ -301,8 +325,8 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="Contract No."
-          prop="contractNo"
+          label="Confirmation No."
+          prop="confirmationNo"
           min-width="100"
         ></el-table-column>
         <el-table-column
@@ -339,6 +363,7 @@
     >
       <el-form
         ref="contractForm"
+        :rules="contractFormValidationSchema"
         label-position="left"
         label-width="200px"
         :model="contract"
@@ -351,20 +376,24 @@
             :lg="18"
             :xl="12"
           >
-            <el-form-item label="Contract No.">
+            <el-form-item 
+              label="Confirmation No."
+              prop="confirmationNo"
+            >
               <el-input
-                v-model="contract.contractNo"
+                v-model="contract.confirmationNo"
               ></el-input>
             </el-form-item>
-            <el-form-item label="Contract Start Date">
+            <el-form-item 
+              label="Contract Start Date">
               <el-input
-                v-model="contract.startDate"
+                v-model="contract.contractStartDate"
                 disabled
               ></el-input>
             </el-form-item>
             <el-form-item label="Contract End Date">
               <el-input
-                v-model="contract.endDate"
+                v-model="contract.contractEndDate"
                 disabled
               ></el-input>
             </el-form-item>
@@ -377,10 +406,18 @@
           >
             <el-form-item label="Contract Attachment">
               <el-upload
-                action="/api/c-attachments/upload"
+                :action="action"
                 class="upload-demo"
-                :limit="1"
+                :limit="limit"
                 :multiple="false"
+                :accept="accept"
+                :before-upload="handleBeforeUpload"
+                :on-change="onUploadChange"
+                :on-preview="handlePreview"
+                :on-exceed="handleExceed"
+                :on-remove="handleRemove"
+                :on-error="onUploadError"
+                :on-success="onUploadSuccess"
               >
                 <el-button
                   size="mini"
@@ -400,7 +437,7 @@
         </el-row>
         <el-form-item label="Contract Detail">
           <el-input
-            v-model="contract.remark"
+            v-model="contract.contractDetail"
             :rows="7"
             type="textarea"
           ></el-input>
@@ -418,7 +455,7 @@
           icon="el-icon-check"
           size="mini"
           type="primary"
-          @click="showConfirmationForm = false"
+          @click="saveAsDraft"
         >
           {{ $t('entity.action.save') }}
         </el-button>
@@ -426,7 +463,7 @@
           icon="el-icon-s-promotion"
           size="mini"
           type="primary"
-          @click="showConfirmationForm = false"
+          @click="showConfirmPublish"
         >
           Publish
         </el-button>

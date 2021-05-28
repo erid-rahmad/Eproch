@@ -1,4 +1,5 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
+import { ElForm } from 'element-ui/types/form';
 import Vue from 'vue';
 import Component, { mixins } from 'vue-class-component';
 import { Inject } from 'vue-property-decorator';
@@ -19,23 +20,39 @@ const VendorConfirmationDetailProp = Vue.extend({
 export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, VendorConfirmationDetailProp) {
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
+
+  private limit: number = 1;
+  private action: string = "/api/c-attachments/upload";
+  private accept: string = ".jpg, .jpeg, .png, .pdf";
+  private file: any = {};
+
+  contractFormValidationSchema = {
+    confirmationNo: {
+      required: true,
+      message: 'Confirmation No. is required'
+    }
+  };
   
   columnSpacing = 24;
   showDetail = false;
   showConfirmationForm = false;
+  confirmPublish = false;
   showPoForm = false;
   showHistory = false;
 
   mainForm:any = {};
 
-  contract = {
-    contractNo: 112001,
-    startDate: '2021-03-31',
-    endDate: '2021-03-31',
-    remark: null
+  contract:any = {};
+/*
+    confirmationNo: "",
+    contractStartDate: '2021-05-28',
+    contractEndDate: '2021-05-28',
+    contractDetail: null
   };
+*/
 
-  confirmations = [
+  confirmations = []
+/*
     {
       vendorName: 'Supplier 3',
       amount: 29310000000,
@@ -63,6 +80,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
       ]
     }
   ];
+*/
 
   history = [
     {
@@ -92,7 +110,10 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
         this.vendorConfirmation = res.map(item => ({ key: item.value, value: item.name }));
       });
     
-    /*
+    this.refreshLine();
+  }
+
+  refreshLine(){
     this.commonService('/api/m-vendor-confirmation-lines').retrieve({
       criteriaQuery: this.updateCriteria([
         'active.equals=true',
@@ -103,8 +124,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
         size: 10000,
         sort: ['id']
       }
-    }).then(res=>{console.log(res)});
-    */
+    }).then(res=>{this.confirmations = res.data});
   }
 
   formatConfirmationStatus(value: string) {
@@ -126,10 +146,166 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   }
 
   openConfirmationForm(_row: any) {
+    this.selectedConfirmation = _row;
+    this.commonService('/api/m-vendor-confirmation-contracts').retrieve({
+      criteriaQuery: this.updateCriteria([
+        'active.equals=true',
+        `vendorConfirmationLineId.equals=${_row.id}`
+      ]),
+      paginationQuery: {
+        page: 0,
+        size: 10000,
+        sort: ['id']
+      }
+    }).then(res=>{this.contract = 
+      res.data[0]?res.data[0]:{
+        confirmationNo: "",
+        contractStartDate: '2021-05-28',
+        contractEndDate: '2021-05-28',
+        contractDetail: null,
+        adOrganizationId: this.mainForm.adOrganizationId,
+        vendorConfirmationLineId: _row.id
+      }
+      
+      console.log(this.contract);
+    });
     this.showConfirmationForm = true;
   }
 
   generatePo(_row: any) {
     this.showPoForm = true;
+  }
+
+  onUploadChange(file: any) {
+    this.file = file;
+  }
+
+  handlePreview(file) {
+    window.open(file.response.downloadUri, '_blank');
+  }
+
+  handleRemove(files, fileList) {
+    this.file = {};
+    this.contract.attachmentId = null;
+  }
+
+  onUploadError(err: any) {
+    console.log('Failed uploading a file ', err);
+    this.$notify({
+      title: 'Error',
+      message: "Failed uploading a file",
+      type: 'error',
+      duration: 3000
+    });
+  }
+
+  onUploadSuccess(response: any, file) {
+      console.log('File uploaded successfully ', response);
+      this.contract.attachmentId = response.attachment.id;
+      this.file = file;
+      //(this.$refs.company as ElForm).clearValidate('file');
+  }
+
+  handleExceed(files, fileList) {
+    if (files.length >= 1) {
+      this.$notify({
+        title: 'Warning',
+        message: "Up to 1 file(s) are allowed",
+        type: 'warning',
+        duration: 3000
+      });
+      return false;
+    }
+  }
+
+  handleBeforeUpload(file: any) {
+    // File size limitation
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      this.$notify({
+          title: 'Warning',
+          message: "File size must be less than 2Mb",
+          type: 'warning',
+          duration: 3000
+      });
+      return isLt2M;
+    }
+
+    // File type restriction
+    const name = file.name ? file.name : '';
+    const ext = name
+      ? name.substr(name.lastIndexOf('.') + 1, name.length)
+      : true;
+    const isExt = this.accept.indexOf(ext) < 0;
+    if (isExt) {
+      this.$notify({
+        title: 'Warning',
+        message: "Please upload the correct format type",
+        type: 'warning',
+        duration: 3000
+      });
+      return !isExt;
+    }
+
+  }
+  saveAsDraft(){
+    (<ElForm>this.$refs.contractForm).validate(passed => {
+      if (passed) {
+        if (!this.contract.attachmentId) {
+          this.$notify({
+            title: 'Warning',
+            message: "Please upload contract file.",
+            type: 'warning',
+            duration: 3000
+          });
+        } else {
+          if (this.contract.id) {
+          this.commonService('/api/m-vendor-confirmation-contracts')
+            .update(this.contract)
+            .then(_res => {
+              this.$message.success('Contract has been saved!');
+              this.showConfirmationForm = false;
+              this.refreshLine();
+            }).catch(err => {
+              console.error('Failed to save the contract.', err);
+              this.$message.error(`Failed saving the contract`);
+            });
+          } else {
+            this.commonService('/api/m-vendor-confirmation-contracts')
+            .create(this.contract)
+            .then(_res => {
+              this.$message.success('Contract has been saved!');
+              this.showConfirmationForm = false;
+              this.refreshLine();
+            }).catch(err => {
+              console.error('Failed to save the contract.', err);
+              this.$message.error(`Failed saving the contract`);
+            });
+          }
+        }
+      }
+    });
+  }
+
+  publish(){
+    this.commonService(`/api/m-vendor-confirmation-contracts/publish/${this.contract.id}`)
+      .create(this.contract)
+      .then(_res => {
+        this.$message.success('Contract has been published!');
+        this.showConfirmationForm = false;
+        this.confirmPublish = false;
+        this.refreshLine();
+      }).catch(err => {
+        console.error('Failed to publish the contract.', err);
+        this.$message.error(`Failed saving the contract`);
+      });
+  }
+
+  showConfirmPublish(){
+    (<ElForm>this.$refs.contractForm).validate(passed => {
+      if (passed) {
+        this.confirmPublish = true;
+      }
+    });
   }
 }

@@ -87,8 +87,9 @@
         v-if="isVendor"
         label="Status"
         min-width="100"
-        prop="confirmationStatus"
-      ></el-table-column>
+      >
+        <template slot-scope="{ row }">{{formatConfirmationStatus(row.status)}}</template>
+      </el-table-column>
       <el-table-column
         v-else
         label="Selected Winner"
