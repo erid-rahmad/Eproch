@@ -31,14 +31,16 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
   submitting = false;
 
   contract = {
-    contractNo: 112001,
+    contractNo: 0,
     startDate: '2021-03-31',
     endDate: '2021-03-31',
     remark: null,
     reason: null
   };
 
-  vendorConfirmations = [
+  vendorConfirmations = []
+  vendorConfirmation: any[] = [];
+/*
     {
       biddingNo: 'BN-00001',
       biddingTitle: 'Pengadaan Kendaraan Operasional',
@@ -62,7 +64,7 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
       confirmationStatus: 'Rejected'
     },
   ];
-
+*/
   get isVendor() {
     return AccountStoreModule.isVendor;
   }
@@ -93,6 +95,11 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
     .then(res => {
       this.vendorConfirmations = res.data;
     });
+    this.commonService(null)
+      .retrieveReferenceLists('vendorConfirmation')
+      .then(res => {
+        this.vendorConfirmation = res.map(item => ({ key: item.value, value: item.name }));
+      });
   }
 
   mounted() {
@@ -127,6 +134,21 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
 
   viewDetail(row: any) {
     this.selectedRow = row;
+    this.commonService('/api/m-vendor-confirmation-contracts').retrieve({
+      criteriaQuery: this.updateCriteria([
+        ''
+      ]),
+      paginationQuery: {
+        page: 0,
+        size: 10000,
+        sort: ['id']
+      }
+    })
     this.index = false;
+  }
+
+  formatConfirmationStatus(value: string) {
+    if ('P'===value) return 'Need Confirmation';
+    return this.vendorConfirmation.find(status => status.key === value)?.value;
   }
 }

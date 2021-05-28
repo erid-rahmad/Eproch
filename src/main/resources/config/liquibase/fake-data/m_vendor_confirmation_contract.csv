@@ -1,0 +1,11 @@
+id;uid;active;contract_detail;contract_start_date;contract_end_date;ad_organization_id;attachment_id;vendor_confirmation_line_id
+1;4e3a4546-14c3-4274-b1e8-98d69c7d674d;true;../fake-data/blob/hipster.txt;2021-05-26;2021-05-27;1;1;1
+2;2af55d2e-21cc-4def-a8f2-1b8e96781853;false;../fake-data/blob/hipster.txt;2021-05-27;2021-05-27;2;2;2
+3;14c3a131-aa97-472f-8b8f-566754ffab59;true;../fake-data/blob/hipster.txt;2021-05-27;2021-05-26;3;3;3
+4;79bfecba-bda8-4581-8474-cbc1ee00db20;false;../fake-data/blob/hipster.txt;2021-05-27;2021-05-26;4;4;4
+5;1d05b25a-40e7-4142-9289-8143114046d1;true;../fake-data/blob/hipster.txt;2021-05-27;2021-05-27;5;5;5
+6;d1e3f871-36a6-49d8-bb38-fbdf72ee9b15;false;../fake-data/blob/hipster.txt;2021-05-27;2021-05-26;6;6;6
+7;4705b45f-cb2a-4fd0-a9ae-677ed0987dbf;false;../fake-data/blob/hipster.txt;2021-05-27;2021-05-26;7;7;7
+8;6332e074-b75c-4b0b-9df5-733de50f9908;false;../fake-data/blob/hipster.txt;2021-05-27;2021-05-27;8;8;8
+9;0b3d67f0-eb4e-4ff0-b903-097a45ab7263;true;../fake-data/blob/hipster.txt;2021-05-26;2021-05-27;9;9;9
+10;ed0f8ee0-e35f-4a05-90d7-42af62e99794;true;../fake-data/blob/hipster.txt;2021-05-27;2021-05-27;10;10;10

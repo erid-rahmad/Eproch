@@ -1361,6 +1361,14 @@ entity MVendorConfirmationLine {
 	status String maxlength(10)
 }
 
+entity MVendorConfirmationContract {
+	uid UUID
+	active Boolean
+	contractDetail TextBlob
+	contractStartDate LocalDate
+	contractEndDate LocalDate
+}
+
 entity MVendorInvitation {
 	uid UUID
 	active Boolean
@@ -1933,6 +1941,10 @@ relationship ManyToOne {
 	MVendorConfirmationLine{vendor required} to CVendor
 	MVendorConfirmationLine{biddingEvalResult } to MBiddingEvalResult
 	MVendorConfirmationLine{vendorConfirmation required} to MVendorConfirmation
+
+	MVendorConfirmationContract{adOrganization required} to ADOrganization
+	MVendorConfirmationContract{attachment required} to CAttachment
+	MVendorConfirmationContract{vendorConfirmationLine required} to MVendorConfirmationLine
 
 	MVendorInvitation{bidding required} to MBidding
 	MVendorInvitation{adOrganization required} to ADOrganization

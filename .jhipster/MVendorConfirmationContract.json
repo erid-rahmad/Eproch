@@ -1,0 +1,64 @@
+{
+    "name": "MVendorConfirmationContract",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "contractDetail",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "contractStartDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "contractEndDate",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mVendorConfirmationContract",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cAttachment",
+            "otherEntityRelationshipName": "mVendorConfirmationContract",
+            "relationshipValidateRules": "required",
+            "relationshipName": "attachment",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mVendorConfirmationLine",
+            "otherEntityRelationshipName": "mVendorConfirmationContract",
+            "relationshipValidateRules": "required",
+            "relationshipName": "vendorConfirmationLine",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210527153900",
+    "entityTableName": "m_vendor_confirmation_contract",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}
