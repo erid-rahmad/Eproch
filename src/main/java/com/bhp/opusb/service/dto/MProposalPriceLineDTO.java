@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
  * A DTO for the {@link com.bhp.opusb.domain.MProposalPriceLine} entity.
  */
 public class MProposalPriceLineDTO extends AbstractAuditingDTO {
-    
+
     private Long id;
 
     @NotNull
@@ -36,7 +36,52 @@ public class MProposalPriceLineDTO extends AbstractAuditingDTO {
 
     private Long biddingLineId;
     private String biddingLineName;
-    
+    private BigDecimal biddingLineQuantity;
+    private BigDecimal biddingLineCeilingPrice;
+    private BigDecimal biddingLineTotalCeilingPrice;
+    private LocalDate biddingLineDeliveryDate;
+    private String biddingLineRemark;
+
+    public BigDecimal getBiddingLineQuantity() {
+        return biddingLineQuantity;
+    }
+
+    public void setBiddingLineQuantity(BigDecimal biddingLineQuantity) {
+        this.biddingLineQuantity = biddingLineQuantity;
+    }
+
+    public BigDecimal getBiddingLineCeilingPrice() {
+        return biddingLineCeilingPrice;
+    }
+
+    public void setBiddingLineCeilingPrice(BigDecimal biddingLineCeilingPrice) {
+        this.biddingLineCeilingPrice = biddingLineCeilingPrice;
+    }
+
+    public BigDecimal getBiddingLineTotalCeilingPrice() {
+        return biddingLineTotalCeilingPrice;
+    }
+
+    public void setBiddingLineTotalCeilingPrice(BigDecimal biddingLineTotalCeilingPrice) {
+        this.biddingLineTotalCeilingPrice = biddingLineTotalCeilingPrice;
+    }
+
+    public LocalDate getBiddingLineDeliveryDate() {
+        return biddingLineDeliveryDate;
+    }
+
+    public void setBiddingLineDeliveryDate(LocalDate biddingLineDeliveryDate) {
+        this.biddingLineDeliveryDate = biddingLineDeliveryDate;
+    }
+
+    public String getBiddingLineRemark() {
+        return biddingLineRemark;
+    }
+
+    public void setBiddingLineRemark(String biddingLineRemark) {
+        this.biddingLineRemark = biddingLineRemark;
+    }
+
     public Long getId() {
         return id;
     }

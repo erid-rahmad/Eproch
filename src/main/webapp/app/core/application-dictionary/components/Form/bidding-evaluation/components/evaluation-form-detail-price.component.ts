@@ -1,10 +1,14 @@
 import Vue from 'vue';
 import {Inject, Mixins, Watch} from "vue-property-decorator";
 import Component from "vue-class-component";
+import DynamicWindowService from "@/core/application-dictionary/components/DynamicWindow/dynamic-window.service";
+
+const baseApiProposal = 'api/m-proposal-prices';
+const baseApiProposalLine = 'api/m-proposal-price-lines';
 
 const DetailPriceProp = Vue.extend({
   props: {
-    SelectVendorScoringLine: {
+    evaluationFormProp: {
       type: Object,
       default: () => {
         return {};
@@ -15,23 +19,18 @@ const DetailPriceProp = Vue.extend({
 
 @Component
 export default class DetailPrice extends Mixins( DetailPriceProp) {
+
+  @Inject('dynamicWindowService')
+  protected commonService: (baseApiUrl: string) => DynamicWindowService
+
+
+
   menuPrice:boolean=false;
-  private evaluation={
-    biddingNo:'BN-00008',
-    biddingName:'Pengadaan Mobil Operasional',
-    biddingTypeName:'Tender Goods',
-    eventTypeName:'Satu Tahap',
-    total:'4.3',
-    evaluation:'7',
-    price:'1.500.000.000.00',
-    vendor:'Supplier1',
-    pic:'Admin ',
-    date:'2021-05-31 12:12',
-    attachment:'penawaran.pdf',
-    Currency:"IDR"
-  }
+  isLoading:boolean=false;
 
   ///////////
+
+
   data() {
     return {
       options: [{
@@ -79,7 +78,47 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
 
     ];
   ///////////
+
+  private proposalPrice:any={};
+  private proposalPriceLine:any={};
   created(){
+    this.retrieveProposal(this.evaluationFormProp.biddingSubmission.id);
+  }
+
+  private retrieveProposal(submissionId: number) {
+    this.commonService(baseApiProposal)
+      .retrieve({
+        criteriaQuery: [
+          `biddingSubmissionId.equals=${submissionId}`
+        ]
+      })
+      .then(res => {
+        if (res.data.length) {
+          this.proposalPrice = { ...this.proposalPrice, ...res.data[0] };
+          console.log("proposal price",this.proposalPrice)
+          this.retrieveProposedLines(this.proposalPrice.id);
+        }
+      });
+  }
+
+  private retrieveProposedLines(proposalId: number) {
+    this.commonService(baseApiProposalLine)
+      .retrieve({
+        criteriaQuery: [
+          `proposalPriceId.equals=${proposalId}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 10,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.proposalPriceLine=res.data;
+        console.log("line",this.proposalPriceLine);
+
+      })
+
   }
   close() {
     this.$emit("close");

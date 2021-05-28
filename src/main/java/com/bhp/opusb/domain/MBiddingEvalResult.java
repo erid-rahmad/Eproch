@@ -29,6 +29,12 @@ public class MBiddingEvalResult implements Serializable {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "score")
+    private Integer score;
+
+    @Column(name = "rank")
+    private Integer rank;
+
     @Column(name = "uid")
     private UUID uid;
 
@@ -65,6 +71,32 @@ public class MBiddingEvalResult implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public MBiddingEvalResult score(Integer score) {
+        this.score = score;
+        return this;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public Integer getRank() {
+        return rank;
+    }
+
+    public MBiddingEvalResult rank(Integer rank) {
+        this.rank = rank;
+        return this;
+    }
+
+    public void setRank(Integer rank) {
+        this.rank = rank;
     }
 
     public UUID getUid() {
@@ -141,6 +173,8 @@ public class MBiddingEvalResult implements Serializable {
         return "MBiddingEvalResult{" +
             "id=" + getId() +
             ", status='" + getStatus() + "'" +
+            ", score=" + getScore() +
+            ", rank=" + getRank() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

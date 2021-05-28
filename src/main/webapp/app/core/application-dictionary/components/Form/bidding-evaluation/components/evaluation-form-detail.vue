@@ -143,14 +143,14 @@
                     <el-col :span="6">
                         <div class="grid-content bg-purple">
                             <el-form-item label="Average Score">
-                                <el-input v-model="averageScore" placeholder="Please input"></el-input>
+                                <el-input v-model="evaluationResultLine.score" placeholder="Please input" @change="updateData"></el-input>
                             </el-form-item>
                         </div>
                     </el-col>
                     <el-col :span="6">
                         <div class="grid-content bg-purple-light"  >
                             <template>
-                                <el-select size="mini" v-model="value" placeholder="Select">
+                                <el-select size="mini" v-model="evaluationResultLine.status" placeholder="Select">
                                     <el-option
                                         size="mini"
                                         v-for="item in options"

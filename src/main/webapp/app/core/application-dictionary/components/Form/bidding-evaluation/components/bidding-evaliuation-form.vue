@@ -32,13 +32,13 @@
                 </el-form-item>
             </el-form>
             <div v-if="FormMenu===1" >
-                <EvaluationTeamDetailPrice :SelectVendorScoringLine="SelectVendorScoringLine" :vendorId="vendorId"></EvaluationTeamDetailPrice>
+                <EvaluationTeamDetailPrice :evaluationFormProp="evaluationFormProp" :SelectVendorScoringLine="SelectVendorScoringLine" :vendorId="vendorId"></EvaluationTeamDetailPrice>
             </div>
             <div v-if="FormMenu===2">
                 <el-divider content-position="left">
                     <h4>Evaluation</h4>
                 </el-divider>
-                <EvaluationFormDetail :SelectVendorScoringLine="SelectVendorScoringLine" :vendorId="vendorId"></EvaluationFormDetail>
+                <EvaluationFormDetail :evaluationFormProp="evaluationFormProp"  :SelectVendorScoringLine="SelectVendorScoringLine" :vendorId="vendorId"></EvaluationFormDetail>
             </div>
         </div>
     </div>

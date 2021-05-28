@@ -8,9 +8,11 @@ import {Inject} from "vue-property-decorator";
 import DynamicWindowService from "@/core/application-dictionary/components/DynamicWindow/dynamic-window.service";
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 
+const baseApiEvalResultLine='api/m-bidding-eval-result-lines';
+
 const ProductCatalogProp = Vue.extend({
   props: {
-    data: {
+    evaluationResultProp: {
       type: Object,
       default: () => {
         return {};
@@ -35,28 +37,29 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     vendorName:'supplier1'
   }
 
-  private biddingSubmission=[
-
-    {
-      "1": "Administrasi",
-      "date": "2021-05-25T15:30:33.833453Z",
-      "3": "Pass",
-      "4": "6.5",
-    },    {
-      "1": "Technical ",
-      "date": "2021-05-25T15:30:33.833453Z",
-      "3": "Pass",
-      "4": "6.2",
-    },    {
-      "1": "Price ",
-      "date": "2021-05-25T15:30:33.833453Z",
-      "3": "Pass",
-      "4": "7",
-    },
-
-  ]
+  private evaluationResultLine:any={};
 
   created(){
+    console.log("this eval resupt",this.evaluationResultProp)
+    this.retrieveEvalResultLine(this.evaluationResultProp.id)
+  }
+
+  retrieveEvalResultLine(biddingEvalResultId:number){
+    this.commonService(baseApiEvalResultLine)
+      .retrieve({
+        criteriaQuery: [
+          `biddingEvalResultId.equals=${biddingEvalResultId}`,
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.evaluationResultLine=res.data;
+        console.log(this.evaluationResultLine);
+      });
   }
 
   close() {

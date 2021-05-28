@@ -9,7 +9,7 @@ import java.util.UUID;
  * A DTO for the {@link com.bhp.opusb.domain.MBiddingEvalResultLine} entity.
  */
 public class MBiddingEvalResultLineDTO implements Serializable {
-    
+
     private Long id;
 
     private String status;
@@ -24,9 +24,18 @@ public class MBiddingEvalResultLineDTO implements Serializable {
     private Long adOrganizationId;
 
     private Long evaluationMethodLineId;
+    private String evaluationMethodLineName;
 
     private Long biddingEvalResultId;
-    
+
+    public String getEvaluationMethodLineName() {
+        return evaluationMethodLineName;
+    }
+
+    public void setEvaluationMethodLineName(String evaluationMethodLineName) {
+        this.evaluationMethodLineName = evaluationMethodLineName;
+    }
+
     public Long getId() {
         return id;
     }

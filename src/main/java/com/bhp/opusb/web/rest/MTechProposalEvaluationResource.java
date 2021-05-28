@@ -73,7 +73,6 @@ public class MTechProposalEvaluationResource {
     @PostMapping("/m-tech-proposal-evaluations/evaluation")
     public ResponseEntity<List<MTechProposalEvaluationDTO>> postMTechProposalEvaluation(@Valid @RequestBody List<MTechProposalEvaluationDTO> cEvaluationMethodCriteriaDTOS) throws URISyntaxException {
        mTechProposalEvaluationService.evaluation(cEvaluationMethodCriteriaDTOS);
-        log.info(MapperJSONUtil.prettyLog(cEvaluationMethodCriteriaDTOS));
         return ResponseEntity.ok(cEvaluationMethodCriteriaDTOS);
     }
 

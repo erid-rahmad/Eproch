@@ -4,41 +4,36 @@
             <el-form ref="productCatalog" label-position="left" label-width="130px"
                      size="mini">
                 <el-form-item label="Bidding No">
-                    {{ evaluation.biddingNo }}
+                    {{ evaluationResultProp.biddingNo }}
                 </el-form-item>
                 <el-form-item label="Bidding Name">
-                    {{ evaluation.biddingName }}
+                    {{ evaluationResultProp.biddingName }}
                 </el-form-item>
                 <el-form-item label="Bidding Type">
-                    {{ evaluation.biddingTypeName }}
+                    {{ evaluationResultProp.biddingTypeName }}
                 </el-form-item>
                 <el-form-item label="Vendor Name">
-                    {{ evaluation.vendorName }}
+                    {{ evaluationResultProp.vendorName }}
                 </el-form-item>
                 <el-form-item label="TotalScore">
-                    {{ evaluation.total }}
+                    {{ evaluationResultProp.total }}
                 </el-form-item>
                 <el-divider content-position="left">
                     <h4>Evaluation</h4>
                 </el-divider>
             </el-form>
 
-            <el-table :data="biddingSubmission" :default-sort="{prop: 'date', order: 'descending'}" size="mini" style="width: 100%">
+            <el-table :data="evaluationResultLine" :default-sort="{prop: 'date', order: 'descending'}" size="mini" style="width: 100%">
                 <el-table-column label="No" min-width="30">
                         <template slot-scope="row">
                             {{ row.$index + 1 }}
                         </template>
                 </el-table-column>
-                <el-table-column label="Proposal" prop="1" sortable min-width="180">
+                <el-table-column label="Proposal" prop="evaluationMethodLineName" sortable min-width="180">
                 </el-table-column>
-                <el-table-column label="date Submited" prop="dateSubmit" sortable min-width="180">
-                    <template slot-scope="{row}" >
-                        {{row.date | formatDate}}
-                    </template>
+                <el-table-column label="Evaluation" prop="status" sortable min-width="180">
                 </el-table-column>
-                <el-table-column label="Evaluation" prop="3" sortable min-width="180">
-                </el-table-column>
-                <el-table-column label="Total Score" prop="4" sortable min-width="180">
+                <el-table-column label="Total Score" prop="score" sortable min-width="180">
                 </el-table-column>
             </el-table>
         </div>

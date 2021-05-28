@@ -17,6 +17,10 @@ public class MBiddingEvalResultDTO implements Serializable {
 
     private String status;
 
+    private Integer score;
+
+    private Integer rank;
+
     private UUID uid;
 
     private Boolean active;
@@ -77,6 +81,22 @@ public class MBiddingEvalResultDTO implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public Integer getRank() {
+        return rank;
+    }
+
+    public void setRank(Integer rank) {
+        this.rank = rank;
     }
 
     public UUID getUid() {
@@ -142,10 +162,13 @@ public class MBiddingEvalResultDTO implements Serializable {
         return "MBiddingEvalResultDTO{" +
             "id=" + id +
             ", status='" + status + '\'' +
+            ", score=" + score +
+            ", rank=" + rank +
             ", uid=" + uid +
             ", active=" + active +
             ", adOrganizationId=" + adOrganizationId +
             ", biddingSubmissionId=" + biddingSubmissionId +
+            ", vendorId=" + vendorId +
             ", vendorName='" + vendorName + '\'' +
             ", biddingId=" + biddingId +
             ", biddingName='" + biddingName + '\'' +

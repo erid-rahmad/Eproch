@@ -11,20 +11,20 @@
             <el-form ref="productCatalog" label-position="left" label-width="130px"
                      size="mini">
                 <el-form-item label="Bidding No">
-                    {{ evaluation.biddingNo }}
+                    {{ pickRow.documentNo }}
                 </el-form-item>
                 <el-form-item label="Bidding Name">
-                    {{ evaluation.biddingName }}
+                    {{ pickRow.name }}
                 </el-form-item>
                 <el-form-item label="Bidding Type">
-                    {{ evaluation.biddingTypeName }}
+                    {{ pickRow.biddingTypeName }}
                 </el-form-item>
                 <el-divider content-position="left">
                     <h4>Evaluation</h4>
                 </el-divider>
             </el-form>
 
-            <el-table :data="biddingSubmission" :default-sort="{prop: 'date', order: 'descending'}"
+            <el-table :data="evaluationResult" :default-sort="{prop: 'date', order: 'descending'}"
                       size="mini"
                       border
                       style="width: 100%">
@@ -40,7 +40,7 @@
                         {{ row.dateSubmit | formatDate }}
                     </template>
                 </el-table-column>
-                <el-table-column label="Status" min-width="180" prop="biddingStatus" sortable>
+                <el-table-column label="Status" min-width="180" prop="status" sortable>
                 </el-table-column>
                 <el-table-column label="Total Score" min-width="180" prop="score" sortable>
                 </el-table-column>
@@ -49,7 +49,7 @@
                 <el-table-column label="Summary" min-width="120" sortable>
                     <template slot-scope="{ row }">
                         <el-button class="button" icon="el el-download-alt" size="mini" type="primary"
-                                   @click="index=false">
+                                   @click="detailScore(row)">
                             Detail Score
                         </el-button>
                     </template>
@@ -57,7 +57,7 @@
             </el-table>
         </div>
         <div>
-            <ResultDetail v-if="!index"></ResultDetail>
+            <ResultDetail :evaluationResultProp="evaluationResultProp" v-if="!index"></ResultDetail>
         </div>
     </div>
 </template>

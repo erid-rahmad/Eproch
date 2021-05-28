@@ -9,9 +9,11 @@ import DynamicWindowService from "@/core/application-dictionary/components/Dynam
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 import ResultDetail from './components/result-detail.vue';
 
+const baseApiEvalResults ='api/m-bidding-eval-results';
+
 const ProductCatalogProp = Vue.extend({
   props: {
-    data: {
+    pickRow: {
       type: Object,
       default: () => {
         return {};
@@ -31,44 +33,35 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
-
   index=true;
-
-  private evaluation={
-    biddingNo:'BN 00001',
-    biddingName:'Pengadaan Kendaraan Operasional',
-    biddingTypeName:'Tender Goods',
-    eventTypeName:'Ingram',
-    vendorName:'Ingram'
-  }
-
-  private biddingSubmission=[
-
-    {
-      "dateSubmit": '2021-05-25T15:30:33.833453Z',
-      "vendorName": "supplier1",
-      "biddingStatus": "Pass",
-      "score": 6.4,
-      "rank":3,
-    },
-    {
-      "dateSubmit": '2021-05-25T15:30:33.833453Z',
-      "vendorName": "supplier2",
-      "biddingStatus": "Pass",
-      "score": 6.4,
-      "rank":2,
-    },
-    {
-      "dateSubmit": '2021-05-25T15:30:33.833453Z',
-      "vendorName": "supplier1",
-      "biddingStatus": "Pass",
-      "score": 6.7,
-      "rank":1,
-    },
-
-  ]
+  private evaluationResult:any={};
+  private evaluationResultProp:any={};
 
   created(){
+    console.log(this.pickRow);
+    this.retriveEvaluationResult(this.pickRow.id);
+  }
+
+  retriveEvaluationResult(biddingId){
+    this.commonService(baseApiEvalResults)
+      .retrieve({
+        criteriaQuery: [
+          `biddingId.equals=${biddingId}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+          this.evaluationResult=res.data;
+      });
+  }
+
+  detailScore(row){
+    this.index=false;
+    this.evaluationResultProp=row;
   }
 
   close() {

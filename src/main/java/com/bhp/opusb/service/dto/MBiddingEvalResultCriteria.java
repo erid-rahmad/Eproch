@@ -29,6 +29,10 @@ public class MBiddingEvalResultCriteria implements Serializable, Criteria {
 
     private StringFilter status;
 
+    private IntegerFilter score;
+
+    private IntegerFilter rank;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -43,6 +47,8 @@ public class MBiddingEvalResultCriteria implements Serializable, Criteria {
     public MBiddingEvalResultCriteria(MBiddingEvalResultCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.status = other.status == null ? null : other.status.copy();
+        this.score = other.score == null ? null : other.score.copy();
+        this.rank = other.rank == null ? null : other.rank.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -68,6 +74,22 @@ public class MBiddingEvalResultCriteria implements Serializable, Criteria {
 
     public void setStatus(StringFilter status) {
         this.status = status;
+    }
+
+    public IntegerFilter getScore() {
+        return score;
+    }
+
+    public void setScore(IntegerFilter score) {
+        this.score = score;
+    }
+
+    public IntegerFilter getRank() {
+        return rank;
+    }
+
+    public void setRank(IntegerFilter rank) {
+        this.rank = rank;
     }
 
     public UUIDFilter getUid() {
@@ -115,6 +137,8 @@ public class MBiddingEvalResultCriteria implements Serializable, Criteria {
         return
             Objects.equals(id, that.id) &&
             Objects.equals(status, that.status) &&
+            Objects.equals(score, that.score) &&
+            Objects.equals(rank, that.rank) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
@@ -126,6 +150,8 @@ public class MBiddingEvalResultCriteria implements Serializable, Criteria {
         return Objects.hash(
         id,
         status,
+        score,
+        rank,
         uid,
         active,
         adOrganizationId,
@@ -138,6 +164,8 @@ public class MBiddingEvalResultCriteria implements Serializable, Criteria {
         return "MBiddingEvalResultCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (status != null ? "status=" + status + ", " : "") +
+                (score != null ? "score=" + score + ", " : "") +
+                (rank != null ? "rank=" + rank + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

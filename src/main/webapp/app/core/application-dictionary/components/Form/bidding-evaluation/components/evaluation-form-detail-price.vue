@@ -8,22 +8,22 @@
                             <el-form ref="productCatalog" label-position="left" label-width="130px"
                                      size="mini">
                                 <el-form-item label="Bidding No">
-                                    {{ evaluation.biddingNo }}
+                                    {{ proposalPrice.biddingNo }}
                                 </el-form-item>
                                 <el-form-item label="Bidding Name">
-                                    {{ evaluation.biddingName }}
+                                    {{ proposalPrice.biddingSubmissionName }}
                                 </el-form-item>
                                 <el-form-item label="Currency">
-                                    {{ evaluation.Currency }}
+                                    {{ proposalPrice.Currency }}
                                 </el-form-item>
                                 <el-form-item label="Proposal Price">
-                                    {{ evaluation.price }}
+                                    {{ proposalPrice.ceilingPrice }}
                                 </el-form-item>
                                 <el-form-item label="Bidding Type">
-                                    {{ evaluation.biddingTypeName }}
+                                    {{ proposalPrice.biddingTypeName }}
                                 </el-form-item>
                                 <el-form-item label="Evaluation">
-                                    {{ evaluation.evaluation }}
+                                    {{ proposalPrice.evaluation }}
                                 </el-form-item>
                                 <el-form-item label="Document " style="width: 50%">
                                     <el-button class="button"
@@ -31,7 +31,7 @@
                                                size="mini"
                                                type="primary"
                                     >
-                                        {{ evaluation.attachment }}
+                                        {{ proposalPrice.attachment }}
                                     </el-button>
 
                                 </el-form-item>
@@ -43,19 +43,19 @@
                             <el-form ref="productCatalog" label-position="left" label-width="300px"
                                      size="mini">
                                 <el-form-item label="Event Type">
-                                    {{ evaluation.eventTypeName }}
+                                    {{ proposalPrice.eventTypeName }}
                                 </el-form-item>
                                 <el-form-item label="Vendor Name">
-                                    {{ evaluation.vendor }}
+                                    {{ proposalPrice.vendor }}
                                 </el-form-item>
                                 <el-form-item label="PIC">
-                                    {{ evaluation.pic }}
+                                    {{ proposalPrice.pic }}
                                 </el-form-item>
                                 <el-form-item label="Date Submit">
-                                    {{ evaluation.date }}
+                                    {{ proposalPrice.date }}
                                 </el-form-item>
                                 <el-form-item label="Submission Deadline">
-                                    {{ evaluation.date }}
+                                    {{ proposalPrice.date }}
                                 </el-form-item>
                                 <el-form-item label="Pass Or Fail">
                                     <template>
@@ -76,7 +76,7 @@
                     </el-col>
                 </div>
                 <div>
-                    <el-table :data="biddingLineList"
+                    <el-table :data="a"
                               size="mini"
                               border
                               style="width: 100%"
@@ -87,51 +87,46 @@
                                 {{ row.$index + 1 }}
                             </template>
                         </el-table-column>
-                        <el-table-column label="Product" min-width="100" prop="productName"/>
-                        <el-table-column label="Sub Item" min-width="60" sortable>
-                            <template slot-scope="{ row, $index }">
-                                <el-button class="button" icon="el-icon-search" size="mini" type="primary"
-                                           @click="viewSubItem(row,$index)">
-                                    View
-                                </el-button>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="Qty" min-width="50" prop="quantity"/>
-                        <el-table-column label="UoM" min-width="50" prop="uomName"/>
-                        <el-table-column align="right" label="Ceiling Price/Unit" min-width="80">
-                            <template slot-scope="{ row }">
-                                {{ row.ceilingPrice | formatCurrency }}
-                            </template>
+                        <el-table-column label="Product" min-width="100" prop="biddingLineName"/>
+<!--                        <el-table-column label="Sub Item" min-width="60" sortable>-->
+<!--                            <template slot-scope="{ row, $index }">-->
+<!--                                <el-button class="button" icon="el-icon-search" size="mini" type="primary"-->
+<!--                                           @click="viewSubItem(row,$index)">-->
+<!--                                    View-->
+<!--                                </el-button>-->
+<!--                            </template>-->
+<!--                        </el-table-column>-->
+<!--                        <el-table-column label="Qty" min-width="50" prop="quantity"/>-->
+<!--                        <el-table-column label="UoM" min-width="50" prop="uomName"/>-->
+<!--                        <el-table-column align="right" label="Ceiling Price/Unit" min-width="80">-->
+<!--                            <template slot-scope="{ row }">-->
+<!--                                {{ row.ceilingPrice  }}-->
+<!--                            </template>-->
 
-                        </el-table-column>
-                        <el-table-column align="right" label="Total Ceiling Price" min-width="80">
-                            <template slot-scope="{ row }">
-                                {{ row.totalCeilingPrice | formatCurrency }}
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="Delivery Date" min-width="70" prop="deliveryDate">
-                            <template slot-scope="{ row }">
-                                {{ row.deliveryDate | formatDate }}
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="Price submision/unit" min-width="110" prop="">
-                            <template slot-scope="{ row, $index }">
-                                <el-input-number v-model="row.ceilingPrice1" v-inputmask="{'alias': 'currency'}"
-                                                 :step="50000" clearable controls-position="right"
-                                                 @change="value => onQuantityOrderedChanged(row, $index, value)">
-                                </el-input-number>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="Total Price Submission" min-width="70" prop="">
-                            <template slot-scope="{ row }">
-                                {{ row.totalpricesubmision | formatCurrency }}
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="Delivery Date" min-width="70" prop="">
-                            <template slot-scope="{ row }">
-                                {{ row.delivery | formatDate }}
-                            </template>
-                        </el-table-column>
+<!--                        </el-table-column>-->
+<!--                        <el-table-column align="right" label="Total Ceiling Price" min-width="80">-->
+<!--                            <template slot-scope="{ row }">-->
+<!--                                {{ row.totalCeilingPrice  }}-->
+<!--                            </template>-->
+<!--                        </el-table-column>-->
+<!--                        <el-table-column label="Delivery Date" min-width="70" prop="deliveryDate">-->
+<!--                            <template slot-scope="{ row }">-->
+<!--                                {{ row.deliveryDate  }}-->
+<!--                            </template>-->
+<!--                        </el-table-column>-->
+<!--                        <el-table-column label="Price submision/unit" min-width="110" prop="proposedPrice">-->
+
+<!--                        </el-table-column>-->
+<!--                        <el-table-column label="Total Price Submission" min-width="70" prop="">-->
+<!--                            <template slot-scope="{ row }">-->
+<!--                                {{ row.totalPriceSubmission  }}-->
+<!--                            </template>-->
+<!--                        </el-table-column>-->
+<!--                        <el-table-column label="Delivery Date" min-width="70" prop="">-->
+<!--                            <template slot-scope="{ row }">-->
+<!--                                {{ row.deliveryDate  }}-->
+<!--                            </template>-->
+<!--                        </el-table-column>-->
                         <el-table-column label="Remark" min-width="50" prop="remark"/>
                         <el-table-column label="Document" min-width="50" prop="doc"/>
                     </el-table>

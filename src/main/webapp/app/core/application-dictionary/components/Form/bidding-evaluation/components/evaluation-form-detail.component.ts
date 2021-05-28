@@ -7,20 +7,18 @@ const baseApiEvalMethodCriteria = 'api/c-evaluation-method-criteria';
 const baseApiVendorScoringCriteria = 'api/m-vendor-scoring-criteria';
 const baseApiMTechproposal = 'api/m-tech-proposal-evaluations';
 const baseApiBiddingEvaluation = 'api/m-tech-proposal-evaluations';
+const baseApiEvalResultLine='api/m-bidding-eval-result-lines';
 
 const PrequalificationFormProps = Vue.extend({
   props: {
     loading: Boolean,
     readOnly: Boolean,
-
-    SelectVendorScoringLine: {
+    evaluationFormProp: {
       type: Object,
       default: () => {
         return {};
       }
     },
-    vendorId:Number,
-
   }
 });
 
@@ -30,29 +28,20 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
 
-  ///////////
-  data() {
-    return {
       options: [{
         value: 'Pass',
         label: 'Pass'
       }, {
         value: 'Fail',
         label: 'Fail'
-      }],
+      }];
       value: ''
-    }
-  }
 
-  ///////////
-
-  savebutton:boolean=false;
 
   private evaluationMethodCriteria: any = [];
-
-
   private questions: Map<number, any> = new Map();
-  private averageScore ="30";
+  private averageScore ="";
+  private evaluationResultLine:any={};
 
   private validationSchema = {
     requirement: {
@@ -64,13 +53,14 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
 
   @Watch('SelectVendorScoringLine')
   loaddata(){
-    this.retrieveEvaluationMethodCriteria(this.SelectVendorScoringLine.evaluationMethodLineId,this.SelectVendorScoringLine.id);
-    this.savebutton=true;
-
-
+    this.retrieveEvaluationMethodCriteria(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLineId,
+      this.evaluationFormProp.SelectVendorScoringLine.id);
+    this.evaluationResultLine=this.evaluationFormProp.evaluationResultLine;
   }
   created() {
-    this.retrieveEvaluationMethodCriteria(this.SelectVendorScoringLine.evaluationMethodLineId,this.SelectVendorScoringLine.id);
+    this.retrieveEvaluationMethodCriteria(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLineId,
+      this.evaluationFormProp.SelectVendorScoringLine.id);
+    this.evaluationResultLine=this.evaluationFormProp.evaluationResultLine;
   }
 
   @Watch('observableIdentifiers')
@@ -78,6 +68,8 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
     this.questions.clear();
     this.retrieveEvaluationMethodCriteria(evaluationMethodLineId, vendorScoringLineId);
   }
+
+
 
   private retrieveEvaluationMethodCriteria(evaluationMethodLineId: number, vendorScoringLineId: number) {
     this.commonService(baseApiEvalMethodCriteria)
@@ -104,7 +96,7 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
           return evalMethodCriteria;
         });
         this.retrieveVendorScoringCriteria(vendorScoringLineId);
-        this.retrieveEvaluation(this.SelectVendorScoringLine.biddingId);
+        this.retrieveEvaluation(this.evaluationFormProp.SelectVendorScoringLine.biddingId);
       })
   }
 
@@ -147,7 +139,7 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
       .retrieve({
         criteriaQuery: [
           `biddingId.equals=${biddingId}`,
-          `vendorId.equals=${this.vendorId}`
+          `vendorId.equals=${this.evaluationFormProp.vendorId}`
         ],
         paginationQuery: {
           page: 0,
@@ -192,8 +184,8 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
       requirement.biddingSubCriteriaLineId = question.id;
       requirement.notes = question.notes;
       requirement.evaluation = question.evaluation;
-      requirement.biddingId=this.SelectVendorScoringLine.biddingId;
-      requirement.vendorId=this.vendorId;
+      requirement.biddingId=this.evaluationFormProp.SelectVendorScoringLine.biddingId;
+      requirement.vendorId=this.evaluationFormProp.vendorId;
       data.push(requirement);
 
     });
@@ -219,11 +211,25 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
 
     this.commonService(`${baseApiMTechproposal}/evaluation`)
       .create(data)
-      .then(_res => this.$message.success(`Requirements has been saved successfully`))
+      .then(_res => {
+        this.$message.success(`Requirements has been saved successfully`);
+        this.updateEvalResultLine();
+      })
       .catch(err => {
         console.error('Failed to save the criteria. %O', err);
         this.$message.error(`Failed to save vendor scoring criteria`);
       })
       .finally(() => this.$emit('update:loading', false));
+  }
+
+  updateEvalResultLine(){
+    this.commonService(baseApiEvalResultLine)
+      .create(this.evaluationResultLine)
+      .then(res => {
+        this.evaluationFormProp.SelectVendorScoringLine = res.data;
+        this.$message.success('create ResultLine ');
+      })
+      .catch(_err => this.$message.error('fail create record'));
+
   }
 }

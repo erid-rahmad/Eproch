@@ -54,7 +54,7 @@
             </el-col>
         </el-row>
         <el-row v-if="index===2">
-            <EvaluationResult @close="close"></EvaluationResult>
+            <EvaluationResult @close="close" :pickRow="pickRow"></EvaluationResult>
         </el-row>
         <el-dialog :visible.sync="dialogTableVisible" title="Shipping address">
             <el-table :data="gridData">

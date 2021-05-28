@@ -73,6 +73,8 @@ class MBiddingEvalResultGatlingTest extends Simulation {
             .body(StringBody("""{
                 "id":null
                 , "status":"SAMPLE_TEXT"
+                , "score":"0"
+                , "rank":"0"
                 , "uid":null
                 , "active":null
                 }""")).asJson

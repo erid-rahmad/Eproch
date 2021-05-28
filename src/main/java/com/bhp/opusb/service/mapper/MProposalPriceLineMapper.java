@@ -17,6 +17,11 @@ public interface MProposalPriceLineMapper extends EntityMapper<MProposalPriceLin
     @Mapping(source = "proposalPrice.id", target = "proposalPriceId")
     @Mapping(source = "proposalPrice.biddingSubmission.bidding.name", target = "proposalPriceName")
     @Mapping(source = "biddingLine.id", target = "biddingLineId")
+    @Mapping(source = "biddingLine.quantity", target = "biddingLineQuantity")
+    @Mapping(source = "biddingLine.ceilingPrice", target = "biddingLineCeilingPrice")
+    @Mapping(source = "biddingLine.totalCeilingPrice", target = "biddingLineTotalCeilingPrice")
+    @Mapping(source = "biddingLine.deliveryDate", target = "biddingLineDeliveryDate")
+    @Mapping(source = "biddingLine.remark", target = "biddingLineRemark")
     @Mapping(source = "biddingLine.product.name", target = "biddingLineName")
     MProposalPriceLineDTO toDto(MProposalPriceLine mProposalPriceLine);
 

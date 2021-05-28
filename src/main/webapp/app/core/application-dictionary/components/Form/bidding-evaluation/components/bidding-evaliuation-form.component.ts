@@ -14,6 +14,7 @@ import EvaluationTeamDetailPrice from './evaluation-form-detail-price.vue'
 const baseApiVendorScoring = 'api/m-vendor-scorings';
 const baseApiEvaluationMethodLine = 'api/c-evaluation-method-lines';
 const baseApiVendorScoringLine ='api/m-vendor-scoring-lines';
+const baseApiEvalResultLine='api/m-bidding-eval-result-lines';
 
 
 const ProductCatalogProp = Vue.extend({
@@ -42,18 +43,16 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   private biddingSubmission:any={};
   private evaluation:any={};
   private evaluationMethodLines:any={};
-  private SelectEvaluationMethodLines:any={};
   private VendorScoringLine:any={};
   private SelectVendorScoringLine:any={};
   private vendorId:number;
   private evaluationResult:any={};
+  private evaluationFormProp:any={};
   mainForm: any = {};
-  private EvaluationMethod
 
   created(){
-    this.biddingSubmission=this.data.biddingSubmission;
+    this.evaluationFormProp.biddingSubmission=this.data.pickrow;
     this.evaluationResult=this.data.evaluationResult;
-    console.log(this.evaluationResult)
     this.evaluation=this.data.pickrow;
     this.retrieveVendorScoring(this.evaluation.biddingId)
   }
@@ -78,13 +77,57 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   loaddata(){
     console.log("from this",this.SelectVendorScoringLine);
     this.vendorId=this.evaluation.vendorId;
-
+    this.evaluationFormProp.vendorId=this.evaluation.vendorId;
+    this.evaluationFormProp.SelectVendorScoringLine=this.SelectVendorScoringLine;
+   this.retrieveEvalResultLine(this.SelectVendorScoringLine.evaluationMethodLineId,this.evaluationResult.id);
     if (this.SelectVendorScoringLine.evaluationMethodLineEvaluation ==="P"){
       this.FormMenu=1;
     }
     else {
       this.FormMenu=2;
     }
+  }
+  retrieveEvalResultLine(evaluationMethodLineId:number,biddingEvalResultId:number){
+    this.commonService(baseApiEvalResultLine)
+      .retrieve({
+        criteriaQuery: [
+          `evaluationMethodLineId.equals=${evaluationMethodLineId}`,
+          `biddingEvalResultId.equals=${biddingEvalResultId}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        const data = res.data as any[];
+        let result:any={};
+        if (data.length) {
+          result = {...result, ...data[0]};
+          this.evaluationFormProp.evaluationResultLine=result;
+          this.$message.success('open ResultLine ');
+        }
+        else {
+          this.createTableEvalResultLine();
+        }
+      });
+  }
+
+  createTableEvalResultLine(){
+    const data={
+      biddingEvalResultId:this.evaluationResult.id,
+      evaluationMethodLineId:this.SelectVendorScoringLine.evaluationMethodLineId,
+      adOrganizationId:1,
+      active:true,
+    }
+    this.commonService(baseApiEvalResultLine)
+      .create(data)
+      .then(res => {
+        this.evaluationFormProp.evaluationResultLine = res.data;
+        this.$message.success('create ResultLine ');
+      })
+      .catch(_err => this.$message.error('fail create record'));
   }
 
   private retrieveVendorScoring(biddingId: number) {

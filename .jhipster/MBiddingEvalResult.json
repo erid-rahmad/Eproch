@@ -6,6 +6,14 @@
             "fieldType": "String"
         },
         {
+            "fieldName": "score",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "rank",
+            "fieldType": "Integer"
+        },
+        {
             "fieldName": "uid",
             "fieldType": "UUID"
         },
