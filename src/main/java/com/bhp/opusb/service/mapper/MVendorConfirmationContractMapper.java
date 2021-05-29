@@ -14,6 +14,7 @@ public interface MVendorConfirmationContractMapper extends EntityMapper<MVendorC
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "attachment.id", target = "attachmentId")
+    @Mapping(source = "attachment.downloadUrl", target = "downloadUrl")
     @Mapping(source = "vendorConfirmationLine.id", target = "vendorConfirmationLineId")
     MVendorConfirmationContractDTO toDto(MVendorConfirmationContract mVendorConfirmationContract);
 

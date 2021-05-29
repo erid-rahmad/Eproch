@@ -34,6 +34,9 @@ public class MVendorConfirmationContract extends AbstractAuditingEntity implemen
     @Column(name = "active")
     private Boolean active;
 
+    @Column(name = "confirmation_no")
+    private String confirmationNo;
+
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "contract_detail")
@@ -44,6 +47,9 @@ public class MVendorConfirmationContract extends AbstractAuditingEntity implemen
 
     @Column(name = "contract_end_date")
     private LocalDate contractEndDate;
+
+    @Column(name = "publish_date")
+    private LocalDate publishDate;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -95,6 +101,19 @@ public class MVendorConfirmationContract extends AbstractAuditingEntity implemen
         this.active = active;
     }
 
+    public String getConfirmationNo() {
+        return confirmationNo;
+    }
+
+    public MVendorConfirmationContract confirmationNo(String confirmationNo) {
+        this.confirmationNo = confirmationNo;
+        return this;
+    }
+
+    public void setConfirmationNo(String confirmationNo) {
+        this.confirmationNo = confirmationNo;
+    }
+
     public String getContractDetail() {
         return contractDetail;
     }
@@ -132,6 +151,19 @@ public class MVendorConfirmationContract extends AbstractAuditingEntity implemen
 
     public void setContractEndDate(LocalDate contractEndDate) {
         this.contractEndDate = contractEndDate;
+    }
+
+    public LocalDate getPublishDate() {
+        return publishDate;
+    }
+
+    public MVendorConfirmationContract publishDate(LocalDate publishDate) {
+        this.publishDate = publishDate;
+        return this;
+    }
+
+    public void setPublishDate(LocalDate publishDate) {
+        this.publishDate = publishDate;
     }
 
     public ADOrganization getAdOrganization() {

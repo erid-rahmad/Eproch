@@ -1,5 +1,6 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import { ElForm } from 'element-ui/types/form';
+import { ElUpload } from 'element-ui/types/upload';
 import Vue from 'vue';
 import Component, { mixins } from 'vue-class-component';
 import { Inject } from 'vue-property-decorator';
@@ -142,6 +143,17 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
 
   viewHistory(row: any) {
     this.selectedConfirmation = row;
+    this.commonService('/api/m-vendor-confirmation-responses').retrieve({
+      criteriaQuery: this.updateCriteria([
+      'active.equals=true',
+      `vendorConfirmationLineId.equals=${row.id}`
+      ]),
+      paginationQuery: {
+        page: 0,
+        size: 10000,
+        sort: ['id']
+      }
+    }).then(res=>{this.history = res.data});
     this.showHistory = true;
   }
 
@@ -159,7 +171,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
       }
     }).then(res=>{this.contract = 
       res.data[0]?res.data[0]:{
-        confirmationNo: "",
+        confirmationNo: Date.now(),
         contractStartDate: '2021-05-28',
         contractEndDate: '2021-05-28',
         contractDetail: null,
@@ -264,7 +276,8 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
             .update(this.contract)
             .then(_res => {
               this.$message.success('Contract has been saved!');
-              this.showConfirmationForm = false;
+
+              this.resetForm();
               this.refreshLine();
             }).catch(err => {
               console.error('Failed to save the contract.', err);
@@ -275,7 +288,8 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
             .create(this.contract)
             .then(_res => {
               this.$message.success('Contract has been saved!');
-              this.showConfirmationForm = false;
+
+              this.resetForm();
               this.refreshLine();
             }).catch(err => {
               console.error('Failed to save the contract.', err);
@@ -288,17 +302,32 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   }
 
   publish(){
-    this.commonService(`/api/m-vendor-confirmation-contracts/publish/${this.contract.id}`)
+    if(this.contract.id){
+      this.commonService(`/api/m-vendor-confirmation-contracts/publish/${this.contract.id}`)
+        .create(this.contract)
+        .then(_res => {
+          this.$message.success('Contract has been published!');
+
+          this.resetForm();
+
+          this.confirmPublish = false;
+          this.refreshLine();
+        }).catch(err => {
+          console.error('Failed to publish the contract.', err);
+          this.$message.error(`Failed saving the contract`);
+        });
+    } else {
+      this.commonService('/api/m-vendor-confirmation-contracts')
       .create(this.contract)
-      .then(_res => {
-        this.$message.success('Contract has been published!');
-        this.showConfirmationForm = false;
-        this.confirmPublish = false;
-        this.refreshLine();
+      .then(res => {
+        console.log(res);
+        this.contract = res;
+        this.publish();
       }).catch(err => {
-        console.error('Failed to publish the contract.', err);
+        console.error('Failed to save the contract.', err);
         this.$message.error(`Failed saving the contract`);
       });
+    }
   }
 
   showConfirmPublish(){
@@ -307,5 +336,11 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
         this.confirmPublish = true;
       }
     });
+  }
+
+  resetForm() {
+    this.contract = {};
+    (<ElUpload>this.$refs.contractFile).clearFiles();
+    this.showConfirmationForm = false;
   }
 }

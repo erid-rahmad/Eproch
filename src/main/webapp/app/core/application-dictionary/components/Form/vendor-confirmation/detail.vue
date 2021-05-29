@@ -202,6 +202,7 @@
         <el-button
           icon="el-icon-check"
           size="mini"
+          type="primary"
           @click="publish"
         >
           Yes
@@ -336,14 +337,16 @@
         ></el-table-column>
         <el-table-column
           label="Status"
-          prop="status"
           min-width="100"
-        ></el-table-column>
+        ><template slot-scope="{ row }">
+          {{row.accept ? "Accept" : "Need Revision"}}
+          </template></el-table-column>
         <el-table-column
           label="Reason"
-          prop="reason"
           min-width="200"
-        ></el-table-column>
+        ><template slot-scope="{ row }">
+          {{row.accept ? row.accept : row.needRevision}}
+          </template></el-table-column>
       </el-table>
       <div slot="footer">
         <el-button
@@ -406,6 +409,7 @@
           >
             <el-form-item label="Contract Attachment">
               <el-upload
+                ref="contractFile"
                 :action="action"
                 class="upload-demo"
                 :limit="limit"
@@ -447,7 +451,7 @@
         <el-button
           icon="el-icon-close"
           size="mini"
-          @click="showConfirmationForm = false"
+          @click="resetForm"
         >
           {{ $t('entity.action.cancel') }}
         </el-button>

@@ -18,20 +18,20 @@
             :lg="12"
             :xl="8"
           >
-            <el-form-item label="Contract No.">
+            <el-form-item label="Confirmation No.">
               <el-input
-                v-model="mainForm.contractNo"
+                v-model="mainForm.confirmationNo"
               ></el-input>
             </el-form-item>
             <el-form-item label="Contract Start Date">
               <el-input
-                v-model="mainForm.startDate"
+                v-model="mainForm.contractStartDate"
                 disabled
               ></el-input>
             </el-form-item>
             <el-form-item label="Contract End Date">
               <el-input
-                v-model="mainForm.endDate"
+                v-model="mainForm.contractEndDate"
                 disabled
               ></el-input>
             </el-form-item>
@@ -48,13 +48,14 @@
                 icon="el-icon-download"
                 size="mini"
                 type="primary"
+                @click="downloadAttachment"
               >
                 Download
               </el-button>
             </el-form-item>
             <el-form-item label="Contract Detail">
               <el-input
-                v-model="mainForm.remark"
+                v-model="mainForm.contractDetail"
                 :autosize="{minRows: 2, maxRows: 7}"
                 disabled
                 style="margin-bottom: 5px"
@@ -64,7 +65,7 @@
             <el-form-item label="">
               <el-button
                 size="mini"
-                @click="showHistory = true"
+                @click="viewHistory"
               >
                 <svg-icon name="icomoo/078-history"></svg-icon> History
               </el-button>
@@ -97,8 +98,8 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="Contract No."
-          prop="contractNo"
+          label="Confirmation No."
+          prop="confirmationNo"
           min-width="100"
         ></el-table-column>
         <el-table-column
@@ -108,14 +109,16 @@
         ></el-table-column>
         <el-table-column
           label="Status"
-          prop="status"
           min-width="100"
-        ></el-table-column>
+        ><template slot-scope="{ row }">
+          {{row.accept ? "Accept" : "Need Revision"}}
+          </template></el-table-column>
         <el-table-column
           label="Reason"
-          prop="reason"
           min-width="200"
-        ></el-table-column>
+        ><template slot-scope="{ row }">
+          {{row.accept ? row.accept : row.needRevision}}
+          </template></el-table-column>
       </el-table>
       <div slot="footer">
         <el-button

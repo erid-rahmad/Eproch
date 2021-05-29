@@ -1,11 +1,11 @@
-id;uid;active;contract_detail;contract_start_date;contract_end_date;ad_organization_id;attachment_id;vendor_confirmation_line_id
-1;4e3a4546-14c3-4274-b1e8-98d69c7d674d;true;../fake-data/blob/hipster.txt;2021-05-26;2021-05-27;1;1;1
-2;2af55d2e-21cc-4def-a8f2-1b8e96781853;false;../fake-data/blob/hipster.txt;2021-05-27;2021-05-27;2;2;2
-3;14c3a131-aa97-472f-8b8f-566754ffab59;true;../fake-data/blob/hipster.txt;2021-05-27;2021-05-26;3;3;3
-4;79bfecba-bda8-4581-8474-cbc1ee00db20;false;../fake-data/blob/hipster.txt;2021-05-27;2021-05-26;4;4;4
-5;1d05b25a-40e7-4142-9289-8143114046d1;true;../fake-data/blob/hipster.txt;2021-05-27;2021-05-27;5;5;5
-6;d1e3f871-36a6-49d8-bb38-fbdf72ee9b15;false;../fake-data/blob/hipster.txt;2021-05-27;2021-05-26;6;6;6
-7;4705b45f-cb2a-4fd0-a9ae-677ed0987dbf;false;../fake-data/blob/hipster.txt;2021-05-27;2021-05-26;7;7;7
-8;6332e074-b75c-4b0b-9df5-733de50f9908;false;../fake-data/blob/hipster.txt;2021-05-27;2021-05-27;8;8;8
-9;0b3d67f0-eb4e-4ff0-b903-097a45ab7263;true;../fake-data/blob/hipster.txt;2021-05-26;2021-05-27;9;9;9
-10;ed0f8ee0-e35f-4a05-90d7-42af62e99794;true;../fake-data/blob/hipster.txt;2021-05-27;2021-05-27;10;10;10
+id;uid;active;confirmation_no;contract_detail;publish_date;contract_start_date;contract_end_date;ad_organization_id;attachment_id;vendor_confirmation_line_id
+1;4e3a4546-14c3-4274-b1e8-98d69c7d674d;true;budgetary management CFP Franc frictionless;../fake-data/blob/hipster.txt;2021-05-26;2021-05-27;2021-05-26;1;1;1
+2;21ccdef2-8f21-4b8e-9678-185303414c3a;false;Handcrafted Metal Soap;../fake-data/blob/hipster.txt;2021-05-27;2021-05-27;2021-05-27;2;2;2
+3;f8b8f566-754f-4fab-9991-d79bfecbabda;true;Avon Bedfordshire;../fake-data/blob/hipster.txt;2021-05-27;2021-05-27;2021-05-26;3;3;3
+4;bc1ee00d-b200-43b1-905b-25a40e714212;true;Avon Down-sized;../fake-data/blob/hipster.txt;2021-05-27;2021-05-27;2021-05-27;4;4;4
+5;046d1980-d1e3-4f87-936a-69d87b38fbdf;false;Chief;../fake-data/blob/hipster.txt;2021-05-27;2021-05-26;2021-05-27;5;5;5
+6;510b4705-b45f-4cb2-afd0-a9ae677ed098;false;Rand Namibia Dollar Ball AI;../fake-data/blob/hipster.txt;2021-05-27;2021-05-27;2021-05-27;6;6;6
+7;e074b75c-b0b9-4df5-b33d-e50f99081470;true;navigating;../fake-data/blob/hipster.txt;2021-05-27;2021-05-26;2021-05-27;7;7;7
+8;eb4eff03-9030-497a-85ab-7263ae0ed0f8;true;Outdoors Horizontal Web;../fake-data/blob/hipster.txt;2021-05-27;2021-05-27;2021-05-27;8;8;8
+9;0d742af6-2e99-4794-a13f-4c0f7a32371d;false;COM;../fake-data/blob/hipster.txt;2021-05-26;2021-05-27;2021-05-26;9;9;9
+10;171d22b3-4b66-4cd7-9b31-621ec8551be3;false;Islands hacking;../fake-data/blob/hipster.txt;2021-05-26;2021-05-27;2021-05-27;10;10;10

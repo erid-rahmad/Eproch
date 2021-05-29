@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 /**
@@ -63,6 +64,7 @@ public class MVendorConfirmationContractService {
         log.debug("Request to publish MVendorConfirmationContract : {}", mVendorConfirmationContractDTO);
         MVendorConfirmationContract mVendorConfirmationContract = mVendorConfirmationContractMapper.toEntity(mVendorConfirmationContractDTO);
         mVendorConfirmationContract.setActive(false);
+        mVendorConfirmationContract.setPublishDate(LocalDate.now());
         
         // updates the line status to published as well
         MVendorConfirmationLine mvcl = mVendorConfirmationLineRepository.findById(mVendorConfirmationContractDTO.getVendorConfirmationLineId()).get();

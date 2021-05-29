@@ -1,0 +1,11 @@
+id;uid;active;need_revision;accept;ad_organization_id;vendor_confirmation_line_id;vendor_confirmation_contract_id
+1;3260460b-a2c7-42c3-be8c-9e6666267405;true;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;1;1;1
+2;5c280a5e-6a7f-4c34-ad6f-30d43143389a;false;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2;2;2
+3;092e1186-6841-4b37-a4ca-da7cd7c72939;false;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;3;3;3
+4;927dc2c8-5939-4a31-a8da-f0e11817ac1f;false;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;4;4;4
+5;cf47977b-9816-415e-acbe-40e0248ad56d;false;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;5;5;5
+6;a741855b-34e0-49b1-9e44-30f1a72c2abd;true;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;6;6;6
+7;3a90e334-2dad-4078-9250-3fffd95a2fd5;true;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;7;7;7
+8;b9d8a516-02b9-416f-8edd-50a416ed0090;true;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;8;8;8
+9;5ed7b2af-fab0-4dd0-aec4-7c9e4bca6a18;true;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;9;9;9
+10;3c003afc-2316-4979-98ca-960a09b19e58;false;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;10;10;10

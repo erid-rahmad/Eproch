@@ -48,8 +48,15 @@ public class MVendorConfirmationContractResourceIT {
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
 
+    private static final String DEFAULT_CONFIRMATION_NO = "AAAAAAAAAA";
+    private static final String UPDATED_CONFIRMATION_NO = "BBBBBBBBBB";
+
     private static final String DEFAULT_CONTRACT_DETAIL = "AAAAAAAAAA";
     private static final String UPDATED_CONTRACT_DETAIL = "BBBBBBBBBB";
+
+    private static final LocalDate DEFAULT_PUBLISH_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_PUBLISH_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_PUBLISH_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final LocalDate DEFAULT_CONTRACT_START_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_CONTRACT_START_DATE = LocalDate.now(ZoneId.systemDefault());
@@ -89,7 +96,9 @@ public class MVendorConfirmationContractResourceIT {
         MVendorConfirmationContract mVendorConfirmationContract = new MVendorConfirmationContract()
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE)
+            .confirmationNo(DEFAULT_CONFIRMATION_NO)
             .contractDetail(DEFAULT_CONTRACT_DETAIL)
+            .publishDate(DEFAULT_PUBLISH_DATE)
             .contractStartDate(DEFAULT_CONTRACT_START_DATE)
             .contractEndDate(DEFAULT_CONTRACT_END_DATE);
         // Add required entity
@@ -134,7 +143,9 @@ public class MVendorConfirmationContractResourceIT {
         MVendorConfirmationContract mVendorConfirmationContract = new MVendorConfirmationContract()
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE)
+            .confirmationNo(UPDATED_CONFIRMATION_NO)
             .contractDetail(UPDATED_CONTRACT_DETAIL)
+            .publishDate(UPDATED_PUBLISH_DATE)
             .contractStartDate(UPDATED_CONTRACT_START_DATE)
             .contractEndDate(UPDATED_CONTRACT_END_DATE);
         // Add required entity
@@ -193,7 +204,9 @@ public class MVendorConfirmationContractResourceIT {
         MVendorConfirmationContract testMVendorConfirmationContract = mVendorConfirmationContractList.get(mVendorConfirmationContractList.size() - 1);
         assertThat(testMVendorConfirmationContract.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testMVendorConfirmationContract.isActive()).isEqualTo(DEFAULT_ACTIVE);
+        assertThat(testMVendorConfirmationContract.getConfirmationNo()).isEqualTo(DEFAULT_CONFIRMATION_NO);
         assertThat(testMVendorConfirmationContract.getContractDetail()).isEqualTo(DEFAULT_CONTRACT_DETAIL);
+        assertThat(testMVendorConfirmationContract.getPublishDate()).isEqualTo(DEFAULT_PUBLISH_DATE);
         assertThat(testMVendorConfirmationContract.getContractStartDate()).isEqualTo(DEFAULT_CONTRACT_START_DATE);
         assertThat(testMVendorConfirmationContract.getContractEndDate()).isEqualTo(DEFAULT_CONTRACT_END_DATE);
     }
@@ -232,7 +245,9 @@ public class MVendorConfirmationContractResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(mVendorConfirmationContract.getId().intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].confirmationNo").value(hasItem(DEFAULT_CONFIRMATION_NO)))
             .andExpect(jsonPath("$.[*].contractDetail").value(hasItem(DEFAULT_CONTRACT_DETAIL.toString())))
+            .andExpect(jsonPath("$.[*].publishDate").value(hasItem(DEFAULT_PUBLISH_DATE.toString())))
             .andExpect(jsonPath("$.[*].contractStartDate").value(hasItem(DEFAULT_CONTRACT_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].contractEndDate").value(hasItem(DEFAULT_CONTRACT_END_DATE.toString())));
     }
@@ -250,7 +265,9 @@ public class MVendorConfirmationContractResourceIT {
             .andExpect(jsonPath("$.id").value(mVendorConfirmationContract.getId().intValue()))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
+            .andExpect(jsonPath("$.confirmationNo").value(DEFAULT_CONFIRMATION_NO))
             .andExpect(jsonPath("$.contractDetail").value(DEFAULT_CONTRACT_DETAIL.toString()))
+            .andExpect(jsonPath("$.publishDate").value(DEFAULT_PUBLISH_DATE.toString()))
             .andExpect(jsonPath("$.contractStartDate").value(DEFAULT_CONTRACT_START_DATE.toString()))
             .andExpect(jsonPath("$.contractEndDate").value(DEFAULT_CONTRACT_END_DATE.toString()));
     }
@@ -378,6 +395,189 @@ public class MVendorConfirmationContractResourceIT {
         // Get all the mVendorConfirmationContractList where active is null
         defaultMVendorConfirmationContractShouldNotBeFound("active.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllMVendorConfirmationContractsByConfirmationNoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVendorConfirmationContractRepository.saveAndFlush(mVendorConfirmationContract);
+
+        // Get all the mVendorConfirmationContractList where confirmationNo equals to DEFAULT_CONFIRMATION_NO
+        defaultMVendorConfirmationContractShouldBeFound("confirmationNo.equals=" + DEFAULT_CONFIRMATION_NO);
+
+        // Get all the mVendorConfirmationContractList where confirmationNo equals to UPDATED_CONFIRMATION_NO
+        defaultMVendorConfirmationContractShouldNotBeFound("confirmationNo.equals=" + UPDATED_CONFIRMATION_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVendorConfirmationContractsByConfirmationNoIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVendorConfirmationContractRepository.saveAndFlush(mVendorConfirmationContract);
+
+        // Get all the mVendorConfirmationContractList where confirmationNo not equals to DEFAULT_CONFIRMATION_NO
+        defaultMVendorConfirmationContractShouldNotBeFound("confirmationNo.notEquals=" + DEFAULT_CONFIRMATION_NO);
+
+        // Get all the mVendorConfirmationContractList where confirmationNo not equals to UPDATED_CONFIRMATION_NO
+        defaultMVendorConfirmationContractShouldBeFound("confirmationNo.notEquals=" + UPDATED_CONFIRMATION_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVendorConfirmationContractsByConfirmationNoIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVendorConfirmationContractRepository.saveAndFlush(mVendorConfirmationContract);
+
+        // Get all the mVendorConfirmationContractList where confirmationNo in DEFAULT_CONFIRMATION_NO or UPDATED_CONFIRMATION_NO
+        defaultMVendorConfirmationContractShouldBeFound("confirmationNo.in=" + DEFAULT_CONFIRMATION_NO + "," + UPDATED_CONFIRMATION_NO);
+
+        // Get all the mVendorConfirmationContractList where confirmationNo equals to UPDATED_CONFIRMATION_NO
+        defaultMVendorConfirmationContractShouldNotBeFound("confirmationNo.in=" + UPDATED_CONFIRMATION_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVendorConfirmationContractsByConfirmationNoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVendorConfirmationContractRepository.saveAndFlush(mVendorConfirmationContract);
+
+        // Get all the mVendorConfirmationContractList where confirmationNo is not null
+        defaultMVendorConfirmationContractShouldBeFound("confirmationNo.specified=true");
+
+        // Get all the mVendorConfirmationContractList where confirmationNo is null
+        defaultMVendorConfirmationContractShouldNotBeFound("confirmationNo.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMVendorConfirmationContractsByConfirmationNoContainsSomething() throws Exception {
+        // Initialize the database
+        mVendorConfirmationContractRepository.saveAndFlush(mVendorConfirmationContract);
+
+        // Get all the mVendorConfirmationContractList where confirmationNo contains DEFAULT_CONFIRMATION_NO
+        defaultMVendorConfirmationContractShouldBeFound("confirmationNo.contains=" + DEFAULT_CONFIRMATION_NO);
+
+        // Get all the mVendorConfirmationContractList where confirmationNo contains UPDATED_CONFIRMATION_NO
+        defaultMVendorConfirmationContractShouldNotBeFound("confirmationNo.contains=" + UPDATED_CONFIRMATION_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVendorConfirmationContractsByConfirmationNoNotContainsSomething() throws Exception {
+        // Initialize the database
+        mVendorConfirmationContractRepository.saveAndFlush(mVendorConfirmationContract);
+
+        // Get all the mVendorConfirmationContractList where confirmationNo does not contain DEFAULT_CONFIRMATION_NO
+        defaultMVendorConfirmationContractShouldNotBeFound("confirmationNo.doesNotContain=" + DEFAULT_CONFIRMATION_NO);
+
+        // Get all the mVendorConfirmationContractList where confirmationNo does not contain UPDATED_CONFIRMATION_NO
+        defaultMVendorConfirmationContractShouldBeFound("confirmationNo.doesNotContain=" + UPDATED_CONFIRMATION_NO);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMVendorConfirmationContractsByPublishDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVendorConfirmationContractRepository.saveAndFlush(mVendorConfirmationContract);
+
+        // Get all the mVendorConfirmationContractList where publishDate equals to DEFAULT_PUBLISH_DATE
+        defaultMVendorConfirmationContractShouldBeFound("publishDate.equals=" + DEFAULT_PUBLISH_DATE);
+
+        // Get all the mVendorConfirmationContractList where publishDate equals to UPDATED_PUBLISH_DATE
+        defaultMVendorConfirmationContractShouldNotBeFound("publishDate.equals=" + UPDATED_PUBLISH_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVendorConfirmationContractsByPublishDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVendorConfirmationContractRepository.saveAndFlush(mVendorConfirmationContract);
+
+        // Get all the mVendorConfirmationContractList where publishDate not equals to DEFAULT_PUBLISH_DATE
+        defaultMVendorConfirmationContractShouldNotBeFound("publishDate.notEquals=" + DEFAULT_PUBLISH_DATE);
+
+        // Get all the mVendorConfirmationContractList where publishDate not equals to UPDATED_PUBLISH_DATE
+        defaultMVendorConfirmationContractShouldBeFound("publishDate.notEquals=" + UPDATED_PUBLISH_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVendorConfirmationContractsByPublishDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVendorConfirmationContractRepository.saveAndFlush(mVendorConfirmationContract);
+
+        // Get all the mVendorConfirmationContractList where publishDate in DEFAULT_PUBLISH_DATE or UPDATED_PUBLISH_DATE
+        defaultMVendorConfirmationContractShouldBeFound("publishDate.in=" + DEFAULT_PUBLISH_DATE + "," + UPDATED_PUBLISH_DATE);
+
+        // Get all the mVendorConfirmationContractList where publishDate equals to UPDATED_PUBLISH_DATE
+        defaultMVendorConfirmationContractShouldNotBeFound("publishDate.in=" + UPDATED_PUBLISH_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVendorConfirmationContractsByPublishDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVendorConfirmationContractRepository.saveAndFlush(mVendorConfirmationContract);
+
+        // Get all the mVendorConfirmationContractList where publishDate is not null
+        defaultMVendorConfirmationContractShouldBeFound("publishDate.specified=true");
+
+        // Get all the mVendorConfirmationContractList where publishDate is null
+        defaultMVendorConfirmationContractShouldNotBeFound("publishDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVendorConfirmationContractsByPublishDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mVendorConfirmationContractRepository.saveAndFlush(mVendorConfirmationContract);
+
+        // Get all the mVendorConfirmationContractList where publishDate is greater than or equal to DEFAULT_PUBLISH_DATE
+        defaultMVendorConfirmationContractShouldBeFound("publishDate.greaterThanOrEqual=" + DEFAULT_PUBLISH_DATE);
+
+        // Get all the mVendorConfirmationContractList where publishDate is greater than or equal to UPDATED_PUBLISH_DATE
+        defaultMVendorConfirmationContractShouldNotBeFound("publishDate.greaterThanOrEqual=" + UPDATED_PUBLISH_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVendorConfirmationContractsByPublishDateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mVendorConfirmationContractRepository.saveAndFlush(mVendorConfirmationContract);
+
+        // Get all the mVendorConfirmationContractList where publishDate is less than or equal to DEFAULT_PUBLISH_DATE
+        defaultMVendorConfirmationContractShouldBeFound("publishDate.lessThanOrEqual=" + DEFAULT_PUBLISH_DATE);
+
+        // Get all the mVendorConfirmationContractList where publishDate is less than or equal to SMALLER_PUBLISH_DATE
+        defaultMVendorConfirmationContractShouldNotBeFound("publishDate.lessThanOrEqual=" + SMALLER_PUBLISH_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVendorConfirmationContractsByPublishDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mVendorConfirmationContractRepository.saveAndFlush(mVendorConfirmationContract);
+
+        // Get all the mVendorConfirmationContractList where publishDate is less than DEFAULT_PUBLISH_DATE
+        defaultMVendorConfirmationContractShouldNotBeFound("publishDate.lessThan=" + DEFAULT_PUBLISH_DATE);
+
+        // Get all the mVendorConfirmationContractList where publishDate is less than UPDATED_PUBLISH_DATE
+        defaultMVendorConfirmationContractShouldBeFound("publishDate.lessThan=" + UPDATED_PUBLISH_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVendorConfirmationContractsByPublishDateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mVendorConfirmationContractRepository.saveAndFlush(mVendorConfirmationContract);
+
+        // Get all the mVendorConfirmationContractList where publishDate is greater than DEFAULT_PUBLISH_DATE
+        defaultMVendorConfirmationContractShouldNotBeFound("publishDate.greaterThan=" + DEFAULT_PUBLISH_DATE);
+
+        // Get all the mVendorConfirmationContractList where publishDate is greater than SMALLER_PUBLISH_DATE
+        defaultMVendorConfirmationContractShouldBeFound("publishDate.greaterThan=" + SMALLER_PUBLISH_DATE);
+    }
+
 
     @Test
     @Transactional
@@ -646,7 +846,9 @@ public class MVendorConfirmationContractResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(mVendorConfirmationContract.getId().intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].confirmationNo").value(hasItem(DEFAULT_CONFIRMATION_NO)))
             .andExpect(jsonPath("$.[*].contractDetail").value(hasItem(DEFAULT_CONTRACT_DETAIL.toString())))
+            .andExpect(jsonPath("$.[*].publishDate").value(hasItem(DEFAULT_PUBLISH_DATE.toString())))
             .andExpect(jsonPath("$.[*].contractStartDate").value(hasItem(DEFAULT_CONTRACT_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].contractEndDate").value(hasItem(DEFAULT_CONTRACT_END_DATE.toString())));
 
@@ -698,7 +900,9 @@ public class MVendorConfirmationContractResourceIT {
         updatedMVendorConfirmationContract
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE)
+            .confirmationNo(UPDATED_CONFIRMATION_NO)
             .contractDetail(UPDATED_CONTRACT_DETAIL)
+            .publishDate(UPDATED_PUBLISH_DATE)
             .contractStartDate(UPDATED_CONTRACT_START_DATE)
             .contractEndDate(UPDATED_CONTRACT_END_DATE);
         MVendorConfirmationContractDTO mVendorConfirmationContractDTO = mVendorConfirmationContractMapper.toDto(updatedMVendorConfirmationContract);
@@ -714,7 +918,9 @@ public class MVendorConfirmationContractResourceIT {
         MVendorConfirmationContract testMVendorConfirmationContract = mVendorConfirmationContractList.get(mVendorConfirmationContractList.size() - 1);
         assertThat(testMVendorConfirmationContract.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testMVendorConfirmationContract.isActive()).isEqualTo(UPDATED_ACTIVE);
+        assertThat(testMVendorConfirmationContract.getConfirmationNo()).isEqualTo(UPDATED_CONFIRMATION_NO);
         assertThat(testMVendorConfirmationContract.getContractDetail()).isEqualTo(UPDATED_CONTRACT_DETAIL);
+        assertThat(testMVendorConfirmationContract.getPublishDate()).isEqualTo(UPDATED_PUBLISH_DATE);
         assertThat(testMVendorConfirmationContract.getContractStartDate()).isEqualTo(UPDATED_CONTRACT_START_DATE);
         assertThat(testMVendorConfirmationContract.getContractEndDate()).isEqualTo(UPDATED_CONTRACT_END_DATE);
     }

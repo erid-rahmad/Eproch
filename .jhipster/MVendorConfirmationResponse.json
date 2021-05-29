@@ -1,5 +1,5 @@
 {
-    "name": "MVendorConfirmationContract",
+    "name": "MVendorConfirmationResponse",
     "fields": [
         {
             "fieldName": "uid",
@@ -10,55 +10,44 @@
             "fieldType": "Boolean"
         },
         {
-            "fieldName": "confirmationNo",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "contractDetail",
+            "fieldName": "needRevision",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "text"
         },
         {
-            "fieldName": "publishDate",
-            "fieldType": "LocalDate"
-        },
-        {
-            "fieldName": "contractStartDate",
-            "fieldType": "LocalDate"
-        },
-        {
-            "fieldName": "contractEndDate",
-            "fieldType": "LocalDate"
+            "fieldName": "accept",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         }
     ],
     "relationships": [
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "mVendorConfirmationContract",
+            "otherEntityRelationshipName": "mVendorConfirmationResponse",
             "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "cAttachment",
-            "otherEntityRelationshipName": "mVendorConfirmationContract",
+            "otherEntityName": "mVendorConfirmationLine",
+            "otherEntityRelationshipName": "mVendorConfirmationResponse",
             "relationshipValidateRules": "required",
-            "relationshipName": "attachment",
+            "relationshipName": "vendorConfirmationLine",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "mVendorConfirmationLine",
-            "otherEntityRelationshipName": "mVendorConfirmationContract",
+            "otherEntityName": "mVendorConfirmationContract",
+            "otherEntityRelationshipName": "mVendorConfirmationResponse",
             "relationshipValidateRules": "required",
-            "relationshipName": "vendorConfirmationLine",
+            "relationshipName": "vendorConfirmationContract",
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20210527153900",
-    "entityTableName": "m_vendor_confirmation_contract",
+    "changelogDate": "20210529052600",
+    "entityTableName": "m_vendor_confirmation_response",
     "dto": "mapstruct",
     "pagination": "pagination",
     "service": "serviceClass",

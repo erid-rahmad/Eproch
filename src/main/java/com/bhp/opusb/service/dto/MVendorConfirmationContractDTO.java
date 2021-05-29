@@ -18,8 +18,12 @@ public class MVendorConfirmationContractDTO extends AbstractAuditingDTO implemen
 
     private Boolean active;
 
+    private String confirmationNo;
+
     @Lob
     private String contractDetail;
+
+    private LocalDate publishDate;
 
     private LocalDate contractStartDate;
 
@@ -29,13 +33,48 @@ public class MVendorConfirmationContractDTO extends AbstractAuditingDTO implemen
     private Long adOrganizationId;
 
     private Long attachmentId;
+    private String downloadUrl;
 
     private Long vendorConfirmationLineId;
 
     private Boolean publish;
+
+    private String reason;
     
     public Long getId() {
         return id;
+    }
+
+    public String getReason() {
+        return reason==null?"":reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public LocalDate getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(LocalDate publishDate) {
+        this.publishDate = publishDate;
+    }
+
+    public String getConfirmationNo() {
+        return confirmationNo;
+    }
+
+    public void setConfirmationNo(String confirmationNo) {
+        this.confirmationNo = confirmationNo;
+    }
+
+    public String getDownloadUrl() {
+        return downloadUrl;
+    }
+
+    public void setDownloadUrl(String downloadUrl) {
+        this.downloadUrl = downloadUrl;
     }
 
     public Boolean getPublish() {

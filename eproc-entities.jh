@@ -1364,9 +1364,18 @@ entity MVendorConfirmationLine {
 entity MVendorConfirmationContract {
 	uid UUID
 	active Boolean
+	confirmationNo String
 	contractDetail TextBlob
+	publishDate LocalDate
 	contractStartDate LocalDate
 	contractEndDate LocalDate
+}
+
+entity MVendorConfirmationResponse {
+	uid UUID
+	active Boolean
+	needRevision TextBlob
+	accept TextBlob
 }
 
 entity MVendorInvitation {
@@ -1945,6 +1954,10 @@ relationship ManyToOne {
 	MVendorConfirmationContract{adOrganization required} to ADOrganization
 	MVendorConfirmationContract{attachment required} to CAttachment
 	MVendorConfirmationContract{vendorConfirmationLine required} to MVendorConfirmationLine
+
+	MVendorConfirmationResponse{adOrganization required} to ADOrganization
+	MVendorConfirmationResponse{vendorConfirmationLine required} to MVendorConfirmationLine
+	MVendorConfirmationResponse{vendorConfirmationContract required} to MVendorConfirmationContract
 
 	MVendorInvitation{bidding required} to MBidding
 	MVendorInvitation{adOrganization required} to ADOrganization

@@ -32,6 +32,10 @@ public class MVendorConfirmationContractCriteria implements Serializable, Criter
 
     private BooleanFilter active;
 
+    private StringFilter confirmationNo;
+
+    private LocalDateFilter publishDate;
+
     private LocalDateFilter contractStartDate;
 
     private LocalDateFilter contractEndDate;
@@ -49,6 +53,8 @@ public class MVendorConfirmationContractCriteria implements Serializable, Criter
         this.id = other.id == null ? null : other.id.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.confirmationNo = other.confirmationNo == null ? null : other.confirmationNo.copy();
+        this.publishDate = other.publishDate == null ? null : other.publishDate.copy();
         this.contractStartDate = other.contractStartDate == null ? null : other.contractStartDate.copy();
         this.contractEndDate = other.contractEndDate == null ? null : other.contractEndDate.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -83,6 +89,22 @@ public class MVendorConfirmationContractCriteria implements Serializable, Criter
 
     public void setActive(BooleanFilter active) {
         this.active = active;
+    }
+
+    public StringFilter getConfirmationNo() {
+        return confirmationNo;
+    }
+
+    public void setConfirmationNo(StringFilter confirmationNo) {
+        this.confirmationNo = confirmationNo;
+    }
+
+    public LocalDateFilter getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(LocalDateFilter publishDate) {
+        this.publishDate = publishDate;
     }
 
     public LocalDateFilter getContractStartDate() {
@@ -139,6 +161,8 @@ public class MVendorConfirmationContractCriteria implements Serializable, Criter
             Objects.equals(id, that.id) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
+            Objects.equals(confirmationNo, that.confirmationNo) &&
+            Objects.equals(publishDate, that.publishDate) &&
             Objects.equals(contractStartDate, that.contractStartDate) &&
             Objects.equals(contractEndDate, that.contractEndDate) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
@@ -152,6 +176,8 @@ public class MVendorConfirmationContractCriteria implements Serializable, Criter
         id,
         uid,
         active,
+        confirmationNo,
+        publishDate,
         contractStartDate,
         contractEndDate,
         adOrganizationId,
@@ -166,6 +192,8 @@ public class MVendorConfirmationContractCriteria implements Serializable, Criter
                 (id != null ? "id=" + id + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (confirmationNo != null ? "confirmationNo=" + confirmationNo + ", " : "") +
+                (publishDate != null ? "publishDate=" + publishDate + ", " : "") +
                 (contractStartDate != null ? "contractStartDate=" + contractStartDate + ", " : "") +
                 (contractEndDate != null ? "contractEndDate=" + contractEndDate + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

@@ -61,8 +61,8 @@ public class MVendorConfirmation extends AbstractAuditingEntity implements Seria
     private String status;
 
     @Formula("(select max(mvcc.id) from m_vendor_confirmation_contract mvcc where "
-    + "mvcc.active = false and "
-    +"mvcc.vendor_confirmation_line_id = (select mvcl.id from m_vendor_confirmation_line mvcl where mvcl.vendor_confirmation_id = id))")
+    + "mvcc.publish_date is not null and "
+    + "mvcc.vendor_confirmation_line_id = (select mvcl.id from m_vendor_confirmation_line mvcl where mvcl.vendor_confirmation_id = id))")
     private Long latestContractId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

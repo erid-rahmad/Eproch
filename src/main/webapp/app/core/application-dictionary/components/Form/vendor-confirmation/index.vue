@@ -150,12 +150,12 @@
         <el-button
           icon="el-icon-close"
           size="mini"
-          @click="showConfirmationForm = false"
+          @click="clearReason"
         >
           {{ $t('entity.action.cancel') }}
         </el-button>
         <el-button
-          icon="el-icon-close"
+          icon="el-icon-check"
           :loading="submitting"
           size="mini"
           type="primary"

@@ -97,6 +97,12 @@ public class MVendorConfirmationContractQueryService extends QueryService<MVendo
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), MVendorConfirmationContract_.active));
             }
+            if (criteria.getConfirmationNo() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getConfirmationNo(), MVendorConfirmationContract_.confirmationNo));
+            }
+            if (criteria.getPublishDate() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getPublishDate(), MVendorConfirmationContract_.publishDate));
+            }
             if (criteria.getContractStartDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getContractStartDate(), MVendorConfirmationContract_.contractStartDate));
             }

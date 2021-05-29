@@ -1,6 +1,8 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import Vue from 'vue';
 import Component, { mixins } from 'vue-class-component';
+import { Inject } from 'vue-property-decorator';
+import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 
 const ConfirmationFormProp = Vue.extend({
   props: {
@@ -15,12 +17,14 @@ const ConfirmationFormProp = Vue.extend({
 
 @Component
 export default class ConfirmationForm extends mixins(AccessLevelMixin, ConfirmationFormProp) {
-
+  @Inject('dynamicWindowService')
+  private commonService: (baseApiUrl: string) => DynamicWindowService;
+  
   columnSpacing = 24;
   showHistory = false;
   showConfirmationForm = false;
 
-  mainForm = {};
+  mainForm:any = {};
 
   contract = {
     contractNo: 112001,
@@ -31,13 +35,13 @@ export default class ConfirmationForm extends mixins(AccessLevelMixin, Confirmat
 
   history = [
     {
-      contractNo: '112001',
+      confirmationNo: '112001',
       lastModifiedDate: '2021-03-31',
       status: 'Accepted',
       reason: 'Sudah sesuai'
     },
     {
-      contractNo: '112001',
+      confirmationNo: '112001',
       lastModifiedDate: '2021-03-28',
       status: 'Need Revision',
       reason: 'Mohon konfirmasi'
@@ -78,18 +82,33 @@ export default class ConfirmationForm extends mixins(AccessLevelMixin, Confirmat
   created() {
     console.log('component confirmation-form created');
     this.mainForm = {...this.data};
+    console.log(this.data);
   }
 
   beforeDestroy() {
     console.log('before destroy component confirmation-form');
   }
 
-  viewDetail(row: any) {
-    this.selectedConfirmation = row;
+  viewHistory() {
     this.showHistory = true;
+    this.commonService('/api/m-vendor-confirmation-responses').retrieve({
+      criteriaQuery: this.updateCriteria([
+      'active.equals=true',
+      `vendorConfirmationLineId.equals=${this.mainForm.vendorConfirmationLineId}`
+      ]),
+      paginationQuery: {
+        page: 0,
+        size: 10000,
+        sort: ['id']
+      }
+    }).then(res=>{this.history = res.data});
   }
 
   openConfirmationForm(_row: any) {
     this.showConfirmationForm = true;
+  }
+
+  downloadAttachment(){
+    window.open(this.mainForm.downloadUrl, '_blank');
   }
 }

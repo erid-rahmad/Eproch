@@ -26,16 +26,18 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
 
   index = true;
   documentAction = null;
+  isAccept = false;
+
   selectedRow: any = {};
   showConfirmationForm = false;
   submitting = false;
 
-  contract = {
+  contract:any = {
     contractNo: 0,
     startDate: '2021-03-31',
     endDate: '2021-03-31',
-    remark: null,
-    reason: null
+    remark: "",
+    reason: ""
   };
 
   vendorConfirmations = []
@@ -108,6 +110,7 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
 
   accept() {
     this.documentAction = 'Accept';
+    this.isAccept = true;
     this.showConfirmationForm = true;
   }
 
@@ -117,15 +120,29 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
 
   revise() {
     this.documentAction = 'Need Revision';
+    this.isAccept = false;
     this.showConfirmationForm = true;
   }
 
   submit() {
     this.submitting = true;
-    setTimeout(() => {
+    
+    let data:any = {};
+
+    data.adOrganizationId = this.contract.adOrganizationId;
+    data.vendorConfirmationLineId = this.contract.vendorConfirmationLineId;
+    data.vendorConfirmationContractId = this.selectedRow.latestContractId;
+    if(this.isAccept) data.accept = this.contract.reason;
+    else data.needRevision = this.contract.reason;
+
+    this.commonService('/api/m-vendor-confirmation-responses').create(data).then(res=>{
       this.submitting = false;
-      this.showConfirmationForm = false;
-    }, 2000);
+      this.clearReason();
+      this.$message.success("Reason submitted successfully.");
+    }).catch(err => {
+      console.error('Failed to submit reason.', err);
+      this.$message.error(`Failed saving the contract`);
+    });
   }
 
   private setRow(record: any) {
@@ -134,21 +151,26 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
 
   viewDetail(row: any) {
     this.selectedRow = row;
-    this.commonService('/api/m-vendor-confirmation-contracts').retrieve({
-      criteriaQuery: this.updateCriteria([
-        ''
-      ]),
+    this.commonService(`/api/m-vendor-confirmation-contracts/${row.latestContractId}`).retrieve({
       paginationQuery: {
         page: 0,
         size: 10000,
         sort: ['id']
       }
+    }).then(res=>{
+      console.log(res.data);
+      this.contract = res.data;
+      this.index = false;
     })
-    this.index = false;
   }
 
   formatConfirmationStatus(value: string) {
     if ('P'===value) return 'Need Confirmation';
     return this.vendorConfirmation.find(status => status.key === value)?.value;
+  }
+
+  clearReason(){
+    this.contract.reason = "";
+    this.showConfirmationForm = false;
   }
 }
