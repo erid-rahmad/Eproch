@@ -8,6 +8,8 @@ const baseApiVendorScoringCriteria = 'api/m-vendor-scoring-criteria';
 const baseApiMTechproposal = 'api/m-tech-proposal-evaluations';
 const baseApiBiddingEvaluation = 'api/m-tech-proposal-evaluations';
 const baseApiEvalResultLine = 'api/m-bidding-eval-result-lines';
+const baseApiTechnicalAnswer = 'api/m-proposal-technicals';
+const baseApiAdministrationAnswer = 'api/m-proposal-administrations';
 
 const PrequalificationFormProps = Vue.extend({
   props: {
@@ -67,6 +69,7 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
     this.retrieveEvaluationMethodCriteria(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLineId,
       this.evaluationFormProp.SelectVendorScoringLine.id);
     this.evaluationResultLine = this.evaluationFormProp.evaluationResultLine;
+
   }
 
   save() {
@@ -140,12 +143,6 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
 
   }
 
-  @Watch('observableIdentifiers')
-  private loadQuestions({id: vendorScoringLineId, evaluationMethodLineId}) {
-    this.questions.clear();
-    this.retrieveEvaluationMethodCriteria(evaluationMethodLineId, vendorScoringLineId);
-  }
-
   private retrieveEvaluationMethodCriteria(evaluationMethodLineId: number, vendorScoringLineId: number) {
 
     this.commonService(baseApiEvalMethodCriteria)
@@ -166,6 +163,7 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
             evalMethodSubCriteria.biddingSubCriteriaDTO.forEach((biddingSubCriteria: any) => {
               biddingSubCriteria.criteriaLineDTO.forEach((subCriteriaLine: any) => {
                 this.questions.set(subCriteriaLine.id, subCriteriaLine);
+                console.log("question",this.questions);
               });
             });
           });
@@ -175,8 +173,10 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
 
       })
       .finally(() => {
-        this.retrieveEvaluation(this.evaluationFormProp.SelectVendorScoringLine.biddingId);
         this.retrieveVendorScoringCriteria(vendorScoringLineId);
+
+
+
       });
   }
 
@@ -204,13 +204,75 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
           let question = this.questions.get(criteria.biddingSubCriteriaLineId);
           question.requirement = criteria.requirement;
           question.vendorScoringLineId = criteria.vendorScoringLineId;
+        })
+        // this.retrieveAnswerAdmin(this.evaluationFormProp.biddingSubmission.id);
+        this.retrieveAnswerTechnical(this.evaluationFormProp.biddingSubmission.id);
+
+      })
+      .catch(err => {
+        const message = 'Failed to get vendor scoring requirements';
+        console.log(message, err);
+        this.$message.error(message);
+        this.retrieveEvaluation(this.SelectVendorScoringLine.biddingId);
+      });
+  }
+
+  private retrieveAnswerTechnical(SubmissionId: number) {
+    this.commonService(baseApiTechnicalAnswer)
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          `biddingSubmissionId.equals=${SubmissionId}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        res.data.forEach((criteria: any) => {
+          try {
+            let question = this.questions.get(criteria.biddingSubCriteriaLineId);
+            question.answer = criteria.answer;
+          }catch (e) {
+          }
+        });
+        this.retrieveEvaluation(this.evaluationFormProp.SelectVendorScoringLine.biddingId);
+      })
+      .catch(err => {
+        const message = 'Failed to get vendor scoring requirements';
+        console.log(message, err);
+        this.$message.error(message);
+      });
+  }
+
+  private retrieveAnswerAdmin(SubmissionId: number) {
+    this.commonService(baseApiAdministrationAnswer)
+      .retrieve({
+        criteriaQuery: [
+          // 'active.equals=true',
+          // `biddingSubmissionId.equals=${SubmissionId}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        res.data.forEach((criteria: any) => {
+          try {
+            let question = this.questions.get(criteria.biddingSubCriteriaLineId);
+            question.answer = criteria.answer;
+          }catch (e) {
+          }
         });
       })
       .catch(err => {
         const message = 'Failed to get vendor scoring requirements';
         console.log(message, err);
         this.$message.error(message);
-        // this.retrieveEvaluation(this.SelectVendorScoringLine.biddingId);
       });
   }
 

@@ -86,10 +86,10 @@
                                         <template slot-scope="{ row }">
                                             <el-input
                                                 v-model="row.answer"
-
+                                                :disabled="true"
                                                 class="form-input"
-                                                clearable
                                                 size="mini"
+                                                clearable
                                             ></el-input>
                                         </template>
                                     </el-table-column>

@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
  * A DTO for the {@link com.bhp.opusb.domain.MProposalTechnical} entity.
  */
 public class MProposalTechnicalDTO extends AbstractAuditingDTO {
-    
+
     private Long id;
 
     @NotNull
@@ -29,8 +29,8 @@ public class MProposalTechnicalDTO extends AbstractAuditingDTO {
     private String biddingSubmissionName;
 
     private Long biddingSubCriteriaLineId;
-    private Long biddingSubCriteriaLineName;
-    
+    private String biddingSubCriteriaLineName;
+
     public Long getId() {
         return id;
     }
@@ -111,11 +111,11 @@ public class MProposalTechnicalDTO extends AbstractAuditingDTO {
         this.biddingSubCriteriaLineId = cBiddingSubCriteriaLineId;
     }
 
-    public Long getBiddingSubCriteriaLineName() {
+    public String getBiddingSubCriteriaLineName() {
         return biddingSubCriteriaLineName;
     }
 
-    public void setBiddingSubCriteriaLineName(Long biddingSubCriteriaLineName) {
+    public void setBiddingSubCriteriaLineName(String biddingSubCriteriaLineName) {
         this.biddingSubCriteriaLineName = biddingSubCriteriaLineName;
     }
 

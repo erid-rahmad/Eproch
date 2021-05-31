@@ -47,9 +47,15 @@ spring:
         server-uri: http://localhost:9393
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/eproch_demo_1
-    username: postgres
-    password: root
+
+    url: jdbc:postgresql://10.71.5.58:5435/eproc_demo
+    username: dbdemo
+    password: AMU53cKgS0Q6cJi
+
+#    url: jdbc:postgresql://localhost:5432/DEVELOP
+#    username: postgres
+#    password: root
+
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -153,6 +159,10 @@ application:
   default-product-category-id: 45551
   default-product-asset-account-id: 18601
   default-product-expense-account-id: 19901
+  attachment:
+    upload-dir: C:\Users\erid_\upload
   integration:
     endpoint:
       invoice-verification-url: http://localhost:20001/api/invoice-verification
+upload:
+    dir: C:\Users\erid_\upload\
