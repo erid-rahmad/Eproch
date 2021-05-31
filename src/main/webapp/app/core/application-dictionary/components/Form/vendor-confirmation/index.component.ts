@@ -161,6 +161,17 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
       console.log(res.data);
       this.contract = res.data;
       this.index = false;
+    }).catch(reason=>{
+      console.log(reason);
+      this.contract = {
+        confirmationNo: Date.now(),
+        contractStartDate: '2021-05-28',
+        contractEndDate: '2021-05-28',
+        contractDetail: null,
+        adOrganizationId: row.adOrganizationId,
+        vendorConfirmationLineId: row.id
+      };
+      this.index = false;
     })
   }
 

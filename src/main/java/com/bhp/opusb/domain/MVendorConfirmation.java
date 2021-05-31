@@ -60,7 +60,7 @@ public class MVendorConfirmation extends AbstractAuditingEntity implements Seria
     @Formula("(select mvcl.status from m_vendor_confirmation_line mvcl where mvcl.vendor_confirmation_id = id)")
     private String status;
 
-    @Formula("(select max(mvcc.id) from m_vendor_confirmation_contract mvcc where "
+    @Formula("(select coalesce(max(mvcc.id),0) from m_vendor_confirmation_contract mvcc where "
     + "mvcc.publish_date is not null and "
     + "mvcc.vendor_confirmation_line_id = (select mvcl.id from m_vendor_confirmation_line mvcl where mvcl.vendor_confirmation_id = id))")
     private Long latestContractId;
