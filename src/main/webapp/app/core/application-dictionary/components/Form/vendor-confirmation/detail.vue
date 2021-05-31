@@ -231,7 +231,7 @@
           >
             <el-form-item label="Amount Total">
               <el-input
-                v-model="mainForm.amount"
+                v-model="selectedConfirmation.amount"
                 v-inputmask="{'alias': 'currency'}"
                 disabled
               ></el-input>
@@ -279,7 +279,7 @@
             min-width="150"
           >
             <template slot-scope="{ row }">
-              {{ row.ceilingPrice | formatCurrency }}
+              {{ row.proposedPrice | formatCurrency }}
             </template>
           </el-table-column>
           <el-table-column
@@ -287,7 +287,7 @@
             min-width="150"
           >
             <template slot-scope="{ row }">
-              {{ row.totalCeilingPrice | formatCurrency }}
+              {{ row.totalPriceSubmission | formatCurrency }}
             </template>
           </el-table-column>
         </el-table>

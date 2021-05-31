@@ -150,12 +150,15 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
       }
     }).then(res=>{
       let quantity = 0;
+      let amount = 0;
       console.log(res.data);
       res.data.forEach(element => {
         quantity += element.quantity;
+        amount += element.totalPriceSubmission;
       });
       this.selectedConfirmation.lines = res.data;
       this.selectedConfirmation.quantity = quantity;
+      this.selectedConfirmation.amount = amount;
       this.showDetail = true;
     });
   }
