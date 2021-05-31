@@ -98,7 +98,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
     }
   ];
 
-  selectedConfirmation = {};
+  selectedConfirmation: any = {};
   vendorConfirmation: any[] = [];
 
   created() {
@@ -138,7 +138,26 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
 
   viewDetail(row: any) {
     this.selectedConfirmation = row;
-    this.showDetail = true;
+    this.commonService('/api/m-bidding-lines').retrieve({
+      criteriaQuery: this.updateCriteria([
+        'active.equals=true',
+        `biddingId.equals=${this.mainForm.biddingId}`
+        ]),
+      paginationQuery: {
+        page: 0,
+        size: 10000,
+        sort: ['id']
+      }
+    }).then(res=>{
+      let quantity = 0;
+      console.log(res.data);
+      res.data.forEach(element => {
+        quantity += element.quantity;
+      });
+      this.selectedConfirmation.lines = res.data;
+      this.selectedConfirmation.quantity = quantity;
+      this.showDetail = true;
+    });
   }
 
   viewHistory(row: any) {

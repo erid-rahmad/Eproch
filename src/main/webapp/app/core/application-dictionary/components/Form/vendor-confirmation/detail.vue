@@ -265,7 +265,7 @@
           </el-table-column>
           <el-table-column
             label="Item"
-            prop="item"
+            prop="productName"
             min-width="200"
             show-overflow-tooltip
           ></el-table-column>
@@ -279,7 +279,7 @@
             min-width="150"
           >
             <template slot-scope="{ row }">
-              {{ row.unitPrice | formatCurrency }}
+              {{ row.ceilingPrice | formatCurrency }}
             </template>
           </el-table-column>
           <el-table-column
@@ -287,7 +287,7 @@
             min-width="150"
           >
             <template slot-scope="{ row }">
-              {{ row.totalLine | formatCurrency }}
+              {{ row.totalCeilingPrice | formatCurrency }}
             </template>
           </el-table-column>
         </el-table>
