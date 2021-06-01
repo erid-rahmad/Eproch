@@ -31,6 +31,10 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
     confirmationNo: {
       required: true,
       message: 'Confirmation No. is required'
+    }, 
+    contractDetail: {
+      required: true,
+      message: 'Contract Detail is required'
     }
   };
   
@@ -40,6 +44,8 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   confirmPublish = false;
   showPoForm = false;
   showHistory = false;
+
+  poNumber: string = "";
 
   mainForm:any = {};
 
@@ -83,7 +89,8 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   ];
 */
 
-  history = [
+  history = [];
+/*
     {
       contractNo: '112001',
       lastModifiedDate: '2021-03-31',
@@ -97,6 +104,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
       reason: 'Mohon konfirmasi'
     }
   ];
+*/
 
   selectedConfirmation: any = {};
   vendorConfirmation: any[] = [];
@@ -165,6 +173,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
 
   viewHistory(row: any) {
     this.selectedConfirmation = row;
+    this.history = [];
     this.commonService('/api/m-vendor-confirmation-responses').retrieve({
       criteriaQuery: this.updateCriteria([
       'active.equals=true',
@@ -206,8 +215,80 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
     this.showConfirmationForm = true;
   }
 
-  generatePo(_row: any) {
-    this.showPoForm = true;
+  generatePo(row: any) {
+    this.selectedConfirmation = row;
+    let today = new Date();
+    this.commonService('/api/m-bidding-lines').retrieve({
+      criteriaQuery: this.updateCriteria([
+        'active.equals=true',
+        `biddingId.equals=${this.mainForm.biddingId}`
+        ]),
+      paginationQuery: {
+        page: 0,
+        size: 10000,
+        sort: ['id']
+      }
+    }).then(res=>{
+      let quantity = 0;
+      let amount = 0;
+      console.log(res.data);
+      res.data.forEach(element => {
+        quantity += element.quantity;
+        amount += element.totalPriceSubmission;
+      });
+
+      let lines = res.data;
+
+      let poBody: any = {
+        "active": true,
+        "adOrganizationId": row.adOrganizationId,
+        "costCenterId": this.mainForm.costCenterId,
+        "currencyId": this.mainForm.currencyId,
+        "datePromised": "2021-06-01",
+        "dateRequired": "2021-06-01",
+        "dateTrx": `${today.getFullYear()}-${((today.getMonth()+1)<10?'0':'')+(today.getMonth()+1)}-${(today.getDate()<10?'0':'')+(today.getDate()+1)}`,
+        "description": "PO for bidding "+this.mainForm.biddingTitle,
+        "documentTypeId": 874953,
+        "grandTotal": amount,
+        "paymentTermId": 1951601,
+        "vendorId": row.vendorId,
+        "warehouseId": 46851
+      };
+
+      this.commonService('/api/m-purchase-orders').create(poBody).then(res=>{
+        this.poNumber = res.documentNo;
+        this.showPoForm = true;
+        poBody = res;
+        lines.forEach((element)=>{
+          let lineBody = {
+            "active": true,
+            "dateTrx": poBody.dateTrx,
+            "orderAmount": element.totalPriceSubmission,
+            "quantity": element.quantity,
+            "unitPrice": element.proposedPrice,
+            "purchaseOrderId": poBody.id,
+            "adOrganizationId": poBody.adOrganizationId,
+            "productId": element.productId,
+            "warehouseId": poBody.warehouseId,
+            "costCenterId": poBody.costCenterId,
+            "uomId": element.uomId,
+            "vendorId": this.selectedConfirmation.vendorId,
+            "dateRequired": poBody.dateRequired,
+            "datePromised": poBody.datePromised
+          }
+
+          this.commonService('/api/m-purchase-order-lines').create(lineBody).then(res=>{
+            console.log("created line for po "+ this.poNumber+", line id: "+res.id);
+          });
+
+          console.log(lineBody);
+        });
+      }).catch(error=>{
+        this.$message.error("Unable to generate PO.");
+      })
+
+      console.log(poBody);
+    });
   }
 
   onUploadChange(file: any) {
@@ -220,6 +301,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
 
   handleRemove(files, fileList) {
     this.file = {};
+    this.contract.attachment = null;
     this.contract.attachmentId = null;
   }
 
@@ -235,6 +317,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
 
   onUploadSuccess(response: any, file) {
       console.log('File uploaded successfully ', response);
+      this.contract.attachment = response.attachment;
       this.contract.attachmentId = response.attachment.id;
       this.file = file;
       //(this.$refs.company as ElForm).clearValidate('file');

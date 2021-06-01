@@ -32,6 +32,7 @@ public class MVendorConfirmationContractDTO extends AbstractAuditingDTO implemen
 
     private Long adOrganizationId;
 
+    private CAttachmentDTO attachment;
     private Long attachmentId;
     private String downloadUrl;
 
@@ -43,6 +44,14 @@ public class MVendorConfirmationContractDTO extends AbstractAuditingDTO implemen
     
     public Long getId() {
         return id;
+    }
+
+    public CAttachmentDTO getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(CAttachmentDTO attachment) {
+        this.attachment = attachment;
     }
 
     public String getReason() {

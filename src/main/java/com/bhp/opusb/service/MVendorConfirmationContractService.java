@@ -1,7 +1,9 @@
 package com.bhp.opusb.service;
 
+import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.domain.MVendorConfirmationContract;
 import com.bhp.opusb.domain.MVendorConfirmationLine;
+import com.bhp.opusb.repository.AdUserRepository;
 import com.bhp.opusb.repository.MVendorConfirmationContractRepository;
 import com.bhp.opusb.repository.MVendorConfirmationLineRepository;
 import com.bhp.opusb.service.dto.MVendorConfirmationContractDTO;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -28,15 +31,21 @@ public class MVendorConfirmationContractService {
 
     private final MVendorConfirmationContractRepository mVendorConfirmationContractRepository;
     private final MVendorConfirmationLineRepository mVendorConfirmationLineRepository;
+    private final AdUserRepository adUserRepository;
 
     private final MVendorConfirmationContractMapper mVendorConfirmationContractMapper;
 
+    private final MailService mailService;
+
     public MVendorConfirmationContractService(MVendorConfirmationContractRepository mVendorConfirmationContractRepository,
-     MVendorConfirmationContractMapper mVendorConfirmationContractMapper,
-     MVendorConfirmationLineRepository mVendorConfirmationLineRepository) {
+     MVendorConfirmationContractMapper mVendorConfirmationContractMapper, MailService mailService,
+     MVendorConfirmationLineRepository mVendorConfirmationLineRepository, AdUserRepository adUserRepository
+     ) {
         this.mVendorConfirmationContractRepository = mVendorConfirmationContractRepository;
         this.mVendorConfirmationContractMapper = mVendorConfirmationContractMapper;
         this.mVendorConfirmationLineRepository = mVendorConfirmationLineRepository;
+        this.adUserRepository = adUserRepository;
+        this.mailService = mailService;
     }
 
     /**
@@ -69,6 +78,16 @@ public class MVendorConfirmationContractService {
         // updates the line status to published as well
         MVendorConfirmationLine mvcl = mVendorConfirmationLineRepository.findById(mVendorConfirmationContractDTO.getVendorConfirmationLineId()).get();
         mvcl.setStatus("P");
+
+        String emailBody = "Contract for bidding " + mvcl.getVendorConfirmation().getBidding().getName() + " is available for confirmation.";
+
+        List<AdUser> pics = adUserRepository.findBycVendor(mvcl.getVendor());
+        if(pics.size()==0) log.debug("No pics found for vendor {}", mvcl.getVendor());
+        for(AdUser pic: pics){
+            log.debug("Sending vendor contract notification to {}", pic.getUser().getEmail());
+            mailService.sendEmail(pic.getUser().getEmail(), "Contract Available", emailBody, false, false);
+        }
+
         mVendorConfirmationLineRepository.save(mvcl);
         mVendorConfirmationContractRepository.save(mVendorConfirmationContract);
     }

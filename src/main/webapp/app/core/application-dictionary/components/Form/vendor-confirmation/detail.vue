@@ -173,7 +173,7 @@
       :visible.sync="showPoForm"
       title="Generate PO"
     >
-      PO has been generated.
+      PO has been generated. Your PO Number is {{poNumber}}.
       <div slot="footer">
         <el-button
           icon="el-icon-close"
@@ -410,6 +410,7 @@
             <el-form-item label="Contract Attachment">
               <el-upload
                 ref="contractFile"
+                v-model="contract.attachment"
                 :action="action"
                 class="upload-demo"
                 :limit="limit"
@@ -439,7 +440,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="Contract Detail">
+        <el-form-item label="Contract Detail" prop="contractDetail">
           <el-input
             v-model="contract.contractDetail"
             :rows="7"

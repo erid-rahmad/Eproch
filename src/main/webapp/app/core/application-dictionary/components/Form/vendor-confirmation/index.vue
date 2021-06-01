@@ -11,7 +11,7 @@
         Close
       </el-button>
       <el-button
-        v-if="!index && isVendor"
+        v-if="!index && isVendor && selectedRow.status==='P'"
         icon="el-icon-check"
         size="mini"
         type="primary"
@@ -20,7 +20,7 @@
         Accept
       </el-button>
       <el-button
-        v-if="!index && isVendor"
+        v-if="!index && isVendor && selectedRow.status==='P'"
         icon="el-icon-edit"
         size="mini"
         type="warning"

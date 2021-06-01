@@ -20,7 +20,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
+
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -76,7 +79,7 @@ public class MVendorConfirmationContractResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/m-vendor-confirmation-contracts/publish/{id}")
-    public ResponseEntity<MVendorConfirmationContractDTO> publishContract(@PathVariable Long id, @RequestBody MVendorConfirmationContractDTO mVendorConfirmationContractDTO) throws URISyntaxException {
+    public ResponseEntity<MVendorConfirmationContractDTO> publishContract(@PathVariable Long id, @RequestBody MVendorConfirmationContractDTO mVendorConfirmationContractDTO) throws URISyntaxException, MessagingException, IOException {
         log.debug("REST request to publish MVendorConfirmationContract : {}", mVendorConfirmationContractDTO);
         if (id == null) {
             throw new BadRequestAlertException("Cannot publish contract without its ID", ENTITY_NAME, "noid");
