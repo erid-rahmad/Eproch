@@ -298,6 +298,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
 
   onUploadChange(file: any) {
     this.file = file;
+    this.fileList = [file];
   }
 
   handlePreview(file) {
@@ -306,6 +307,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
 
   handleRemove(files, fileList) {
     this.file = {};
+    this.fileList = [];
     this.contract.attachment = null;
     this.contract.attachmentId = null;
   }
@@ -325,6 +327,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
       this.contract.attachment = response.attachment;
       this.contract.attachmentId = response.attachment.id;
       this.file = file;
+      this.fileList = [file];
       //(this.$refs.company as ElForm).clearValidate('file');
   }
 
@@ -451,6 +454,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   resetForm() {
     this.contract = {};
     (<ElUpload>this.$refs.contractFile).clearFiles();
+    this.fileList = [];
     this.showConfirmationForm = false;
   }
 }

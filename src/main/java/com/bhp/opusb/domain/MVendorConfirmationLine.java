@@ -55,6 +55,11 @@ public class MVendorConfirmationLine extends AbstractAuditingEntity implements S
     @JsonIgnoreProperties("mVendorConfirmationLines")
     private MVendorConfirmation vendorConfirmation;
 
+    @PrePersist
+    public void assignUUID() {
+        this.uid = UUID.randomUUID();
+    }
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
