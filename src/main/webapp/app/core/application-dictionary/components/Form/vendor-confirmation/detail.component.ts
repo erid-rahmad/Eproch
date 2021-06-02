@@ -27,6 +27,8 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   private accept: string = ".jpg, .jpeg, .png, .pdf";
   private file: any = {};
 
+  private fileList: any[] = [];
+
   contractFormValidationSchema = {
     confirmationNo: {
       required: true,
@@ -210,6 +212,9 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
         vendorConfirmationLineId: _row.id
       }
       
+      if(this.contract.attachmentId){
+        this.fileList.push({"name":this.contract.attachment.fileName, "url":this.contract.downloadUrl})
+      }
       console.log(this.contract);
     });
     this.showConfirmationForm = true;
