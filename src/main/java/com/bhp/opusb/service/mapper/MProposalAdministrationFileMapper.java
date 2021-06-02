@@ -15,6 +15,7 @@ public interface MProposalAdministrationFileMapper extends EntityMapper<MProposa
 
     @Mapping(source = "CAttachment.id", target = "CAttachmentId")
     @Mapping(source = "CAttachment.fileName", target = "CAttachmentName")
+    @Mapping(source = "CAttachment.downloadUrl", target = "attachmentUrl")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "biddingSubmission.id", target = "biddingSubmissionId")

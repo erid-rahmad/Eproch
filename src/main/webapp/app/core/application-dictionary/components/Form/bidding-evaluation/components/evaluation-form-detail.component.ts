@@ -10,8 +10,9 @@ const baseApiBiddingEvaluation = 'api/m-tech-proposal-evaluations';
 const baseApiEvalResultLine = 'api/m-bidding-eval-result-lines';
 const baseApiTechnicalAnswer = 'api/m-proposal-technicals';
 const baseApiAdministrationAnswer = 'api/m-proposal-administrations';
+const baseApiProposalTechnicalFile = 'api/m-proposal-administration-files';
 
-const PrequalificationFormProps = Vue.extend({
+const EvaluationFormDetailComponentProp = Vue.extend({
   props: {
     loading: Boolean,
     readOnly: Boolean,
@@ -31,7 +32,7 @@ const PrequalificationFormProps = Vue.extend({
 });
 
 @Component
-export default class PrequalificationForm extends Mixins(AccessLevelMixin, PrequalificationFormProps) {
+export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMixin, EvaluationFormDetailComponentProp) {
 
   options = [{
     value: 'Pass',
@@ -45,7 +46,8 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
   private evaluationMethodCriteria: any = [];
   private questions: Map<number, any> = new Map();
-  private evaluationResultLine: any = {};
+  private evaluationResultLine:any= {};
+  attachmentHandler: Map<number, string> = new Map();
 
   private validationSchema = {
     requirement: {
@@ -57,18 +59,20 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
 
   @Watch('SelectVendorScoringLine')
   loaddata() {
-    console.log("load data")
     this.retrieveEvaluationMethodCriteria(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLineId,
       this.evaluationFormProp.SelectVendorScoringLine.id);
-    this.evaluationResultLine = this.evaluationFormProp.evaluationResultLine;
+    if (this.evaluationFormProp.evaluationResultLine) {
+      this.evaluationResultLine = this.evaluationFormProp.evaluationResultLine;
+    };
 
   }
 
   created() {
-    console.log("evaluationFormProp",this.evaluationFormProp)
     this.retrieveEvaluationMethodCriteria(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLineId,
       this.evaluationFormProp.SelectVendorScoringLine.id);
-    this.evaluationResultLine = this.evaluationFormProp.evaluationResultLine;
+    if (this.evaluationFormProp.evaluationResultLine) {
+      this.evaluationResultLine = this.evaluationFormProp.evaluationResultLine;
+    };
 
   }
 
@@ -161,9 +165,13 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
         this.evaluationMethodCriteria = res.data.map((evalMethodCriteria: any) => {
           evalMethodCriteria.evalMethodSubCriteriaList.forEach((evalMethodSubCriteria: any) => {
             evalMethodSubCriteria.biddingSubCriteriaDTO.forEach((biddingSubCriteria: any) => {
+              biddingSubCriteria.attachmentId=null;
+              biddingSubCriteria.attachmentName=null;
+              biddingSubCriteria.attachmentUrl=null;
+              this.attachmentHandler.set(biddingSubCriteria.id,biddingSubCriteria);
               biddingSubCriteria.criteriaLineDTO.forEach((subCriteriaLine: any) => {
                 this.questions.set(subCriteriaLine.id, subCriteriaLine);
-                console.log("question",this.questions);
+
               });
             });
           });
@@ -205,7 +213,7 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
           question.requirement = criteria.requirement;
           question.vendorScoringLineId = criteria.vendorScoringLineId;
         })
-        // this.retrieveAnswerAdmin(this.evaluationFormProp.biddingSubmission.id);
+        this.retrieveAnswerAdmin(this.evaluationFormProp.biddingSubmission.id);
         this.retrieveAnswerTechnical(this.evaluationFormProp.biddingSubmission.id);
 
       })
@@ -213,7 +221,7 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
         const message = 'Failed to get vendor scoring requirements';
         console.log(message, err);
         this.$message.error(message);
-        this.retrieveEvaluation(this.SelectVendorScoringLine.biddingId);
+
       });
   }
 
@@ -301,11 +309,48 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
           }
 
         });
+        this.retrieveAttachment(this.evaluationFormProp.biddingSubmission.id);
+
       })
       .catch(err => {
         const message = 'Failed to get evaluation';
         console.log(message, err);
         this.$message.error(message);
       });
+  }
+
+  retrieveAttachment(submissionId){
+    this.commonService(baseApiProposalTechnicalFile)
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          `biddingSubmissionId.equals=${submissionId}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        for (const proposal of res.data) {
+          const item = this.attachmentHandler.get(proposal.biddingSubCriteriaId);
+          // @ts-ignore
+          item.attachmentId = proposal.cAttachmentId;
+          // @ts-ignore
+          item.attachmentName = proposal.cattachmentName;
+          // @ts-ignore
+          item.attachmentUrl = proposal.attachmentUrl;
+        }
+      })
+      .catch(err => {
+        console.error('Failed',err);
+        this.$message.error(`Failed reload attachment `);
+      })
+  }
+
+  handlePreview(biddingSubCriteria){
+    window.open(biddingSubCriteria.attachmentUrl, '_blank');
+
   }
 }

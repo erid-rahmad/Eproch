@@ -3,7 +3,6 @@ import Component, {
   mixins
 } from 'vue-class-component';
 import Vue2Filters from 'vue2-filters';
-import ContextVariableAccessor from "../../../ContextVariableAccessor";
 import Vue from 'vue';
 import {Inject, Watch} from "vue-property-decorator";
 import DynamicWindowService from "@/core/application-dictionary/components/DynamicWindow/dynamic-window.service";
@@ -50,9 +49,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   private SelectVendorScoringLine:any={};
   private vendorId:number;
   private evaluationResult:any={};
-  private evaluationFormProp:any={
-    evaluationResultLine:{}
-    ,};
+  private evaluationFormProp:any={};
   mainForm: any = {};
 
   created(){
@@ -60,7 +57,6 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     this.evaluationResult=this.data.evaluationResult;
     this.evaluation=this.data.pickrow;
     this.retrieveVendorScoring(this.evaluation.biddingId);
-    this.SelectVendorScoringLine='';
 
   }
 
@@ -71,12 +67,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     this.evaluationFormProp.SelectVendorScoringLine=this.SelectVendorScoringLine;
     this.retrieveEvalResultLine(this.SelectVendorScoringLine.evaluationMethodLineId,this.evaluationResult.id);
     this.retrieveAllEvalResultLine(this.evaluationResult.id);
-    if (this.SelectVendorScoringLine.evaluationMethodLineEvaluation ==="P"){
-      this.FormMenu=1;
-    }
-    else {
-      this.FormMenu=2;
-    }
+
   }
 
   changeCode(code :String){
@@ -148,12 +139,20 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
         if (data.length) {
           result = {...result, ...data[0]};
           this.evaluationFormProp.evaluationResultLine=result;
-          console.log("result",result)
+          // console.log("result",result)
           this.$message.success('open ResultLine ');
         }
         else {
           this.createTableEvalResultLine();
         }
+
+        if (this.SelectVendorScoringLine.evaluationMethodLineEvaluation ==="P"){
+          this.FormMenu=1;
+        }
+        else {
+          this.FormMenu=2;
+        }
+
       });
   }
 

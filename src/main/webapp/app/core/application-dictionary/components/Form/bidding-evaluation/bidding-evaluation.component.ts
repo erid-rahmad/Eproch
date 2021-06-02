@@ -32,7 +32,7 @@ export default class BiddingEvaluation extends mixins(Vue2Filters.mixin, AlertMi
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
-  private biddingSubmission: any = {};
+  private biddingSubmission: any = [];
   private evaluationResult:any={};
   index=0;
   private data:any={};
