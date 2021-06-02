@@ -173,7 +173,7 @@
       :visible.sync="showPoForm"
       title="Generate PO"
     >
-      PO has been generated.
+      PO has been generated. Your PO Number is {{poNumber}}.
       <div slot="footer">
         <el-button
           icon="el-icon-close"
@@ -231,7 +231,7 @@
           >
             <el-form-item label="Amount Total">
               <el-input
-                v-model="mainForm.amount"
+                v-model="selectedConfirmation.amount"
                 v-inputmask="{'alias': 'currency'}"
                 disabled
               ></el-input>
@@ -279,7 +279,7 @@
             min-width="150"
           >
             <template slot-scope="{ row }">
-              {{ row.ceilingPrice | formatCurrency }}
+              {{ row.proposedPrice | formatCurrency }}
             </template>
           </el-table-column>
           <el-table-column
@@ -287,7 +287,7 @@
             min-width="150"
           >
             <template slot-scope="{ row }">
-              {{ row.totalCeilingPrice | formatCurrency }}
+              {{ row.totalPriceSubmission | formatCurrency }}
             </template>
           </el-table-column>
         </el-table>
@@ -410,11 +410,13 @@
             <el-form-item label="Contract Attachment">
               <el-upload
                 ref="contractFile"
+                v-model="contract.attachment"
                 :action="action"
                 class="upload-demo"
                 :limit="limit"
                 :multiple="false"
                 :accept="accept"
+                :file-list="fileList"
                 :before-upload="handleBeforeUpload"
                 :on-change="onUploadChange"
                 :on-preview="handlePreview"
@@ -439,7 +441,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="Contract Detail">
+        <el-form-item label="Contract Detail" prop="contractDetail">
           <el-input
             v-model="contract.contractDetail"
             :rows="7"

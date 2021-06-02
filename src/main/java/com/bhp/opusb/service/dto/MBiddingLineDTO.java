@@ -54,8 +54,26 @@ public class MBiddingLineDTO extends AbstractAuditingDTO {
     private Long uomId;
     private String uomName;
 
+    private BigDecimal proposedPrice, totalPriceSubmission;
+
     public Long getId() {
         return id;
+    }
+
+    public BigDecimal getProposedPrice() {
+        return proposedPrice;
+    }
+
+    public void setProposedPrice(BigDecimal proposedPrice) {
+        this.proposedPrice = proposedPrice;
+    }
+
+    public BigDecimal getTotalPriceSubmission() {
+        return totalPriceSubmission;
+    }
+
+    public void setTotalPriceSubmission(BigDecimal totalPriceSubmission) {
+        this.totalPriceSubmission = totalPriceSubmission;
     }
 
     public void setId(Long id) {

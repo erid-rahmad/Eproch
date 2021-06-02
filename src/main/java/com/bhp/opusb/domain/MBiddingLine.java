@@ -24,6 +24,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Formula;
 
 /**
  * A MBiddingLine.
@@ -97,6 +98,12 @@ public class MBiddingLine extends AbstractAuditingEntity {
     @NotNull
     @JsonIgnoreProperties("mBiddingLines")
     private CUnitOfMeasure uom;
+
+    @Formula("(select mppl.proposed_price from m_proposal_price_line mppl where mppl.bidding_line_id = id)")
+    private BigDecimal proposedPrice;
+
+    @Formula("(select mppl.total_price_submission from m_proposal_price_line mppl where mppl.bidding_line_id = id)")
+    private BigDecimal totalPriceSubmission;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -287,6 +294,32 @@ public class MBiddingLine extends AbstractAuditingEntity {
 
     public void setUom(CUnitOfMeasure cUnitOfMeasure) {
         this.uom = cUnitOfMeasure;
+    }
+
+    public BigDecimal getProposedPrice() {
+        return proposedPrice;
+    }
+
+    public MBiddingLine proposedPrice(BigDecimal proposedPrice) {
+        this.proposedPrice = proposedPrice;
+        return this;
+    }
+
+    public void setProposedPrice(BigDecimal proposedPrice) {
+        this.proposedPrice = proposedPrice;
+    }
+
+    public BigDecimal getTotalPriceSubmission() {
+        return totalPriceSubmission;
+    }
+
+    public MBiddingLine totalPriceSubmission(BigDecimal totalPriceSubmission) {
+        this.totalPriceSubmission = totalPriceSubmission;
+        return this;
+    }
+
+    public void setTotalPriceSubmission(BigDecimal totalPriceSubmission) {
+        this.totalPriceSubmission = totalPriceSubmission;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
