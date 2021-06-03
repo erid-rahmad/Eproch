@@ -78,9 +78,12 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
         this.proposalPriceLine=res.data;
       })
   }
+
+
   close() {
     this.$emit("close");
   }
+
 
   save(){
       this.commonService(baseApiEvalResultLine)

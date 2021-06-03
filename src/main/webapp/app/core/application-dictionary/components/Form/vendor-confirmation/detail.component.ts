@@ -27,6 +27,8 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   private accept: string = ".jpg, .jpeg, .png, .pdf";
   private file: any = {};
 
+  private fileList: any[] = [];
+
   contractFormValidationSchema = {
     confirmationNo: {
       required: true,
@@ -210,6 +212,9 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
         vendorConfirmationLineId: _row.id
       }
       
+      if(this.contract.attachmentId){
+        this.fileList.push({"name":this.contract.attachment.fileName, "url":this.contract.downloadUrl})
+      }
       console.log(this.contract);
     });
     this.showConfirmationForm = true;
@@ -293,6 +298,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
 
   onUploadChange(file: any) {
     this.file = file;
+    this.fileList = [file];
   }
 
   handlePreview(file) {
@@ -301,6 +307,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
 
   handleRemove(files, fileList) {
     this.file = {};
+    this.fileList = [];
     this.contract.attachment = null;
     this.contract.attachmentId = null;
   }
@@ -320,6 +327,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
       this.contract.attachment = response.attachment;
       this.contract.attachmentId = response.attachment.id;
       this.file = file;
+      this.fileList = [file];
       //(this.$refs.company as ElForm).clearValidate('file');
   }
 
@@ -446,6 +454,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   resetForm() {
     this.contract = {};
     (<ElUpload>this.$refs.contractFile).clearFiles();
+    this.fileList = [];
     this.showConfirmationForm = false;
   }
 }

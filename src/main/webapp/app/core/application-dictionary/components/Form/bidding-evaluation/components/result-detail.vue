@@ -30,7 +30,12 @@
                 </el-divider>
             </el-form>
 
-            <el-table :data="evaluationResultLine" :default-sort="{prop: 'date', order: 'descending'}" size="mini" style="width: 100%">
+            <el-table :data="evaluationResultLine"
+                      :default-sort="{prop: 'date', order: 'descending'}"
+                      size="mini"
+                      style="width: 100%"
+                      v-loading="loading"
+            >
                 <el-table-column label="No" min-width="30">
                         <template slot-scope="row">
                             {{ row.$index + 1 }}

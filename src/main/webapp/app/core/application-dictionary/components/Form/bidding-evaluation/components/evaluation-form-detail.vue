@@ -1,6 +1,6 @@
 <template>
     <div class="prequalification-form">
-        <el-form ref="mainForm" label-position="left" label-width="200px" size="mini">
+        <el-form ref="mainForm" label-position="left" label-width="200px" size="mini" v-loading="loadingAll">
             <el-row
                 v-for="(criteria, index) in evaluationMethodCriteria"
                 :key="criteria.id"
@@ -30,14 +30,6 @@
                                         </el-form-item>
                                     </div>
                                 </el-col>
-                                <el-col :span="12">
-                                    <div class="grid-content bg-purple-light">
-                                        <el-button size="mini" style="margin-left: 40px"
-                                                   type="primary" @click="save()">
-                                            {{ subCriteria.biddingSubCriteriaName }}.PDF
-                                        </el-button>
-                                    </div>
-                                </el-col>
                             </el-row>
                             <el-row
                                 v-for="(biddingSubCriteria, subsubindex) in subCriteria.biddingSubCriteriaDTO"
@@ -45,6 +37,11 @@
                                 :class="`sub-${subsubindex}`"
                                 class="sub-sub-criteria-section"
                             >
+                                <el-col style="text-align: right;padding-right: 40px;padding-bottom: 5px">
+                                    <el-button v-if="biddingSubCriteria.attachmentName" icon="el-icon-view" size="mini" type="primary"
+                                               @click="handlePreview(biddingSubCriteria)">{{ biddingSubCriteria.attachmentName }}
+                                    </el-button>
+                                </el-col>
                                 <el-table
                                     :data="biddingSubCriteria.criteriaLineDTO" border
                                     class="question-list"

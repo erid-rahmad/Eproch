@@ -283,6 +283,7 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
   }
 
   onUploadSuccess(response, file, fileList) {
+    console.log("this response",response)
     this.formData.attachment = response.attachment;
     this.formData.attachmentId = response.attachment.id;
     this.formData.attachmentName = response.attachment.name;

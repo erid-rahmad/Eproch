@@ -6,7 +6,7 @@
         <el-form ref="biddingInformation" label-position="left" label-width="200px" size="mini">
             <el-row :gutter="24">
                 <el-col :span="18">
-                    <el-form-item label="Prequalification Method" prop="title">
+                    <el-form-item label="Prequalification Method" prop="title administrasi">
                         <!-- <el-dropdown>
                             <el-button type="primary">
                                 Metode Prekualifikasi 2021<i class="el-icon-arrow-down el-icon--right"></i>
@@ -50,7 +50,7 @@
                     </el-table-column>
                     <el-table-column min-width="120" prop="dockument" label="Question" />
                     <el-table-column min-width="30" prop="dockument1" label="requirment" />
-                    <el-table-column min-width="150"  label="Answer">                 
+                    <el-table-column min-width="150"  label="Answer">
                         <template slot-scope="{row}">
                             <el-input class="form-input" size="mini" v-model="row.input" clearable required></el-input>
                         </template>

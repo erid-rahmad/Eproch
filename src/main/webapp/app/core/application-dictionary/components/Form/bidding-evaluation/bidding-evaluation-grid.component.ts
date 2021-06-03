@@ -28,6 +28,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
   private bidding: any= [];
   private pickRow:any={};
   private biddingStatuses:any=[];
+  loading: boolean = false;
   index=0;
 
   created(){
@@ -43,6 +44,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
   }
 
   private moreInformationData() {
+    this.loading=true;
     this.dynamicWindowService("/api/m-biddings")
       .retrieve({
         paginationQuery: {
@@ -53,7 +55,8 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
       })
       .then(res => {
         this.bidding = res.data;
-      });
+      })
+      .finally(()=> this.loading=false);
   }
 
   evaluate(row){

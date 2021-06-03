@@ -1343,7 +1343,14 @@ entity MBiddingEvalResultLine {
 	active Boolean
 }
 
-
+entity MBiddingNegotiation {
+	biddingStatus String
+	evaluationStatus String
+	startDate ZonedDateTime required
+	endDate ZonedDateTime required
+	uid UUID
+	active Boolean
+}
 
 entity MPrequalificationDateSet {
 	startDate ZonedDateTime
@@ -1951,6 +1958,10 @@ relationship ManyToOne {
 	MBiddingLine{costCenter required} to CCostCenter
 	MBiddingLine{product required} to CProduct
 	MBiddingLine{uom required} to CUnitOfMeasure
+
+	MBiddingNegotiation{biddingEval required} to MBiddingEvaluation
+	MBiddingNegotiation{adOrganization required} to ADOrganization
+	MBiddingNegotiation{biddingSchedule required} to MBiddingSchedule
 
 	MBiddingSubItem{adOrganization required} to ADOrganization
 	MBiddingSubItem{product required} to CProduct

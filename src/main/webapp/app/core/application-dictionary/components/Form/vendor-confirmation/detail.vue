@@ -416,6 +416,7 @@
                 :limit="limit"
                 :multiple="false"
                 :accept="accept"
+                :file-list="fileList"
                 :before-upload="handleBeforeUpload"
                 :on-change="onUploadChange"
                 :on-preview="handlePreview"

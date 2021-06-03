@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * A DTO for the {@link com.bhp.opusb.domain.MProposalAdministrationFile} entity.
  */
 public class MProposalAdministrationFileDTO implements Serializable {
-    
+
     private Long id;
 
     private UUID uid;
@@ -22,6 +22,7 @@ public class MProposalAdministrationFileDTO implements Serializable {
 
     @JsonProperty("cAttachmentName")
     private String cAttachmentName;
+    private String attachmentUrl;
 
     private Long adOrganizationId;
     private String adOrganizationName;
@@ -31,7 +32,15 @@ public class MProposalAdministrationFileDTO implements Serializable {
 
     private Long biddingSubCriteriaId;
     private String biddingSubCriteriaName;
-    
+
+    public String getAttachmentUrl() {
+        return attachmentUrl;
+    }
+
+    public void setAttachmentUrl(String attachmentUrl) {
+        this.attachmentUrl = attachmentUrl;
+    }
+
     public Long getId() {
         return id;
     }

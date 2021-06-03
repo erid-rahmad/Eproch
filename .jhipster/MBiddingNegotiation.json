@@ -1,0 +1,73 @@
+{
+    "name": "MBiddingNegotiation",
+    "fields": [
+        {
+            "fieldName": "biddingStatus",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "evaluationStatus",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "startDate",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "endDate",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBiddingEvaluation",
+            "otherEntityRelationshipName": "mBiddingNegotiation",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingEval",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mBiddingNegotiation",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBiddingSchedule",
+            "otherEntityRelationshipName": "mBiddingNegotiation",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingSchedule",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210602063400",
+    "entityTableName": "m_bidding_negotiation",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

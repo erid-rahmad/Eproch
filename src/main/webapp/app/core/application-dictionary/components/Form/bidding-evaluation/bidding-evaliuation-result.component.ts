@@ -36,6 +36,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   index=true;
   private evaluationResult:any=[];
   private evaluationResultProp:any={};
+  private loading:boolean=false;
 
   created(){
     console.log(this.pickRow);
@@ -43,6 +44,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   }
 
   retriveEvaluationResult(biddingId){
+    this.loading=true;
     this.commonService(baseApiEvalResults)
       .retrieve({
         criteriaQuery: [
@@ -56,7 +58,8 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       })
       .then(res => {
           this.evaluationResult=res.data;
-      });
+      })
+      .finally(()=>this.loading=false);
   }
 
   detailScore(row){

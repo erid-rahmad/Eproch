@@ -27,17 +27,8 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
-
-  private evaluation={
-    biddingNo:'BN-00008',
-    biddingName:'Pengadaan Mobil Operasional',
-    biddingTypeName:'Tender-Goods',
-    eventTypeName:'Ingram',
-    total:'6.4',
-    vendorName:'supplier1'
-  }
-
   private evaluationResultLine:any={};
+  private loading:boolean=false;
 
   created(){
     console.log("this eval resupt",this.evaluationResultProp)
@@ -45,6 +36,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   }
 
   retrieveEvalResultLine(biddingEvalResultId:number){
+    this.loading=true;
     this.commonService(baseApiEvalResultLine)
       .retrieve({
         criteriaQuery: [
@@ -59,7 +51,8 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       .then(res => {
         this.evaluationResultLine=res.data;
         console.log(this.evaluationResultLine);
-      });
+      })
+      .finally(()=>this.loading=false);
   }
 
   close() {

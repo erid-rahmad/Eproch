@@ -5,7 +5,10 @@
                 <el-tabs class="card">
 
                         <el-col :span="24">
-                            <el-table :data="bidding" :default-sort="{prop: 'date', order: 'descending'}" size="mini"
+                            <el-table :data="bidding"
+                                      :default-sort="{prop: 'date', order: 'descending'}"
+                                      size="mini"
+                                      v-loading="loading"
                                       border
                                       style="width: 100%">
 
@@ -60,17 +63,6 @@
         <el-row v-if="index===2">
             <EvaluationResult @close="close" :pickRow="pickRow"></EvaluationResult>
         </el-row>
-        <el-dialog :visible.sync="dialogTableVisible" title="Shipping address">
-            <el-table :data="gridData">
-                <el-table-column label="no" property="no" width="150">
-                    <template slot-scope="row">
-                        {{ row.$index + 1 }}
-                    </template>
-                </el-table-column>
-                <el-table-column label="Vendor Name" property="name" width="200"></el-table-column>
-                <el-table-column label="Address" property="address"></el-table-column>
-            </el-table>
-        </el-dialog>
     </div>
 </template>
 
