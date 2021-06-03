@@ -1082,15 +1082,8 @@ entity MAuction {
 	active Boolean
 }
 
-entity MAuctionTeam {
-	/** Referenced from auctionRole */
-	role String maxlength(10)
-
-	uid UUID
-	active Boolean
-}
-
-entity MAuctionParticipant {
+entity MAuctionContent {
+	description TextBlob
 	uid UUID
 	active Boolean
 }
@@ -1125,8 +1118,69 @@ entity MAuctionItem {
 	active Boolean
 }
 
-entity MAuctionContent {
-	description TextBlob
+entity MAuctionParticipant {
+	uid UUID
+	active Boolean
+}
+
+entity MAuctionRule {
+	/**
+	 * Allow vendors to place a bid during preview period.
+	 * Available options are:
+	 * 1. Allow Pre-bids
+	 * 2. Don't allow Pre-bids
+	 * 3. Require Pre-bids
+	 */
+	bidPrevPeriod String required maxlength(10)
+
+	/** This field is enabled if bidPrePeriod = 1 or 3. */
+	preBidEndDate ZonedDateTime
+
+	startDate ZonedDateTime
+
+	/** The amount of time required for the first lot, in minutes. */
+	firstLotRunTime Integer
+
+	bidRankOvertime Integer
+
+	startOvertimeWithin Integer
+
+	overtimePeriod Integer
+
+	estAwardDate LocalDate
+
+	/**
+	 * Unit to use for increment/decrement price.
+	 * Available options are:
+	 * 1. Amount
+	 * 2. Percentage
+	 */
+	bidImprovementUnit String required maxlength(10)
+
+	/**
+	 * Rule to be applied when there are tie bids:
+	 * 1. Allow tie bids for all ranks
+	 * 2. Break tie bids by submit time
+	 * 3. No tie bids
+	 * 4. No tie bids for rank 2 or higher
+	 * 5. No tie bids for rank 3 or higher
+	 */
+	tieBidsRule String required maxlength(10)
+
+	/** Whether or not to show bids between participants. */
+	showResponse Boolean
+
+	/** Whether or not to show leading bid to all participants */
+	showLeader Boolean
+
+	uid UUID
+	active Boolean
+}
+
+entity MAuctionTeam {
+	/** Referenced from auctionRole */
+	role String maxlength(10)
+
 	uid UUID
 	active Boolean
 }
@@ -1268,7 +1322,7 @@ entity MBiddingEvaluation {
 }
 
 entity MBiddingEvaluationLine {
-	Status String
+	status String
 	evaluationStatus String
 	uid UUID
 	active Boolean
@@ -1449,6 +1503,10 @@ relationship OneToOne {
 	CCountry{currency required} to CCurrency
 	CVendor{taxIdFile} to CAttachment
 	CGalleryItem{cAttachment required} to CAttachment
+
+	MAuction{rule} to MAuctionRule
+	MAuction{content} to MAuctionContent
+
 	MProductCatalog{cGallery} to CGallery
 	MBiddingLine{subItem} to MBiddingSubItem{biddingLine}
 	MBiddingScheduleAttachment{cAttachment required} to CAttachment
@@ -1884,7 +1942,6 @@ relationship ManyToOne {
 	MAuctionItem{uom required} to CUnitOfMeasure
 
 	MAuctionContent{adOrganization required} to ADOrganization
-	MAuctionContent{auction required} to MAuction
 
 	MBidding{adOrganization required} to ADOrganization
 	MBidding{costCenter required} to CCostCenter
@@ -2040,19 +2097,23 @@ relationship ManyToOne {
 	MBiddingInvitation{vendor required} to CVendor
 
 	MBiddingResult{adOrganization required} to ADOrganization
-    MBiddingResult{announcementResult required} to CAnnouncementResult
-    MBiddingResult{bidding required} to MBidding
-    MBiddingResult{vendor required} to CVendor
-    MBiddingResult{biddingEvalResult required} to MBiddingEvalResult
+	MBiddingResult{announcementResult required} to CAnnouncementResult
+	MBiddingResult{bidding required} to MBidding
+	MBiddingResult{vendor required} to CVendor
+	MBiddingResult{biddingEvalResult required} to MBiddingEvalResult
 }
 
 // Allow filtering to all entities.
 filter * except CRegDocTypeBusinessCategory
+
 // Set pagination options.
 paginate * with pagination except CRegDocTypeBusinessCategory
+
 // Use Data Transfert Objects (DTO)
 dto * with mapstruct except CRegDocTypeBusinessCategory
+
 // Set service options to all except few
 service * with serviceClass
 
+// Skip generation of client codes except few
 skipClient * except CProduct, CProductCategory, MProductCatalog, CGallery, CGalleryItem, CAttachment, MShoppingCart, MShoppingCartItem

@@ -80,17 +80,14 @@ export default class DynamicWindowService {
     });
   }
 
-  public retrieveReferenceLists(code: string) {
+  public retrieveReferenceLists(code: string, pagination: IPaginationQuery = { page: 0, size: 1000, sort: ['name']}) {
     return new Promise<IADReferenceList[]>((resolve, reject) => {
       const criteriaQuery = [
         'active.equals=true',
         `adReferenceValue.equals=${code}`
       ]
-      const paginationQuery: IPaginationQuery = {
-        page: 0, size: 1000, sort: ['name']
-      }
 
-      const queryString = buildCriteriaQueryString(criteriaQuery) + '&' + buildPaginationQueryOpts(paginationQuery);
+      const queryString = buildCriteriaQueryString(criteriaQuery) + '&' + buildPaginationQueryOpts(pagination);
 
       axios.get(`/api/ad-reference-lists?` + queryString)
         .then(function(res) {

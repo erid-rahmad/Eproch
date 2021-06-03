@@ -3,18 +3,20 @@ import { AccountStoreModule } from '@/shared/config/store/account-store';
 import { ElTable } from 'element-ui/types/table';
 import { Component, Inject, Mixins, Watch } from "vue-property-decorator";
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
-import BidSubmission from './bid-submission.vue';
+import AuctionSetup from './setup/auction-setup.vue';
+import BidSubmission from './submission/bid-submission.vue';
 
 const enum AuctionPage {
   MAIN = 'main',
+  SETUP = 'setup',
   SUBMISSION = 'submission',
 }
 
 const baseApiAuction = 'api/m-auctions';
-const baseApiAuctionItem = 'api/m-auction-items';
 
 @Component({
   components: {
+    AuctionSetup,
     BidSubmission
   }
 })
@@ -24,6 +26,7 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
   biddingScheduleVisible: boolean = false;
+  deleteConfirmationVisible: boolean = false;
   loading: boolean = false;
   formType: string = null;
 
@@ -85,6 +88,10 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
     return this.section === AuctionPage.MAIN;
   }
 
+  get setupPage() {
+    return this.section === AuctionPage.SETUP;
+  }
+
   get submissionPage() {
     return this.section === AuctionPage.SUBMISSION;
   }
@@ -98,8 +105,17 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
     this.selectedRow = row;
   }
 
-  onFormClosed() {
+  onCloseClicked() {
     this.section = AuctionPage.MAIN;
+    this.transition();
+  }
+
+  onDeleteClicked() {
+    this.deleteConfirmationVisible = true;
+  }
+
+  onFormSaved() {
+    (<any>this.$refs.setupPage).save();
   }
 
   created() {
@@ -146,6 +162,20 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
   public clear(): void {
     this.page = 1;
     this.retrieveAllRecords();
+  }
+
+  deleteRecord() {
+    this.commonService(baseApiAuction)
+      .delete(this.selectedRow.id)
+      .then(() => {
+        this.$message.success(`Auction ${this.selectedRow.documentNo} has been deleted successfully`);
+        this.transition();
+        this.deleteConfirmationVisible = false;
+      })
+      .catch(err => {
+        console.error('Failed to delete the auction', err);
+        this.$message.error(`Failed to delete auction ${this.selectedRow.documentNo}`);
+      });
   }
 
   printDocStatus(status: string) {
@@ -213,4 +243,21 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
     this.section = AuctionPage.SUBMISSION;
   }
 
+  viewSetup(row: any) {
+    if ( ! row) {
+      this.selectedRow = {
+        name: null,
+        description: null,
+        documentNo: null,
+        adOrganizationId: AccountStoreModule.organizationInfo.id,
+        currencyId: null,
+        costCenterId: null,
+        ownerUserId: null
+      };
+    } else {
+      this.selectedRow = row;
+    }
+
+    this.section = AuctionPage.SETUP;
+  }
 }

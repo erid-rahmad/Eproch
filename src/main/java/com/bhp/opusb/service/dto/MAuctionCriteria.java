@@ -52,6 +52,8 @@ public class MAuctionCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
+    private LongFilter contentId;
+
     private LongFilter adOrganizationId;
 
     private LongFilter currencyId;
@@ -78,6 +80,7 @@ public class MAuctionCriteria implements Serializable, Criteria {
         this.rejectedReason = other.rejectedReason == null ? null : other.rejectedReason.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.contentId = other.contentId == null ? null : other.contentId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
         this.costCenterId = other.costCenterId == null ? null : other.costCenterId.copy();
@@ -201,6 +204,14 @@ public class MAuctionCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
+    public LongFilter getContentId() {
+        return contentId;
+    }
+
+    public void setContentId(LongFilter contentId) {
+        this.contentId = contentId;
+    }
+
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -258,6 +269,7 @@ public class MAuctionCriteria implements Serializable, Criteria {
             Objects.equals(rejectedReason, that.rejectedReason) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
+            Objects.equals(contentId, that.contentId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(currencyId, that.currencyId) &&
             Objects.equals(costCenterId, that.costCenterId) &&
@@ -281,6 +293,7 @@ public class MAuctionCriteria implements Serializable, Criteria {
         rejectedReason,
         uid,
         active,
+        contentId,
         adOrganizationId,
         currencyId,
         costCenterId,
@@ -305,6 +318,7 @@ public class MAuctionCriteria implements Serializable, Criteria {
                 (rejectedReason != null ? "rejectedReason=" + rejectedReason + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (contentId != null ? "contentId=" + contentId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (currencyId != null ? "currencyId=" + currencyId + ", " : "") +
                 (costCenterId != null ? "costCenterId=" + costCenterId + ", " : "") +

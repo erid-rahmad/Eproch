@@ -101,10 +101,6 @@ public class MAuctionContentQueryService extends QueryService<MAuctionContent> {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(MAuctionContent_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
-            if (criteria.getAuctionId() != null) {
-                specification = specification.and(buildSpecification(criteria.getAuctionId(),
-                    root -> root.join(MAuctionContent_.auction, JoinType.LEFT).get(MAuction_.id)));
-            }
         }
         return specification;
     }

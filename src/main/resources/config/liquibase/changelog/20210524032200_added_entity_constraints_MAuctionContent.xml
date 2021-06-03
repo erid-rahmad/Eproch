@@ -21,4 +21,11 @@
                                  referencedTableName="m_auction"/>
 
     </changeSet>
+
+    <changeSet id="20210603094500" author="Ananta Aryadewa">
+        <dropForeignKeyConstraint baseTableName="m_auction_content"
+                                  constraintName="fk_m_auction_content_auction_id"/>
+
+        <dropColumn tableName="m_auction_content" columnName="auction_id"/>
+    </changeSet>
 </databaseChangeLog>

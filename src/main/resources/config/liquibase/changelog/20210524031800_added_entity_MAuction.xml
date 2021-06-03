@@ -125,4 +125,12 @@
         </loadData>
     </changeSet>
 
+    <changeSet id="20210603094400" author="Ananta Aryadewa">
+        <addColumn tableName="m_auction">
+            <column name="content_id" type="bigint">
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_m_auction_content_id" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
