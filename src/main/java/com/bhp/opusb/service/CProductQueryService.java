@@ -91,12 +91,18 @@ public class CProductQueryService extends QueryService<CProduct> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), CProduct_.id));
             }
-            if (criteria.getCode() != null) {
+
+            if (criteria.getCode() != null && criteria.getName() != null) {
+                specification = specification.and(
+                    Specification.where(buildStringSpecification(criteria.getCode(), CProduct_.code))
+                        .or(buildSpecification(criteria.getName(), CProduct_.name))
+                    );
+            } else if (criteria.getCode() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getCode(), CProduct_.code));
-            }
-            if (criteria.getName() != null) {
+            } else if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), CProduct_.name));
             }
+            
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), CProduct_.description));
             }

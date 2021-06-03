@@ -75,6 +75,14 @@
     ],
     "relationships": [
         {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "mAuctionContent",
+            "otherEntityRelationshipName": "mAuction",
+            "relationshipName": "content",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
             "relationshipType": "many-to-one",
             "otherEntityName": "aDOrganization",
             "otherEntityRelationshipName": "mAuction",

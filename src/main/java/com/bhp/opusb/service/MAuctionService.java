@@ -1,13 +1,9 @@
 package com.bhp.opusb.service;
 
-import com.bhp.opusb.config.ApplicationProperties;
-import com.bhp.opusb.config.ApplicationProperties.Document;
 import com.bhp.opusb.domain.MAuction;
 import com.bhp.opusb.repository.MAuctionRepository;
 import com.bhp.opusb.service.dto.MAuctionDTO;
 import com.bhp.opusb.service.mapper.MAuctionMapper;
-import com.bhp.opusb.util.DocumentUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,12 +27,9 @@ public class MAuctionService {
 
     private final MAuctionMapper mAuctionMapper;
 
-    private final Document document;
-
-    public MAuctionService(ApplicationProperties applicationProperties, MAuctionRepository mAuctionRepository, MAuctionMapper mAuctionMapper) {
+    public MAuctionService(MAuctionRepository mAuctionRepository, MAuctionMapper mAuctionMapper) {
         this.mAuctionRepository = mAuctionRepository;
         this.mAuctionMapper = mAuctionMapper;
-        this.document = applicationProperties.getDocuments().get("auction");
     }
 
     /**
@@ -48,11 +41,6 @@ public class MAuctionService {
     public MAuctionDTO save(MAuctionDTO mAuctionDTO) {
         log.debug("Request to save MAuction : {}", mAuctionDTO);
         MAuction mAuction = mAuctionMapper.toEntity(mAuctionDTO);
-
-        if (mAuction.getDocumentNo() == null) {
-            mAuction.setDocumentNo(DocumentUtil.buildDocumentNumber(document.getDocumentNumberPrefix(), mAuctionRepository));
-        }
-        
         mAuction = mAuctionRepository.save(mAuction);
         return mAuctionMapper.toDto(mAuction);
     }

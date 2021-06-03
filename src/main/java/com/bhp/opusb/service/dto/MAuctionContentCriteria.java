@@ -30,8 +30,6 @@ public class MAuctionContentCriteria implements Serializable, Criteria {
 
     private LongFilter adOrganizationId;
 
-    private LongFilter auctionId;
-
     public MAuctionContentCriteria() {
     }
 
@@ -40,7 +38,6 @@ public class MAuctionContentCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
-        this.auctionId = other.auctionId == null ? null : other.auctionId.copy();
     }
 
     @Override
@@ -80,14 +77,6 @@ public class MAuctionContentCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
-    public LongFilter getAuctionId() {
-        return auctionId;
-    }
-
-    public void setAuctionId(LongFilter auctionId) {
-        this.auctionId = auctionId;
-    }
-
 
     @Override
     public boolean equals(Object o) {
@@ -102,8 +91,7 @@ public class MAuctionContentCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(auctionId, that.auctionId);
+            Objects.equals(adOrganizationId, that.adOrganizationId);
     }
 
     @Override
@@ -112,8 +100,7 @@ public class MAuctionContentCriteria implements Serializable, Criteria {
         id,
         uid,
         active,
-        adOrganizationId,
-        auctionId
+        adOrganizationId
         );
     }
 
@@ -124,7 +111,6 @@ public class MAuctionContentCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
-                (auctionId != null ? "auctionId=" + auctionId + ", " : "") +
             "}";
     }
 

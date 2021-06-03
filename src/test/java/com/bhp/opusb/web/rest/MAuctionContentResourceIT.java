@@ -3,7 +3,6 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MAuctionContent;
 import com.bhp.opusb.domain.ADOrganization;
-import com.bhp.opusb.domain.MAuction;
 import com.bhp.opusb.repository.MAuctionContentRepository;
 import com.bhp.opusb.service.MAuctionContentService;
 import com.bhp.opusb.service.dto.MAuctionContentDTO;
@@ -89,16 +88,6 @@ public class MAuctionContentResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         mAuctionContent.setAdOrganization(aDOrganization);
-        // Add required entity
-        MAuction mAuction;
-        if (TestUtil.findAll(em, MAuction.class).isEmpty()) {
-            mAuction = MAuctionResourceIT.createEntity(em);
-            em.persist(mAuction);
-            em.flush();
-        } else {
-            mAuction = TestUtil.findAll(em, MAuction.class).get(0);
-        }
-        mAuctionContent.setAuction(mAuction);
         return mAuctionContent;
     }
     /**
@@ -122,16 +111,6 @@ public class MAuctionContentResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         mAuctionContent.setAdOrganization(aDOrganization);
-        // Add required entity
-        MAuction mAuction;
-        if (TestUtil.findAll(em, MAuction.class).isEmpty()) {
-            mAuction = MAuctionResourceIT.createUpdatedEntity(em);
-            em.persist(mAuction);
-            em.flush();
-        } else {
-            mAuction = TestUtil.findAll(em, MAuction.class).get(0);
-        }
-        mAuctionContent.setAuction(mAuction);
         return mAuctionContent;
     }
 
@@ -351,22 +330,6 @@ public class MAuctionContentResourceIT {
 
         // Get all the mAuctionContentList where adOrganization equals to adOrganizationId + 1
         defaultMAuctionContentShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllMAuctionContentsByAuctionIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        MAuction auction = mAuctionContent.getAuction();
-        mAuctionContentRepository.saveAndFlush(mAuctionContent);
-        Long auctionId = auction.getId();
-
-        // Get all the mAuctionContentList where auction equals to auctionId
-        defaultMAuctionContentShouldBeFound("auctionId.equals=" + auctionId);
-
-        // Get all the mAuctionContentList where auction equals to auctionId + 1
-        defaultMAuctionContentShouldNotBeFound("auctionId.equals=" + (auctionId + 1));
     }
 
     /**

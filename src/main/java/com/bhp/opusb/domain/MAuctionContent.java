@@ -49,11 +49,6 @@ public class MAuctionContent extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mAuctionContents")
     private ADOrganization adOrganization;
 
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("mAuctionContents")
-    private MAuction auction;
-
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -113,19 +108,6 @@ public class MAuctionContent extends AbstractAuditingEntity {
 
     public void setAdOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
-    }
-
-    public MAuction getAuction() {
-        return auction;
-    }
-
-    public MAuctionContent auction(MAuction mAuction) {
-        this.auction = mAuction;
-        return this;
-    }
-
-    public void setAuction(MAuction mAuction) {
-        this.auction = mAuction;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

@@ -2,14 +2,51 @@
   <div class="app-container card-view auction">
     <div class="toolbar">
       <el-button
-        v-if="submissionPage"
+        v-if="mainPage"
+        icon="el-icon-plus"
+        size="mini"
+        type="primary"
+        @click="viewSetup()"
+      ></el-button>
+
+      <el-button
+        v-if="mainPage"
+        :disabled="selectedRow.documentStatus !== 'DRF'"
+        icon="el-icon-delete"
+        size="mini"
+        title="Delete"
+        type="danger"
+        @click="onDeleteClicked"
+      ></el-button>
+
+      <el-button
+        v-if="!mainPage"
         icon="el-icon-close"
         size="mini"
         type="danger"
-        @click="onFormClosed"
+        @click="onCloseClicked"
       >
         Close
       </el-button>
+
+      <el-button
+        v-if="setupPage"
+        size="mini"
+        type="primary"
+        @click="onFormSaved"
+      >
+        <svg-icon name="icomoo/273-checkmark"></svg-icon> Save
+      </el-button>
+
+      <!-- <document-action-button
+        v-if="!submissionPage"
+        :approved="false"
+        :document-type-id="auction.documentTypeId"
+        :next-action="defaultDocumentAction"
+        size="mini"
+        window-type="TRANSACTION"
+        @change="onDocumentActionChanged"
+      ></document-action-button> -->
 
       <el-dropdown
         v-if="!isVendor && submissionPage && actions.length"
@@ -84,12 +121,22 @@
 
           <el-table-column
             fixed="right"
-            min-width="140"
+            width="180"
             label="Action"
           >
             <template slot-scope="{ row }">
               <el-button
                 class="button"
+                size="mini"
+                type="primary"
+                @click="viewSetup(row)"
+              >
+                <svg-icon name="icomoo/149-cog"></svg-icon> Config
+              </el-button>
+
+              <el-button
+                class="button"
+                :disabled="row.documentStatus === 'DRF' || row.documentStatus === 'PUB'"
                 size="mini"
                 type="primary"
                 @click="viewDetails(row)"
@@ -113,6 +160,12 @@
         ></el-pagination>
       </template>
 
+      <auction-setup
+        v-else-if="setupPage"
+        ref="setupPage"
+        :data.sync="selectedRow"
+      ></auction-setup>
+
       <bid-submission
         v-else
         ref="bidSubmission"
@@ -120,6 +173,35 @@
       ></bid-submission>
 
     </div>
+
+    <el-dialog
+      width="30%"
+      :visible.sync="deleteConfirmationVisible"
+      :title="$t('entity.delete.title')"
+    >
+      <template>
+        <span>Are you sure to delete the selected record?</span>
+        <div slot="footer">
+          <el-button
+            style="margin-left: 0px;"
+            size="mini"
+            icon="el-icon-close"
+            @click="deleteConfirmationVisible = false"
+          >
+            {{ $t('entity.action.cancel') }}
+          </el-button>
+          <el-button
+            style="margin-left: 0px;"
+            size="mini"
+            icon="el-icon-delete"
+            type="danger"
+            @click="deleteRecord"
+          >
+            {{ $t('entity.action.delete') }}
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 <script lang="ts" src="./index.component.ts"></script>

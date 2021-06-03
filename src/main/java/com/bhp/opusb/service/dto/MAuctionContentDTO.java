@@ -22,9 +22,6 @@ public class MAuctionContentDTO extends AbstractAuditingDTO {
 
     private Long adOrganizationId;
     private String adOrganizationName;
-
-    private Long auctionId;
-    private String auctionName;
     
     public Long getId() {
         return id;
@@ -74,22 +71,6 @@ public class MAuctionContentDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
-    public Long getAuctionId() {
-        return auctionId;
-    }
-
-    public void setAuctionId(Long mAuctionId) {
-        this.auctionId = mAuctionId;
-    }
-
-    public String getAuctionName() {
-        return auctionName;
-    }
-
-    public void setAuctionName(String auctionName) {
-        this.auctionName = auctionName;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -119,7 +100,6 @@ public class MAuctionContentDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", auctionId=" + getAuctionId() +
             "}";
     }
 }

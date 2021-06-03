@@ -23,14 +23,6 @@
             "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "mAuction",
-            "otherEntityRelationshipName": "mAuctionContent",
-            "relationshipValidateRules": "required",
-            "relationshipName": "auction",
-            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20210524032200",

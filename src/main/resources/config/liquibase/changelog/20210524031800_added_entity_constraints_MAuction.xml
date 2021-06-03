@@ -33,4 +33,14 @@
                                  referencedTableName="ad_user"/>
 
     </changeSet>
+
+    <changeSet id="20210603094300" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="content_id"
+                                 baseTableName="m_auction"
+                                 constraintName="fk_m_auction_content_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_auction_content"/>
+
+    </changeSet>
 </databaseChangeLog>

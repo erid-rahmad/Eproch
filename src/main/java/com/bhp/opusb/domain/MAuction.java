@@ -8,7 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -78,6 +80,10 @@ public class MAuction extends AbstractAuditingEntity {
 
     @Column(name = "active")
     private Boolean active;
+
+    @OneToOne
+    @JoinColumn(unique = true)
+    private MAuctionContent content;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -273,6 +279,19 @@ public class MAuction extends AbstractAuditingEntity {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public MAuctionContent getContent() {
+        return content;
+    }
+
+    public MAuction content(MAuctionContent mAuctionContent) {
+        this.content = mAuctionContent;
+        return this;
+    }
+
+    public void setContent(MAuctionContent mAuctionContent) {
+        this.content = mAuctionContent;
     }
 
     public ADOrganization getAdOrganization() {
