@@ -29,12 +29,15 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
   private pushService: (baseApiUrl: string) => DynamicWindowService;
   @Inject('accountService')
   private accountService: () => AccountService;
-  private biddingInvitationsGridData: any = {};
+  private biddingInvitationsGridData: any = [];
   private selecrow: any = {};
   private reason = '';
   private info: any = {};
   private pickdetailemail: any = {};
   private bidding: any = {};
+  private loading:boolean=false;
+  private loadingProjectInfo:boolean=false;
+  private loadingEmailDetail:boolean=false;
 
   private vendorId = '';
 
@@ -60,9 +63,11 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
   }
 
   getemail() {
+    this.loadingEmailDetail=true;
     axios
       .get(`/api/m-bidding-invitations/${this.pickdetailemail.id}`)
-      .then(response => (this.info = response.data));
+      .then(response => (this.info = response.data))
+      .finally(()=>this.loadingEmailDetail=false);
 
   }
 
@@ -132,6 +137,7 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
   }
 
   private biddingInvitations() {
+    this.loading=true;
     this.commonService(biddingInvitationsAPI)
       .retrieve({
         criteriaQuery: this.updateCriteria([
@@ -146,7 +152,9 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
       })
       .then(res => {
         this.biddingInvitationsGridData = res.data;
-      });
+        console.log("biddingInvitationsGridData",this.biddingInvitationsGridData)
+      })
+      .finally(()=>this.loading=false);
   }
 
   private UpdatebiddingInvitation() {
@@ -158,7 +166,7 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
 
   private retrieveProjectInformations(biddingId: number): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      // this.loadingProjectInfo = true;
+      this.loadingProjectInfo = true;
       this.commonService(ProjectInformationsAPI)
         .retrieve({
           criteriaQuery: this.updateCriteria([
@@ -182,7 +190,7 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
           reject(false);
         })
         .finally(() => {
-          // this.loadingProjectInfo = false;
+          this.loadingProjectInfo = false;
         });
     });
   }
