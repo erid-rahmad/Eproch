@@ -5,7 +5,10 @@
                 <el-tabs class="card">
 
                         <el-col :span="24">
-                            <el-table :data="bidding" :default-sort="{prop: 'date', order: 'descending'}" size="mini"
+                            <el-table :data="bidding"
+                                      :default-sort="{prop: 'date', order: 'descending'}"
+                                      size="mini"
+                                      v-loading="loading"
                                       border
                                       style="width: 100%">
 

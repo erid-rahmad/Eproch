@@ -12,6 +12,7 @@
                 :key="criteria.id"
                 :class="`criteria-${index}`"
                 class="criteria-section"
+                v-loading="loading"
             >
                 <el-col :span="24">
                     <el-row>

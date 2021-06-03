@@ -1,6 +1,6 @@
 <template>
     <div class="prequalification-form">
-        <el-form ref="mainForm" label-position="left" label-width="200px" size="mini">
+        <el-form ref="mainForm" label-position="left" label-width="200px" size="mini" v-loading="loadingAll">
             <el-row
                 v-for="(criteria, index) in evaluationMethodCriteria"
                 :key="criteria.id"

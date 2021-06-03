@@ -21,9 +21,11 @@
                 </el-form-item>
             </el-form>
 
-            <el-table :data="evaluationResult" align="center" :default-sort="{prop: 'date', order: 'descending'}"
+            <el-table :data="evaluationResult" align="center"
+                      :default-sort="{prop: 'date', order: 'descending'}"
                       size="mini"
                       border
+                      v-loading="loading"
                       style="width: 100%">
                 <el-table-column label="Summary"
                                  min-width="120"

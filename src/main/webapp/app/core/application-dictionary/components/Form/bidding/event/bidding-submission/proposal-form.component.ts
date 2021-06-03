@@ -44,7 +44,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
   private action: string = "/api/c-attachments/upload";
   private file: any = {};
   private subCriteria:any={};
-  // hasAttachment =false;
+  loading:boolean=false
 
   answers: Map<number, any> = new Map();
   attachmentFormVisible = false;
@@ -94,6 +94,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
    * @param evaluationMethodLineId
    */
   private retrieveVendorScoringCriteria(vendorScoringLineId: number, evaluationMethodLineId: number) {
+    this.loading=true;
     this.commonService(baseApiVendorScoringCriteria)
       .retrieve({
         criteriaQuery: [
@@ -414,5 +415,6 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
         console.error('Failed',err);
         this.$message.error(`Failed reload attachment `);
       })
+      .finally(()=>this.loading=false);
   }
 }

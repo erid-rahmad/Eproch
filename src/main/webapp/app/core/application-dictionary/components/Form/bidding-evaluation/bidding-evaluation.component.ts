@@ -34,6 +34,7 @@ export default class BiddingEvaluation extends mixins(Vue2Filters.mixin, AlertMi
 
   private biddingSubmission: any = [];
   private evaluationResult:any={};
+  private loading:boolean=false;
   index=0;
   private data:any={};
 
@@ -50,6 +51,7 @@ export default class BiddingEvaluation extends mixins(Vue2Filters.mixin, AlertMi
   }
 
   private getbiddingSubmission() {
+    this.loading=true;
     this.commonService(baseApiBiddingSubmission)
       .retrieve({
         criteriaQuery: this.updateCriteria([]),
@@ -67,7 +69,8 @@ export default class BiddingEvaluation extends mixins(Vue2Filters.mixin, AlertMi
           }
         });
         this.biddingSubmission = biddingEvent;
-      });
+      })
+      .finally(()=>this.loading=false);
   }
 
   createEvaluateTable(biddingSubmissionId){

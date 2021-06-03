@@ -27,7 +27,10 @@
                     <h4>Vendor Join</h4>
                 </el-divider>
             </el-form>
-            <el-table :data="biddingSubmission" :default-sort="{prop: 'date', order: 'descending'}" size="mini"
+            <el-table :data="biddingSubmission"
+                      :default-sort="{prop: 'date', order: 'descending'}"
+                      size="mini"
+                      v-loading="loading"
                       border
                       style="width: 100%">
                 <el-table-column label="No" min-width="30">

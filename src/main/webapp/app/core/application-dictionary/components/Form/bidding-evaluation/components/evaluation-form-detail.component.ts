@@ -45,6 +45,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
   private evaluationMethodCriteria: any = [];
+  private loadingAll:boolean=false;
   private questions: Map<number, any> = new Map();
   private evaluationResultLine:any= {};
   attachmentHandler: Map<number, string> = new Map();
@@ -137,6 +138,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
   }
 
   updateEvalResultLine() {
+
     this.commonService(baseApiEvalResultLine)
       .create(this.evaluationResultLine)
       .then(res => {
@@ -148,7 +150,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
   }
 
   private retrieveEvaluationMethodCriteria(evaluationMethodLineId: number, vendorScoringLineId: number) {
-
+    this.loadingAll=true;
     this.commonService(baseApiEvalMethodCriteria)
       .retrieve({
         criteriaQuery: [
@@ -305,9 +307,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
             question.evaluation = criteria.evaluation;
             question.notes = criteria.notes;
             question.evaluationid = criteria.id;
-          } catch (er) {
-          }
-
+          } catch (e) {}
         });
         this.retrieveAttachment(this.evaluationFormProp.biddingSubmission.id);
 
@@ -347,6 +347,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
         console.error('Failed',err);
         this.$message.error(`Failed reload attachment `);
       })
+      .finally(()=>    this.loadingAll=false);
   }
 
   handlePreview(biddingSubCriteria){
