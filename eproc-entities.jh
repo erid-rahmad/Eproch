@@ -1358,6 +1358,13 @@ entity MBiddingNegotiationLine {
 	active Boolean
 }
 
+entity MBiddingNegotiationChat {
+	uid UUID
+	active Boolean
+	vendorText TextBlob
+	buyerText TextBlob
+}
+
 entity MPrequalificationDateSet {
 	startDate ZonedDateTime
 	endDate ZonedDateTime
@@ -1973,6 +1980,12 @@ relationship ManyToOne {
 	MBiddingNegotiationLine{negotiation required} to MBiddingNegotiation
 	MBiddingNegotiationLine{biddingEvalResult required} to MBiddingEvalResult
 
+	MBiddingNegotiationChat{adOrganization required} to ADOrganization
+	MBiddingNegotiationChat{negotiationLine required} to MBiddingNegotiationLine
+	MBiddingNegotiationChat{bidding required} to MBidding
+	MBiddingNegotiationChat{vendor required} to CVendor
+	MBiddingNegotiationChat{attachment } to CAttachment
+
 	MBiddingSubItem{adOrganization required} to ADOrganization
 	MBiddingSubItem{product required} to CProduct
 
@@ -2002,7 +2015,6 @@ relationship ManyToOne {
     MBiddingEvalResultLine{adOrganization required} to ADOrganization
     MBiddingEvalResultLine{evaluationMethodLine required} to CEvaluationMethodLine
     MBiddingEvalResultLine{biddingEvalResult required} to MBiddingEvalResult
-
 
 	MBiddingScheduleAttachment{adOrganization required} to ADOrganization
 

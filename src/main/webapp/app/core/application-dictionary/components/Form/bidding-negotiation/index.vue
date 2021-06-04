@@ -84,6 +84,7 @@
         label="Vendor"
         min-width="100"
         prop="vendor"
+        v-if="!isVendor"
       ></el-table-column>
       <el-table-column label="Action" min-width="100">
         <template slot-scope="{ row }">

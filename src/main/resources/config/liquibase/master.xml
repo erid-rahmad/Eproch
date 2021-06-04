@@ -179,6 +179,7 @@
     <include file="config/liquibase/changelog/20210529052600_added_entity_MVendorConfirmationResponse.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210602063400_added_entity_MBiddingNegotiation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210603044100_added_entity_MBiddingNegotiationLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210603132000_added_entity_MBiddingNegotiationChat.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
@@ -334,5 +335,6 @@
     <include file="config/liquibase/changelog/20210524032200_added_entity_constraints_MAuctionContent.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210602063400_added_entity_constraints_MBiddingNegotiation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210603044100_added_entity_constraints_MBiddingNegotiationLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210603132000_added_entity_constraints_MBiddingNegotiationChat.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

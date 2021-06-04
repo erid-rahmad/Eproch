@@ -22,11 +22,11 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
-  negotiationLineApi = '/api/m-bidding-negotiation-lines';
+  negotiationChatApi = '/api/m-bidding-negotiation-chats';
   line: any = {};
-  chatForm: any = {text:""};
+  chatForm: any = {text:"", publishToEmail:false};
 
-  chatHistory = "";
+  chatHistory: any[] = [];
   showChatForm = false;
   submitting = false;
 
@@ -37,10 +37,39 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
 
   private fileList: any[] = [];
 
+  chatFormValidationSchema = {
+    text: {
+      required: true,
+      message: 'Text is required.'
+    }
+  };
+
+  get isVendor(){
+    return AccountStoreModule.isVendor;
+  }
+
   created() {
     console.log(this.data);
     this.line = {...this.data};
-    this.chatHistory = "Tidak ada percakapan"
+
+    this.refreshChat();
+  }
+
+  refreshChat(){
+    this.commonService(this.negotiationChatApi).retrieve({
+      criteriaQuery: this.updateCriteria([
+        'active.equals=true',
+        `negotiationLineId.equals=${this.line.id}`
+      ]),
+      paginationQuery: {
+        page: 0,
+        size: 10000,
+        sort: ['id']
+      }
+    }).then((res)=>{
+      console.log(res.data);
+      this.chatHistory = res.data;
+    });
   }
 
   openChatForm(){
@@ -49,6 +78,7 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
 
   clearForm(){
     this.chatForm.text = "";
+    this.chatForm.publishToEmail = false;
     this.showChatForm = false;
   }
 
@@ -122,5 +152,31 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
       });
       return !isExt;
     }
+  }
+
+  submitForm(){
+    this.chatForm.biddingId = this.line.biddingId;
+    this.chatForm.vendorId = this.line.vendorId;
+    this.chatForm.negotiationLineId = this.line.id;
+    this.chatForm.adOrganizationId = this.line.adOrganizationId;
+    this.chatForm.active = true;
+    if(this.isVendor) this.chatForm.vendorText = this.chatForm.text;
+    else this.chatForm.buyerText = this.chatForm.text;
+
+    this.commonService(this.negotiationChatApi).create(this.chatForm).then(
+      (res)=>{
+        console.log(res);
+        this.$message.success("Conversation submitted.");
+        this.clearForm();
+
+        this.refreshChat();
+      }
+    ).catch((error)=>{
+      this.$message.error("Failed to submit conversation.");
+    });
+  }
+
+  viewNegoDetail(){
+    
   }
 }

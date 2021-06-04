@@ -43,47 +43,15 @@ export default class BiddingNegotiationLine extends mixins(AccessLevelMixin, Neg
 
   negotiationLineApi = '/api/m-bidding-negotiation-lines';
 
+  get isVendor() {
+    return AccountStoreModule.isVendor;
+  }
+
   created() {
     console.log(this.data);
     this.negotiation = {...this.data};
 
-    this.commonService(this.negotiationLineApi).retrieve({
-      criteriaQuery: this.updateCriteria([
-        'active.equals=true',
-        `negotiationId.equals=${this.negotiation.id}`
-      ]),
-      paginationQuery: {
-        page: 0,
-        size: 10000,
-        sort: ['id']
-      }
-    }).then((res)=>{
-      console.log(res.data);
-      res.data.forEach(element => {
-        switch(element.negotiationStatus){
-          case 'not started': {
-            this.notStarted.push(element);
-            break;
-          }
-          case 'in progress': {
-            this.inProgress.push(element);
-            break;
-          }
-          case 'disagreed': {
-            this.disagreed.push(element);
-            break;
-          }
-          case 'agreed': {
-            this.agreed.push(element);
-            break;
-          }
-          default: {
-            this.notStarted.push(element);
-            break;
-          }
-        }
-      });
-    })
+    this.refreshLine();
 
     var startDate = new Date(this.negotiation.startDate);
     var today = new Date();
@@ -96,6 +64,7 @@ export default class BiddingNegotiationLine extends mixins(AccessLevelMixin, Neg
     //hides the outer toolbar (which closes the whole detail)
     this.outerIndex = true;
     row.biddingTitle = this.negotiation.biddingTitle;
+    row.biddingId = this.negotiation.biddingId;
     this.selectedRow = row;
     this.innerIndex = false;
   }
@@ -103,5 +72,52 @@ export default class BiddingNegotiationLine extends mixins(AccessLevelMixin, Neg
   closeLine(){
     this.outerIndex = false;
     this.innerIndex = true;
+
+    this.refreshLine();
+  }
+
+  refreshLine(){
+    this.commonService(this.negotiationLineApi).retrieve({
+      criteriaQuery: this.updateCriteria([
+        'active.equals=true',
+        `negotiationId.equals=${this.negotiation.id}`
+      ]),
+      paginationQuery: {
+        page: 0,
+        size: 10000,
+        sort: ['id']
+      }
+    }).then((res)=>{
+      console.log(res.data);
+      if(this.isVendor){
+        this.inProgress = res.data.filter((line)=>{return line.vendorId == AccountStoreModule.vendorInfo.id && 
+        line.negotiationStatus === 'in progress'})
+      } else {
+        res.data.forEach(element => {
+          switch(element.negotiationStatus){
+            case 'not started': {
+              this.notStarted.push(element);
+              break;
+            }
+            case 'in progress': {
+              this.inProgress.push(element);
+              break;
+            }
+            case 'disagreed': {
+              this.disagreed.push(element);
+              break;
+            }
+            case 'agreed': {
+              this.agreed.push(element);
+              break;
+            }
+            default: {
+              this.notStarted.push(element);
+              break;
+            }
+          }
+        });
+      }
+    });
   }
 }

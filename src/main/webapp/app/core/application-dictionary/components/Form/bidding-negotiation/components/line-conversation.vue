@@ -23,6 +23,14 @@
               disabled
             ></el-input>
           </el-form-item>
+          <el-form-item label="" v-if="chatHistory.length">
+            <el-button
+              size="mini"
+              @click="viewNegoDetail"
+            >
+              View Detail
+            </el-button>
+          </el-form-item>
         </el-col>
         <el-col
           :xs="24"
@@ -46,12 +54,38 @@
         :gutter="24"
         style="margin-top: 16px"
       >
-        <el-input
-          :rows="7"
-          type="textarea"
-          v-model="chatHistory"
-        >
-        </el-input>
+      <el-table border :data="chatHistory" size="mini">
+        <el-table-column width="100" label="No">
+          <template slot-scope="row">
+            {{ row.$index + 1 }}
+          </template>
+        </el-table-column>
+        <el-table-column label="From" width="200">
+          <template slot-scope="{row}">
+            <div v-if="row.vendorText">Vendor</div>
+            <div v-else>Buyer</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="Content" width="750">
+          <template slot-scope="{row}">
+            <div v-if="row.vendorText">{{row.vendorText}}</div>
+            <div v-else>{{row.buyerText}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="Attachment" width="400">
+          <template slot-scope="{row}">
+            <el-button
+              class="btn-attachment"
+              icon="el-icon-download"
+              size="mini"
+              type="primary"
+              v-if="row.attachmentId"
+            >
+              Download
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
       </el-row>
     </el-form>
 
@@ -62,6 +96,7 @@
     >
       <el-form
         ref="chatForm"
+        :rules="chatFormValidationSchema"
         label-position="left"
         label-width="96px"
         :model="chatForm"
@@ -124,11 +159,18 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-input
-          v-model="chatForm.text"
-          :rows="7"
-          type="textarea"
-        ></el-input>
+        <el-form-item prop="text">
+          <el-input
+            v-model="chatForm.text"
+            :rows="7"
+            type="textarea"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="publishCheck">
+          <el-checkbox
+            v-model="chatForm.publishToEmail"
+          > Publish to Email?</el-checkbox>
+        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button
@@ -143,6 +185,7 @@
           :loading="submitting"
           size="mini"
           type="primary"
+          @click="submitForm"
         >
           Submit
         </el-button>

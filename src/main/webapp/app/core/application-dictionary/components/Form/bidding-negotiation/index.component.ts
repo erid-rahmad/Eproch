@@ -35,19 +35,7 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
   }
 
   created() {
-    this.commonService(this.negotiationsApi).retrieve({
-      criteriaQuery: this.updateCriteria([
-        'active.equals=true'
-      ]),
-      paginationQuery: {
-        page: 0,
-        size: 10000,
-        sort: ['id']
-      }
-    }).then(res => {
-      console.log(res.data);
-      this.biddingNegotiations = res.data;
-    });
+    this.refreshHeader();
 
     this.commonService(null)
       .retrieveReferenceLists('biddingStatus')
@@ -97,5 +85,22 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
   closeDetail(){
     this.index = true;
     this.displayTable = true;
+    this.refreshHeader();
+  }
+
+  refreshHeader(){
+    this.commonService(this.negotiationsApi).retrieve({
+      criteriaQuery: this.updateCriteria([
+        'active.equals=true'
+      ]),
+      paginationQuery: {
+        page: 0,
+        size: 10000,
+        sort: ['id']
+      }
+    }).then(res => {
+      console.log(res.data);
+      this.biddingNegotiations = res.data;
+    });
   }
 }
