@@ -13,7 +13,7 @@
     </div>
     <el-table
       ref="mainGrid"
-      v-if="index"
+      v-if="index && displayTable"
       border
       :data="biddingNegotiations"
       highlight-current-row
@@ -98,6 +98,13 @@
         </template>
       </el-table-column>
     </el-table>
+    
+    <template v-else>
+      <bidding-negotiation-line
+        :data="selectedRow"
+        :outerIndex="index"
+      ></bidding-negotiation-line>
+    </template>
 
     <el-dialog title="Bidding Schedule" :visible.sync="showSchedule" width="90%" :before-close="closeSchedule">
       <el-table border :data="biddingSchedule" size="mini">
@@ -111,8 +118,8 @@
         <el-table-column property="endDate" label="Finish Date" min-width="200" show-overflow-tooltip></el-table-column>
         <el-table-column min-width="100" label="Action">
           <template slot-scope="{ row }">
-            <el-button class="button" icon="el-icon-caret-right" size="mini" type="primary">
-               Action
+            <el-button class="button" icon="el-icon-caret-right" size="mini" type="primary" @click="viewSchedule2(row)">
+              View
             </el-button>
           </template>
         </el-table-column>
@@ -124,13 +131,11 @@
 <script lang="ts" src="./index.component.ts"></script>
 
 <style lang="scss" scoped>
-/*
 .bidding-negotiation {
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: 36px auto;
 }
-*/
 .compact .el-table tbody .el-button {
   margin: 5px 0;
 }

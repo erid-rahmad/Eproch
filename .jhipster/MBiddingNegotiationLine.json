@@ -1,0 +1,55 @@
+{
+    "name": "MBiddingNegotiationLine",
+    "fields": [
+        {
+            "fieldName": "negotiationStatus",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mBiddingNegotiationLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBiddingNegotiation",
+            "otherEntityRelationshipName": "mBiddingNegotiationLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "negotiation",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBiddingEvalResult",
+            "otherEntityRelationshipName": "mBiddingNegotiationLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingEvalResult",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210603044100",
+    "entityTableName": "m_bidding_negotiation_line",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

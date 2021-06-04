@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity MBiddingNegotiationLine.
+    -->
+    <changeSet id="20210603044100-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="m_bidding_negotiation_line"
+                                 constraintName="fk_m_bidding_negotiation_line_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="negotiation_id"
+                                 baseTableName="m_bidding_negotiation_line"
+                                 constraintName="fk_m_bidding_negotiation_line_negotiation_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_bidding_negotiation"/>
+
+        <addForeignKeyConstraint baseColumnNames="bidding_eval_result_id"
+                                 baseTableName="m_bidding_negotiation_line"
+                                 constraintName="fk_m_bidding_negotiation_line_bidding_eval_result_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_bidding_eval_result"/>
+
+    </changeSet>
+</databaseChangeLog>
