@@ -1,9 +1,9 @@
-import { Component, Vue, Watch, Mixins, Inject } from 'vue-property-decorator';
-import { intervalToDuration, formatDuration } from 'date-fns';
+import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
-import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
-import { isEmpty } from 'lodash';
 import { AccountStoreModule } from '@/shared/config/store/account-store';
+import { formatDuration, intervalToDuration } from 'date-fns';
+import { isEmpty } from 'lodash';
+import { Component, Inject, Mixins, Vue, Watch } from 'vue-property-decorator';
 
 const baseApiAuctionItem = 'api/m-auction-items';
 
