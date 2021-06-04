@@ -38,9 +38,9 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
   private loading:boolean=false;
   private loadingProjectInfo:boolean=false;
   private loadingEmailDetail:boolean=false;
+  private download: Map<number, string> = new Map();
 
   private vendorId = '';
-
   get isVendor() {
     return accountStore.isVendor;
   }
@@ -68,11 +68,9 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
       .get(`/api/m-bidding-invitations/${this.pickdetailemail.id}`)
       .then(response => (this.info = response.data))
       .finally(()=>this.loadingEmailDetail=false);
-
   }
 
   minat(row) {
-
     this.accbutton = false;
     this.retrieveProjectInformations(row.biddingId);
     this.selecrow = null;
@@ -94,8 +92,18 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
 
   downloadAttachment(row) {
     window.open(`/api/c-attachments/download/${row.attachment.id}-${row.attachment.fileName}`, '_blank');
-    this.selecrow.invitationStatus = "D";
-    this.UpdatebiddingInvitation();
+    if (this.selecrow.invitationStatus==="U") {
+      this.selecrow.invitationStatus = "D";
+      this.download.set(row.id, "yes");
+      this.accbutton = true;
+      for (const download_ of this.download.values()) {
+        if (download_ === "no") {
+          this.selecrow.invitationStatus = "U";
+          this.accbutton = false;
+        }
+      }
+      this.UpdatebiddingInvitation();
+    }
   }
 
   printFileName(attachment: any) {
@@ -116,11 +124,9 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
     this.selecrow.reason = this.reason;
     this.UpdatebiddingInvitation();
     this.reasonPA = false;
-
   }
 
   viewemail(row) {
-
     this.showemaildetail = true;
     this.pickdetailemail = row;
   }
@@ -183,6 +189,10 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
           this.$set(this.bidding, 'projectInformations', res.data);
           this.$set(this.bidding, 'removedProjectInformations', []);
           resolve(true);
+          this.download.clear();
+          res.data.forEach(res=>{
+            this.download.set(res.id,"no")
+          });
         })
         .catch(err => {
           console.log('Failed to get project informations. %O', err);
@@ -194,6 +204,4 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
         });
     });
   }
-
-
 }

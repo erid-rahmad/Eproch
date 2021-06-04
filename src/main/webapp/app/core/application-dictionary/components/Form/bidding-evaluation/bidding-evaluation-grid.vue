@@ -29,15 +29,15 @@
                                         {{ row.$index + 1 }}
                                     </template>
                                 </el-table-column>
-                                <el-table-column align="center" label="Bidding N0." prop="documentNo" sortable width="150">
+                                <el-table-column align="center" label="Bidding N0." prop="documentNo" sortable min-width="150">
                                 </el-table-column>
-                                <el-table-column align="center" label="Title" prop="name" show-overflow-tooltip sortable width="180">
+                                <el-table-column align="center" label="Title" prop="name" show-overflow-tooltip sortable min-width="180">
                                 </el-table-column>
-                                <el-table-column align="center" label="Biding Type" prop="biddingTypeName" sortable width="180">
+                                <el-table-column align="center" label="Biding Type" prop="biddingTypeName" sortable min-width="180">
                                 </el-table-column>
-                                <el-table-column align="center" label="Depertement type" prop="costCenterName" sortable width="180">
+                                <el-table-column align="center" label="Depertement type" prop="costCenterName" sortable min-width="180">
                                 </el-table-column>
-                                <el-table-column align="center" label="Biding Schedule" prop="" sortable width="180">
+                                <el-table-column align="center" label="Biding Schedule" prop="" sortable min-width="180">
                                     <template slot-scope="{ row }">
                                         <el-button class="button" size="mini" style="width: 100%" @click="viewBidding(row, 1)">
                                             <svg-icon name="icomoo/084-calendar"></svg-icon> View Schedule

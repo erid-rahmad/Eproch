@@ -1,6 +1,6 @@
 <template>
-    <div class="app-container">
-        <el-row ref="tableWrapper" class="main">
+    <div class="app-container card-view">
+        <el-row ref="tableWrapper" class="card">
             <el-col :span="24">
                 <el-tabs >
                     <keep-alive>
@@ -9,36 +9,37 @@
                                       size="mini"
                                       style="width: 100%"
                                       v-loading="loading"
+                                      border
                             >
-                                <el-table-column label="No" min-width="50">
+                                <el-table-column label="No" align="center" min-width="30">
                                     <template slot-scope="row">
                                         {{ row.$index + 1 }}
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="Publish Date" min-width="210" sortable>
+                                <el-table-column label="Publish Date" align="center" min-width="150" sortable>
                                     <template slot-scope="{ row }">
                                         <span>{{ row.announcementPublishDate | formatDate }}</span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="Bidding Name" prop="biddingName" min-width="210"
+                                <el-table-column label="Bidding Name" align="center" prop="biddingName" min-width="210"
                                                  sortable></el-table-column>
-                                <el-table-column label="End Date" min-width="210"  sortable>
+                                <el-table-column label="End Date" min-width="180"  sortable>
                                     <template slot-scope="{ row }">
                                         <span>{{ row.announcementEndDate | formatDate }}</span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="Status" min-width="150"  sortable>
+                                <el-table-column label="Status" align="center" min-width="100"  sortable>
                                     <template slot-scope="{ row }">
                                         <span>{{ getStatus(row) }}</span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="Detail"  sortable width="180">
+                                <el-table-column label="Detail" align="center"  sortable width="80">
                                     <template slot-scope="{ row }">
                                         <el-button class="btn-attachment" icon="el-icon-search" size="mini"
                                                    type="primary" @click="viewemail(row)"></el-button>
                                     </template>
                                 </el-table-column>
-                                <el-table-column  label="Action" sortable width="180">
+                                <el-table-column  label="Action" align="center" sortable width="130">
                                     <template v-if="answerbutton" slot-scope="{ row }">
                                         <el-button class="btn-attachment" icon="el-icon-circle-check" size="mini"
                                                    type="primary" @click="minat(row)">
