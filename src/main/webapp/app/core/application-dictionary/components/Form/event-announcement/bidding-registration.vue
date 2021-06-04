@@ -5,7 +5,11 @@
                 <el-tabs >
                     <keep-alive>
                         <el-col :span="24">
-                            <el-table :data="biddingInvitationsGridData" size="mini" style="width: 100%">
+                            <el-table :data="biddingInvitationsGridData"
+                                      size="mini"
+                                      style="width: 100%"
+                                      v-loading="loading"
+                            >
                                 <el-table-column label="No" min-width="50">
                                     <template slot-scope="row">
                                         {{ row.$index + 1 }}
@@ -16,7 +20,7 @@
                                         <span>{{ row.announcementPublishDate | formatDate }}</span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="Bidding Name" min-width="210"
+                                <el-table-column label="Bidding Name" prop="biddingName" min-width="210"
                                                  sortable></el-table-column>
                                 <el-table-column label="End Date" min-width="210"  sortable>
                                     <template slot-scope="{ row }">
@@ -73,6 +77,7 @@
                     <el-table
                         ref="projectInformations"
                         :data="bidding.projectInformations"
+                        v-loading="loadingProjectInfo"
                         border
                         highlight-current-row
                         size="mini"
@@ -106,8 +111,8 @@
         <el-button v-if="accbutton" type="primary" @click="minatAction">Accept Invitation</el-button>
       </span>
         </el-dialog>
-        <el-dialog :visible.sync="showemaildetail" center width="60%">
-            <div v-html="info.announcementDescription"></div>
+        <el-dialog :visible.sync="showemaildetail" center width="60%" >
+            <div v-loading="loadingEmailDetail" v-html="info.announcementDescription"></div>
         </el-dialog>
     </div>
 </template>

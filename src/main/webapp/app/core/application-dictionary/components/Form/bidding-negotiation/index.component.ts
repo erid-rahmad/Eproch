@@ -5,19 +5,19 @@ import Vue from 'vue';
 import Component, { mixins } from 'vue-class-component';
 import { Inject } from 'vue-property-decorator';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
+import BiddingNegotiationLine from './components/negotiation-line.vue';
 
-const BiddingNegotiationProp = Vue.extend({
-  props: {
-    approval: Boolean
+@Component({
+  components: {
+    BiddingNegotiationLine
   }
 })
-
-@Component
-export default class BiddingNegotiation extends mixins(AccessLevelMixin, BiddingNegotiationProp) {
+export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
   index = true;
+  displayTable = true;
 
   showSchedule=false;
 
@@ -27,6 +27,12 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin, Bidding
 
   negotiationsApi = '/api/m-bidding-negotiations';
   scheduleApi = '/api/m-bidding-schedules';
+
+  selectedRow: any = {};
+  
+  get isVendor() {
+    return AccountStoreModule.isVendor;
+  }
 
   created() {
     this.commonService(this.negotiationsApi).retrieve({
@@ -79,6 +85,17 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin, Bidding
   }
 
   viewDetail(row){
+    this.selectedRow = row;
+    this.index = false;
+    this.displayTable = false;
+  }
+
+  viewSchedule2(row){
     
+  }
+
+  closeDetail(){
+    this.index = true;
+    this.displayTable = true;
   }
 }
