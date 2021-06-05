@@ -80,7 +80,7 @@ export default class AuctionContent extends Mixins(AccessLevelMixin, AuctionCont
         this.$emit('saved', res);
       }
 
-      this.$message.success(`Content has been ${newRecord ? 'created' : 'updated'} successfully`);
+      this.$message.success(`Content has been saved successfully`);
     } catch(err) {
         console.error('Failed to save the auction content', err);
         this.$message.error('Failed to save the content')

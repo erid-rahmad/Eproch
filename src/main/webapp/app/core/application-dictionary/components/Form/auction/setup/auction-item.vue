@@ -76,6 +76,7 @@
               :remote-method="retrieveProducts"
               placeholder="Select Product"
               size="mini"
+              @clear="retrieveProducts"
             >
               <el-option
                 v-for="product in products"
@@ -113,7 +114,6 @@
       <el-table-column
         label="Qty"
         width="150"
-        prop="quantity"
         sortable
       >
         <template slot-scope="{ row }">
@@ -157,10 +157,12 @@
               :remote-method="retrieveUoms"
               placeholder="Select UoM"
               size="mini"
+              @clear="retrieveUoms"
             >
               <el-option
                 v-for="uom in uoms"
                 :key="uom.id"
+                :label="uom.code"
                 :value="uom.id"
               >
                 <span style="float: left">{{ uom.code }}</span>
@@ -169,7 +171,7 @@
             </el-select>
           </el-tooltip>
           <template v-else>
-            {{ row.uomCode }}
+            {{ row.uomName }}
           </template>
         </template>
       </el-table-column>

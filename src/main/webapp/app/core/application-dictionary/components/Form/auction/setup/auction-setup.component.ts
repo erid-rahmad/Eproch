@@ -1,5 +1,5 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
-import { Component, Inject, Mixins, Vue } from "vue-property-decorator";
+import { Component, Inject, Mixins, Vue, Watch } from "vue-property-decorator";
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import AuctionContent from './auction-content.vue';
 import AuctionInfo from './auction-info.vue';
@@ -25,6 +25,13 @@ const AuctionSetupProps = Vue.extend({
       type: Object,
       default: () => {
         return {};
+      }
+    },
+
+    tab: {
+      type: String,
+      default: () => {
+        return 'INF';
       }
     }
   }
@@ -55,22 +62,40 @@ export default class AuctionSetup extends Mixins(AccessLevelMixin, AuctionSetupP
     return tabPaneComponent.get(this.activeTab);
   }
 
+  get isTabContent() {
+    return this.activeTab === 'CTN';
+  }
+
+  get isTabRul() {
+    return this.activeTab === 'RUL';
+  }
+
   get isTabInfo() {
     return this.activeTab === 'INF';
   }
 
+  @Watch('activeTab')
+  onActiveTabChanged(tabName: string) {
+    this.$emit('update:tab', tabName);
+  }
+
   onTabSaved(data: any) {
-    if (this.isTabInfo) {
+    if (this.isTabInfo || this.isTabRul || this.isTabContent) {
       this.$emit('update:data', data);
-      this.tabs = this.tabs.map(tab => {
-        const item = {...tab};
-        item.disabled = false;
-        return item;
-      });
+
+      if (this.isTabInfo) {
+        this.tabs = this.tabs
+          .map(tab => {
+            const item = {...tab};
+            item.disabled = false;
+            return item;
+          });
+      }
     }
   }
 
   created() {
+    this.activeTab = this.tab;
     this.retrieveTabs();
   }
 

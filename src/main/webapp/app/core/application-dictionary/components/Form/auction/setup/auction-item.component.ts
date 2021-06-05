@@ -55,7 +55,7 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
       required: true,
       message: 'Ceiling Price is required'
     }
-  }
+  };
 
   items: any[] = [];
 
@@ -114,8 +114,8 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
   }
 
   onEditClicked(row) {
-    this.retrieveUoms();
-    this.retrieveProducts();
+    this.retrieveUoms(row.uomId);
+    this.retrieveProducts(row.productId);
     
     this.tmpItem = {...row};
     row.editing = true;
@@ -185,20 +185,22 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
           `auctionId.equals=${auctionId}`
         ]
       })
-      .then(res => this.items = res.data)
+      .then(res => {
+        this.items = res.data.map(item => {
+          item.editing = false;
+          return item;
+        })
+      })
       .finally(() => this.loadingItems = false);
   }
 
-  retrieveProducts(query?: string) {
+  retrieveProducts(query?: string | number) {
     let baseQuery = [ 'active.equals=true' ];
 
     if (!!query) {
       baseQuery = [
         ...baseQuery,
-        ...[
-          // `code.contains=${query}`,
-          `name.contains=${query}`
-        ]
+        ...[ typeof query === 'string' ? `name.contains=${query}` : `id.equals=${query}` ]
       ];
     }
 
@@ -208,22 +210,19 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
         paginationQuery: {
           page: 0,
           size: 20,
-          sort: ['code']
+          sort: ['id,desc']
         }
       })
       .then(res => this.products = res.data);
   }
 
-  retrieveUoms(query?: string) {
+  retrieveUoms(query?: string | number) {
     let baseQuery = [ 'active.equals=true' ];
 
     if (!!query) {
       baseQuery = [
         ...baseQuery,
-        ...[
-          `code.contains=${query}`,
-          `name.contains=${query}`
-        ]
+        ...[ typeof query === 'string' ? `code.contains=${query}` : `id.equals=${query}` ]
       ];
     }
 
@@ -240,7 +239,7 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
   }
 
   public save() {
-    console.log('Saving auction items...');
+    // No save implementation in Auction Item tab.
   }
 
   private saveItem(data: any) {

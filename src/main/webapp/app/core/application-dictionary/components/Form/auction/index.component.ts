@@ -29,6 +29,7 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
   deleteConfirmationVisible: boolean = false;
   loading: boolean = false;
   formType: string = null;
+  setupTabName: string = 'INF';
 
   gridData: any[] = [];
 
@@ -116,6 +117,10 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
 
   onFormSaved() {
     (<any>this.$refs.setupPage).save();
+  }
+
+  onPublishClicked() {
+    console.log('Publishing the auction information...');
   }
 
   created() {

@@ -1939,6 +1939,8 @@ relationship ManyToOne {
 	MAuction{costCenter} to CCostCenter
 	MAuction{owner required} to AdUser
 
+	MAuctionRule{adOrganization required} to ADOrganization
+
 	MAuctionTeam{adOrganization required} to ADOrganization
 	MAuctionTeam{adOrganization required} to ADOrganization
 	MAuctionTeam{user required} to AdUser

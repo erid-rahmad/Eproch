@@ -52,6 +52,8 @@ public class MAuctionCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
+    private LongFilter ruleId;
+
     private LongFilter contentId;
 
     private LongFilter adOrganizationId;
@@ -80,6 +82,7 @@ public class MAuctionCriteria implements Serializable, Criteria {
         this.rejectedReason = other.rejectedReason == null ? null : other.rejectedReason.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.ruleId = other.ruleId == null ? null : other.ruleId.copy();
         this.contentId = other.contentId == null ? null : other.contentId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
@@ -204,6 +207,14 @@ public class MAuctionCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
+    public LongFilter getRuleId() {
+        return ruleId;
+    }
+
+    public void setRuleId(LongFilter ruleId) {
+        this.ruleId = ruleId;
+    }
+
     public LongFilter getContentId() {
         return contentId;
     }
@@ -269,6 +280,7 @@ public class MAuctionCriteria implements Serializable, Criteria {
             Objects.equals(rejectedReason, that.rejectedReason) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
+            Objects.equals(ruleId, that.ruleId) &&
             Objects.equals(contentId, that.contentId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(currencyId, that.currencyId) &&
@@ -293,6 +305,7 @@ public class MAuctionCriteria implements Serializable, Criteria {
         rejectedReason,
         uid,
         active,
+        ruleId,
         contentId,
         adOrganizationId,
         currencyId,
@@ -318,6 +331,7 @@ public class MAuctionCriteria implements Serializable, Criteria {
                 (rejectedReason != null ? "rejectedReason=" + rejectedReason + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (ruleId != null ? "ruleId=" + ruleId + ", " : "") +
                 (contentId != null ? "contentId=" + contentId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (currencyId != null ? "currencyId=" + currencyId + ", " : "") +

@@ -10,9 +10,10 @@ import org.mapstruct.Mapping;
 /**
  * Mapper for the entity {@link MAuction} and its DTO {@link MAuctionDTO}.
  */
-@Mapper(componentModel = "spring", uses = {MAuctionContentMapper.class, ADOrganizationMapper.class, CCurrencyMapper.class, CCostCenterMapper.class, AdUserMapper.class})
+@Mapper(componentModel = "spring", uses = {MAuctionRuleMapper.class, MAuctionContentMapper.class, ADOrganizationMapper.class, CCurrencyMapper.class, CCostCenterMapper.class, AdUserMapper.class})
 public interface MAuctionMapper extends EntityMapper<MAuctionDTO, MAuction> {
 
+    @Mapping(source = "rule.id", target = "ruleId")
     @Mapping(source = "content.id", target = "contentId")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
@@ -24,6 +25,7 @@ public interface MAuctionMapper extends EntityMapper<MAuctionDTO, MAuction> {
     @Mapping(source = "owner.user.login", target = "ownerName")
     MAuctionDTO toDto(MAuction mAuction);
 
+    @Mapping(source = "ruleId", target = "rule")
     @Mapping(source = "contentId", target = "content")
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "currencyId", target = "currency")

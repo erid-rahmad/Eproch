@@ -83,6 +83,10 @@ public class MAuction extends AbstractAuditingEntity {
 
     @OneToOne
     @JoinColumn(unique = true)
+    private MAuctionRule rule;
+
+    @OneToOne
+    @JoinColumn(unique = true)
     private MAuctionContent content;
 
     @ManyToOne(optional = false)
@@ -279,6 +283,19 @@ public class MAuction extends AbstractAuditingEntity {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public MAuctionRule getRule() {
+        return rule;
+    }
+
+    public MAuction rule(MAuctionRule mAuctionRule) {
+        this.rule = mAuctionRule;
+        return this;
+    }
+
+    public void setRule(MAuctionRule mAuctionRule) {
+        this.rule = mAuctionRule;
     }
 
     public MAuctionContent getContent() {

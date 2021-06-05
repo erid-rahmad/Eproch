@@ -30,7 +30,7 @@
       </el-button>
 
       <el-button
-        v-if="setupPage"
+        v-if="setupPage && setupTabName !== 'SUM'"
         size="mini"
         type="primary"
         @click="onFormSaved"
@@ -38,15 +38,14 @@
         <svg-icon name="icomoo/273-checkmark"></svg-icon> Save
       </el-button>
 
-      <!-- <document-action-button
-        v-if="!submissionPage"
-        :approved="false"
-        :document-type-id="auction.documentTypeId"
-        :next-action="defaultDocumentAction"
+      <el-button
+        v-else-if="setupPage && setupTabName === 'SUM'"
         size="mini"
-        window-type="TRANSACTION"
-        @change="onDocumentActionChanged"
-      ></document-action-button> -->
+        type="primary"
+        @click="onPublishClicked"
+      >
+        <svg-icon name="guide"></svg-icon> Publish
+      </el-button>
 
       <el-dropdown
         v-if="!isVendor && submissionPage && actions.length"
@@ -164,6 +163,7 @@
         v-else-if="setupPage"
         ref="setupPage"
         :data.sync="selectedRow"
+        :tab.sync="setupTabName"
       ></auction-setup>
 
       <bid-submission

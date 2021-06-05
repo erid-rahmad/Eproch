@@ -7,7 +7,7 @@
         Added the constraints for entity MAuction.
     -->
     <changeSet id="20210524031800-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="ad_organization_id"
                                  baseTableName="m_auction"
                                  constraintName="fk_m_auction_ad_organization_id"
@@ -41,6 +41,16 @@
                                  constraintName="fk_m_auction_content_id"
                                  referencedColumnNames="id"
                                  referencedTableName="m_auction_content"/>
+
+    </changeSet>
+
+    <changeSet id="20210603160100" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="rule_id"
+                                 baseTableName="m_auction"
+                                 constraintName="fk_m_auction_rule_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_auction_rule"/>
 
     </changeSet>
 </databaseChangeLog>
