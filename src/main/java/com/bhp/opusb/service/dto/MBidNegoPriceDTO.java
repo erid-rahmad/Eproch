@@ -1,0 +1,130 @@
+package com.bhp.opusb.service.dto;
+
+import javax.validation.constraints.*;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Objects;
+import java.util.UUID;
+
+/**
+ * A DTO for the {@link com.bhp.opusb.domain.MBidNegoPrice} entity.
+ */
+public class MBidNegoPriceDTO implements Serializable {
+    
+    private Long id;
+
+    private UUID uid;
+
+    private Boolean active;
+
+    @NotNull
+    private BigDecimal negotiationPrice;
+
+
+    private Long biddingId;
+
+    private Long vendorInvitationId;
+
+    private Long priceProposalId;
+
+    private Long negotiationLineId;
+    
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public UUID getUid() {
+        return uid;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
+    }
+
+    public Boolean isActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public BigDecimal getNegotiationPrice() {
+        return negotiationPrice;
+    }
+
+    public void setNegotiationPrice(BigDecimal negotiationPrice) {
+        this.negotiationPrice = negotiationPrice;
+    }
+
+    public Long getBiddingId() {
+        return biddingId;
+    }
+
+    public void setBiddingId(Long mBiddingId) {
+        this.biddingId = mBiddingId;
+    }
+
+    public Long getVendorInvitationId() {
+        return vendorInvitationId;
+    }
+
+    public void setVendorInvitationId(Long mVendorInvitationId) {
+        this.vendorInvitationId = mVendorInvitationId;
+    }
+
+    public Long getPriceProposalId() {
+        return priceProposalId;
+    }
+
+    public void setPriceProposalId(Long mProposalPriceId) {
+        this.priceProposalId = mProposalPriceId;
+    }
+
+    public Long getNegotiationLineId() {
+        return negotiationLineId;
+    }
+
+    public void setNegotiationLineId(Long mBiddingNegotiationLineId) {
+        this.negotiationLineId = mBiddingNegotiationLineId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        MBidNegoPriceDTO mBidNegoPriceDTO = (MBidNegoPriceDTO) o;
+        if (mBidNegoPriceDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), mBidNegoPriceDTO.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "MBidNegoPriceDTO{" +
+            "id=" + getId() +
+            ", uid='" + getUid() + "'" +
+            ", active='" + isActive() + "'" +
+            ", negotiationPrice=" + getNegotiationPrice() +
+            ", biddingId=" + getBiddingId() +
+            ", vendorInvitationId=" + getVendorInvitationId() +
+            ", priceProposalId=" + getPriceProposalId() +
+            ", negotiationLineId=" + getNegotiationLineId() +
+            "}";
+    }
+}

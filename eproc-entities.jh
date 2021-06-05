@@ -1365,6 +1365,20 @@ entity MBiddingNegotiationChat {
 	buyerText TextBlob
 }
 
+entity MBidNegoPrice {
+	uid UUID
+	active Boolean
+	negotiationPrice BigDecimal required
+}
+
+entity MBidNegoPriceLine {
+	uid UUID
+	active Boolean
+	priceNegotiation BigDecimal required
+	totalNegotiationPrice BigDecimal required
+	negotiationPercentage BigDecimal required
+}
+
 entity MPrequalificationDateSet {
 	startDate ZonedDateTime
 	endDate ZonedDateTime
@@ -1987,6 +2001,15 @@ relationship ManyToOne {
 	MBiddingNegotiationChat{bidding required} to MBidding
 	MBiddingNegotiationChat{vendor required} to CVendor
 	MBiddingNegotiationChat{attachment } to CAttachment
+
+	MBidNegoPrice{bidding required} to MBidding
+	MBidNegoPrice{vendorInvitation required} to MVendorInvitation
+	MBidNegoPrice{priceProposal required} to MProposalPrice
+	MBidNegoPrice{negotiationLine required} to MBiddingNegotiationLine
+
+	MBidNegoPriceLine{bidNegoPrice required} to MBidNegoPrice
+	MBidNegoPriceLine{biddingLine required} to MBiddingLine
+	MBidNegoPriceLine{proposalLine required} to MProposalPriceLine
 
 	MBiddingSubItem{adOrganization required} to ADOrganization
 	MBiddingSubItem{product required} to CProduct

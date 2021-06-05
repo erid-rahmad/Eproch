@@ -65,6 +65,8 @@ export default class BiddingNegotiationLine extends mixins(AccessLevelMixin, Neg
     this.outerIndex = true;
     row.biddingTitle = this.negotiation.biddingTitle;
     row.biddingId = this.negotiation.biddingId;
+    row.biddingNo = this.negotiation.biddingNo;
+    row.biddingType = this.negotiation.biddingType;
     this.selectedRow = row;
     this.innerIndex = false;
   }
@@ -77,6 +79,11 @@ export default class BiddingNegotiationLine extends mixins(AccessLevelMixin, Neg
   }
 
   refreshLine(){
+    this.agreed = [];
+    this.inProgress = [];
+    this.disagreed= [];
+    this.notStarted = [];
+    
     this.commonService(this.negotiationLineApi).retrieve({
       criteriaQuery: this.updateCriteria([
         'active.equals=true',

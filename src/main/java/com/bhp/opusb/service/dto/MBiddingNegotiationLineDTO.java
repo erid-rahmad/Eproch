@@ -30,10 +30,27 @@ public class MBiddingNegotiationLineDTO extends AbstractAuditingDTO implements S
     private Long vendorId;
     private String vendorName;
 
-    private BigDecimal proposedPrice;
+    private BigDecimal proposedPrice, negotiationPrice;
+    private Long negoPriceId;
     
     public Long getId() {
         return id;
+    }
+
+    public Long getNegoPriceId() {
+        return negoPriceId;
+    }
+
+    public void setNegoPriceId(Long negoPriceId) {
+        this.negoPriceId = negoPriceId;
+    }
+
+    public BigDecimal getNegotiationPrice() {
+        return negotiationPrice;
+    }
+
+    public void setNegotiationPrice(BigDecimal negotiationPrice) {
+        this.negotiationPrice = negotiationPrice;
     }
 
     public BigDecimal getProposedPrice() {

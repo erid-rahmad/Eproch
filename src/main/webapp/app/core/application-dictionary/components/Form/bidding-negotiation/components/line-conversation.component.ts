@@ -23,12 +23,17 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
   negotiationChatApi = '/api/m-bidding-negotiation-chats';
+  negotiationLineApi = '/api/m-bidding-negotiation-lines';
+  negoPriceLineApi = '/api/m-bid-nego-price-lines';
+  negoPriceApi = '/api/m-bid-nego-prices';
   line: any = {};
   chatForm: any = {text:"", publishToEmail:false};
 
   chatHistory: any[] = [];
   showChatForm = false;
+  showNegoForm = false;
   submitting = false;
+  isPercentage = false;
 
   private limit: number = 1;
   private action: string = "/api/c-attachments/upload";
@@ -36,6 +41,9 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   private file: any = {};
 
   private fileList: any[] = [];
+
+  negoPrice: any = {};
+  negoPriceLine: any[] = [];
 
   chatFormValidationSchema = {
     text: {
@@ -163,6 +171,8 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
     if(this.isVendor) this.chatForm.vendorText = this.chatForm.text;
     else this.chatForm.buyerText = this.chatForm.text;
 
+    this.submitting = true;
+
     this.commonService(this.negotiationChatApi).create(this.chatForm).then(
       (res)=>{
         console.log(res);
@@ -173,10 +183,124 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
       }
     ).catch((error)=>{
       this.$message.error("Failed to submit conversation.");
+    }).finally(()=>{
+      this.submitting = false;
     });
   }
 
   viewNegoDetail(){
-    
+    this.showNegoForm=true;
+    this.commonService(this.negoPriceLineApi).retrieve({
+      criteriaQuery: this.updateCriteria([
+        'active.equals=true',
+        `negotiationPriceId.equals=${this.line.negoPriceId}`
+      ]),
+      paginationQuery: {
+        page: 0,
+        size: 10000,
+        sort: ['id']
+      }
+    }).then((res)=>{
+      console.log(res.data);
+      this.negoPriceLine=res.data;
+    });
+    this.commonService(this.negoPriceApi).retrieve({
+      criteriaQuery: this.updateCriteria([
+        'active.equals=true',
+        `negotiationPriceId.equals=${this.line.negoPriceId}`
+      ]),
+      paginationQuery: {
+        page: 0,
+        size: 10000,
+        sort: ['id']
+      }
+    }).then((res)=>{
+      console.log(res.data);
+      this.negoPrice=res.data[0];
+      this.negoPrice.percentDiff=((this.line.proposedPrice-this.negoPrice.negotiationPrice)/this.line.proposedPrice)*100;
+    })
+  }
+
+  updateTotal(row){
+    console.log(row);
+    row.priceNegotiation = parseInt(row.priceNegotiation);
+    row.totalNegotiationPrice = row.quantity * row.priceNegotiation;
+    row.negotiationPercentage = ((row.proposedPrice-row.priceNegotiation)/row.proposedPrice)*100
+    this.reCalcTotal();
+  }
+
+  updateTotalByPercentage(row){
+    console.log(row);
+    row.negotiationPercentage = parseFloat(row.negotiationPercentage);
+    row.priceNegotiation = row.proposedPrice*(100-row.negotiationPercentage)/100;
+    row.totalNegotiationPrice = row.quantity * row.priceNegotiation;
+    this.reCalcTotal();
+  }
+
+  reCalcTotal(){
+    this.negoPrice.negotiationPrice = this.negoPriceLine.reduce((a,b)=>{
+      return (a.totalNegotiationPrice?a.totalNegotiationPrice:a)+b.totalNegotiationPrice;
+    });
+    this.negoPrice.percentDiff=((this.line.proposedPrice-this.negoPrice.negotiationPrice)/this.line.proposedPrice)*100;
+  }
+
+  declineNegotiation(){
+    this.submitting=true;
+    this.line.negotiationStatus = 'disagree';
+
+    this.commonService(`${this.negotiationLineApi}/publish/${this.line.id}`).create(this.line).then(
+      (res)=>{
+        console.log(res);
+        this.$message.success("Negotiation agreed.");
+        this.showNegoForm=false;
+        this.refreshChat();
+      }
+    ).catch((error)=>{
+      this.$message.error("Failed to submit negotiation.");
+    }).finally(()=>{
+      this.submitting = false;
+    });
+  }
+
+  submitNegotiation(){
+    this.submitting=true;
+    if(this.isVendor){
+      this.line.negotiationStatus = 'agree';
+
+      this.commonService(`${this.negotiationLineApi}/publish/${this.line.id}`).create(this.line).then(
+        (res)=>{
+          console.log(res);
+          this.$message.success("Negotiation agreed.");
+          this.showNegoForm=false;
+          this.refreshChat();
+        }
+      ).catch((error)=>{
+        this.$message.error("Failed to submit negotiation.");
+      }).finally(()=>{
+        this.submitting = false;
+      });
+    } else {
+      this.commonService(this.negoPriceApi).update(this.negoPrice).then(
+        (res)=>{
+          console.log(res);
+          this.$message.success("Negotiation submitted.");
+          this.negoPriceLine.forEach((elem)=>{
+            this.commonService(this.negoPriceLineApi).update(elem).then(
+              (res)=>{
+                console.log("Updated line no. ", res.id);
+              }
+            ).catch((error)=>{
+              console.log("Failed to update line no. ", elem.id);
+            })
+          })
+          this.showNegoForm=false;
+          this.refreshChat();
+        }
+      ).catch((error)=>{
+        this.$message.error("Failed to submit negotiation.");
+      }).finally(()=>{
+        this.submitting = false;
+      });
+    }
   }
 }

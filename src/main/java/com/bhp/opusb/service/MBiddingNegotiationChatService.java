@@ -5,6 +5,7 @@ import com.bhp.opusb.domain.MBiddingNegotiationChat;
 import com.bhp.opusb.domain.MBiddingNegotiationLine;
 import com.bhp.opusb.repository.MBiddingNegotiationChatRepository;
 import com.bhp.opusb.repository.MBiddingNegotiationLineRepository;
+import com.bhp.opusb.repository.MBiddingNegotiationRepository;
 import com.bhp.opusb.service.dto.MBiddingNegotiationChatDTO;
 import com.bhp.opusb.service.mapper.MBiddingNegotiationChatMapper;
 import org.slf4j.Logger;
@@ -28,15 +29,18 @@ public class MBiddingNegotiationChatService {
 
     private final MBiddingNegotiationChatRepository mBiddingNegotiationChatRepository;
     private final MBiddingNegotiationLineRepository mBiddingNegotiationLineRepository;
+    private final MBiddingNegotiationRepository mBiddingNegotiationRepository;
 
     private final MBiddingNegotiationChatMapper mBiddingNegotiationChatMapper;
 
     public MBiddingNegotiationChatService(MBiddingNegotiationChatRepository mBiddingNegotiationChatRepository, 
     MBiddingNegotiationChatMapper mBiddingNegotiationChatMapper,
-    MBiddingNegotiationLineRepository mBiddingNegotiationLineRepository) {
+    MBiddingNegotiationLineRepository mBiddingNegotiationLineRepository,
+    MBiddingNegotiationRepository mBiddingNegotiationRepository) {
         this.mBiddingNegotiationChatRepository = mBiddingNegotiationChatRepository;
         this.mBiddingNegotiationChatMapper = mBiddingNegotiationChatMapper;
         this.mBiddingNegotiationLineRepository = mBiddingNegotiationLineRepository;
+        this.mBiddingNegotiationRepository = mBiddingNegotiationRepository;
     }
 
     /**
@@ -52,8 +56,14 @@ public class MBiddingNegotiationChatService {
         mBiddingNegotiationChat = mBiddingNegotiationChatRepository.save(mBiddingNegotiationChat);
 
         MBiddingNegotiationLine mbnl = mBiddingNegotiationLineRepository.findById(mBiddingNegotiationChatDTO.getNegotiationLineId()).get();
-        mbnl.setNegotiationStatus("in progress");
-        mBiddingNegotiationLineRepository.save(mbnl);
+        if("in progress".contentEquals(mbnl.getNegotiationStatus())){
+            mbnl.setNegotiationStatus("in progress");
+            mBiddingNegotiationLineRepository.save(mbnl);
+
+            MBiddingNegotiation mbn = mBiddingNegotiationRepository.findById(mbnl.getNegotiation().getId()).get();
+            mbn.setBiddingStatus("in progress");
+            mBiddingNegotiationRepository.save(mbn);
+        }
         
         return mBiddingNegotiationChatMapper.toDto(mBiddingNegotiationChat);
     }

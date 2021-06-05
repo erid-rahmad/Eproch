@@ -57,6 +57,12 @@ public class MBiddingNegotiationLine extends AbstractAuditingEntity implements S
     "(select mbnl.bidding_eval_result_id from m_bidding_negotiation_line mbnl where mbnl.id = id)))")
     private BigDecimal proposedPrice;
 
+    @Formula("(select mbnp.negotiation_price from m_bid_nego_price mbnp where mbnp.negotiation_line_id = id)")
+    private BigDecimal negotiationPrice;
+
+    @Formula("(select mbnp.id from m_bid_nego_price mbnp where mbnp.negotiation_line_id = id)")
+    private Long negoPriceId;
+
     @PrePersist
     public void assignUUID() {
         this.uid = UUID.randomUUID();
@@ -160,6 +166,19 @@ public class MBiddingNegotiationLine extends AbstractAuditingEntity implements S
 
     public void setProposedPrice(BigDecimal proposedPrice) {
         this.proposedPrice = proposedPrice;
+    }
+
+    public BigDecimal getNegotiationPrice() {
+        return negotiationPrice;
+    }
+
+    public MBiddingNegotiationLine negotiationPrice(BigDecimal negotiationPrice) {
+        this.negotiationPrice = negotiationPrice;
+        return this;
+    }
+
+    public void setNegotiationPrice(BigDecimal negotiationPrice) {
+        this.negotiationPrice = negotiationPrice;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

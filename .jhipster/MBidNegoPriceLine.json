@@ -1,0 +1,72 @@
+{
+    "name": "MBidNegoPriceLine",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "priceNegotiation",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "totalNegotiationPrice",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "negotiationPercentage",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBidNegoPrice",
+            "otherEntityRelationshipName": "mBidNegoPriceLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "bidNegoPrice",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBiddingLine",
+            "otherEntityRelationshipName": "mBidNegoPriceLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingLine",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mProposalPriceLine",
+            "otherEntityRelationshipName": "mBidNegoPriceLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "proposalLine",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210604105200",
+    "entityTableName": "m_bid_nego_price_line",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}
