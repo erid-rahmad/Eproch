@@ -30,7 +30,7 @@ public class MBiddingNegotiationDTO extends AbstractAuditingDTO implements Seria
 
 
     private Long biddingEvalId;
-    private Long biddingId;
+    private Long biddingId, finishedCount, vendorCount;
     private String biddingNo, biddingTitle, biddingType, eventType; 
 
     private Long adOrganizationId;
@@ -41,6 +41,22 @@ public class MBiddingNegotiationDTO extends AbstractAuditingDTO implements Seria
     
     public Long getId() {
         return id;
+    }
+
+    public Long getVendorCount() {
+        return vendorCount;
+    }
+
+    public void setVendorCount(Long vendorCount) {
+        this.vendorCount = vendorCount;
+    }
+
+    public Long getFinishedCount() {
+        return finishedCount;
+    }
+
+    public void setFinishedCount(Long finishedCount) {
+        this.finishedCount = finishedCount;
     }
 
     public List<Object> getLine() {

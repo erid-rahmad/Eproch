@@ -1,5 +1,6 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import { AccountStoreModule } from '@/shared/config/store/account-store';
+import { ElForm } from 'element-ui/types/form';
 import { ElTable } from 'element-ui/types/table';
 import Vue from 'vue';
 import Component, { mixins } from 'vue-class-component';
@@ -163,28 +164,32 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   }
 
   submitForm(){
-    this.chatForm.biddingId = this.line.biddingId;
-    this.chatForm.vendorId = this.line.vendorId;
-    this.chatForm.negotiationLineId = this.line.id;
-    this.chatForm.adOrganizationId = this.line.adOrganizationId;
-    this.chatForm.active = true;
-    if(this.isVendor) this.chatForm.vendorText = this.chatForm.text;
-    else this.chatForm.buyerText = this.chatForm.text;
+    (<ElForm>this.$refs.chatForm).validate(passed => {
+      if(passed){
+        this.chatForm.biddingId = this.line.biddingId;
+        this.chatForm.vendorId = this.line.vendorId;
+        this.chatForm.negotiationLineId = this.line.id;
+        this.chatForm.adOrganizationId = this.line.adOrganizationId;
+        this.chatForm.active = true;
+        if(this.isVendor) this.chatForm.vendorText = this.chatForm.text;
+        else this.chatForm.buyerText = this.chatForm.text;
 
-    this.submitting = true;
+        this.submitting = true;
 
-    this.commonService(this.negotiationChatApi).create(this.chatForm).then(
-      (res)=>{
-        console.log(res);
-        this.$message.success("Conversation submitted.");
-        this.clearForm();
+        this.commonService(this.negotiationChatApi).create(this.chatForm).then(
+          (res)=>{
+            console.log(res);
+            this.$message.success("Conversation submitted.");
+            this.clearForm();
 
-        this.refreshChat();
+            this.refreshChat();
+          }
+        ).catch((error)=>{
+          this.$message.error("Failed to submit conversation.");
+        }).finally(()=>{
+          this.submitting = false;
+        });
       }
-    ).catch((error)=>{
-      this.$message.error("Failed to submit conversation.");
-    }).finally(()=>{
-      this.submitting = false;
     });
   }
 
@@ -246,9 +251,9 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
 
   declineNegotiation(){
     this.submitting=true;
-    this.line.negotiationStatus = 'disagree';
+    this.line.negotiationStatus = 'disagreed';
 
-    this.commonService(`${this.negotiationLineApi}/publish/${this.line.id}`).create(this.line).then(
+    this.commonService(`${this.negotiationLineApi}/finalize/${this.line.id}`).create(this.line).then(
       (res)=>{
         console.log(res);
         this.$message.success("Negotiation agreed.");
@@ -265,9 +270,9 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   submitNegotiation(){
     this.submitting=true;
     if(this.isVendor){
-      this.line.negotiationStatus = 'agree';
+      this.line.negotiationStatus = 'agreed';
 
-      this.commonService(`${this.negotiationLineApi}/publish/${this.line.id}`).create(this.line).then(
+      this.commonService(`${this.negotiationLineApi}/finalize/${this.line.id}`).create(this.line).then(
         (res)=>{
           console.log(res);
           this.$message.success("Negotiation agreed.");

@@ -32,9 +32,19 @@ public class MBiddingNegotiationLineDTO extends AbstractAuditingDTO implements S
 
     private BigDecimal proposedPrice, negotiationPrice;
     private Long negoPriceId;
+
+    private Boolean checkmark;
     
     public Long getId() {
         return id;
+    }
+
+    public Boolean getCheckmark() {
+        return checkmark;
+    }
+
+    public void setCheckmark(Boolean checkmark) {
+        this.checkmark = checkmark;
     }
 
     public Long getNegoPriceId() {

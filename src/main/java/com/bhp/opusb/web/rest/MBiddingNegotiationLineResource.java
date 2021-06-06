@@ -75,7 +75,7 @@ public class MBiddingNegotiationLineResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new mBiddingNegotiationLineDTO, or with status {@code 400 (Bad Request)} if the mBiddingNegotiationLine has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/m-bidding-negotiation-lines/finalize")
+    @PostMapping("/m-bidding-negotiation-lines/finalize/{id}")
     public ResponseEntity<MBiddingNegotiationLineDTO> finalizeMBiddingNegotiationLine(@Valid @RequestBody MBiddingNegotiationLineDTO mBiddingNegotiationLineDTO) throws URISyntaxException {
         log.debug("REST request to finalize MBiddingNegotiationLine : {}", mBiddingNegotiationLineDTO);
         if (mBiddingNegotiationLineDTO.getId() == null) {

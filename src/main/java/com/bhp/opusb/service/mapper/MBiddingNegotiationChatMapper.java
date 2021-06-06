@@ -17,6 +17,7 @@ public interface MBiddingNegotiationChatMapper extends EntityMapper<MBiddingNego
     @Mapping(source = "bidding.id", target = "biddingId")
     @Mapping(source = "vendor.id", target = "vendorId")
     @Mapping(source = "attachment.id", target = "attachmentId")
+    @Mapping(source = "attachment.downloadUrl", target = "downloadUrl")
     MBiddingNegotiationChatDTO toDto(MBiddingNegotiationChat mBiddingNegotiationChat);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")

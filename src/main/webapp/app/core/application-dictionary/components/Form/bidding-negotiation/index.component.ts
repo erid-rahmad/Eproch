@@ -20,13 +20,16 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
   displayTable = true;
 
   showSchedule=false;
+  showSummary=false;
 
   biddingNegotiations: any[] = [];
   biddingStates: any[] = [];
   biddingSchedule: any[] = [];
+  negoSummary: any[] = [];
 
   negotiationsApi = '/api/m-bidding-negotiations';
   scheduleApi = '/api/m-bidding-schedules';
+  negotiationLineApi = '/api/m-bidding-negotiation-lines';
 
   selectedRow: any = {};
   
@@ -76,6 +79,29 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
     this.selectedRow = row;
     this.index = false;
     this.displayTable = false;
+  }
+
+  viewSummary(row){
+    this.selectedRow = row;
+    this.showSummary = true;
+    this.commonService(this.negotiationLineApi).retrieve({
+      criteriaQuery: this.updateCriteria([
+        'active.equals=true',
+        `negotiationId.equals=${this.selectedRow.id}`
+      ]),
+      paginationQuery: {
+        page: 0,
+        size: 10000,
+        sort: ['id']
+      }
+    }).then((res)=>{
+      this.negoSummary = res.data;
+    })
+  }
+
+  clearSummary(){
+    this.negoSummary = [];
+    this.showSummary = false;
   }
 
   viewSchedule2(row){

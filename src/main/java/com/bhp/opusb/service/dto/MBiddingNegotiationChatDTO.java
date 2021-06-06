@@ -33,9 +33,28 @@ public class MBiddingNegotiationChatDTO extends AbstractAuditingDTO implements S
     private Long vendorId;
 
     private Long attachmentId;
+    private String downloadUrl;
+
+    private Boolean publishToEmail;
     
     public Long getId() {
         return id;
+    }
+
+    public Boolean getPublishToEmail() {
+        return publishToEmail;
+    }
+
+    public void setPublishToEmail(Boolean publishToEmail) {
+        this.publishToEmail = publishToEmail;
+    }
+
+    public String getDownloadUrl() {
+        return downloadUrl;
+    }
+
+    public void setDownloadUrl(String downloadUrl) {
+        this.downloadUrl = downloadUrl;
     }
 
     public void setId(Long id) {
