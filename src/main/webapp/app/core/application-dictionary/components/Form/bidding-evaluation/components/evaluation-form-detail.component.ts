@@ -46,6 +46,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
   private evaluationMethodCriteria: any = [];
   private loadingAll:boolean=false;
+  private evaluationType:Boolean;
   private questions: Map<number, any> = new Map();
   private evaluationResultLine:any= {};
   attachmentHandler: Map<number, string> = new Map();
@@ -60,21 +61,29 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
 
   @Watch('SelectVendorScoringLine')
   loaddata() {
+   this.getEvaluationtype();
     this.retrieveEvaluationMethodCriteria(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLineId,
       this.evaluationFormProp.SelectVendorScoringLine.id);
     if (this.evaluationFormProp.evaluationResultLine) {
       this.evaluationResultLine = this.evaluationFormProp.evaluationResultLine;
     };
-
   }
 
+
+
   created() {
+    this.getEvaluationtype();
     this.retrieveEvaluationMethodCriteria(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLineId,
       this.evaluationFormProp.SelectVendorScoringLine.id);
     if (this.evaluationFormProp.evaluationResultLine) {
       this.evaluationResultLine = this.evaluationFormProp.evaluationResultLine;
     };
+  }
 
+  getEvaluationtype(){
+    if (this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLineEvaluationType==="S"){
+      this.evaluationType=true;
+    }else { this.evaluationType=false;}
   }
 
   save() {

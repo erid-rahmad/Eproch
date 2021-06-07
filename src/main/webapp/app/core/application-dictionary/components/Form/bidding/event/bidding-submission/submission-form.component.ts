@@ -75,7 +75,7 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
         clearInterval(this.timerId);
       }
     }, (60 - this.currentDate.getSeconds()) * 1000);
-    
+
     if (!this.isVendor) {
       this.retrieveJoinedVendors(this.biddingScheduleId);
     }
@@ -134,11 +134,9 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
 
   submit(confirm: boolean) {
     if (confirm) {
+      this.submission.documentAction='SMT';
       this.commonService(baseApiBiddingSubmission)
-        .applyDocAction({
-          id: this.submission.id,
-          documentAction: 'SMT'
-        })
+        .applyDocAction(this.submission)
         .then(status => {
           this.submitConfirmationVisible = false;
           this.$message({

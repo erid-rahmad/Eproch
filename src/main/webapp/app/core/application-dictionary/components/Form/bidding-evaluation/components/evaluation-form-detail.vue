@@ -1,6 +1,6 @@
 <template>
     <div class="prequalification-form">
-        <el-form ref="mainForm" label-position="left" label-width="200px" size="mini" v-loading="loadingAll">
+        <el-form ref="mainForm" v-loading="loadingAll" label-position="left" label-width="200px" size="mini">
             <el-row
                 v-for="(criteria, index) in evaluationMethodCriteria"
                 :key="criteria.id"
@@ -38,8 +38,10 @@
                                 class="sub-sub-criteria-section"
                             >
                                 <el-col style="text-align: right;padding-right: 40px;padding-bottom: 5px">
-                                    <el-button v-if="biddingSubCriteria.attachmentName" icon="el-icon-view" size="mini" type="primary"
-                                               @click="handlePreview(biddingSubCriteria)">{{ biddingSubCriteria.attachmentName }}
+                                    <el-button v-if="biddingSubCriteria.attachmentName" icon="el-icon-view" size="mini"
+                                               type="primary"
+                                               @click="handlePreview(biddingSubCriteria)">
+                                        {{ biddingSubCriteria.attachmentName }}
                                     </el-button>
                                 </el-col>
                                 <el-table
@@ -85,23 +87,41 @@
                                                 v-model="row.answer"
                                                 :disabled="true"
                                                 class="form-input"
-                                                size="mini"
                                                 clearable
+                                                size="mini"
                                             ></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column
+                                        v-if="evaluationType"
                                         label="Evaluation"
                                         width="150"
                                     >
                                         <template slot-scope="{ row }">
-                                            <el-input
+                                            <el-input-number
                                                 v-model="row.evaluation"
                                                 :disabled="readOnly"
-                                                class="form-input"
-                                                clearable
-                                                size="mini"
-                                            ></el-input>
+                                                :max="10"
+                                                :min="1"
+                                                size="mini">
+                                            </el-input-number>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                        v-if="!evaluationType"
+                                        label="Evaluation"
+                                        width="150"
+                                    >
+
+                                        <template slot-scope="{ row }">
+                                            <el-select v-model="row.evaluation" placeholder="Select"  size="mini">
+                                                <el-option
+                                                    v-for="item in options"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value">
+                                                </el-option>
+                                            </el-select>
                                         </template>
                                     </el-table-column>
                                     <el-table-column
@@ -140,20 +160,20 @@
                     <el-col :span="6">
                         <div class="grid-content bg-purple">
                             <el-form-item label="Average Score">
-                                <el-input v-model="evaluationResultLine.score" placeholder="Please input" ></el-input>
+                                <el-input v-model="evaluationResultLine.score" placeholder="Please input"></el-input>
                             </el-form-item>
                         </div>
                     </el-col>
                     <el-col :span="6">
-                        <div class="grid-content bg-purple-light"  >
+                        <div class="grid-content bg-purple-light">
                             <template>
-                                <el-select size="mini" v-model="evaluationResultLine.status" placeholder="Select">
+                                <el-select v-model="evaluationResultLine.status" placeholder="Select" size="mini">
                                     <el-option
-                                        size="mini"
                                         v-for="item in options"
                                         :key="item.value"
                                         :label="item.label"
-                                        :value="item.value">
+                                        :value="item.value"
+                                        size="mini">
                                     </el-option>
                                 </el-select>
                             </template>
