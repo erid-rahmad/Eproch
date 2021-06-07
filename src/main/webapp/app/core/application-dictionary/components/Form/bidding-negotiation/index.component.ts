@@ -30,8 +30,11 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
   negotiationsApi = '/api/m-bidding-negotiations';
   scheduleApi = '/api/m-bidding-schedules';
   negotiationLineApi = '/api/m-bidding-negotiation-lines';
+  vendorConfirmationApi = '/api/m-vendor-confirmations';
 
   selectedRow: any = {};
+
+  today:Date = new Date();
   
   get isVendor() {
     return AccountStoreModule.isVendor;
@@ -39,6 +42,8 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
 
   created() {
     this.refreshHeader();
+
+    this.today = new Date();
 
     this.commonService(null)
       .retrieveReferenceLists('biddingStatus')
@@ -128,5 +133,29 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
       console.log(res.data);
       this.biddingNegotiations = res.data;
     });
+  }
+
+  createConfirmation(){
+    //finalize negotiation phase
+    let winningLines: any[] = [];
+    this.negoSummary.forEach((elem)=>{
+      if(elem.checkmark) {
+        winningLines.push(elem);
+      }
+    })
+    console.log(winningLines, winningLines.length)
+    if(winningLines.length) {
+      this.selectedRow.line = winningLines;
+      this.commonService(`${this.vendorConfirmationApi}/generate`).create(this.selectedRow).then((res)=>{
+        this.$message.success("Winner(s) chosen successfully.");
+        this.clearSummary();
+      }).catch((error)=>{
+        console.log(error);
+        this.$message.error("Failed creating vendor confirmation");
+      })
+
+    } else {
+      this.$message.error("Please choose at least 1 winner.");
+    }
   }
 }

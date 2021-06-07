@@ -285,19 +285,11 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
         this.submitting = false;
       });
     } else {
+      this.negoPrice.line = this.negoPriceLine
       this.commonService(this.negoPriceApi).update(this.negoPrice).then(
         (res)=>{
           console.log(res);
           this.$message.success("Negotiation submitted.");
-          this.negoPriceLine.forEach((elem)=>{
-            this.commonService(this.negoPriceLineApi).update(elem).then(
-              (res)=>{
-                console.log("Updated line no. ", res.id);
-              }
-            ).catch((error)=>{
-              console.log("Failed to update line no. ", elem.id);
-            })
-          })
           this.showNegoForm=false;
           this.refreshChat();
         }
@@ -307,5 +299,9 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
         this.submitting = false;
       });
     }
+  }
+
+  downloadAttachment(row){
+    window.open(row.downloadUrl, '_blank');
   }
 }

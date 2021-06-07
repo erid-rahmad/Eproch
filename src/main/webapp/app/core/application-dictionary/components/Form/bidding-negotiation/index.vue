@@ -1,6 +1,6 @@
 <template>
   <div class="app-container bidding-negotiation">
-    <div class="toolbar">
+    <div id="innerToolbar" class="toolbar">
       <el-button
         v-if="!index"
         icon="el-icon-close"
@@ -100,7 +100,7 @@
             icon="el-icon-search"
             size="mini"
             type="primary"
-            v-if="row.vendorCount==row.finishedCount"
+            v-if="!isVendor&&((row.vendorCount==row.finishedCount)||((new Date(row.endDate)).getTime()>today.getTime()))"
             @click="viewSummary(row)"
           >
             Summary
@@ -204,6 +204,7 @@
         <el-table-column label="Status" min-width="200">
           <template slot-scope="{row}">
             <el-checkbox
+              v-if="row.negotiationStatus==='agreed'"
               v-model="row.checkmark"
             >{{row.negotiationStatus}}</el-checkbox>
           </template>
@@ -221,7 +222,7 @@
           icon="el-icon-check"
           size="mini"
           type="primary"
-          @click="clearSummary"
+          @click="createConfirmation"
         >
           Submit
         </el-button>

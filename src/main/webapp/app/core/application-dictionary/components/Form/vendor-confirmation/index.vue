@@ -94,7 +94,7 @@
         v-else
         label="Selected Winner"
         min-width="100"
-        prop="selectedWinner"
+        prop="selectedWinners"
       ></el-table-column>
       <el-table-column min-width="100">
         <template slot="header">

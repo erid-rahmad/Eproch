@@ -3,6 +3,7 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.service.MVendorConfirmationService;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
 import com.bhp.opusb.service.dto.MVendorConfirmationDTO;
+import com.bhp.opusb.service.dto.MBiddingNegotiationDTO;
 import com.bhp.opusb.service.dto.MVendorConfirmationCriteria;
 import com.bhp.opusb.service.MVendorConfirmationQueryService;
 
@@ -63,6 +64,24 @@ public class MVendorConfirmationResource {
             throw new BadRequestAlertException("A new mVendorConfirmation cannot already have an ID", ENTITY_NAME, "idexists");
         }
         MVendorConfirmationDTO result = mVendorConfirmationService.save(mVendorConfirmationDTO);
+        return ResponseEntity.created(new URI("/api/m-vendor-confirmations/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+    /**
+     * {@code POST  /m-vendor-confirmations} : Create a new mVendorConfirmation.
+     *
+     * @param mVendorConfirmationDTO the mVendorConfirmationDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new mVendorConfirmationDTO, or with status {@code 400 (Bad Request)} if the mVendorConfirmation has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/m-vendor-confirmations/generate")
+    public ResponseEntity<MVendorConfirmationDTO> generateMVendorConfirmation(@Valid @RequestBody MBiddingNegotiationDTO mBiddingNegotiationDTO) throws URISyntaxException {
+        if (mBiddingNegotiationDTO.getId() == null) {
+            throw new BadRequestAlertException("Cannot create a mVendorConfirmation from a non-existent mBiddingNegotiation", ENTITY_NAME, "idnull");
+        }
+        MVendorConfirmationDTO result = mVendorConfirmationService.generateConfirmation(mBiddingNegotiationDTO);
         return ResponseEntity.created(new URI("/api/m-vendor-confirmations/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);

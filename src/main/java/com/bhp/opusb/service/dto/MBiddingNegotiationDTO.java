@@ -37,7 +37,7 @@ public class MBiddingNegotiationDTO extends AbstractAuditingDTO implements Seria
 
     private Long biddingScheduleId;
 
-    private List<Object> line;
+    private List<MBiddingNegotiationLineDTO> line;
     
     public Long getId() {
         return id;
@@ -59,11 +59,11 @@ public class MBiddingNegotiationDTO extends AbstractAuditingDTO implements Seria
         this.finishedCount = finishedCount;
     }
 
-    public List<Object> getLine() {
+    public List<MBiddingNegotiationLineDTO> getLine() {
         return line;
     }
 
-    public void setLine(List<Object> line) {
+    public void setLine(List<MBiddingNegotiationLineDTO> line) {
         this.line = line;
     }
 

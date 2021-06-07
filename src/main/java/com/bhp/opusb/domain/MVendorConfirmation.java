@@ -65,6 +65,9 @@ public class MVendorConfirmation extends AbstractAuditingEntity implements Seria
     + "mvcc.vendor_confirmation_line_id = (select mvcl.id from m_vendor_confirmation_line mvcl where mvcl.vendor_confirmation_id = id))")
     private Long latestContractId;
 
+    @Formula("(select count(mvcl.id) from m_vendor_confirmation_line mvcl where mvcl.vendor_confirmation_id = id)")
+    private Integer selectedWinners;
+
     @PrePersist
     public void assignUUID() {
         this.uid = UUID.randomUUID();
@@ -181,6 +184,14 @@ public class MVendorConfirmation extends AbstractAuditingEntity implements Seria
 
     public void setStatus(String status){
         this.status = status;
+    }
+
+    public Integer getSelectedWinners(){
+        return this.selectedWinners;
+    }
+
+    public void setSelectedWinners(Integer selectedWinners){
+        this.selectedWinners = selectedWinners;
     }
 
     public Long getLatestContractId(){

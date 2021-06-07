@@ -99,10 +99,10 @@ public class MBiddingLine extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mBiddingLines")
     private CUnitOfMeasure uom;
 
-    @Formula("(select mppl.proposed_price from m_proposal_price_line mppl where mppl.bidding_line_id = id)")
+    @Formula("(select mbnpl.price_negotiation from m_bid_nego_price_line mbnpl where mbnpl.bidding_line_id=id)")
     private BigDecimal proposedPrice;
 
-    @Formula("(select mppl.total_price_submission from m_proposal_price_line mppl where mppl.bidding_line_id = id)")
+    @Formula("(select mbnpl.total_negotiation_price from m_bid_nego_price_line mbnpl where mbnpl.bidding_line_id = id)")
     private BigDecimal totalPriceSubmission;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
