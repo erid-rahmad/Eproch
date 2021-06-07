@@ -17,6 +17,8 @@ public interface MBidNegoPriceLineMapper extends EntityMapper<MBidNegoPriceLineD
     @Mapping(source = "biddingLine.quantity", target = "quantity")
     @Mapping(source = "biddingLine.uom.name", target = "uomName")
     @Mapping(source = "biddingLine.product.name", target = "productName")
+    @Mapping(source = "biddingLine.uom.id", target = "uomId")
+    @Mapping(source = "biddingLine.product.id", target = "productId")
     @Mapping(source = "biddingLine.ceilingPrice", target = "ceilingPrice")
     @Mapping(source = "biddingLine.totalCeilingPrice", target = "totalCeilingPrice")
     @Mapping(source = "proposalLine.id", target = "proposalLineId")

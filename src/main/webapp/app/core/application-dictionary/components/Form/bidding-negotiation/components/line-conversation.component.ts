@@ -60,6 +60,7 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   created() {
     console.log(this.data);
     this.line = {...this.data};
+    //this.line.proposedPrice = this.formatCurrency(this.line.proposedPrice);
 
     this.refreshChat();
   }
@@ -223,6 +224,8 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
       console.log(res.data);
       this.negoPrice=res.data[0];
       this.negoPrice.percentDiff=((this.line.proposedPrice-this.negoPrice.negotiationPrice)/this.line.proposedPrice)*100;
+      this.negoPrice.percentDiff = this.truncateDecimals(this.negoPrice.percentDiff,2);
+      //this.negoPrice.negotiationPrice = this.formatCurrency(this.negoPrice.negotiationPrice);
     })
   }
 
@@ -247,6 +250,8 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
       return (a.totalNegotiationPrice?a.totalNegotiationPrice:a)+b.totalNegotiationPrice;
     });
     this.negoPrice.percentDiff=((this.line.proposedPrice-this.negoPrice.negotiationPrice)/this.line.proposedPrice)*100;
+    this.negoPrice.percentDiff = this.truncateDecimals(this.negoPrice.percentDiff,2);
+    //this.negoPrice.negotiationPrice = this.formatCurrency(this.negoPrice.negotiationPrice);
   }
 
   declineNegotiation(){
@@ -304,4 +309,26 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   downloadAttachment(row){
     window.open(row.downloadUrl, '_blank');
   }
+
+  truncateDecimals = function (number, digits) {
+    var multiplier = Math.pow(10, digits),
+        adjustedNum = number * multiplier,
+        truncatedNum = Math[adjustedNum < 0 ? 'ceil' : 'floor'](adjustedNum);
+
+    return truncatedNum / multiplier;
+  };
+
+  /*
+  formatCurrency = function(value: number, locales?: string | string[], defaultValue?: number) {
+    const formatter = new Intl.NumberFormat(locales || tranlationStore.currentLanguage, {
+      minimumFractionDigits: 2
+    });
+
+    if (value !== void 0) {
+      return formatter.format(value);
+    }
+
+    return defaultValue || null;
+  }
+  */
 }
