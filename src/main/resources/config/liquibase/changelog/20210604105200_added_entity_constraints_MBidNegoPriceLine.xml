@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity MBidNegoPriceLine.
+    -->
+    <changeSet id="20210604105200-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="bid_nego_price_id"
+                                 baseTableName="m_bid_nego_price_line"
+                                 constraintName="fk_m_bid_nego_price_line_bid_nego_price_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_bid_nego_price"/>
+
+        <addForeignKeyConstraint baseColumnNames="bidding_line_id"
+                                 baseTableName="m_bid_nego_price_line"
+                                 constraintName="fk_m_bid_nego_price_line_bidding_line_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_bidding_line"/>
+
+        <addForeignKeyConstraint baseColumnNames="proposal_line_id"
+                                 baseTableName="m_bid_nego_price_line"
+                                 constraintName="fk_m_bid_nego_price_line_proposal_line_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_proposal_price_line"/>
+
+    </changeSet>
+</databaseChangeLog>

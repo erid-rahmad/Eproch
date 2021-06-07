@@ -83,7 +83,8 @@
       <el-table-column
         label="Vendor"
         min-width="100"
-        prop="vendor"
+        prop="vendorCount"
+        v-if="!isVendor"
       ></el-table-column>
       <el-table-column label="Action" min-width="100">
         <template slot-scope="{ row }">
@@ -94,6 +95,15 @@
             @click="viewDetail(row)"
           >
             View
+          </el-button>
+          <el-button
+            icon="el-icon-search"
+            size="mini"
+            type="primary"
+            v-if="row.vendorCount==row.finishedCount"
+            @click="viewSummary(row)"
+          >
+            Summary
           </el-button>
         </template>
       </el-table-column>
@@ -124,6 +134,98 @@
           </template>
         </el-table-column>
       </el-table>
+    </el-dialog>
+
+    <el-dialog title="Negotiation Summary" :visible.sync="showSummary" width="90%" :before-close="clearSummary">
+      <el-form
+          ref="negotiation"
+          label-position="left"
+          label-width="200px"
+          :model="selectedRow"
+          size="mini"
+        >
+          <el-row
+            :gutter="24"
+            style="margin-top: 16px"
+          >
+            <el-col
+              :xs="24"
+              :sm="12"
+              :lg="12"
+              :xl="8"
+            >
+              <el-form-item label="Bidding Number">
+                <el-input
+                  v-model="selectedRow.biddingNo"
+                  disabled
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="Bidding Title">
+                <el-input
+                  v-model="selectedRow.biddingTitle"
+                  disabled
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="Bidding Type">
+                <el-input
+                  v-model="selectedRow.biddingType"
+                  disabled
+                ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col
+              :xs="24"
+              :sm="12"
+              :lg="12"
+              :xl="8"
+            >
+              <el-form-item label="Start Date">
+                <el-input
+                  v-model="selectedRow.startDate"
+                  disabled
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="End Date">
+                <el-input
+                  v-model="selectedRow.endDate"
+                  disabled
+                ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      <el-table border :data="negoSummary" size="mini">
+        <el-table-column width="60" label="No">
+          <template slot-scope="row">
+            {{ row.$index + 1 }}
+          </template>
+        </el-table-column>
+        <el-table-column property="vendorName" label="Vendor" min-width="200" show-overflow-tooltip></el-table-column>
+        <el-table-column label="Status" min-width="200">
+          <template slot-scope="{row}">
+            <el-checkbox
+              v-model="row.checkmark"
+            >{{row.negotiationStatus}}</el-checkbox>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div slot="footer">
+        <el-button
+          icon="el-icon-close"
+          size="mini"
+          @click="clearSummary"
+        >
+          {{ $t('entity.action.cancel') }}
+        </el-button>
+        <el-button
+          icon="el-icon-check"
+          size="mini"
+          type="primary"
+          @click="clearSummary"
+        >
+          Submit
+        </el-button>
+      </div>
     </el-dialog>
   </div>
 </template>

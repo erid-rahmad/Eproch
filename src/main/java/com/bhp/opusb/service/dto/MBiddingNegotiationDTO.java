@@ -3,6 +3,7 @@ package com.bhp.opusb.service.dto;
 import java.time.ZonedDateTime;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -29,15 +30,41 @@ public class MBiddingNegotiationDTO extends AbstractAuditingDTO implements Seria
 
 
     private Long biddingEvalId;
-    private Long biddingId;
+    private Long biddingId, finishedCount, vendorCount;
     private String biddingNo, biddingTitle, biddingType, eventType; 
 
     private Long adOrganizationId;
 
     private Long biddingScheduleId;
+
+    private List<Object> line;
     
     public Long getId() {
         return id;
+    }
+
+    public Long getVendorCount() {
+        return vendorCount;
+    }
+
+    public void setVendorCount(Long vendorCount) {
+        this.vendorCount = vendorCount;
+    }
+
+    public Long getFinishedCount() {
+        return finishedCount;
+    }
+
+    public void setFinishedCount(Long finishedCount) {
+        this.finishedCount = finishedCount;
+    }
+
+    public List<Object> getLine() {
+        return line;
+    }
+
+    public void setLine(List<Object> line) {
+        this.line = line;
     }
 
     public String getBiddingNo() {

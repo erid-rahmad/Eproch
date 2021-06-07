@@ -1,7 +1,9 @@
 package com.bhp.opusb.service;
 
+import com.bhp.opusb.domain.MBiddingNegotiation;
 import com.bhp.opusb.domain.MBiddingNegotiationLine;
 import com.bhp.opusb.repository.MBiddingNegotiationLineRepository;
+import com.bhp.opusb.repository.MBiddingNegotiationRepository;
 import com.bhp.opusb.service.dto.MBiddingNegotiationLineDTO;
 import com.bhp.opusb.service.mapper.MBiddingNegotiationLineMapper;
 import org.slf4j.Logger;
@@ -14,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 /**
  * Service Implementation for managing {@link MBiddingNegotiationLine}.
  */
@@ -24,12 +28,16 @@ public class MBiddingNegotiationLineService {
     private final Logger log = LoggerFactory.getLogger(MBiddingNegotiationLineService.class);
 
     private final MBiddingNegotiationLineRepository mBiddingNegotiationLineRepository;
+    private final MBiddingNegotiationRepository mBiddingNegotiationRepository;
 
     private final MBiddingNegotiationLineMapper mBiddingNegotiationLineMapper;
 
-    public MBiddingNegotiationLineService(MBiddingNegotiationLineRepository mBiddingNegotiationLineRepository, MBiddingNegotiationLineMapper mBiddingNegotiationLineMapper) {
+    public MBiddingNegotiationLineService(MBiddingNegotiationLineRepository mBiddingNegotiationLineRepository, 
+    MBiddingNegotiationLineMapper mBiddingNegotiationLineMapper,
+    MBiddingNegotiationRepository mBiddingNegotiationRepository) {
         this.mBiddingNegotiationLineRepository = mBiddingNegotiationLineRepository;
         this.mBiddingNegotiationLineMapper = mBiddingNegotiationLineMapper;
+        this.mBiddingNegotiationRepository = mBiddingNegotiationRepository;
     }
 
     /**
@@ -79,5 +87,12 @@ public class MBiddingNegotiationLineService {
     public void delete(Long id) {
         log.debug("Request to delete MBiddingNegotiationLine : {}", id);
         mBiddingNegotiationLineRepository.deleteById(id);
+    }
+
+    public MBiddingNegotiationLineDTO finalize(@Valid MBiddingNegotiationLineDTO mBiddingNegotiationLineDTO) {
+        log.debug("Request to save MBiddingNegotiationLine : {}", mBiddingNegotiationLineDTO);
+        MBiddingNegotiationLine mBiddingNegotiationLine = mBiddingNegotiationLineMapper.toEntity(mBiddingNegotiationLineDTO);
+        mBiddingNegotiationLine = mBiddingNegotiationLineRepository.save(mBiddingNegotiationLine);
+        return mBiddingNegotiationLineMapper.toDto(mBiddingNegotiationLine);
     }
 }

@@ -1,0 +1,11 @@
+id;bid_prev_period;pre_bid_end_date;start_date;first_lot_run_time;bid_rank_overtime;start_overtime_within;overtime_period;est_award_date;bid_improvement_unit;tie_bids_rule;show_response;show_leader;uid;active;ad_organization_id
+1;Poland Woo;2021-06-02T19:32:04;2021-06-03T00:12:17;18677;80993;55547;9791;2021-06-02;Louisiana;Consultant;true;true;c82f2893-b6c3-4e6e-934b-2576807e4e48;true;1
+2;withdrawal;2021-06-03T09:32:12;2021-06-03T08:45:25;29015;49770;50576;44774;2021-06-02;Shoes copy;Metal;true;true;62a921c6-3bad-424c-b0f3-dc05380780c1;false;2
+3;silver Mou;2021-06-03T09:17:33;2021-06-03T09:57:42;69409;48778;74185;11885;2021-06-03;Specialist;pixel Gran;true;false;189d472e-bec8-4d7e-bbea-ea6efaf72cdb;false;3
+4;extensible;2021-06-02T14:08:17;2021-06-02T15:51:21;47533;98788;31592;82427;2021-06-03;Chicken To;reinvent;true;false;41b3aaa3-3903-4472-8970-907d498f29bb;false;4
+5;AI;2021-06-03T10:09:48;2021-06-03T10:05:41;90311;32791;15583;1769;2021-06-03;Honduras g;compressin;true;true;00426836-2dc2-4c1c-9811-4a8c84c43561;true;5
+6;Operations;2021-06-03T05:04:12;2021-06-02T11:30:52;16717;99205;86133;93852;2021-06-02;copy funct;circuit pr;true;false;a1911bf9-3d89-42bd-8a74-b57f2eab6ac5;true;6
+7;online Vis;2021-06-02T21:29:58;2021-06-02T14:44:21;10216;53205;29906;31774;2021-06-02;Technician;zero admin;false;false;8daab3be-7e96-4e82-8933-ea27a6ea4f1a;true;7
+8;Identity;2021-06-02T16:30:42;2021-06-03T09:51:17;67405;75655;59168;25837;2021-06-02;Credit Car;Director i;true;true;fa936b86-858a-4036-8e8c-14bac78b38d2;false;8
+9;Money Mark;2021-06-03T03:19:36;2021-06-03T04:11:30;39519;26526;46355;7636;2021-06-03;matrix;infomediar;true;false;d7e9cab2-b1ce-4b88-99e0-1dd8ac59ac2a;true;9
+10;Cross-grou;2021-06-02T12:50:05;2021-06-02T16:16:25;25003;31657;33604;59363;2021-06-02;Cambridges;Sharable R;false;true;cc54aa95-fa91-42de-88a6-bd05be85e5c9;false;10

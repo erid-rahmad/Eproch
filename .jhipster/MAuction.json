@@ -76,6 +76,14 @@
     "relationships": [
         {
             "relationshipType": "one-to-one",
+            "otherEntityName": "mAuctionRule",
+            "otherEntityRelationshipName": "mAuction",
+            "relationshipName": "rule",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
             "otherEntityName": "mAuctionContent",
             "otherEntityRelationshipName": "mAuction",
             "relationshipName": "content",

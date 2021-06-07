@@ -3,6 +3,7 @@ package com.bhp.opusb.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -62,6 +63,12 @@ public class MBiddingNegotiation extends AbstractAuditingEntity implements Seria
     @JsonIgnoreProperties("mBiddingNegotiations")
     private MBiddingSchedule biddingSchedule;
 
+    @Formula("(select count(mbnl.id) from m_bidding_negotiation_line mbnl where mbnl.negotiation_id=id)")
+    private Long vendorCount;
+
+    @Formula("(select count(mbnl.id) from m_bidding_negotiation_line mbnl where mbnl.negotiation_id=id and mbnl.negotiation_status in ('agreed','disagreed'))")
+    private Long finishedCount;
+
     @PrePersist
     public void assignUUID() {
         this.uid = UUID.randomUUID();
@@ -74,6 +81,22 @@ public class MBiddingNegotiation extends AbstractAuditingEntity implements Seria
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getVendorCount() {
+        return vendorCount;
+    }
+
+    public void setVendorCount(Long vendorCount) {
+        this.vendorCount = vendorCount;
+    }
+
+    public Long getFinishedCount() {
+        return finishedCount;
+    }
+
+    public void setFinishedCount(Long finishedCount) {
+        this.finishedCount = finishedCount;
     }
 
     public String getBiddingStatus() {

@@ -47,6 +47,9 @@ public class MAuctionDTO extends AbstractAuditingDTO {
 
     private Boolean active = true;
 
+
+    private Long ruleId;
+
     private Long contentId;
 
     private Long adOrganizationId;
@@ -173,6 +176,14 @@ public class MAuctionDTO extends AbstractAuditingDTO {
         this.active = active;
     }
 
+    public Long getRuleId() {
+        return ruleId;
+    }
+
+    public void setRuleId(Long mAuctionRuleId) {
+        this.ruleId = mAuctionRuleId;
+    }
+
     public Long getContentId() {
         return contentId;
     }
@@ -283,6 +294,7 @@ public class MAuctionDTO extends AbstractAuditingDTO {
             ", rejectedReason='" + getRejectedReason() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
+            ", ruleId=" + getRuleId() +
             ", contentId=" + getContentId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", currencyId=" + getCurrencyId() +

@@ -2,6 +2,7 @@ package com.bhp.opusb.service.dto;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -28,9 +29,46 @@ public class MBiddingNegotiationLineDTO extends AbstractAuditingDTO implements S
 
     private Long vendorId;
     private String vendorName;
+
+    private BigDecimal proposedPrice, negotiationPrice;
+    private Long negoPriceId;
+
+    private Boolean checkmark;
     
     public Long getId() {
         return id;
+    }
+
+    public Boolean getCheckmark() {
+        return checkmark;
+    }
+
+    public void setCheckmark(Boolean checkmark) {
+        this.checkmark = checkmark;
+    }
+
+    public Long getNegoPriceId() {
+        return negoPriceId;
+    }
+
+    public void setNegoPriceId(Long negoPriceId) {
+        this.negoPriceId = negoPriceId;
+    }
+
+    public BigDecimal getNegotiationPrice() {
+        return negotiationPrice;
+    }
+
+    public void setNegotiationPrice(BigDecimal negotiationPrice) {
+        this.negotiationPrice = negotiationPrice;
+    }
+
+    public BigDecimal getProposedPrice() {
+        return proposedPrice;
+    }
+
+    public void setProposedPrice(BigDecimal proposedPrice) {
+        this.proposedPrice = proposedPrice;
     }
 
     public String getEvalStatus() {

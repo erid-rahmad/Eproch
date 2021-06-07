@@ -12,7 +12,7 @@ public class MAuctionParticipantDTO extends AbstractAuditingDTO {
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
 
     private Long adOrganizationId;
@@ -23,6 +23,7 @@ public class MAuctionParticipantDTO extends AbstractAuditingDTO {
 
     private Long userUserId;
     private String userName;
+    private String userEmail;
 
     private Long vendorId;
     private String vendorName;
@@ -97,6 +98,14 @@ public class MAuctionParticipantDTO extends AbstractAuditingDTO {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public Long getVendorId() {

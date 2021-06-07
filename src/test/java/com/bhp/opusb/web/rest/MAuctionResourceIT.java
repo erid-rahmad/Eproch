@@ -2,6 +2,7 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MAuction;
+import com.bhp.opusb.domain.MAuctionRule;
 import com.bhp.opusb.domain.MAuctionContent;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CCurrency;
@@ -1371,6 +1372,26 @@ public class MAuctionResourceIT {
         // Get all the mAuctionList where active is null
         defaultMAuctionShouldNotBeFound("active.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllMAuctionsByRuleIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mAuctionRepository.saveAndFlush(mAuction);
+        MAuctionRule rule = MAuctionRuleResourceIT.createEntity(em);
+        em.persist(rule);
+        em.flush();
+        mAuction.setRule(rule);
+        mAuctionRepository.saveAndFlush(mAuction);
+        Long ruleId = rule.getId();
+
+        // Get all the mAuctionList where rule equals to ruleId
+        defaultMAuctionShouldBeFound("ruleId.equals=" + ruleId);
+
+        // Get all the mAuctionList where rule equals to ruleId + 1
+        defaultMAuctionShouldNotBeFound("ruleId.equals=" + (ruleId + 1));
+    }
+
 
     @Test
     @Transactional

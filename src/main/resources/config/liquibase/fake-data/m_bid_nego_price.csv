@@ -1,0 +1,11 @@
+id;uid;active;negotiation_price;bidding_id;vendor_invitation_id;price_proposal_id;negotiation_line_id
+1;cedd73d9-4a02-4eef-aa71-12ad27621ba6;false;12068;1;1;1;1
+2;91fb1467-3519-45d2-a6c2-d2cf853d16c9;false;96744;2;2;2;2
+3;7e6f19a2-ff8e-4701-9cba-bc27498b44c5;true;43462;3;3;3;3
+4;40cb411a-11ca-4e42-a889-be00235e775e;false;41860;4;4;4;4
+5;932b5dc9-d9d4-4bbb-8891-a24656e5e8f3;false;96407;5;5;5;5
+6;b1a71850-2b4a-4d52-97bc-d291a8b47b39;false;93329;6;6;6;6
+7;b32c73ba-0c52-4915-8029-5d825246b19f;false;25831;7;7;7;7
+8;29c11856-c35a-43a8-9e3e-4fd172cc8b2d;true;47596;8;8;8;8
+9;439b8b6d-31a5-4646-800c-901d9998c927;false;82769;9;9;9;9
+10;44135f53-bcff-405e-a0e0-ab34c11668e2;false;86843;10;10;10;10

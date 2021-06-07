@@ -1358,6 +1358,27 @@ entity MBiddingNegotiationLine {
 	active Boolean
 }
 
+entity MBiddingNegotiationChat {
+	uid UUID
+	active Boolean
+	vendorText TextBlob
+	buyerText TextBlob
+}
+
+entity MBidNegoPrice {
+	uid UUID
+	active Boolean
+	negotiationPrice BigDecimal required
+}
+
+entity MBidNegoPriceLine {
+	uid UUID
+	active Boolean
+	priceNegotiation BigDecimal required
+	totalNegotiationPrice BigDecimal required
+	negotiationPercentage BigDecimal required
+}
+
 entity MPrequalificationDateSet {
 	startDate ZonedDateTime
 	endDate ZonedDateTime
@@ -1932,6 +1953,8 @@ relationship ManyToOne {
 	MAuction{costCenter} to CCostCenter
 	MAuction{owner required} to AdUser
 
+	MAuctionRule{adOrganization required} to ADOrganization
+
 	MAuctionTeam{adOrganization required} to ADOrganization
 	MAuctionTeam{adOrganization required} to ADOrganization
 	MAuctionTeam{user required} to AdUser
@@ -1973,6 +1996,21 @@ relationship ManyToOne {
 	MBiddingNegotiationLine{negotiation required} to MBiddingNegotiation
 	MBiddingNegotiationLine{biddingEvalResult required} to MBiddingEvalResult
 
+	MBiddingNegotiationChat{adOrganization required} to ADOrganization
+	MBiddingNegotiationChat{negotiationLine required} to MBiddingNegotiationLine
+	MBiddingNegotiationChat{bidding required} to MBidding
+	MBiddingNegotiationChat{vendor required} to CVendor
+	MBiddingNegotiationChat{attachment } to CAttachment
+
+	MBidNegoPrice{bidding required} to MBidding
+	MBidNegoPrice{vendorInvitation required} to MVendorInvitation
+	MBidNegoPrice{priceProposal required} to MProposalPrice
+	MBidNegoPrice{negotiationLine required} to MBiddingNegotiationLine
+
+	MBidNegoPriceLine{bidNegoPrice required} to MBidNegoPrice
+	MBidNegoPriceLine{biddingLine required} to MBiddingLine
+	MBidNegoPriceLine{proposalLine required} to MProposalPriceLine
+
 	MBiddingSubItem{adOrganization required} to ADOrganization
 	MBiddingSubItem{product required} to CProduct
 
@@ -2002,7 +2040,6 @@ relationship ManyToOne {
     MBiddingEvalResultLine{adOrganization required} to ADOrganization
     MBiddingEvalResultLine{evaluationMethodLine required} to CEvaluationMethodLine
     MBiddingEvalResultLine{biddingEvalResult required} to MBiddingEvalResult
-
 
 	MBiddingScheduleAttachment{adOrganization required} to ADOrganization
 

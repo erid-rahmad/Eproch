@@ -133,4 +133,12 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20210603160200" author="Ananta Aryadewa">
+        <addColumn tableName="m_auction">
+            <column name="rule_id" type="bigint">
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_m_auction_rule_id" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

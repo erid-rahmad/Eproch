@@ -23,6 +23,14 @@
               disabled
             ></el-input>
           </el-form-item>
+          <el-form-item label="" v-if="chatHistory.length">
+            <el-button
+              size="mini"
+              @click="viewNegoDetail"
+            >
+              View Detail
+            </el-button>
+          </el-form-item>
         </el-col>
         <el-col
           :xs="24"
@@ -31,6 +39,7 @@
           :xl="8"
         >
           <el-form-item>
+            &nbsp;
           </el-form-item>
           <el-form-item label="">
             <el-button
@@ -46,14 +55,221 @@
         :gutter="24"
         style="margin-top: 16px"
       >
-        <el-input
-          :rows="7"
-          type="textarea"
-          v-model="chatHistory"
-        >
-        </el-input>
+      <el-table border :data="chatHistory" size="mini">
+        <el-table-column width="100" label="No">
+          <template slot-scope="row">
+            {{ row.$index + 1 }}
+          </template>
+        </el-table-column>
+        <el-table-column label="From" width="200">
+          <template slot-scope="{row}">
+            <div v-if="row.vendorText">Vendor</div>
+            <div v-else>Buyer</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="Content" width="750">
+          <template slot-scope="{row}">
+            <div v-if="row.vendorText">{{row.vendorText}}</div>
+            <div v-else>{{row.buyerText}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="Attachment" width="400">
+          <template slot-scope="{row}">
+            <el-button
+              class="btn-attachment"
+              icon="el-icon-download"
+              size="mini"
+              type="primary"
+              v-if="row.attachmentId"
+            >
+              Download
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
       </el-row>
     </el-form>
+
+    <el-dialog
+      width="80%"
+      :visible.sync="showNegoForm"
+    >
+      <el-form
+        ref="negoForm"
+        label-position="left"
+        label-width="96px"
+        size="mini"
+      >
+        <el-row
+          :gutter="24"
+          style="margin-top: 16px"
+        >
+          <el-col
+            :span="8"
+          >
+            <el-form-item label="Bidding No">
+              <el-input
+                v-model="line.biddingNo"
+                disabled
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col
+            :span="8"
+          >
+            <el-form-item label="Bidding Type">
+              <el-input
+                v-model="line.biddingType"
+                disabled
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col
+            :span="8"
+          >
+            <el-form-item label="Submission Price">
+              <el-input
+                v-model="line.proposedPrice"
+                disabled
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row
+          :gutter="24"
+          style="margin-top: 16px"
+        >
+          <el-col
+            :span="8"
+          >
+            <el-form-item label="Bidding Title">
+              <el-input
+                v-model="line.biddingTitle"
+                disabled
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col
+            :span="8"
+          >
+            <el-form-item label="Vendor">
+              <el-input
+                v-model="line.vendorName"
+                disabled
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col
+            :span="8"
+          >
+            <el-form-item label="Negotiation Price">
+              <el-input
+                v-model="line.negotiationPrice"
+                disabled
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row
+          :gutter="24"
+          style="margin-top: 16px"
+        >
+          <el-col
+            :span="8"
+          >
+            &nbsp;
+          </el-col>
+          <el-col
+            :span="8"
+          >
+            &nbsp;
+          </el-col>
+          <el-col
+            :span="8"
+          >
+            <el-form-item label="Price Difference Percentage">
+              <el-input
+                v-model="negoPrice.percentDiff"
+                disabled
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-table border :data="negoPriceLine" size="mini">
+          <el-table-column width="60" label="No.">
+            <template slot-scope="row">
+              {{ row.$index + 1 }}
+            </template>
+          </el-table-column>
+          <el-table-column label="Product" prop="productName" width="200">
+          </el-table-column>
+          <el-table-column label="Sub Item" prop="subItemName" width="200">
+          </el-table-column>
+          <el-table-column label="Quantity" prop="quantity" width="60">
+          </el-table-column>
+          <el-table-column label="Uom" prop="uomName" width="60">
+          </el-table-column>
+          <el-table-column label="Ceiling Price / Unit" prop="ceilingPrice" width="200">
+          </el-table-column>
+          <el-table-column label="Total Ceiling Price" prop="totalCeilingPrice" width="200">
+          </el-table-column>
+          <el-table-column label="Submission Price / Unit" prop="proposedPrice" width="200">
+          </el-table-column>
+          <el-table-column label="Total Submission Price" prop="totalPriceSubmission" width="200">
+          </el-table-column>
+          <el-table-column label="Negotiation Price / Unit" prop="priceNegotiation" v-if="isVendor" width="200">
+          </el-table-column>
+          <el-table-column label="Negotiation Price / Unit" v-else width="200">
+            <template slot-scope="{row}">
+              <el-input v-model="row.priceNegotiation" v-on:change="updateTotal(row)" :disabled="isPercentage">
+              </el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="Negotiation Price Percentage" prop="negotiationPercentage" v-if="isVendor" width="200">
+          </el-table-column>
+          <el-table-column label="Negotiation Percentage (%)" v-else width="200">
+            <template slot-scope="{row}">
+              <el-input v-model="row.negotiationPercentage" v-on:change="updateTotalByPercentage(row)" :disabled="!isPercentage">
+              </el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="Total Negotiation Price" prop="totalNegotiationPrice" width="200">
+          </el-table-column>
+        </el-table>
+        <el-form-item prop="percentCheck" v-if="!isVendor">
+          <el-checkbox
+            v-model="isPercentage"
+          >Generate Percentage?</el-checkbox>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button
+          icon="el-icon-close"
+          size="mini"
+          @click="showNegoForm=false"
+        >
+          {{ $t('entity.action.cancel') }}
+        </el-button>
+        <el-button
+          icon="el-icon-close"
+          size="mini"
+          type="danger"
+          @click="declineNegotiation"
+          v-if="isVendor"
+        >
+          Disagree
+        </el-button>
+        <el-button
+          icon="el-icon-check"
+          :loading="submitting"
+          size="mini"
+          type="primary"
+          @click="submitNegotiation"
+        >
+          {{isVendor?"Agree":"Submit"}}
+        </el-button>
+      </div>
+    </el-dialog>
 
     <el-dialog
       width="80%"
@@ -62,6 +278,7 @@
     >
       <el-form
         ref="chatForm"
+        :rules="chatFormValidationSchema"
         label-position="left"
         label-width="96px"
         :model="chatForm"
@@ -124,11 +341,18 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-input
-          v-model="chatForm.text"
-          :rows="7"
-          type="textarea"
-        ></el-input>
+        <el-form-item prop="text">
+          <el-input
+            v-model="chatForm.text"
+            :rows="7"
+            type="textarea"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="publishCheck">
+          <el-checkbox
+            v-model="chatForm.publishToEmail"
+          > Publish to Email?</el-checkbox>
+        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button
@@ -143,6 +367,7 @@
           :loading="submitting"
           size="mini"
           type="primary"
+          @click="submitForm"
         >
           Submit
         </el-button>

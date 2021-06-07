@@ -3,11 +3,13 @@ package com.bhp.opusb.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -49,6 +51,17 @@ public class MBiddingNegotiationLine extends AbstractAuditingEntity implements S
     @NotNull
     @JsonIgnoreProperties("mBiddingNegotiationLines")
     private MBiddingEvalResult biddingEvalResult;
+
+    @Formula("(select mpp.proposed_price from m_proposal_price mpp where mpp.bidding_submission_id = " +
+    "(select mber.bidding_submission_id from m_bidding_eval_result mber where mber.id = " +
+    "(select mbnl.bidding_eval_result_id from m_bidding_negotiation_line mbnl where mbnl.id = id)))")
+    private BigDecimal proposedPrice;
+
+    @Formula("(select mbnp.negotiation_price from m_bid_nego_price mbnp where mbnp.negotiation_line_id = id)")
+    private BigDecimal negotiationPrice;
+
+    @Formula("(select mbnp.id from m_bid_nego_price mbnp where mbnp.negotiation_line_id = id)")
+    private Long negoPriceId;
 
     @PrePersist
     public void assignUUID() {
@@ -140,6 +153,32 @@ public class MBiddingNegotiationLine extends AbstractAuditingEntity implements S
 
     public void setBiddingEvalResult(MBiddingEvalResult mBiddingEvalResult) {
         this.biddingEvalResult = mBiddingEvalResult;
+    }
+
+    public BigDecimal getProposedPrice() {
+        return proposedPrice;
+    }
+
+    public MBiddingNegotiationLine proposedPrice(BigDecimal proposedPrice) {
+        this.proposedPrice = proposedPrice;
+        return this;
+    }
+
+    public void setProposedPrice(BigDecimal proposedPrice) {
+        this.proposedPrice = proposedPrice;
+    }
+
+    public BigDecimal getNegotiationPrice() {
+        return negotiationPrice;
+    }
+
+    public MBiddingNegotiationLine negotiationPrice(BigDecimal negotiationPrice) {
+        this.negotiationPrice = negotiationPrice;
+        return this;
+    }
+
+    public void setNegotiationPrice(BigDecimal negotiationPrice) {
+        this.negotiationPrice = negotiationPrice;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

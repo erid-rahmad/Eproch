@@ -1,0 +1,66 @@
+{
+    "name": "MBidNegoPrice",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "negotiationPrice",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBidding",
+            "otherEntityRelationshipName": "mBidNegoPrice",
+            "relationshipValidateRules": "required",
+            "relationshipName": "bidding",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mVendorInvitation",
+            "otherEntityRelationshipName": "mBidNegoPrice",
+            "relationshipValidateRules": "required",
+            "relationshipName": "vendorInvitation",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mProposalPrice",
+            "otherEntityRelationshipName": "mBidNegoPrice",
+            "relationshipValidateRules": "required",
+            "relationshipName": "priceProposal",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBiddingNegotiationLine",
+            "otherEntityRelationshipName": "mBidNegoPrice",
+            "relationshipValidateRules": "required",
+            "relationshipName": "negotiationLine",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210604105100",
+    "entityTableName": "m_bid_nego_price",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

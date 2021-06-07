@@ -20,13 +20,16 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
   displayTable = true;
 
   showSchedule=false;
+  showSummary=false;
 
   biddingNegotiations: any[] = [];
   biddingStates: any[] = [];
   biddingSchedule: any[] = [];
+  negoSummary: any[] = [];
 
   negotiationsApi = '/api/m-bidding-negotiations';
   scheduleApi = '/api/m-bidding-schedules';
+  negotiationLineApi = '/api/m-bidding-negotiation-lines';
 
   selectedRow: any = {};
   
@@ -35,19 +38,7 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
   }
 
   created() {
-    this.commonService(this.negotiationsApi).retrieve({
-      criteriaQuery: this.updateCriteria([
-        'active.equals=true'
-      ]),
-      paginationQuery: {
-        page: 0,
-        size: 10000,
-        sort: ['id']
-      }
-    }).then(res => {
-      console.log(res.data);
-      this.biddingNegotiations = res.data;
-    });
+    this.refreshHeader();
 
     this.commonService(null)
       .retrieveReferenceLists('biddingStatus')
@@ -90,6 +81,29 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
     this.displayTable = false;
   }
 
+  viewSummary(row){
+    this.selectedRow = row;
+    this.showSummary = true;
+    this.commonService(this.negotiationLineApi).retrieve({
+      criteriaQuery: this.updateCriteria([
+        'active.equals=true',
+        `negotiationId.equals=${this.selectedRow.id}`
+      ]),
+      paginationQuery: {
+        page: 0,
+        size: 10000,
+        sort: ['id']
+      }
+    }).then((res)=>{
+      this.negoSummary = res.data;
+    })
+  }
+
+  clearSummary(){
+    this.negoSummary = [];
+    this.showSummary = false;
+  }
+
   viewSchedule2(row){
     
   }
@@ -97,5 +111,22 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
   closeDetail(){
     this.index = true;
     this.displayTable = true;
+    this.refreshHeader();
+  }
+
+  refreshHeader(){
+    this.commonService(this.negotiationsApi).retrieve({
+      criteriaQuery: this.updateCriteria([
+        'active.equals=true'
+      ]),
+      paginationQuery: {
+        page: 0,
+        size: 10000,
+        sort: ['id']
+      }
+    }).then(res => {
+      console.log(res.data);
+      this.biddingNegotiations = res.data;
+    });
   }
 }

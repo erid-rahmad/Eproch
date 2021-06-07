@@ -19,6 +19,7 @@ public interface MAuctionParticipantMapper extends EntityMapper<MAuctionParticip
     @Mapping(source = "auction.name", target = "auctionName")
     @Mapping(source = "user.user.id", target = "userUserId")
     @Mapping(source = "user.user.login", target = "userName")
+    @Mapping(source = "user.user.email", target = "userEmail")
     @Mapping(source = "vendor.id", target = "vendorId")
     @Mapping(source = "vendor.name", target = "vendorName")
     MAuctionParticipantDTO toDto(MAuctionParticipant mAuctionParticipant);
