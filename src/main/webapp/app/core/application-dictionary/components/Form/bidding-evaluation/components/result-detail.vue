@@ -17,13 +17,13 @@
                     {{ evaluationResultProp.biddingName }}
                 </el-form-item>
                 <el-form-item label="Bidding Type">
-                    {{ evaluationResultProp.biddingTypeName }}
+                    {{ evaluationResultProp.biddingType}}
                 </el-form-item>
                 <el-form-item label="Vendor Name">
                     {{ evaluationResultProp.vendorName }}
                 </el-form-item>
                 <el-form-item label="TotalScore">
-                    {{ evaluationResultProp.total }}
+                    {{ evaluationResultProp.score }}
                 </el-form-item>
                 <el-divider content-position="left">
                     <h4>Evaluation</h4>

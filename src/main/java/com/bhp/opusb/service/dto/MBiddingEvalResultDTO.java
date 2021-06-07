@@ -31,9 +31,27 @@ public class MBiddingEvalResultDTO implements Serializable {
     private Long biddingSubmissionId;
     private Long vendorId;
     private String vendorName;
+    private String biddingNo;
+    private String biddingType;
 
     private Long biddingId;
     private String biddingName;
+
+    public String getBiddingNo() {
+        return biddingNo;
+    }
+
+    public void setBiddingNo(String biddingNo) {
+        this.biddingNo = biddingNo;
+    }
+
+    public String getBiddingType() {
+        return biddingType;
+    }
+
+    public void setBiddingType(String biddingType) {
+        this.biddingType = biddingType;
+    }
 
     public Long getVendorId() {
         return vendorId;

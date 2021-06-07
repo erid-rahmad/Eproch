@@ -1,7 +1,5 @@
 import AlertMixin from '@/shared/alert/alert.mixin';
-import Component, {
-  mixins
-} from 'vue-class-component';
+import Component, {mixins} from 'vue-class-component';
 import Vue2Filters from 'vue2-filters';
 import Vue from 'vue';
 import {Inject} from "vue-property-decorator";
@@ -9,7 +7,7 @@ import DynamicWindowService from "@/core/application-dictionary/components/Dynam
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 import ResultDetail from './components/result-detail.vue';
 
-const baseApiEvalResults ='api/m-bidding-eval-results';
+const baseApiEvalResults = 'api/m-bidding-eval-results';
 
 const ProductCatalogProp = Vue.extend({
   props: {
@@ -23,33 +21,32 @@ const ProductCatalogProp = Vue.extend({
 })
 
 @Component({
-  components:{
+  components: {
     ResultDetail,
   }
 
 
 })
-export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertMixin,AccessLevelMixin, ProductCatalogProp) {
+export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertMixin, AccessLevelMixin, ProductCatalogProp) {
 
+  index = true;
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
-  index=true;
-  private evaluationResult:any=[];
-  private evaluationResultProp:any={};
-  private loading:boolean=false;
+  private evaluationResult: any = [];
+  private evaluationResultProp: any = {};
+  private loading: boolean = false;
 
-  created(){
-    console.log(this.pickRow);
+  created() {
     this.retriveEvaluationResult(this.pickRow.id);
   }
 
-  retriveEvaluationResult(biddingId){
-    this.loading=true;
+  retriveEvaluationResult(biddingId) {
+    this.loading = true;
     this.commonService(baseApiEvalResults)
       .retrieve({
-        criteriaQuery: [
-          `biddingId.equals=${biddingId}`
-        ],
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+        ]),
         paginationQuery: {
           page: 0,
           size: 10000,
@@ -57,20 +54,28 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
         }
       })
       .then(res => {
-          this.evaluationResult=res.data;
+        let data_: any = []
+        res.data.forEach(data => {
+          if (data.biddingId === biddingId) {
+            data_.push(data);
+          }
+        })
+        this.evaluationResult = data_;
+
       })
-      .finally(()=>this.loading=false);
+      .finally(() => this.loading = false);
   }
 
-  detailScore(row){
-    this.index=false;
-    this.evaluationResultProp=row;
+  detailScore(row) {
+    this.index = false;
+    this.evaluationResultProp = row;
   }
 
   close() {
     this.$emit("close");
   }
+
   close_() {
-    this.index=true;
+    this.index = true;
   }
 }
