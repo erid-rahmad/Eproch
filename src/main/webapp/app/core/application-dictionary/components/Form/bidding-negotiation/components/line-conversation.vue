@@ -55,6 +55,24 @@
         :gutter="24"
         style="margin-top: 16px"
       >
+      <el-scrollbar class="form-wrapper">
+        <div v-for="(c,index) in chatHistory" :key="index">
+          <h4>{{c.vendorText?"Vendor":"Buyer"}}
+            <el-button
+              class="btn-attachment"
+              icon="el-icon-download"
+              size="mini"
+              type="primary"
+              v-if="c.attachmentId"
+              @click="downloadAttachment(c)"
+            >
+              Download
+            </el-button>
+          </h4>
+          <p>{{c.vendorText?c.vendorText:c.buyerText}}</p>
+        </div>
+      </el-scrollbar>
+      <!--
       <el-table border :data="chatHistory" size="mini">
         <el-table-column width="100" label="No">
           <template slot-scope="row">
@@ -88,6 +106,7 @@
           </template>
         </el-table-column>
       </el-table>
+      -->
       </el-row>
     </el-form>
 
@@ -397,5 +416,9 @@
       padding: 15px;
     }
   }
+}
+
+p {
+  font-size: 14px;
 }
 </style>

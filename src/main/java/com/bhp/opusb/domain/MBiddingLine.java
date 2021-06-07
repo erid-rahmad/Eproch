@@ -99,12 +99,6 @@ public class MBiddingLine extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mBiddingLines")
     private CUnitOfMeasure uom;
 
-    @Formula("(select mbnpl.price_negotiation from m_bid_nego_price_line mbnpl where mbnpl.bidding_line_id=id)")
-    private BigDecimal proposedPrice;
-
-    @Formula("(select mbnpl.total_negotiation_price from m_bid_nego_price_line mbnpl where mbnpl.bidding_line_id = id)")
-    private BigDecimal totalPriceSubmission;
-
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -296,31 +290,6 @@ public class MBiddingLine extends AbstractAuditingEntity {
         this.uom = cUnitOfMeasure;
     }
 
-    public BigDecimal getProposedPrice() {
-        return proposedPrice;
-    }
-
-    public MBiddingLine proposedPrice(BigDecimal proposedPrice) {
-        this.proposedPrice = proposedPrice;
-        return this;
-    }
-
-    public void setProposedPrice(BigDecimal proposedPrice) {
-        this.proposedPrice = proposedPrice;
-    }
-
-    public BigDecimal getTotalPriceSubmission() {
-        return totalPriceSubmission;
-    }
-
-    public MBiddingLine totalPriceSubmission(BigDecimal totalPriceSubmission) {
-        this.totalPriceSubmission = totalPriceSubmission;
-        return this;
-    }
-
-    public void setTotalPriceSubmission(BigDecimal totalPriceSubmission) {
-        this.totalPriceSubmission = totalPriceSubmission;
-    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @PrePersist
