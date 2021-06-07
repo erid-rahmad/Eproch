@@ -6,10 +6,12 @@ import Component, { mixins } from 'vue-class-component';
 import { Inject } from 'vue-property-decorator';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import BiddingNegotiationLine from './components/negotiation-line.vue';
+import BiddingSchedule from "@/core/application-dictionary/components/Form/bidding/submission/bidding-schedule.vue";
 
 @Component({
   components: {
-    BiddingNegotiationLine
+    BiddingNegotiationLine,
+    BiddingSchedule
   }
 })
 export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
@@ -59,6 +61,8 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
 
   viewSchedule(row: any){
     this.showSchedule = true;
+    this.selectedRow = row;
+    /*
     this.commonService(this.scheduleApi).retrieve({
       criteriaQuery: this.updateCriteria([
         'active.equals=true',
@@ -73,6 +77,7 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
       console.log(res);
       this.biddingSchedule = res.data;
     });
+    */
   }
 
   closeSchedule(){
