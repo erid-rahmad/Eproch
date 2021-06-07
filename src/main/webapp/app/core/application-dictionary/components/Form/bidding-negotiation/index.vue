@@ -1,6 +1,6 @@
 <template>
   <div class="app-container bidding-negotiation">
-    <div class="toolbar">
+    <div id="innerToolbar" class="toolbar">
       <el-button
         v-if="!index"
         icon="el-icon-close"
