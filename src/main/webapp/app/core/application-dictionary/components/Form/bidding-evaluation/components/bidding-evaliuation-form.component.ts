@@ -51,10 +51,14 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   private evaluationResult:any={};
   private evaluationFormProp:any={};
   mainForm: any = {};
+  private readOnly:boolean=false;
 
   created(){
     this.evaluationFormProp.biddingSubmission=this.data.pickrow;
     this.evaluationResult=this.data.evaluationResult;
+    if (this.evaluationResult.evaluationStatus==="SMT"){
+      this.readOnly=true;
+    }
     this.evaluation=this.data.pickrow;
     this.retrieveVendorScoring(this.evaluation.biddingId);
 
@@ -118,6 +122,17 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
         let evaluationResult = res.data;
       })
       .catch(_err => this.$message.error('fail create record'));
+  }
+
+  submitEvaluation(){
+    this.evaluationResult.evaluationStatus="SMT";
+    this.commonService(baseApiEvalResults)
+      .create( this.evaluationResult)
+      .then(res => {
+        let evaluationResult = res.data;
+      })
+      .catch(_err => this.$message.error('fail create record'))
+      .finally(()=>{});
   }
 
   retrieveEvalResultLine(evaluationMethodLineId:number,biddingEvalResultId:number){

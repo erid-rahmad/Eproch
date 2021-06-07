@@ -25,6 +25,7 @@
                 <el-form-item label="TotalScore">
                     {{ evaluationResultProp.score }}
                 </el-form-item>
+
                 <el-divider content-position="left">
                     <h4>Evaluation</h4>
                 </el-divider>

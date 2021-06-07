@@ -40,6 +40,12 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     this.retriveEvaluationResult(this.pickRow.id);
   }
 
+  getStatus(status){
+    if (status==="SMT"){
+      return "Submitted"
+    }else {return "Drafted"}
+  }
+
   retriveEvaluationResult(biddingId) {
     this.loading = true;
     this.commonService(baseApiEvalResults)

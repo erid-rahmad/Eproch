@@ -72,6 +72,7 @@ class MBiddingEvalResultGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "evaluationStatus":"SAMPLE_TEXT"
                 , "status":"SAMPLE_TEXT"
                 , "score":"0"
                 , "rank":"0"

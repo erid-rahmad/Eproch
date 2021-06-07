@@ -1329,6 +1329,7 @@ entity MBiddingEvaluationLine {
 }
 
 entity MBiddingEvalResult {
+    evaluationStatus String
     status String
     score Integer
     rank Integer

@@ -17,7 +17,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "m_bidding_eval_result")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MBiddingEvalResult implements Serializable {
+public class MBiddingEvalResult extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,6 +25,9 @@ public class MBiddingEvalResult implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
+
+    @Column(name = "evaluation_status")
+    private String evaluationStatus;
 
     @Column(name = "status")
     private String status;
@@ -58,6 +61,19 @@ public class MBiddingEvalResult implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getEvaluationStatus() {
+        return evaluationStatus;
+    }
+
+    public MBiddingEvalResult evaluationStatus(String evaluationStatus) {
+        this.evaluationStatus = evaluationStatus;
+        return this;
+    }
+
+    public void setEvaluationStatus(String evaluationStatus) {
+        this.evaluationStatus = evaluationStatus;
     }
 
     public String getStatus() {
@@ -168,10 +184,17 @@ public class MBiddingEvalResult implements Serializable {
         return 31;
     }
 
+    @PrePersist
+    public void prePersist() {
+        uid = UUID.randomUUID();
+    }
+
+
     @Override
     public String toString() {
         return "MBiddingEvalResult{" +
             "id=" + getId() +
+            ", evaluationStatus='" + getEvaluationStatus() + "'" +
             ", status='" + getStatus() + "'" +
             ", score=" + getScore() +
             ", rank=" + getRank() +

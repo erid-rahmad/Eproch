@@ -1,11 +1,11 @@
-id;status;score;rank;uid;active;ad_organization_id;bidding_submission_id
-1;Bedfordshire;57940;65611;0e2b802b-3ec0-4841-a2de-7688654e4263;true;1;1
-2;XSS;34180;69812;b877d979-176e-41fa-8255-eed9e092c9c3;false;2;2
-3;navigating payment;80370;29920;d6796574-c9bf-4741-947c-beedbea69ba3;true;3;3
-4;Enhanced Missouri Awesome;15916;37963;73dc29c5-ff80-4db8-92a8-adf3ed900730;true;4;4
-5;bluetooth throughput;60867;93568;9248956d-f7bd-4cfa-a3ba-0492fd0d3b1c;true;5;5
-6;Bedfordshire Intelligent;78228;88026;8a495f8a-0fd2-443e-874d-56d99676166d;true;6;6
-7;enhance;19040;36362;57e2a053-6845-49fc-9a1b-4e2d25339c90;true;7;7
-8;North Dakota;48715;14724;283e809d-22a4-4942-ab4c-6785ce371cdd;false;8;8
-9;Turnpike toolset;23976;13771;de3d4325-7336-471e-af54-562e46cea3c1;false;9;9
-10;Cambridgeshire Tuna Iraqi Dinar;4341;67736;c5888c3a-f2d7-4e41-a0ff-f88271920cf7;false;10;10
+id;evaluation_status;status;score;rank;uid;active;ad_organization_id;bidding_submission_id
+1;Bedfordshire;deposit Dynamic;69199;53208;02b3ec08-41a2-4de7-a886-54e4263b0df5;true;1;1
+2;Kazakhstan Cambridgeshire Mississippi;Sleek functionalities;9654;97023;a0255eed-9e09-42c9-8346-d6abc4d67965;false;2;2
+3;multi-byte;Architect attitude-oriented Money Market Account;48837;75455;beedbea6-9ba3-48c3-b971-92673dc29c5f;true;3;3
+4;Refined Soft Hat Rustic;Niger XSS;23609;90303;d9007309-7ca5-4f9e-9248-956df7bdcfa6;false;4;4
+5;Australian Dollar local area network Chips;Sports magenta Licensed;58844;61839;8412ce8a-495f-48a0-bd24-3e474d56d996;false;5;5
+6;Fantastic networks;Fantastic Concrete Mouse frictionless;45591;93699;2a053684-59fc-41a1-b4e2-d25339c90f39;true;6;6
+7;Wooden Dominica;Aruba Tennessee Mouse;67279;27731;942ab4c6-785c-4e37-9cdd-587e4f32de3d;false;7;7
+8;Pants;white deploy;12157;89301;2f54562e-46ce-4a3c-95f7-e2ab50ac5888;true;8;8
+9;invoice;RSS;91112;27055;120fff88-2719-420c-b708-cd4393da4018;true;9;9
+10;Brand capacitor array;Chief Tasty Frozen Bike;89733;14006;0b58f3c0-43fb-4fe5-bb91-c32560dcfa44;false;10;10

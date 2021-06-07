@@ -1,7 +1,5 @@
 package com.bhp.opusb.service.dto;
 
-import com.bhp.opusb.domain.AbstractAuditingEntity;
-
 import javax.persistence.PrePersist;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -11,9 +9,11 @@ import java.util.UUID;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MBiddingEvalResult} entity.
  */
-public class MBiddingEvalResultDTO implements Serializable {
+public class MBiddingEvalResultDTO extends AbstractAuditingDTO {
 
     private Long id;
+
+    private String evaluationStatus;
 
     private String status;
 
@@ -91,6 +91,14 @@ public class MBiddingEvalResultDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getEvaluationStatus() {
+        return evaluationStatus;
+    }
+
+    public void setEvaluationStatus(String evaluationStatus) {
+        this.evaluationStatus = evaluationStatus;
     }
 
     public String getStatus() {
@@ -179,6 +187,7 @@ public class MBiddingEvalResultDTO implements Serializable {
     public String toString() {
         return "MBiddingEvalResultDTO{" +
             "id=" + id +
+            ", evaluationStatus='" + evaluationStatus + '\'' +
             ", status='" + status + '\'' +
             ", score=" + score +
             ", rank=" + rank +
@@ -188,6 +197,8 @@ public class MBiddingEvalResultDTO implements Serializable {
             ", biddingSubmissionId=" + biddingSubmissionId +
             ", vendorId=" + vendorId +
             ", vendorName='" + vendorName + '\'' +
+            ", biddingNo='" + biddingNo + '\'' +
+            ", biddingType='" + biddingType + '\'' +
             ", biddingId=" + biddingId +
             ", biddingName='" + biddingName + '\'' +
             '}';

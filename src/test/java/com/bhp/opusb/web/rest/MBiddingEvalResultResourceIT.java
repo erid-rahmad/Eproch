@@ -38,6 +38,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class MBiddingEvalResultResourceIT {
 
+    private static final String DEFAULT_EVALUATION_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_EVALUATION_STATUS = "BBBBBBBBBB";
+
     private static final String DEFAULT_STATUS = "AAAAAAAAAA";
     private static final String UPDATED_STATUS = "BBBBBBBBBB";
 
@@ -83,6 +86,7 @@ public class MBiddingEvalResultResourceIT {
      */
     public static MBiddingEvalResult createEntity(EntityManager em) {
         MBiddingEvalResult mBiddingEvalResult = new MBiddingEvalResult()
+            .evaluationStatus(DEFAULT_EVALUATION_STATUS)
             .status(DEFAULT_STATUS)
             .score(DEFAULT_SCORE)
             .rank(DEFAULT_RANK)
@@ -118,6 +122,7 @@ public class MBiddingEvalResultResourceIT {
      */
     public static MBiddingEvalResult createUpdatedEntity(EntityManager em) {
         MBiddingEvalResult mBiddingEvalResult = new MBiddingEvalResult()
+            .evaluationStatus(UPDATED_EVALUATION_STATUS)
             .status(UPDATED_STATUS)
             .score(UPDATED_SCORE)
             .rank(UPDATED_RANK)
@@ -167,6 +172,7 @@ public class MBiddingEvalResultResourceIT {
         List<MBiddingEvalResult> mBiddingEvalResultList = mBiddingEvalResultRepository.findAll();
         assertThat(mBiddingEvalResultList).hasSize(databaseSizeBeforeCreate + 1);
         MBiddingEvalResult testMBiddingEvalResult = mBiddingEvalResultList.get(mBiddingEvalResultList.size() - 1);
+        assertThat(testMBiddingEvalResult.getEvaluationStatus()).isEqualTo(DEFAULT_EVALUATION_STATUS);
         assertThat(testMBiddingEvalResult.getStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testMBiddingEvalResult.getScore()).isEqualTo(DEFAULT_SCORE);
         assertThat(testMBiddingEvalResult.getRank()).isEqualTo(DEFAULT_RANK);
@@ -206,6 +212,7 @@ public class MBiddingEvalResultResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mBiddingEvalResult.getId().intValue())))
+            .andExpect(jsonPath("$.[*].evaluationStatus").value(hasItem(DEFAULT_EVALUATION_STATUS)))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
             .andExpect(jsonPath("$.[*].score").value(hasItem(DEFAULT_SCORE)))
             .andExpect(jsonPath("$.[*].rank").value(hasItem(DEFAULT_RANK)))
@@ -224,6 +231,7 @@ public class MBiddingEvalResultResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(mBiddingEvalResult.getId().intValue()))
+            .andExpect(jsonPath("$.evaluationStatus").value(DEFAULT_EVALUATION_STATUS))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS))
             .andExpect(jsonPath("$.score").value(DEFAULT_SCORE))
             .andExpect(jsonPath("$.rank").value(DEFAULT_RANK))
@@ -248,6 +256,84 @@ public class MBiddingEvalResultResourceIT {
 
         defaultMBiddingEvalResultShouldBeFound("id.lessThanOrEqual=" + id);
         defaultMBiddingEvalResultShouldNotBeFound("id.lessThan=" + id);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMBiddingEvalResultsByEvaluationStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultRepository.saveAndFlush(mBiddingEvalResult);
+
+        // Get all the mBiddingEvalResultList where evaluationStatus equals to DEFAULT_EVALUATION_STATUS
+        defaultMBiddingEvalResultShouldBeFound("evaluationStatus.equals=" + DEFAULT_EVALUATION_STATUS);
+
+        // Get all the mBiddingEvalResultList where evaluationStatus equals to UPDATED_EVALUATION_STATUS
+        defaultMBiddingEvalResultShouldNotBeFound("evaluationStatus.equals=" + UPDATED_EVALUATION_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingEvalResultsByEvaluationStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultRepository.saveAndFlush(mBiddingEvalResult);
+
+        // Get all the mBiddingEvalResultList where evaluationStatus not equals to DEFAULT_EVALUATION_STATUS
+        defaultMBiddingEvalResultShouldNotBeFound("evaluationStatus.notEquals=" + DEFAULT_EVALUATION_STATUS);
+
+        // Get all the mBiddingEvalResultList where evaluationStatus not equals to UPDATED_EVALUATION_STATUS
+        defaultMBiddingEvalResultShouldBeFound("evaluationStatus.notEquals=" + UPDATED_EVALUATION_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingEvalResultsByEvaluationStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultRepository.saveAndFlush(mBiddingEvalResult);
+
+        // Get all the mBiddingEvalResultList where evaluationStatus in DEFAULT_EVALUATION_STATUS or UPDATED_EVALUATION_STATUS
+        defaultMBiddingEvalResultShouldBeFound("evaluationStatus.in=" + DEFAULT_EVALUATION_STATUS + "," + UPDATED_EVALUATION_STATUS);
+
+        // Get all the mBiddingEvalResultList where evaluationStatus equals to UPDATED_EVALUATION_STATUS
+        defaultMBiddingEvalResultShouldNotBeFound("evaluationStatus.in=" + UPDATED_EVALUATION_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingEvalResultsByEvaluationStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultRepository.saveAndFlush(mBiddingEvalResult);
+
+        // Get all the mBiddingEvalResultList where evaluationStatus is not null
+        defaultMBiddingEvalResultShouldBeFound("evaluationStatus.specified=true");
+
+        // Get all the mBiddingEvalResultList where evaluationStatus is null
+        defaultMBiddingEvalResultShouldNotBeFound("evaluationStatus.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMBiddingEvalResultsByEvaluationStatusContainsSomething() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultRepository.saveAndFlush(mBiddingEvalResult);
+
+        // Get all the mBiddingEvalResultList where evaluationStatus contains DEFAULT_EVALUATION_STATUS
+        defaultMBiddingEvalResultShouldBeFound("evaluationStatus.contains=" + DEFAULT_EVALUATION_STATUS);
+
+        // Get all the mBiddingEvalResultList where evaluationStatus contains UPDATED_EVALUATION_STATUS
+        defaultMBiddingEvalResultShouldNotBeFound("evaluationStatus.contains=" + UPDATED_EVALUATION_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingEvalResultsByEvaluationStatusNotContainsSomething() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultRepository.saveAndFlush(mBiddingEvalResult);
+
+        // Get all the mBiddingEvalResultList where evaluationStatus does not contain DEFAULT_EVALUATION_STATUS
+        defaultMBiddingEvalResultShouldNotBeFound("evaluationStatus.doesNotContain=" + DEFAULT_EVALUATION_STATUS);
+
+        // Get all the mBiddingEvalResultList where evaluationStatus does not contain UPDATED_EVALUATION_STATUS
+        defaultMBiddingEvalResultShouldBeFound("evaluationStatus.doesNotContain=" + UPDATED_EVALUATION_STATUS);
     }
 
 
@@ -682,6 +768,7 @@ public class MBiddingEvalResultResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mBiddingEvalResult.getId().intValue())))
+            .andExpect(jsonPath("$.[*].evaluationStatus").value(hasItem(DEFAULT_EVALUATION_STATUS)))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
             .andExpect(jsonPath("$.[*].score").value(hasItem(DEFAULT_SCORE)))
             .andExpect(jsonPath("$.[*].rank").value(hasItem(DEFAULT_RANK)))
@@ -734,6 +821,7 @@ public class MBiddingEvalResultResourceIT {
         // Disconnect from session so that the updates on updatedMBiddingEvalResult are not directly saved in db
         em.detach(updatedMBiddingEvalResult);
         updatedMBiddingEvalResult
+            .evaluationStatus(UPDATED_EVALUATION_STATUS)
             .status(UPDATED_STATUS)
             .score(UPDATED_SCORE)
             .rank(UPDATED_RANK)
@@ -750,6 +838,7 @@ public class MBiddingEvalResultResourceIT {
         List<MBiddingEvalResult> mBiddingEvalResultList = mBiddingEvalResultRepository.findAll();
         assertThat(mBiddingEvalResultList).hasSize(databaseSizeBeforeUpdate);
         MBiddingEvalResult testMBiddingEvalResult = mBiddingEvalResultList.get(mBiddingEvalResultList.size() - 1);
+        assertThat(testMBiddingEvalResult.getEvaluationStatus()).isEqualTo(UPDATED_EVALUATION_STATUS);
         assertThat(testMBiddingEvalResult.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testMBiddingEvalResult.getScore()).isEqualTo(UPDATED_SCORE);
         assertThat(testMBiddingEvalResult.getRank()).isEqualTo(UPDATED_RANK);

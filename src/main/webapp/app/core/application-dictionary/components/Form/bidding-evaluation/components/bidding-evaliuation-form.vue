@@ -6,6 +6,10 @@
                             type="danger" @click="close">
                     Close
                 </el-button>
+                <el-button  size="mini" style="margin-left: 10px"
+                            type="primary" @click="submitEvaluation">
+                    Submit
+                </el-button>
                 <el-button v-for="MethodLine in VendorScoringLine" size="mini" style="margin-left: 10px"
                            type="primary" @click="setEvaluation(MethodLine)">
                     {{ changeCode(MethodLine.evaluationMethodLineName) }}
@@ -32,13 +36,13 @@
                 </el-form-item>
             </el-form>
             <div v-if="FormMenu===1" >
-                <EvaluationTeamDetailPrice ref="evaluationFormDetail" :evaluationFormProp="evaluationFormProp" ></EvaluationTeamDetailPrice>
+                <EvaluationTeamDetailPrice ref="evaluationFormDetail" :evaluationFormProp="evaluationFormProp" :readOnly="readOnly" ></EvaluationTeamDetailPrice>
             </div>
             <div v-if="FormMenu===2">
                 <el-divider content-position="left">
                     <h4>Evaluation</h4>
                 </el-divider>
-                <EvaluationFormDetail :evaluationFormProp="evaluationFormProp"  :SelectVendorScoringLine="SelectVendorScoringLine" ></EvaluationFormDetail>
+                <EvaluationFormDetail :evaluationFormProp="evaluationFormProp" :readOnly="readOnly" :SelectVendorScoringLine="SelectVendorScoringLine" ></EvaluationFormDetail>
             </div>
 
         </div>

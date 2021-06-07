@@ -27,6 +27,8 @@ public class MBiddingEvalResultCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
+    private StringFilter evaluationStatus;
+
     private StringFilter status;
 
     private IntegerFilter score;
@@ -46,6 +48,7 @@ public class MBiddingEvalResultCriteria implements Serializable, Criteria {
 
     public MBiddingEvalResultCriteria(MBiddingEvalResultCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.evaluationStatus = other.evaluationStatus == null ? null : other.evaluationStatus.copy();
         this.status = other.status == null ? null : other.status.copy();
         this.score = other.score == null ? null : other.score.copy();
         this.rank = other.rank == null ? null : other.rank.copy();
@@ -66,6 +69,14 @@ public class MBiddingEvalResultCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public StringFilter getEvaluationStatus() {
+        return evaluationStatus;
+    }
+
+    public void setEvaluationStatus(StringFilter evaluationStatus) {
+        this.evaluationStatus = evaluationStatus;
     }
 
     public StringFilter getStatus() {
@@ -136,6 +147,7 @@ public class MBiddingEvalResultCriteria implements Serializable, Criteria {
         final MBiddingEvalResultCriteria that = (MBiddingEvalResultCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(evaluationStatus, that.evaluationStatus) &&
             Objects.equals(status, that.status) &&
             Objects.equals(score, that.score) &&
             Objects.equals(rank, that.rank) &&
@@ -149,6 +161,7 @@ public class MBiddingEvalResultCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
+        evaluationStatus,
         status,
         score,
         rank,
@@ -163,6 +176,7 @@ public class MBiddingEvalResultCriteria implements Serializable, Criteria {
     public String toString() {
         return "MBiddingEvalResultCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (evaluationStatus != null ? "evaluationStatus=" + evaluationStatus + ", " : "") +
                 (status != null ? "status=" + status + ", " : "") +
                 (score != null ? "score=" + score + ", " : "") +
                 (rank != null ? "rank=" + rank + ", " : "") +

@@ -2,6 +2,10 @@
     "name": "MBiddingEvalResult",
     "fields": [
         {
+            "fieldName": "evaluationStatus",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "status",
             "fieldType": "String"
         },

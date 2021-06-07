@@ -57,6 +57,11 @@
                 </el-table-column>
                 <el-table-column label="Rank" align="center" min-width="80" prop="rank" sortable>
                 </el-table-column>
+                <el-table-column label="Document Status" align="center" min-width="120" prop="evaluationStatus" sortable>
+                    <template slot-scope="{row}">
+                        {{getStatus(row.evaluationStatus)}}
+                    </template>
+                </el-table-column>
 
             </el-table>
         </div>

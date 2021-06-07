@@ -37,6 +37,19 @@
     <changeSet id="20210519162400-1-relations" author="jhipster">
 
     </changeSet>
+
+    <changeSet id="20210607222-audit-1" author="jhipster-entity-audit">
+        <addColumn tableName="m_bidding_eval_result">
+            <column name="created_by" type="varchar(50)" defaultValue="system">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
     <!--
@@ -67,6 +80,14 @@
                 <constraints nullable="true" />
             </column>
             <column name="rank" type="integer">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="202106072270000" author="erid">
+        <addColumn tableName="m_bidding_eval_result">
+            <column name="evaluation_status" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
         </addColumn>
