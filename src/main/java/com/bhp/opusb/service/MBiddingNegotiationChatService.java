@@ -61,7 +61,7 @@ public class MBiddingNegotiationChatService {
             mBiddingNegotiationLineRepository.save(mbnl);
 
             MBiddingNegotiation mbn = mBiddingNegotiationRepository.findById(mbnl.getNegotiation().getId()).get();
-            mbn.setBiddingStatus("in progress");
+            mbn.setBiddingStatus("P");
             mBiddingNegotiationRepository.save(mbn);
         }
         

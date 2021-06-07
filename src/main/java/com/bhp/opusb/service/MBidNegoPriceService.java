@@ -1,8 +1,12 @@
 package com.bhp.opusb.service;
 
 import com.bhp.opusb.domain.MBidNegoPrice;
+import com.bhp.opusb.domain.MBidNegoPriceLine;
+import com.bhp.opusb.repository.MBidNegoPriceLineRepository;
 import com.bhp.opusb.repository.MBidNegoPriceRepository;
 import com.bhp.opusb.service.dto.MBidNegoPriceDTO;
+import com.bhp.opusb.service.dto.MBidNegoPriceLineDTO;
+import com.bhp.opusb.service.mapper.MBidNegoPriceLineMapper;
 import com.bhp.opusb.service.mapper.MBidNegoPriceMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -24,12 +30,17 @@ public class MBidNegoPriceService {
     private final Logger log = LoggerFactory.getLogger(MBidNegoPriceService.class);
 
     private final MBidNegoPriceRepository mBidNegoPriceRepository;
+    private final MBidNegoPriceLineRepository mBidNegoPriceLineRepository;
 
     private final MBidNegoPriceMapper mBidNegoPriceMapper;
+    private final MBidNegoPriceLineMapper mBidNegoPriceLineMapper;
 
-    public MBidNegoPriceService(MBidNegoPriceRepository mBidNegoPriceRepository, MBidNegoPriceMapper mBidNegoPriceMapper) {
+    public MBidNegoPriceService(MBidNegoPriceRepository mBidNegoPriceRepository, MBidNegoPriceMapper mBidNegoPriceMapper,
+    MBidNegoPriceLineRepository mBidNegoPriceLineRepository, MBidNegoPriceLineMapper mBidNegoPriceLineMapper) {
         this.mBidNegoPriceRepository = mBidNegoPriceRepository;
         this.mBidNegoPriceMapper = mBidNegoPriceMapper;
+        this.mBidNegoPriceLineRepository = mBidNegoPriceLineRepository;
+        this.mBidNegoPriceLineMapper = mBidNegoPriceLineMapper;
     }
 
     /**
@@ -42,6 +53,13 @@ public class MBidNegoPriceService {
         log.debug("Request to save MBidNegoPrice : {}", mBidNegoPriceDTO);
         MBidNegoPrice mBidNegoPrice = mBidNegoPriceMapper.toEntity(mBidNegoPriceDTO);
         mBidNegoPrice = mBidNegoPriceRepository.save(mBidNegoPrice);
+        
+        List<MBidNegoPriceLine> line = new ArrayList<>();
+        for(MBidNegoPriceLineDTO dto: mBidNegoPriceDTO.getLine()){
+            line.add(mBidNegoPriceLineMapper.toEntity(dto));
+        }
+        mBidNegoPriceLineRepository.saveAll(line);
+        
         return mBidNegoPriceMapper.toDto(mBidNegoPrice);
     }
 

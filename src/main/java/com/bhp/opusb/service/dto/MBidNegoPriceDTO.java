@@ -3,6 +3,7 @@ package com.bhp.opusb.service.dto;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -28,9 +29,19 @@ public class MBidNegoPriceDTO implements Serializable {
     private Long priceProposalId;
 
     private Long negotiationLineId;
+
+    private List<MBidNegoPriceLineDTO> line;
     
     public Long getId() {
         return id;
+    }
+
+    public List<MBidNegoPriceLineDTO> getLine() {
+        return line;
+    }
+
+    public void setLine(List<MBidNegoPriceLineDTO> line) {
+        this.line = line;
     }
 
     public void setId(Long id) {

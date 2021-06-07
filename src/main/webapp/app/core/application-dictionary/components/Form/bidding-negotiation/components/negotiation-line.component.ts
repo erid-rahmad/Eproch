@@ -53,10 +53,9 @@ export default class BiddingNegotiationLine extends mixins(AccessLevelMixin, Neg
 
     this.refreshLine();
 
-    var startDate = new Date(this.negotiation.startDate);
     var today = new Date();
 
-    this.allowNegotiation = (startDate.getTime()<today.getTime());
+    this.allowNegotiation = ((new Date(this.negotiation.startDate)).getTime()<today.getTime());
     console.log(this.allowNegotiation);
   }
   

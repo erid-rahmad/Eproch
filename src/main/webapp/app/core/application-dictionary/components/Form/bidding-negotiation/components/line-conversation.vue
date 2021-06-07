@@ -81,6 +81,7 @@
               size="mini"
               type="primary"
               v-if="row.attachmentId"
+              @click="downloadAttachment(row)"
             >
               Download
             </el-button>
@@ -310,7 +311,7 @@
             <el-form-item label="Attachment">
               <el-upload
                 ref="contractFile"
-                v-model="line.attachment"
+                v-model="chatForm.attachment"
                 :action="action"
                 class="upload-demo"
                 :limit="limit"
