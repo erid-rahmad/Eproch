@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * A DTO for the {@link com.bhp.opusb.domain.MPreBidMeeting} entity.
  */
 public class MPreBidMeetingDTO extends AbstractAuditingDTO {
-    
+
     private Long id;
 
     private UUID uid;
@@ -20,15 +20,43 @@ public class MPreBidMeetingDTO extends AbstractAuditingDTO {
 
     private Long biddingId;
     private String biddingName;
+    private String biddingNo;
+    private String biddingType;
+    private String biddingStatus;
+
 
     private Long biddingScheduleId;
     private String biddingScheduleName;
 
     private Long adOrganizationId;
     private String adOrganizationName;
-    
+
     @JsonProperty("mPreBidMeetingAttachments")
     private List<MPreBidMeetingAttachmentDTO> mPreBidMeetingAttachments = new ArrayList<>();
+
+    public String getBiddingNo() {
+        return biddingNo;
+    }
+
+    public void setBiddingNo(String biddingNo) {
+        this.biddingNo = biddingNo;
+    }
+
+    public String getBiddingType() {
+        return biddingType;
+    }
+
+    public void setBiddingType(String biddingType) {
+        this.biddingType = biddingType;
+    }
+
+    public String getBiddingStatus() {
+        return biddingStatus;
+    }
+
+    public void setBiddingStatus(String biddingStatus) {
+        this.biddingStatus = biddingStatus;
+    }
 
     public Long getId() {
         return id;

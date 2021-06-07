@@ -15,6 +15,9 @@ public interface MPreBidMeetingMapper extends EntityMapper<MPreBidMeetingDTO, MP
 
     @Mapping(source = "biddingSchedule.bidding.id", target = "biddingId")
     @Mapping(source = "biddingSchedule.bidding.name", target = "biddingName")
+    @Mapping(source = "biddingSchedule.bidding.documentNo", target = "biddingNo")
+    @Mapping(source = "biddingSchedule.bidding.biddingType.name", target = "biddingType")
+    @Mapping(source = "biddingSchedule.bidding.biddingStatus", target = "biddingStatus")
     @Mapping(source = "biddingSchedule.id", target = "biddingScheduleId")
     @Mapping(source = "biddingSchedule.eventTypeLine.CEvent.name", target = "biddingScheduleName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
