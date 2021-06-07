@@ -116,24 +116,19 @@
       ></bidding-negotiation-line>
     </template>
 
-    <el-dialog title="Bidding Schedule" :visible.sync="showSchedule" width="90%" :before-close="closeSchedule">
-      <el-table border :data="biddingSchedule" size="mini">
-        <el-table-column width="60" label="No">
-          <template slot-scope="row">
-            {{ row.$index + 1 }}
-          </template>
-        </el-table-column>
-        <el-table-column property="eventTypeLineName" label="Event" width="200" show-overflow-tooltip></el-table-column>
-        <el-table-column property="startDate" label="Start Date" min-width="200" show-overflow-tooltip></el-table-column>
-        <el-table-column property="endDate" label="Finish Date" min-width="200" show-overflow-tooltip></el-table-column>
-        <el-table-column min-width="100" label="Action">
-          <template slot-scope="{ row }">
-            <el-button class="button" icon="el-icon-caret-right" size="mini" type="primary" @click="viewSchedule2(row)">
-              View
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+    <el-dialog
+      class="bidding-schedule-dialog"
+      width="80%"
+      :visible.sync="showSchedule"
+      title="Bidding Schedule"
+    >
+      <bidding-schedule
+        :bidding-id="selectedRow.biddingId"
+        :bidding-name="selectedRow.biddingTitle"
+        :bidding-no="selectedRow.biddingNo"
+        :submission-id="selectedRow.id"
+        @form-open="showSchedule = false"
+      ></bidding-schedule>
     </el-dialog>
 
     <el-dialog title="Negotiation Summary" :visible.sync="showSummary" width="90%" :before-close="clearSummary">
