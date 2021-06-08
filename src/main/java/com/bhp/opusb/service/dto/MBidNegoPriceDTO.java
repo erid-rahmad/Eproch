@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MBidNegoPrice} entity.
  */
-public class MBidNegoPriceDTO implements Serializable {
+public class MBidNegoPriceDTO extends AbstractAuditingDTO implements Serializable {
     
     private Long id;
 
