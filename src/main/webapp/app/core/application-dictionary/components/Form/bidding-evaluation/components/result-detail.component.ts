@@ -55,6 +55,18 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       .finally(()=>this.loading=false);
   }
 
+  changeCode(code :String){
+    if(code==="T"){
+      return "Technic"
+    }
+    if(code==="A"){
+      return "Administrasi"
+    }
+    if(code==="P"){
+      return "Price"
+    }
+  }
+
   close() {
     this.$emit("close");
   }

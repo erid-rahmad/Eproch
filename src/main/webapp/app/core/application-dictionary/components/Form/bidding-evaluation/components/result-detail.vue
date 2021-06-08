@@ -43,6 +43,9 @@
                         </template>
                 </el-table-column>
                 <el-table-column label="Proposal" prop="evaluationMethodLineName" sortable min-width="180">
+                    <template slot-scope="{row}">
+                        {{ changeCode(row.evaluationMethodLineName)}}
+                    </template>
                 </el-table-column>
                 <el-table-column label="Evaluation" prop="status" sortable min-width="180">
                 </el-table-column>

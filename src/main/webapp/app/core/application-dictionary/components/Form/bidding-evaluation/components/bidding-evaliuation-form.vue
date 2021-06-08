@@ -2,16 +2,53 @@
     <div v-if="" class="bidding-evaluation card-view">
         <el-row  class="toolbar">
             <el-col :span="24">
-                <el-button  size="mini" style="margin-left: 10px"
-                            type="danger" @click="close">
+                <el-button  size="mini"
+                            style="margin-left: 10px"
+                            type="danger"
+                            @click="close">
                     Close
                 </el-button>
-                <el-button  size="mini" style="margin-left: 10px"
-                            type="primary" @click="submitEvaluation">
+                <el-button  size="mini"
+                            v-if="button===0"
+                            style="margin-left: 10px"
+                            type="primary"
+                            @click="submitEvaluation">
                     Submit
                 </el-button>
-                <el-button v-for="MethodLine in VendorScoringLine" size="mini" style="margin-left: 10px"
-                           type="primary" @click="setEvaluation(MethodLine)">
+                <el-button  size="mini"
+                            v-if="button===1"
+                            style="margin-left: 10px"
+                            type="primary"
+                            @click="approveEvaluation">
+                    Approve
+                </el-button>
+                <el-button  size="mini"
+                            v-if="button===1"
+                            style="margin-left: 10px"
+                            type="primary"
+                            @click="rejectEvaluation">
+                    Reject
+                </el-button>
+                <el-button  size="mini"
+                            v-if="button===2"
+                            style="margin-left: 10px"
+                            type="danger"
+                            disabled="true"
+                            >
+                    Rejected
+                </el-button>
+                <el-button  size="mini"
+                            v-if="button===3"
+                            style="margin-left: 10px"
+                            type="primary"
+                            disabled="true"
+                           >
+                    Approved
+                </el-button>
+                <el-button v-for="MethodLine in VendorScoringLine"
+                           size="mini" style="margin-left: 10px"
+                           type="primary"
+                           @click="setEvaluation(MethodLine)">
                     {{ changeCode(MethodLine.evaluationMethodLineName) }}
                 </el-button>
             </el-col>

@@ -41,7 +41,14 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
     value: 'Fail',
     label: 'Fail'
   }];
-  value: ''
+  optionsEvaluation = [{
+    value: 0,
+    label: 'Pass'
+  }, {
+    value: 10,
+    label: 'Fail'
+  }];
+
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
   private evaluationMethodCriteria: any = [];
@@ -50,6 +57,9 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
   private questions: Map<number, any> = new Map();
   private evaluationResultLine:any= {};
   attachmentHandler: Map<number, string> = new Map();
+  biddingSubCriteria: Map<number, string> = new Map();
+  statusReadOnly:boolean=false;
+
 
   private validationSchema = {
     requirement: {
@@ -181,8 +191,9 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
               biddingSubCriteria.attachmentUrl=null;
               this.attachmentHandler.set(biddingSubCriteria.id,biddingSubCriteria);
               biddingSubCriteria.criteriaLineDTO.forEach((subCriteriaLine: any) => {
+                subCriteriaLine.SubCriteriaWeight=evalMethodSubCriteria.weight;
+                subCriteriaLine.CriteriaWeight=evalMethodCriteria.weight;
                 this.questions.set(subCriteriaLine.id, subCriteriaLine);
-
               });
             });
           });
@@ -193,6 +204,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
       })
       .finally(() => {
         this.retrieveVendorScoringCriteria(vendorScoringLineId);
+        console.log("this atach",this.attachmentHandler)
 
 
 
@@ -327,6 +339,27 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
         this.$message.error(message);
       });
   }
+
+  average(){
+    console.log("change");
+    let x=0;
+    let s=0;
+    this.questions.forEach(question_=>{
+      console.log("this ques",question_)
+      let y=question_.evaluation*question_.score/100*question_.SubCriteriaWeight/100*question_.CriteriaWeight/100;
+      x=x+y;
+      s++;
+    })
+    this.evaluationResultLine.score =x;
+
+    if(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLinePassingGrade>=0){
+      this.statusReadOnly=true;
+      if (x>this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLinePassingGrade){
+        this.evaluationResultLine.status="Pass";
+      }else { this.evaluationResultLine.status="Fail";}
+    }
+  }
+
 
   retrieveAttachment(submissionId){
     this.commonService(baseApiProposalTechnicalFile)

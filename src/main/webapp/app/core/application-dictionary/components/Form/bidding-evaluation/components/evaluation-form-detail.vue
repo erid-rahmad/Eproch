@@ -102,7 +102,8 @@
                                                 v-model="row.evaluation"
                                                 :disabled="readOnly"
                                                 :max="10"
-                                                :min="1"
+                                                :min="0"
+                                                @change="average"
                                                 size="mini">
                                             </el-input-number>
                                         </template>
@@ -114,9 +115,9 @@
                                     >
 
                                         <template slot-scope="{ row }">
-                                            <el-select v-model="row.evaluation" placeholder="Select"  size="mini">
+                                            <el-select v-model="row.evaluation" @change="average" :disabled="readOnly" placeholder="Select"  size="mini">
                                                 <el-option
-                                                    v-for="item in options"
+                                                    v-for="item in optionsEvaluation"
                                                     :key="item.value"
                                                     :label="item.label"
                                                     :value="item.value">
@@ -160,14 +161,14 @@
                     <el-col :span="6">
                         <div class="grid-content bg-purple">
                             <el-form-item label="Average Score">
-                                <el-input v-model="evaluationResultLine.score" placeholder="Please input"></el-input>
+                                <el-input disabled="true" v-model="evaluationResultLine.score" :disabled="true" placeholder="Please input"></el-input>
                             </el-form-item>
                         </div>
                     </el-col>
                     <el-col :span="6">
                         <div class="grid-content bg-purple-light">
                             <template>
-                                <el-select v-model="evaluationResultLine.status" placeholder="Select" size="mini">
+                                <el-select v-model="evaluationResultLine.status" :disabled="(readOnly,statusReadOnly)" placeholder="Select" size="mini">
                                     <el-option
                                         v-for="item in options"
                                         :key="item.value"

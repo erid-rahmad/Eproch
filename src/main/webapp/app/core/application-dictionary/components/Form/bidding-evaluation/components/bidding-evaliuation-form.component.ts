@@ -52,14 +52,13 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   private evaluationFormProp:any={};
   mainForm: any = {};
   private readOnly:boolean=false;
+  button =0;
 
   created(){
-    this.evaluationFormProp.biddingSubmission=this.data.pickrow;
     this.evaluationResult=this.data.evaluationResult;
-    if (this.evaluationResult.evaluationStatus==="SMT"){
-      this.readOnly=true;
-    }
+    this.evaluationFormProp.biddingSubmission=this.data.pickrow;
     this.evaluation=this.data.pickrow;
+    this.handleButton();
     this.retrieveVendorScoring(this.evaluation.biddingId);
 
   }
@@ -83,6 +82,21 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     }
     if(code==="P"){
       return "Price"
+    }
+  }
+
+  handleButton(){
+    if (this.evaluationResult.evaluationStatus==="SMT"){
+      this.readOnly=true;
+      this.button=1;
+    }
+    if (this.evaluationResult.evaluationStatus==="RJC" ){
+      this.readOnly=true;
+      this.button=2;
+    }
+    if (this.evaluationResult.evaluationStatus==="APP"){
+      this.readOnly=true;
+      this.button=3;
     }
   }
 
@@ -132,7 +146,29 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
         let evaluationResult = res.data;
       })
       .catch(_err => this.$message.error('fail create record'))
-      .finally(()=>{});
+      .finally(()=>{ this.button=1});
+  }
+
+  approveEvaluation(){
+    this.evaluationResult.evaluationStatus="APP";
+    this.commonService(baseApiEvalResults)
+      .create( this.evaluationResult)
+      .then(res => {
+        let evaluationResult = res.data;
+      })
+      .catch(_err => this.$message.error('fail create record'))
+      .finally(()=>{this.button=3});
+  }
+
+  rejectEvaluation(){
+    this.evaluationResult.evaluationStatus="RJC";
+    this.commonService(baseApiEvalResults)
+      .create( this.evaluationResult)
+      .then(res => {
+        let evaluationResult = res.data;
+      })
+      .catch(_err => this.$message.error('fail create record'))
+      .finally(()=>{this.button=2});
   }
 
   retrieveEvalResultLine(evaluationMethodLineId:number,biddingEvalResultId:number){

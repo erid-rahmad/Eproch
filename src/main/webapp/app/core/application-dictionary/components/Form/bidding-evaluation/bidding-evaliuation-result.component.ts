@@ -43,7 +43,14 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   getStatus(status){
     if (status==="SMT"){
       return "Submitted"
-    }else {return "Drafted"}
+    }
+    else if (status==="APP"){
+      return "Approved"
+    }
+    else if (status==="RJC"){
+      return "Rejected"
+    }
+    else {return "Drafted"}
   }
 
   retriveEvaluationResult(biddingId) {
