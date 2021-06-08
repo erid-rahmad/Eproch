@@ -150,6 +150,7 @@
             <el-form-item label="Submission Price">
               <el-input
                 v-model="line.proposedPrice"
+                v-inputmask="{'alias': 'currency'}"
                 disabled
               ></el-input>
             </el-form-item>
@@ -185,6 +186,7 @@
             <el-form-item label="Negotiation Price">
               <el-input
                 v-model="negoPrice.negotiationPrice"
+                v-inputmask="{'alias': 'currency'}"
                 disabled
               ></el-input>
             </el-form-item>
@@ -229,31 +231,56 @@
           </el-table-column>
           <el-table-column label="Uom" prop="uomName" width="60">
           </el-table-column>
-          <el-table-column label="Ceiling Price / Unit" prop="ceilingPrice" width="200">
+          <el-table-column label="Ceiling Price / Unit" width="200">
+            <template slot-scope="{row}">
+              {{row.ceilingPrice | formatCurrency}}
+            </template>
           </el-table-column>
-          <el-table-column label="Total Ceiling Price" prop="totalCeilingPrice" width="200">
+          <el-table-column label="Total Ceiling Price" width="200">
+            <template slot-scope="{row}">
+              {{row.totalCeilingPrice | formatCurrency}}
+            </template>
           </el-table-column>
-          <el-table-column label="Submission Price / Unit" prop="proposedPrice" width="200">
+          <el-table-column label="Submission Price / Unit" width="200">
+            <template slot-scope="{row}">
+              {{row.proposedPrice | formatCurrency}}
+            </template>
           </el-table-column>
-          <el-table-column label="Total Submission Price" prop="totalPriceSubmission" width="200">
+          <el-table-column label="Total Submission Price" width="200">
+            <template slot-scope="{row}">
+              {{row.totalPriceSubmission | formatCurrency}}
+            </template>
           </el-table-column>
-          <el-table-column label="Negotiation Price / Unit" prop="priceNegotiation" v-if="isVendor" width="200">
+          <el-table-column label="Negotiation Price / Unit" v-if="isVendor" width="200">
+            <template slot-scope="{row}">
+              {{row.priceNegotiation | formatCurrency}}
+            </template>
           </el-table-column>
           <el-table-column label="Negotiation Price / Unit" v-else width="200">
             <template slot-scope="{row}">
-              <el-input v-model="row.priceNegotiation" v-on:change="updateTotal(row)" :disabled="isPercentage">
+              <el-input 
+                v-model="row.priceNegotiation" 
+                v-inputmask="{'alias': 'currency'}" 
+                v-on:change="updateTotal(row)" 
+                :disabled="isPercentage">
               </el-input>
             </template>
           </el-table-column>
-          <el-table-column label="Negotiation Price Percentage" prop="negotiationPercentage" v-if="isVendor" width="200">
+          <el-table-column label="Negotiation Percentage (%)" prop="negotiationPercentage" v-if="isVendor" width="200">
           </el-table-column>
           <el-table-column label="Negotiation Percentage (%)" v-else width="200">
             <template slot-scope="{row}">
-              <el-input v-model="row.negotiationPercentage" v-on:change="updateTotalByPercentage(row)" :disabled="!isPercentage">
+              <el-input 
+                v-model="row.negotiationPercentage" 
+                v-on:change="updateTotalByPercentage(row)" 
+                :disabled="!isPercentage">
               </el-input>
             </template>
           </el-table-column>
           <el-table-column label="Total Negotiation Price" prop="totalNegotiationPrice" width="200">
+            <template slot-scope="{row}">
+              {{row.totalNegotiationPrice | formatCurrency}}
+            </template>
           </el-table-column>
         </el-table>
         <el-form-item prop="percentCheck" v-if="!isVendor">
