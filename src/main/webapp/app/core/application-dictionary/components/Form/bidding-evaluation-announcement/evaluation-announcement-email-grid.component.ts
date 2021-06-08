@@ -1,15 +1,15 @@
-import AlertMixin from '@/shared/alert/alert.mixin';
 import { mixins } from 'vue-class-component';
 import {Component, Inject, Vue} from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import ContextVariableAccessor from "../../ContextVariableAccessor";
 import HtmlEditor from '@/shared/components/HtmlEditor/index.vue';
-import DynamicWindowService from "@/core/application-dictionary/components/DynamicWindow/dynamic-window.service";
-import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
-import {element} from "protractor";
 import AccountService from "@/account/account.service";
+import ScheduleEventMixin from "@/core/application-dictionary/mixins/ScheduleEventMixin";
 
-const EventAnnouncementProps = Vue.extend({
+const baseApiBiddingEvalResult ="api/m-bidding-eval-results";
+const baseApiAnnouncementResult ="api/c-announcement-results";
+const baseApiSchedules ="api/m-bidding-schedules";
+const baseApiBiddingResult ="api/m-bidding-results/publish";
+
+const EvaluationAnnouncementProps = Vue.extend({
   props: {
     pickRow: {
       type: Object,
@@ -23,10 +23,7 @@ const EventAnnouncementProps = Vue.extend({
     HtmlEditor
   }
 })
-export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMixin,AccessLevelMixin, ContextVariableAccessor,EventAnnouncementProps) {
-
-  @Inject('dynamicWindowService')
-  private commonService: (baseApiUrl: string) => DynamicWindowService;
+export default class EvaluationAnnouncement extends mixins(ScheduleEventMixin, EvaluationAnnouncementProps) {
 
   @Inject('accountService')
   private accountService: () => AccountService;
@@ -35,7 +32,10 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
   private action: string = "/api/c-attachments/upload"
   private accept: string = ".jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .csv, .ppt, .pptx, .pdf";
   private file: any = {};
+  private data:any={};
   attachmentFormVisible = false;
+  biddingEvalResultLoading:boolean=false;
+  descriptionLoading:boolean=false;
 
   private biddingEvalResult:any={};
   loading: boolean = false;
@@ -53,14 +53,27 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
 
 
   created() {
-    console.log("this row",this.pickRow);
-    this.retrieveBiddingEvalResult();
-    this.retrieveapiAnnouncementResults(this.pickRow.id);
-    this.retrieveBiddingSchedule()
+    if(this.pickRow){
+      this.retrieveBiddingEvalResult(this.pickRow.id);
+      this.retrieveapiAnnouncementResults(this.pickRow.id);
+      this.retrieveBiddingSchedules(this.pickRow.id);
+      this.data.No=this.pickRow.documentNo;
+      this.data.Name=this.pickRow.name;
+    }
   }
 
-  private retrieveBiddingEvalResult() {
-    this.commonService("api/m-bidding-eval-results")
+  onMainFormUpdatedevaluation(mainForm: any){
+    this.retrieveBiddingEvalResult(mainForm.biddingId);
+    this.retrieveapiAnnouncementResults(mainForm.biddingId);
+    this.retrieveBiddingSchedules(mainForm.biddingId);
+    this.data.No=mainForm.biddingNo;
+    this.data.Name=mainForm.biddingName;
+  }
+
+
+   retrieveBiddingEvalResult(biddingId) {
+    this.biddingEvalResultLoading=true;
+    this.commonService(baseApiBiddingEvalResult)
       .retrieve({
         criteriaQuery: this.updateCriteria([
           // `biddingId.equals=${this.pickRow.id}`
@@ -74,24 +87,22 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
       .then(res => {
         let biddingEvent:any=[];
         res.data.forEach(result => {
-          // console.log("this result before",result)
-          if (result.biddingId===this.pickRow.id){
-            // console.log(result.biddingId,this.pickRow.id)
+          if (result.biddingId===biddingId){
             biddingEvent.push(result);
           }
         });
         this.biddingEvalResult = biddingEvent;
-        // console.log("this biddingEvent",biddingEvent)
-        // console.log("this biddingEvalResult",this.biddingEvalResult)
-      });
+        console.log("biddingEvalResult",this.biddingEvalResult);
+      })
+      .finally(()=>this.biddingEvalResultLoading=false);
   }
 
-  private retrieveBiddingSchedule() {
+    retrieveBiddingSchedules(biddingId) {
     const a : String="RS";
-    this.commonService("api/m-bidding-schedules")
+    this.commonService(baseApiSchedules)
       .retrieve({
         criteriaQuery: this.updateCriteria([
-          `biddingId.equals=${this.pickRow.id}`,
+          `biddingId.equals=${biddingId}`,
         ]),
         paginationQuery: {
           page: 0,
@@ -101,12 +112,11 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
       })
       .then(res => {
         res.data.forEach(result => {
-          console.log("this result",result)
           if (result.formType==="RS"){
             this.schedule=result;
           }
-        });
-        console.log("this schedule ",this.schedule);
+        })
+          .catch(err => this.$message.error('Failed to get schedule'))
       });
   }
 
@@ -130,9 +140,9 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
       .catch(err => this.$message.error('Failed to get the email recipients'))
   }
 
-  private retrieveapiAnnouncementResults(biddingId: number) {
-
-    this.commonService("api/c-announcement-results")
+   retrieveapiAnnouncementResults(biddingId) {
+    this.descriptionLoading=true;
+    this.commonService(baseApiAnnouncementResult)
       .retrieve({
         criteriaQuery: this.updateCriteria([
           `biddingId.equals=${biddingId}`,
@@ -145,6 +155,7 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
         }
       })
       .catch(err => this.$message.error('Failed to get bidding announcement'))
+      .finally(()=>this.descriptionLoading=false);
   }
 
   //upload
@@ -247,12 +258,9 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
   //upload end
 
   saveDraft(){
-    console.log()
     this.formData.adOrganizationId=1;
     this.formData.biddingId=this.pickRow.id;
     this.formData.biddingScheduleId=this.schedule.id;
-    console.log(this.formData)
-
     this.loading = false
       this.commonService("api/c-announcement-results")
         .create(this.formData)
@@ -269,9 +277,7 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
       data.cAnnouncementResultDTO=this.formData;
       data.mBiddingEvalResult=this.biddingEvalResult;
       data.users=this.selectedRecipients;
-
-      // this.commonService(`${baseApiAnnouncement}/publish/${data.announcement.id}`)
-      this.commonService(`api/m-bidding-results/publish`)
+      this.commonService(baseApiBiddingResult)
         .create(data)
         .then(() => {
           this.$message.success('Announcement has been published successfully');
@@ -279,10 +285,7 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
         })
         .catch(() => this.$message.error('Failed to publish bidding announcement'))
         .finally(() => this.loading = false);
-
   }
-
-
 
   back() {
     this.pages = 1;
@@ -292,7 +295,4 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
     this.$emit("back")
       ;
   }
-
-
-
 }
