@@ -13,6 +13,7 @@ import org.mapstruct.*;
 public interface MBidNegoPriceLineMapper extends EntityMapper<MBidNegoPriceLineDTO, MBidNegoPriceLine> {
 
     @Mapping(source = "bidNegoPrice.id", target = "bidNegoPriceId")
+    @Mapping(source = "biddingLine.subItem.product.name", target = "subItemName")
     @Mapping(source = "biddingLine.id", target = "biddingLineId")
     @Mapping(source = "biddingLine.quantity", target = "quantity")
     @Mapping(source = "biddingLine.uom.name", target = "uomName")
