@@ -279,7 +279,7 @@
             min-width="150"
           >
             <template slot-scope="{ row }">
-              {{ row.proposedPrice | formatCurrency }}
+              {{ row.priceNegotiation | formatCurrency }}
             </template>
           </el-table-column>
           <el-table-column
@@ -287,7 +287,7 @@
             min-width="150"
           >
             <template slot-scope="{ row }">
-              {{ row.totalPriceSubmission | formatCurrency }}
+              {{ row.totalNegotiationPrice | formatCurrency }}
             </template>
           </el-table-column>
         </el-table>

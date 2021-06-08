@@ -9,7 +9,7 @@ import java.util.UUID;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MBidNegoPriceLine} entity.
  */
-public class MBidNegoPriceLineDTO implements Serializable {
+public class MBidNegoPriceLineDTO extends AbstractAuditingDTO implements Serializable {
     
     private Long id;
 
@@ -30,6 +30,7 @@ public class MBidNegoPriceLineDTO implements Serializable {
     private Long bidNegoPriceId;
 
     private Long biddingLineId,quantity;
+    private Long uomId,productId;
     private String uomName,productName;
     private BigDecimal ceilingPrice,totalCeilingPrice;
 
@@ -38,6 +39,22 @@ public class MBidNegoPriceLineDTO implements Serializable {
     
     public Long getId() {
         return id;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    public Long getUomId() {
+        return uomId;
+    }
+
+    public void setUomId(Long uomId) {
+        this.uomId = uomId;
     }
 
     public BigDecimal getTotalPriceSubmission() {

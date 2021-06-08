@@ -2,6 +2,7 @@ package com.bhp.opusb.service.dto;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -26,6 +27,7 @@ public class MVendorConfirmationDTO extends AbstractAuditingDTO implements Seria
     private Long currencyId;
     private String currencyName;
     private Long amount;
+    private BigDecimal negoAmount;
 
     private Long costCenterId;
     private String costCenterName;
@@ -40,6 +42,14 @@ public class MVendorConfirmationDTO extends AbstractAuditingDTO implements Seria
     
     public Long getId() {
         return id;
+    }
+
+    public BigDecimal getNegoAmount() {
+        return negoAmount;
+    }
+
+    public void setNegoAmount(BigDecimal negoAmount) {
+        this.negoAmount = negoAmount;
     }
 
     public Long getLatestContractId() {

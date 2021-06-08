@@ -184,7 +184,7 @@
           >
             <el-form-item label="Negotiation Price">
               <el-input
-                v-model="line.negotiationPrice"
+                v-model="negoPrice.negotiationPrice"
                 disabled
               ></el-input>
             </el-form-item>

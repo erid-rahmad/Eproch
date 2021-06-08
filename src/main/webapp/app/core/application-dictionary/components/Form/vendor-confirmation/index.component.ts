@@ -96,6 +96,9 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
     })
     .then(res => {
       this.vendorConfirmations = res.data;
+      this.vendorConfirmations.forEach((elem)=>{
+        if(elem.negoAmount) elem.amount = elem.negoAmount;
+      })
     });
     this.commonService(null)
       .retrieveReferenceLists('vendorConfirmation')

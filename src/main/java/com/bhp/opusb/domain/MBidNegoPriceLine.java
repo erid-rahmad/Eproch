@@ -18,7 +18,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "m_bid_nego_price_line")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MBidNegoPriceLine implements Serializable {
+public class MBidNegoPriceLine extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -59,6 +59,11 @@ public class MBidNegoPriceLine implements Serializable {
     @NotNull
     @JsonIgnoreProperties("mBidNegoPriceLines")
     private MProposalPriceLine proposalLine;
+
+    @PrePersist
+    public void assignUUID(){
+        this.uid = UUID.randomUUID();
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {

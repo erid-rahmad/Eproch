@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -68,12 +69,26 @@ public class MVendorConfirmation extends AbstractAuditingEntity implements Seria
     @Formula("(select count(mvcl.id) from m_vendor_confirmation_line mvcl where mvcl.vendor_confirmation_id = id)")
     private Integer selectedWinners;
 
+    @Formula("(select mbnp.negotiation_price from m_bid_nego_price mbnp where mbnp.bidding_id = ("+
+        "select mbs.bidding_id from m_bidding_submission mbs where mbs.id = ("+
+        "select mber.bidding_submission_id from m_bidding_eval_result mber where mber.id = ("+
+        "select mvcl.bidding_eval_result_id from m_vendor_confirmation_line mvcl where mvcl.id = id))))")
+    private BigDecimal negoAmount;
+
     @PrePersist
     public void assignUUID() {
         this.uid = UUID.randomUUID();
     }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    public BigDecimal getNegoAmount() {
+        return negoAmount;
+    }
+
+    public void setNegoAmount(BigDecimal negoAmount) {
+        this.negoAmount = negoAmount;
+    }
+
     public Long getId() {
         return id;
     }
