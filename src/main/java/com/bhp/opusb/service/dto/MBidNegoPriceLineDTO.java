@@ -31,7 +31,7 @@ public class MBidNegoPriceLineDTO extends AbstractAuditingDTO implements Seriali
 
     private Long biddingLineId,quantity;
     private Long uomId,productId;
-    private String uomName,productName;
+    private String uomName,productName,subItemName;
     private BigDecimal ceilingPrice,totalCeilingPrice;
 
     private Long proposalLineId;
@@ -39,6 +39,14 @@ public class MBidNegoPriceLineDTO extends AbstractAuditingDTO implements Seriali
     
     public Long getId() {
         return id;
+    }
+
+    public String getSubItemName() {
+        return subItemName;
+    }
+
+    public void setSubItemName(String subItemName) {
+        this.subItemName = subItemName;
     }
 
     public Long getProductId() {

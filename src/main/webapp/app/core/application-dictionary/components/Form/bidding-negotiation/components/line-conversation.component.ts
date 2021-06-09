@@ -60,8 +60,6 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   created() {
     console.log(this.data);
     this.line = {...this.data};
-    //this.line.proposedPrice = this.formatCurrency(this.line.proposedPrice);
-
     this.refreshChat();
   }
 
@@ -225,13 +223,15 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
       this.negoPrice=res.data[0];
       this.negoPrice.percentDiff=((this.line.proposedPrice-this.negoPrice.negotiationPrice)/this.line.proposedPrice)*100;
       this.negoPrice.percentDiff = this.truncateDecimals(this.negoPrice.percentDiff,2);
-      //this.negoPrice.negotiationPrice = this.formatCurrency(this.negoPrice.negotiationPrice);
     })
   }
 
   updateTotal(row){
     console.log(row);
     row.priceNegotiation = parseInt(row.priceNegotiation);
+    if(Object.is(row.priceNegotiation,NaN)){
+      row.priceNegotiation = row.proposedPrice;
+    }
     row.totalNegotiationPrice = row.quantity * row.priceNegotiation;
     row.negotiationPercentage = ((row.proposedPrice-row.priceNegotiation)/row.proposedPrice)*100
     this.reCalcTotal();
@@ -240,6 +240,9 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   updateTotalByPercentage(row){
     console.log(row);
     row.negotiationPercentage = parseFloat(row.negotiationPercentage);
+    if(Object.is(row.negotiationPercentage,NaN)){
+      row.negotiationPercentage = 0;
+    }
     row.priceNegotiation = row.proposedPrice*(100-row.negotiationPercentage)/100;
     row.totalNegotiationPrice = row.quantity * row.priceNegotiation;
     this.reCalcTotal();
@@ -251,7 +254,6 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
     });
     this.negoPrice.percentDiff=((this.line.proposedPrice-this.negoPrice.negotiationPrice)/this.line.proposedPrice)*100;
     this.negoPrice.percentDiff = this.truncateDecimals(this.negoPrice.percentDiff,2);
-    //this.negoPrice.negotiationPrice = this.formatCurrency(this.negoPrice.negotiationPrice);
   }
 
   declineNegotiation(){
@@ -317,18 +319,4 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
 
     return truncatedNum / multiplier;
   };
-
-  /*
-  formatCurrency = function(value: number, locales?: string | string[], defaultValue?: number) {
-    const formatter = new Intl.NumberFormat(locales || tranlationStore.currentLanguage, {
-      minimumFractionDigits: 2
-    });
-
-    if (value !== void 0) {
-      return formatter.format(value);
-    }
-
-    return defaultValue || null;
-  }
-  */
 }

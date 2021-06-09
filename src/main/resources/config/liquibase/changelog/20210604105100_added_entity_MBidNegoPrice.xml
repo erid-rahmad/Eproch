@@ -56,6 +56,12 @@
             <column name="last_modified_date" type="timestamp"/>
         </addColumn>
     </changeSet>
+
+    <changeSet author="ricky-kurniawan" id="20210604105100-delete-col-1">  
+        <dropColumn tableName="m_bid_nego_price">  
+            <column name="vendor_invitation_id"/>  
+        </dropColumn>  
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
     <!--

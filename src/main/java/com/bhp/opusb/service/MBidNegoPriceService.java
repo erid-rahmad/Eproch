@@ -54,12 +54,13 @@ public class MBidNegoPriceService {
         MBidNegoPrice mBidNegoPrice = mBidNegoPriceMapper.toEntity(mBidNegoPriceDTO);
         mBidNegoPrice = mBidNegoPriceRepository.save(mBidNegoPrice);
         
-        List<MBidNegoPriceLine> line = new ArrayList<>();
-        for(MBidNegoPriceLineDTO dto: mBidNegoPriceDTO.getLine()){
-            line.add(mBidNegoPriceLineMapper.toEntity(dto));
+        if(mBidNegoPriceDTO.getLine()!=null) {
+            List<MBidNegoPriceLine> line = new ArrayList<>();
+            for(MBidNegoPriceLineDTO dto: mBidNegoPriceDTO.getLine()){
+                line.add(mBidNegoPriceLineMapper.toEntity(dto));
+            }
+            mBidNegoPriceLineRepository.saveAll(line);
         }
-        mBidNegoPriceLineRepository.saveAll(line);
-        
         return mBidNegoPriceMapper.toDto(mBidNegoPrice);
     }
 

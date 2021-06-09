@@ -104,9 +104,11 @@
         ></el-table-column>
         <el-table-column
           label="Modified Date"
-          prop="lastModifiedDate"
           min-width="100"
-        ></el-table-column>
+        > <template slot-scope="{ row }">
+          {{row.lastModifiedDate | formatDate}}
+          </template> 
+        </el-table-column>
         <el-table-column
           label="Status"
           min-width="100"

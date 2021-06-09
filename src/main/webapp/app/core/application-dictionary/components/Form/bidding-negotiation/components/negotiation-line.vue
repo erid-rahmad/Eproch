@@ -56,16 +56,22 @@
               :xl="8"
             >
               <el-form-item label="Start Date">
-                <el-input
+                <el-date-picker
                   v-model="negotiation.startDate"
                   disabled
-                ></el-input>
+                  :format="dateDisplayFormat"
+                  size="mini"
+                  type="datetime"
+                ></el-date-picker>
               </el-form-item>
               <el-form-item label="End Date">
-                <el-input
+                <el-date-picker
                   v-model="negotiation.endDate"
                   disabled
-                ></el-input>
+                  :format="dateDisplayFormat"
+                  size="mini"
+                  type="datetime"
+                ></el-date-picker>
               </el-form-item>
             </el-col>
           </el-row>

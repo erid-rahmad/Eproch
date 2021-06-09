@@ -6,6 +6,7 @@ import Component, { mixins } from 'vue-class-component';
 import { Inject } from 'vue-property-decorator';
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import BiddingNegotiationLineConversation from './line-conversation.vue';
+import settings from '@/settings';
 
 const NegotiationLineProp = Vue.extend({
   props: {
@@ -61,7 +62,7 @@ export default class BiddingNegotiationLine extends mixins(AccessLevelMixin, Neg
   
   viewNegotiationWindow(row:any){
     //hides the outer toolbar (which closes the whole detail)
-    document.querySelector("#innerToolbar").style.display = "none";
+    (<any>document.querySelector("#innerToolbar")).style.display = "none";
     row.biddingTitle = this.negotiation.biddingTitle;
     row.biddingId = this.negotiation.biddingId;
     row.biddingNo = this.negotiation.biddingNo;
@@ -71,7 +72,7 @@ export default class BiddingNegotiationLine extends mixins(AccessLevelMixin, Neg
   }
 
   closeLine(){
-    document.querySelector("#innerToolbar").style.display = "";
+    (<any>document.querySelector("#innerToolbar")).style.display = "";
     this.innerIndex = true;
 
     this.refreshLine();
@@ -125,5 +126,9 @@ export default class BiddingNegotiationLine extends mixins(AccessLevelMixin, Neg
         });
       }
     });
+  }
+
+  get dateDisplayFormat() {
+    return settings.dateTimeDisplayFormat;
   }
 }
