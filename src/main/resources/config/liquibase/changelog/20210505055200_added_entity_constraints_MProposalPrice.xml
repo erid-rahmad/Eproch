@@ -7,7 +7,7 @@
         Added the constraints for entity MProposalPrice.
     -->
     <changeSet id="20210505055200-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="bidding_submission_id"
                                  baseTableName="m_proposal_price"
                                  constraintName="fk_m_proposal_price_bidding_submission_id"
@@ -20,5 +20,12 @@
                                  referencedColumnNames="id"
                                  referencedTableName="ad_organization"/>
 
+    </changeSet>
+    <changeSet id="" author="">
+        <addForeignKeyConstraint baseColumnNames="attachment_id"
+                                 baseTableName="m_proposal_price"
+                                 constraintName="fk_m_proposal_price_attachment_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_attachment"/>
     </changeSet>
 </databaseChangeLog>

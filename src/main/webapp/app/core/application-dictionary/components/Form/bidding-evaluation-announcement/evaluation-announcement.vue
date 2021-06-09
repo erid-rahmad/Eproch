@@ -3,26 +3,34 @@
 
 
         <div v-if="page===1">
-            <el-row>
+            <el-row class="card">
                 <el-col :span="24">
-                    <el-table :data="biddingGrid" style="width: 100%" size="mini">
-                        <el-table-column width="50" label="No">
+                    <el-table :data="biddingGrid"
+                              style="width: 100%"
+                              v-loading="loading"
+                              border
+                              size="mini">
+                        <el-table-column width="50" align="center"  label="No">
                             <template slot-scope="row">
                                 {{ row.$index + 1 }}
                             </template>
                         </el-table-column>
-                        <el-table-column min-width="80" sortable prop="documentNo" label="Bidding No" />
+                        <el-table-column min-width="50" sortable prop="documentNo" label="Bidding No" />
                         <el-table-column min-width="100" sortable prop="name" label="Title" />
-                         <el-table-column min-width="100" sortable prop="biddingTypeName" label="Bidding Type" />
-                        <el-table-column min-width="100" label="Bidding Schedule">
+                         <el-table-column min-width="80" sortable align="center" prop="biddingTypeName" label="Bidding Type" />
+                        <el-table-column min-width="50" label="Bidding Schedule">
                             <template slot-scope="{ row }">
-                                <el-button class="button" icon="el-icon-search" size="mini" type="primary" @click="ScheduleListVisible=true">
-                                    View
-                                </el-button>
+                                    <el-button class="button" size="mini" style="width: 100%" >
+                                        <svg-icon name="icomoo/084-calendar"></svg-icon> View Schedule
+                                    </el-button>
                             </template>
                         </el-table-column>
-                         <el-table-column min-width="70" sortable prop="documentStatus" label="Bidding Status" />
-                          <el-table-column min-width="60" sortable prop="join" label="Joined Vendor" />
+                         <el-table-column min-width="70" sortable align="center"  label="Bidding Status" >
+                             <template slot-scope="{ row }">
+                                 {{ formatBiddingStatus(row.biddingStatus) }}
+                             </template>
+                         </el-table-column>
+<!--                          <el-table-column min-width="60" sortable prop="join" label="Joined Vendor" />-->
                         <el-table-column align="center" min-width="30">
                             <template slot-scope="{row}">
                                 <!-- <el-button size="mini" icon="el-icon-view" type="primary" @click="moreinfo()" /> -->

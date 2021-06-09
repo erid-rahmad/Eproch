@@ -28,14 +28,6 @@
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "mVendorInvitation",
-            "otherEntityRelationshipName": "mBidNegoPrice",
-            "relationshipValidateRules": "required",
-            "relationshipName": "vendorInvitation",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
             "otherEntityName": "mProposalPrice",
             "otherEntityRelationshipName": "mBidNegoPrice",
             "relationshipValidateRules": "required",

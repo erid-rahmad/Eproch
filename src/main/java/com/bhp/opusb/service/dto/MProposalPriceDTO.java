@@ -1,16 +1,16 @@
 package com.bhp.opusb.service.dto;
 
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MProposalPrice} entity.
  */
 public class MProposalPriceDTO extends AbstractAuditingDTO {
-    
+
     private Long id;
 
     @NotNull
@@ -29,7 +29,9 @@ public class MProposalPriceDTO extends AbstractAuditingDTO {
 
     private Long adOrganizationId;
     private String adOrganizationName;
-    
+
+    private Long attachmentId;
+
     public Long getId() {
         return id;
     }
@@ -102,6 +104,14 @@ public class MProposalPriceDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
+    public Long getAttachmentId() {
+        return attachmentId;
+    }
+
+    public void setAttachmentId(Long cAttachmentId) {
+        this.attachmentId = cAttachmentId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -133,6 +143,7 @@ public class MProposalPriceDTO extends AbstractAuditingDTO {
             ", active='" + isActive() + "'" +
             ", biddingSubmissionId=" + getBiddingSubmissionId() +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", attachmentId=" + getAttachmentId() +
             "}";
     }
 }

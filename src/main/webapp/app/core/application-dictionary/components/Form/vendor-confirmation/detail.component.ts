@@ -257,11 +257,9 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
           sort: ['id']
         }
       }).then((res)=>{
-        let quantity = 0;
         let amount = 0;
         console.log(res.data);
         res.data.forEach(element => {
-          quantity += element.quantity;
           amount += element.totalNegotiationPrice;
         });
 
@@ -274,49 +272,43 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
           "currencyId": this.mainForm.currencyId,
           "datePromised": "2021-06-01",
           "dateRequired": "2021-06-01",
-          "dateTrx": `${today.getFullYear()}-${((today.getMonth()+1)<10?'0':'')+(today.getMonth()+1)}-${(today.getDate()<10?'0':'')+(today.getDate()+1)}`,
+          "dateTrx": `${today.getFullYear()}-${((today.getMonth()+1)<10?'0':'')+(today.getMonth()+1)}-${(today.getDate()<10?'0':'')+(today.getDate())}`,
           "description": "PO for bidding "+this.mainForm.biddingTitle,
           "documentTypeId": 874953,
           "grandTotal": amount,
           "paymentTermId": 1951601,
           "vendorId": row.vendorId,
-          "warehouseId": 46851
+          "warehouseId": this.mainForm.warehouseId,
+          "poLines": []
         };
 
-        this.commonService('/api/m-purchase-orders').create(poBody).then(res=>{
-          this.poNumber = res.documentNo;
-          this.showPoForm = true;
-          poBody = res;
-          lines.forEach((element)=>{
-            let lineBody = {
-              "active": true,
-              "dateTrx": poBody.dateTrx,
-              "orderAmount": element.totalNegotiationPrice,
-              "quantity": element.quantity,
-              "unitPrice": element.priceNegotiation,
-              "purchaseOrderId": poBody.id,
-              "adOrganizationId": poBody.adOrganizationId,
-              "productId": element.productId,
-              "warehouseId": poBody.warehouseId,
-              "costCenterId": poBody.costCenterId,
-              "uomId": element.uomId,
-              "vendorId": this.selectedConfirmation.vendorId,
-              "dateRequired": poBody.dateRequired,
-              "datePromised": poBody.datePromised
-            }
-
-            this.commonService('/api/m-purchase-order-lines').create(lineBody).then(res=>{
-              console.log("created line for po "+ this.poNumber+", line id: "+res.id);
-            });
-
-            console.log(lineBody);
-          });
-        }).catch(error=>{
-          this.$message.error("Unable to generate PO.");
-        })
-
+        lines.forEach((element)=>{
+          let lineBody = {
+            "active": true,
+            "dateTrx": poBody.dateTrx,
+            "orderAmount": element.totalNegotiationPrice,
+            "quantity": element.quantity,
+            "unitPrice": element.priceNegotiation,
+            "adOrganizationId": poBody.adOrganizationId,
+            "productId": element.productId,
+            "warehouseId": poBody.warehouseId,
+            "costCenterId": poBody.costCenterId,
+            "uomId": element.uomId,
+            "vendorId": this.selectedConfirmation.vendorId,
+            "dateRequired": poBody.dateRequired,
+            "datePromised": poBody.datePromised
+          }
+          poBody.poLines.push(lineBody);
+          console.log(lineBody);
+        });
         console.log(poBody);
 
+        this.commonService('/api/m-purchase-orders/generate-from-vc').create(poBody).then(res=>{
+          this.poNumber = res.documentNo;
+          this.showPoForm = true;
+        }).catch(error=>{
+          this.$message.error("Unable to generate PO.");
+        });
       });
     });
   }

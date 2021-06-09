@@ -4,6 +4,7 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MProposalPrice;
 import com.bhp.opusb.domain.MBiddingSubmission;
 import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.CAttachment;
 import com.bhp.opusb.repository.MProposalPriceRepository;
 import com.bhp.opusb.service.MProposalPriceService;
 import com.bhp.opusb.service.dto.MProposalPriceDTO;
@@ -105,6 +106,16 @@ public class MProposalPriceResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         mProposalPrice.setAdOrganization(aDOrganization);
+        // Add required entity
+        CAttachment cAttachment;
+        if (TestUtil.findAll(em, CAttachment.class).isEmpty()) {
+            cAttachment = CAttachmentResourceIT.createEntity(em);
+            em.persist(cAttachment);
+            em.flush();
+        } else {
+            cAttachment = TestUtil.findAll(em, CAttachment.class).get(0);
+        }
+        mProposalPrice.setAttachment(cAttachment);
         return mProposalPrice;
     }
     /**
@@ -139,6 +150,16 @@ public class MProposalPriceResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         mProposalPrice.setAdOrganization(aDOrganization);
+        // Add required entity
+        CAttachment cAttachment;
+        if (TestUtil.findAll(em, CAttachment.class).isEmpty()) {
+            cAttachment = CAttachmentResourceIT.createUpdatedEntity(em);
+            em.persist(cAttachment);
+            em.flush();
+        } else {
+            cAttachment = TestUtil.findAll(em, CAttachment.class).get(0);
+        }
+        mProposalPrice.setAttachment(cAttachment);
         return mProposalPrice;
     }
 
@@ -625,6 +646,22 @@ public class MProposalPriceResourceIT {
 
         // Get all the mProposalPriceList where adOrganization equals to adOrganizationId + 1
         defaultMProposalPriceShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMProposalPricesByAttachmentIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CAttachment attachment = mProposalPrice.getAttachment();
+        mProposalPriceRepository.saveAndFlush(mProposalPrice);
+        Long attachmentId = attachment.getId();
+
+        // Get all the mProposalPriceList where attachment equals to attachmentId
+        defaultMProposalPriceShouldBeFound("attachmentId.equals=" + attachmentId);
+
+        // Get all the mProposalPriceList where attachment equals to attachmentId + 1
+        defaultMProposalPriceShouldNotBeFound("attachmentId.equals=" + (attachmentId + 1));
     }
 
     /**

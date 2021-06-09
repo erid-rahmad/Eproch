@@ -41,6 +41,14 @@
             "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cAttachment",
+            "otherEntityRelationshipName": "mProposalPrice",
+            "relationshipValidateRules": "required",
+            "relationshipName": "attachment",
+            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20210505055200",

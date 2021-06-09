@@ -6,7 +6,6 @@
                     Back
                 </el-button>
                 <el-button
-                    v-loading.fullscreen.lock="fullscreenLoading"
                     size="mini"
                     style="margin-left: 0px"
                     type="primary"
@@ -15,7 +14,7 @@
                     Save Draft
                 </el-button>
                 <el-button
-                    v-loading.fullscreen.lock="fullscreenLoading"
+
                     size="mini"
                     style="margin-left: 0px"
                     type="primary"
@@ -29,8 +28,8 @@
             <div>
 
                 <div class="header">
-                    <h2>{{ pickRow.documentNo }}</h2>
-                    <p>{{ pickRow.name }}</p>
+                    <h2>{{ data.No }}</h2>
+                    <p>{{ data.Name }}</p>
                 </div>
                 <el-form
                     ref="mainForm"
@@ -43,7 +42,7 @@
                 >
                     <el-row :gutter="24">
                         <el-col :lg="12" :sm="12" :xl="12" :xs="12">
-                            <el-form-item label="Tanggal Pengumuman">
+                            <el-form-item label="Announcement Date">
                                 <template>
                                     <div class="block">
                                         <el-date-picker
@@ -57,7 +56,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :lg="12" :sm="12" :xl="12" :xs="12">
-                            <el-form-item label="Nomor Pengumuman">
+                            <el-form-item label="Announcement Number">
                                 <el-input v-model="formData.documentNo"></el-input>
                             </el-form-item>
                         </el-col>
@@ -65,7 +64,7 @@
                     <el-row :gutter="24">
                         <el-col :lg="18" :sm="24" :xl="16" :xs="24">
                             <el-form-item label="Description" prop="description">
-                                <html-editor v-model="formData.description" size="mini"></html-editor>
+                                <html-editor v-loading="descriptionLoading" v-model="formData.description" size="mini"></html-editor>
                             </el-form-item>
                             <el-form-item style="margin-top: .5rem">
                                 <el-button v-if="!hasAttachment" size="mini" type="primary"
@@ -89,8 +88,7 @@
                 </el-form>
                 <template>
                     <el-table
-                        ref="biddingSchedule"
-                        v-loading="processing"
+                        v-loading="biddingEvalResultLoading"
                         :data="biddingEvalResult"
                         border
                         highlight-current-row
@@ -105,14 +103,6 @@
                         </el-table-column>
                         <el-table-column label="Vendor Name" min-width="120" prop="vendorName"/>
                         <el-table-column label="Evaluasi Status" min-width="100" prop="status"/>
-                        <!--                        <el-table-column label="Action" min-width="60" sortable>-->
-                        <!--                            <template slot-scope="{ row }">-->
-                        <!--                                <el-button class="button" icon="el el-download-alt" size="mini" type="primary"-->
-                        <!--                                           @click="viewemail = true">-->
-                        <!--                                    View-->
-                        <!--                                </el-button>-->
-                        <!--                            </template>-->
-                        <!--                        </el-table-column>-->
                     </el-table>
                 </template>
             </div>

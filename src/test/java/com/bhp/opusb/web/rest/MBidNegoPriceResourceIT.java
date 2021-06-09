@@ -3,7 +3,6 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MBidNegoPrice;
 import com.bhp.opusb.domain.MBidding;
-import com.bhp.opusb.domain.MVendorInvitation;
 import com.bhp.opusb.domain.MProposalPrice;
 import com.bhp.opusb.domain.MBiddingNegotiationLine;
 import com.bhp.opusb.repository.MBidNegoPriceRepository;
@@ -93,16 +92,6 @@ public class MBidNegoPriceResourceIT {
         }
         mBidNegoPrice.setBidding(mBidding);
         // Add required entity
-        MVendorInvitation mVendorInvitation;
-        if (TestUtil.findAll(em, MVendorInvitation.class).isEmpty()) {
-            mVendorInvitation = MVendorInvitationResourceIT.createEntity(em);
-            em.persist(mVendorInvitation);
-            em.flush();
-        } else {
-            mVendorInvitation = TestUtil.findAll(em, MVendorInvitation.class).get(0);
-        }
-        mBidNegoPrice.setVendorInvitation(mVendorInvitation);
-        // Add required entity
         MProposalPrice mProposalPrice;
         if (TestUtil.findAll(em, MProposalPrice.class).isEmpty()) {
             mProposalPrice = MProposalPriceResourceIT.createEntity(em);
@@ -145,16 +134,6 @@ public class MBidNegoPriceResourceIT {
             mBidding = TestUtil.findAll(em, MBidding.class).get(0);
         }
         mBidNegoPrice.setBidding(mBidding);
-        // Add required entity
-        MVendorInvitation mVendorInvitation;
-        if (TestUtil.findAll(em, MVendorInvitation.class).isEmpty()) {
-            mVendorInvitation = MVendorInvitationResourceIT.createUpdatedEntity(em);
-            em.persist(mVendorInvitation);
-            em.flush();
-        } else {
-            mVendorInvitation = TestUtil.findAll(em, MVendorInvitation.class).get(0);
-        }
-        mBidNegoPrice.setVendorInvitation(mVendorInvitation);
         // Add required entity
         MProposalPrice mProposalPrice;
         if (TestUtil.findAll(em, MProposalPrice.class).isEmpty()) {
@@ -518,22 +497,6 @@ public class MBidNegoPriceResourceIT {
 
         // Get all the mBidNegoPriceList where bidding equals to biddingId + 1
         defaultMBidNegoPriceShouldNotBeFound("biddingId.equals=" + (biddingId + 1));
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllMBidNegoPricesByVendorInvitationIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        MVendorInvitation vendorInvitation = mBidNegoPrice.getVendorInvitation();
-        mBidNegoPriceRepository.saveAndFlush(mBidNegoPrice);
-        Long vendorInvitationId = vendorInvitation.getId();
-
-        // Get all the mBidNegoPriceList where vendorInvitation equals to vendorInvitationId
-        defaultMBidNegoPriceShouldBeFound("vendorInvitationId.equals=" + vendorInvitationId);
-
-        // Get all the mBidNegoPriceList where vendorInvitation equals to vendorInvitationId + 1
-        defaultMBidNegoPriceShouldNotBeFound("vendorInvitationId.equals=" + (vendorInvitationId + 1));
     }
 
 

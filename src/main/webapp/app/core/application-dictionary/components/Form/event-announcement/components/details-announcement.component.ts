@@ -56,7 +56,6 @@ export default class DetailsAnnouncement extends Mixins(DetailsAnnouncementProps
         console.log("data1", data)
       })
       .finally(() => this.retrivedata(this.invitationData.announcementId))
-
   }
 
   retrivedata(announcementId: number) {

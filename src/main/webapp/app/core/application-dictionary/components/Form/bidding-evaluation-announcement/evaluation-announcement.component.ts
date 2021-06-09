@@ -18,47 +18,33 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin,AccessLe
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
-  private biddingGrid : any={};
+  private biddingGrid : any=[];
   private pickRow:any={};
+  biddingStatuses: any[] = [];
+  private loading:boolean=false;
 
 
   created() {
+
+    this.commonService(null)
+      .retrieveReferenceLists('biddingStatus')
+      .then(res => {
+        this.biddingStatuses = res.map(item => ({ key: item.value, value: item.name }));
+      });
+
     this.biddingInvitations();
   }
 
   ScheduleListVisible = false;
   editor = null;
-  gridSchema = {
-    defaultSort: {},
-    emptyText: 'No Records Found',
-    maxHeight: 500,
-    height: 500
-  };
 
-  BiddingSchedule = [
-    {
-      event: 'Bidding Announcement',
-      startdate: '20-03-2021',
-      finisdate:'20-03-2021',
-    },
-    {
-      event: 'Bidding Registration',
-      startdate: '21-03-2021',
-      finisdate:'21-03-2021',
-    },
-    {
-      event: 'Pre-Bid Meeting',
-      startdate: '22-03-2021',
-      finisdate:'22-03-2021',
-    },
-    {
-      event: 'Bidding Submission',
-      startdate: '23-03-2021',
-      finisdate:'23-03-2021',
-    },
-  ]
+  formatBiddingStatus(value: string) {
+    return this.biddingStatuses.find(status => status.key === value)?.value;
+  }
+
 
   private biddingInvitations() {
+    this.loading=true;
     this.commonService('/api/m-biddings')
       .retrieve({
         criteriaQuery: this.updateCriteria([
@@ -72,8 +58,8 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin,AccessLe
       })
       .then(res => {
         this.biddingGrid = res.data;
-        console.log("BiddingGrid",this.biddingGrid);
-      });
+      })
+      .finally(()=>this.loading=false);
   }
 
   index: boolean = true;
@@ -82,16 +68,15 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin,AccessLe
   step: boolean = false;
 
   viewBidding(row){
-    console.log(row);
+
   }
 
   viewSchedule(row){
-    console.log(row);
+
   }
 
   view(row, stepIndex: number = 0) {
     this.page = 3;
-    console.log("this row",row);
     this.pickRow=row;
     this.ScheduleListVisible = false;
   }

@@ -45,11 +45,6 @@ public class MBidNegoPrice extends AbstractAuditingEntity implements Serializabl
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mBidNegoPrices")
-    private MVendorInvitation vendorInvitation;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("mBidNegoPrices")
     private MProposalPrice priceProposal;
 
     @ManyToOne(optional = false)
@@ -121,19 +116,6 @@ public class MBidNegoPrice extends AbstractAuditingEntity implements Serializabl
 
     public void setBidding(MBidding mBidding) {
         this.bidding = mBidding;
-    }
-
-    public MVendorInvitation getVendorInvitation() {
-        return vendorInvitation;
-    }
-
-    public MBidNegoPrice vendorInvitation(MVendorInvitation mVendorInvitation) {
-        this.vendorInvitation = mVendorInvitation;
-        return this;
-    }
-
-    public void setVendorInvitation(MVendorInvitation mVendorInvitation) {
-        this.vendorInvitation = mVendorInvitation;
     }
 
     public MProposalPrice getPriceProposal() {

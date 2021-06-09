@@ -63,18 +63,21 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
         paginationQuery: {
           page: 0,
           size: 10000,
-          sort: ['id']
+          sort: ['score,desc']
         }
       })
       .then(res => {
         let data_: any = []
+        let x =1;
+
         res.data.forEach(data => {
           if (data.biddingId === biddingId) {
+            data.rank=x;
             data_.push(data);
+            x++;
           }
         })
         this.evaluationResult = data_;
-
       })
       .finally(() => this.loading = false);
   }
