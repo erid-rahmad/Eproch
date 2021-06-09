@@ -20,7 +20,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
+
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -57,7 +60,7 @@ public class MBiddingNegotiationChatResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/m-bidding-negotiation-chats")
-    public ResponseEntity<MBiddingNegotiationChatDTO> createMBiddingNegotiationChat(@Valid @RequestBody MBiddingNegotiationChatDTO mBiddingNegotiationChatDTO) throws URISyntaxException {
+    public ResponseEntity<MBiddingNegotiationChatDTO> createMBiddingNegotiationChat(@Valid @RequestBody MBiddingNegotiationChatDTO mBiddingNegotiationChatDTO) throws URISyntaxException, MessagingException, IOException {
         log.debug("REST request to save MBiddingNegotiationChat : {}", mBiddingNegotiationChatDTO);
         if (mBiddingNegotiationChatDTO.getId() != null) {
             throw new BadRequestAlertException("A new mBiddingNegotiationChat cannot already have an ID", ENTITY_NAME, "idexists");
@@ -78,7 +81,7 @@ public class MBiddingNegotiationChatResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/m-bidding-negotiation-chats")
-    public ResponseEntity<MBiddingNegotiationChatDTO> updateMBiddingNegotiationChat(@Valid @RequestBody MBiddingNegotiationChatDTO mBiddingNegotiationChatDTO) throws URISyntaxException {
+    public ResponseEntity<MBiddingNegotiationChatDTO> updateMBiddingNegotiationChat(@Valid @RequestBody MBiddingNegotiationChatDTO mBiddingNegotiationChatDTO) throws URISyntaxException, MessagingException, IOException {
         log.debug("REST request to update MBiddingNegotiationChat : {}", mBiddingNegotiationChatDTO);
         if (mBiddingNegotiationChatDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");

@@ -22,6 +22,9 @@ public class MBidNegoPriceDTO extends AbstractAuditingDTO implements Serializabl
     private BigDecimal negotiationPrice;
 
 
+    private Long attachmentId;
+    private String fileName, downloadUrl;
+
     private Long biddingId;
 
     private Long priceProposalId;
@@ -32,6 +35,22 @@ public class MBidNegoPriceDTO extends AbstractAuditingDTO implements Serializabl
     
     public Long getId() {
         return id;
+    }
+
+    public String getDownloadUrl() {
+        return downloadUrl;
+    }
+
+    public void setDownloadUrl(String downloadUrl) {
+        this.downloadUrl = downloadUrl;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public List<MBidNegoPriceLineDTO> getLine() {
@@ -68,6 +87,14 @@ public class MBidNegoPriceDTO extends AbstractAuditingDTO implements Serializabl
 
     public void setNegotiationPrice(BigDecimal negotiationPrice) {
         this.negotiationPrice = negotiationPrice;
+    }
+
+    public Long getAttachmentId() {
+        return attachmentId;
+    }
+
+    public void setAttachmentId(Long cAttachmentId) {
+        this.attachmentId = cAttachmentId;
     }
 
     public Long getBiddingId() {
@@ -122,6 +149,7 @@ public class MBidNegoPriceDTO extends AbstractAuditingDTO implements Serializabl
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", negotiationPrice=" + getNegotiationPrice() +
+            ", attachmentId=" + getAttachmentId() +
             ", biddingId=" + getBiddingId() +
             ", priceProposalId=" + getPriceProposalId() +
             ", negotiationLineId=" + getNegotiationLineId() +

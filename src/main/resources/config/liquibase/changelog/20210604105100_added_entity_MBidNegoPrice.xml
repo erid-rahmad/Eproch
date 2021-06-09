@@ -62,6 +62,14 @@
             <column name="vendor_invitation_id"/>  
         </dropColumn>  
     </changeSet>
+
+    <changeSet author="ricky-kurniawan" id="20210604105100-add-attach-1">  
+        <addColumn tableName="m_bid_nego_price">
+            <column name="attachment_id" type="bigint">
+                <constraints nullable="true" />
+            </column> 
+        </addColumn>  
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
     <!--

@@ -100,6 +100,10 @@ public class MBidNegoPriceQueryService extends QueryService<MBidNegoPrice> {
             if (criteria.getNegotiationPrice() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getNegotiationPrice(), MBidNegoPrice_.negotiationPrice));
             }
+            if (criteria.getAttachmentId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAttachmentId(),
+                    root -> root.join(MBidNegoPrice_.attachment, JoinType.LEFT).get(CAttachment_.id)));
+            }
             if (criteria.getBiddingId() != null) {
                 specification = specification.and(buildSpecification(criteria.getBiddingId(),
                     root -> root.join(MBidNegoPrice_.bidding, JoinType.LEFT).get(MBidding_.id)));
