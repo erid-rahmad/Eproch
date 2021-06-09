@@ -2130,6 +2130,7 @@ relationship ManyToOne {
 	MProposalTechnicalFile{biddingSubCriteria required} to CBiddingSubCriteria
 
 	MProposalPrice{adOrganization required} to ADOrganization
+	MProposalPrice{attachment required} to CAttachment
 
 	MProposalPriceLine{adOrganization required} to ADOrganization
 	MProposalPriceLine{proposalPrice required} to MProposalPrice

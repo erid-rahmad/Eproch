@@ -7,6 +7,7 @@ import { formatDuration, intervalToDuration } from 'date-fns';
 import { Component, Inject, Mixins, Vue } from 'vue-property-decorator';
 import Schema from 'async-validator';
 import { ElForm } from 'element-ui/types/form';
+import AccountService from "@/account/account.service";
 
 const baseApiLines = 'api/m-bidding-lines';
 const baseApiSubmission = 'api/m-bidding-submissions';
@@ -49,9 +50,19 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
 
+  @Inject('accountService')
+  private accountService: () => AccountService;
+
   private timerId;
   private intervalId;
   private currentDate = new Date();
+
+  private accept: string = ".jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .csv, .ppt, .pptx, .pdf";
+  private action: string = "/api/c-attachments/upload"
+  private limit: number = 1;
+  private formData:any={};
+  private file: any = {};
+  attachmentFormVisible = false;
 
   private lineCache: Map<number, any> = new Map();
 
@@ -92,12 +103,111 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
     maxHeight: 150,
     height: 150
   };
-  
+
   selectedItemIndex = 0;
   selectedItem = {};
 
   columnSpacing = 32;
   subItemEditorVisible = false;
+
+  // upload
+  handleBeforeUpload(file: any) {
+    // File size limitation
+    const isLt5M = file.size / 1024 / 1024 < 5;
+    if (!isLt5M) {
+      this.$notify({
+        title: 'Warning',
+        message: "files with a size less than 5Mb",
+        type: 'warning',
+        duration: 3000
+      });
+      return isLt5M;
+    }
+
+    // File type restriction
+    const name = file.name ? file.name : '';
+    const ext = name
+      ? name.substr(name.lastIndexOf('.') + 1, name.length)
+      : true;
+    const isExt = this.accept.indexOf(ext) < 0;
+    if (isExt) {
+      this.$notify({
+        title: 'Warning',
+        message: "Please upload the correct format type",
+        type: 'warning',
+        duration: 3000
+      });
+      return !isExt;
+    }
+
+  }
+
+  handlePreview() {
+    window.open(this.formData.attachmentUrl, '_blank');
+  }
+
+  cancelAttachment() {
+    this.formData.attachmentId = null;
+    this.formData.attachmentName = null;
+    this.formData.attachmentUrl = null;
+    this.formData.attachment = null;
+  }
+
+  handleExceed(files, fileList) {
+    if (files.length >= 1) {
+      this.$notify({
+        title: 'Warning',
+        message: "Up to 1 files are allowed",
+        type: 'warning',
+        duration: 3000
+      });
+      return false;
+    }
+  }
+
+  onUploadSuccess(response, file, fileList) {
+    console.log("this response",response)
+    this.formData.attachment = response.attachment;
+    this.formData.attachmentId = response.attachment.id;
+    this.formData.attachmentName = response.attachment.name;
+    this.formData.attachmentUrl = response.attachment.downloadUrl;
+    this.file = file;
+  }
+
+  handleRemove(file, fileList) {
+    console.log(file, fileList);
+
+  }
+  onUploadError(err: any) {
+    console.log('Failed uploading a file ', err);
+  }
+
+  get uploadHeaders() {
+    if (this.accountService().hasToken) {
+      return {
+        'Authorization': `Bearer ${this.accountService().token}`
+      }
+    }
+
+    return {};
+  }
+
+  printFileName(attachment: any) {
+    return attachment?.fileName;
+  }
+
+  saveAttachment() {
+    this.formData.attachmentId = this.formData.attachment.id;
+    this.formData.attachmentName = this.formData.attachment.fileName;
+    this.formData.attachmentUrl = this.formData.downloadUri;
+    this.attachmentFormVisible = false;
+  }
+
+  get hasAttachment() {
+    return !!this.formData.attachmentId;
+  }
+
+  //upload
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;

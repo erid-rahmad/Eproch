@@ -6,7 +6,6 @@
                     Back
                 </el-button>
                 <el-button
-                    v-loading.fullscreen.lock="fullscreenLoading"
                     size="mini"
                     style="margin-left: 0px"
                     type="primary"
@@ -15,7 +14,7 @@
                     Save Draft
                 </el-button>
                 <el-button
-                    v-loading.fullscreen.lock="fullscreenLoading"
+
                     size="mini"
                     style="margin-left: 0px"
                     type="primary"

@@ -1,25 +1,16 @@
 package com.bhp.opusb.domain;
 
-import java.math.BigDecimal;
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import javax.validation.constraints.*;
+
+import java.io.Serializable;
+import java.util.Objects;
+import java.math.BigDecimal;
+import java.util.UUID;
 
 /**
  * A MProposalPrice.
@@ -57,6 +48,11 @@ public class MProposalPrice extends AbstractAuditingEntity {
     @NotNull
     @JsonIgnoreProperties("mProposalPrices")
     private ADOrganization adOrganization;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mProposalPrices")
+    private CAttachment attachment;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -143,6 +139,19 @@ public class MProposalPrice extends AbstractAuditingEntity {
 
     public void setAdOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
+    }
+
+    public CAttachment getAttachment() {
+        return attachment;
+    }
+
+    public MProposalPrice attachment(CAttachment cAttachment) {
+        this.attachment = cAttachment;
+        return this;
+    }
+
+    public void setAttachment(CAttachment cAttachment) {
+        this.attachment = cAttachment;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

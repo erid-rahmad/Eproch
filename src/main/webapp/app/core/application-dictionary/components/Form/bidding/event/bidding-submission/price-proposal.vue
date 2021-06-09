@@ -1,6 +1,6 @@
 <template>
     <div class="price-proposal">
-        <h3 style="margin-top: 0">Price Proposal</h3>
+        <h3 style="margin-top: 0">Price Proposal aa</h3>
 
         <el-form
             ref="mainForm"
@@ -115,6 +115,22 @@
                             ></el-option>
                         </el-select>
                     </el-form-item>
+                    <el-row :gutter="24">
+                        <el-col :xs="24" :sm="24" :lg="18" :xl="16">
+                            <el-form-item label="Description" prop="description">
+                                <html-editor v-model="formData.description" size="mini"></html-editor>
+                            </el-form-item>
+                            <el-form-item style="margin-top: .5rem">
+                                <el-button v-if="!hasAttachment" size="mini" type="primary" @click="attachmentFormVisible = true">
+                                    <svg-icon name="icomoo/206-attachment"></svg-icon> Attachment
+                                </el-button>
+                                <el-button v-if="hasAttachment" icon="el-icon-view" size="mini" type="primary" @click="handlePreview">
+                                    {{ attachmentName }}
+                                </el-button>
+                                <el-button v-if="hasAttachment" icon="el-icon-close" size="mini" type="primary" @click="cancelAttachment"></el-button>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
                     <el-form-item
                         v-if="!isVendor"
                         label="Vendor"
@@ -316,6 +332,39 @@
                     type="primary"
                     @click="saveSubitemEditor"
                 >
+                    {{ $t('entity.action.save') }}
+                </el-button>
+            </div>
+        </el-dialog>
+
+        <el-dialog :show-close="false" title="Add Attachment" :visible.sync="attachmentFormVisible">
+            <el-upload
+                ref="docUpload"
+                :accept="accept"
+                :action="action"
+                auto-upload
+                :headers="uploadHeaders"
+                :limit="limit"
+                :before-upload="handleBeforeUpload"
+                :on-error="onUploadError"
+                :on-exceed="handleExceed"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :on-success="onUploadSuccess"
+            >
+                <el-button icon="el-icon-search" slot="trigger" type="primary">
+                    Select File
+                </el-button>
+                <span class="el-upload__tip" style="margin-left: 10px" slot="tip">
+          Files with a size less than 5Mb
+        </span>
+            </el-upload>
+
+            <div slot="footer">
+                <el-button icon="el-icon-close" size="mini" style="margin-left: 0px;" @click="attachmentFormVisible = false">
+                    {{ $t('entity.action.cancel') }}
+                </el-button>
+                <el-button icon="el-icon-check" size="mini" style="margin-left: 0px;" type="primary" @click="saveAttachment">
                     {{ $t('entity.action.save') }}
                 </el-button>
             </div>

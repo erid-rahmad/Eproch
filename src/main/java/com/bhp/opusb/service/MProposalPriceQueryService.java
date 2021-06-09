@@ -111,6 +111,10 @@ public class MProposalPriceQueryService extends QueryService<MProposalPrice> {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(MProposalPrice_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
+            if (criteria.getAttachmentId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAttachmentId(),
+                    root -> root.join(MProposalPrice_.attachment, JoinType.LEFT).get(CAttachment_.id)));
+            }
         }
         return specification;
     }

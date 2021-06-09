@@ -36,15 +36,18 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
   emailPreviewVisible = false;
   recipientListVisible = false;
 
-  private file: any = {};
+
 
   public biddingData: any = {};
   public value: any = {};
   public itemname: any = {};
   public emailList: any[] = [];
+
   private accept: string = ".jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .csv, .ppt, .pptx, .pdf";
   private action: string = "/api/c-attachments/upload"
   private limit: number = 1;
+  private file: any = {};
+
   private vendorSuggestions: any[] = [];
   private dataForAnnouncment: any = {};
 
@@ -227,7 +230,7 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
   onRecipientSelectionChanged(val) {
     this.selectedRecipients = val;
   }
-
+// upload
   handleBeforeUpload(file: any) {
     // File size limitation
     const isLt5M = file.size / 1024 / 1024 < 5;
@@ -312,6 +315,8 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
   printFileName(attachment: any) {
     return attachment?.fileName;
   }
+
+  //upload
 
   openRecipientList() {
     this.recipientListVisible = true;

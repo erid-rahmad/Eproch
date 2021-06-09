@@ -2,12 +2,15 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-
 import io.github.jhipster.service.Criteria;
-import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.FloatFilter;
+import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
+import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -37,6 +40,8 @@ public class MProposalPriceCriteria implements Serializable, Criteria {
 
     private LongFilter adOrganizationId;
 
+    private LongFilter attachmentId;
+
     public MProposalPriceCriteria() {
     }
 
@@ -48,6 +53,7 @@ public class MProposalPriceCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.biddingSubmissionId = other.biddingSubmissionId == null ? null : other.biddingSubmissionId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.attachmentId = other.attachmentId == null ? null : other.attachmentId.copy();
     }
 
     @Override
@@ -111,6 +117,14 @@ public class MProposalPriceCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
+    public LongFilter getAttachmentId() {
+        return attachmentId;
+    }
+
+    public void setAttachmentId(LongFilter attachmentId) {
+        this.attachmentId = attachmentId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -128,7 +142,8 @@ public class MProposalPriceCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(biddingSubmissionId, that.biddingSubmissionId) &&
-            Objects.equals(adOrganizationId, that.adOrganizationId);
+            Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(attachmentId, that.attachmentId);
     }
 
     @Override
@@ -140,7 +155,8 @@ public class MProposalPriceCriteria implements Serializable, Criteria {
         uid,
         active,
         biddingSubmissionId,
-        adOrganizationId
+        adOrganizationId,
+        attachmentId
         );
     }
 
@@ -154,6 +170,7 @@ public class MProposalPriceCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (biddingSubmissionId != null ? "biddingSubmissionId=" + biddingSubmissionId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (attachmentId != null ? "attachmentId=" + attachmentId + ", " : "") +
             "}";
     }
 
