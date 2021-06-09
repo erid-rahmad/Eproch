@@ -1,18 +1,21 @@
 package com.bhp.opusb.service;
 
+import java.util.Optional;
+
+import com.bhp.opusb.config.ApplicationProperties;
+import com.bhp.opusb.config.ApplicationProperties.Document;
 import com.bhp.opusb.domain.MAuction;
 import com.bhp.opusb.repository.MAuctionRepository;
 import com.bhp.opusb.service.dto.MAuctionDTO;
 import com.bhp.opusb.service.mapper.MAuctionMapper;
+import com.bhp.opusb.util.DocumentUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link MAuction}.
@@ -27,9 +30,12 @@ public class MAuctionService {
 
     private final MAuctionMapper mAuctionMapper;
 
-    public MAuctionService(MAuctionRepository mAuctionRepository, MAuctionMapper mAuctionMapper) {
+    private final Document document;
+
+    public MAuctionService(ApplicationProperties applicationProperties, MAuctionRepository mAuctionRepository, MAuctionMapper mAuctionMapper) {
         this.mAuctionRepository = mAuctionRepository;
         this.mAuctionMapper = mAuctionMapper;
+        this.document = applicationProperties.getDocuments().get("auction");
     }
 
     /**
@@ -41,6 +47,15 @@ public class MAuctionService {
     public MAuctionDTO save(MAuctionDTO mAuctionDTO) {
         log.debug("Request to save MAuction : {}", mAuctionDTO);
         MAuction mAuction = mAuctionMapper.toEntity(mAuctionDTO);
+
+        if (mAuction.getDocumentNo() == null) {
+            mAuction.setDocumentNo(DocumentUtil.buildDocumentNumber(document.getDocumentNumberPrefix(), mAuctionRepository));
+        }
+        
+        if (Boolean.FALSE.equals(mAuction.isProcessed()) && DocumentUtil.isPublish(mAuction.getDocumentStatus())) {
+            mAuction.setProcessed(true);
+        }
+
         mAuction = mAuctionRepository.save(mAuction);
         return mAuctionMapper.toDto(mAuction);
     }

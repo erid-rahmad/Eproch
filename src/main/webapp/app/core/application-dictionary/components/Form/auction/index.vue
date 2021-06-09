@@ -30,7 +30,7 @@
       </el-button>
 
       <el-button
-        v-if="setupPage && setupTabName !== 'SUM'"
+        v-if="setupPage && isDraft && setupTabName !== 'SUM'"
         size="mini"
         type="primary"
         @click="onFormSaved"
@@ -39,7 +39,8 @@
       </el-button>
 
       <el-button
-        v-else-if="setupPage && setupTabName === 'SUM'"
+        v-else-if="setupPage && isDraft && setupTabName === 'SUM'"
+        :disabled="publishing"
         size="mini"
         type="primary"
         @click="onPublishClicked"
@@ -48,7 +49,7 @@
       </el-button>
 
       <el-dropdown
-        v-if="!isVendor && submissionPage && actions.length"
+        v-if="!isVendor && !isDraft && submissionPage"
         size="mini"
         style="margin-left: 5px"
         @command="runAction"
@@ -57,7 +58,7 @@
           size="mini"
           type="primary"
         >
-          <svg-icon name="icomoo/149-cog"></svg-icon> Settings 
+          <svg-icon name="icomoo/149-cog"></svg-icon> Actions 
         </el-button>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item
@@ -109,6 +110,16 @@
           ></el-table-column>
 
           <el-table-column
+            label="Start Date"
+            min-width="150"
+            sortable
+          >
+            <template slot-scope="{ row }">
+              {{ row.ruleStartDate | formatDate }}
+            </template>
+          </el-table-column>
+
+          <el-table-column
             label="Auction Status"
             min-width="140"
             sortable
@@ -125,6 +136,7 @@
           >
             <template slot-scope="{ row }">
               <el-button
+                v-if="!isVendor"
                 class="button"
                 size="mini"
                 type="primary"
@@ -135,7 +147,7 @@
 
               <el-button
                 class="button"
-                :disabled="row.documentStatus === 'DRF' || row.documentStatus === 'PUB'"
+                :disabled="row.documentStatus === 'DRF'"
                 size="mini"
                 type="primary"
                 @click="viewDetails(row)"

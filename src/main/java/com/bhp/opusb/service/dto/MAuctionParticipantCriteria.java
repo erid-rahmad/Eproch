@@ -7,7 +7,9 @@ import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.Filter;
 import io.github.jhipster.service.filter.LongFilter;
+import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
+import io.github.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
  * Criteria class for the {@link com.bhp.opusb.domain.MAuctionParticipant} entity. This class is used
@@ -31,6 +33,9 @@ public class MAuctionParticipantCriteria implements Serializable, Criteria {
     private LongFilter adOrganizationId;
 
     private LongFilter auctionId;
+    private BooleanFilter auctionActive;
+    private StringFilter auctionDocumentStatus;
+    private ZonedDateTimeFilter auctionStartDate;
 
     private LongFilter userUserId;
 
@@ -45,6 +50,9 @@ public class MAuctionParticipantCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.auctionId = other.auctionId == null ? null : other.auctionId.copy();
+        this.auctionActive = other.auctionActive == null ? null : other.auctionActive.copy();
+        this.auctionDocumentStatus = other.auctionDocumentStatus == null ? null : other.auctionDocumentStatus.copy();
+        this.auctionStartDate = other.auctionStartDate == null ? null : other.auctionStartDate.copy();
         this.userUserId = other.userUserId == null ? null : other.userUserId.copy();
         this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
     }
@@ -94,6 +102,30 @@ public class MAuctionParticipantCriteria implements Serializable, Criteria {
         this.auctionId = auctionId;
     }
 
+    public BooleanFilter getAuctionActive() {
+        return auctionActive;
+    }
+
+    public void setAuctionActive(BooleanFilter auctionActive) {
+        this.auctionActive = auctionActive;
+    }
+
+    public StringFilter getAuctionDocumentStatus() {
+        return auctionDocumentStatus;
+    }
+
+    public void setAuctionDocumentStatus(StringFilter auctionDocumentStatus) {
+        this.auctionDocumentStatus = auctionDocumentStatus;
+    }
+
+    public ZonedDateTimeFilter getAuctionStartDate() {
+        return auctionStartDate;
+    }
+
+    public void setAuctionStartDate(ZonedDateTimeFilter auctionStartDate) {
+        this.auctionStartDate = auctionStartDate;
+    }
+
     public LongFilter getUserUserId() {
         return userUserId;
     }
@@ -126,6 +158,9 @@ public class MAuctionParticipantCriteria implements Serializable, Criteria {
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(auctionId, that.auctionId) &&
+            Objects.equals(auctionActive, that.auctionActive) &&
+            Objects.equals(auctionDocumentStatus, that.auctionDocumentStatus) &&
+            Objects.equals(auctionStartDate, that.auctionStartDate) &&
             Objects.equals(userUserId, that.userUserId) &&
             Objects.equals(vendorId, that.vendorId);
     }
@@ -138,6 +173,9 @@ public class MAuctionParticipantCriteria implements Serializable, Criteria {
         active,
         adOrganizationId,
         auctionId,
+        auctionActive,
+        auctionDocumentStatus,
+        auctionStartDate,
         userUserId,
         vendorId
         );
@@ -151,6 +189,9 @@ public class MAuctionParticipantCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (auctionId != null ? "auctionId=" + auctionId + ", " : "") +
+                (auctionActive != null ? "auctionActive=" + auctionActive + ", " : "") +
+                (auctionDocumentStatus != null ? "auctionDocumentStatus=" + auctionDocumentStatus + ", " : "") +
+                (auctionStartDate != null ? "auctionStartDate=" + auctionStartDate + ", " : "") +
                 (userUserId != null ? "userId=" + userUserId + ", " : "") +
                 (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
             "}";

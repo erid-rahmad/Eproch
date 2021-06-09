@@ -4,6 +4,7 @@ import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service'
 import settings from '@/settings';
 import { AccountStoreModule } from '@/shared/config/store/account-store';
 import Schema from "async-validator";
+import { ElTable } from 'element-ui/types/table';
 
 const baseApiAuctionItem = 'api/m-auction-items';
 const baseApiProduct = 'api/c-products';
@@ -32,6 +33,7 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
   deleteConfirmationVisible: boolean = false;
 
   auction: any = {};
+  selectedRow: any = {};
 
   /**
    * Store the original record before editing or deleting.
@@ -70,6 +72,8 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
    * a user is filtering it by code/name.
    */
   uoms: any[] = [];
+  bidImprovementUnitOptions: any[] = [];
+  tieBidsRuleOptions: any[] = [];
 
   gutterSize: number = 24;
 
@@ -77,11 +81,19 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
     return settings.form;
   }
 
+  get isStarted() {
+    return this.selectedRow.documentStatus === 'STR';
+  }
+
   get readOnly() {
     return this.auction.documentStatus && this.auction.documentStatus !== 'DRF';
   }
 
   onAddClicked() {
+    if (this.editMode) {
+      return false;
+    }
+    
     this.retrieveUoms();
     this.retrieveProducts();
 
@@ -93,9 +105,13 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
       uomId: null,
       quantity: 0,
       ceilingPrice: 0,
-      amount: 0
+      amount: 0,
+      bidDecrement: null,
+      protectFrontBuffer: null,
+      protectBackBuffer: null
     });
 
+    this.editMode = true;
     this.newRecord = true;
   }
 
@@ -105,6 +121,8 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
   }
 
   onEditCanceled(index: number) {
+    this.editMode = false;
+
     if (this.newRecord) {
       this.items.splice(0, 1);
       this.newRecord = false;
@@ -118,6 +136,7 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
     this.retrieveProducts(row.productId);
     
     this.tmpItem = {...row};
+    this.editMode = true;
     row.editing = true;
   }
 
@@ -148,9 +167,17 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
     row.amount = quantity * row.ceilingPrice;
   }
 
+  onCurrentRowChanged(row: any) {
+    if (!this.editMode) {
+      this.selectedRow = row;
+    }
+  }
+
   created() {
     this.auction = {...this.data};
     this.retrieveItems(this.data.id);
+    this.retrieveBidImprovementUnitOptions();
+    this.retrieveTieBidsRuleOptions();
   }
 
   deleteRecord() {
@@ -176,6 +203,14 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
     return this.products.find(product => product.id === productId)?.name || productId;
   }
 
+  printBidImprovementUnit(value: string) {
+    return this.bidImprovementUnitOptions.find(item => item.value === value)?.name || value;
+  }
+
+  printTieBidsRule(value: string) {
+    return this.tieBidsRuleOptions.find(item => item.value === value)?.name || value;
+  }
+
   private retrieveItems(auctionId: number) {
     this.loadingItems = true;
     this.commonService(baseApiAuctionItem)
@@ -189,7 +224,11 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
         this.items = res.data.map(item => {
           item.editing = false;
           return item;
-        })
+        });
+
+        if (this.items.length) {
+          this.setRow(this.items[0]);
+        }
       })
       .finally(() => this.loadingItems = false);
   }
@@ -238,6 +277,22 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
       .then(res => this.uoms = res.data);
   }
 
+  private retrieveBidImprovementUnitOptions() {
+    this.commonService(null)
+      .retrieveReferenceLists('bidImprovementUnitOptions')
+      .then(res => this.bidImprovementUnitOptions = res);
+  }
+
+  private retrieveTieBidsRuleOptions() {
+    this.commonService(null)
+      .retrieveReferenceLists('tieBidsRuleOptions')
+      .then(res => this.tieBidsRuleOptions = res);
+  }
+
+  private setRow(record: any) {
+    (<ElTable>this.$refs.itemGrid).setCurrentRow(record);
+  }
+
   public save() {
     // No save implementation in Auction Item tab.
   }
@@ -250,6 +305,7 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
       [newRecord ? 'create' : 'update'](data)
       .then(res => {
         this.$message.success(`Item has been ${newRecord ? 'added' : 'updated'} successfully`);
+        this.editMode = false;
         this.newRecord = false;
         this.tmpItem = {};
         this.retrieveItems(this.auction.id);

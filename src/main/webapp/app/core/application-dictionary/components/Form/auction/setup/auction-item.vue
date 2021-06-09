@@ -43,11 +43,13 @@
 
     <el-table
       v-loading="loadingItems"
+      ref="itemGrid"
       border
       :data="items"
       highlight-current-row
       size="mini"
       stripe
+      @current-change="onCurrentRowChanged"
     >
       <el-table-column width="50" label="No">
         <template slot-scope="{ $index }">
@@ -221,6 +223,7 @@
       >
         <template slot="header">
           <el-button
+            v-show="!editMode"
             icon="el-icon-plus"
             size="mini"
             title="Add an Item"
@@ -240,6 +243,7 @@
           </el-button>
           <el-button
             v-else
+            :disabled="editMode"
             icon="el-icon-edit"
             size="mini"
             type="primary"
@@ -257,6 +261,7 @@
           ></el-button>
           <el-button
             v-else
+            :disabled="editMode"
             icon="el-icon-delete"
             size="mini"
             type="danger"
@@ -265,6 +270,55 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <el-form
+      :disabled="!selectedRow.editing"
+      :label-position="formSettings.labelPosition"
+      :label-width="formSettings.labelWidth"
+      :model="selectedRow"
+      :size="formSettings.size"
+    >
+      <el-divider content-position="left">
+        <h4>Bidding Rules</h4>
+      </el-divider>
+      <el-row :gutter="gutterSize">
+        <el-col
+          :xs="24"
+          :sm="20"
+          :md="16"
+          :lg="12"
+          :xl="8"
+        >
+          <el-form-item label="Improve Bid by">
+            <strong>{{ printBidImprovementUnit(auction.ruleBidImprovementUnit) }}</strong>
+          </el-form-item>
+          <el-form-item label="Bid Decrement">
+            <el-input-number
+              v-model="selectedRow.bidDecrement"
+              controls-position="right"
+              :min="0"
+            ></el-input-number>
+          </el-form-item>
+          <el-form-item label="Leading Bid Front Buffer">
+            <el-input-number
+              v-model="selectedRow.protectFrontBuffer"
+              controls-position="right"
+              :min="0"
+            ></el-input-number>
+          </el-form-item>
+          <el-form-item label="Leading Bid Back Buffer">
+            <el-input-number
+              v-model="selectedRow.protectBackBuffer"
+              controls-position="right"
+              :min="0"
+            ></el-input-number>
+          </el-form-item>
+          <el-form-item label="Tie Bids Rule">
+            <strong>{{ printTieBidsRule(auction.ruleTieBidsRule) }}</strong>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
 
     <el-dialog
       width="30%"

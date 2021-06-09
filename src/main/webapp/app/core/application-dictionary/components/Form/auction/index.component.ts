@@ -13,6 +13,7 @@ const enum AuctionPage {
 }
 
 const baseApiAuction = 'api/m-auctions';
+const processName = 'mAuctionProcessTrigger';
 
 @Component({
   components: {
@@ -28,6 +29,7 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
   biddingScheduleVisible: boolean = false;
   deleteConfirmationVisible: boolean = false;
   loading: boolean = false;
+  publishing: boolean = false;
   formType: string = null;
   setupTabName: string = 'INF';
 
@@ -57,29 +59,77 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
   biddingStatuses: any[] = [];
   docStatuses: any[] = [];
 
-  actions: any[] = [
-    {
-      id: 1000,
-      name: 'Pause',
-      tooltip: 'Pause the timer',
-      type: 'T',
-      serviceName: 'pauseAuctionProcessTrigger'
-    },
-    {
-      id: 2000,
-      name: 'Stop',
-      tooltip: 'Stop the timer',
-      type: 'T',
-      serviceName: 'stopAuctionProcessTrigger'
-    },
-    {
-      id: 3000,
-      name: 'Adjust Time',
-      tooltip: 'Adjust date and time',
+  get actions() {
+    let keySeq = 0;
+    const list = [];
+
+    if (this.isPublished) {
+      list.push({
+        id: ++keySeq,
+        name: 'Start',
+        tooltip: 'Start the auction',
+        type: 'T',
+        serviceName: processName,
+        params: {
+          auctionId: this.selectedRow.id,
+          action: 'STR'
+        }
+      });
+    } else if (this.isStarted) {
+      list.push({
+        id: ++keySeq,
+        name: 'Pause',
+        tooltip: 'Pause the auction',
+        type: 'T',
+        serviceName: processName,
+        params: {
+          auctionId: this.selectedRow.id,
+          action: 'PAS'
+        }
+      },
+      {
+        id: ++keySeq,
+        name: 'Cancel',
+        tooltip: 'Cancel the auction',
+        type: 'T',
+        serviceName: processName,
+        params: {
+          auctionId: this.selectedRow.id,
+          action: 'CNL'
+        }
+      });
+    }
+
+    list.push({
+      id: keySeq + 1,
+      name: 'Overtime',
+      tooltip: 'Make overtime',
       type: 'P',
       popup: 'adjustScheduleForm'
-    },
-  ]
+    });
+
+    return list;
+  }
+  
+  get isCanceled() {
+    return this.selectedRow.documentStatus === 'CNL';
+  }
+
+  get isDraft() {
+    return this.selectedRow.documentStatus === 'DRF';
+  }
+
+  get isPaused() {
+    return this.selectedRow.documentStatus === 'PAS';
+  }
+
+  get isPublished() {
+    return this.selectedRow.documentStatus === 'PUB';
+  }
+
+  get isStarted() {
+    return this.selectedRow.documentStatus === 'STR';
+  }
 
   get isVendor() {
     return AccountStoreModule.isVendor;
@@ -108,6 +158,7 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
 
   onCloseClicked() {
     this.section = AuctionPage.MAIN;
+    this.setupTabName = 'INF';
     this.transition();
   }
 
@@ -120,7 +171,20 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
   }
 
   onPublishClicked() {
-    console.log('Publishing the auction information...');
+    this.selectedRow.documentStatus = 'PUB';
+
+    this.publishing = true;
+    this.commonService(baseApiAuction)
+      .update(this.selectedRow)
+      .then(res => {
+        this.$message.success(`Auction #${res.documentNo} has been published successfully`);
+        this.selectedRow.processed = res.processed;
+      })
+      .catch(err => {
+        console.error('Failed to publish the auction', err);
+        this.$message.error(`Failed to publish auction #${this.selectedRow.documentNo}`);
+      })
+      .finally(() => this.publishing = false);
   }
 
   created() {
@@ -237,6 +301,10 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
 
   runAction(command: any) {
     console.log('Run action. command:', command);
+    if (command.type === 'T') {
+      this.commonService(`api/ad-triggers/process/${command.serviceName}`)
+        .create(command.params)
+    }
   }
 
   private setRow(record: any) {

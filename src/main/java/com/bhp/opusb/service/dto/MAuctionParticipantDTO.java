@@ -20,6 +20,10 @@ public class MAuctionParticipantDTO extends AbstractAuditingDTO {
 
     private Long auctionId;
     private String auctionName;
+    private String auctionDocumentNo;
+    private Long auctionCurrencyId;
+    private String auctionCurrencyName;
+    private String auctionStartDate;
 
     private Long userUserId;
     private String userName;
@@ -82,6 +86,38 @@ public class MAuctionParticipantDTO extends AbstractAuditingDTO {
 
     public void setAuctionName(String auctionName) {
         this.auctionName = auctionName;
+    }
+
+    public String getAuctionDocumentNo() {
+        return auctionDocumentNo;
+    }
+
+    public void setAuctionDocumentNo(String auctionDocumentNo) {
+        this.auctionDocumentNo = auctionDocumentNo;
+    }
+
+    public Long getAuctionCurrencyId() {
+        return auctionCurrencyId;
+    }
+
+    public void setAuctionCurrencyId(Long auctionCurrencyId) {
+        this.auctionCurrencyId = auctionCurrencyId;
+    }
+
+    public String getAuctionCurrencyName() {
+        return auctionCurrencyName;
+    }
+
+    public void setAuctionCurrencyName(String auctionCurrencyName) {
+        this.auctionCurrencyName = auctionCurrencyName;
+    }
+
+    public String getAuctionStartDate() {
+        return auctionStartDate;
+    }
+
+    public void setAuctionStartDate(String auctionStartDate) {
+        this.auctionStartDate = auctionStartDate;
     }
 
     public Long getUserUserId() {

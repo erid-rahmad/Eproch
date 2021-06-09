@@ -90,7 +90,7 @@
             </el-select>
           </el-tooltip>
           <template v-else>
-            {{ row.userName }}
+            {{ row.vendorName }}
           </template>
         </template>
       </el-table-column>
@@ -154,6 +154,7 @@
       >
         <template slot="header">
           <el-button
+            v-show="!editMode"
             icon="el-icon-plus"
             size="mini"
             title="Add an Item"
@@ -173,6 +174,7 @@
           </el-button>
           <el-button
             v-else
+            :disabled="editMode"
             icon="el-icon-edit"
             size="mini"
             type="primary"
@@ -190,6 +192,7 @@
           ></el-button>
           <el-button
             v-else
+            :disabled="editMode"
             icon="el-icon-delete"
             size="mini"
             type="danger"

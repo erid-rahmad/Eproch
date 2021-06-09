@@ -103,7 +103,20 @@ public class MAuctionParticipantQueryService extends QueryService<MAuctionPartic
             }
             if (criteria.getAuctionId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAuctionId(),
-                    root -> root.join(MAuctionParticipant_.auction, JoinType.LEFT).get(MAuction_.id)));
+                    root -> root.join(MAuctionParticipant_.auction, JoinType.INNER).get(MAuction_.id)));
+            }
+            if (criteria.getAuctionActive() != null) {
+                specification = specification.and(buildSpecification(criteria.getAuctionActive(),
+                    root -> root.join(MAuctionParticipant_.auction, JoinType.INNER).get(MAuction_.active)));
+            }
+            if (criteria.getAuctionDocumentStatus() != null) {
+                specification = specification.and(buildSpecification(criteria.getAuctionDocumentStatus(),
+                    root -> root.join(MAuctionParticipant_.auction, JoinType.INNER).get(MAuction_.documentStatus)));
+            }
+            if (criteria.getAuctionStartDate() != null) {
+                specification = specification.and(buildSpecification(criteria.getAuctionStartDate(),
+                    root -> root.join(MAuctionParticipant_.auction, JoinType.INNER)
+                        .join(MAuction_.rule).get(MAuctionRule_.startDate)));
             }
             if (criteria.getUserUserId() != null) {
                 specification = specification.and(buildSpecification(criteria.getUserUserId(),

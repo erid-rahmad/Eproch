@@ -1,9 +1,14 @@
 import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import { AccountStoreModule } from '@/shared/config/store/account-store';
-import { formatDuration, intervalToDuration } from 'date-fns';
+import { intervalToDuration } from 'date-fns';
+import dayjs from 'dayjs';
+import duration from "dayjs/plugin/duration";
 import { isEmpty } from 'lodash';
 import { Component, Inject, Mixins, Vue, Watch } from 'vue-property-decorator';
+import AuctionService from '../auction.service';
+
+dayjs.extend(duration);
 
 const baseApiAuctionItem = 'api/m-auction-items';
 
@@ -29,7 +34,9 @@ const BidSubmissionProp = Vue.extend({
 export default class BidSubmission extends Mixins(AccessLevelMixin, BidSubmissionProp) {
 
   @Inject('dynamicWindowService')
-  protected commonService: (baseApiUrl: string) => DynamicWindowService;
+  private commonService: (baseApiUrl: string) => DynamicWindowService;
+
+  private auctionWsService: AuctionService = new AuctionService();
 
   // These props are used to show the remainingTime.
   private timerId;
@@ -86,31 +93,16 @@ export default class BidSubmission extends Mixins(AccessLevelMixin, BidSubmissio
     if (!this.auction.actualEndDate) {
       return '';
     }
-
+/* 
     if (this.currentDate >= new Date(this.auction.actualEndDate)) {
       return 'Event has been ended';
     }
-
-    const duration = intervalToDuration({
-      start: this.currentDate,
-      end: new Date(this.auction.actualEndDate)
-    });
-
-    let format: string[];
-
-    if (duration.years) {
-      format = durationFormats.get('years');
-    } else if (duration.months) {
-      format = durationFormats.get('months');
-    } else if (duration.days) {
-      format = durationFormats.get('days');
-    } else {
-      format = durationFormats.get('hours');
-    }
-
-    return formatDuration(duration, {
-      format
-    });
+ */
+    return dayjs.duration({
+      hours: 0,
+      minutes: 10,
+      seconds: 0,
+    }).format('HH:mm:ss');
   }
 
   @Watch('data')
@@ -127,9 +119,19 @@ export default class BidSubmission extends Mixins(AccessLevelMixin, BidSubmissio
     this.updateTimer();
   }
 
+  mounted() {
+    this.auctionWsService.connect();
+    this.auctionWsService.subscribe(this.data.id);
+    this.auctionWsService.receive().subscribe(data => {
+      console.log('Auction info has been updated.', data);
+    });
+  }
+
   beforeDestroy() {
     clearInterval(this.intervalId);
     clearTimeout(this.timerId);
+    this.auctionWsService.unsubscribe();
+    this.auctionWsService.disconnect();
   }
 
   private retrieveAuctionItems(auctionId: number) {

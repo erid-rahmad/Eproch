@@ -14,6 +14,9 @@ import org.mapstruct.Mapping;
 public interface MAuctionMapper extends EntityMapper<MAuctionDTO, MAuction> {
 
     @Mapping(source = "rule.id", target = "ruleId")
+    @Mapping(source = "rule.startDate", target = "ruleStartDate")
+    @Mapping(source = "rule.bidImprovementUnit", target = "ruleBidImprovementUnit")
+    @Mapping(source = "rule.tieBidsRule", target = "ruleTieBidsRule")
     @Mapping(source = "content.id", target = "contentId")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")

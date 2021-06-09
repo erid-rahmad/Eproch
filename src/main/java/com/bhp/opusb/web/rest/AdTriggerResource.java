@@ -153,7 +153,7 @@ public class AdTriggerResource {
     }
 
   /**
-   * {@code post  /process-trigger} : Execute a process.
+   * {@code post  /ad-triggers/process} : Execute a process.
    *
    * @param serviceName the process name to execute.
    * @param params the process parameters.

@@ -29,6 +29,7 @@ export default class AuctionParticipant extends Mixins(AccessLevelMixin, Auction
   gutterSize: number = 24;
 
   loadingParticipants: boolean = false;
+  editMode: boolean = false;
   newRecord: boolean = false;
   deleteConfirmationVisible: boolean = false;
 
@@ -59,6 +60,10 @@ export default class AuctionParticipant extends Mixins(AccessLevelMixin, Auction
   }
 
   onAddClicked() {
+    if (this.editMode) {
+      return false;
+    }
+    
     this.retrieveVendors();
 
     this.participants.splice(0, 0, {
@@ -70,6 +75,7 @@ export default class AuctionParticipant extends Mixins(AccessLevelMixin, Auction
       email: null
     });
 
+    this.editMode = true;
     this.newRecord = true;
   }
 
@@ -79,6 +85,8 @@ export default class AuctionParticipant extends Mixins(AccessLevelMixin, Auction
   }
 
   onEditCanceled(index: number) {
+    this.editMode = false;
+
     if (this.newRecord) {
       this.participants.splice(0, 1);
       this.newRecord = false;
@@ -93,6 +101,8 @@ export default class AuctionParticipant extends Mixins(AccessLevelMixin, Auction
     this.retrieveVendorUsers(row.vendorId, row.userUserId);
     this.tmpParticipant = {...row};
     row.editing = true;
+
+    this.editMode = true;
   }
 
   onSaveClicked(row: any) {
@@ -219,7 +229,7 @@ export default class AuctionParticipant extends Mixins(AccessLevelMixin, Auction
   }
 
   public save() {
-    console.log('Saving auction participants...');
+    // 
   }
 
   private saveParticipant(data: any) {
@@ -230,6 +240,7 @@ export default class AuctionParticipant extends Mixins(AccessLevelMixin, Auction
       [newRecord ? 'create' : 'update'](data)
       .then(res => {
         this.$message.success(`Participant has been ${newRecord ? 'added' : 'updated'} successfully`);
+        this.editMode = true;
         this.newRecord = false;
         this.tmpParticipant = {};
         this.retrieveParticipants(this.auction.id);

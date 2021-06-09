@@ -49,6 +49,9 @@ public class MAuctionDTO extends AbstractAuditingDTO {
 
 
     private Long ruleId;
+    private ZonedDateTime ruleStartDate;
+    private String ruleBidImprovementUnit;
+    private String ruleTieBidsRule;
 
     private Long contentId;
 
@@ -182,6 +185,30 @@ public class MAuctionDTO extends AbstractAuditingDTO {
 
     public void setRuleId(Long mAuctionRuleId) {
         this.ruleId = mAuctionRuleId;
+    }
+
+    public ZonedDateTime getRuleStartDate() {
+        return ruleStartDate;
+    }
+
+    public void setRuleStartDate(ZonedDateTime ruleStartDate) {
+        this.ruleStartDate = ruleStartDate;
+    }
+
+    public String getRuleBidImprovementUnit() {
+        return ruleBidImprovementUnit;
+    }
+
+    public void setRuleBidImprovementUnit(String ruleBidImprovementUnit) {
+        this.ruleBidImprovementUnit = ruleBidImprovementUnit;
+    }
+
+    public String getRuleTieBidsRule() {
+        return ruleTieBidsRule;
+    }
+
+    public void setRuleTieBidsRule(String ruleTieBidsRule) {
+        this.ruleTieBidsRule = ruleTieBidsRule;
     }
 
     public Long getContentId() {

@@ -21,6 +21,7 @@
     "bootstrap-vue": "2.2.2",
     "cleave.js": "^1.6.0",
     "date-fns": "^2.21.2",
+    "dayjs": "^1.10.5",
     "dexie": "^3.0.3",
     "element-ui": "^2.13.0",
     "file-saver": "^2.0.2",
