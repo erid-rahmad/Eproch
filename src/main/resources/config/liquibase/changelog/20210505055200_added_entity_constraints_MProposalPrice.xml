@@ -21,7 +21,7 @@
                                  referencedTableName="ad_organization"/>
 
     </changeSet>
-    <changeSet id="" author="">
+    <changeSet id="20210609114900" author="erid">
         <addForeignKeyConstraint baseColumnNames="attachment_id"
                                  baseTableName="m_proposal_price"
                                  constraintName="fk_m_proposal_price_attachment_id"
