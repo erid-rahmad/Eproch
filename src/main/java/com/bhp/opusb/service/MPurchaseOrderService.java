@@ -25,7 +25,9 @@ import com.bhp.opusb.repository.MPurchaseOrderRepository;
 import com.bhp.opusb.repository.MRequisitionLineRepository;
 import com.bhp.opusb.repository.MRequisitionRepository;
 import com.bhp.opusb.service.dto.MPurchaseOrderDTO;
+import com.bhp.opusb.service.dto.MPurchaseOrderLineDTO;
 import com.bhp.opusb.service.dto.MRequisitionLineDTO;
+import com.bhp.opusb.service.mapper.MPurchaseOrderLineMapper;
 import com.bhp.opusb.service.mapper.MPurchaseOrderMapper;
 import com.bhp.opusb.service.mapper.MRequisitionLineMapper;
 import com.bhp.opusb.util.DocumentUtil;
@@ -64,12 +66,13 @@ public class MPurchaseOrderService {
 
     private final MPurchaseOrderMapper mPurchaseOrderMapper;
     private final MRequisitionLineMapper mRequisitionLineMapper;
+    private final MPurchaseOrderLineMapper mPurchaseOrderLineMapper;
     private final Document document;
 
     public MPurchaseOrderService(ApplicationProperties applicationProperties,
             MPurchaseOrderRepository mPurchaseOrderRepository, CDocumentTypeRepository cDocumentTypeRepository,
             MRequisitionRepository mRequisitionRepository, MRequisitionLineRepository mRequisitionLineRepository, MPurchaseOrderLineRepository mPurchaseOrderLineRepository,
-            CVendorTaxRepository cVendorTaxRepository, MPurchaseOrderMapper mPurchaseOrderMapper,
+            CVendorTaxRepository cVendorTaxRepository, MPurchaseOrderMapper mPurchaseOrderMapper, MPurchaseOrderLineMapper mPurchaseOrderLineMapper,
             MRequisitionLineMapper mRequisitionLineMapper, DataSource dataSource) {
         this.mPurchaseOrderRepository = mPurchaseOrderRepository;
         this.mPurchaseOrderLineRepository = mPurchaseOrderLineRepository;
@@ -79,6 +82,7 @@ public class MPurchaseOrderService {
         this.cVendorTaxRepository = cVendorTaxRepository;
         this.mPurchaseOrderMapper = mPurchaseOrderMapper;
         this.mRequisitionLineMapper = mRequisitionLineMapper;
+        this.mPurchaseOrderLineMapper = mPurchaseOrderLineMapper;
         this.dataSource = dataSource;
 
         document = applicationProperties.getDocuments().get("purchaseOrder");
@@ -175,6 +179,22 @@ public class MPurchaseOrderService {
     private String initDocumentNumber() {
         return DocumentUtil.buildDocumentNumber(document.getDocumentNumberPrefix(), mPurchaseOrderRepository);
     }
+
+    /**
+     * Build Purchase Order from Vendor Confirmation
+     * @param mPurchaseOrderDTO with PO Lines
+     * @return persisted DTO
+     */
+    public MPurchaseOrderDTO generatePurchaseOrderFromVendor(MPurchaseOrderDTO mpoDto) {
+        MPurchaseOrderDTO savedDto = save(mpoDto);
+        List<MPurchaseOrderLine> mpols = new ArrayList<>();
+        for(MPurchaseOrderLineDTO lines: mpoDto.getPoLines()){
+            lines.setPurchaseOrderId(savedDto.getId());
+            mpols.add(mPurchaseOrderLineMapper.toEntity(lines));
+        }
+        mPurchaseOrderLineRepository.saveAll(mpols);
+        return savedDto;
+    } 
 
     /**
      * Build MPurchaseOrderLine from an MRequisitionLineDTO.

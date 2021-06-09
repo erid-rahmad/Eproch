@@ -21,6 +21,7 @@ public class MVendorConfirmationDTO extends AbstractAuditingDTO implements Seria
     private String biddingNo;
     private String biddingTitle;
     private String biddingTypeName;
+    private Long warehouseId;
 
     private Long adOrganizationId;
 
@@ -42,6 +43,14 @@ public class MVendorConfirmationDTO extends AbstractAuditingDTO implements Seria
     
     public Long getId() {
         return id;
+    }
+
+    public Long getWarehouseId() {
+        return warehouseId;
+    }
+
+    public void setWarehouseId(Long warehouseId) {
+        this.warehouseId = warehouseId;
     }
 
     public BigDecimal getNegoAmount() {

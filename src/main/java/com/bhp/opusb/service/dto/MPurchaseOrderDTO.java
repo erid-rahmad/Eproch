@@ -79,9 +79,19 @@ public class MPurchaseOrderDTO extends AbstractAuditingDTO {
     private String paymentTermName;
 
     private List<MRequisitionLineDTO> requisitionLines = new ArrayList<>();
+
+    private List<MPurchaseOrderLineDTO> poLines = new ArrayList<>();
     
     public Long getId() {
         return id;
+    }
+
+    public List<MPurchaseOrderLineDTO> getPoLines() {
+        return poLines;
+    }
+
+    public void setPoLines(List<MPurchaseOrderLineDTO> poLines) {
+        this.poLines = poLines;
     }
 
     public void setId(Long id) {
