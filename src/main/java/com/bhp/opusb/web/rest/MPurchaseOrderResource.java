@@ -104,6 +104,28 @@ public class MPurchaseOrderResource {
     }
 
     /**
+     * {@code POST  /m-purchase-orders/generate} : Generate mPurchaseOrder from Vendor Confirmation.
+     *
+     * @param mPurchaseOrderDTO the mPurchaseOrderDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new mPurchaseOrderDTO, or with status {@code 400 (Bad Request)} if the mPurchaseOrder has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/m-purchase-orders/generate-from-vc")
+    public ResponseEntity<MPurchaseOrderDTO> generateMPurchaseOrdersFromVendor(@Valid @RequestBody MPurchaseOrderDTO mPurchaseOrderDTO) throws URISyntaxException {
+        log.debug("REST request to save MPurchaseOrder : {}", mPurchaseOrderDTO);
+        if (mPurchaseOrderDTO.getPoLines() == null) {
+            throw new BadRequestAlertException("The submitted purchase order has no lines", ENTITY_NAME, "poNoLines");
+        }
+        if (mPurchaseOrderDTO.getId() != null) {
+            throw new BadRequestAlertException("A new mPurchaseOrder cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        MPurchaseOrderDTO result = mPurchaseOrderService.generatePurchaseOrderFromVendor(mPurchaseOrderDTO);
+        return ResponseEntity.created(new URI("/api/m-purchase-orders/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+    /**
      * {@code PUT  /m-purchase-orders} : Updates an existing mPurchaseOrder.
      *
      * @param mPurchaseOrderDTO the mPurchaseOrderDTO to update.
