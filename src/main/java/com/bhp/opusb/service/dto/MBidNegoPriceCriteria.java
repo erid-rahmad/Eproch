@@ -34,6 +34,8 @@ public class MBidNegoPriceCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter negotiationPrice;
 
+    private LongFilter attachmentId;
+
     private LongFilter biddingId;
 
     private LongFilter priceProposalId;
@@ -48,6 +50,7 @@ public class MBidNegoPriceCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.negotiationPrice = other.negotiationPrice == null ? null : other.negotiationPrice.copy();
+        this.attachmentId = other.attachmentId == null ? null : other.attachmentId.copy();
         this.biddingId = other.biddingId == null ? null : other.biddingId.copy();
         this.priceProposalId = other.priceProposalId == null ? null : other.priceProposalId.copy();
         this.negotiationLineId = other.negotiationLineId == null ? null : other.negotiationLineId.copy();
@@ -90,6 +93,14 @@ public class MBidNegoPriceCriteria implements Serializable, Criteria {
         this.negotiationPrice = negotiationPrice;
     }
 
+    public LongFilter getAttachmentId() {
+        return attachmentId;
+    }
+
+    public void setAttachmentId(LongFilter attachmentId) {
+        this.attachmentId = attachmentId;
+    }
+
     public LongFilter getBiddingId() {
         return biddingId;
     }
@@ -129,6 +140,7 @@ public class MBidNegoPriceCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(negotiationPrice, that.negotiationPrice) &&
+            Objects.equals(attachmentId, that.attachmentId) &&
             Objects.equals(biddingId, that.biddingId) &&
             Objects.equals(priceProposalId, that.priceProposalId) &&
             Objects.equals(negotiationLineId, that.negotiationLineId);
@@ -141,6 +153,7 @@ public class MBidNegoPriceCriteria implements Serializable, Criteria {
         uid,
         active,
         negotiationPrice,
+        attachmentId,
         biddingId,
         priceProposalId,
         negotiationLineId
@@ -154,6 +167,7 @@ public class MBidNegoPriceCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (negotiationPrice != null ? "negotiationPrice=" + negotiationPrice + ", " : "") +
+                (attachmentId != null ? "attachmentId=" + attachmentId + ", " : "") +
                 (biddingId != null ? "biddingId=" + biddingId + ", " : "") +
                 (priceProposalId != null ? "priceProposalId=" + priceProposalId + ", " : "") +
                 (negotiationLineId != null ? "negotiationLineId=" + negotiationLineId + ", " : "") +

@@ -199,7 +199,33 @@
           <el-col
             :span="8"
           >
-            &nbsp;
+            <el-form-item label="Attachment" v-if="isVendor">
+              <el-upload
+                ref="contractFile"
+                v-model="negoPrice.attachment"
+                :action="action"
+                class="upload-demo"
+                :limit="limit"
+                :multiple="false"
+                :accept="accept"
+                :file-list="fileList2"
+                :before-upload="handleBeforeUpload"
+                :on-change="onUploadChangeN"
+                :on-preview="handlePreview"
+                :on-exceed="handleExceed"
+                :on-remove="handleRemoveN"
+                :on-error="onUploadError"
+                :on-success="onUploadSuccessN"
+              >
+                <el-button
+                  size="mini"
+                  type="primary"
+                >
+                  Select Document
+                </el-button>
+              </el-upload>
+            </el-form-item>
+            <div v-else>&nbsp;</div>
           </el-col>
           <el-col
             :span="8"
@@ -209,7 +235,7 @@
           <el-col
             :span="8"
           >
-            <el-form-item label="Price Difference Percentage">
+            <el-form-item label="Price Difference Percentage" v-if="!isVendor">
               <el-input
                 v-model="negoPrice.percentDiff"
                 disabled

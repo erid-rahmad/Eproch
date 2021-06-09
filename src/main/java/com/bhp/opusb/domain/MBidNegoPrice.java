@@ -37,6 +37,10 @@ public class MBidNegoPrice extends AbstractAuditingEntity implements Serializabl
     @Column(name = "negotiation_price", precision = 21, scale = 2, nullable = false)
     private BigDecimal negotiationPrice;
 
+    @OneToOne
+    @JoinColumn(unique = true)
+    private CAttachment attachment;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mBidNegoPrices")
@@ -103,6 +107,19 @@ public class MBidNegoPrice extends AbstractAuditingEntity implements Serializabl
 
     public void setNegotiationPrice(BigDecimal negotiationPrice) {
         this.negotiationPrice = negotiationPrice;
+    }
+
+    public CAttachment getAttachment() {
+        return attachment;
+    }
+
+    public MBidNegoPrice attachment(CAttachment cAttachment) {
+        this.attachment = cAttachment;
+        return this;
+    }
+
+    public void setAttachment(CAttachment cAttachment) {
+        this.attachment = cAttachment;
     }
 
     public MBidding getBidding() {

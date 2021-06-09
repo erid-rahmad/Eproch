@@ -1547,6 +1547,8 @@ relationship OneToOne {
 	MProposalAdministrationFile{cAttachment required} to CAttachment
 	MProposalTechnicalFile{cAttachment required} to CAttachment
 	MProposalPrice{biddingSubmission required} to MBiddingSubmission
+
+	MBidNegoPrice{attachment} to CAttachment
 }
 
 /**
