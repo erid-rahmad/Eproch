@@ -43,6 +43,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class MProposalPriceLineResourceIT {
 
+    private static final Boolean DEFAULT_DOCUMENT = false;
+    private static final Boolean UPDATED_DOCUMENT = true;
+
     private static final BigDecimal DEFAULT_PROPOSED_PRICE = new BigDecimal(1);
     private static final BigDecimal UPDATED_PROPOSED_PRICE = new BigDecimal(2);
     private static final BigDecimal SMALLER_PROPOSED_PRICE = new BigDecimal(1 - 1);
@@ -89,6 +92,7 @@ public class MProposalPriceLineResourceIT {
      */
     public static MProposalPriceLine createEntity(EntityManager em) {
         MProposalPriceLine mProposalPriceLine = new MProposalPriceLine()
+            .document(DEFAULT_DOCUMENT)
             .proposedPrice(DEFAULT_PROPOSED_PRICE)
             .totalPriceSubmission(DEFAULT_TOTAL_PRICE_SUBMISSION)
             .deliveryDate(DEFAULT_DELIVERY_DATE)
@@ -134,6 +138,7 @@ public class MProposalPriceLineResourceIT {
      */
     public static MProposalPriceLine createUpdatedEntity(EntityManager em) {
         MProposalPriceLine mProposalPriceLine = new MProposalPriceLine()
+            .document(UPDATED_DOCUMENT)
             .proposedPrice(UPDATED_PROPOSED_PRICE)
             .totalPriceSubmission(UPDATED_TOTAL_PRICE_SUBMISSION)
             .deliveryDate(UPDATED_DELIVERY_DATE)
@@ -193,6 +198,7 @@ public class MProposalPriceLineResourceIT {
         List<MProposalPriceLine> mProposalPriceLineList = mProposalPriceLineRepository.findAll();
         assertThat(mProposalPriceLineList).hasSize(databaseSizeBeforeCreate + 1);
         MProposalPriceLine testMProposalPriceLine = mProposalPriceLineList.get(mProposalPriceLineList.size() - 1);
+        assertThat(testMProposalPriceLine.isDocument()).isEqualTo(DEFAULT_DOCUMENT);
         assertThat(testMProposalPriceLine.getProposedPrice()).isEqualTo(DEFAULT_PROPOSED_PRICE);
         assertThat(testMProposalPriceLine.getTotalPriceSubmission()).isEqualTo(DEFAULT_TOTAL_PRICE_SUBMISSION);
         assertThat(testMProposalPriceLine.getDeliveryDate()).isEqualTo(DEFAULT_DELIVERY_DATE);
@@ -289,6 +295,7 @@ public class MProposalPriceLineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mProposalPriceLine.getId().intValue())))
+            .andExpect(jsonPath("$.[*].document").value(hasItem(DEFAULT_DOCUMENT.booleanValue())))
             .andExpect(jsonPath("$.[*].proposedPrice").value(hasItem(DEFAULT_PROPOSED_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].totalPriceSubmission").value(hasItem(DEFAULT_TOTAL_PRICE_SUBMISSION.intValue())))
             .andExpect(jsonPath("$.[*].deliveryDate").value(hasItem(DEFAULT_DELIVERY_DATE.toString())))
@@ -307,6 +314,7 @@ public class MProposalPriceLineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(mProposalPriceLine.getId().intValue()))
+            .andExpect(jsonPath("$.document").value(DEFAULT_DOCUMENT.booleanValue()))
             .andExpect(jsonPath("$.proposedPrice").value(DEFAULT_PROPOSED_PRICE.intValue()))
             .andExpect(jsonPath("$.totalPriceSubmission").value(DEFAULT_TOTAL_PRICE_SUBMISSION.intValue()))
             .andExpect(jsonPath("$.deliveryDate").value(DEFAULT_DELIVERY_DATE.toString()))
@@ -333,6 +341,58 @@ public class MProposalPriceLineResourceIT {
         defaultMProposalPriceLineShouldNotBeFound("id.lessThan=" + id);
     }
 
+
+    @Test
+    @Transactional
+    public void getAllMProposalPriceLinesByDocumentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalPriceLineRepository.saveAndFlush(mProposalPriceLine);
+
+        // Get all the mProposalPriceLineList where document equals to DEFAULT_DOCUMENT
+        defaultMProposalPriceLineShouldBeFound("document.equals=" + DEFAULT_DOCUMENT);
+
+        // Get all the mProposalPriceLineList where document equals to UPDATED_DOCUMENT
+        defaultMProposalPriceLineShouldNotBeFound("document.equals=" + UPDATED_DOCUMENT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalPriceLinesByDocumentIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalPriceLineRepository.saveAndFlush(mProposalPriceLine);
+
+        // Get all the mProposalPriceLineList where document not equals to DEFAULT_DOCUMENT
+        defaultMProposalPriceLineShouldNotBeFound("document.notEquals=" + DEFAULT_DOCUMENT);
+
+        // Get all the mProposalPriceLineList where document not equals to UPDATED_DOCUMENT
+        defaultMProposalPriceLineShouldBeFound("document.notEquals=" + UPDATED_DOCUMENT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalPriceLinesByDocumentIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProposalPriceLineRepository.saveAndFlush(mProposalPriceLine);
+
+        // Get all the mProposalPriceLineList where document in DEFAULT_DOCUMENT or UPDATED_DOCUMENT
+        defaultMProposalPriceLineShouldBeFound("document.in=" + DEFAULT_DOCUMENT + "," + UPDATED_DOCUMENT);
+
+        // Get all the mProposalPriceLineList where document equals to UPDATED_DOCUMENT
+        defaultMProposalPriceLineShouldNotBeFound("document.in=" + UPDATED_DOCUMENT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalPriceLinesByDocumentIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProposalPriceLineRepository.saveAndFlush(mProposalPriceLine);
+
+        // Get all the mProposalPriceLineList where document is not null
+        defaultMProposalPriceLineShouldBeFound("document.specified=true");
+
+        // Get all the mProposalPriceLineList where document is null
+        defaultMProposalPriceLineShouldNotBeFound("document.specified=false");
+    }
 
     @Test
     @Transactional
@@ -828,6 +888,7 @@ public class MProposalPriceLineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mProposalPriceLine.getId().intValue())))
+            .andExpect(jsonPath("$.[*].document").value(hasItem(DEFAULT_DOCUMENT.booleanValue())))
             .andExpect(jsonPath("$.[*].proposedPrice").value(hasItem(DEFAULT_PROPOSED_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].totalPriceSubmission").value(hasItem(DEFAULT_TOTAL_PRICE_SUBMISSION.intValue())))
             .andExpect(jsonPath("$.[*].deliveryDate").value(hasItem(DEFAULT_DELIVERY_DATE.toString())))
@@ -880,6 +941,7 @@ public class MProposalPriceLineResourceIT {
         // Disconnect from session so that the updates on updatedMProposalPriceLine are not directly saved in db
         em.detach(updatedMProposalPriceLine);
         updatedMProposalPriceLine
+            .document(UPDATED_DOCUMENT)
             .proposedPrice(UPDATED_PROPOSED_PRICE)
             .totalPriceSubmission(UPDATED_TOTAL_PRICE_SUBMISSION)
             .deliveryDate(UPDATED_DELIVERY_DATE)
@@ -896,6 +958,7 @@ public class MProposalPriceLineResourceIT {
         List<MProposalPriceLine> mProposalPriceLineList = mProposalPriceLineRepository.findAll();
         assertThat(mProposalPriceLineList).hasSize(databaseSizeBeforeUpdate);
         MProposalPriceLine testMProposalPriceLine = mProposalPriceLineList.get(mProposalPriceLineList.size() - 1);
+        assertThat(testMProposalPriceLine.isDocument()).isEqualTo(UPDATED_DOCUMENT);
         assertThat(testMProposalPriceLine.getProposedPrice()).isEqualTo(UPDATED_PROPOSED_PRICE);
         assertThat(testMProposalPriceLine.getTotalPriceSubmission()).isEqualTo(UPDATED_TOTAL_PRICE_SUBMISSION);
         assertThat(testMProposalPriceLine.getDeliveryDate()).isEqualTo(UPDATED_DELIVERY_DATE);

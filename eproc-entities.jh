@@ -1276,6 +1276,7 @@ entity MProposalPrice {
 }
 
 entity MProposalPriceLine {
+    document Boolean
 	proposedPrice BigDecimal required
 	totalPriceSubmission BigDecimal required
 	deliveryDate LocalDate required

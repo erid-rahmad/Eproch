@@ -1,11 +1,11 @@
 package com.bhp.opusb.service.dto;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
+import javax.validation.constraints.*;
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MProposalPriceLine} entity.
@@ -13,6 +13,8 @@ import javax.validation.constraints.NotNull;
 public class MProposalPriceLineDTO extends AbstractAuditingDTO {
 
     private Long id;
+
+    private Boolean document;
 
     @NotNull
     private BigDecimal proposedPrice;
@@ -88,6 +90,14 @@ public class MProposalPriceLineDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Boolean isDocument() {
+        return document;
+    }
+
+    public void setDocument(Boolean document) {
+        this.document = document;
     }
 
     public BigDecimal getProposedPrice() {
@@ -203,6 +213,7 @@ public class MProposalPriceLineDTO extends AbstractAuditingDTO {
     public String toString() {
         return "MProposalPriceLineDTO{" +
             "id=" + getId() +
+            ", document='" + isDocument() + "'" +
             ", proposedPrice=" + getProposedPrice() +
             ", totalPriceSubmission=" + getTotalPriceSubmission() +
             ", deliveryDate='" + getDeliveryDate() + "'" +

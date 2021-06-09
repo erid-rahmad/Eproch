@@ -2,6 +2,10 @@
     "name": "MProposalPriceLine",
     "fields": [
         {
+            "fieldName": "document",
+            "fieldType": "Boolean"
+        },
+        {
             "fieldName": "proposedPrice",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [

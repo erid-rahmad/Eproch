@@ -146,7 +146,12 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
     window.open(this.mainForm.attachmentUrl, '_blank');
   }
 
+  get hasAttachment() {
+    return !!this.mainForm.attachmentName;
+  }
+
   cancelAttachment() {
+    this.mainForm.attachmentName=null;
     this.formData = null;
     this.formData = [];
 
@@ -168,7 +173,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
     console.log("this response",response)
     this.formData.attachment = response.attachment;
     this.formData.attachmentId = response.attachment.id;
-    this.formData.attachmentName = response.attachment.name;
+    this.formData.attachmentName = response.attachment.fileName;
     this.formData.attachmentUrl = response.attachment.downloadUrl;
     this.file = file;
   }
@@ -198,8 +203,8 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
   saveAttachment() {
     this.mainForm.attachmentUrl=this.formData.downloadUri;
     this.mainForm.attachmentId=this.formData.attachment.id;
+    this.mainForm.attachmentName= this.formData.attachmentName;
     this.attachmentFormVisible = false;
-
   }
 
   //upload
@@ -367,6 +372,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
               deliveryDate,
               ceilingPrice,
               productName,
+              document,
               quantity,
               totalCeilingPrice,
               uomName,
@@ -380,6 +386,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
               ceilingPrice,
               totalCeilingPrice,
               productName,
+              document,
               quantity,
               uomName,
               remark,
@@ -431,11 +438,18 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
         }
       })
       .then(res => {
+        console.log("this res",res.data);
+
         (res.data as any[]).forEach(line => {
+          console.log("this line",line);
+
           const item = this.lineCache.get(line.biddingLineId);
+          item.document=line.document;
+          item.id=line.id;
           item.deliveryDate = line.deliveryDate;
           item.proposedPrice = line.proposedPrice;
           item.totalPriceSubmission = item.quantity * line.proposedPrice;
+          console.log("this item",item);
         })
       })
   }
@@ -454,7 +468,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
       id,
       adOrganizationId,
       biddingSubmissionId: this.submissionId,
-      attachmentId:this.formData.attachmentId,
+      attachmentId:this.mainForm.attachmentId,
       ceilingPrice,
       proposedPrice,
       proposalPriceLines
