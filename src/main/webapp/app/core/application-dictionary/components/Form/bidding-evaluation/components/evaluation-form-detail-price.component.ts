@@ -45,6 +45,7 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
     this.retrieveProposal(this.evaluationFormProp.biddingSubmission.id);
     this.evaluationResultLine=this.evaluationFormProp.evaluationResultLine;
     this.biddingSubmission=this.evaluationFormProp.biddingSubmission;
+    console.log("bidding submission",this.biddingSubmission)
   }
 
   private retrieveProposal(submissionId: number) {
@@ -77,6 +78,10 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
       .then(res => {
         this.proposalPriceLine=res.data;
       })
+  }
+
+  downloadAttachment(){
+    window.open(this.proposalPrice.attachmentUrl, '_blank');
   }
 
 

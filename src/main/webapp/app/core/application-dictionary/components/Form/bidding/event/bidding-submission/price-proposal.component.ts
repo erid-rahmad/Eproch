@@ -143,14 +143,13 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
   }
 
   handlePreview() {
-    window.open(this.formData.attachmentUrl, '_blank');
+    window.open(this.mainForm.attachmentUrl, '_blank');
   }
 
   cancelAttachment() {
-    this.formData.attachmentId = null;
-    this.formData.attachmentName = null;
-    this.formData.attachmentUrl = null;
-    this.formData.attachment = null;
+    this.formData = null;
+    this.formData = [];
+
   }
 
   handleExceed(files, fileList) {
@@ -197,14 +196,10 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
   }
 
   saveAttachment() {
-    this.formData.attachmentId = this.formData.attachment.id;
-    this.formData.attachmentName = this.formData.attachment.fileName;
-    this.formData.attachmentUrl = this.formData.downloadUri;
+    this.mainForm.attachmentUrl=this.formData.downloadUri;
+    this.mainForm.attachmentId=this.formData.attachment.id;
     this.attachmentFormVisible = false;
-  }
 
-  get hasAttachment() {
-    return !!this.formData.attachmentId;
   }
 
   //upload
@@ -444,7 +439,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
         })
       })
   }
-
+  // attachmentId=this.formData.attachmentId,
   save() {
     this.$emit('update:loading', true);
     let valid = true;
@@ -453,11 +448,13 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
       adOrganizationId,
       ceilingPrice,
       proposedPrice,
+
       proposalPriceLines
     }) => ({
       id,
       adOrganizationId,
       biddingSubmissionId: this.submissionId,
+      attachmentId:this.formData.attachmentId,
       ceilingPrice,
       proposedPrice,
       proposalPriceLines
@@ -471,6 +468,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
       }
 
       if (valid) {
+
         this.commonService(`${baseApiProposal}/form`)
           .create(data)
           .then(_res => {

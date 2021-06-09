@@ -2,6 +2,7 @@ import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMi
 import {Component, Inject, Mixins, Vue, Watch} from "vue-property-decorator";
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import Schema from 'async-validator';
+import {numeric} from "vuelidate/lib/validators";
 
 const baseApiEvalMethodCriteria = 'api/c-evaluation-method-criteria';
 const baseApiVendorScoringCriteria = 'api/m-vendor-scoring-criteria';
@@ -162,7 +163,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
       .create(this.evaluationResultLine)
       .then(res => {
         this.evaluationFormProp.SelectVendorScoringLine = res.data;
-        this.$message.success('create ResultLine ');
+        // this.$message.success('create ResultLine ');
       })
       .catch(_err => this.$message.error('fail create record'));
 
@@ -183,24 +184,41 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
         }
       })
       .then(res => {
+        let x =0;
         this.evaluationMethodCriteria = res.data.map((evalMethodCriteria: any) => {
+          x=x+evalMethodCriteria.weight;
+          let y =0;
           evalMethodCriteria.evalMethodSubCriteriaList.forEach((evalMethodSubCriteria: any) => {
+            y=y+evalMethodSubCriteria.weight;
             evalMethodSubCriteria.biddingSubCriteriaDTO.forEach((biddingSubCriteria: any) => {
               biddingSubCriteria.attachmentId=null;
               biddingSubCriteria.attachmentName=null;
               biddingSubCriteria.attachmentUrl=null;
               this.attachmentHandler.set(biddingSubCriteria.id,biddingSubCriteria);
+              let z=0;
               biddingSubCriteria.criteriaLineDTO.forEach((subCriteriaLine: any) => {
                 subCriteriaLine.SubCriteriaWeight=evalMethodSubCriteria.weight;
                 subCriteriaLine.CriteriaWeight=evalMethodCriteria.weight;
                 this.questions.set(subCriteriaLine.id, subCriteriaLine);
+                z=z+subCriteriaLine.score;
               });
+              if(z!==100){
+                let zz =z.toString();
+                this.$message.error(`Average SubCriteriaLine = ${z}`);
+              }
+              // console.log("this z",z)
             });
           });
+          if(y!==100){
+            this.$message.error(`Average MethodSubCriteria = ${y}`);
+          }
+          // console.log("this y",y)
           return evalMethodCriteria;
         })
-
-
+        if(x!==100){
+          this.$message.error(`Average MethodCriteria = ${x}`);
+        }
+        // console.log("this x ",x)
       })
       .finally(() => {
         this.retrieveVendorScoringCriteria(vendorScoringLineId);

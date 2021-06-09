@@ -31,6 +31,24 @@ public class MProposalPriceDTO extends AbstractAuditingDTO {
     private String adOrganizationName;
 
     private Long attachmentId;
+    private String attachmentName;
+    private String attachmentUrl;
+
+    public String getAttachmentUrl() {
+        return attachmentUrl;
+    }
+
+    public void setAttachmentUrl(String attachmentUrl) {
+        this.attachmentUrl = attachmentUrl;
+    }
+
+    public String getAttachmentName() {
+        return attachmentName;
+    }
+
+    public void setAttachmentName(String attachmentName) {
+        this.attachmentName = attachmentName;
+    }
 
     public Long getId() {
         return id;

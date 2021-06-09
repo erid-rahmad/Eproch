@@ -121,13 +121,13 @@
                                 <html-editor v-model="formData.description" size="mini"></html-editor>
                             </el-form-item>
                             <el-form-item style="margin-top: .5rem">
-                                <el-button v-if="!hasAttachment" size="mini" type="primary" @click="attachmentFormVisible = true">
+                                <el-button v-if="!mainForm.attachmentName" size="mini" type="primary" @click="attachmentFormVisible = true">
                                     <svg-icon name="icomoo/206-attachment"></svg-icon> Attachment
                                 </el-button>
-                                <el-button v-if="hasAttachment" icon="el-icon-view" size="mini" type="primary" @click="handlePreview">
-                                    {{ attachmentName }}
+                                <el-button v-if="mainForm.attachmentName" icon="el-icon-view" size="mini" type="primary" @click="handlePreview">
+                                    {{ mainForm.attachmentName }}
                                 </el-button>
-                                <el-button v-if="hasAttachment" icon="el-icon-close" size="mini" type="primary" @click="cancelAttachment"></el-button>
+                                <el-button v-if="mainForm.attachmentName" icon="el-icon-close" size="mini" type="primary" @click="cancelAttachment"></el-button>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -305,6 +305,15 @@
                 min-width="200"
                 prop="remark"
             ></el-table-column>
+            <el-table-column
+                width="100"
+                label="Dockument"
+                align="center"
+                >
+                <template scope="{row}">
+                    <el-checkbox label="" name="type"></el-checkbox>
+                </template>
+            </el-table-column>
         </el-table>
 
         <el-dialog :show-close="false" :visible.sync="subItemEditorVisible" title="Edit Sub Item"

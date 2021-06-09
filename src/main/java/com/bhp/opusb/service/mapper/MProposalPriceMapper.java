@@ -17,6 +17,8 @@ public interface MProposalPriceMapper extends EntityMapper<MProposalPriceDTO, MP
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "attachment.id", target = "attachmentId")
+    @Mapping(source = "attachment.fileName", target = "attachmentName")
+    @Mapping(source = "attachment.downloadUrl", target = "attachmentUrl")
     MProposalPriceDTO toDto(MProposalPrice mProposalPrice);
 
     @Mapping(source = "biddingSubmissionId", target = "biddingSubmission")
