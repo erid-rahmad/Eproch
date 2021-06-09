@@ -24,8 +24,6 @@ public class MBidNegoPriceDTO extends AbstractAuditingDTO implements Serializabl
 
     private Long biddingId;
 
-    private Long vendorInvitationId;
-
     private Long priceProposalId;
 
     private Long negotiationLineId;
@@ -80,14 +78,6 @@ public class MBidNegoPriceDTO extends AbstractAuditingDTO implements Serializabl
         this.biddingId = mBiddingId;
     }
 
-    public Long getVendorInvitationId() {
-        return vendorInvitationId;
-    }
-
-    public void setVendorInvitationId(Long mVendorInvitationId) {
-        this.vendorInvitationId = mVendorInvitationId;
-    }
-
     public Long getPriceProposalId() {
         return priceProposalId;
     }
@@ -133,7 +123,6 @@ public class MBidNegoPriceDTO extends AbstractAuditingDTO implements Serializabl
             ", active='" + isActive() + "'" +
             ", negotiationPrice=" + getNegotiationPrice() +
             ", biddingId=" + getBiddingId() +
-            ", vendorInvitationId=" + getVendorInvitationId() +
             ", priceProposalId=" + getPriceProposalId() +
             ", negotiationLineId=" + getNegotiationLineId() +
             "}";

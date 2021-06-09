@@ -2004,7 +2004,6 @@ relationship ManyToOne {
 	MBiddingNegotiationChat{attachment } to CAttachment
 
 	MBidNegoPrice{bidding required} to MBidding
-	MBidNegoPrice{vendorInvitation required} to MVendorInvitation
 	MBidNegoPrice{priceProposal required} to MProposalPrice
 	MBidNegoPrice{negotiationLine required} to MBiddingNegotiationLine
 

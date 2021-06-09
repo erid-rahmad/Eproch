@@ -7,7 +7,6 @@ import com.bhp.opusb.domain.MBiddingNegotiationChat;
 import com.bhp.opusb.domain.MBiddingNegotiationLine;
 import com.bhp.opusb.domain.MProposalPrice;
 import com.bhp.opusb.domain.MProposalPriceLine;
-import com.bhp.opusb.domain.MVendorInvitation;
 import com.bhp.opusb.repository.MBidNegoPriceLineRepository;
 import com.bhp.opusb.repository.MBidNegoPriceRepository;
 import com.bhp.opusb.repository.MBiddingNegotiationChatRepository;
@@ -15,7 +14,6 @@ import com.bhp.opusb.repository.MBiddingNegotiationLineRepository;
 import com.bhp.opusb.repository.MBiddingNegotiationRepository;
 import com.bhp.opusb.repository.MProposalPriceLineRepository;
 import com.bhp.opusb.repository.MProposalPriceRepository;
-import com.bhp.opusb.repository.MVendorInvitationRepository;
 import com.bhp.opusb.service.dto.MBiddingNegotiationChatDTO;
 import com.bhp.opusb.service.mapper.MBiddingNegotiationChatMapper;
 import org.slf4j.Logger;
@@ -49,8 +47,6 @@ public class MBiddingNegotiationChatService {
     private final MProposalPriceRepository mProposalPriceRepository;
     private final MProposalPriceLineRepository mProposalPriceLineRepository;
 
-    private final MVendorInvitationRepository mVendorInvitationRepository;
-
     private final MBiddingNegotiationChatMapper mBiddingNegotiationChatMapper;
 
     public MBiddingNegotiationChatService(MBiddingNegotiationChatRepository mBiddingNegotiationChatRepository, 
@@ -58,8 +54,7 @@ public class MBiddingNegotiationChatService {
     MBiddingNegotiationLineRepository mBiddingNegotiationLineRepository,
     MBiddingNegotiationRepository mBiddingNegotiationRepository,
     MBidNegoPriceRepository mBidNegoPriceRepository, MBidNegoPriceLineRepository mBidNegoPriceLineRepository,
-    MProposalPriceRepository mProposalPriceRepository, MProposalPriceLineRepository mProposalPriceLineRepository,
-    MVendorInvitationRepository mVendorInvitationRepository) {
+    MProposalPriceRepository mProposalPriceRepository, MProposalPriceLineRepository mProposalPriceLineRepository) {
         this.mBiddingNegotiationChatRepository = mBiddingNegotiationChatRepository;
         this.mBiddingNegotiationChatMapper = mBiddingNegotiationChatMapper;
         this.mBiddingNegotiationLineRepository = mBiddingNegotiationLineRepository;
@@ -69,8 +64,6 @@ public class MBiddingNegotiationChatService {
         this.mBidNegoPriceLineRepository = mBidNegoPriceLineRepository;
         this.mProposalPriceRepository = mProposalPriceRepository;
         this.mProposalPriceLineRepository = mProposalPriceLineRepository;
-
-        this.mVendorInvitationRepository = mVendorInvitationRepository;
     }
 
     /**
@@ -100,9 +93,6 @@ public class MBiddingNegotiationChatService {
                 MBidNegoPrice bnp = new MBidNegoPrice();
                 bnp.setNegotiationPrice(pp.getProposedPrice());
                 bnp.setBidding(pp.getBiddingSubmission().getBidding());
-
-                List<MVendorInvitation> mvis = mVendorInvitationRepository.findByAdOrganizationAndBidding(pp.getAdOrganization(), bnp.getBidding()); 
-                if (mvis.size()>0) bnp.setVendorInvitation(mvis.get(0));
                 bnp.setPriceProposal(pp);
                 bnp.setNegotiationLine(mbnl);
                 bnp.setActive(true);
