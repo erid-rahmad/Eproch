@@ -57,11 +57,11 @@
                             {{ biddingSubmission.biddingScheduleEndDate | formatDate }}
                         </el-form-item>
                         <el-form-item label="Score">
-                            <el-input v-model="evaluationResultLine.score" placeholder="Please input"></el-input>
+                            <el-input v-model="evaluationResultLine.score" :disabled="readOnly" placeholder="Please input"></el-input>
                         </el-form-item>
                         <el-form-item label="Evaluation">
                             <template>
-                                <el-select v-model="evaluationResultLine.status" placeholder="Select" size="mini">
+                                <el-select v-model="evaluationResultLine.status" :disabled="readOnly" placeholder="Select" size="mini">
                                     <el-option
                                         v-for="item in options"
                                         :key="item.value"
@@ -97,7 +97,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column label="Qty" min-width="50" prop="biddingLineQuantity"/>
-                <el-table-column label="UoM" min-width="50" prop="uomName"/>
+                <el-table-column label="UoM" min-width="50" prop="biddingLineUom"/>
                 <el-table-column align="right" label="Ceiling Price/Unit" min-width="80">
                     <template slot-scope="{ row }">
                         {{ row.biddingLineCeilingPrice | formatCurrency }}
@@ -128,7 +128,11 @@
                     </template>
                 </el-table-column>
                 <el-table-column label="Remark" min-width="50" prop="biddingLineRemark"/>
-                <el-table-column label="Document" min-width="50" prop="doc"/>
+                <el-table-column label="Document" min-width="50" prop="doc">
+                    <template scope="{row}">
+                        <el-checkbox disabled="true" v-model="row.document">Checked</el-checkbox>
+                    </template>
+                </el-table-column>
             </el-table>
         </div>
         <div style="margin-bottom: 20px;margin-top: 20px">

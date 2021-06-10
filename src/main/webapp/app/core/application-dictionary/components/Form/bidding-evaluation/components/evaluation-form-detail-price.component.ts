@@ -15,6 +15,7 @@ const DetailPriceProp = Vue.extend({
         return {};
       }
     },
+    readOnly: Boolean,
   }
 });
 
@@ -59,6 +60,7 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
         if (res.data.length) {
           this.proposalPrice = { ...this.proposalPrice, ...res.data[0] };
           this.retrieveProposedLines(this.proposalPrice.id);
+
         }
       });
   }
@@ -77,6 +79,7 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
       })
       .then(res => {
         this.proposalPriceLine=res.data;
+        console.log("this proposal line",this.proposalPriceLine);
       })
   }
 
