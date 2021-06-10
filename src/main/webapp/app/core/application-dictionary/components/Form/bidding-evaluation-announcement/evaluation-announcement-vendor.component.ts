@@ -19,6 +19,8 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
+  biddingStatuses: any[] = [];
+
   private vendorId = '';
   get isVendor() {
     return accountStore.isVendor;
@@ -35,6 +37,10 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
 
   index: boolean = true;
   ScheduleListVisible = false;
+
+  formatBiddingStatus(value: string) {
+    return this.biddingStatuses.find(status => status.key === value)?.value;
+  }
 
 
   BiddingSchedule = [
@@ -72,6 +78,11 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
   ]
 
   created() {
+    this.commonService(null)
+      .retrieveReferenceLists('biddingStatus')
+      .then(res => {
+        this.biddingStatuses = res.map(item => ({ key: item.value, value: item.name }));
+      });
     this.retrieveBiddingResult();
   }
 
@@ -80,12 +91,12 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
     this.commonService("api/m-bidding-results")
       .retrieve({
         criteriaQuery: this.updateCriteria([
-          // `vendorId.equals=${this.vendorId}`
+
         ])
       })
       .then(res => {
         this.biddingResults=res.data;
-        console.log("this result",this.biddingResults)
+
       })
       .catch(err => this.$message.error('Failed to get bidding announcement'))
     // .finally(() => this.loading = false);

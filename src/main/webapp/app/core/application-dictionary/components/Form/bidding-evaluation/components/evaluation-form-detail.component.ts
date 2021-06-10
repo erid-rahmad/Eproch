@@ -43,10 +43,10 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
     label: 'Fail'
   }];
   optionsEvaluation = [{
-    value: 0,
+    value: 10,
     label: 'Pass'
   }, {
-    value: 10,
+    value: 0,
     label: 'Fail'
   }];
 

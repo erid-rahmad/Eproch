@@ -1,5 +1,13 @@
-import { Component, Vue } from "vue-property-decorator";
+import {Component, Inject, Vue} from "vue-property-decorator";
+import DynamicWindowService from "@/core/application-dictionary/components/DynamicWindow/dynamic-window.service";
+import {mixins} from "vue-class-component";
+import AlertMixin from "@/shared/alert/alert.mixin";
+import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 import axios from "axios";
+
+
+const baseApiBiddingResult='api/m-bidding-results/';
+const baseApiBiddingSchedule='api/m-bidding-schedules';
 
   const EventAnnouncement = Vue.extend({
     props: {
@@ -11,14 +19,18 @@ import axios from "axios";
   });
 
 @Component
-export default class DetailsAnnouncementForm extends EventAnnouncement {
+export default class DetailsAnnouncementForm extends  mixins(EventAnnouncement, AlertMixin,AccessLevelMixin) {
+
+  @Inject('dynamicWindowService')
+  private commonService: (baseApiUrl: string) => DynamicWindowService;
+
   winerTableVisible = false;
   private email:any={};
+  private biddingSchedule:any={};
 
   created(){
-    console.log(this.pickRow)
-    this.getemail(this.pickRow.id)
-
+    this.getemail(this.pickRow.id);
+    this.getSchedule(this.pickRow.biddingId);
   }
 
   downloadAttachment() {
@@ -27,45 +39,32 @@ export default class DetailsAnnouncementForm extends EventAnnouncement {
 
   getemail(id) {
     axios
-      .get(`/api/m-bidding-results/${id}`)
-      .then(response => (this.email = response.data));
-    console.log("this info", this.email);
+      .get(`${baseApiBiddingResult}${id}`)
+      .then(response => {
+        this.email = response.data;
+      });
   }
-
-
-  moreinfo1= [
-    { JudulPengadaan: 'Pengadaan 1' },
-    { JudulPengadaan: 'Pengadaan 2' },
-
-  ];
-  moreinfo2= [
-    { namaperusahaan: 'PT Eproch', tanggaldaftar: '28-12-2021' },
-    { namaperusahaan: 'PT Eproch', tanggaldaftar: '28-12-2021' },
-
-  ];
-
-  moreinfo3= [
-    { namaperusahaan: 'PT Eproch', tanggaldaftar: '28-12-2021',alasan:'tolak' },
-    { namaperusahaan: 'PT Eproch', tanggaldaftar: '28-12-2021',alasan:'tolak' },
-
-  ];
-
-  moreinfo4= [
-    { namaperusahaan: 'PT Eproch', tanggaldaftar: '28-12-2021' },
-    { namaperusahaan: 'PT Eproch', tanggaldaftar: '28-12-2021' },
-
-  ];
-
+  getSchedule(id){
+    this.commonService(baseApiBiddingSchedule)
+  .retrieve({
+      criteriaQuery: this.updateCriteria([
+        `biddingId.equals=${id}`
+      ])
+    })
+      .then(res => {
+        res.data.forEach(schedule=>{
+          if (schedule.formType=="AN"){
+            this.$set(this.biddingSchedule,'startDate',schedule.startDate);
+          }
+          if (schedule.formType=="E1"){
+            this.$set(this.biddingSchedule,'endDate',schedule.endDate);
+          }
+        })
+      })
+      .catch(err => this.$message.error('Failed to get bidding announcement'))
+  }
   back() {
     this.$emit("back")
   ;
-
-
-
   }
-
-
-
-
-
 }
