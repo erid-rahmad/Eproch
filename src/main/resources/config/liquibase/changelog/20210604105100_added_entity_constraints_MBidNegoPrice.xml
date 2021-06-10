@@ -33,4 +33,11 @@
                                  referencedTableName="m_bidding_negotiation_line"/>
 
     </changeSet>
+    <changeSet id="20210604105100-add-attachment-2" author="ricky-kurniawan">
+        <addForeignKeyConstraint baseColumnNames="attachment_id"
+                                 baseTableName="m_bid_nego_price"
+                                 constraintName="fk_m_bid_nego_price_attachment_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_attachment"/>
+    </changeSet>
 </databaseChangeLog>

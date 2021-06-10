@@ -1,5 +1,6 @@
 package com.bhp.opusb.service;
 
+import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.domain.MBidNegoPrice;
 import com.bhp.opusb.domain.MBidNegoPriceLine;
 import com.bhp.opusb.domain.MBiddingNegotiation;
@@ -7,6 +8,7 @@ import com.bhp.opusb.domain.MBiddingNegotiationChat;
 import com.bhp.opusb.domain.MBiddingNegotiationLine;
 import com.bhp.opusb.domain.MProposalPrice;
 import com.bhp.opusb.domain.MProposalPriceLine;
+import com.bhp.opusb.repository.AdUserRepository;
 import com.bhp.opusb.repository.MBidNegoPriceLineRepository;
 import com.bhp.opusb.repository.MBidNegoPriceRepository;
 import com.bhp.opusb.repository.MBiddingNegotiationChatRepository;
@@ -23,6 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -49,12 +52,16 @@ public class MBiddingNegotiationChatService {
 
     private final MBiddingNegotiationChatMapper mBiddingNegotiationChatMapper;
 
+    private final AdUserRepository adUserRepository;
+    private final MailService mailService;
+
     public MBiddingNegotiationChatService(MBiddingNegotiationChatRepository mBiddingNegotiationChatRepository, 
     MBiddingNegotiationChatMapper mBiddingNegotiationChatMapper,
     MBiddingNegotiationLineRepository mBiddingNegotiationLineRepository,
     MBiddingNegotiationRepository mBiddingNegotiationRepository,
     MBidNegoPriceRepository mBidNegoPriceRepository, MBidNegoPriceLineRepository mBidNegoPriceLineRepository,
-    MProposalPriceRepository mProposalPriceRepository, MProposalPriceLineRepository mProposalPriceLineRepository) {
+    MProposalPriceRepository mProposalPriceRepository, MProposalPriceLineRepository mProposalPriceLineRepository,
+    MailService mailService, AdUserRepository adUserRepository) {
         this.mBiddingNegotiationChatRepository = mBiddingNegotiationChatRepository;
         this.mBiddingNegotiationChatMapper = mBiddingNegotiationChatMapper;
         this.mBiddingNegotiationLineRepository = mBiddingNegotiationLineRepository;
@@ -64,6 +71,9 @@ public class MBiddingNegotiationChatService {
         this.mBidNegoPriceLineRepository = mBidNegoPriceLineRepository;
         this.mProposalPriceRepository = mProposalPriceRepository;
         this.mProposalPriceLineRepository = mProposalPriceLineRepository;
+
+        this.adUserRepository = adUserRepository;
+        this.mailService = mailService;
     }
 
     /**
@@ -79,11 +89,11 @@ public class MBiddingNegotiationChatService {
         mBiddingNegotiationChat = mBiddingNegotiationChatRepository.save(mBiddingNegotiationChat);
 
         MBiddingNegotiationLine mbnl = mBiddingNegotiationLineRepository.findById(mBiddingNegotiationChatDTO.getNegotiationLineId()).get();
+        MBiddingNegotiation mbn = mBiddingNegotiationRepository.findById(mbnl.getNegotiation().getId()).get();
         if("not started".contentEquals(mbnl.getNegotiationStatus())){
             mbnl.setNegotiationStatus("in progress");
             mBiddingNegotiationLineRepository.save(mbnl);
 
-            MBiddingNegotiation mbn = mBiddingNegotiationRepository.findById(mbnl.getNegotiation().getId()).get();
             mbn.setBiddingStatus("P");
             mBiddingNegotiationRepository.save(mbn);
 
@@ -114,6 +124,26 @@ public class MBiddingNegotiationChatService {
                 }
 
                 mBidNegoPriceLineRepository.saveAll(bnpls);
+            }
+        }
+
+        if((mBiddingNegotiationChatDTO.getPublishToEmail()==null?false:mBiddingNegotiationChatDTO.getPublishToEmail())){
+            if(StringUtils.hasLength(mBiddingNegotiationChatDTO.getBuyerText())) {
+                String emailBody = "The buyer has responded to the negotiation of bidding " + 
+                mbn.getBiddingEval().getBiddingSubmission().getBidding().getName() + ".<br/>"
+                +"The following is their response: <br/><br/>"
+                +mBiddingNegotiationChatDTO.getVendorText();
+
+                List<AdUser> pics = adUserRepository.findBycVendor(mBiddingNegotiationChat.getVendor());
+                if(pics.size()==0) log.debug("No pics found for vendor {}", mBiddingNegotiationChat.getVendor());
+                for(AdUser pic: pics){
+                    log.debug("Sending Buyer contract notification to {}", pic.getUser().getEmail());
+                    mailService.sendEmail(pic.getUser().getEmail(), "Buyer Responded to Negotiation for Bidding " + 
+                    mbn.getBiddingEval().getBiddingSubmission().getBidding().getName(), emailBody, false, false);
+                }
+            } else if (StringUtils.hasLength(mBiddingNegotiationChatDTO.getVendorText())){
+                // ... reply to who?
+                // TODO: send to corresponding buyer; pic or sth... or nothing at all?
             }
         }
         

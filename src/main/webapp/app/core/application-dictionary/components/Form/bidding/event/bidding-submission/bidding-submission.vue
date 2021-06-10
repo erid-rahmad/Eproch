@@ -20,9 +20,9 @@
       >
         <svg-icon name="guide"></svg-icon> Submit
       </el-button>
-      
+
       <el-button
-        v-if="!submissionPage && !cannotSave"
+        v-if="!submissionPage "
         :loading="loading"
         size="mini"
         type="primary"

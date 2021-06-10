@@ -191,7 +191,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
           result = {...result, ...data[0]};
           this.evaluationFormProp.evaluationResultLine=result;
           // console.log("result",result)
-          this.$message.success('open ResultLine ');
+          // this.$message.success('open ResultLine ');
         }
         else {
           this.createTableEvalResultLine();
@@ -218,7 +218,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       .create(data)
       .then(res => {
         this.evaluationFormProp.evaluationResultLine = res;
-        this.$message.success('create ResultLine ');
+        // this.$message.success('create ResultLine ');
       })
       .catch(_err => this.$message.error('fail create record'));
   }

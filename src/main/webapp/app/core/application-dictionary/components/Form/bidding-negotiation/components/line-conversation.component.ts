@@ -42,6 +42,7 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   private file: any = {};
 
   private fileList: any[] = [];
+  private fileList2: any[] = [];
 
   negoPrice: any = {};
   negoPriceLine: any[] = [];
@@ -94,6 +95,10 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
     this.fileList = [file];
   }
 
+  onUploadChangeN(file: any) {
+    this.fileList2 = [file];
+  }
+
   handlePreview(file) {
     window.open(file.response.downloadUri, '_blank');
   }
@@ -101,6 +106,11 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   handleRemove(files, fileList) {
     this.fileList = [];
     this.chatForm.attachmentId = null;
+  }
+
+  handleRemoveN(files, fileList) {
+    this.fileList2 = [];
+    this.negoPrice.attachmentId = null;
   }
 
   onUploadError(err: any) {
@@ -118,6 +128,13 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
       this.chatForm.attachmentId = response.attachment.id;
       this.fileList = [file];
       //(this.$refs.company as ElForm).clearValidate('file');
+  }
+
+  onUploadSuccessN(response: any, file) {
+    console.log('File uploaded successfully ', response);
+    this.negoPrice.attachmentId = response.attachment.id;
+    this.fileList2 = [file];
+    //(this.$refs.company as ElForm).clearValidate('file');
   }
 
   handleExceed(files, fileList) {
@@ -223,6 +240,10 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
       this.negoPrice=res.data[0];
       this.negoPrice.percentDiff=((this.line.proposedPrice-this.negoPrice.negotiationPrice)/this.line.proposedPrice)*100;
       this.negoPrice.percentDiff = this.truncateDecimals(this.negoPrice.percentDiff,2);
+
+      if(this.negoPrice.attachmentId){
+        this.fileList2 = [{"name":this.negoPrice.fileName, "url":this.negoPrice.downloadUrl}];
+      }
     })
   }
 

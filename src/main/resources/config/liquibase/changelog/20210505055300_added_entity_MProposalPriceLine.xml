@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity MProposalPriceLine.
     -->
@@ -76,6 +76,7 @@
                   separator=";"
                   tableName="m_proposal_price_line">
             <column name="id" type="numeric"/>
+            <column name="document" type="boolean"/>
             <column name="proposed_price" type="numeric"/>
             <column name="total_price_submission" type="numeric"/>
             <column name="delivery_date" type="date"/>
@@ -86,6 +87,14 @@
             <column name="bidding_line_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20210607093312" author="erid">
+        <addColumn tableName="m_proposal_price_line">
+            <column name="document" type="boolean">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

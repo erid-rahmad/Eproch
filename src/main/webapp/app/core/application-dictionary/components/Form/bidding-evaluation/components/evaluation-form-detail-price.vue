@@ -28,8 +28,9 @@
                                        icon="el-icon-download"
                                        size="mini"
                                        type="primary"
+                                       @click="downloadAttachment"
                             >
-                                {{ proposalPrice.attachment }}
+                                {{ proposalPrice.attachmentName }}
                             </el-button>
 
                         </el-form-item>
@@ -47,13 +48,13 @@
                             {{ biddingSubmission.vendorName }}
                         </el-form-item>
                         <el-form-item label="PIC">
-                            {{ biddingSubmission.pic }}
+                            {{ biddingSubmission.biddingUser }}
                         </el-form-item>
                         <el-form-item label="Date Submit">
-                            {{ biddingSubmission.date }}
+                            {{ biddingSubmission.dateSubmit | formatDate }}
                         </el-form-item>
                         <el-form-item label="Submission Deadline">
-                            {{ biddingSubmission.date }}
+                            {{ biddingSubmission.biddingScheduleEndDate | formatDate }}
                         </el-form-item>
                         <el-form-item label="Score">
                             <el-input v-model="evaluationResultLine.score" placeholder="Please input"></el-input>

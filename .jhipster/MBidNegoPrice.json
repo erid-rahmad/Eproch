@@ -19,6 +19,14 @@
     ],
     "relationships": [
         {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "cAttachment",
+            "otherEntityRelationshipName": "mBidNegoPrice",
+            "relationshipName": "attachment",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
             "relationshipType": "many-to-one",
             "otherEntityName": "mBidding",
             "otherEntityRelationshipName": "mBidNegoPrice",

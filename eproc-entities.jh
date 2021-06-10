@@ -1276,6 +1276,7 @@ entity MProposalPrice {
 }
 
 entity MProposalPriceLine {
+    document Boolean
 	proposedPrice BigDecimal required
 	totalPriceSubmission BigDecimal required
 	deliveryDate LocalDate required
@@ -1547,6 +1548,8 @@ relationship OneToOne {
 	MProposalAdministrationFile{cAttachment required} to CAttachment
 	MProposalTechnicalFile{cAttachment required} to CAttachment
 	MProposalPrice{biddingSubmission required} to MBiddingSubmission
+
+	MBidNegoPrice{attachment} to CAttachment
 }
 
 /**

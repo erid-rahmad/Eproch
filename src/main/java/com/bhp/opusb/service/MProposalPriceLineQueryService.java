@@ -91,6 +91,9 @@ public class MProposalPriceLineQueryService extends QueryService<MProposalPriceL
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), MProposalPriceLine_.id));
             }
+            if (criteria.getDocument() != null) {
+                specification = specification.and(buildSpecification(criteria.getDocument(), MProposalPriceLine_.document));
+            }
             if (criteria.getProposedPrice() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getProposedPrice(), MProposalPriceLine_.proposedPrice));
             }

@@ -2,6 +2,7 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MBidNegoPrice;
+import com.bhp.opusb.domain.CAttachment;
 import com.bhp.opusb.domain.MBidding;
 import com.bhp.opusb.domain.MProposalPrice;
 import com.bhp.opusb.domain.MBiddingNegotiationLine;
@@ -481,6 +482,26 @@ public class MBidNegoPriceResourceIT {
 
         // Get all the mBidNegoPriceList where negotiationPrice is greater than SMALLER_NEGOTIATION_PRICE
         defaultMBidNegoPriceShouldBeFound("negotiationPrice.greaterThan=" + SMALLER_NEGOTIATION_PRICE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMBidNegoPricesByAttachmentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mBidNegoPriceRepository.saveAndFlush(mBidNegoPrice);
+        CAttachment attachment = CAttachmentResourceIT.createEntity(em);
+        em.persist(attachment);
+        em.flush();
+        mBidNegoPrice.setAttachment(attachment);
+        mBidNegoPriceRepository.saveAndFlush(mBidNegoPrice);
+        Long attachmentId = attachment.getId();
+
+        // Get all the mBidNegoPriceList where attachment equals to attachmentId
+        defaultMBidNegoPriceShouldBeFound("attachmentId.equals=" + attachmentId);
+
+        // Get all the mBidNegoPriceList where attachment equals to attachmentId + 1
+        defaultMBidNegoPriceShouldNotBeFound("attachmentId.equals=" + (attachmentId + 1));
     }
 
 

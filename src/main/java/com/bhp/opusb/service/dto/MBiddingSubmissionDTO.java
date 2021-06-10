@@ -49,6 +49,7 @@ public class MBiddingSubmissionDTO extends AbstractAuditingDTO {
 
     private Long biddingId;
     private String biddingName;
+    private String biddingUser;
     private String biddingNo;
     private String biddingTypeName;
     private String biddingStatus;
@@ -61,13 +62,31 @@ public class MBiddingSubmissionDTO extends AbstractAuditingDTO {
     private Long biddingScheduleId;
     private String biddingScheduleName;
     private String biddingScheduleStatus;
+    private ZonedDateTime biddingScheduleEndDate;
+
 
     private Long vendorId;
     private String vendorName;
 
     private Long adOrganizationId;
     private String adOrganizationName;
-    
+
+    public String getBiddingUser() {
+        return biddingUser;
+    }
+
+    public void setBiddingUser(String biddingUser) {
+        this.biddingUser = biddingUser;
+    }
+
+    public ZonedDateTime getBiddingScheduleEndDate() {
+        return biddingScheduleEndDate;
+    }
+
+    public void setBiddingScheduleEndDate(ZonedDateTime biddingScheduleEndDate) {
+        this.biddingScheduleEndDate = biddingScheduleEndDate;
+    }
+
     public Long getId() {
         return id;
     }

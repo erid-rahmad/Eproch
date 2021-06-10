@@ -35,6 +35,8 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     this.retrieveEvalResultLine(this.evaluationResultProp.id)
   }
 
+
+
   retrieveEvalResultLine(biddingEvalResultId:number){
     this.loading=true;
     this.commonService(baseApiEvalResultLine)

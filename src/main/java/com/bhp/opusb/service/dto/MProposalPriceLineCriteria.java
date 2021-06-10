@@ -2,13 +2,16 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-
 import io.github.jhipster.service.Criteria;
-import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.LocalDateFilter;
+import io.github.jhipster.service.filter.FloatFilter;
+import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
+import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.BigDecimalFilter;
+import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -25,6 +28,8 @@ public class MProposalPriceLineCriteria implements Serializable, Criteria {
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
+
+    private BooleanFilter document;
 
     private BigDecimalFilter proposedPrice;
 
@@ -49,6 +54,7 @@ public class MProposalPriceLineCriteria implements Serializable, Criteria {
 
     public MProposalPriceLineCriteria(MProposalPriceLineCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.document = other.document == null ? null : other.document.copy();
         this.proposedPrice = other.proposedPrice == null ? null : other.proposedPrice.copy();
         this.totalPriceSubmission = other.totalPriceSubmission == null ? null : other.totalPriceSubmission.copy();
         this.deliveryDate = other.deliveryDate == null ? null : other.deliveryDate.copy();
@@ -71,6 +77,14 @@ public class MProposalPriceLineCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public BooleanFilter getDocument() {
+        return document;
+    }
+
+    public void setDocument(BooleanFilter document) {
+        this.document = document;
     }
 
     public BigDecimalFilter getProposedPrice() {
@@ -157,6 +171,7 @@ public class MProposalPriceLineCriteria implements Serializable, Criteria {
         final MProposalPriceLineCriteria that = (MProposalPriceLineCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(document, that.document) &&
             Objects.equals(proposedPrice, that.proposedPrice) &&
             Objects.equals(totalPriceSubmission, that.totalPriceSubmission) &&
             Objects.equals(deliveryDate, that.deliveryDate) &&
@@ -172,6 +187,7 @@ public class MProposalPriceLineCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
+        document,
         proposedPrice,
         totalPriceSubmission,
         deliveryDate,
@@ -188,6 +204,7 @@ public class MProposalPriceLineCriteria implements Serializable, Criteria {
     public String toString() {
         return "MProposalPriceLineCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (document != null ? "document=" + document + ", " : "") +
                 (proposedPrice != null ? "proposedPrice=" + proposedPrice + ", " : "") +
                 (totalPriceSubmission != null ? "totalPriceSubmission=" + totalPriceSubmission + ", " : "") +
                 (deliveryDate != null ? "deliveryDate=" + deliveryDate + ", " : "") +

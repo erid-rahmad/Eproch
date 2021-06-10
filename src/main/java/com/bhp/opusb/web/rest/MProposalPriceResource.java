@@ -78,7 +78,7 @@ public class MProposalPriceResource {
      */
     @PostMapping("/m-proposal-prices/form")
     public ResponseEntity<MProposalPriceDTO> createMProposalPrice(@Valid @RequestBody MProposalPriceVM mProposalPriceVM) throws URISyntaxException {
-        log.debug("REST request to save MProposalPrice form : {}", mProposalPriceVM);
+        log.debug("REST request to save MProposalPrice form -- : {}", mProposalPriceVM);
         MProposalPriceDTO result = mProposalPriceService.saveForm(mProposalPriceVM);
         return ResponseEntity.ok().body(result);
     }

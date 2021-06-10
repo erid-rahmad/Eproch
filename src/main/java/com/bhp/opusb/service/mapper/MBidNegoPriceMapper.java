@@ -9,14 +9,18 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link MBidNegoPrice} and its DTO {@link MBidNegoPriceDTO}.
  */
-@Mapper(componentModel = "spring", uses = {MBiddingMapper.class, MProposalPriceMapper.class, MBiddingNegotiationLineMapper.class})
+@Mapper(componentModel = "spring", uses = {CAttachmentMapper.class, MBiddingMapper.class, MProposalPriceMapper.class, MBiddingNegotiationLineMapper.class})
 public interface MBidNegoPriceMapper extends EntityMapper<MBidNegoPriceDTO, MBidNegoPrice> {
 
+    @Mapping(source = "attachment.id", target = "attachmentId")
+    @Mapping(source = "attachment.fileName", target = "fileName")
+    @Mapping(source = "attachment.downloadUrl", target = "downloadUrl")
     @Mapping(source = "bidding.id", target = "biddingId")
     @Mapping(source = "priceProposal.id", target = "priceProposalId")
     @Mapping(source = "negotiationLine.id", target = "negotiationLineId")
     MBidNegoPriceDTO toDto(MBidNegoPrice mBidNegoPrice);
 
+    @Mapping(source = "attachmentId", target = "attachment")
     @Mapping(source = "biddingId", target = "bidding")
     @Mapping(source = "priceProposalId", target = "priceProposal")
     @Mapping(source = "negotiationLineId", target = "negotiationLine")
