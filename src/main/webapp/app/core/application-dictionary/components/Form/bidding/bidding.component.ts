@@ -228,6 +228,24 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
     this.index = false;
   }
 
+  terminateBidding(row:any){
+    this.selectedRow = row;
+    this.showTerminationDialog = true;
+  }
+
+  confirmTermination(){
+    this.selectedRow.biddingStatus = 'T';
+    console.log(this.selectedRow);
+    this.commonService(baseApiUrl).update(this.selectedRow).then((res)=>{
+      this.$message.success(`Bidding ${this.selectedRow.documentNo} successfully terminated.`);
+      this.showTerminationDialog = false;
+      this.terminationReason = null;
+    }).catch((err)=>{
+      console.log(err);
+      this.$message.success(`Unable to terminate bidding ${this.selectedRow.documentNo}.`);
+    })
+  }
+
   viewJoinVendor(biddingId: number) {
     this.showJoinedVendors = true;
     this.loadingJoinedVendors = true;
