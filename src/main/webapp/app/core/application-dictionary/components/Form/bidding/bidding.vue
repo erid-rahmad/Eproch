@@ -32,7 +32,7 @@
             <el-button icon="el-icon-search" size="mini" title="View" type="primary" :underline="false" @click="viewBidding(row)"
               >View</el-button
             >
-            <el-button size="mini" title="Terminate Bidding" type="danger" :underline="false" @click="showTerminationDialog = true">
+            <el-button size="mini" title="Terminate Bidding" type="danger" :underline="false" @click="terminateBidding(row)">
               <svg-icon name="icomoo/183-switch"></svg-icon> Terminate
             </el-button>
           </template>
@@ -124,13 +124,11 @@
 
     <el-dialog width="30%" :visible.sync="showTerminationDialog" title="Terminate Bidding Confirmation">
       <p>Are you sure you want to terminate the bidding process?</p>
-      <p>Please type the reason:</p>
-      <el-input v-model="terminationReason" type="textarea" :autosize="{ minRows: 2, maxRows: 4 }"></el-input>
       <div slot="footer">
         <el-button style="margin-left: 0px;" size="mini" icon="el-icon-close" @click="showTerminationDialog = false">
           {{ $t('entity.action.cancel') }}
         </el-button>
-        <el-button style="margin-left: 0px;" size="mini" type="danger" @click="showTerminationDialog = false">
+        <el-button style="margin-left: 0px;" size="mini" type="danger" @click="confirmTermination">
           <svg-icon name="icomoo/183-switch"></svg-icon> Terminate
         </el-button>
       </div>
