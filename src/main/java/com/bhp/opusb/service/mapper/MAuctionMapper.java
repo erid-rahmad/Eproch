@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 /**
  * Mapper for the entity {@link MAuction} and its DTO {@link MAuctionDTO}.
  */
-@Mapper(componentModel = "spring", uses = {MAuctionRuleMapper.class, MAuctionContentMapper.class, ADOrganizationMapper.class, CCurrencyMapper.class, CCostCenterMapper.class, AdUserMapper.class})
+@Mapper(componentModel = "spring", uses = {MAuctionRuleMapper.class, MAuctionContentMapper.class, ADOrganizationMapper.class, CCurrencyMapper.class, CCostCenterMapper.class, AdUserMapper.class, CAuctionPrerequisiteMapper.class})
 public interface MAuctionMapper extends EntityMapper<MAuctionDTO, MAuction> {
 
     @Mapping(source = "rule.id", target = "ruleId")
@@ -26,6 +26,7 @@ public interface MAuctionMapper extends EntityMapper<MAuctionDTO, MAuction> {
     @Mapping(source = "costCenter.name", target = "costCenterName")
     @Mapping(source = "owner.id", target = "ownerUserId")
     @Mapping(source = "owner.user.login", target = "ownerName")
+    @Mapping(source = "prerequisite.id", target = "prerequisiteId")
     MAuctionDTO toDto(MAuction mAuction);
 
     @Mapping(source = "ruleId", target = "rule")
@@ -34,6 +35,7 @@ public interface MAuctionMapper extends EntityMapper<MAuctionDTO, MAuction> {
     @Mapping(source = "currencyId", target = "currency")
     @Mapping(source = "costCenterId", target = "costCenter")
     @Mapping(source = "ownerUserId", target = "owner")
+    @Mapping(source = "prerequisiteId", target = "prerequisite")
     MAuction toEntity(MAuctionDTO mAuctionDTO);
 
     default MAuction fromId(Long id) {

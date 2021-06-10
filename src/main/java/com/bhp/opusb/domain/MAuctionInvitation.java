@@ -8,9 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -23,25 +21,17 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * A MAuction.
+ * A MAuctionInvitation.
  */
 @Entity
-@Table(name = "m_auction")
+@Table(name = "m_auction_invitation")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MAuction extends AbstractAuditingEntity {
+public class MAuctionInvitation extends AbstractAuditingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
-
-    @NotNull
-    @Size(max = 30)
-    @Column(name = "name", length = 30, nullable = false)
-    private String name;
-
-    @Column(name = "description")
-    private String description;
 
     @Column(name = "date_trx")
     private ZonedDateTime dateTrx;
@@ -55,11 +45,17 @@ public class MAuction extends AbstractAuditingEntity {
     @Column(name = "document_action", length = 10, nullable = false)
     private String documentAction;
 
+    /**
+     * By default is SMT (submit). Available statuses are: ACC (Accept) and DCL (Decline).
+     */
     @NotNull
     @Size(max = 12)
     @Column(name = "document_status", length = 12, nullable = false)
     private String documentStatus;
 
+    /**
+     * Whether the supplier accept the invitation or not.
+     */
     @Column(name = "approved")
     private Boolean approved;
 
@@ -81,35 +77,20 @@ public class MAuction extends AbstractAuditingEntity {
     @Column(name = "active")
     private Boolean active;
 
-    @OneToOne
-    @JoinColumn(unique = true)
-    private MAuctionRule rule;
-
-    @OneToOne
-    @JoinColumn(unique = true)
-    private MAuctionContent content;
-
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("mAuctions")
+    @JsonIgnoreProperties("mAuctionInvitations")
     private ADOrganization adOrganization;
 
-    @ManyToOne
-    @JsonIgnoreProperties("mAuctions")
-    private CCurrency currency;
-
-    @ManyToOne
-    @JsonIgnoreProperties("mAuctions")
-    private CCostCenter costCenter;
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mAuctionInvitations")
+    private MAuction auction;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("mAuctions")
-    private AdUser owner;
-
-    @ManyToOne
-    @JsonIgnoreProperties("mAuctions")
-    private CAuctionPrerequisite prerequisite;
+    @JsonIgnoreProperties("mAuctionInvitations")
+    private CVendor vendor;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -120,37 +101,11 @@ public class MAuction extends AbstractAuditingEntity {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public MAuction name(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public MAuction description(String description) {
-        this.description = description;
-        return this;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public ZonedDateTime getDateTrx() {
         return dateTrx;
     }
 
-    public MAuction dateTrx(ZonedDateTime dateTrx) {
+    public MAuctionInvitation dateTrx(ZonedDateTime dateTrx) {
         this.dateTrx = dateTrx;
         return this;
     }
@@ -163,7 +118,7 @@ public class MAuction extends AbstractAuditingEntity {
         return documentNo;
     }
 
-    public MAuction documentNo(String documentNo) {
+    public MAuctionInvitation documentNo(String documentNo) {
         this.documentNo = documentNo;
         return this;
     }
@@ -176,7 +131,7 @@ public class MAuction extends AbstractAuditingEntity {
         return documentAction;
     }
 
-    public MAuction documentAction(String documentAction) {
+    public MAuctionInvitation documentAction(String documentAction) {
         this.documentAction = documentAction;
         return this;
     }
@@ -189,7 +144,7 @@ public class MAuction extends AbstractAuditingEntity {
         return documentStatus;
     }
 
-    public MAuction documentStatus(String documentStatus) {
+    public MAuctionInvitation documentStatus(String documentStatus) {
         this.documentStatus = documentStatus;
         return this;
     }
@@ -202,7 +157,7 @@ public class MAuction extends AbstractAuditingEntity {
         return approved;
     }
 
-    public MAuction approved(Boolean approved) {
+    public MAuctionInvitation approved(Boolean approved) {
         this.approved = approved;
         return this;
     }
@@ -215,7 +170,7 @@ public class MAuction extends AbstractAuditingEntity {
         return processed;
     }
 
-    public MAuction processed(Boolean processed) {
+    public MAuctionInvitation processed(Boolean processed) {
         this.processed = processed;
         return this;
     }
@@ -228,7 +183,7 @@ public class MAuction extends AbstractAuditingEntity {
         return dateApprove;
     }
 
-    public MAuction dateApprove(ZonedDateTime dateApprove) {
+    public MAuctionInvitation dateApprove(ZonedDateTime dateApprove) {
         this.dateApprove = dateApprove;
         return this;
     }
@@ -241,7 +196,7 @@ public class MAuction extends AbstractAuditingEntity {
         return dateReject;
     }
 
-    public MAuction dateReject(ZonedDateTime dateReject) {
+    public MAuctionInvitation dateReject(ZonedDateTime dateReject) {
         this.dateReject = dateReject;
         return this;
     }
@@ -254,7 +209,7 @@ public class MAuction extends AbstractAuditingEntity {
         return rejectedReason;
     }
 
-    public MAuction rejectedReason(String rejectedReason) {
+    public MAuctionInvitation rejectedReason(String rejectedReason) {
         this.rejectedReason = rejectedReason;
         return this;
     }
@@ -267,7 +222,7 @@ public class MAuction extends AbstractAuditingEntity {
         return uid;
     }
 
-    public MAuction uid(UUID uid) {
+    public MAuctionInvitation uid(UUID uid) {
         this.uid = uid;
         return this;
     }
@@ -280,7 +235,7 @@ public class MAuction extends AbstractAuditingEntity {
         return active;
     }
 
-    public MAuction active(Boolean active) {
+    public MAuctionInvitation active(Boolean active) {
         this.active = active;
         return this;
     }
@@ -289,37 +244,11 @@ public class MAuction extends AbstractAuditingEntity {
         this.active = active;
     }
 
-    public MAuctionRule getRule() {
-        return rule;
-    }
-
-    public MAuction rule(MAuctionRule mAuctionRule) {
-        this.rule = mAuctionRule;
-        return this;
-    }
-
-    public void setRule(MAuctionRule mAuctionRule) {
-        this.rule = mAuctionRule;
-    }
-
-    public MAuctionContent getContent() {
-        return content;
-    }
-
-    public MAuction content(MAuctionContent mAuctionContent) {
-        this.content = mAuctionContent;
-        return this;
-    }
-
-    public void setContent(MAuctionContent mAuctionContent) {
-        this.content = mAuctionContent;
-    }
-
     public ADOrganization getAdOrganization() {
         return adOrganization;
     }
 
-    public MAuction adOrganization(ADOrganization aDOrganization) {
+    public MAuctionInvitation adOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
         return this;
     }
@@ -328,56 +257,30 @@ public class MAuction extends AbstractAuditingEntity {
         this.adOrganization = aDOrganization;
     }
 
-    public CCurrency getCurrency() {
-        return currency;
+    public MAuction getAuction() {
+        return auction;
     }
 
-    public MAuction currency(CCurrency cCurrency) {
-        this.currency = cCurrency;
+    public MAuctionInvitation auction(MAuction mAuction) {
+        this.auction = mAuction;
         return this;
     }
 
-    public void setCurrency(CCurrency cCurrency) {
-        this.currency = cCurrency;
+    public void setAuction(MAuction mAuction) {
+        this.auction = mAuction;
     }
 
-    public CCostCenter getCostCenter() {
-        return costCenter;
+    public CVendor getVendor() {
+        return vendor;
     }
 
-    public MAuction costCenter(CCostCenter cCostCenter) {
-        this.costCenter = cCostCenter;
+    public MAuctionInvitation vendor(CVendor cVendor) {
+        this.vendor = cVendor;
         return this;
     }
 
-    public void setCostCenter(CCostCenter cCostCenter) {
-        this.costCenter = cCostCenter;
-    }
-
-    public AdUser getOwner() {
-        return owner;
-    }
-
-    public MAuction owner(AdUser adUser) {
-        this.owner = adUser;
-        return this;
-    }
-
-    public void setOwner(AdUser adUser) {
-        this.owner = adUser;
-    }
-
-    public CAuctionPrerequisite getPrerequisite() {
-        return prerequisite;
-    }
-
-    public MAuction prerequisite(CAuctionPrerequisite cAuctionPrerequisite) {
-        this.prerequisite = cAuctionPrerequisite;
-        return this;
-    }
-
-    public void setPrerequisite(CAuctionPrerequisite cAuctionPrerequisite) {
-        this.prerequisite = cAuctionPrerequisite;
+    public void setVendor(CVendor cVendor) {
+        this.vendor = cVendor;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -391,10 +294,10 @@ public class MAuction extends AbstractAuditingEntity {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof MAuction)) {
+        if (!(o instanceof MAuctionInvitation)) {
             return false;
         }
-        return id != null && id.equals(((MAuction) o).id);
+        return id != null && id.equals(((MAuctionInvitation) o).id);
     }
 
     @Override
@@ -404,10 +307,8 @@ public class MAuction extends AbstractAuditingEntity {
 
     @Override
     public String toString() {
-        return "MAuction{" +
+        return "MAuctionInvitation{" +
             "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", description='" + getDescription() + "'" +
             ", dateTrx='" + getDateTrx() + "'" +
             ", documentNo='" + getDocumentNo() + "'" +
             ", documentAction='" + getDocumentAction() + "'" +

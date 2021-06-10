@@ -209,6 +209,9 @@ application:
     auction:
       documentType: 'Auction'
       documentNumberPrefix: 'AN-'
+    auctionInvitation:
+      documentType: 'Auction Invitation'
+      documentNumberPrefix: 'AI-'
     bidding:
       documentType: 'Bidding'
       documentNumberPrefix: 'BD-'

@@ -12,23 +12,19 @@ import io.github.jhipster.service.filter.UUIDFilter;
 import io.github.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
- * Criteria class for the {@link com.bhp.opusb.domain.MAuction} entity. This class is used
- * in {@link com.bhp.opusb.web.rest.MAuctionResource} to receive all the possible filtering options from
+ * Criteria class for the {@link com.bhp.opusb.domain.MAuctionInvitation} entity. This class is used
+ * in {@link com.bhp.opusb.web.rest.MAuctionInvitationResource} to receive all the possible filtering options from
  * the Http GET request parameters.
  * For example the following could be a valid request:
- * {@code /m-auctions?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
+ * {@code /m-auction-invitations?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
  * As Spring is unable to properly convert the types, unless specific {@link Filter} class are used, we need to use
  * fix type specific filters.
  */
-public class MAuctionCriteria implements Serializable, Criteria {
+public class MAuctionInvitationCriteria implements Serializable, Criteria {
 
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
-
-    private StringFilter name;
-
-    private StringFilter description;
 
     private ZonedDateTimeFilter dateTrx;
 
@@ -52,27 +48,17 @@ public class MAuctionCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
-    private LongFilter ruleId;
-
-    private LongFilter contentId;
-
     private LongFilter adOrganizationId;
 
-    private LongFilter currencyId;
+    private LongFilter auctionId;
 
-    private LongFilter costCenterId;
+    private LongFilter vendorId;
 
-    private LongFilter ownerUserId;
-
-    private LongFilter prerequisiteId;
-
-    public MAuctionCriteria() {
+    public MAuctionInvitationCriteria() {
     }
 
-    public MAuctionCriteria(MAuctionCriteria other) {
+    public MAuctionInvitationCriteria(MAuctionInvitationCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.name = other.name == null ? null : other.name.copy();
-        this.description = other.description == null ? null : other.description.copy();
         this.dateTrx = other.dateTrx == null ? null : other.dateTrx.copy();
         this.documentNo = other.documentNo == null ? null : other.documentNo.copy();
         this.documentAction = other.documentAction == null ? null : other.documentAction.copy();
@@ -84,18 +70,14 @@ public class MAuctionCriteria implements Serializable, Criteria {
         this.rejectedReason = other.rejectedReason == null ? null : other.rejectedReason.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
-        this.ruleId = other.ruleId == null ? null : other.ruleId.copy();
-        this.contentId = other.contentId == null ? null : other.contentId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
-        this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
-        this.costCenterId = other.costCenterId == null ? null : other.costCenterId.copy();
-        this.ownerUserId = other.ownerUserId == null ? null : other.ownerUserId.copy();
-        this.prerequisiteId = other.prerequisiteId == null ? null : other.prerequisiteId.copy();
+        this.auctionId = other.auctionId == null ? null : other.auctionId.copy();
+        this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
     }
 
     @Override
-    public MAuctionCriteria copy() {
-        return new MAuctionCriteria(this);
+    public MAuctionInvitationCriteria copy() {
+        return new MAuctionInvitationCriteria(this);
     }
 
     public LongFilter getId() {
@@ -104,22 +86,6 @@ public class MAuctionCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
-    }
-
-    public StringFilter getName() {
-        return name;
-    }
-
-    public void setName(StringFilter name) {
-        this.name = name;
-    }
-
-    public StringFilter getDescription() {
-        return description;
-    }
-
-    public void setDescription(StringFilter description) {
-        this.description = description;
     }
 
     public ZonedDateTimeFilter getDateTrx() {
@@ -210,22 +176,6 @@ public class MAuctionCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
-    public LongFilter getRuleId() {
-        return ruleId;
-    }
-
-    public void setRuleId(LongFilter ruleId) {
-        this.ruleId = ruleId;
-    }
-
-    public LongFilter getContentId() {
-        return contentId;
-    }
-
-    public void setContentId(LongFilter contentId) {
-        this.contentId = contentId;
-    }
-
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -234,36 +184,20 @@ public class MAuctionCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
-    public LongFilter getCurrencyId() {
-        return currencyId;
+    public LongFilter getAuctionId() {
+        return auctionId;
     }
 
-    public void setCurrencyId(LongFilter currencyId) {
-        this.currencyId = currencyId;
+    public void setAuctionId(LongFilter auctionId) {
+        this.auctionId = auctionId;
     }
 
-    public LongFilter getCostCenterId() {
-        return costCenterId;
+    public LongFilter getVendorId() {
+        return vendorId;
     }
 
-    public void setCostCenterId(LongFilter costCenterId) {
-        this.costCenterId = costCenterId;
-    }
-
-    public LongFilter getOwnerUserId() {
-        return ownerUserId;
-    }
-
-    public void setOwnerUserId(LongFilter ownerId) {
-        this.ownerUserId = ownerId;
-    }
-
-    public LongFilter getPrerequisiteId() {
-        return prerequisiteId;
-    }
-
-    public void setPrerequisiteId(LongFilter prerequisiteId) {
-        this.prerequisiteId = prerequisiteId;
+    public void setVendorId(LongFilter vendorId) {
+        this.vendorId = vendorId;
     }
 
 
@@ -275,11 +209,9 @@ public class MAuctionCriteria implements Serializable, Criteria {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final MAuctionCriteria that = (MAuctionCriteria) o;
+        final MAuctionInvitationCriteria that = (MAuctionInvitationCriteria) o;
         return
             Objects.equals(id, that.id) &&
-            Objects.equals(name, that.name) &&
-            Objects.equals(description, that.description) &&
             Objects.equals(dateTrx, that.dateTrx) &&
             Objects.equals(documentNo, that.documentNo) &&
             Objects.equals(documentAction, that.documentAction) &&
@@ -291,21 +223,15 @@ public class MAuctionCriteria implements Serializable, Criteria {
             Objects.equals(rejectedReason, that.rejectedReason) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(ruleId, that.ruleId) &&
-            Objects.equals(contentId, that.contentId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(currencyId, that.currencyId) &&
-            Objects.equals(costCenterId, that.costCenterId) &&
-            Objects.equals(ownerUserId, that.ownerUserId) &&
-            Objects.equals(prerequisiteId, that.prerequisiteId);
+            Objects.equals(auctionId, that.auctionId) &&
+            Objects.equals(vendorId, that.vendorId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
         id,
-        name,
-        description,
         dateTrx,
         documentNo,
         documentAction,
@@ -317,22 +243,16 @@ public class MAuctionCriteria implements Serializable, Criteria {
         rejectedReason,
         uid,
         active,
-        ruleId,
-        contentId,
         adOrganizationId,
-        currencyId,
-        costCenterId,
-        ownerUserId,
-        prerequisiteId
+        auctionId,
+        vendorId
         );
     }
 
     @Override
     public String toString() {
-        return "MAuctionCriteria{" +
+        return "MAuctionInvitationCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
-                (name != null ? "name=" + name + ", " : "") +
-                (description != null ? "description=" + description + ", " : "") +
                 (dateTrx != null ? "dateTrx=" + dateTrx + ", " : "") +
                 (documentNo != null ? "documentNo=" + documentNo + ", " : "") +
                 (documentAction != null ? "documentAction=" + documentAction + ", " : "") +
@@ -344,13 +264,9 @@ public class MAuctionCriteria implements Serializable, Criteria {
                 (rejectedReason != null ? "rejectedReason=" + rejectedReason + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
-                (ruleId != null ? "ruleId=" + ruleId + ", " : "") +
-                (contentId != null ? "contentId=" + contentId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
-                (currencyId != null ? "currencyId=" + currencyId + ", " : "") +
-                (costCenterId != null ? "costCenterId=" + costCenterId + ", " : "") +
-                (ownerUserId != null ? "ownerId=" + ownerUserId + ", " : "") +
-                (prerequisiteId != null ? "prerequisiteId=" + prerequisiteId + ", " : "") +
+                (auctionId != null ? "auctionId=" + auctionId + ", " : "") +
+                (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
             "}";
     }
 

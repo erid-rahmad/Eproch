@@ -8,6 +8,7 @@ import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CCurrency;
 import com.bhp.opusb.domain.CCostCenter;
 import com.bhp.opusb.domain.AdUser;
+import com.bhp.opusb.domain.CAuctionPrerequisite;
 import com.bhp.opusb.repository.MAuctionRepository;
 import com.bhp.opusb.service.MAuctionService;
 import com.bhp.opusb.service.dto.MAuctionDTO;
@@ -1482,6 +1483,26 @@ public class MAuctionResourceIT {
 
         // Get all the mAuctionList where owner equals to ownerId + 1
         defaultMAuctionShouldNotBeFound("ownerId.equals=" + (ownerId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMAuctionsByPrerequisiteIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mAuctionRepository.saveAndFlush(mAuction);
+        CAuctionPrerequisite prerequisite = CAuctionPrerequisiteResourceIT.createEntity(em);
+        em.persist(prerequisite);
+        em.flush();
+        mAuction.setPrerequisite(prerequisite);
+        mAuctionRepository.saveAndFlush(mAuction);
+        Long prerequisiteId = prerequisite.getId();
+
+        // Get all the mAuctionList where prerequisite equals to prerequisiteId
+        defaultMAuctionShouldBeFound("prerequisiteId.equals=" + prerequisiteId);
+
+        // Get all the mAuctionList where prerequisite equals to prerequisiteId + 1
+        defaultMAuctionShouldNotBeFound("prerequisiteId.equals=" + (prerequisiteId + 1));
     }
 
     /**
