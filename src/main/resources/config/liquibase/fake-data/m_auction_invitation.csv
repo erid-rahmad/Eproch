@@ -1,0 +1,11 @@
+id;date_trx;document_no;document_action;document_status;approved;processed;date_approve;date_reject;rejected_reason;uid;active;ad_organization_id;auction_id;vendor_id
+1;2021-06-08T16:19:06;Manager;redundant;Investment A;false;true;2021-06-09T10:30:38;2021-06-09T00:17:08;Sleek Cotton Chicken;6663f2e4-e36c-4fc9-916a-aa8443c592df;false;1;1;1
+2;2021-06-09T01:32:36;Mews Bedfordshire Bike;internet s;Savings Acco;true;false;2021-06-09T03:40:32;2021-06-09T11:13:00;teal;68892b57-4c5c-4f06-88e3-0ef036d75a46;false;2;2;2
+3;2021-06-08T20:25:21;copy;Officer Co;Bacon Texas;true;true;2021-06-09T00:24:52;2021-06-09T05:58:28;sky blue alarm;f81737c4-0c61-4d2e-bdc1-7e0e41ae4cc6;true;3;3;3
+4;2021-06-08T11:55:20;Assimilated Mouse Planner;Lek Custom;Shirt Colora;false;true;2021-06-08T22:50:51;2021-06-09T01:19:42;archive;4ebd8fe2-bada-41be-a1dc-3941da2655ec;true;4;4;4
+5;2021-06-08T18:04:46;mobile;Internatio;Shoes;true;false;2021-06-09T10:32:23;2021-06-08T18:29:59;contingency parse Nuevo Sol;d68a5b5d-5208-4509-ac7a-d4a915f56dc2;true;5;5;5
+6;2021-06-08T17:28:50;backing up Plastic;embrace;orchestratio;false;false;2021-06-09T10:46:07;2021-06-08T22:47:52;deposit New Jersey;97322c10-cf5b-41c5-8e98-1ddcaf8f1b57;true;6;6;6
+7;2021-06-08T18:59:03;Cheese capacitor;Garden Eng;Berkshire or;false;false;2021-06-08T12:54:08;2021-06-09T01:08:26;payment synthesize;ca99462d-d543-4267-8c13-1129214203cb;true;7;7;7
+8;2021-06-08T20:26:34;orange;Philippine;Borders;false;false;2021-06-08T17:45:46;2021-06-08T17:56:52;Fresh Steel;a11a6c4b-281e-429b-be97-6332eac6e44b;false;8;8;8
+9;2021-06-08T13:31:03;parallelism;transmit C;backing up;true;false;2021-06-09T04:45:35;2021-06-09T00:15:37;Personal Loan Account;d353f895-099d-4b60-a473-74b2672692eb;false;9;9;9
+10;2021-06-09T02:46:45;Technician;attitude-o;Checking Acc;true;false;2021-06-09T09:12:49;2021-06-08T22:45:53;Jewelery Soft Officer;6d8e9248-c2b8-472e-93c5-129e1c210edd;true;10;10;10

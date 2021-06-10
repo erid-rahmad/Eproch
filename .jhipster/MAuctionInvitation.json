@@ -1,19 +1,6 @@
 {
-    "name": "MAuction",
+    "name": "MAuctionInvitation",
     "fields": [
-        {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "30"
-        },
-        {
-            "fieldName": "description",
-            "fieldType": "String"
-        },
         {
             "fieldName": "dateTrx",
             "fieldType": "ZonedDateTime"
@@ -37,6 +24,7 @@
         },
         {
             "fieldName": "documentStatus",
+            "javadoc": "By default is SMT (submit). Available statuses are: ACC (Accept) and DCL (Decline).",
             "fieldType": "String",
             "fieldValidateRules": [
                 "required",
@@ -46,6 +34,7 @@
         },
         {
             "fieldName": "approved",
+            "javadoc": "Whether the supplier accept the invitation or not.",
             "fieldType": "Boolean"
         },
         {
@@ -75,61 +64,32 @@
     ],
     "relationships": [
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "mAuctionRule",
-            "otherEntityRelationshipName": "mAuction",
-            "relationshipName": "rule",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "mAuctionContent",
-            "otherEntityRelationshipName": "mAuction",
-            "relationshipName": "content",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
-        {
             "relationshipType": "many-to-one",
             "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "mAuction",
+            "otherEntityRelationshipName": "mAuctionInvitation",
             "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "cCurrency",
-            "otherEntityRelationshipName": "mAuction",
-            "relationshipName": "currency",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cCostCenter",
-            "otherEntityRelationshipName": "mAuction",
-            "relationshipName": "costCenter",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "adUser",
-            "otherEntityRelationshipName": "mAuction",
+            "otherEntityName": "mAuction",
+            "otherEntityRelationshipName": "mAuctionInvitation",
             "relationshipValidateRules": "required",
-            "relationshipName": "owner",
+            "relationshipName": "auction",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "cAuctionPrerequisite",
-            "otherEntityRelationshipName": "mAuction",
-            "relationshipName": "prerequisite",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "mAuctionInvitation",
+            "relationshipValidateRules": "required",
+            "relationshipName": "vendor",
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20210524031800",
-    "entityTableName": "m_auction",
+    "changelogDate": "20210609111500",
+    "entityTableName": "m_auction_invitation",
     "dto": "mapstruct",
     "pagination": "pagination",
     "service": "serviceClass",

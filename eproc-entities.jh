@@ -1088,6 +1088,12 @@ entity MAuctionContent {
 	active Boolean
 }
 
+entity CAuctionPrerequisite {
+	description TextBlob
+	uid UUID
+	active Boolean
+}
+
 entity MAuctionItem {
 	quantity BigDecimal
 
@@ -1116,6 +1122,21 @@ entity MAuctionItem {
 
 	uid UUID
 	active Boolean
+}
+
+entity MAuctionSubmission {
+	price BigDecimal required
+
+	uid UUID
+	active Boolean
+}
+
+entity MAuctionSubmissionLog {
+	action String required maxlength(10)
+	userName String required
+	price BigDecimal
+	dateTrx ZonedDateTime required
+	message String
 }
 
 entity MAuctionParticipant {
@@ -1180,6 +1201,27 @@ entity MAuctionRule {
 entity MAuctionTeam {
 	/** Referenced from auctionRole */
 	role String maxlength(10)
+
+	uid UUID
+	active Boolean
+}
+
+entity MAuctionInvitation {
+	// Common transactional fields.
+	dateTrx ZonedDateTime
+	documentNo String maxlength(30)
+	documentAction String required maxlength(10)
+
+	/** By default is SMT (submit). Available statuses are: ACC (Accept) and DCL (Decline). */
+	documentStatus String required maxlength(12)
+
+	/** Whether the supplier accept the invitation or not. */
+	approved Boolean
+
+	processed Boolean
+	dateApprove ZonedDateTime
+	dateReject ZonedDateTime
+	rejectedReason String
 
 	uid UUID
 	active Boolean
@@ -1870,6 +1912,8 @@ relationship ManyToOne {
 	MPurchaseOrderLine{uom required} to CUnitOfMeasure
 	MPurchaseOrderLine{vendor} to CVendor
 
+	CAuctionPrerequisite{adOrganization required} to ADOrganization
+
 	CBiddingType{adOrganization required} to ADOrganization
 	CBiddingType{productClassification required} to CProductClassification
 
@@ -1956,6 +2000,7 @@ relationship ManyToOne {
 	MAuction{currency} to CCurrency
 	MAuction{costCenter} to CCostCenter
 	MAuction{owner required} to AdUser
+	MAuction{prerequisite} to CAuctionPrerequisite
 
 	MAuctionRule{adOrganization required} to ADOrganization
 
@@ -1975,6 +2020,15 @@ relationship ManyToOne {
 	MAuctionItem{uom required} to CUnitOfMeasure
 
 	MAuctionContent{adOrganization required} to ADOrganization
+
+	MAuctionInvitation{adOrganization required} to ADOrganization
+	MAuctionInvitation{auction required} to MAuction
+	MAuctionInvitation{vendor required} to CVendor
+
+	MAuctionSubmission{adOrganization required} to ADOrganization
+	MAuctionSubmission{auctionItem required} to MAuctionItem
+
+	MAuctionSubmissionLog{auctionItem required} to MAuctionItem
 
 	MBidding{adOrganization required} to ADOrganization
 	MBidding{costCenter required} to CCostCenter

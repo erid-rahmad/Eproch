@@ -7,18 +7,14 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
- * A DTO for the {@link com.bhp.opusb.domain.MAuction} entity.
+ * A DTO for the {@link com.bhp.opusb.domain.MAuctionInvitation} entity.
  */
-public class MAuctionDTO extends AbstractAuditingDTO {
+public class MAuctionInvitationDTO extends AbstractAuditingDTO {
     
     private Long id;
-
-    @NotNull
-    @Size(max = 30)
-    private String name;
-
-    private String description;
 
     private ZonedDateTime dateTrx = ZonedDateTime.now();
 
@@ -27,12 +23,20 @@ public class MAuctionDTO extends AbstractAuditingDTO {
 
     @NotNull
     @Size(max = 10)
-    private String documentAction = "PBS";
+    private String documentAction = "ACC";
 
+    /**
+     * By default is SMT (submit). Available statuses are: ACC (Accept) and DCL (Decline).
+     */
     @NotNull
     @Size(max = 12)
-    private String documentStatus = "DRF";
+    @ApiModelProperty(value = "By default is SMT (submit). Available statuses are: ACC (Accept) and DCL (Decline).", required = true)
+    private String documentStatus = "SMT";
 
+    /**
+     * Whether the supplier accept the invitation or not.
+     */
+    @ApiModelProperty(value = "Whether the supplier accept the invitation or not.")
     private Boolean approved;
 
     private Boolean processed;
@@ -48,26 +52,15 @@ public class MAuctionDTO extends AbstractAuditingDTO {
     private Boolean active = true;
 
 
-    private Long ruleId;
-    private ZonedDateTime ruleStartDate;
-    private String ruleBidImprovementUnit;
-    private String ruleTieBidsRule;
-
-    private Long contentId;
-
     private Long adOrganizationId;
     private String adOrganizationName;
 
-    private Long currencyId;
-    private String currencyName;
+    private Long auctionId;
+    private String auctionDocumentNo;
+    private String auctionName;
 
-    private Long costCenterId;
-    private String costCenterName;
-
-    private Long ownerUserId;
-    private String ownerName;
-
-    private Long prerequisiteId;
+    private Long vendorId;
+    private String vendorName;
     
     public Long getId() {
         return id;
@@ -75,22 +68,6 @@ public class MAuctionDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public ZonedDateTime getDateTrx() {
@@ -181,46 +158,6 @@ public class MAuctionDTO extends AbstractAuditingDTO {
         this.active = active;
     }
 
-    public Long getRuleId() {
-        return ruleId;
-    }
-
-    public void setRuleId(Long mAuctionRuleId) {
-        this.ruleId = mAuctionRuleId;
-    }
-
-    public ZonedDateTime getRuleStartDate() {
-        return ruleStartDate;
-    }
-
-    public void setRuleStartDate(ZonedDateTime ruleStartDate) {
-        this.ruleStartDate = ruleStartDate;
-    }
-
-    public String getRuleBidImprovementUnit() {
-        return ruleBidImprovementUnit;
-    }
-
-    public void setRuleBidImprovementUnit(String ruleBidImprovementUnit) {
-        this.ruleBidImprovementUnit = ruleBidImprovementUnit;
-    }
-
-    public String getRuleTieBidsRule() {
-        return ruleTieBidsRule;
-    }
-
-    public void setRuleTieBidsRule(String ruleTieBidsRule) {
-        this.ruleTieBidsRule = ruleTieBidsRule;
-    }
-
-    public Long getContentId() {
-        return contentId;
-    }
-
-    public void setContentId(Long mAuctionContentId) {
-        this.contentId = mAuctionContentId;
-    }
-
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -237,60 +174,44 @@ public class MAuctionDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
-    public Long getCurrencyId() {
-        return currencyId;
+    public Long getAuctionId() {
+        return auctionId;
     }
 
-    public void setCurrencyId(Long cCurrencyId) {
-        this.currencyId = cCurrencyId;
+    public void setAuctionId(Long mAuctionId) {
+        this.auctionId = mAuctionId;
     }
 
-    public String getCurrencyName() {
-        return currencyName;
+    public String getAuctionDocumentNo() {
+        return auctionDocumentNo;
     }
 
-    public void setCurrencyName(String currencyName) {
-        this.currencyName = currencyName;
+    public void setAuctionDocumentNo(String auctionDocumentNo) {
+        this.auctionDocumentNo = auctionDocumentNo;
     }
 
-    public Long getCostCenterId() {
-        return costCenterId;
+    public String getAuctionName() {
+        return auctionName;
     }
 
-    public void setCostCenterId(Long cCostCenterId) {
-        this.costCenterId = cCostCenterId;
+    public void setAuctionName(String auctionName) {
+        this.auctionName = auctionName;
     }
 
-    public String getCostCenterName() {
-        return costCenterName;
+    public Long getVendorId() {
+        return vendorId;
     }
 
-    public void setCostCenterName(String costCenterName) {
-        this.costCenterName = costCenterName;
+    public void setVendorId(Long cVendorId) {
+        this.vendorId = cVendorId;
     }
 
-    public Long getOwnerUserId() {
-        return ownerUserId;
+    public String getVendorName() {
+        return vendorName;
     }
 
-    public void setOwnerUserId(Long ownerUserId) {
-        this.ownerUserId = ownerUserId;
-    }
-
-    public String getOwnerName() {
-        return ownerName;
-    }
-
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
-    }
-
-    public Long getPrerequisiteId() {
-        return prerequisiteId;
-    }
-
-    public void setPrerequisiteId(Long cAuctionPrerequisiteId) {
-        this.prerequisiteId = cAuctionPrerequisiteId;
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
     }
 
     @Override
@@ -302,11 +223,11 @@ public class MAuctionDTO extends AbstractAuditingDTO {
             return false;
         }
 
-        MAuctionDTO mAuctionDTO = (MAuctionDTO) o;
-        if (mAuctionDTO.getId() == null || getId() == null) {
+        MAuctionInvitationDTO mAuctionInvitationDTO = (MAuctionInvitationDTO) o;
+        if (mAuctionInvitationDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), mAuctionDTO.getId());
+        return Objects.equals(getId(), mAuctionInvitationDTO.getId());
     }
 
     @Override
@@ -316,10 +237,8 @@ public class MAuctionDTO extends AbstractAuditingDTO {
 
     @Override
     public String toString() {
-        return "MAuctionDTO{" +
+        return "MAuctionInvitationDTO{" +
             "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", description='" + getDescription() + "'" +
             ", dateTrx='" + getDateTrx() + "'" +
             ", documentNo='" + getDocumentNo() + "'" +
             ", documentAction='" + getDocumentAction() + "'" +
@@ -331,13 +250,9 @@ public class MAuctionDTO extends AbstractAuditingDTO {
             ", rejectedReason='" + getRejectedReason() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
-            ", ruleId=" + getRuleId() +
-            ", contentId=" + getContentId() +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", currencyId=" + getCurrencyId() +
-            ", costCenterId=" + getCostCenterId() +
-            ", ownerUserId=" + getOwnerUserId() +
-            ", prerequisiteId=" + getPrerequisiteId() +
+            ", auctionId=" + getAuctionId() +
+            ", vendorId=" + getVendorId() +
             "}";
     }
 }

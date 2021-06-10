@@ -1,0 +1,11 @@
+id;description;uid;active;ad_organization_id
+1;../fake-data/blob/hipster.txt;647c49eb-f7d1-429d-88b6-5798e6787fed;true;1
+2;../fake-data/blob/hipster.txt;82d0710f-674e-44a1-b535-78ba0ab3df7e;true;2
+3;../fake-data/blob/hipster.txt;6b0c3629-5c3a-4b15-a0ed-45c8882b8ddb;true;3
+4;../fake-data/blob/hipster.txt;4701fd93-079e-4329-bdb5-f5ff62ab0616;false;4
+5;../fake-data/blob/hipster.txt;58c8cf3a-f487-44a3-9d8a-10d96ec193b3;true;5
+6;../fake-data/blob/hipster.txt;8e1474c3-d35c-4d1c-837a-c9701429c7d6;true;6
+7;../fake-data/blob/hipster.txt;e437ebae-3865-4182-b21a-f707acb99ca8;true;7
+8;../fake-data/blob/hipster.txt;99bc70c0-0a89-49eb-8e3d-831999fc57f5;false;8
+9;../fake-data/blob/hipster.txt;83ba58b5-37b3-4c64-b529-d0c1ac0ea2fd;true;9
+10;../fake-data/blob/hipster.txt;013cfe8b-f29d-4ef6-a039-e23ad3840458;true;10

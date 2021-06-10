@@ -53,4 +53,14 @@
                                  referencedTableName="m_auction_rule"/>
 
     </changeSet>
+
+    <changeSet id="20210610100000" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="prerequisite_id"
+                                 baseTableName="m_auction"
+                                 constraintName="fk_m_auction_prerequisite_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_auction_prerequisite"/>
+
+    </changeSet>
 </databaseChangeLog>
