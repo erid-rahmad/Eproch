@@ -3,11 +3,13 @@ package com.bhp.opusb.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -55,6 +57,12 @@ public class MVendorConfirmationLine extends AbstractAuditingEntity implements S
     @JsonIgnoreProperties("mVendorConfirmationLines")
     private MVendorConfirmation vendorConfirmation;
 
+    @Formula("(select sum(mbnp.negotiation_price) from m_bid_nego_price mbnp where mbnp.bidding_id = ("+
+        "select mbs.bidding_id from m_bidding_submission mbs where mbs.id = ("+
+        "select mber.bidding_submission_id from m_bidding_eval_result mber where mber.id = ("+
+        "select mvcl.bidding_eval_result_id from m_vendor_confirmation_line mvcl where mvcl.id = id))))")
+    private BigDecimal negoAmount;
+
     @PrePersist
     public void assignUUID() {
         this.uid = UUID.randomUUID();
@@ -69,6 +77,14 @@ public class MVendorConfirmationLine extends AbstractAuditingEntity implements S
         this.id = id;
     }
 
+    public BigDecimal getNegoAmount() {
+        return negoAmount;
+    }
+
+    public void setNegoAmount(BigDecimal negoAmount) {
+        this.negoAmount = negoAmount;
+    }
+    
     public UUID getUid() {
         return uid;
     }
