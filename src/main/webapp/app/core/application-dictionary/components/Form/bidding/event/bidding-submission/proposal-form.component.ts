@@ -137,6 +137,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
               biddingSubCriteria.attachmentName=null;
               biddingSubCriteria.attachmentUrl=null;
               this.attachmentHandler.set(biddingSubCriteria.id,biddingSubCriteria);
+
               biddingSubCriteria.criteriaLineDTO.forEach((subCriteriaLine: any) => {
                 subCriteriaLine.requirement = this.requirements.get(subCriteriaLine.id)
                 subCriteriaLine.answer = null;
@@ -152,7 +153,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
 
         });
 
-        console.log("evaluationMethodCriteria",this.evaluationMethodCriteria)
+
 
         this.retrieveProposalData(this.submissionId);
       })
@@ -251,7 +252,6 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
   }
 
   onUploadSuccess(response, file, fileList) {
-    console.log("response",response)
     this.formData.attachment = response.attachment;
     this.formData.attachmentId = response.attachment.id;
     this.formData.attachmentName = response.attachment.name;
@@ -290,23 +290,21 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
     input.attachmentName = this.formData.attachment.fileName;
       // @ts-ignore
     input.attachmentUrl = this.formData.attachment.downloadUrl;
-      console.log("this ",input);
-    console.log("this attachmentHandler",this.attachmentHandler);
+
+
     this.attachmentFormVisible = false;
   }
 
   OpenAttachmentForm(row){
     this.subCriteria=null;
     this.subCriteria=row;
-    console.log("this.subCriteria.id",this.subCriteria.id)
-    console.log(row);
     this.attachmentFormVisible = true;
     this.fileList=[];
   }
   //
 
   save() {
-    console.log("save option")
+
     this.$emit('update:loading', true);
     const data: any[] = [];
 
@@ -367,23 +365,30 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
 
   PushProposalTechnicalFile(){
     for(const attachment of this.attachmentHandler.values()){
+
       const attachmentFile = {
         adOrganizationId:1,
         biddingSubmissionId:this.submissionId,
         // @ts-ignore
         biddingSubCriteriaId:attachment.id,
         // @ts-ignore
-        cAttachmentId:attachment.attachmentId
+        cAttachmentId:attachment.attachmentId,
+        // @ts-ignore
+        id:attachment.technicalfileId,
+
       }
       // console.log("this attachmentFile",attachmentFile)
-      this.commonService(baseApiProposalTechnicalFile)
-        .create(attachmentFile)
-        .then(_res =>{})
-        .catch(err => {
-          console.error('Failed',err);
-          this.$message.error(`Failed upload Attachment `);
-        })
-        .finally(() => this.$emit('update:loading', false));
+      try {
+        this.commonService(baseApiProposalTechnicalFile)
+          .create(attachmentFile)
+          .then(_res =>{})
+          .catch(err => {
+            console.error('Failed',err);
+            this.$message.error(`Failed upload Attachment `);
+          })
+          .finally(() => this.$emit('update:loading', false));
+      }catch (e) {
+      }
     }
   }
 
@@ -409,6 +414,8 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
           item.attachmentName = proposal.cattachmentName;
           // @ts-ignore
           item.attachmentUrl = proposal.attachmentUrl;
+          // @ts-ignore
+          item.technicalfileId=proposal.id;
         }
       })
       .catch(err => {

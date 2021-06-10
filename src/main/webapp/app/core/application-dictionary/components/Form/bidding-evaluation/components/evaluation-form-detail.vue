@@ -168,7 +168,7 @@
                     <el-col :span="6">
                         <div class="grid-content bg-purple-light">
                             <template>
-                                <el-select v-model="evaluationResultLine.status" :disabled="(readOnly,statusReadOnly)" placeholder="Select" size="mini">
+                                <el-select v-model="evaluationResultLine.status" :disabled="readOnly,statusReadOnly" placeholder="Select" size="mini">
                                     <el-option
                                         v-for="item in options"
                                         :key="item.value"

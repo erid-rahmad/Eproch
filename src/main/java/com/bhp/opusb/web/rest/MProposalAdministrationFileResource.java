@@ -60,7 +60,7 @@ public class MProposalAdministrationFileResource {
     public ResponseEntity<MProposalAdministrationFileDTO> createMProposalAdministrationFile(@Valid @RequestBody MProposalAdministrationFileDTO mProposalAdministrationFileDTO) throws URISyntaxException {
         log.debug("REST request to save MProposalAdministrationFile : {}", mProposalAdministrationFileDTO);
         if (mProposalAdministrationFileDTO.getId() != null) {
-            throw new BadRequestAlertException("A new mProposalAdministrationFile cannot already have an ID", ENTITY_NAME, "idexists");
+            return updateMProposalAdministrationFile(mProposalAdministrationFileDTO);
         }
         MProposalAdministrationFileDTO result = mProposalAdministrationFileService.save(mProposalAdministrationFileDTO);
         return ResponseEntity.created(new URI("/api/m-proposal-administration-files/" + result.getId()))

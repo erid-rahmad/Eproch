@@ -78,6 +78,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
           }
         })
         this.evaluationResult = data_;
+        console.log("this ",this.evaluationResult)
       })
       .finally(() => this.loading = false);
   }

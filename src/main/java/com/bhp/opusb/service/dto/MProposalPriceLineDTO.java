@@ -43,6 +43,15 @@ public class MProposalPriceLineDTO extends AbstractAuditingDTO {
     private BigDecimal biddingLineTotalCeilingPrice;
     private LocalDate biddingLineDeliveryDate;
     private String biddingLineRemark;
+    private String biddingLineUom;
+
+    public String getBiddingLineUom() {
+        return biddingLineUom;
+    }
+
+    public void setBiddingLineUom(String biddingLineUom) {
+        this.biddingLineUom = biddingLineUom;
+    }
 
     public BigDecimal getBiddingLineQuantity() {
         return biddingLineQuantity;

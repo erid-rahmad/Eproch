@@ -46,9 +46,9 @@
                 </el-table-column>
                 <el-table-column label="Vendor Name" align="center" min-width="180" prop="vendorName" sortable>
                 </el-table-column>
-                <el-table-column label="Date Submited" align="center" min-width="180" prop="dateSubmit" sortable>
+                <el-table-column label="Date Submited" align="center" min-width="180"  sortable>
                     <template slot-scope="{row}">
-                        {{ row.dateSubmit | formatDate }}
+                        {{ row.submitDate | formatDate }}
                     </template>
                 </el-table-column>
                 <el-table-column label="Status" align="center" min-width="80" prop="status" sortable>

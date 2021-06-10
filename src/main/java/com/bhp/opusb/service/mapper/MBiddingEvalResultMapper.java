@@ -20,6 +20,7 @@ public interface MBiddingEvalResultMapper extends EntityMapper<MBiddingEvalResul
     @Mapping(source = "biddingSubmission.bidding.name", target = "biddingName")
     @Mapping(source = "biddingSubmission.bidding.documentNo", target = "biddingNo")
     @Mapping(source = "biddingSubmission.bidding.biddingType.name", target = "biddingType")
+    @Mapping(source = "biddingSubmission.dateSubmit", target = "submitDate")
     MBiddingEvalResultDTO toDto(MBiddingEvalResult mBiddingEvalResult);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")

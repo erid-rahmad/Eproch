@@ -3,6 +3,7 @@ package com.bhp.opusb.service.dto;
 import javax.persistence.PrePersist;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -33,9 +34,18 @@ public class MBiddingEvalResultDTO extends AbstractAuditingDTO {
     private String vendorName;
     private String biddingNo;
     private String biddingType;
+    private ZonedDateTime submitDate;
 
     private Long biddingId;
     private String biddingName;
+
+    public ZonedDateTime getSubmitDate() {
+        return submitDate;
+    }
+
+    public void setSubmitDate(ZonedDateTime submitDate) {
+        this.submitDate = submitDate;
+    }
 
     public String getBiddingNo() {
         return biddingNo;
