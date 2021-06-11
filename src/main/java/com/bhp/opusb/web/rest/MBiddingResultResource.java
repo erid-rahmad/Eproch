@@ -107,6 +107,7 @@ public class MBiddingResultResource {
     @GetMapping("/m-bidding-results")
     public ResponseEntity<List<MBiddingResultDTO>> getAllMBiddingResults(MBiddingResultCriteria criteria, Pageable pageable) {
         log.debug("REST request to get MBiddingResults by criteria: {}", criteria);
+
         Page<MBiddingResultDTO> page = mBiddingResultQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());

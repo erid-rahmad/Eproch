@@ -175,9 +175,11 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
       })
       .then(res => {
         for (const proposal of res.data) {
-          const item = this.answers.get(proposal.biddingSubCriteriaLineId);
-          item.answer = proposal.answer;
-          item.documentEvaluation = proposal.documentEvaluation;
+          try {
+            const item = this.answers.get(proposal.biddingSubCriteriaLineId);
+            item.answer = proposal.answer;
+            item.documentEvaluation = proposal.documentEvaluation;
+          }catch (e) {}
         };
         this.retrieveAttachment(this.submissionId);
       })
@@ -282,14 +284,17 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
   }
 
   saveAttachment() {
-    const input = this.attachmentHandler.get(this.subCriteria.id);
+
+      const input = this.attachmentHandler.get(this.subCriteria.id);
 
       // @ts-ignore
-    input.attachmentId = this.formData.attachment.id;
+      input.attachmentId = this.formData.attachment.id;
       // @ts-ignore
-    input.attachmentName = this.formData.attachment.fileName;
+      input.attachmentName = this.formData.attachment.fileName;
       // @ts-ignore
-    input.attachmentUrl = this.formData.attachment.downloadUrl;
+      input.attachmentUrl = this.formData.attachment.downloadUrl;
+
+
 
 
     this.attachmentFormVisible = false;
@@ -407,15 +412,17 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
       })
       .then(res => {
         for (const proposal of res.data) {
-          const item = this.attachmentHandler.get(proposal.biddingSubCriteriaId);
-          // @ts-ignore
-          item.attachmentId = proposal.cAttachmentId;
-          // @ts-ignore
-          item.attachmentName = proposal.cattachmentName;
-          // @ts-ignore
-          item.attachmentUrl = proposal.attachmentUrl;
-          // @ts-ignore
-          item.technicalfileId=proposal.id;
+          try {
+            const item = this.attachmentHandler.get(proposal.biddingSubCriteriaId);
+            // @ts-ignore
+            item.attachmentId = proposal.cAttachmentId;
+            // @ts-ignore
+            item.attachmentName = proposal.cattachmentName;
+            // @ts-ignore
+            item.attachmentUrl = proposal.attachmentUrl;
+            // @ts-ignore
+            item.technicalfileId=proposal.id;
+          }catch (e) {}
         }
       })
       .catch(err => {

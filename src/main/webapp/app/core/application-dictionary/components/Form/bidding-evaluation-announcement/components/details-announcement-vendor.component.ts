@@ -42,7 +42,9 @@ export default class DetailsAnnouncementForm extends  mixins(EventAnnouncement, 
       .get(`${baseApiBiddingResult}${id}`)
       .then(response => {
         this.email = response.data;
+        console.log("this email",this.email)
       });
+
   }
   getSchedule(id){
     this.commonService(baseApiBiddingSchedule)
