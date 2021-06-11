@@ -3,8 +3,6 @@
 f_cont=/app/jenkins/workspace/eproc-demo
 d_cont=( demoeproc )
 
-
-
 case $1 in
   start)
     if [ ! "$(ls -A $f_cont/pid)" ]; then
