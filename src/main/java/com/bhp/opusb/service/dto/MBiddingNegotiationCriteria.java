@@ -40,7 +40,7 @@ public class MBiddingNegotiationCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
-    private LongFilter biddingEvalId;
+    private LongFilter biddingEvalResultId;
 
     private LongFilter adOrganizationId;
 
@@ -57,7 +57,7 @@ public class MBiddingNegotiationCriteria implements Serializable, Criteria {
         this.endDate = other.endDate == null ? null : other.endDate.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
-        this.biddingEvalId = other.biddingEvalId == null ? null : other.biddingEvalId.copy();
+        this.biddingEvalResultId = other.biddingEvalResultId == null ? null : other.biddingEvalResultId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.biddingScheduleId = other.biddingScheduleId == null ? null : other.biddingScheduleId.copy();
     }
@@ -123,12 +123,12 @@ public class MBiddingNegotiationCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
-    public LongFilter getBiddingEvalId() {
-        return biddingEvalId;
+    public LongFilter getBiddingEvalResultId() {
+        return biddingEvalResultId;
     }
 
-    public void setBiddingEvalId(LongFilter biddingEvalId) {
-        this.biddingEvalId = biddingEvalId;
+    public void setBiddingEvalResultId(LongFilter biddingEvalResultId) {
+        this.biddingEvalResultId = biddingEvalResultId;
     }
 
     public LongFilter getAdOrganizationId() {
@@ -165,7 +165,7 @@ public class MBiddingNegotiationCriteria implements Serializable, Criteria {
             Objects.equals(endDate, that.endDate) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(biddingEvalId, that.biddingEvalId) &&
+            Objects.equals(biddingEvalResultId, that.biddingEvalResultId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(biddingScheduleId, that.biddingScheduleId);
     }
@@ -180,7 +180,7 @@ public class MBiddingNegotiationCriteria implements Serializable, Criteria {
         endDate,
         uid,
         active,
-        biddingEvalId,
+        biddingEvalResultId,
         adOrganizationId,
         biddingScheduleId
         );
@@ -196,7 +196,7 @@ public class MBiddingNegotiationCriteria implements Serializable, Criteria {
                 (endDate != null ? "endDate=" + endDate + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
-                (biddingEvalId != null ? "biddingEvalId=" + biddingEvalId + ", " : "") +
+                (biddingEvalResultId != null ? "biddingEvalResultId=" + biddingEvalResultId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (biddingScheduleId != null ? "biddingScheduleId=" + biddingScheduleId + ", " : "") +
             "}";

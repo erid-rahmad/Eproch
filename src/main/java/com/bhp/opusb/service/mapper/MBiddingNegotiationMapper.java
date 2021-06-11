@@ -9,20 +9,21 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link MBiddingNegotiation} and its DTO {@link MBiddingNegotiationDTO}.
  */
-@Mapper(componentModel = "spring", uses = {MBiddingEvaluationMapper.class, ADOrganizationMapper.class, MBiddingScheduleMapper.class})
+@Mapper(componentModel = "spring", uses = {MBiddingEvalResultMapper.class, ADOrganizationMapper.class, MBiddingScheduleMapper.class})
 public interface MBiddingNegotiationMapper extends EntityMapper<MBiddingNegotiationDTO, MBiddingNegotiation> {
 
-    @Mapping(source = "biddingEval.id", target = "biddingEvalId")
-    @Mapping(source = "biddingEval.biddingSubmission.bidding.id", target = "biddingId")
-    @Mapping(source = "biddingEval.biddingSubmission.bidding.documentNo", target = "biddingNo")
-    @Mapping(source = "biddingEval.biddingSubmission.bidding.name", target = "biddingTitle")
-    @Mapping(source = "biddingEval.biddingSubmission.bidding.biddingType.name", target = "biddingType")
-    @Mapping(source = "biddingEval.biddingSubmission.bidding.eventType.name", target = "eventType")
+    @Mapping(source = "biddingEvalResult.id", target = "biddingEvalResultId")
+
+    @Mapping(source = "biddingEvalResult.biddingSubmission.bidding.id", target = "biddingId")
+    @Mapping(source = "biddingEvalResult.biddingSubmission.bidding.documentNo", target = "biddingNo")
+    @Mapping(source = "biddingEvalResult.biddingSubmission.bidding.name", target = "biddingTitle")
+    @Mapping(source = "biddingEvalResult.biddingSubmission.bidding.biddingType.name", target = "biddingType")
+    @Mapping(source = "biddingEvalResult.biddingSubmission.bidding.eventType.name", target = "eventType")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "biddingSchedule.id", target = "biddingScheduleId")
     MBiddingNegotiationDTO toDto(MBiddingNegotiation mBiddingNegotiation);
 
-    @Mapping(source = "biddingEvalId", target = "biddingEval")
+    @Mapping(source = "biddingEvalResultId", target = "biddingEvalResult")
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "biddingScheduleId", target = "biddingSchedule")
     MBiddingNegotiation toEntity(MBiddingNegotiationDTO mBiddingNegotiationDTO);

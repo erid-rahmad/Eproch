@@ -2046,7 +2046,7 @@ relationship ManyToOne {
 	MBiddingLine{product required} to CProduct
 	MBiddingLine{uom required} to CUnitOfMeasure
 
-	MBiddingNegotiation{biddingEval required} to MBiddingEvaluation
+	MBiddingNegotiation{biddingEvalResult required} to MBiddingEvalResult
 	MBiddingNegotiation{adOrganization required} to ADOrganization
 	MBiddingNegotiation{biddingSchedule required} to MBiddingSchedule
 

@@ -2,7 +2,7 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MBiddingNegotiation;
-import com.bhp.opusb.domain.MBiddingEvaluation;
+import com.bhp.opusb.domain.MBiddingEvalResult;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.MBiddingSchedule;
 import com.bhp.opusb.repository.MBiddingNegotiationRepository;
@@ -99,15 +99,15 @@ public class MBiddingNegotiationResourceIT {
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
-        MBiddingEvaluation mBiddingEvaluation;
-        if (TestUtil.findAll(em, MBiddingEvaluation.class).isEmpty()) {
-            mBiddingEvaluation = MBiddingEvaluationResourceIT.createEntity(em);
-            em.persist(mBiddingEvaluation);
+        MBiddingEvalResult mBiddingEvalResult;
+        if (TestUtil.findAll(em, MBiddingEvalResult.class).isEmpty()) {
+            mBiddingEvalResult = MBiddingEvalResultResourceIT.createEntity(em);
+            em.persist(mBiddingEvalResult);
             em.flush();
         } else {
-            mBiddingEvaluation = TestUtil.findAll(em, MBiddingEvaluation.class).get(0);
+            mBiddingEvalResult = TestUtil.findAll(em, MBiddingEvalResult.class).get(0);
         }
-        mBiddingNegotiation.setBiddingEval(mBiddingEvaluation);
+        mBiddingNegotiation.setBiddingEvalResult(mBiddingEvalResult);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -145,15 +145,15 @@ public class MBiddingNegotiationResourceIT {
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
-        MBiddingEvaluation mBiddingEvaluation;
-        if (TestUtil.findAll(em, MBiddingEvaluation.class).isEmpty()) {
-            mBiddingEvaluation = MBiddingEvaluationResourceIT.createUpdatedEntity(em);
-            em.persist(mBiddingEvaluation);
+        MBiddingEvalResult mBiddingEvalResult;
+        if (TestUtil.findAll(em, MBiddingEvalResult.class).isEmpty()) {
+            mBiddingEvalResult = MBiddingEvalResultResourceIT.createUpdatedEntity(em);
+            em.persist(mBiddingEvalResult);
             em.flush();
         } else {
-            mBiddingEvaluation = TestUtil.findAll(em, MBiddingEvaluation.class).get(0);
+            mBiddingEvalResult = TestUtil.findAll(em, MBiddingEvalResult.class).get(0);
         }
-        mBiddingNegotiation.setBiddingEval(mBiddingEvaluation);
+        mBiddingNegotiation.setBiddingEvalResult(mBiddingEvalResult);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -795,17 +795,17 @@ public class MBiddingNegotiationResourceIT {
 
     @Test
     @Transactional
-    public void getAllMBiddingNegotiationsByBiddingEvalIsEqualToSomething() throws Exception {
+    public void getAllMBiddingNegotiationsByBiddingEvalResultIsEqualToSomething() throws Exception {
         // Get already existing entity
-        MBiddingEvaluation biddingEval = mBiddingNegotiation.getBiddingEval();
+        MBiddingEvalResult biddingEvalResult = mBiddingNegotiation.getBiddingEvalResult();
         mBiddingNegotiationRepository.saveAndFlush(mBiddingNegotiation);
-        Long biddingEvalId = biddingEval.getId();
+        Long biddingEvalResultId = biddingEvalResult.getId();
 
-        // Get all the mBiddingNegotiationList where biddingEval equals to biddingEvalId
-        defaultMBiddingNegotiationShouldBeFound("biddingEvalId.equals=" + biddingEvalId);
+        // Get all the mBiddingNegotiationList where biddingEvalResult equals to biddingEvalResultId
+        defaultMBiddingNegotiationShouldBeFound("biddingEvalResultId.equals=" + biddingEvalResultId);
 
-        // Get all the mBiddingNegotiationList where biddingEval equals to biddingEvalId + 1
-        defaultMBiddingNegotiationShouldNotBeFound("biddingEvalId.equals=" + (biddingEvalId + 1));
+        // Get all the mBiddingNegotiationList where biddingEvalResult equals to biddingEvalResultId + 1
+        defaultMBiddingNegotiationShouldNotBeFound("biddingEvalResultId.equals=" + (biddingEvalResultId + 1));
     }
 
 
