@@ -1,4 +1,5 @@
 import settings from '@/settings';
+import HtmlEditor from '@/shared/components/HtmlEditor/index.vue';
 import { IRegisterTabParameter, WindowStoreModule as windowStore } from '@/shared/config/store/window-store';
 import { ADColumnType } from '@/shared/model/ad-column.model';
 import { IADField } from '@/shared/model/ad-field.model';
@@ -43,6 +44,7 @@ const DetailViewProps = Vue.extend({
 @Component({
   components: {
     AddressEditor,
+    HtmlEditor,
     MultiOption,
     PasswordEditor
   },

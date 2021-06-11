@@ -57,6 +57,11 @@
               :field="col.field"
               @change="value => onInputChanged(col.field, value)"
             ></multi-option>
+            <html-editor
+              v-else-if="isRichText(col.field)"
+              v-model="model[col.name]"
+              size="mini"
+            ></html-editor>
             <el-select
               v-else-if="isTableDirectLink(col.field)"
               v-model="model[col.name]"

@@ -1,5 +1,5 @@
 import { IADField } from '@/shared/model/ad-field.model';
-import { hasPrecision, hasReferenceList, isActiveStatusField, isAddressField, isAttachmentField, isBooleanField, isCheckboxGroup, isDateField, isDateTimeField, isMultiValues, isNewRecord, isNumericField, isPasswordField, isStringField, isTableDirectLink } from '@/utils/validate';
+import { hasPrecision, hasReferenceList, isActiveStatusField, isAddressField, isAttachmentField, isBooleanField, isCheckboxGroup, isDateField, isDateTimeField, isMultiValues, isNewRecord, isNumericField, isPasswordField, isRichText, isStringField, isTableDirectLink } from '@/utils/validate';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
@@ -13,6 +13,7 @@ import { Component, Vue } from 'vue-property-decorator';
     isBooleanField,
     hasPrecision,
     hasReferenceList,
+    isRichText,
     isTableDirectLink,
     isAddressField,
     isAttachmentField,
@@ -36,6 +37,7 @@ export default class FieldTypeValidationMixin extends Vue {
   protected isTableDirectLink!: (field: IADField) => boolean;
   protected isAddressField!: (field: IADField) => boolean;
   protected isAttachmentField!: (field: IADField) => boolean;
+  protected isRichText!: (field: IADField) => boolean;
   protected isCheckboxGroup!: (field: IADField) => boolean;
   protected isMultiValues!: (field: IADField) => boolean;
 

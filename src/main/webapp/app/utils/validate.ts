@@ -128,6 +128,11 @@ export const isAddressField = (field: IADField) => {
   return reference?.value === 'address';
 }
 
+export const isRichText = (field: IADField) => {
+  const refType = field.referenceTypeName || field.adColumn?.referenceTypeName;
+  return refType === 'RICH_TEXT';
+}
+
 export const isMultiValues = (field: IADField) => {
   const refType = field.referenceTypeName || field.adColumn?.referenceTypeName;
   return refType === 'MULTI_CHECKBOXES' || refType === 'MULTI_OPTIONS';
