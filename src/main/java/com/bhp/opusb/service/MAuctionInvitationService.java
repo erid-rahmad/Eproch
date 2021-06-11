@@ -2,6 +2,8 @@ package com.bhp.opusb.service;
 
 import com.bhp.opusb.config.ApplicationProperties;
 import com.bhp.opusb.config.ApplicationProperties.Document;
+import com.bhp.opusb.domain.CVendor;
+import com.bhp.opusb.domain.MAuction;
 import com.bhp.opusb.domain.MAuctionInvitation;
 import com.bhp.opusb.repository.MAuctionInvitationRepository;
 import com.bhp.opusb.service.dto.MAuctionInvitationDTO;
@@ -16,7 +18,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link MAuctionInvitation}.
@@ -37,6 +42,28 @@ public class MAuctionInvitationService {
         this.mAuctionInvitationRepository = mAuctionInvitationRepository;
         this.mAuctionInvitationMapper = mAuctionInvitationMapper;
         this.document = applicationProperties.getDocuments().get("auctionInvitation");
+    }
+
+    public List<MAuctionInvitationDTO> create(MAuction mAuction, List<Long> vendorIds) {
+        log.debug("Request to create MAuctionInvitation for Auction {} and the following vendors : {}", mAuction.getDocumentNo(), vendorIds);
+        List<MAuctionInvitation> invitations = vendorIds.stream()
+            .map(vendorId -> {
+                CVendor cVendor = new CVendor();
+                cVendor.setId(vendorId);
+
+                return new MAuctionInvitation()
+                    .active(true)
+                    .adOrganization(mAuction.getAdOrganization())
+                    .auction(mAuction)
+                    .dateTrx(ZonedDateTime.now())
+                    .documentAction(DocumentUtil.STATUS_ACCEPT)
+                    .documentNo(DocumentUtil.buildDocumentNumber(document.getDocumentNumberPrefix(), mAuctionInvitationRepository))
+                    .documentStatus(DocumentUtil.STATUS_DRAFT)
+                    .vendor(cVendor);
+            })
+            .collect(Collectors.toList());
+    
+        return mAuctionInvitationMapper.toDto(mAuctionInvitationRepository.saveAll(invitations));
     }
 
     /**

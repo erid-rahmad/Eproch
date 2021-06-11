@@ -30,8 +30,8 @@ public class MAuctionInvitationDTO extends AbstractAuditingDTO {
      */
     @NotNull
     @Size(max = 12)
-    @ApiModelProperty(value = "By default is SMT (submit). Available statuses are: ACC (Accept) and DCL (Decline).", required = true)
-    private String documentStatus = "SMT";
+    @ApiModelProperty(value = "By default is DRF (draft). Available statuses are: ACC (Accept) and DCL (Decline).", required = true)
+    private String documentStatus = "DRF";
 
     /**
      * Whether the supplier accept the invitation or not.
@@ -57,7 +57,13 @@ public class MAuctionInvitationDTO extends AbstractAuditingDTO {
 
     private Long auctionId;
     private String auctionDocumentNo;
+    private String auctionDocumentStatus;
     private String auctionName;
+    private Long auctionCurrencyId;
+    private Long auctionContentId;
+    private Long auctionPrerequisiteId;
+    private Long auctionRuleId;
+    private ZonedDateTime auctionRuleStartDate;
 
     private Long vendorId;
     private String vendorName;
@@ -190,12 +196,60 @@ public class MAuctionInvitationDTO extends AbstractAuditingDTO {
         this.auctionDocumentNo = auctionDocumentNo;
     }
 
+    public String getAuctionDocumentStatus() {
+        return auctionDocumentStatus;
+    }
+
+    public void setAuctionDocumentStatus(String auctionDocumentStatus) {
+        this.auctionDocumentStatus = auctionDocumentStatus;
+    }
+
     public String getAuctionName() {
         return auctionName;
     }
 
     public void setAuctionName(String auctionName) {
         this.auctionName = auctionName;
+    }
+
+    public Long getAuctionCurrencyId() {
+        return auctionCurrencyId;
+    }
+
+    public void setAuctionCurrencyId(Long auctionCurrencyId) {
+        this.auctionCurrencyId = auctionCurrencyId;
+    }
+
+    public Long getAuctionContentId() {
+        return auctionContentId;
+    }
+
+    public void setAuctionContentId(Long auctionContentId) {
+        this.auctionContentId = auctionContentId;
+    }
+
+    public Long getAuctionPrerequisiteId() {
+        return auctionPrerequisiteId;
+    }
+
+    public void setAuctionPrerequisiteId(Long auctionPrerequisiteId) {
+        this.auctionPrerequisiteId = auctionPrerequisiteId;
+    }
+
+    public Long getAuctionRuleId() {
+        return auctionRuleId;
+    }
+
+    public void setAuctionRuleId(Long auctionRuleId) {
+        this.auctionRuleId = auctionRuleId;
+    }
+
+    public ZonedDateTime getAuctionRuleStartDate() {
+        return auctionRuleStartDate;
+    }
+
+    public void setAuctionRuleStartDate(ZonedDateTime auctionRuleStartDate) {
+        this.auctionRuleStartDate = auctionRuleStartDate;
     }
 
     public Long getVendorId() {

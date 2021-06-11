@@ -8,6 +8,8 @@ import com.bhp.opusb.repository.GenericDocumentRepository;
 public class DocumentUtil {
 
   public static final String STATUS_APPROVE = "APV";
+  public static final String STATUS_ACCEPT = "ACC";
+  public static final String STATUS_DECLINE = "DCL";
   public static final String STATUS_DRAFT = "DRF";
   public static final String STATUS_REOPEN = "ROP";
   public static final String STATUS_REJECT = "RJC";

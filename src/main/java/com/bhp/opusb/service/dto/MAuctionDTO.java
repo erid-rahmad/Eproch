@@ -27,7 +27,7 @@ public class MAuctionDTO extends AbstractAuditingDTO {
 
     @NotNull
     @Size(max = 10)
-    private String documentAction = "PBS";
+    private String documentAction = "PUB";
 
     @NotNull
     @Size(max = 12)

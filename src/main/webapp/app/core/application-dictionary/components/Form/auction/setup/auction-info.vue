@@ -73,22 +73,15 @@
         :xl="8"
       >
         <el-form-item label="Currency">
-          <el-select
+          <ad-input-lookup
             v-model="auction.currencyId"
-            clearable
-            filterable
             placeholder="Select Currency"
-          >
-            <el-option
-              v-for="item in currencyOptions"
-              :key="item.id"
-              :label="item.code"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+            table-name="c_currency"
+          ></ad-input-lookup>
         </el-form-item>
       </el-col>
       <el-col
+        v-if="!isVendor"
         :xs="24"
         :sm="20"
         :md="16"
@@ -96,24 +89,21 @@
         :xl="8"
       >
         <el-form-item label="Owner" prop="ownerUserId">
-          <el-select
+          <ad-input-lookup
             v-model="auction.ownerUserId"
-            clearable
-            filterable
             placeholder="Select Owner"
-          >
-            <el-option
-              v-for="item in ownerOptions"
-              :key="item.id"
-              :label="item.userLogin"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+            table-name="ad_user"
+            :label-fields="['userLogin']"
+            :query="['employee.equals=true']"
+          ></ad-input-lookup>
         </el-form-item>
       </el-col>
     </el-row>
 
-    <el-row :gutter="gutterSize">
+    <el-row
+      v-if="!isVendor"
+      :gutter="gutterSize"
+    >
       <el-col
         :xs="24"
         :sm="20"
@@ -122,19 +112,11 @@
         :xl="8"
       >
         <el-form-item label="Department">
-          <el-select
+          <ad-input-lookup
             v-model="auction.costCenterId"
-            clearable
-            filterable
             placeholder="Select Department"
-          >
-            <el-option
-              v-for="item in departmentOptions"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+            table-name="c_cost_center"
+          ></ad-input-lookup>
         </el-form-item>
       </el-col>
     </el-row>

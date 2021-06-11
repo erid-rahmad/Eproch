@@ -1,14 +1,12 @@
-import { Component, Inject, Mixins, Vue } from "vue-property-decorator";
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
-import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import settings from '@/settings';
+import AdInputLookup from '@/shared/components/AdInput/ad-input-lookup.vue';
 import { ElForm } from 'element-ui/types/form';
 import { ElInput } from 'element-ui/types/input';
+import { Component, Inject, Mixins, Vue } from "vue-property-decorator";
+import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 
 const baseApiAuction = 'api/m-auctions';
-const baseApiCurrency = 'api/c-currencies';
-const baseApiCostCenter = 'api/c-cost-centers';
-const baseApiUser = 'api/ad-users';
 
 const AuctionInfoProps = Vue.extend({
   props: {
@@ -21,7 +19,11 @@ const AuctionInfoProps = Vue.extend({
   }
 })
 
-@Component
+@Component({
+  components: {
+    AdInputLookup
+  }
+})
 export default class AuctionInfo extends Mixins(AccessLevelMixin, AuctionInfoProps) {
 
   @Inject('dynamicWindowService')
@@ -42,10 +44,6 @@ export default class AuctionInfo extends Mixins(AccessLevelMixin, AuctionInfoPro
     }
   }
 
-  currencyOptions: any[] = [];
-  departmentOptions: any[] = [];
-  ownerOptions: any[] = [];
-
   gutterSize: number = 24;
 
   get editMode() {
@@ -62,46 +60,12 @@ export default class AuctionInfo extends Mixins(AccessLevelMixin, AuctionInfoPro
 
   created() {
     this.auction = {...this.data};
-    this.retrieveCurrencies();
-    this.retrieveDepartments();
-    this.retrieveOwners();
   }
 
   mounted() {
     this.$nextTick(() => {
       (<ElInput>this.$refs.documentNo).focus();
     });
-  }
-
-  private retrieveCurrencies() {
-    this.commonService(baseApiCurrency)
-      .retrieve({
-        criteriaQuery: this.updateCriteria([
-          'active.equals=true'
-        ])
-      })
-      .then(res => this.currencyOptions = res.data);
-  }
-
-  private retrieveDepartments() {
-    this.commonService(baseApiCostCenter)
-      .retrieve({
-        criteriaQuery: this.updateCriteria([
-          'active.equals=true'
-        ])
-      })
-      .then(res => this.departmentOptions = res.data);
-  }
-
-  private retrieveOwners() {
-    this.commonService(baseApiUser)
-      .retrieve({
-        criteriaQuery: this.updateCriteria([
-          'active.equals=true',
-          'employee.equals=true'
-        ])
-      })
-      .then(res => this.ownerOptions = res.data);
   }
 
   public save() {

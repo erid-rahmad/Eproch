@@ -12,7 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link MAuctionParticipant}.
@@ -69,6 +71,15 @@ public class MAuctionParticipantService {
         log.debug("Request to get MAuctionParticipant : {}", id);
         return mAuctionParticipantRepository.findById(id)
             .map(mAuctionParticipantMapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MAuctionParticipantDTO> findByAuctionId(Long auctionId) {
+        log.debug("Request to get MAuctionParticipants for Auction : {}", auctionId);
+        return mAuctionParticipantRepository.findByAuction_Id(auctionId)
+            .stream()
+            .map(mAuctionParticipantMapper::toDto)
+            .collect(Collectors.toList());
     }
 
     /**

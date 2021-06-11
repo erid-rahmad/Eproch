@@ -113,7 +113,12 @@ export default class AuctionTeam extends Mixins(AccessLevelMixin, AuctionTeamPro
         criteriaQuery: [
           'active.equals=true',
           `auctionId.equals=${auctionId}`
-        ]
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 50,
+          sort: ['id']
+        }
       })
       .then(res => this.teams = res.data)
       .finally(() => this.loadingTeams = false);

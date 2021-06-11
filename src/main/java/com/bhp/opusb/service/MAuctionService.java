@@ -1,12 +1,15 @@
 package com.bhp.opusb.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.bhp.opusb.config.ApplicationProperties;
 import com.bhp.opusb.config.ApplicationProperties.Document;
 import com.bhp.opusb.domain.MAuction;
 import com.bhp.opusb.repository.MAuctionRepository;
 import com.bhp.opusb.service.dto.MAuctionDTO;
+import com.bhp.opusb.service.dto.MAuctionParticipantDTO;
 import com.bhp.opusb.service.mapper.MAuctionMapper;
 import com.bhp.opusb.util.DocumentUtil;
 
@@ -26,13 +29,20 @@ public class MAuctionService {
 
     private final Logger log = LoggerFactory.getLogger(MAuctionService.class);
 
+    private final MAuctionInvitationService mAuctionInvitationService;
+    private final MAuctionParticipantService mAuctionParticipantService;
+
     private final MAuctionRepository mAuctionRepository;
 
     private final MAuctionMapper mAuctionMapper;
 
     private final Document document;
 
-    public MAuctionService(ApplicationProperties applicationProperties, MAuctionRepository mAuctionRepository, MAuctionMapper mAuctionMapper) {
+    public MAuctionService(ApplicationProperties applicationProperties,
+            MAuctionInvitationService mAuctionInvitationService, MAuctionParticipantService mAuctionParticipantService,
+            MAuctionRepository mAuctionRepository, MAuctionMapper mAuctionMapper) {
+        this.mAuctionInvitationService = mAuctionInvitationService;
+        this.mAuctionParticipantService = mAuctionParticipantService;
         this.mAuctionRepository = mAuctionRepository;
         this.mAuctionMapper = mAuctionMapper;
         this.document = applicationProperties.getDocuments().get("auction");
@@ -52,7 +62,15 @@ public class MAuctionService {
             mAuction.setDocumentNo(DocumentUtil.buildDocumentNumber(document.getDocumentNumberPrefix(), mAuctionRepository));
         }
         
-        if (Boolean.FALSE.equals(mAuction.isProcessed()) && DocumentUtil.isPublish(mAuction.getDocumentStatus())) {
+        boolean isPublishing = ! Boolean.TRUE.equals(mAuction.isProcessed()) && DocumentUtil.isPublish(mAuction.getDocumentStatus());
+
+        if (isPublishing) {
+            List<Long> vendorIds = mAuctionParticipantService.findByAuctionId(mAuction.getId())
+                .stream()
+                .map(MAuctionParticipantDTO::getVendorId)
+                .collect(Collectors.toList());
+
+            mAuctionInvitationService.create(mAuction, vendorIds);
             mAuction.setProcessed(true);
         }
 

@@ -17,7 +17,13 @@ public interface MAuctionInvitationMapper extends EntityMapper<MAuctionInvitatio
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "auction.id", target = "auctionId")
     @Mapping(source = "auction.documentNo", target = "auctionDocumentNo")
+    @Mapping(source = "auction.documentStatus", target = "auctionDocumentStatus")
     @Mapping(source = "auction.name", target = "auctionName")
+    @Mapping(source = "auction.currency.id", target = "auctionCurrencyId")
+    @Mapping(source = "auction.content.id", target = "auctionContentId")
+    @Mapping(source = "auction.prerequisite.id", target = "auctionPrerequisiteId")
+    @Mapping(source = "auction.rule.id", target = "auctionRuleId")
+    @Mapping(source = "auction.rule.startDate", target = "auctionRuleStartDate")
     @Mapping(source = "vendor.id", target = "vendorId")
     @Mapping(source = "vendor.name", target = "vendorName")
     MAuctionInvitationDTO toDto(MAuctionInvitation mAuctionInvitation);

@@ -11,6 +11,7 @@ import AuctionService from '../auction.service';
 dayjs.extend(duration);
 
 const baseApiAuctionItem = 'api/m-auction-items';
+const baseApiAuctionRule = 'api/m-auction-rules';
 
 const durationFormats = new Map([
   ['years', ['years', 'months']],
@@ -51,6 +52,8 @@ export default class BidSubmission extends Mixins(AccessLevelMixin, BidSubmissio
     decrement: 1000,
     actualEndDate: '2021-05-31T23:59:59'
   };
+
+  auctionRule: any = {};
 
   auctionItems: any[] = [];
 
@@ -132,6 +135,10 @@ export default class BidSubmission extends Mixins(AccessLevelMixin, BidSubmissio
     clearTimeout(this.timerId);
     this.auctionWsService.unsubscribe();
     this.auctionWsService.disconnect();
+  }
+
+  private retrieveRule(auctionId: number) {
+    // abc
   }
 
   private retrieveAuctionItems(auctionId: number) {

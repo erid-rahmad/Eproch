@@ -165,7 +165,12 @@ export default class AuctionParticipant extends Mixins(AccessLevelMixin, Auction
         criteriaQuery: [
           'active.equals=true',
           `auctionId.equals=${auctionId}`
-        ]
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id']
+        }
       })
       .then(res => {
         this.participants = res.data
@@ -240,7 +245,7 @@ export default class AuctionParticipant extends Mixins(AccessLevelMixin, Auction
       [newRecord ? 'create' : 'update'](data)
       .then(res => {
         this.$message.success(`Participant has been ${newRecord ? 'added' : 'updated'} successfully`);
-        this.editMode = true;
+        this.editMode = false;
         this.newRecord = false;
         this.tmpParticipant = {};
         this.retrieveParticipants(this.auction.id);

@@ -5,9 +5,9 @@ import settings from '@/settings';
 import { AccountStoreModule } from '@/shared/config/store/account-store';
 import Schema from "async-validator";
 import { ElTable } from 'element-ui/types/table';
+import AdInputLookup from '@/shared/components/AdInput/ad-input-lookup.vue';
 
 const baseApiAuctionItem = 'api/m-auction-items';
-const baseApiProduct = 'api/c-products';
 const baseApiUom = 'api/c-unit-of-measures';
 
 const AuctionItemProps = Vue.extend({
@@ -21,7 +21,11 @@ const AuctionItemProps = Vue.extend({
   }
 })
 
-@Component
+@Component({
+  components: {
+    AdInputLookup
+  }
+})
 export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemProps) {
 
   @Inject('dynamicWindowService')
@@ -67,11 +71,6 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
    */
   products: any[] = [];
 
-  /**
-   * UoMs are dynamically loaded each time
-   * a user is filtering it by code/name.
-   */
-  uoms: any[] = [];
   bidImprovementUnitOptions: any[] = [];
   tieBidsRuleOptions: any[] = [];
 
@@ -94,9 +93,6 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
       return false;
     }
     
-    this.retrieveUoms();
-    this.retrieveProducts();
-
     this.items.splice(0, 0, {
       editing: true,
       adOrganizationId: AccountStoreModule.organizationInfo.id,
@@ -128,12 +124,12 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
       this.newRecord = false;
     } else {
       this.items.splice(index, 1, this.tmpItem);
+      this.setRow(this.tmpItem);
     }
   }
 
   onEditClicked(row) {
-    this.retrieveUoms(row.uomId);
-    this.retrieveProducts(row.productId);
+    this.selectedRow = row;
     
     this.tmpItem = {...row};
     this.editMode = true;
@@ -218,7 +214,12 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
         criteriaQuery: [
           'active.equals=true',
           `auctionId.equals=${auctionId}`
-        ]
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 500,
+          sort: ['id']
+        }
       })
       .then(res => {
         this.items = res.data.map(item => {
@@ -231,50 +232,6 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
         }
       })
       .finally(() => this.loadingItems = false);
-  }
-
-  retrieveProducts(query?: string | number) {
-    let baseQuery = [ 'active.equals=true' ];
-
-    if (!!query) {
-      baseQuery = [
-        ...baseQuery,
-        ...[ typeof query === 'string' ? `name.contains=${query}` : `id.equals=${query}` ]
-      ];
-    }
-
-    this.commonService(baseApiProduct)
-      .retrieve({
-        criteriaQuery: this.updateCriteria(baseQuery),
-        paginationQuery: {
-          page: 0,
-          size: 20,
-          sort: ['id,desc']
-        }
-      })
-      .then(res => this.products = res.data);
-  }
-
-  retrieveUoms(query?: string | number) {
-    let baseQuery = [ 'active.equals=true' ];
-
-    if (!!query) {
-      baseQuery = [
-        ...baseQuery,
-        ...[ typeof query === 'string' ? `code.contains=${query}` : `id.equals=${query}` ]
-      ];
-    }
-
-    this.commonService(baseApiUom)
-      .retrieve({
-        criteriaQuery: this.updateCriteria(baseQuery),
-        paginationQuery: {
-          page: 0,
-          size: 20,
-          sort: ['code']
-        }
-      })
-      .then(res => this.uoms = res.data);
   }
 
   private retrieveBidImprovementUnitOptions() {

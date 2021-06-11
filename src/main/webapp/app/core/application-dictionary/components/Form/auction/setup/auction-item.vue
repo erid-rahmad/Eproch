@@ -69,27 +69,20 @@
             :content="row.productIdMessage"
             :disabled="!row.productIdError"
           >
-            <el-select
+            <ad-input-lookup
               v-model="row.productId"
               :class="{ 'is-error': row.productIdError }"
-              clearable
-              filterable
-              remote
-              :remote-method="retrieveProducts"
+              :items.sync="products"
+              lookup-by-field="name"
               placeholder="Select Product"
               size="mini"
-              @clear="retrieveProducts"
+              table-name="c_product"
             >
-              <el-option
-                v-for="product in products"
-                :key="product.id"
-                :label="product.code"
-                :value="product.id"
-              >
+              <template v-slot="{ item: product }">
                 <span style="float: left">{{ product.code }}</span>
                 <span style="float: right; color: #8492a6; font-size: 12px">{{ product.name }}</span>
-              </el-option>
-            </el-select>
+              </template>
+            </ad-input-lookup>
           </el-tooltip>
           <template v-else>
             {{ row.productCode }}
@@ -150,27 +143,18 @@
             :content="row.uomIdMessage"
             :disabled="!row.uomIdError"
           >
-            <el-select
+            <ad-input-lookup
               v-model="row.uomId"
               :class="{ 'is-error': row.uomIdError }"
-              clearable
-              filterable
-              remote
-              :remote-method="retrieveUoms"
               placeholder="Select UoM"
               size="mini"
-              @clear="retrieveUoms"
+              table-name="c_unit_of_measure"
             >
-              <el-option
-                v-for="uom in uoms"
-                :key="uom.id"
-                :label="uom.code"
-                :value="uom.id"
-              >
+              <template v-slot="{ item: uom }">
                 <span style="float: left">{{ uom.code }}</span>
                 <span style="float: right; color: #8492a6; font-size: 12px">{{ uom.name }}</span>
-              </el-option>
-            </el-select>
+              </template>
+            </ad-input-lookup>
           </el-tooltip>
           <template v-else>
             {{ row.uomName }}
