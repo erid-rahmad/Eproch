@@ -40,7 +40,7 @@ pipeline {
         steps {
                 script {
 						sh "chmod +x script/demoeproc"
-       					sh "sh script/demoeproc stop && sh script/demoeproc start"
+       					sh "sudo /usr/bin/monit restart eprocdemo"
                     }
             }
         }	

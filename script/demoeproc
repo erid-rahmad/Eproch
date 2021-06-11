@@ -6,7 +6,7 @@ d_cont=( demoeproc )
 case $1 in
   start)
     if [ ! "$(ls -A $f_cont/pid)" ]; then
-		mkdir -p pid
+		mkdir -p $f_cont/pid
 	fi 
   
     for i in "${d_cont[@]}"
