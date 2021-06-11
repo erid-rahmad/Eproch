@@ -26,5 +26,23 @@ pipeline {
                     }
             }
         }
+		
+	stage('Restart Eproc Demo') {
+        steps {
+                script {
+						sh "chmod +x script/demoeproc"
+       					sh "sudo /usr/bin/monit restart bhp-eproc-demo"
+                    }
+            }
+        }	
+   
+    stage('Remove Failed Container') {
+        steps {
+                script {
+                		sh "chmod +x removenoneimage.sh"
+       					sh "sh removenoneimage.sh"
+                    }
+            }
+        }
   }
 }
