@@ -109,9 +109,9 @@ public class MBiddingNegotiationQueryService extends QueryService<MBiddingNegoti
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), MBiddingNegotiation_.active));
             }
-            if (criteria.getBiddingEvalId() != null) {
-                specification = specification.and(buildSpecification(criteria.getBiddingEvalId(),
-                    root -> root.join(MBiddingNegotiation_.biddingEval, JoinType.LEFT).get(MBiddingEvaluation_.id)));
+            if (criteria.getBiddingEvalResultId() != null) {
+                specification = specification.and(buildSpecification(criteria.getBiddingEvalResultId(),
+                    root -> root.join(MBiddingNegotiation_.biddingEvalResult, JoinType.LEFT).get(MBiddingEvalResult_.id)));
             }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),

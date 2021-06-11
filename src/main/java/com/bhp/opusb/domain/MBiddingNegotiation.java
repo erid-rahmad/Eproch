@@ -3,7 +3,6 @@ package com.bhp.opusb.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -51,7 +50,7 @@ public class MBiddingNegotiation extends AbstractAuditingEntity implements Seria
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mBiddingNegotiations")
-    private MBiddingEvaluation biddingEval;
+    private MBiddingEvalResult biddingEvalResult;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -63,17 +62,6 @@ public class MBiddingNegotiation extends AbstractAuditingEntity implements Seria
     @JsonIgnoreProperties("mBiddingNegotiations")
     private MBiddingSchedule biddingSchedule;
 
-    @Formula("(select count(mbnl.id) from m_bidding_negotiation_line mbnl where mbnl.negotiation_id=id)")
-    private Long vendorCount;
-
-    @Formula("(select count(mbnl.id) from m_bidding_negotiation_line mbnl where mbnl.negotiation_id=id and mbnl.negotiation_status in ('agreed','disagreed'))")
-    private Long finishedCount;
-
-    @PrePersist
-    public void assignUUID() {
-        this.uid = UUID.randomUUID();
-    }
-
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -81,22 +69,6 @@ public class MBiddingNegotiation extends AbstractAuditingEntity implements Seria
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getVendorCount() {
-        return vendorCount;
-    }
-
-    public void setVendorCount(Long vendorCount) {
-        this.vendorCount = vendorCount;
-    }
-
-    public Long getFinishedCount() {
-        return finishedCount;
-    }
-
-    public void setFinishedCount(Long finishedCount) {
-        this.finishedCount = finishedCount;
     }
 
     public String getBiddingStatus() {
@@ -177,17 +149,17 @@ public class MBiddingNegotiation extends AbstractAuditingEntity implements Seria
         this.active = active;
     }
 
-    public MBiddingEvaluation getBiddingEval() {
-        return biddingEval;
+    public MBiddingEvalResult getBiddingEvalResult() {
+        return biddingEvalResult;
     }
 
-    public MBiddingNegotiation biddingEval(MBiddingEvaluation mBiddingEvaluation) {
-        this.biddingEval = mBiddingEvaluation;
+    public MBiddingNegotiation biddingEvalResult(MBiddingEvalResult mBiddingEvalResult) {
+        this.biddingEvalResult = mBiddingEvalResult;
         return this;
     }
 
-    public void setBiddingEval(MBiddingEvaluation mBiddingEvaluation) {
-        this.biddingEval = mBiddingEvaluation;
+    public void setBiddingEvalResult(MBiddingEvalResult mBiddingEvalResult) {
+        this.biddingEvalResult = mBiddingEvalResult;
     }
 
     public ADOrganization getAdOrganization() {

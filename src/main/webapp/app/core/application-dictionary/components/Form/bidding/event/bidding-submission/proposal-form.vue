@@ -51,7 +51,7 @@
 
                                 <el-col style="text-align: right;padding-right: 40px;padding-bottom: 5px">
 
-                                    <el-button v-if="!biddingSubCriteria.attachmentName" size="mini" type="primary"
+                                    <el-button v-if="!biddingSubCriteria.attachmentName && isVendor" size="mini" type="primary"
                                                @click="OpenAttachmentForm(biddingSubCriteria)">
                                         <svg-icon name="icomoo/206-attachment">
                                         </svg-icon>
@@ -60,7 +60,7 @@
                                     <el-button v-if="biddingSubCriteria.attachmentName" icon="el-icon-view" size="mini" type="primary"
                                                @click="handlePreview">{{ biddingSubCriteria.attachmentName }}
                                     </el-button>
-                                    <el-button v-if="biddingSubCriteria.attachmentName" icon="el-icon-close" size="mini" type="primary"
+                                    <el-button v-if="biddingSubCriteria.attachmentName && isVendor" :disabled="disabled" icon="el-icon-close" size="mini" type="primary"
                                                @click="cancelAttachment(biddingSubCriteria)">
                                     </el-button>
                                 </el-col>

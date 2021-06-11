@@ -55,7 +55,7 @@ public class MBiddingNegotiationChatService {
     private final AdUserRepository adUserRepository;
     private final MailService mailService;
 
-    public MBiddingNegotiationChatService(MBiddingNegotiationChatRepository mBiddingNegotiationChatRepository, 
+    public MBiddingNegotiationChatService(MBiddingNegotiationChatRepository mBiddingNegotiationChatRepository,
     MBiddingNegotiationChatMapper mBiddingNegotiationChatMapper,
     MBiddingNegotiationLineRepository mBiddingNegotiationLineRepository,
     MBiddingNegotiationRepository mBiddingNegotiationRepository,
@@ -97,7 +97,7 @@ public class MBiddingNegotiationChatService {
             mbn.setBiddingStatus("P");
             mBiddingNegotiationRepository.save(mbn);
 
-            List<MProposalPrice> pps = mProposalPriceRepository.findByBiddingSubmission(mbn.getBiddingEval().getBiddingSubmission());
+            List<MProposalPrice> pps = mProposalPriceRepository.findByBiddingSubmission(mbn.getBiddingEvalResult().getBiddingSubmission());
             if(pps.size()>0) {
                 MProposalPrice pp = pps.get(0);
                 MBidNegoPrice bnp = new MBidNegoPrice();
@@ -106,7 +106,7 @@ public class MBiddingNegotiationChatService {
                 bnp.setPriceProposal(pp);
                 bnp.setNegotiationLine(mbnl);
                 bnp.setActive(true);
-                
+
                 bnp = mBidNegoPriceRepository.save(bnp);
 
                 List<MProposalPriceLine> ppls = mProposalPriceLineRepository.findByProposalPrice(pp);
@@ -129,8 +129,8 @@ public class MBiddingNegotiationChatService {
 
         if((mBiddingNegotiationChatDTO.getPublishToEmail()==null?false:mBiddingNegotiationChatDTO.getPublishToEmail())){
             if(StringUtils.hasLength(mBiddingNegotiationChatDTO.getBuyerText())) {
-                String emailBody = "The buyer has responded to the negotiation of bidding " + 
-                mbn.getBiddingEval().getBiddingSubmission().getBidding().getName() + ".<br/>"
+                String emailBody = "The buyer has responded to the negotiation of bidding " +
+                mbn.getBiddingEvalResult().getBiddingSubmission().getBidding().getName() + ".<br/>"
                 +"The following is their response: <br/><br/>"
                 +mBiddingNegotiationChatDTO.getVendorText();
 
@@ -138,15 +138,15 @@ public class MBiddingNegotiationChatService {
                 if(pics.size()==0) log.debug("No pics found for vendor {}", mBiddingNegotiationChat.getVendor());
                 for(AdUser pic: pics){
                     log.debug("Sending Buyer contract notification to {}", pic.getUser().getEmail());
-                    mailService.sendEmail(pic.getUser().getEmail(), "Buyer Responded to Negotiation for Bidding " + 
-                    mbn.getBiddingEval().getBiddingSubmission().getBidding().getName(), emailBody, false, false);
+                    mailService.sendEmail(pic.getUser().getEmail(), "Buyer Responded to Negotiation for Bidding " +
+                    mbn.getBiddingEvalResult().getBiddingSubmission().getBidding().getName(), emailBody, false, false);
                 }
             } else if (StringUtils.hasLength(mBiddingNegotiationChatDTO.getVendorText())){
                 // ... reply to who?
                 // TODO: send to corresponding buyer; pic or sth... or nothing at all?
             }
         }
-        
+
         return mBiddingNegotiationChatMapper.toDto(mBiddingNegotiationChat);
     }
 
