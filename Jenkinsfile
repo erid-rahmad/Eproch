@@ -1,6 +1,6 @@
 pipeline {
   	agent {
-    	label 'bhp-dwh-prd'
+    	label 'bhp-dataflow-dev'
   	}
  
   	stages {
@@ -23,15 +23,6 @@ pipeline {
      steps {
                 script {
                 		sh "./mvnw package -Pprod -DskipTests verify jib:dockerBuild"
-                    }
-            }
-        }
-   
-    stage('Remove Failed Container') {
-        steps {
-                script {
-                		sh "chmod +x removenoneimage.sh"
-       					sh "sh removenoneimage.sh"
                     }
             }
         }

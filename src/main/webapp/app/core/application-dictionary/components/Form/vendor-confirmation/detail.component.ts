@@ -254,7 +254,8 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
     this.commonService('/api/m-bid-nego-prices').retrieve({
       criteriaQuery: this.updateCriteria([
         'active.equals=true',
-        `biddingId.equals=${this.mainForm.biddingId}`
+        `biddingId.equals=${this.mainForm.biddingId}`,
+        `negotiationLineId.equals=${row.negoLineId}`
         ]),
       paginationQuery: {
         page: 0,

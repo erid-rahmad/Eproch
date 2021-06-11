@@ -1,0 +1,35 @@
+#!/bin/bash
+
+f_cont=/app/jenkins/workspace/eproc-demo
+d_cont=( demoeproc )
+
+case $1 in
+  start)
+    if [ ! "$(ls -A $f_cont/pid)" ]; then
+		mkdir -p $f_cont/pid
+	fi 
+  
+    for i in "${d_cont[@]}"
+    do
+       rm -rf $f_cont/pid/$i-docker-container.pid; # do whatever on $i
+    done
+
+    /usr/local/bin/docker-compose -f $f_cont/src/main/docker/docker-compose.yml up -d
+
+    for i in "${d_cont[@]}"
+    do
+       docker inspect --format={{.State.Pid}} $i > $f_cont/pid/$i-docker-container.pid;
+    done
+    ;;
+  stop)
+    /usr/local/bin/docker-compose -f $f_cont/src/main/docker/docker-compose.yml down
+    for i in "${d_cont[@]}"
+    do
+       rm -rf $f_cont/pid/$i-docker-container.pid; # do whatever on $i
+    done
+    ;;
+  *)
+    echo "usage: {start|stop} [name]" ;;
+esac
+exit 0
+

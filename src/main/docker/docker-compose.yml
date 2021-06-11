@@ -1,0 +1,54 @@
+version: '2.2'
+
+services:
+  demoeproc:
+    image: bhp/eproc-danone:2.3.0
+    container_name: demoeproc
+    hostname: demoeproc
+    mem_limit: 1G
+#    mem_reservation: 1G
+    cpus: 1
+#    cpu_shares: 100
+    environment:
+      - TZ=Asia/Jakarta
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+        #      - SPRING_PROFILES_ACTIVE=prod,swagger
+      - SPRING_PROFILES_ACTIVE=prod,swagger,no-liquibase
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - SPRING_DATASOURCE_USERNAME=dbdemo
+      - SPRING_DATASOURCE_PASSWORD=AMU53cKgS0Q6cJi
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://10.71.5.58:5435/eproc_demo
+      - SPRING_CLOUD_DATAFLOW_CLIENT_SERVER_URI=http://10.71.5.59:9393
+      - SPRING_MAIL_HOST=10.71.5.59
+      - SPRING_MAIL_PORT=1025
+      - SPRING_MAIL_USERNAME=admin.opusb@berca.co.id
+      - SPRING_MAIL_PASSWORD=cSWZKe%o~h@iaUg4
+      - SPRING_MAIL_PROTOCOL=smtp
+      - SPRING_MAIL_TLS=false
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=false
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=false
+        #      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_TRUST=BHPCAS1SRV.berca.co.id
+        #      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+      - KAFKA_BOOTSTRAPSERVERS=10.71.5.59:9092
+      - JHIPSTER_MAIL_BASE_URL=https://demo-eproc.opusb.co.id
+      - JHIPSTER_MAIL_FROM=admin.opusb@berca.co.id
+      - APPLICATION_ATTACHMENT_UPLOAD_DIR=/opt/attachments
+      - APPLICATION_DOCUMENTS_PURCHASE_REQUISITION_DOCUMENT_TYPE=Quotation
+      - APPLICATION_INTEGRATION_ENDPOINT_INVOICE_VERIFICATION_URL=http://10.71.5.59:20001/api/invoice-verification
+    volumes:
+      - data_demo_eproc:/opt/attachments
+    ports:
+      - 8089:8090
+    networks:
+     demoeproc:
+       ipv4_address: 172.100.5.2
+
+networks:
+  demoeproc:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.100.5.1/30
+
+volumes:
+  data_demo_eproc:
