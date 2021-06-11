@@ -69,10 +69,8 @@ public class MVendorConfirmation extends AbstractAuditingEntity implements Seria
     @Formula("(select count(mvcl.id) from m_vendor_confirmation_line mvcl where mvcl.vendor_confirmation_id = id)")
     private Integer selectedWinners;
 
-    @Formula("(select mbnp.negotiation_price from m_bid_nego_price mbnp where mbnp.bidding_id = ("+
-        "select mbs.bidding_id from m_bidding_submission mbs where mbs.id = ("+
-        "select mber.bidding_submission_id from m_bidding_eval_result mber where mber.id = ("+
-        "select mvcl.bidding_eval_result_id from m_vendor_confirmation_line mvcl where mvcl.id = id))))")
+    @Formula("(select sum(mbnp.negotiation_price) from m_bid_nego_price mbnp where mbnp.bidding_id = ("+
+        "select mvc.bidding_id from m_vendor_confirmation mvc where mvc.id = id))")
     private BigDecimal negoAmount;
 
     @PrePersist
