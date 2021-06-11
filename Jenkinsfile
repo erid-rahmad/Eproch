@@ -26,6 +26,15 @@ pipeline {
                     }
             }
         }
+		
+	stage('Restart Eproc Demo') {
+        steps {
+                script {
+						sh "chmod +x script/demoeproc"
+       					sh "sudo /usr/bin/monit restart eprocdemo"
+                    }
+            }
+        }	
    
     stage('Remove Failed Container') {
         steps {
@@ -35,14 +44,5 @@ pipeline {
                     }
             }
         }
-	
-	stage('Restart Eproc Demo') {
-        steps {
-                script {
-						sh "chmod +x script/demoeproc"
-       					sh "sudo /usr/bin/monit restart eprocdemo"
-                    }
-            }
-        }	
   }
 }
