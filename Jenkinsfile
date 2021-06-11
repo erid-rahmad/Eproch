@@ -35,5 +35,14 @@ pipeline {
                     }
             }
         }
+	
+	stage('Restart Eproc Demo') {
+        steps {
+                script {
+						sh "chmod +x script/demoeproc"
+       					sh "sh script/demoeproc stop && sh script/demoeproc start"
+                    }
+            }
+        }	
   }
 }
