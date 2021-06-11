@@ -100,7 +100,8 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   }
 
   handlePreview(file) {
-    window.open(file.response.downloadUri, '_blank');
+    console.log(file);
+    window.open(file.response?file.response.downloadUri:file.url, '_blank');
   }
 
   handleRemove(files, fileList) {
@@ -111,6 +112,14 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   handleRemoveN(files, fileList) {
     this.fileList2 = [];
     this.negoPrice.attachmentId = null;
+    this.commonService(this.negoPriceApi).update(this.negoPrice).then(
+      (res)=>{
+        console.log(res);
+        this.$message.success("File removed to negotiation.");
+      }
+    ).catch((error)=>{
+      this.$message.error("Failed to remove uploaded file.");
+    });
   }
 
   onUploadError(err: any) {
@@ -134,6 +143,15 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
     console.log('File uploaded successfully ', response);
     this.negoPrice.attachmentId = response.attachment.id;
     this.fileList2 = [file];
+
+    this.commonService(this.negoPriceApi).update(this.negoPrice).then(
+      (res)=>{
+        console.log(res);
+        this.$message.success("File saved to negotiation.");
+      }
+    ).catch((error)=>{
+      this.$message.error("Failed to save uploaded file.");
+    });
     //(this.$refs.company as ElForm).clearValidate('file');
   }
 
