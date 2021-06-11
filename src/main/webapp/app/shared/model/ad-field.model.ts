@@ -45,6 +45,7 @@ export interface IADField {
   adValidationRule?: IAdValidationRule;
   adValidationRuleId?: number;
   adTabId?: number;
+  adTabName?: string;
 }
 
 export class ADField implements IADField {
@@ -90,7 +91,8 @@ export class ADField implements IADField {
     public adColumnId?: number,
     public adValidationRule?: IAdValidationRule,
     public adValidationRuleId?: number,
-    public adTabId?: number
+    public adTabId?: number,
+    public adTabName?: string
   ) {
     this.staticField = this.staticField || false;
     this.labelOnly = this.labelOnly || false;

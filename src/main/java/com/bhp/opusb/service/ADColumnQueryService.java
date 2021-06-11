@@ -190,7 +190,11 @@ public class ADColumnQueryService extends QueryService<ADColumn> {
             }
             if (criteria.getAdTableId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdTableId(),
-                    root -> root.join(ADColumn_.adTable, JoinType.LEFT).get(ADTable_.id)));
+                    root -> root.join(ADColumn_.adTable, JoinType.INNER).get(ADTable_.id)));
+            }
+            if (criteria.getAdTableName() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdTableName(),
+                    root -> root.join(ADColumn_.adTable, JoinType.INNER).get(ADTable_.name)));
             }
         }
         return specification;

@@ -109,6 +109,7 @@ public class ADColumnCriteria implements Serializable, Criteria {
     private LongFilter adValidationRuleId;
 
     private LongFilter adTableId;
+    private StringFilter adTableName;
 
     public ADColumnCriteria() {
     }
@@ -147,6 +148,7 @@ public class ADColumnCriteria implements Serializable, Criteria {
         this.adReferenceId = other.adReferenceId == null ? null : other.adReferenceId.copy();
         this.adValidationRuleId = other.adValidationRuleId == null ? null : other.adValidationRuleId.copy();
         this.adTableId = other.adTableId == null ? null : other.adTableId.copy();
+        this.adTableName = other.adTableName == null ? null : other.adTableName.copy();
     }
 
     @Override
@@ -418,6 +420,13 @@ public class ADColumnCriteria implements Serializable, Criteria {
         this.adTableId = adTableId;
     }
 
+    public StringFilter getAdTableName() {
+        return adTableName;
+    }
+
+    public void setAdTableName(StringFilter adTableName) {
+        this.adTableName = adTableName;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -461,7 +470,8 @@ public class ADColumnCriteria implements Serializable, Criteria {
             Objects.equals(referenceTypeId, that.referenceTypeId) &&
             Objects.equals(adReferenceId, that.adReferenceId) &&
             Objects.equals(adValidationRuleId, that.adValidationRuleId) &&
-            Objects.equals(adTableId, that.adTableId);
+            Objects.equals(adTableId, that.adTableId) &&
+            Objects.equals(adTableName, that.adTableName);
     }
 
     @Override
@@ -499,7 +509,8 @@ public class ADColumnCriteria implements Serializable, Criteria {
         referenceTypeId,
         adReferenceId,
         adValidationRuleId,
-        adTableId
+        adTableId,
+        adTableName
         );
     }
 
@@ -539,6 +550,7 @@ public class ADColumnCriteria implements Serializable, Criteria {
                 (adReferenceId != null ? "adReferenceId=" + adReferenceId + ", " : "") +
                 (adValidationRuleId != null ? "adValidationRuleId=" + adValidationRuleId + ", " : "") +
                 (adTableId != null ? "adTableId=" + adTableId + ", " : "") +
+                (adTableName != null ? "adTableName=" + adTableName + ", " : "") +
             "}";
     }
 
