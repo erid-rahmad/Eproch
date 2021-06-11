@@ -1,8 +1,8 @@
 #!/bin/bash
 
 d_work=/app/jenkins/workspace/eproc-dev/removenoneimages
-f_work=$d_work/etc/noneimages.txt
-fc_work=$d_work/etc/exitedcontainer.txt
+f_work=noneimages.txt
+fc_work=exitedcontainer.txt
 l_work=$d_work/log/imageremove.log
 
 docker ps -a | grep Exited | awk {'print $1}' > $fc_work

@@ -11,7 +11,7 @@ import java.util.UUID;
  * A DTO for the {@link com.bhp.opusb.domain.MBiddingNegotiation} entity.
  */
 public class MBiddingNegotiationDTO extends AbstractAuditingDTO implements Serializable {
-    
+
     private Long id;
 
     private String biddingStatus;
@@ -29,16 +29,15 @@ public class MBiddingNegotiationDTO extends AbstractAuditingDTO implements Seria
     private Boolean active;
 
 
-    private Long biddingEvalId;
+    private Long biddingEvalResultId;
     private Long biddingId, finishedCount, vendorCount;
-    private String biddingNo, biddingTitle, biddingType, eventType; 
-
+    private String biddingNo, biddingTitle, biddingType, eventType;
     private Long adOrganizationId;
 
     private Long biddingScheduleId;
 
     private List<MBiddingNegotiationLineDTO> line;
-    
+
     public Long getId() {
         return id;
     }
@@ -159,12 +158,12 @@ public class MBiddingNegotiationDTO extends AbstractAuditingDTO implements Seria
         this.active = active;
     }
 
-    public Long getBiddingEvalId() {
-        return biddingEvalId;
+    public Long getBiddingEvalResultId() {
+        return biddingEvalResultId;
     }
 
-    public void setBiddingEvalId(Long mBiddingEvaluationId) {
-        this.biddingEvalId = mBiddingEvaluationId;
+    public void setBiddingEvalResultId(Long mBiddingEvalResultId) {
+        this.biddingEvalResultId = mBiddingEvalResultId;
     }
 
     public Long getAdOrganizationId() {
@@ -214,7 +213,7 @@ public class MBiddingNegotiationDTO extends AbstractAuditingDTO implements Seria
             ", endDate='" + getEndDate() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
-            ", biddingEvalId=" + getBiddingEvalId() +
+            ", biddingEvalResultId=" + getBiddingEvalResultId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", biddingScheduleId=" + getBiddingScheduleId() +
             "}";

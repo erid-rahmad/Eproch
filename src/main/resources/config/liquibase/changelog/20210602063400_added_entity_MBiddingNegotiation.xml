@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity MBiddingNegotiation.
     -->
@@ -86,11 +86,25 @@
             <column name="end_date" type="datetime"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
-            <column name="bidding_eval_id" type="numeric"/>
+            <column name="bidding_eval_result_id" type="numeric"/>
             <column name="ad_organization_id" type="numeric"/>
             <column name="bidding_schedule_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20210611020011" author="erid">
+        <dropColumn tableName="m_bidding_negotiation">
+            <column name="bidding_eval_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+
+        </dropColumn>
+        <addColumn tableName="m_bidding_negotiation">
+            <column name="bidding_eval_result_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

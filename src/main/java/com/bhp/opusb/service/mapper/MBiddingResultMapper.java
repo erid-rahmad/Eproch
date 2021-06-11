@@ -17,6 +17,7 @@ public interface MBiddingResultMapper extends EntityMapper<MBiddingResultDTO, MB
     @Mapping(source = "announcementResult.description", target = "announcementResultName")
     @Mapping(source = "announcementResult.attachment.fileName", target = "attachmentName")
     @Mapping(source = "announcementResult.attachment.id", target = "attachmentId")
+    @Mapping(source = "announcementResult.attachment.downloadUrl", target = "attachmentUrl")
     @Mapping(source = "bidding.id", target = "biddingId")
     @Mapping(source = "bidding.name", target = "biddingName")
     @Mapping(source = "bidding.biddingStatus", target = "biddingStatus")

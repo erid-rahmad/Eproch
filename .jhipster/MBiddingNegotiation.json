@@ -35,10 +35,10 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "mBiddingEvaluation",
+            "otherEntityName": "mBiddingEvalResult",
             "otherEntityRelationshipName": "mBiddingNegotiation",
             "relationshipValidateRules": "required",
-            "relationshipName": "biddingEval",
+            "relationshipName": "biddingEvalResult",
             "otherEntityField": "id"
         },
         {

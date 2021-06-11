@@ -24,6 +24,7 @@ public class MBiddingResultDTO extends AbstractAuditingDTO {
     private String announcementResultName;
     private String attachmentName;
     private String attachmentId;
+    private String attachmentUrl;
 
     private Long biddingId;
     private String biddingName;
@@ -32,6 +33,14 @@ public class MBiddingResultDTO extends AbstractAuditingDTO {
     private String biddingType;
     private ZonedDateTime startDate;
     private ZonedDateTime endDate;
+
+    public String getAttachmentUrl() {
+        return attachmentUrl;
+    }
+
+    public void setAttachmentUrl(String attachmentUrl) {
+        this.attachmentUrl = attachmentUrl;
+    }
 
     public String getAttachmentId() {
         return attachmentId;

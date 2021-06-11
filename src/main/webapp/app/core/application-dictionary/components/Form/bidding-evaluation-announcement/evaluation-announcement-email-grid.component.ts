@@ -258,7 +258,7 @@ export default class EvaluationAnnouncement extends mixins(ScheduleEventMixin, E
   //upload end
 
   saveDraft(){
-    this.formData.adOrganizationId=1;
+    this.formData.adOrganizationId=this.schedule.adOrganizationId;
     this.formData.biddingId=this.pickRow.id;
     this.formData.biddingScheduleId=this.schedule.id;
     this.loading = false
@@ -273,18 +273,31 @@ export default class EvaluationAnnouncement extends mixins(ScheduleEventMixin, E
     }
 
   publish() {
-      const data :any ={};
-      data.cAnnouncementResultDTO=this.formData;
-      data.mBiddingEvalResult=this.biddingEvalResult;
-      data.users=this.selectedRecipients;
-      this.commonService(baseApiBiddingResult)
-        .create(data)
-        .then(() => {
-          this.$message.success('Announcement has been published successfully');
-          this.recipientListVisible = false;
-        })
-        .catch(() => this.$message.error('Failed to publish bidding announcement'))
-        .finally(() => this.loading = false);
+    this.formData.adOrganizationId=this.schedule.adOrganizationId;
+    this.formData.biddingId=this.pickRow.id;
+    this.formData.biddingScheduleId=this.schedule.id;
+    this.loading = false
+    this.commonService("api/c-announcement-results")
+      .create(this.formData)
+      .then(res => {
+        this.formData = res;
+        this.$message.success('Announcement has been saved successfully');
+
+        const data :any ={};
+        data.cAnnouncementResultDTO=this.formData;
+        data.mBiddingEvalResult=this.biddingEvalResult;
+        data.users=this.selectedRecipients;
+        this.commonService(baseApiBiddingResult)
+          .create(data)
+          .then(() => {
+            this.$message.success('Announcement has been published successfully');
+            this.recipientListVisible = false;
+          })
+          .catch(() => this.$message.error('Failed to publish bidding announcement'))
+          .finally(() => this.loading = false);
+      })
+      .catch(_err => this.$message.error('Failed to save the announcement'))
+      .finally(() => this.loading = false);
   }
 
   back() {
