@@ -2,6 +2,7 @@ package com.bhp.opusb.service.dto;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -27,10 +28,27 @@ public class MVendorConfirmationLineDTO extends AbstractAuditingDTO implements S
 
     private Long biddingEvalResultId;
 
-    private Long vendorConfirmationId;
+    private Long vendorConfirmationId, negoLineId;
+    private BigDecimal negoAmount;
     
     public Long getId() {
         return id;
+    }
+
+    public Long getNegoLineId() {
+        return negoLineId;
+    }
+
+    public void setNegoLineId(Long negoLineId) {
+        this.negoLineId = negoLineId;
+    }
+
+    public BigDecimal getNegoAmount() {
+        return negoAmount;
+    }
+
+    public void setNegoAmount(BigDecimal negoAmount) {
+        this.negoAmount = negoAmount;
     }
 
     public String getVendorName() {
