@@ -97,7 +97,9 @@
                 label="Contract Amount"
                 min-width="150"
               >
-                  {{ mainForm.amount | formatCurrency }}
+                <template slot-scope="{ row }">
+                  {{ row.negoAmount | formatCurrency }}
+                </template>
               </el-table-column>
               <el-table-column
                 label="Status"
@@ -114,6 +116,7 @@
                     size="mini"
                     style="width: 100%"
                     type="primary"
+                    :loading="loading"
                     @click="viewDetail(row)"
                   ></el-button>
                 </template>

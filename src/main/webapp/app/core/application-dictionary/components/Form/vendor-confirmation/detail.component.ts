@@ -46,6 +46,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   confirmPublish = false;
   showPoForm = false;
   showHistory = false;
+  loading = false;
 
   poNumber: string = "";
 
@@ -135,7 +136,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
         size: 10000,
         sort: ['id']
       }
-    }).then(res=>{this.confirmations = res.data});
+    }).then(res=>{console.log(res.data);this.confirmations = res.data});
   }
 
   formatConfirmationStatus(value: string) {
@@ -147,11 +148,13 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   }
 
   viewDetail(row: any) {
+    this.loading = true;
     this.selectedConfirmation = row;
     this.commonService('/api/m-bid-nego-prices').retrieve({
       criteriaQuery: this.updateCriteria([
         'active.equals=true',
-        `biddingId.equals=${this.mainForm.biddingId}`
+        `biddingId.equals=${this.mainForm.biddingId}`,
+        `negotiationLineId.equals=${row.negoLineId}`
         ]),
       paginationQuery: {
         page: 0,
@@ -181,7 +184,16 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
         this.selectedConfirmation.quantity = quantity;
         this.selectedConfirmation.amount = amount;
         this.showDetail = true;
+      }).catch((err)=>{
+        console.log(err);
+        this.$message.error("Unable to load detail.")
+      }).finally(()=>{
+        this.loading = false;
       });
+    }).catch((err)=>{
+      console.log(err);
+      this.$message.error("Unable to load detail.")
+      this.loading = false;
     });
   }
 
@@ -198,7 +210,11 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
         size: 10000,
         sort: ['id']
       }
-    }).then(res=>{this.history = res.data});
+    }).then(res=>{this.history = res.data}).catch((err)=>{
+      console.log(err);
+      this.$message.error("Unable to load history.")
+    }).finally(()=>{
+    });;
     this.showHistory = true;
   }
 

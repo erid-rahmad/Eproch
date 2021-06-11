@@ -1,6 +1,6 @@
 pipeline {
   	agent {
-    	label 'bhp-dataflow-dev'
+    	label 'bhp-dwh-prd'
   	}
  
   	stages {
