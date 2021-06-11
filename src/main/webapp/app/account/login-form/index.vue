@@ -80,9 +80,9 @@
             </el-checkbox>
 
             <el-button
-              v-loading="loading"
               class="login-button"
               icon="el-icon-user-solid"
+              :loading="loading"
               tabindex="4"
               type="primary"
               @click.native.prevent="handleLogin"
