@@ -107,7 +107,6 @@ public class MBiddingResultService {
         Optional<MBiddingResult> mBiddingResult = mBiddingResultRepository.findById(id);
         log.info("this bidding schedule {}",mBiddingResult.get().getBiddingEvalResult().getBiddingSubmission().getBiddingSchedule());
         mBiddingResult.get().getBiddingEvalResult().getBiddingSubmission().getBiddingSchedule();
-
         String email= mBiddingResult.get().getAnnouncementResult().getDescription();
         email=email.replace("#vendorName",mBiddingResult.get().getBiddingEvalResult().getBiddingSubmission().getVendor().getName());
         email=email.replace("#status",mBiddingResult.get().getBiddingEvalResult().getStatus());
