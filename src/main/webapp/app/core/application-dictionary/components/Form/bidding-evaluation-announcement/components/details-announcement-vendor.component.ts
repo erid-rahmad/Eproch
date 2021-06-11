@@ -34,7 +34,7 @@ export default class DetailsAnnouncementForm extends  mixins(EventAnnouncement, 
   }
 
   downloadAttachment() {
-    window.open(`/api/c-attachments/download/${this.email.attachmentId}-${this.email.attachmentName}`, '_blank');
+    window.open(this.email.attachmentUrl, '_blank');
   }
 
   getemail(id) {
@@ -42,7 +42,9 @@ export default class DetailsAnnouncementForm extends  mixins(EventAnnouncement, 
       .get(`${baseApiBiddingResult}${id}`)
       .then(response => {
         this.email = response.data;
+        console.log("this email",this.email)
       });
+
   }
   getSchedule(id){
     this.commonService(baseApiBiddingSchedule)

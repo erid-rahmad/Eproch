@@ -250,9 +250,12 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
       })
       .then(res => {
         res.data.forEach((criteria: any) => {
-          let question = this.questions.get(criteria.biddingSubCriteriaLineId);
-          question.requirement = criteria.requirement;
-          question.vendorScoringLineId = criteria.vendorScoringLineId;
+          try {
+            let question = this.questions.get(criteria.biddingSubCriteriaLineId);
+            question.requirement = criteria.requirement;
+            question.vendorScoringLineId = criteria.vendorScoringLineId;
+
+          }catch (e) {}
         })
         this.retrieveAnswerAdmin(this.evaluationFormProp.biddingSubmission.id);
         this.retrieveAnswerTechnical(this.evaluationFormProp.biddingSubmission.id);
@@ -394,13 +397,16 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
       })
       .then(res => {
         for (const proposal of res.data) {
-          const item = this.attachmentHandler.get(proposal.biddingSubCriteriaId);
-          // @ts-ignore
-          item.attachmentId = proposal.cAttachmentId;
-          // @ts-ignore
-          item.attachmentName = proposal.cattachmentName;
-          // @ts-ignore
-          item.attachmentUrl = proposal.attachmentUrl;
+          try {
+            const item = this.attachmentHandler.get(proposal.biddingSubCriteriaId);
+            // @ts-ignore
+            item.attachmentId = proposal.cAttachmentId;
+            // @ts-ignore
+            item.attachmentName = proposal.cattachmentName;
+            // @ts-ignore
+            item.attachmentUrl = proposal.attachmentUrl;
+          }catch (e) {}
+
         }
       })
       .catch(err => {
