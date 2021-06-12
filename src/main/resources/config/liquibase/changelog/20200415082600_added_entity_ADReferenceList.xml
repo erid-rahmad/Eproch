@@ -98,4 +98,8 @@
         <dropUniqueConstraint tableName="ad_reference_list" constraintName="ux_ad_reference_list_value" />
     </changeSet>
 
+    <changeSet id="20210612135200" author="Ananta Aryadewa">
+        <addUniqueConstraint tableName="ad_reference_list" columnNames="ad_organization_id, ad_reference_id, value" />
+    </changeSet>
+
 </databaseChangeLog>
