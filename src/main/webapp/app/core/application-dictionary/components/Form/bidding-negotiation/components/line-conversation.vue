@@ -55,7 +55,7 @@
         :gutter="24"
         style="margin-top: 16px"
       >
-      <el-scrollbar class="form-wrapper">
+      <el-scrollbar class="form-wrapper" v-if="chatHistory.length">
         <div v-for="(c,index) in chatHistory" :key="index">
           <h4>{{c.vendorText?"Vendor":"Buyer"}}
             <el-button
@@ -71,6 +71,9 @@
           </h4>
           <p>{{c.vendorText?c.vendorText:c.buyerText}}</p>
         </div>
+      </el-scrollbar>
+      <el-scrollbar class="form-wrapper" v-else>
+        <p>Tidak ada percakapan</p>
       </el-scrollbar>
       <!--
       <el-table border :data="chatHistory" size="mini">
@@ -199,7 +202,7 @@
           <el-col
             :span="8"
           >
-            <el-form-item label="Attachment" v-if="isVendor">
+            <el-form-item label="Attachment">
               <el-upload
                 ref="contractFile"
                 v-model="negoPrice.attachment"
@@ -225,7 +228,6 @@
                 </el-button>
               </el-upload>
             </el-form-item>
-            <div v-else>&nbsp;</div>
           </el-col>
           <el-col
             :span="8"
