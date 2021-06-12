@@ -71,6 +71,14 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mBiddingSubmission",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "mBidding",
             "otherEntityRelationshipName": "mBiddingSubmission",
             "relationshipValidateRules": "required",
@@ -87,18 +95,17 @@
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "cVendor",
+            "otherEntityName": "cDocumentType",
             "otherEntityRelationshipName": "mBiddingSubmission",
-            "relationshipValidateRules": "required",
-            "relationshipName": "vendor",
+            "relationshipName": "documentType",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "aDOrganization",
+            "otherEntityName": "cVendor",
             "otherEntityRelationshipName": "mBiddingSubmission",
             "relationshipValidateRules": "required",
-            "relationshipName": "adOrganization",
+            "relationshipName": "vendor",
             "otherEntityField": "id"
         }
     ],

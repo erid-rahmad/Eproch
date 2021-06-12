@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 /**
  * Mapper for the entity {@link MAuctionInvitation} and its DTO {@link MAuctionInvitationDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, MAuctionMapper.class, CVendorMapper.class})
+@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, MAuctionMapper.class, CDocumentTypeMapper.class, CVendorMapper.class})
 public interface MAuctionInvitationMapper extends EntityMapper<MAuctionInvitationDTO, MAuctionInvitation> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
@@ -24,12 +24,15 @@ public interface MAuctionInvitationMapper extends EntityMapper<MAuctionInvitatio
     @Mapping(source = "auction.prerequisite.id", target = "auctionPrerequisiteId")
     @Mapping(source = "auction.rule.id", target = "auctionRuleId")
     @Mapping(source = "auction.rule.startDate", target = "auctionRuleStartDate")
+    @Mapping(source = "documentType.id", target = "documentTypeId")
+    @Mapping(source = "documentType.name", target = "documentTypeName")
     @Mapping(source = "vendor.id", target = "vendorId")
     @Mapping(source = "vendor.name", target = "vendorName")
     MAuctionInvitationDTO toDto(MAuctionInvitation mAuctionInvitation);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "auctionId", target = "auction")
+    @Mapping(source = "documentTypeId", target = "documentType")
     @Mapping(source = "vendorId", target = "vendor")
     MAuctionInvitation toEntity(MAuctionInvitationDTO mAuctionInvitationDTO);
 

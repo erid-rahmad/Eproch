@@ -81,6 +81,14 @@
         },
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "cDocumentType",
+            "otherEntityRelationshipName": "mAuctionInvitation",
+            "relationshipValidateRules": "required",
+            "relationshipName": "documentType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "cVendor",
             "otherEntityRelationshipName": "mAuctionInvitation",
             "relationshipValidateRules": "required",

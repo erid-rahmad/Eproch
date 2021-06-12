@@ -92,10 +92,10 @@
             <column name="date_submit" type="datetime"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
+            <column name="ad_organization_id" type="numeric"/>
             <column name="bidding_id" type="numeric"/>
             <column name="bidding_schedule_id" type="numeric"/>
             <column name="vendor_id" type="numeric"/>
-            <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>
@@ -142,6 +142,14 @@
         <dropDefaultValue tableName="m_bidding_submission" columnName="date_approve" columnDataType="datetime"/>
         <dropDefaultValue tableName="m_bidding_submission" columnName="date_reject" columnDataType="datetime"/>
         <dropDefaultValue tableName="m_bidding_submission" columnName="date_submit" columnDataType="datetime"/>
+    </changeSet>
+
+    <changeSet id="20210612071500" author="Ananta Aryadewa">
+        <addColumn tableName="m_bidding_submission">
+            <column name="document_type_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

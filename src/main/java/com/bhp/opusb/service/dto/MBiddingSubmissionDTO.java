@@ -47,6 +47,9 @@ public class MBiddingSubmissionDTO extends AbstractAuditingDTO {
     private Boolean active = true;
 
 
+    private Long adOrganizationId;
+    private String adOrganizationName;
+
     private Long biddingId;
     private String biddingName;
     private String biddingUser;
@@ -64,29 +67,12 @@ public class MBiddingSubmissionDTO extends AbstractAuditingDTO {
     private String biddingScheduleStatus;
     private ZonedDateTime biddingScheduleEndDate;
 
+    private Long documentTypeId;
+    private String documentTypeName;
 
     private Long vendorId;
     private String vendorName;
-
-    private Long adOrganizationId;
-    private String adOrganizationName;
-
-    public String getBiddingUser() {
-        return biddingUser;
-    }
-
-    public void setBiddingUser(String biddingUser) {
-        this.biddingUser = biddingUser;
-    }
-
-    public ZonedDateTime getBiddingScheduleEndDate() {
-        return biddingScheduleEndDate;
-    }
-
-    public void setBiddingScheduleEndDate(ZonedDateTime biddingScheduleEndDate) {
-        this.biddingScheduleEndDate = biddingScheduleEndDate;
-    }
-
+    
     public Long getId() {
         return id;
     }
@@ -199,6 +185,22 @@ public class MBiddingSubmissionDTO extends AbstractAuditingDTO {
         this.active = active;
     }
 
+    public Long getAdOrganizationId() {
+        return adOrganizationId;
+    }
+
+    public void setAdOrganizationId(Long aDOrganizationId) {
+        this.adOrganizationId = aDOrganizationId;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
     public Long getBiddingId() {
         return biddingId;
     }
@@ -213,6 +215,14 @@ public class MBiddingSubmissionDTO extends AbstractAuditingDTO {
 
     public void setBiddingName(String biddingName) {
         this.biddingName = biddingName;
+    }
+
+    public String getBiddingUser() {
+        return biddingUser;
+    }
+
+    public void setBiddingUser(String biddingUser) {
+        this.biddingUser = biddingUser;
     }
 
     public String getBiddingNo() {
@@ -295,6 +305,30 @@ public class MBiddingSubmissionDTO extends AbstractAuditingDTO {
         this.biddingScheduleStatus = biddingScheduleStatus;
     }
 
+    public ZonedDateTime getBiddingScheduleEndDate() {
+        return biddingScheduleEndDate;
+    }
+
+    public void setBiddingScheduleEndDate(ZonedDateTime biddingScheduleEndDate) {
+        this.biddingScheduleEndDate = biddingScheduleEndDate;
+    }
+
+    public Long getDocumentTypeId() {
+        return documentTypeId;
+    }
+
+    public void setDocumentTypeId(Long cDocumentTypeId) {
+        this.documentTypeId = cDocumentTypeId;
+    }
+
+    public String getDocumentTypeName() {
+        return documentTypeName;
+    }
+
+    public void setDocumentTypeName(String documentTypeName) {
+        this.documentTypeName = documentTypeName;
+    }
+
     public Long getVendorId() {
         return vendorId;
     }
@@ -309,22 +343,6 @@ public class MBiddingSubmissionDTO extends AbstractAuditingDTO {
 
     public void setVendorName(String vendorName) {
         this.vendorName = vendorName;
-    }
-
-    public Long getAdOrganizationId() {
-        return adOrganizationId;
-    }
-
-    public void setAdOrganizationId(Long aDOrganizationId) {
-        this.adOrganizationId = aDOrganizationId;
-    }
-
-    public String getAdOrganizationName() {
-        return adOrganizationName;
-    }
-
-    public void setAdOrganizationName(String adOrganizationName) {
-        this.adOrganizationName = adOrganizationName;
     }
 
     @Override
@@ -365,10 +383,11 @@ public class MBiddingSubmissionDTO extends AbstractAuditingDTO {
             ", dateSubmit='" + getDateSubmit() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
+            ", adOrganizationId=" + getAdOrganizationId() +
             ", biddingId=" + getBiddingId() +
             ", biddingScheduleId=" + getBiddingScheduleId() +
+            ", documentTypeId=" + getDocumentTypeId() +
             ", vendorId=" + getVendorId() +
-            ", adOrganizationId=" + getAdOrganizationId() +
             "}";
     }
 }

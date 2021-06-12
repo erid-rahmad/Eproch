@@ -1,16 +1,15 @@
 package com.bhp.opusb.service.mapper;
 
 
-import com.bhp.opusb.domain.MAuction;
+import com.bhp.opusb.domain.*;
 import com.bhp.opusb.service.dto.MAuctionDTO;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 /**
  * Mapper for the entity {@link MAuction} and its DTO {@link MAuctionDTO}.
  */
-@Mapper(componentModel = "spring", uses = {MAuctionRuleMapper.class, MAuctionContentMapper.class, ADOrganizationMapper.class, CCurrencyMapper.class, CCostCenterMapper.class, AdUserMapper.class, CAuctionPrerequisiteMapper.class})
+@Mapper(componentModel = "spring", uses = {MAuctionRuleMapper.class, MAuctionContentMapper.class, ADOrganizationMapper.class, CCurrencyMapper.class, CCostCenterMapper.class, CDocumentTypeMapper.class, AdUserMapper.class, CAuctionPrerequisiteMapper.class})
 public interface MAuctionMapper extends EntityMapper<MAuctionDTO, MAuction> {
 
     @Mapping(source = "rule.id", target = "ruleId")
@@ -24,6 +23,8 @@ public interface MAuctionMapper extends EntityMapper<MAuctionDTO, MAuction> {
     @Mapping(source = "currency.code", target = "currencyName")
     @Mapping(source = "costCenter.id", target = "costCenterId")
     @Mapping(source = "costCenter.name", target = "costCenterName")
+    @Mapping(source = "documentType.id", target = "documentTypeId")
+    @Mapping(source = "documentType.name", target = "documentTypeName")
     @Mapping(source = "owner.id", target = "ownerUserId")
     @Mapping(source = "owner.user.login", target = "ownerName")
     @Mapping(source = "prerequisite.id", target = "prerequisiteId")
@@ -34,6 +35,7 @@ public interface MAuctionMapper extends EntityMapper<MAuctionDTO, MAuction> {
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "currencyId", target = "currency")
     @Mapping(source = "costCenterId", target = "costCenter")
+    @Mapping(source = "documentTypeId", target = "documentType")
     @Mapping(source = "ownerUserId", target = "owner")
     @Mapping(source = "prerequisiteId", target = "prerequisite")
     MAuction toEntity(MAuctionDTO mAuctionDTO);

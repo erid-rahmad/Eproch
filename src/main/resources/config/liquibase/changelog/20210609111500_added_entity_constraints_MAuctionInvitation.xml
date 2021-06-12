@@ -27,4 +27,14 @@
                                  referencedTableName="c_vendor"/>
 
     </changeSet>
+
+    <changeSet id="20210612072000" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="document_type_id"
+                                 baseTableName="m_auction_invitation"
+                                 constraintName="fk_m_auction_invitation_document_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_document_type"/>
+
+    </changeSet>
 </databaseChangeLog>

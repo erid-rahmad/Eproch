@@ -132,6 +132,10 @@ public class MAuctionInvitationQueryService extends QueryService<MAuctionInvitat
                 specification = specification.and(buildSpecification(criteria.getAuctionId(),
                     root -> root.join(MAuctionInvitation_.auction, JoinType.LEFT).get(MAuction_.id)));
             }
+            if (criteria.getDocumentTypeId() != null) {
+                specification = specification.and(buildSpecification(criteria.getDocumentTypeId(),
+                    root -> root.join(MAuctionInvitation_.documentType, JoinType.LEFT).get(CDocumentType_.id)));
+            }
             if (criteria.getVendorId() != null) {
                 specification = specification.and(buildSpecification(criteria.getVendorId(),
                     root -> root.join(MAuctionInvitation_.vendor, JoinType.LEFT).get(CVendor_.id)));

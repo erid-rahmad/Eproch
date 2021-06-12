@@ -1997,14 +1997,14 @@ relationship ManyToOne {
 	CVendorEvaluationLine{cVendorEvaluation required} to CVendorEvaluation
 
 	MAuction{adOrganization required} to ADOrganization
-	MAuction{currency} to CCurrency
-	MAuction{costCenter} to CCostCenter
+	MAuction{currency required} to CCurrency
+	MAuction{costCenter required} to CCostCenter
+	MAuction{documentType required} to CDocumentType
 	MAuction{owner required} to AdUser
 	MAuction{prerequisite} to CAuctionPrerequisite
 
 	MAuctionRule{adOrganization required} to ADOrganization
 
-	MAuctionTeam{adOrganization required} to ADOrganization
 	MAuctionTeam{adOrganization required} to ADOrganization
 	MAuctionTeam{user required} to AdUser
 	MAuctionTeam{auction required} to MAuction
@@ -2023,6 +2023,7 @@ relationship ManyToOne {
 
 	MAuctionInvitation{adOrganization required} to ADOrganization
 	MAuctionInvitation{auction required} to MAuction
+	MAuctionInvitation{documentType required} to CDocumentType
 	MAuctionInvitation{vendor required} to CVendor
 
 	MAuctionSubmission{adOrganization required} to ADOrganization
@@ -2088,15 +2089,15 @@ relationship ManyToOne {
 	MBiddingEvaluation{adOrganization required} to ADOrganization
 
 
-    MBiddingEvaluationLine{adOrganization required} to ADOrganization
-    MBiddingEvaluationLine{biddingEvaluation required} to MBiddingEvaluation
+	MBiddingEvaluationLine{adOrganization required} to ADOrganization
+	MBiddingEvaluationLine{biddingEvaluation required} to MBiddingEvaluation
 
-    MBiddingEvalResult{adOrganization required} to ADOrganization
-    MBiddingEvalResult{biddingSubmission required} to MBiddingSubmission
+	MBiddingEvalResult{adOrganization required} to ADOrganization
+	MBiddingEvalResult{biddingSubmission required} to MBiddingSubmission
 
-    MBiddingEvalResultLine{adOrganization required} to ADOrganization
-    MBiddingEvalResultLine{evaluationMethodLine required} to CEvaluationMethodLine
-    MBiddingEvalResultLine{biddingEvalResult required} to MBiddingEvalResult
+	MBiddingEvalResultLine{adOrganization required} to ADOrganization
+	MBiddingEvalResultLine{evaluationMethodLine required} to CEvaluationMethodLine
+	MBiddingEvalResultLine{biddingEvalResult required} to MBiddingEvalResult
 
 	MBiddingScheduleAttachment{adOrganization required} to ADOrganization
 
@@ -2107,10 +2108,10 @@ relationship ManyToOne {
 
 	MTechProposalEvaluation{adOrganization required} to ADOrganization
 	MTechProposalEvaluation{bidding } to MBidding
-    MTechProposalEvaluation{evaluationMethodCriteria } to CEvaluationMethodCriteria
-   	MTechProposalEvaluation{evalMethodSubCriteria } to CEvalMethodSubCriteria
-   	MTechProposalEvaluation{biddingSubCriteriaLine } to CBiddingSubCriteriaLine
-   	MTechProposalEvaluation{vendor} to CVendor
+	MTechProposalEvaluation{evaluationMethodCriteria } to CEvaluationMethodCriteria
+	MTechProposalEvaluation{evalMethodSubCriteria } to CEvalMethodSubCriteria
+	MTechProposalEvaluation{biddingSubCriteriaLine } to CBiddingSubCriteriaLine
+	MTechProposalEvaluation{vendor} to CVendor
 
 	MVendorConfirmation{bidding required} to MBidding
 	MVendorConfirmation{adOrganization required} to ADOrganization
@@ -2165,10 +2166,11 @@ relationship ManyToOne {
 	MPreBidMeetingParticipant{preBidMeeting required} to MPreBidMeeting
 	MPreBidMeetingParticipant{vendor required} to CVendor
 
+	MBiddingSubmission{adOrganization required} to ADOrganization
 	MBiddingSubmission{bidding required} to MBidding
 	MBiddingSubmission{biddingSchedule required} to MBiddingSchedule
+	MBiddingSubmission{documentType} to CDocumentType
 	MBiddingSubmission{vendor required} to CVendor
-	MBiddingSubmission{adOrganization required} to ADOrganization
 
 	MProposalAdministration{adOrganization required} to ADOrganization
 	MProposalAdministration{biddingSubmission required} to MBiddingSubmission

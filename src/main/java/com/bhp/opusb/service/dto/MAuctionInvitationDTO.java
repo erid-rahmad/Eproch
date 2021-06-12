@@ -65,6 +65,9 @@ public class MAuctionInvitationDTO extends AbstractAuditingDTO {
     private Long auctionRuleId;
     private ZonedDateTime auctionRuleStartDate;
 
+    private Long documentTypeId;
+    private String documentTypeName;
+
     private Long vendorId;
     private String vendorName;
     
@@ -252,6 +255,22 @@ public class MAuctionInvitationDTO extends AbstractAuditingDTO {
         this.auctionRuleStartDate = auctionRuleStartDate;
     }
 
+    public Long getDocumentTypeId() {
+        return documentTypeId;
+    }
+
+    public void setDocumentTypeId(Long cDocumentTypeId) {
+        this.documentTypeId = cDocumentTypeId;
+    }
+
+    public String getDocumentTypeName() {
+        return documentTypeName;
+    }
+
+    public void setDocumentTypeName(String documentTypeName) {
+        this.documentTypeName = documentTypeName;
+    }
+
     public Long getVendorId() {
         return vendorId;
     }
@@ -306,6 +325,7 @@ public class MAuctionInvitationDTO extends AbstractAuditingDTO {
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", auctionId=" + getAuctionId() +
+            ", documentTypeId=" + getDocumentTypeId() +
             ", vendorId=" + getVendorId() +
             "}";
     }

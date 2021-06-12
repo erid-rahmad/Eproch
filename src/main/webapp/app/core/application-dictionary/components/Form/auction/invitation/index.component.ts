@@ -57,6 +57,7 @@ export default class AuctionInvitation extends Mixins(AccessLevelMixin) {
       name: this.selectedRow.auctionName,
       documentNo: this.selectedRow.documentNo,
       documentStatus: this.selectedRow.documentStatus,
+      documentTypeName: this.selectedRow.documentTypeName,
       currencyId: this.selectedRow.auctionCurrencyId,
       contentId: this.selectedRow.auctionContentId,
       prerequisiteId: this.selectedRow.auctionPrerequisiteId,

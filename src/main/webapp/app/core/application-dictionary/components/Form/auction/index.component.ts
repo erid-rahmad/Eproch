@@ -116,7 +116,7 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
   }
 
   get isDraft() {
-    return this.selectedRow.documentStatus === 'DRF';
+    return ! this.selectedRow.id || this.selectedRow.documentStatus === 'DRF';
   }
 
   get isPaused() {

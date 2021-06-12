@@ -80,6 +80,11 @@ public class MBiddingSubmission extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mBiddingSubmissions")
+    private ADOrganization adOrganization;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mBiddingSubmissions")
     private MBidding bidding;
 
     @ManyToOne(optional = false)
@@ -87,15 +92,14 @@ public class MBiddingSubmission extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mBiddingSubmissions")
     private MBiddingSchedule biddingSchedule;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     @JsonIgnoreProperties("mBiddingSubmissions")
-    private CVendor vendor;
+    private CDocumentType documentType;
 
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mBiddingSubmissions")
-    private ADOrganization adOrganization;
+    private CVendor vendor;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -275,6 +279,19 @@ public class MBiddingSubmission extends AbstractAuditingEntity {
         this.active = active;
     }
 
+    public ADOrganization getAdOrganization() {
+        return adOrganization;
+    }
+
+    public MBiddingSubmission adOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
+        return this;
+    }
+
+    public void setAdOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
+    }
+
     public MBidding getBidding() {
         return bidding;
     }
@@ -301,6 +318,19 @@ public class MBiddingSubmission extends AbstractAuditingEntity {
         this.biddingSchedule = mBiddingSchedule;
     }
 
+    public CDocumentType getDocumentType() {
+        return documentType;
+    }
+
+    public MBiddingSubmission documentType(CDocumentType cDocumentType) {
+        this.documentType = cDocumentType;
+        return this;
+    }
+
+    public void setDocumentType(CDocumentType cDocumentType) {
+        this.documentType = cDocumentType;
+    }
+
     public CVendor getVendor() {
         return vendor;
     }
@@ -312,19 +342,6 @@ public class MBiddingSubmission extends AbstractAuditingEntity {
 
     public void setVendor(CVendor cVendor) {
         this.vendor = cVendor;
-    }
-
-    public ADOrganization getAdOrganization() {
-        return adOrganization;
-    }
-
-    public MBiddingSubmission adOrganization(ADOrganization aDOrganization) {
-        this.adOrganization = aDOrganization;
-        return this;
-    }
-
-    public void setAdOrganization(ADOrganization aDOrganization) {
-        this.adOrganization = aDOrganization;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

@@ -4,6 +4,7 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MAuctionInvitation;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.MAuction;
+import com.bhp.opusb.domain.CDocumentType;
 import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.repository.MAuctionInvitationRepository;
 import com.bhp.opusb.service.MAuctionInvitationService;
@@ -140,6 +141,16 @@ public class MAuctionInvitationResourceIT {
         }
         mAuctionInvitation.setAuction(mAuction);
         // Add required entity
+        CDocumentType cDocumentType;
+        if (TestUtil.findAll(em, CDocumentType.class).isEmpty()) {
+            cDocumentType = CDocumentTypeResourceIT.createEntity(em);
+            em.persist(cDocumentType);
+            em.flush();
+        } else {
+            cDocumentType = TestUtil.findAll(em, CDocumentType.class).get(0);
+        }
+        mAuctionInvitation.setDocumentType(cDocumentType);
+        // Add required entity
         CVendor cVendor;
         if (TestUtil.findAll(em, CVendor.class).isEmpty()) {
             cVendor = CVendorResourceIT.createEntity(em);
@@ -190,6 +201,16 @@ public class MAuctionInvitationResourceIT {
             mAuction = TestUtil.findAll(em, MAuction.class).get(0);
         }
         mAuctionInvitation.setAuction(mAuction);
+        // Add required entity
+        CDocumentType cDocumentType;
+        if (TestUtil.findAll(em, CDocumentType.class).isEmpty()) {
+            cDocumentType = CDocumentTypeResourceIT.createUpdatedEntity(em);
+            em.persist(cDocumentType);
+            em.flush();
+        } else {
+            cDocumentType = TestUtil.findAll(em, CDocumentType.class).get(0);
+        }
+        mAuctionInvitation.setDocumentType(cDocumentType);
         // Add required entity
         CVendor cVendor;
         if (TestUtil.findAll(em, CVendor.class).isEmpty()) {
@@ -1228,6 +1249,22 @@ public class MAuctionInvitationResourceIT {
 
         // Get all the mAuctionInvitationList where auction equals to auctionId + 1
         defaultMAuctionInvitationShouldNotBeFound("auctionId.equals=" + (auctionId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMAuctionInvitationsByDocumentTypeIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CDocumentType documentType = mAuctionInvitation.getDocumentType();
+        mAuctionInvitationRepository.saveAndFlush(mAuctionInvitation);
+        Long documentTypeId = documentType.getId();
+
+        // Get all the mAuctionInvitationList where documentType equals to documentTypeId
+        defaultMAuctionInvitationShouldBeFound("documentTypeId.equals=" + documentTypeId);
+
+        // Get all the mAuctionInvitationList where documentType equals to documentTypeId + 1
+        defaultMAuctionInvitationShouldNotBeFound("documentTypeId.equals=" + (documentTypeId + 1));
     }
 
 

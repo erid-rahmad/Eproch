@@ -102,6 +102,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "cCurrency",
             "otherEntityRelationshipName": "mAuction",
+            "relationshipValidateRules": "required",
             "relationshipName": "currency",
             "otherEntityField": "id"
         },
@@ -109,7 +110,16 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "cCostCenter",
             "otherEntityRelationshipName": "mAuction",
+            "relationshipValidateRules": "required",
             "relationshipName": "costCenter",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cDocumentType",
+            "otherEntityRelationshipName": "mAuction",
+            "relationshipValidateRules": "required",
+            "relationshipName": "documentType",
             "otherEntityField": "id"
         },
         {

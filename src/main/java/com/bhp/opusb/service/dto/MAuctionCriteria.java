@@ -62,6 +62,8 @@ public class MAuctionCriteria implements Serializable, Criteria {
 
     private LongFilter costCenterId;
 
+    private LongFilter documentTypeId;
+
     private LongFilter ownerUserId;
 
     private LongFilter prerequisiteId;
@@ -89,6 +91,7 @@ public class MAuctionCriteria implements Serializable, Criteria {
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
         this.costCenterId = other.costCenterId == null ? null : other.costCenterId.copy();
+        this.documentTypeId = other.documentTypeId == null ? null : other.documentTypeId.copy();
         this.ownerUserId = other.ownerUserId == null ? null : other.ownerUserId.copy();
         this.prerequisiteId = other.prerequisiteId == null ? null : other.prerequisiteId.copy();
     }
@@ -250,6 +253,14 @@ public class MAuctionCriteria implements Serializable, Criteria {
         this.costCenterId = costCenterId;
     }
 
+    public LongFilter getDocumentTypeId() {
+        return documentTypeId;
+    }
+
+    public void setDocumentTypeId(LongFilter documentTypeId) {
+        this.documentTypeId = documentTypeId;
+    }
+
     public LongFilter getOwnerUserId() {
         return ownerUserId;
     }
@@ -296,6 +307,7 @@ public class MAuctionCriteria implements Serializable, Criteria {
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(currencyId, that.currencyId) &&
             Objects.equals(costCenterId, that.costCenterId) &&
+            Objects.equals(documentTypeId, that.documentTypeId) &&
             Objects.equals(ownerUserId, that.ownerUserId) &&
             Objects.equals(prerequisiteId, that.prerequisiteId);
     }
@@ -322,6 +334,7 @@ public class MAuctionCriteria implements Serializable, Criteria {
         adOrganizationId,
         currencyId,
         costCenterId,
+        documentTypeId,
         ownerUserId,
         prerequisiteId
         );
@@ -349,6 +362,7 @@ public class MAuctionCriteria implements Serializable, Criteria {
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (currencyId != null ? "currencyId=" + currencyId + ", " : "") +
                 (costCenterId != null ? "costCenterId=" + costCenterId + ", " : "") +
+                (documentTypeId != null ? "documentTypeId=" + documentTypeId + ", " : "") +
                 (ownerUserId != null ? "ownerId=" + ownerUserId + ", " : "") +
                 (prerequisiteId != null ? "prerequisiteId=" + prerequisiteId + ", " : "") +
             "}";

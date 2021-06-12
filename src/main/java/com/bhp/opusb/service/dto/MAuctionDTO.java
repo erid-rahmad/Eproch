@@ -64,6 +64,9 @@ public class MAuctionDTO extends AbstractAuditingDTO {
     private Long costCenterId;
     private String costCenterName;
 
+    private Long documentTypeId;
+    private String documentTypeName;
+
     private Long ownerUserId;
     private String ownerName;
 
@@ -269,6 +272,22 @@ public class MAuctionDTO extends AbstractAuditingDTO {
         this.costCenterName = costCenterName;
     }
 
+    public Long getDocumentTypeId() {
+        return documentTypeId;
+    }
+
+    public void setDocumentTypeId(Long cDocumentTypeId) {
+        this.documentTypeId = cDocumentTypeId;
+    }
+
+    public String getDocumentTypeName() {
+        return documentTypeName;
+    }
+
+    public void setDocumentTypeName(String documentTypeName) {
+        this.documentTypeName = documentTypeName;
+    }
+
     public Long getOwnerUserId() {
         return ownerUserId;
     }
@@ -336,6 +355,7 @@ public class MAuctionDTO extends AbstractAuditingDTO {
             ", adOrganizationId=" + getAdOrganizationId() +
             ", currencyId=" + getCurrencyId() +
             ", costCenterId=" + getCostCenterId() +
+            ", documentTypeId=" + getDocumentTypeId() +
             ", ownerUserId=" + getOwnerUserId() +
             ", prerequisiteId=" + getPrerequisiteId() +
             "}";

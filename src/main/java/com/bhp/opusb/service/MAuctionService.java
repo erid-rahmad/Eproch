@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.bhp.opusb.config.ApplicationProperties;
 import com.bhp.opusb.config.ApplicationProperties.Document;
 import com.bhp.opusb.domain.MAuction;
+import com.bhp.opusb.repository.CDocumentTypeRepository;
 import com.bhp.opusb.repository.MAuctionRepository;
 import com.bhp.opusb.service.dto.MAuctionDTO;
 import com.bhp.opusb.service.dto.MAuctionParticipantDTO;
@@ -32,6 +33,8 @@ public class MAuctionService {
     private final MAuctionInvitationService mAuctionInvitationService;
     private final MAuctionParticipantService mAuctionParticipantService;
 
+    private final CDocumentTypeRepository cDocumentTypeRepository;
+
     private final MAuctionRepository mAuctionRepository;
 
     private final MAuctionMapper mAuctionMapper;
@@ -40,9 +43,10 @@ public class MAuctionService {
 
     public MAuctionService(ApplicationProperties applicationProperties,
             MAuctionInvitationService mAuctionInvitationService, MAuctionParticipantService mAuctionParticipantService,
-            MAuctionRepository mAuctionRepository, MAuctionMapper mAuctionMapper) {
+            CDocumentTypeRepository cDocumentTypeRepository, MAuctionRepository mAuctionRepository, MAuctionMapper mAuctionMapper) {
         this.mAuctionInvitationService = mAuctionInvitationService;
         this.mAuctionParticipantService = mAuctionParticipantService;
+        this.cDocumentTypeRepository = cDocumentTypeRepository;
         this.mAuctionRepository = mAuctionRepository;
         this.mAuctionMapper = mAuctionMapper;
         this.document = applicationProperties.getDocuments().get("auction");
@@ -56,10 +60,15 @@ public class MAuctionService {
      */
     public MAuctionDTO save(MAuctionDTO mAuctionDTO) {
         log.debug("Request to save MAuction : {}", mAuctionDTO);
-        MAuction mAuction = mAuctionMapper.toEntity(mAuctionDTO);
+        final MAuction mAuction = mAuctionMapper.toEntity(mAuctionDTO);
 
         if (mAuction.getDocumentNo() == null) {
             mAuction.setDocumentNo(DocumentUtil.buildDocumentNumber(document.getDocumentNumberPrefix(), mAuctionRepository));
+        }
+
+        if (mAuction.getDocumentType() == null) {
+            cDocumentTypeRepository.findFirstByName(document.getDocumentType())
+                .ifPresent(mAuction::setDocumentType);
         }
         
         boolean isPublishing = ! Boolean.TRUE.equals(mAuction.isProcessed()) && DocumentUtil.isPublish(mAuction.getDocumentStatus());
@@ -74,8 +83,7 @@ public class MAuctionService {
             mAuction.setProcessed(true);
         }
 
-        mAuction = mAuctionRepository.save(mAuction);
-        return mAuctionMapper.toDto(mAuction);
+        return mAuctionMapper.toDto(mAuctionRepository.save(mAuction));
     }
 
     /**

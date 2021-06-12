@@ -109,6 +109,7 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
 
     this.editMode = true;
     this.newRecord = true;
+    this.selectedRow = this.items[0];
   }
 
   onDeleteClicked(row: any) {
@@ -122,6 +123,7 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
     if (this.newRecord) {
       this.items.splice(0, 1);
       this.newRecord = false;
+      this.selectedRow = this.items[0];
     } else {
       this.items.splice(index, 1, this.tmpItem);
       this.setRow(this.tmpItem);

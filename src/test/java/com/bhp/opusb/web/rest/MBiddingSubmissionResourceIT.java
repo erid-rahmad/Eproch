@@ -2,10 +2,11 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MBiddingSubmission;
+import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.MBidding;
 import com.bhp.opusb.domain.MBiddingSchedule;
+import com.bhp.opusb.domain.CDocumentType;
 import com.bhp.opusb.domain.CVendor;
-import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.repository.MBiddingSubmissionRepository;
 import com.bhp.opusb.service.MBiddingSubmissionService;
 import com.bhp.opusb.service.dto.MBiddingSubmissionDTO;
@@ -130,6 +131,16 @@ public class MBiddingSubmissionResourceIT {
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        mBiddingSubmission.setAdOrganization(aDOrganization);
+        // Add required entity
         MBidding mBidding;
         if (TestUtil.findAll(em, MBidding.class).isEmpty()) {
             mBidding = MBiddingResourceIT.createEntity(em);
@@ -159,16 +170,6 @@ public class MBiddingSubmissionResourceIT {
             cVendor = TestUtil.findAll(em, CVendor.class).get(0);
         }
         mBiddingSubmission.setVendor(cVendor);
-        // Add required entity
-        ADOrganization aDOrganization;
-        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
-            aDOrganization = ADOrganizationResourceIT.createEntity(em);
-            em.persist(aDOrganization);
-            em.flush();
-        } else {
-            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
-        }
-        mBiddingSubmission.setAdOrganization(aDOrganization);
         return mBiddingSubmission;
     }
     /**
@@ -192,6 +193,16 @@ public class MBiddingSubmissionResourceIT {
             .dateSubmit(UPDATED_DATE_SUBMIT)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createUpdatedEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        mBiddingSubmission.setAdOrganization(aDOrganization);
         // Add required entity
         MBidding mBidding;
         if (TestUtil.findAll(em, MBidding.class).isEmpty()) {
@@ -222,16 +233,6 @@ public class MBiddingSubmissionResourceIT {
             cVendor = TestUtil.findAll(em, CVendor.class).get(0);
         }
         mBiddingSubmission.setVendor(cVendor);
-        // Add required entity
-        ADOrganization aDOrganization;
-        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
-            aDOrganization = ADOrganizationResourceIT.createUpdatedEntity(em);
-            em.persist(aDOrganization);
-            em.flush();
-        } else {
-            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
-        }
-        mBiddingSubmission.setAdOrganization(aDOrganization);
         return mBiddingSubmission;
     }
 
@@ -1396,6 +1397,22 @@ public class MBiddingSubmissionResourceIT {
 
     @Test
     @Transactional
+    public void getAllMBiddingSubmissionsByAdOrganizationIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        ADOrganization adOrganization = mBiddingSubmission.getAdOrganization();
+        mBiddingSubmissionRepository.saveAndFlush(mBiddingSubmission);
+        Long adOrganizationId = adOrganization.getId();
+
+        // Get all the mBiddingSubmissionList where adOrganization equals to adOrganizationId
+        defaultMBiddingSubmissionShouldBeFound("adOrganizationId.equals=" + adOrganizationId);
+
+        // Get all the mBiddingSubmissionList where adOrganization equals to adOrganizationId + 1
+        defaultMBiddingSubmissionShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMBiddingSubmissionsByBiddingIsEqualToSomething() throws Exception {
         // Get already existing entity
         MBidding bidding = mBiddingSubmission.getBidding();
@@ -1428,6 +1445,26 @@ public class MBiddingSubmissionResourceIT {
 
     @Test
     @Transactional
+    public void getAllMBiddingSubmissionsByDocumentTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingSubmissionRepository.saveAndFlush(mBiddingSubmission);
+        CDocumentType documentType = CDocumentTypeResourceIT.createEntity(em);
+        em.persist(documentType);
+        em.flush();
+        mBiddingSubmission.setDocumentType(documentType);
+        mBiddingSubmissionRepository.saveAndFlush(mBiddingSubmission);
+        Long documentTypeId = documentType.getId();
+
+        // Get all the mBiddingSubmissionList where documentType equals to documentTypeId
+        defaultMBiddingSubmissionShouldBeFound("documentTypeId.equals=" + documentTypeId);
+
+        // Get all the mBiddingSubmissionList where documentType equals to documentTypeId + 1
+        defaultMBiddingSubmissionShouldNotBeFound("documentTypeId.equals=" + (documentTypeId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMBiddingSubmissionsByVendorIsEqualToSomething() throws Exception {
         // Get already existing entity
         CVendor vendor = mBiddingSubmission.getVendor();
@@ -1439,22 +1476,6 @@ public class MBiddingSubmissionResourceIT {
 
         // Get all the mBiddingSubmissionList where vendor equals to vendorId + 1
         defaultMBiddingSubmissionShouldNotBeFound("vendorId.equals=" + (vendorId + 1));
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllMBiddingSubmissionsByAdOrganizationIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        ADOrganization adOrganization = mBiddingSubmission.getAdOrganization();
-        mBiddingSubmissionRepository.saveAndFlush(mBiddingSubmission);
-        Long adOrganizationId = adOrganization.getId();
-
-        // Get all the mBiddingSubmissionList where adOrganization equals to adOrganizationId
-        defaultMBiddingSubmissionShouldBeFound("adOrganizationId.equals=" + adOrganizationId);
-
-        // Get all the mBiddingSubmissionList where adOrganization equals to adOrganizationId + 1
-        defaultMBiddingSubmissionShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
     }
 
     /**

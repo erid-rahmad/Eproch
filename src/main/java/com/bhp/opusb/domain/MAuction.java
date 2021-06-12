@@ -94,13 +94,20 @@ public class MAuction extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mAuctions")
     private ADOrganization adOrganization;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties("mAuctions")
     private CCurrency currency;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties("mAuctions")
     private CCostCenter costCenter;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mAuctions")
+    private CDocumentType documentType;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -352,6 +359,19 @@ public class MAuction extends AbstractAuditingEntity {
 
     public void setCostCenter(CCostCenter cCostCenter) {
         this.costCenter = cCostCenter;
+    }
+
+    public CDocumentType getDocumentType() {
+        return documentType;
+    }
+
+    public MAuction documentType(CDocumentType cDocumentType) {
+        this.documentType = cDocumentType;
+        return this;
+    }
+
+    public void setDocumentType(CDocumentType cDocumentType) {
+        this.documentType = cDocumentType;
     }
 
     public AdUser getOwner() {

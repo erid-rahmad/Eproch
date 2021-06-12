@@ -120,6 +120,9 @@
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
+            <column name="currency_id" type="numeric"/>
+            <column name="cost_center_id" type="numeric"/>
+            <column name="document_type_id" type="numeric"/>
             <column name="owner_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
@@ -147,6 +150,16 @@
                 <constraints nullable="true" />
             </column>
         </addColumn>
+    </changeSet>
+
+    <changeSet id="20210612071800" author="Ananta Aryadewa">
+        <addColumn tableName="m_auction">
+            <column name="document_type_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <addNotNullConstraint tableName="m_auction" columnName="currency_id" />
+        <addNotNullConstraint tableName="m_auction" columnName="cost_center_id" />
     </changeSet>
 
 </databaseChangeLog>

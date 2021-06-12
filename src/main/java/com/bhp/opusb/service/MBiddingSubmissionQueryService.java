@@ -130,6 +130,10 @@ public class MBiddingSubmissionQueryService extends QueryService<MBiddingSubmiss
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), MBiddingSubmission_.active));
             }
+            if (criteria.getAdOrganizationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
+                    root -> root.join(MBiddingSubmission_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
+            }
             if (criteria.getBiddingId() != null) {
                 specification = specification.and(buildSpecification(criteria.getBiddingId(),
                     root -> root.join(MBiddingSubmission_.bidding, JoinType.LEFT).get(MBidding_.id)));
@@ -138,13 +142,13 @@ public class MBiddingSubmissionQueryService extends QueryService<MBiddingSubmiss
                 specification = specification.and(buildSpecification(criteria.getBiddingScheduleId(),
                     root -> root.join(MBiddingSubmission_.biddingSchedule, JoinType.LEFT).get(MBiddingSchedule_.id)));
             }
+            if (criteria.getDocumentTypeId() != null) {
+                specification = specification.and(buildSpecification(criteria.getDocumentTypeId(),
+                    root -> root.join(MBiddingSubmission_.documentType, JoinType.LEFT).get(CDocumentType_.id)));
+            }
             if (criteria.getVendorId() != null) {
                 specification = specification.and(buildSpecification(criteria.getVendorId(),
                     root -> root.join(MBiddingSubmission_.vendor, JoinType.LEFT).get(CVendor_.id)));
-            }
-            if (criteria.getAdOrganizationId() != null) {
-                specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
-                    root -> root.join(MBiddingSubmission_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
         }
         return specification;

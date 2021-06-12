@@ -7,6 +7,7 @@ import com.bhp.opusb.domain.MAuctionContent;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CCurrency;
 import com.bhp.opusb.domain.CCostCenter;
+import com.bhp.opusb.domain.CDocumentType;
 import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.domain.CAuctionPrerequisite;
 import com.bhp.opusb.repository.MAuctionRepository;
@@ -142,6 +143,36 @@ public class MAuctionResourceIT {
         }
         mAuction.setAdOrganization(aDOrganization);
         // Add required entity
+        CCurrency cCurrency;
+        if (TestUtil.findAll(em, CCurrency.class).isEmpty()) {
+            cCurrency = CCurrencyResourceIT.createEntity(em);
+            em.persist(cCurrency);
+            em.flush();
+        } else {
+            cCurrency = TestUtil.findAll(em, CCurrency.class).get(0);
+        }
+        mAuction.setCurrency(cCurrency);
+        // Add required entity
+        CCostCenter cCostCenter;
+        if (TestUtil.findAll(em, CCostCenter.class).isEmpty()) {
+            cCostCenter = CCostCenterResourceIT.createEntity(em);
+            em.persist(cCostCenter);
+            em.flush();
+        } else {
+            cCostCenter = TestUtil.findAll(em, CCostCenter.class).get(0);
+        }
+        mAuction.setCostCenter(cCostCenter);
+        // Add required entity
+        CDocumentType cDocumentType;
+        if (TestUtil.findAll(em, CDocumentType.class).isEmpty()) {
+            cDocumentType = CDocumentTypeResourceIT.createEntity(em);
+            em.persist(cDocumentType);
+            em.flush();
+        } else {
+            cDocumentType = TestUtil.findAll(em, CDocumentType.class).get(0);
+        }
+        mAuction.setDocumentType(cDocumentType);
+        // Add required entity
         AdUser adUser;
         if (TestUtil.findAll(em, AdUser.class).isEmpty()) {
             adUser = AdUserResourceIT.createEntity(em);
@@ -184,6 +215,36 @@ public class MAuctionResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         mAuction.setAdOrganization(aDOrganization);
+        // Add required entity
+        CCurrency cCurrency;
+        if (TestUtil.findAll(em, CCurrency.class).isEmpty()) {
+            cCurrency = CCurrencyResourceIT.createUpdatedEntity(em);
+            em.persist(cCurrency);
+            em.flush();
+        } else {
+            cCurrency = TestUtil.findAll(em, CCurrency.class).get(0);
+        }
+        mAuction.setCurrency(cCurrency);
+        // Add required entity
+        CCostCenter cCostCenter;
+        if (TestUtil.findAll(em, CCostCenter.class).isEmpty()) {
+            cCostCenter = CCostCenterResourceIT.createUpdatedEntity(em);
+            em.persist(cCostCenter);
+            em.flush();
+        } else {
+            cCostCenter = TestUtil.findAll(em, CCostCenter.class).get(0);
+        }
+        mAuction.setCostCenter(cCostCenter);
+        // Add required entity
+        CDocumentType cDocumentType;
+        if (TestUtil.findAll(em, CDocumentType.class).isEmpty()) {
+            cDocumentType = CDocumentTypeResourceIT.createUpdatedEntity(em);
+            em.persist(cDocumentType);
+            em.flush();
+        } else {
+            cDocumentType = TestUtil.findAll(em, CDocumentType.class).get(0);
+        }
+        mAuction.setDocumentType(cDocumentType);
         // Add required entity
         AdUser adUser;
         if (TestUtil.findAll(em, AdUser.class).isEmpty()) {
@@ -1433,12 +1494,8 @@ public class MAuctionResourceIT {
     @Test
     @Transactional
     public void getAllMAuctionsByCurrencyIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mAuctionRepository.saveAndFlush(mAuction);
-        CCurrency currency = CCurrencyResourceIT.createEntity(em);
-        em.persist(currency);
-        em.flush();
-        mAuction.setCurrency(currency);
+        // Get already existing entity
+        CCurrency currency = mAuction.getCurrency();
         mAuctionRepository.saveAndFlush(mAuction);
         Long currencyId = currency.getId();
 
@@ -1453,12 +1510,8 @@ public class MAuctionResourceIT {
     @Test
     @Transactional
     public void getAllMAuctionsByCostCenterIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mAuctionRepository.saveAndFlush(mAuction);
-        CCostCenter costCenter = CCostCenterResourceIT.createEntity(em);
-        em.persist(costCenter);
-        em.flush();
-        mAuction.setCostCenter(costCenter);
+        // Get already existing entity
+        CCostCenter costCenter = mAuction.getCostCenter();
         mAuctionRepository.saveAndFlush(mAuction);
         Long costCenterId = costCenter.getId();
 
@@ -1467,6 +1520,22 @@ public class MAuctionResourceIT {
 
         // Get all the mAuctionList where costCenter equals to costCenterId + 1
         defaultMAuctionShouldNotBeFound("costCenterId.equals=" + (costCenterId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMAuctionsByDocumentTypeIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CDocumentType documentType = mAuction.getDocumentType();
+        mAuctionRepository.saveAndFlush(mAuction);
+        Long documentTypeId = documentType.getId();
+
+        // Get all the mAuctionList where documentType equals to documentTypeId
+        defaultMAuctionShouldBeFound("documentTypeId.equals=" + documentTypeId);
+
+        // Get all the mAuctionList where documentType equals to documentTypeId + 1
+        defaultMAuctionShouldNotBeFound("documentTypeId.equals=" + (documentTypeId + 1));
     }
 
 

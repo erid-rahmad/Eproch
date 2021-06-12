@@ -90,6 +90,11 @@ public class MAuctionInvitation extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mAuctionInvitations")
+    private CDocumentType documentType;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mAuctionInvitations")
     private CVendor vendor;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -268,6 +273,19 @@ public class MAuctionInvitation extends AbstractAuditingEntity {
 
     public void setAuction(MAuction mAuction) {
         this.auction = mAuction;
+    }
+
+    public CDocumentType getDocumentType() {
+        return documentType;
+    }
+
+    public MAuctionInvitation documentType(CDocumentType cDocumentType) {
+        this.documentType = cDocumentType;
+        return this;
+    }
+
+    public void setDocumentType(CDocumentType cDocumentType) {
+        this.documentType = cDocumentType;
     }
 
     public CVendor getVendor() {

@@ -52,13 +52,15 @@ public class MBiddingSubmissionCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
+    private LongFilter adOrganizationId;
+
     private LongFilter biddingId;
 
     private LongFilter biddingScheduleId;
 
-    private LongFilter vendorId;
+    private LongFilter documentTypeId;
 
-    private LongFilter adOrganizationId;
+    private LongFilter vendorId;
 
     public MBiddingSubmissionCriteria() {
     }
@@ -78,10 +80,11 @@ public class MBiddingSubmissionCriteria implements Serializable, Criteria {
         this.dateSubmit = other.dateSubmit == null ? null : other.dateSubmit.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.biddingId = other.biddingId == null ? null : other.biddingId.copy();
         this.biddingScheduleId = other.biddingScheduleId == null ? null : other.biddingScheduleId.copy();
+        this.documentTypeId = other.documentTypeId == null ? null : other.documentTypeId.copy();
         this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
-        this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
     }
 
     @Override
@@ -201,6 +204,14 @@ public class MBiddingSubmissionCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
+    public LongFilter getAdOrganizationId() {
+        return adOrganizationId;
+    }
+
+    public void setAdOrganizationId(LongFilter adOrganizationId) {
+        this.adOrganizationId = adOrganizationId;
+    }
+
     public LongFilter getBiddingId() {
         return biddingId;
     }
@@ -217,20 +228,20 @@ public class MBiddingSubmissionCriteria implements Serializable, Criteria {
         this.biddingScheduleId = biddingScheduleId;
     }
 
+    public LongFilter getDocumentTypeId() {
+        return documentTypeId;
+    }
+
+    public void setDocumentTypeId(LongFilter documentTypeId) {
+        this.documentTypeId = documentTypeId;
+    }
+
     public LongFilter getVendorId() {
         return vendorId;
     }
 
     public void setVendorId(LongFilter vendorId) {
         this.vendorId = vendorId;
-    }
-
-    public LongFilter getAdOrganizationId() {
-        return adOrganizationId;
-    }
-
-    public void setAdOrganizationId(LongFilter adOrganizationId) {
-        this.adOrganizationId = adOrganizationId;
     }
 
 
@@ -258,10 +269,11 @@ public class MBiddingSubmissionCriteria implements Serializable, Criteria {
             Objects.equals(dateSubmit, that.dateSubmit) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
+            Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(biddingId, that.biddingId) &&
             Objects.equals(biddingScheduleId, that.biddingScheduleId) &&
-            Objects.equals(vendorId, that.vendorId) &&
-            Objects.equals(adOrganizationId, that.adOrganizationId);
+            Objects.equals(documentTypeId, that.documentTypeId) &&
+            Objects.equals(vendorId, that.vendorId);
     }
 
     @Override
@@ -281,10 +293,11 @@ public class MBiddingSubmissionCriteria implements Serializable, Criteria {
         dateSubmit,
         uid,
         active,
+        adOrganizationId,
         biddingId,
         biddingScheduleId,
-        vendorId,
-        adOrganizationId
+        documentTypeId,
+        vendorId
         );
     }
 
@@ -305,10 +318,11 @@ public class MBiddingSubmissionCriteria implements Serializable, Criteria {
                 (dateSubmit != null ? "dateSubmit=" + dateSubmit + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (biddingId != null ? "biddingId=" + biddingId + ", " : "") +
                 (biddingScheduleId != null ? "biddingScheduleId=" + biddingScheduleId + ", " : "") +
+                (documentTypeId != null ? "documentTypeId=" + documentTypeId + ", " : "") +
                 (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
-                (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
             "}";
     }
 

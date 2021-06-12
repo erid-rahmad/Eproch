@@ -52,6 +52,8 @@ public class MAuctionInvitationCriteria implements Serializable, Criteria {
 
     private LongFilter auctionId;
 
+    private LongFilter documentTypeId;
+
     private LongFilter vendorId;
 
     public MAuctionInvitationCriteria() {
@@ -72,6 +74,7 @@ public class MAuctionInvitationCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.auctionId = other.auctionId == null ? null : other.auctionId.copy();
+        this.documentTypeId = other.documentTypeId == null ? null : other.documentTypeId.copy();
         this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
     }
 
@@ -192,6 +195,14 @@ public class MAuctionInvitationCriteria implements Serializable, Criteria {
         this.auctionId = auctionId;
     }
 
+    public LongFilter getDocumentTypeId() {
+        return documentTypeId;
+    }
+
+    public void setDocumentTypeId(LongFilter documentTypeId) {
+        this.documentTypeId = documentTypeId;
+    }
+
     public LongFilter getVendorId() {
         return vendorId;
     }
@@ -225,6 +236,7 @@ public class MAuctionInvitationCriteria implements Serializable, Criteria {
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(auctionId, that.auctionId) &&
+            Objects.equals(documentTypeId, that.documentTypeId) &&
             Objects.equals(vendorId, that.vendorId);
     }
 
@@ -245,6 +257,7 @@ public class MAuctionInvitationCriteria implements Serializable, Criteria {
         active,
         adOrganizationId,
         auctionId,
+        documentTypeId,
         vendorId
         );
     }
@@ -266,6 +279,7 @@ public class MAuctionInvitationCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (auctionId != null ? "auctionId=" + auctionId + ", " : "") +
+                (documentTypeId != null ? "documentTypeId=" + documentTypeId + ", " : "") +
                 (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
             "}";
     }
