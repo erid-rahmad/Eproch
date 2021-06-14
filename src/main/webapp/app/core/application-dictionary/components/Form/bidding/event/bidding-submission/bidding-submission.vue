@@ -55,6 +55,7 @@
                 v-if="submissionPage"
                 ref="submissionForm"
                 :submission.sync="submission"
+                :scheduleFromGrid="scheduleFromGrid"
                 @data-loaded="onSubmissionFormLoaded"
             ></submission-form>
 
@@ -67,6 +68,7 @@
                 :loading.sync="loading"
                 :schedule="schedule"
                 :submission-id="submission.id"
+                :scheduleFromGrid="scheduleFromGrid"
             ></component>
         </div>
     </div>

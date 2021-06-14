@@ -52,6 +52,10 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   private vendorId:number;
   private evaluationResult:any={};
   private evaluationFormProp:any={};
+  dialogSubmitEvaluation:boolean=false;
+  dialogApproveEvaluation:boolean=false;
+  dialogRejectEvaluation:boolean=false;
+
 
   mainForm: any = {};
   private readOnly:boolean=false;
@@ -147,9 +151,11 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       .create( this.evaluationResult)
       .then(res => {
         let evaluationResult = res.data;
+        this.button=1;
+        this.dialogSubmitEvaluation=false;
       })
       .catch(_err => this.$message.error('fail create record'))
-      .finally(()=>{ this.button=1});
+      .finally(()=>{ });
   }
 
   approveEvaluation(){
@@ -159,9 +165,11 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       .then(res => {
         let evaluationResult = res.data;
         this.button=3;
+        this.dialogApproveEvaluation=false;
+        this.createTableNegotiation();
       })
       .catch(_err => this.$message.error('fail create records evalResult'))
-      .finally(()=>{this.createTableNegotiation();});
+      .finally(()=>{});
   }
 
   createTableNegotiation(){
@@ -205,9 +213,11 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       .create( this.evaluationResult)
       .then(res => {
         let evaluationResult = res.data;
+        this.button=2;
+        this.dialogRejectEvaluation=false;
       })
       .catch(_err => this.$message.error('fail create record'))
-      .finally(()=>{this.button=2});
+      .finally(()=>{});
   }
 
   retrieveEvalResultLine(evaluationMethodLineId:number,biddingEvalResultId:number){

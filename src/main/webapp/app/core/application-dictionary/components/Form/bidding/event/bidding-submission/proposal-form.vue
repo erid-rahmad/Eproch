@@ -58,7 +58,7 @@
                                         Attachment
                                     </el-button>
                                     <el-button v-if="biddingSubCriteria.attachmentName" icon="el-icon-view" size="mini" type="primary"
-                                               @click="handlePreview">{{ biddingSubCriteria.attachmentName }}
+                                               @click="handleDownload(biddingSubCriteria.attachmentUrl)">{{ biddingSubCriteria.attachmentName }}
                                     </el-button>
                                     <el-button v-if="biddingSubCriteria.attachmentName && isVendor" :disabled="disabled" icon="el-icon-close" size="mini" type="primary"
                                                @click="cancelAttachment(biddingSubCriteria)">

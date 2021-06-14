@@ -240,6 +240,10 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
   handlePreview() {
     window.open(this.formData.attachmentUrl, '_blank');
   }
+
+  handleDownload(url) {
+    window.open(url, '_blank');
+  }
   cancelAttachment(biddingSubCriteria) {
     const att = this.attachmentHandler.get(biddingSubCriteria.id);
     // @ts-ignore
@@ -303,9 +307,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
       // @ts-ignore
       input.attachmentUrl = this.formData.attachment.downloadUrl;
 
-
-
-
+    this.retrieveAttachment(this.submissionId);
     this.attachmentFormVisible = false;
   }
 

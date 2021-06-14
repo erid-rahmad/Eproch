@@ -23,9 +23,10 @@ const PriceProposalProp = Vue.extend({
       type: Object,
       default: () => {
         return {};
-      }
-    },
+      },
 
+    },
+    scheduleFromGrid:Object,
     disabled: Boolean,
     loading: Boolean,
 
@@ -35,11 +36,9 @@ const PriceProposalProp = Vue.extend({
         return {};
       }
     },
-
     submissionId: Number
   }
 })
-
 @Component({
   components: {
     SubitemEditor
@@ -266,6 +265,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
   }
 
   created() {
+    console.log("this price proposal",this.scheduleFromGrid)
     this.timerId = setTimeout(() => {
       this.intervalId = setInterval(this.updateCurrentDate, 60000);
       this.updateCurrentDate();
@@ -287,6 +287,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
       });
 
     Promise.allSettled([
+
       this.retrieveSubmission(this.submissionId),
       this.retrieveBiddingLines(this.schedule.biddingId)
     ])
@@ -349,6 +350,10 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
   }
 
   private retrieveBiddingLines(biddingId: number) {
+    if(this.scheduleFromGrid){
+      biddingId=this.scheduleFromGrid.biddingId;
+    }
+    console.log("retrieveBiddingLines",biddingId)
     return new Promise((resolve, reject) => {
       this.loadingLines = true;
       this.commonService(baseApiLines)
@@ -442,7 +447,6 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
 
         (res.data as any[]).forEach(line => {
           console.log("this line",line);
-
           const item = this.lineCache.get(line.biddingLineId);
           item.document=line.document;
           item.id=line.id;

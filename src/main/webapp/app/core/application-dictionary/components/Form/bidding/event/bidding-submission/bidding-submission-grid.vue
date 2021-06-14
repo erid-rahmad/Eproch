@@ -1,13 +1,13 @@
 <template>
     <div class="app-container card-view">
         <div class="toolbar">
-            <el-button v-if="!index" icon="el-icon-close" size="mini" type="danger" @click="onFormClosed">
-                Close
-            </el-button>
-            <el-button v-if="!index" :disabled="!dataChanged" size="mini" type="primary" @click="onFormSaved">
-                <svg-icon name="icomoo/273-checkmark"></svg-icon>
-                Save
-            </el-button>
+<!--            <el-button v-if="!index" icon="el-icon-close" size="mini" type="danger" @click="close" >-->
+<!--                Close-->
+<!--            </el-button>-->
+<!--            <el-button v-if="!index"  size="mini" type="primary" >-->
+<!--                <svg-icon name="icomoo/273-checkmark"></svg-icon>-->
+<!--                Save-->
+<!--            </el-button>-->
 
         </div>
         <div v-if="index" class="card">
@@ -69,7 +69,10 @@
                 <el-table-column label="Modified By" min-width="150" prop="lastModifiedBy" sortable></el-table-column>
             </el-table>
         </div>
-        <div v-if="!index"></div>
+        <div v-if="!index">
+            <bidding-submission :scheduleFromGrid="scheduleFromGrid"></bidding-submission>
+
+        </div>
     </div>
 </template>
 <script lang="ts" src="./bidding-submission-grid.component.ts">
