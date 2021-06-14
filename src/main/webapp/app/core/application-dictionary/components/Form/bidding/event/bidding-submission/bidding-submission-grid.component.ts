@@ -3,8 +3,9 @@ import AlertMixin from "@/shared/alert/alert.mixin";
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 import {Inject} from "vue-property-decorator";
 import DynamicWindowService from "@/core/application-dictionary/components/DynamicWindow/dynamic-window.service";
-import biddingSubmission from"../../submission/registered-bidding-list.vue";
+import biddingSubmission from"./bidding-submission.vue";
 const baseApiUrl = 'api/m-biddings';
+const baseApiSchedule = 'api/m-bidding-schedules';
 
 
 @Component({
@@ -23,6 +24,7 @@ export default class BiddingSubmissionGridComponent extends mixins( AlertMixin,A
   selectedRows: any[] = [];
   stepIndex: number = 0;
   biddingStatuses: any[] = [];
+  scheduleFromGrid:any={};
 
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
@@ -42,9 +44,39 @@ export default class BiddingSubmissionGridComponent extends mixins( AlertMixin,A
   }
 
   view(row){
-    this.index=false;
+
+    console.log("this row",row)
+
+    this.commonService(baseApiSchedule)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `biddingId.equals=${row.id}`
+        ]),
+      })
+      .then(res => {
+        res.data.forEach(item=>{
+          if(item.formType==="S1"){
+            this.scheduleFromGrid = item;
+          }
+        })
+        console.log("this schedule",this.scheduleFromGrid);
+        this.index=false;
+      })
+      .catch(err => {
+        console.error('Failed to get bidding schedule. %O', err);
+        this.$message.error('Failed to get schedule details');
+      })
+      .finally(() => {
+      });
 
   }
+
+  close(){
+    this.index=true;
+  }
+
+
 
   public retrieveAllRecords(): void {
     this.processing = true;

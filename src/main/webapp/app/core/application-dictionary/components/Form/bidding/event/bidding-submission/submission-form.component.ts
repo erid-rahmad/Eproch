@@ -11,6 +11,7 @@ const SubmissionFormProps = Vue.extend({
   props: {
     data: Object,
     submission: Object,
+    scheduleFromGrid:Object,
   }
 })
 
@@ -23,6 +24,8 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
 
   submitConfirmationVisible: boolean = false;
   vendorOptions: any[] = [];
+
+
 
   get dateDisplayFormat() {
     return settings.dateTimeDisplayFormat;
@@ -52,12 +55,15 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
   }
 
   protected onMainFormUpdated(_mainForm: any) {
+
     if (this.isVendor) {
       this.retrieveSubmission(AccountStoreModule.vendorInfo.id);
+      console.log("get isVendor")
     }
   }
 
   onVendorChanged(vendorId: number) {
+    console.log("vendor change",vendorId)
     if (vendorId) {
       this.retrieveSubmission(vendorId);
     } else {
@@ -66,6 +72,10 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
   }
 
   created() {
+    console.log("submissionform",this.mainForm);
+    if(this.scheduleFromGrid){
+      this.mainForm=this.scheduleFromGrid;
+    }
     this.timerId = setTimeout(() => {
       this.intervalId = setInterval(this.updateCurrentDate, 60000);
       this.updateCurrentDate();
@@ -77,7 +87,9 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
     }, (60 - this.currentDate.getSeconds()) * 1000);
 
     if (!this.isVendor) {
-      this.retrieveJoinedVendors(this.biddingScheduleId);
+      if (this.biddingScheduleId) {
+        this.retrieveJoinedVendors(this.biddingScheduleId);
+      }else { this.retrieveJoinedVendors(this.scheduleFromGrid.id)}
     }
   }
 
