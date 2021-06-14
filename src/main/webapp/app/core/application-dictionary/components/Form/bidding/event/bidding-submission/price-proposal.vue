@@ -133,7 +133,7 @@
                         ></el-input>
                     </el-form-item>
                     <el-form-item  label="Attachment" style="margin-top: .5rem">
-                        <el-button v-if="!hasAttachment && isVendor" size="mini" type="primary" @click="attachmentFormVisible = true">
+                        <el-button v-if="!hasAttachment && isVendor" :disabled="disabled" size="mini" type="primary" @click="attachmentFormVisible = true">
                             <svg-icon name="icomoo/206-attachment"></svg-icon> Attachment
                         </el-button>
                         <el-button v-if="hasAttachment" icon="el-icon-view" size="mini" type="primary" @click="handlePreview">

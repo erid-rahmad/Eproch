@@ -50,6 +50,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
   attachmentFormVisible = false;
 
   validationSchema: any = {};
+  validationSchemaAttachment: any = {};
 
   get isVendor() {
     return AccountStoreModule.isVendor;
@@ -78,7 +79,15 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
           type: 'string',
           required: true,
           message: 'Answer is required'
-        }
+        },
+      };
+      this.validationSchemaAttachment = {
+        attachmentName: {
+          type: 'string',
+          required: true,
+          message: 'attachment is required'
+
+        },
       };
     }
 
@@ -310,7 +319,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
 
   save() {
 
-    this.$emit('update:loading', true);
+
     const data: any[] = [];
 
     this.answers.forEach(answer => {
@@ -347,9 +356,28 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
       }
     }
 
+    const validatorA = new Schema(this.validationSchemaAttachment);
+    // let validA = true;
+
+    for (const proposal of this.attachmentHandler.values()) {
+      console.log("this proposal",proposal);
+      validatorA.validate(proposal, (errors: any) => {
+        if (errors) {
+          valid = false;
+          this.$message.error(errors[0].message);
+        }
+      });
+
+      if (!valid) {
+        break;
+      }
+    }
+
     if (!valid) {
       return;
     }
+
+    this.$emit('update:loading', true);
 
     const baseApiUrl = this.isAdministration ? baseApiProposalAdministration : baseApiProposalTechnical
     const evaluationName = proposalNameMap.get(this.data.evaluationMethodLineName);
