@@ -69,6 +69,7 @@ public class MBiddingNegotiationChat extends AbstractAuditingEntity implements S
 
     @PrePersist
     public void assignUUID() {
+        this.active=true;
         this.uid = UUID.randomUUID();
     }
 
