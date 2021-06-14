@@ -44,7 +44,7 @@
         </div>
         <div v-else>
             <BiddingSubmission :biddingrow="rowsa" @back="close" />
-        </div>       
+        </div>
 
         <el-dialog title="Bidding Schedule" :visible.sync="vendorListVisible" width="90%">
             <el-table border :data="BiddingSchedule" size="mini">

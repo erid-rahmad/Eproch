@@ -55,11 +55,20 @@ export default class DetailsAnnouncementForm extends  mixins(EventAnnouncement, 
     })
       .then(res => {
         res.data.forEach(schedule=>{
+          console.log("this schedule",schedule);
           if (schedule.formType=="AN"){
-            this.$set(this.biddingSchedule,'startDate',schedule.startDate);
+            if(schedule.actualStartDate){
+              this.$set(this.biddingSchedule,'startDate',schedule.actualStartDate);
+            }else {
+              this.$set(this.biddingSchedule,'startDate',schedule.startDate);
+            }
           }
-          if (schedule.formType=="E1"){
-            this.$set(this.biddingSchedule,'endDate',schedule.endDate);
+          if (schedule.eventTypeLineName=="Vendor Confirmation"){
+            if(schedule.actualEndDate){
+              this.$set(this.biddingSchedule,'endDate',schedule.actualEndDate);
+            }else {
+              this.$set(this.biddingSchedule,'endDate',schedule.endDate);
+            }
           }
         })
       })

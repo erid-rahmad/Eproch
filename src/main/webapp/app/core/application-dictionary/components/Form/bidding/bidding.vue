@@ -1,174 +1,188 @@
 <template>
-  <div class="app-container card-view bidding-process">
-    <div class="toolbar">
-      <el-button v-if="!index" icon="el-icon-close" size="mini" type="danger" @click="onFormClosed">
-        Close
-      </el-button>
-      <el-button v-if="!index" :disabled="!dataChanged" size="mini" type="primary" @click="onFormSaved">
-        <svg-icon name="icomoo/273-checkmark"></svg-icon> Save
-      </el-button>
-      <el-button v-if="index" class="button" icon="el-icon-plus" size="mini" type="primary" @click="onCreateClicked"></el-button>
-    </div>
-
-    <div v-if="index" class="card">
-      <el-table
-        v-loading="processing"
-        ref="mainGrid"
-        border
-        :data="gridData"
-        :default-sort="gridSchema.defaultSort"
-        :empty-text="gridSchema.emptyText"
-        highlight-current-row
-        size="mini"
-        stripe
-        @current-change="onCurrentRowChanged"
-        @sort-change="changeOrder"
-        @selection-change="onSelectionChanged"
-      >
-        <el-table-column align="center" fixed type="selection" width="48" />
-
-        <el-table-column fixed="right" width="200">
-          <template slot-scope="{ row }">
-            <el-button icon="el-icon-search" size="mini" title="View" type="primary" :underline="false" @click="viewBidding(row)"
-              >View</el-button
+    <div class="app-container card-view bidding-process">
+        <div class="toolbar">
+            <el-button v-if="!index" icon="el-icon-close" size="mini" type="danger" @click="onFormClosed">
+                Close
+            </el-button>
+            <el-button v-if="!index" :disabled="!dataChanged" size="mini" type="primary" @click="onFormSaved">
+                <svg-icon name="icomoo/273-checkmark"></svg-icon>
+                Save
+            </el-button>
+            <el-button v-if="index" class="button" icon="el-icon-plus" size="mini" type="primary"
+                       @click="onCreateClicked"></el-button>
+        </div>
+        <div v-if="index" class="card">
+            <el-table
+                ref="mainGrid"
+                v-loading="processing"
+                :data="gridData"
+                :default-sort="gridSchema.defaultSort"
+                :empty-text="gridSchema.emptyText"
+                border
+                highlight-current-row
+                size="mini"
+                stripe
+                @current-change="onCurrentRowChanged"
+                @sort-change="changeOrder"
+                @selection-change="onSelectionChanged"
             >
-            <el-button size="mini" title="Terminate Bidding" type="danger" :underline="false" @click="terminateBidding(row)">
-              <svg-icon name="icomoo/183-switch"></svg-icon> Terminate
-            </el-button>
-          </template>
-        </el-table-column>
+                <el-table-column align="center" fixed type="selection" width="48"/>
 
-        <el-table-column label="Bidding No." min-width="150" sortable prop="documentNo"></el-table-column>
+                <el-table-column fixed="right" width="200">
+                    <template slot-scope="{ row }">
+                        <el-button :underline="false" icon="el-icon-search" size="mini" title="View" type="primary"
+                                   @click="viewBidding(row)"
+                        >View
+                        </el-button
+                        >
+                        <el-button :underline="false" size="mini" title="Terminate Bidding" type="danger"
+                                   @click="terminateBidding(row)">
+                            <svg-icon name="icomoo/183-switch"></svg-icon>
+                            Terminate
+                        </el-button>
+                    </template>
+                </el-table-column>
 
-        <el-table-column label="Title" min-width="140" prop="name" show-overflow-tooltip sortable></el-table-column>
+                <el-table-column label="Bidding No." min-width="150" prop="documentNo" sortable></el-table-column>
 
-        <el-table-column label="Bidding Type" min-width="130" prop="biddingTypeName" show-overflow-tooltip sortable></el-table-column>
+                <el-table-column label="Title" min-width="140" prop="name" show-overflow-tooltip
+                                 sortable></el-table-column>
 
-        <el-table-column label="Bidding Schedule" min-width="140">
-          <template slot-scope="{ row }">
-            <el-button class="button" size="mini" style="width: 100%" @click="viewBidding(row, 1)">
-              <svg-icon name="icomoo/084-calendar"></svg-icon> View Schedule
-            </el-button>
-          </template>
-        </el-table-column>
+                <el-table-column label="Bidding Type" min-width="130" prop="biddingTypeName" show-overflow-tooltip
+                                 sortable></el-table-column>
 
-        <el-table-column label="Bidding Status" min-width="140" sortable>
-          <template slot-scope="{ row }">
-            {{ formatBiddingStatus(row.biddingStatus) }}
-          </template>
-        </el-table-column>
+                <el-table-column label="Bidding Schedule" min-width="140">
+                    <template slot-scope="{ row }">
+                        <el-button class="button" size="mini" style="width: 100%" @click="viewBidding(row, 1)">
+                            <svg-icon name="icomoo/084-calendar"></svg-icon>
+                            View Schedule
+                        </el-button>
+                    </template>
+                </el-table-column>
 
-        <el-table-column label="Joined Vendor" min-width="140">
-          <template slot-scope="{ row }">
-            <el-button class="button" size="mini" style="width: 100%" @click="viewJoinVendor(row.id)">
-              <svg-icon name="icomoo/115-users"></svg-icon> {{ row.joinedVendorCount }}
-            </el-button>
-          </template>
-        </el-table-column>
+                <el-table-column label="Bidding Status" min-width="140" sortable>
+                    <template slot-scope="{ row }">
+                        {{ formatBiddingStatus(row.biddingStatus) }}
+                    </template>
+                </el-table-column>
 
-        <el-table-column label="Modified Date" min-width="150" prop="lastModifiedDate" sortable>
-          <template slot-scope="{ row }">
-            {{ row.lastModifiedDate | formatDate }}
-          </template>
-        </el-table-column>
+                <el-table-column label="Joined Vendor" min-width="140">
+                    <template slot-scope="{ row }">
+                        <el-button class="button" size="mini" style="width: 100%" @click="viewJoinVendor(row.id)">
+                            <svg-icon name="icomoo/115-users"></svg-icon>
+                            {{ row.joinedVendorCount }}
+                        </el-button>
+                    </template>
+                </el-table-column>
 
-        <el-table-column label="Modified By" prop="lastModifiedBy" min-width="150" sortable></el-table-column>
-      </el-table>
-      <el-pagination
-        ref="pagination"
-        background
-        layout="sizes, prev, pager, next"
-        small
-        :current-page.sync="page"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="itemsPerPage"
-        :total="queryCount"
-        @size-change="changePageSize"
-      ></el-pagination>
+                <el-table-column label="Modified Date" min-width="150" prop="lastModifiedDate" sortable>
+                    <template slot-scope="{ row }">
+                        {{ row.lastModifiedDate | formatDate }}
+                    </template>
+                </el-table-column>
+
+                <el-table-column label="Modified By" min-width="150" prop="lastModifiedBy" sortable></el-table-column>
+            </el-table>
+            <el-pagination
+                ref="pagination"
+                :current-page.sync="page"
+                :page-size="itemsPerPage"
+                :page-sizes="[10, 20, 50, 100]"
+                :total="queryCount"
+                background
+                layout="sizes, prev, pager, next"
+                small
+                @size-change="changePageSize"
+            ></el-pagination>
+        </div>
+
+        <step-form
+            v-else
+            ref="biddingForm"
+            :data="selectedRow"
+            :edit-mode="editMode"
+            :step-index="stepIndex"
+            class="card"
+            @change="onStepChanged"
+        ></step-form>
+
+        <document-action-confirm
+            :action="selectedDocumentAction"
+            :data="selectedRow"
+            :visible.sync="showDocumentActionConfirm"
+        ></document-action-confirm>
+
+        <el-dialog :visible.sync="showJoinedVendors" class="joined-vendor-dialog" title="Joined Vendors" width="40%">
+            <el-table v-loading="loadingJoinedVendors" :data="joinedVendors" border class="vendor-list"
+                      highlight-current-row size="mini">
+                <el-table-column label="No." width="50">
+                    <template slot-scope="{ $index }">
+                        {{ $index + 1 }}
+                    </template>
+                </el-table-column>
+
+                <el-table-column label="Vendor" min-width="150" prop="vendorName" show-overflow-tooltip
+                                 sortable></el-table-column>
+
+                <el-table-column label="Address" min-width="200" prop="location"
+                                 show-overflow-tooltip></el-table-column>
+            </el-table>
+            <div slot="footer">
+                <el-button icon="el-icon-close" size="mini" @click="showJoinedVendors = false">
+                    Close
+                </el-button>
+            </div>
+        </el-dialog>
+
+        <el-dialog :visible.sync="showTerminationDialog" title="Terminate Bidding Confirmation" width="30%">
+            <p>Are you sure you want to terminate the bidding process?</p>
+            <div slot="footer">
+                <el-button icon="el-icon-close" size="mini" style="margin-left: 0px;"
+                           @click="showTerminationDialog = false">
+                    {{ $t('entity.action.cancel') }}
+                </el-button>
+                <el-button size="mini" style="margin-left: 0px;" type="danger" @click="confirmTermination">
+                    <svg-icon name="icomoo/183-switch"></svg-icon>
+                    Terminate
+                </el-button>
+            </div>
+        </el-dialog>
     </div>
-
-    <step-form
-      v-else
-      class="card"
-      ref="biddingForm"
-      :edit-mode="editMode"
-      :data="selectedRow"
-      :step-index="stepIndex"
-      @change="onStepChanged"
-    ></step-form>
-
-    <document-action-confirm
-      :action="selectedDocumentAction"
-      :data="selectedRow"
-      :visible.sync="showDocumentActionConfirm"
-    ></document-action-confirm>
-
-    <el-dialog class="joined-vendor-dialog" width="40%" :visible.sync="showJoinedVendors" title="Joined Vendors">
-      <el-table v-loading="loadingJoinedVendors" border class="vendor-list" :data="joinedVendors" highlight-current-row size="mini">
-        <el-table-column label="No." width="50">
-          <template slot-scope="{ $index }">
-            {{ $index + 1 }}
-          </template>
-        </el-table-column>
-
-        <el-table-column label="Vendor" min-width="150" show-overflow-tooltip sortable prop="vendorName"></el-table-column>
-
-        <el-table-column label="Address" min-width="200" show-overflow-tooltip prop="location"></el-table-column>
-      </el-table>
-      <div slot="footer">
-        <el-button icon="el-icon-close" size="mini" @click="showJoinedVendors = false">
-          Close
-        </el-button>
-      </div>
-    </el-dialog>
-
-    <el-dialog width="30%" :visible.sync="showTerminationDialog" title="Terminate Bidding Confirmation">
-      <p>Are you sure you want to terminate the bidding process?</p>
-      <div slot="footer">
-        <el-button style="margin-left: 0px;" size="mini" icon="el-icon-close" @click="showTerminationDialog = false">
-          {{ $t('entity.action.cancel') }}
-        </el-button>
-        <el-button style="margin-left: 0px;" size="mini" type="danger" @click="confirmTermination">
-          <svg-icon name="icomoo/183-switch"></svg-icon> Terminate
-        </el-button>
-      </div>
-    </el-dialog>
-  </div>
 </template>
 
 <script lang="ts" src="./bidding.component.ts"></script>
 
 <style lang="scss">
 .compact .bidding-process {
-  display: grid;
-  grid-template-columns: 100%;
-  grid-template-rows: 36px auto;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 36px auto;
 
-  .joined-vendor-dialog .el-table.vendor-list {
-    td {
-      height: 35px;
+    .joined-vendor-dialog .el-table.vendor-list {
+        td {
+            height: 35px;
+        }
     }
-  }
 }
 
 .el-table__fixed,
 .el-table__fixed-right {
-  box-shadow: none;
+    box-shadow: none;
 }
 
 .main {
-  padding: 0px;
+    padding: 0px;
 
-  .button {
-    width: 100%;
-  }
+    .button {
+        width: 100%;
+    }
 }
 
 .toolbar {
-  padding: 4px 16px;
+    padding: 4px 16px;
 }
 
 .form-input {
-  width: 100%;
+    width: 100%;
 }
 </style>
