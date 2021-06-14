@@ -2,15 +2,13 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
+import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -51,6 +49,7 @@ public class MRequisitionCriteria implements Serializable, Criteria {
     private LongFilter adOrganizationId;
 
     private LongFilter documentTypeId;
+    private StringFilter documentTypeName;
 
     private LongFilter currencyId;
 
@@ -75,6 +74,7 @@ public class MRequisitionCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.documentTypeId = other.documentTypeId == null ? null : other.documentTypeId.copy();
+        this.documentTypeName = other.documentTypeName == null ? null : other.documentTypeName.copy();
         this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
         this.warehouseId = other.warehouseId == null ? null : other.warehouseId.copy();
         this.costCenterId = other.costCenterId == null ? null : other.costCenterId.copy();
@@ -193,6 +193,14 @@ public class MRequisitionCriteria implements Serializable, Criteria {
         return currencyId;
     }
 
+    public StringFilter getDocumentTypeName() {
+        return documentTypeName;
+    }
+
+    public void setDocumentTypeName(StringFilter documentTypeName) {
+        this.documentTypeName = documentTypeName;
+    }
+
     public void setCurrencyId(LongFilter currencyId) {
         this.currencyId = currencyId;
     }
@@ -237,6 +245,7 @@ public class MRequisitionCriteria implements Serializable, Criteria {
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(documentTypeId, that.documentTypeId) &&
+            Objects.equals(documentTypeName, that.documentTypeName) &&
             Objects.equals(currencyId, that.currencyId) &&
             Objects.equals(warehouseId, that.warehouseId) &&
             Objects.equals(costCenterId, that.costCenterId);
@@ -258,6 +267,7 @@ public class MRequisitionCriteria implements Serializable, Criteria {
         active,
         adOrganizationId,
         documentTypeId,
+        documentTypeName,
         currencyId,
         warehouseId,
         costCenterId
@@ -280,6 +290,7 @@ public class MRequisitionCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (documentTypeId != null ? "documentTypeId=" + documentTypeId + ", " : "") +
+                (documentTypeName != null ? "documentTypeName=" + documentTypeName + ", " : "") +
                 (currencyId != null ? "currencyId=" + currencyId + ", " : "") +
                 (warehouseId != null ? "warehouseId=" + warehouseId + ", " : "") +
                 (costCenterId != null ? "costCenterId=" + costCenterId + ", " : "") +

@@ -127,7 +127,11 @@ public class MRequisitionQueryService extends QueryService<MRequisition> {
             }
             if (criteria.getDocumentTypeId() != null) {
                 specification = specification.and(buildSpecification(criteria.getDocumentTypeId(),
-                    root -> root.join(MRequisition_.documentType, JoinType.LEFT).get(CDocumentType_.id)));
+                    root -> root.join(MRequisition_.documentType, JoinType.INNER).get(CDocumentType_.id)));
+            }
+            if (criteria.getDocumentTypeName() != null) {
+                specification = specification.and(buildSpecification(criteria.getDocumentTypeName(),
+                    root -> root.join(MRequisition_.documentType, JoinType.INNER).get(CDocumentType_.name)));
             }
             if (criteria.getCurrencyId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCurrencyId(),
