@@ -1,48 +1,81 @@
 <template>
     <div v-if="" class="bidding-evaluation card-view">
-        <el-row  class="toolbar">
+        <el-row class="toolbar">
             <el-col :span="24">
-                <el-button  size="mini"
-                            style="margin-left: 10px"
-                            type="danger"
-                            @click="close">
+                <el-button size="mini"
+                           style="margin-left: 10px"
+                           type="danger"
+                           @click="close">
                     Close
                 </el-button>
-                <el-button  size="mini"
-                            v-if="button===0"
-                            style="margin-left: 10px"
-                            type="primary"
-                            @click="submitEvaluation">
+                <el-button v-if="button===0"
+                           size="mini"
+                           style="margin-left: 10px"
+                           type="primary"
+                           @click="dialogSubmitEvaluation=true">
                     Submit
                 </el-button>
-                <el-button  size="mini"
-                            v-if="button===1"
-                            style="margin-left: 10px"
-                            type="primary"
-                            @click="approveEvaluation">
+                <el-dialog
+                    :visible.sync="dialogSubmitEvaluation"
+                    title="Tips"
+                    width="30%">
+                    <span>Submit Evaluation ?</span>
+                    <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogSubmitEvaluation = false">Cancel</el-button>
+                    <el-button type="primary" @click="submitEvaluation">Confirm</el-button>
+                </span>
+                </el-dialog>
+                <el-button v-if="button===1"
+                           size="mini"
+                           style="margin-left: 10px"
+                           type="primary"
+                           @click="dialogApproveEvaluation=true">
                     Approve
                 </el-button>
-                <el-button  size="mini"
-                            v-if="button===1"
-                            style="margin-left: 10px"
-                            type="primary"
-                            @click="rejectEvaluation">
+                <el-dialog
+                    :visible.sync="dialogApproveEvaluation"
+                    title="Tips"
+                    width="30%">
+                    <span>Approve Evaluation ?</span>
+                    <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogApproveEvaluation=false">Cancel</el-button>
+                    <el-button type="primary" @click="approveEvaluation">Confirm</el-button>
+                </span>
+                </el-dialog>
+                <el-button v-if="button===1"
+                           size="mini"
+                           style="margin-left: 10px"
+                           type="primary"
+                           @click="dialogRejectEvaluation=true">
                     Reject
                 </el-button>
-                <el-button  size="mini"
-                            v-if="button===2"
-                            style="margin-left: 10px"
-                            type="danger"
-                            disabled="true"
-                            >
+                <template>
+                    <el-dialog
+                        :visible.sync="dialogRejectEvaluation"
+                        title="Tips"
+                        width="30%">
+                        <span>Reject Evaluation ?</span>
+                        <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogRejectEvaluation=false">Cancel</el-button>
+                    <el-button type="primary" @click="rejectEvaluation">Confirm</el-button>
+                </span>
+                    </el-dialog>
+                </template>
+
+                <el-button v-if="button===2"
+                           disabled="true"
+                           size="mini"
+                           style="margin-left: 10px"
+                           type="danger"
+                >
                     Rejected
                 </el-button>
-                <el-button  size="mini"
-                            v-if="button===3"
-                            style="margin-left: 10px"
-                            type="primary"
-                            disabled="true"
-                           >
+                <el-button v-if="button===3"
+                           disabled="true"
+                           size="mini"
+                           style="margin-left: 10px"
+                           type="primary"
+                >
                     Approved
                 </el-button>
                 <el-button v-for="MethodLine in VendorScoringLine"
@@ -54,7 +87,8 @@
             </el-col>
         </el-row>
         <div class="card">
-            <el-form  v-if="FormMenu===0 || FormMenu===2|| FormMenu===3" ref="productCatalog" label-position="left" label-width="130px"
+            <el-form v-if="FormMenu===0 || FormMenu===2|| FormMenu===3" ref="productCatalog" label-position="left"
+                     label-width="130px"
                      size="mini">
                 <el-form-item label="Bidding No">
                     {{ evaluation.biddingNo }}
@@ -72,14 +106,16 @@
                     {{ evaluation.vendorName }}
                 </el-form-item>
             </el-form>
-            <div v-if="FormMenu===1" >
-                <EvaluationTeamDetailPrice ref="evaluationFormDetail" :evaluationFormProp="evaluationFormProp" :readOnly="readOnly" ></EvaluationTeamDetailPrice>
+            <div v-if="FormMenu===1">
+                <EvaluationTeamDetailPrice ref="evaluationFormDetail" :evaluationFormProp="evaluationFormProp"
+                                           :readOnly="readOnly"></EvaluationTeamDetailPrice>
             </div>
             <div v-if="FormMenu===2">
                 <el-divider content-position="left">
                     <h4>Evaluation</h4>
                 </el-divider>
-                <EvaluationFormDetail :evaluationFormProp="evaluationFormProp" :readOnly="readOnly" :SelectVendorScoringLine="SelectVendorScoringLine" ></EvaluationFormDetail>
+                <EvaluationFormDetail :SelectVendorScoringLine="SelectVendorScoringLine" :evaluationFormProp="evaluationFormProp"
+                                      :readOnly="readOnly"></EvaluationFormDetail>
             </div>
 
         </div>

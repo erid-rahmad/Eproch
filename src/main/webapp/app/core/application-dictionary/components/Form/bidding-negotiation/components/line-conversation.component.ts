@@ -67,7 +67,7 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   refreshChat(){
     this.commonService(this.negotiationChatApi).retrieve({
       criteriaQuery: this.updateCriteria([
-        'active.equals=true',
+        //'active.equals=true',
         `negotiationLineId.equals=${this.line.id}`
       ]),
       paginationQuery: {
@@ -231,7 +231,7 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
     this.showNegoForm=true;
     this.commonService(this.negoPriceLineApi).retrieve({
       criteriaQuery: this.updateCriteria([
-        'active.equals=true',
+        //'active.equals=true',
         `negotiationPriceId.equals=${this.line.negoPriceId}`
       ]),
       paginationQuery: {
@@ -245,7 +245,7 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
     });
     this.commonService(this.negoPriceApi).retrieve({
       criteriaQuery: this.updateCriteria([
-        'active.equals=true',
+        //'active.equals=true',
         `negotiationPriceId.equals=${this.line.negoPriceId}`
       ]),
       paginationQuery: {

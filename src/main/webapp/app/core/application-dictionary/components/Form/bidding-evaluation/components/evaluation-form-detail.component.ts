@@ -202,11 +202,6 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
                 this.questions.set(subCriteriaLine.id, subCriteriaLine);
                 z=z+subCriteriaLine.score;
               });
-              if(z!==100){
-                let zz =z.toString();
-                this.$message.error(`Average SubCriteriaLine = ${z}`);
-              }
-              // console.log("this z",z)
             });
           });
           if(y!==100){
@@ -304,7 +299,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
       .retrieve({
         criteriaQuery: [
           // 'active.equals=true',
-          // `biddingSubmissionId.equals=${SubmissionId}`
+          `biddingSubmissionId.equals=${SubmissionId}`
         ],
         paginationQuery: {
           page: 0,
@@ -367,7 +362,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
     let s=0;
     this.questions.forEach(question_=>{
       console.log("this ques",question_)
-      let y=question_.evaluation*question_.score/100*question_.SubCriteriaWeight/100*question_.CriteriaWeight/100;
+      let y=100*question_.SubCriteriaWeight/100*question_.CriteriaWeight/100;
       x=x+y;
       s++;
     })

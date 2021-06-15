@@ -12,6 +12,15 @@ const enum SubmissionPage {
   PROPOSAL = 'proposal'
 }
 
+const SubmissionProps = Vue.extend({
+  props: {
+    scheduleFromGrid:{
+      type: Object,
+      default: () => {}
+    }
+  }
+})
+
 @Component({
   components: {
     SubmissionForm,
@@ -19,7 +28,7 @@ const enum SubmissionPage {
     ProposalForm
   }
 })
-export default class BiddingSubmissionEvent extends Vue {
+export default class BiddingSubmissionEvent extends SubmissionProps {
 
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
@@ -27,6 +36,7 @@ export default class BiddingSubmissionEvent extends Vue {
   section: SubmissionPage = SubmissionPage.SUBMISSION;
   formType: string = null;
   loading: boolean = false;
+
 
   schedule: any = {};
   evaluationList: any[] = [];
@@ -47,7 +57,6 @@ export default class BiddingSubmissionEvent extends Vue {
     if (this.isVendor) {
       return this.submitted;
     }
-
     return this.proposalName === 'P' && this.submitted;
   }
 
@@ -64,7 +73,6 @@ export default class BiddingSubmissionEvent extends Vue {
     if (this.proposalName === 'P') {
       return 'price-proposal';
     }
-
     return `proposal-form`;
   }
 
@@ -73,6 +81,7 @@ export default class BiddingSubmissionEvent extends Vue {
   }
 
   onSubmissionFormLoaded(data: any) {
+    console.log("load onSubmissionFormLoaded")
     this.formType = data.formType;
     this.schedule = data;
 
@@ -81,8 +90,13 @@ export default class BiddingSubmissionEvent extends Vue {
   }
 
   created() {
+    if (this.scheduleFromGrid){
+      this.retrieveVendorScoringLines(this.scheduleFromGrid.biddingId,"S1");
+    }
+    console.log("satu",this.scheduleFromGrid);
     const submissionId = (this.$route.query.submissionId as string);
     if (submissionId) {
+      console.log("dua")
       this.submission = {
         id: submissionId
       };
@@ -113,6 +127,7 @@ export default class BiddingSubmissionEvent extends Vue {
   }
 
   private retrieveVendorScoringLines(biddingId: number, formType: string) {
+    console.log("biddingId formType ",biddingId,formType)
     this.commonService(baseApiVendorScoringLine)
       .retrieve({
         criteriaQuery: [

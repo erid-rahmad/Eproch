@@ -323,44 +323,67 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
   }
 
   publish() {
-    this.loading = true;
-    console.log("this vendor suggestion ",this.vendorSuggestions)
-    if (this.selectedRecipients.length == 0) {
-      this.$message.error('Please select at least one recipient');
-    } else {
-      const data = {
-        announcement: this.formData,
-        bidding: {
-          id: this.mainForm.biddingId,
-          name: this.mainForm.biddingTitle,
-          documentNo: this.mainForm.biddingNo
-        },
-        users: [],
-        vendor: this.vendorSuggestions,
 
-      };
+    (<ElForm>this.$refs.mainForm).validate((passed, errors) => {
+      if (passed) {
+        this.loading = true;
+        this.commonService(baseApiAnnouncement)
+          .create(this.formData)
+          .then(res => {
+            this.formData = res;
+            this.$message.success('Announcement has been saved successfully');
 
-      for (const recipient of this.selectedRecipients) {
-        const {
-          createdBy,
-          createdDate,
-          lastModifiedBy,
-          lastModifiedDate,
-          password,
-          ...user
-        } = recipient;
-        data.users.push(user);
+
+            this.loading = true;
+            console.log("this vendor suggestion ",this.vendorSuggestions)
+            if (this.selectedRecipients.length == 0) {
+              this.$message.error('Please select at least one recipient');
+            } else {
+              const data = {
+                announcement: this.formData,
+                bidding: {
+                  id: this.mainForm.biddingId,
+                  name: this.mainForm.biddingTitle,
+                  documentNo: this.mainForm.biddingNo
+                },
+                users: [],
+                vendor: this.vendorSuggestions,
+
+              };
+
+              for (const recipient of this.selectedRecipients) {
+                const {
+                  createdBy,
+                  createdDate,
+                  lastModifiedBy,
+                  lastModifiedDate,
+                  password,
+                  ...user
+                } = recipient;
+                data.users.push(user);
+              }
+
+              this.commonService(`${baseApiAnnouncement}/publish/${data.announcement.id}`)
+                .create(data)
+                .then(() => {
+                  this.$message.success('Announcement has been published successfully');
+                  this.recipientListVisible = false;
+                })
+                .catch(() => this.$message.error('Failed to publish bidding announcement'))
+                .finally(() => this.loading = false);
+            }
+
+
+          })
+          .catch(_err => this.$message.error('Failed to save the announcement'))
+          .finally(() => this.loading = false);
       }
+    })
 
-      this.commonService(`${baseApiAnnouncement}/publish/${data.announcement.id}`)
-        .create(data)
-        .then(() => {
-          this.$message.success('Announcement has been published successfully');
-          this.recipientListVisible = false;
-        })
-        .catch(() => this.$message.error('Failed to publish bidding announcement'))
-        .finally(() => this.loading = false);
-    }
+
+
+
+
   }
 
   saveAsDraft() {

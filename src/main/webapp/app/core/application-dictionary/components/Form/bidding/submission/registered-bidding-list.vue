@@ -10,7 +10,7 @@
       >
         Close
       </el-button>
-      
+
       <el-button
         v-if="!mainPage && !submissionPage"
         icon="el-icon-back"
@@ -20,7 +20,7 @@
       >
         Back
       </el-button>
-      
+
       <el-button
         v-if="submissionPage && isVendor"
         :disabled="submitted"
@@ -30,7 +30,7 @@
       >
         <svg-icon name="guide"></svg-icon> Submit
       </el-button>
-      
+
       <el-button
         v-if="!mainPage && !submissionPage && !submitted"
         :loading="loading"
@@ -115,7 +115,7 @@
               </el-button>
             </template>
           </el-table-column>
-          
+
           <el-table-column
             label="Bidding Status"
             min-width="140"

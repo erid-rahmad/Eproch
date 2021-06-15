@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity MAuction.
     -->
@@ -76,7 +76,7 @@
     <changeSet id="20210524031800-1-relations" author="jhipster">
 
     </changeSet>
-    
+
     <!-- Added the entity audit columns -->
     <changeSet id="20210524031800-audit-1" author="jhipster-entity-audit">
         <addColumn tableName="m_auction">
@@ -155,7 +155,7 @@
     <changeSet id="20210612071800" author="Ananta Aryadewa">
         <addColumn tableName="m_auction">
             <column name="document_type_id" type="bigint">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
             </column>
         </addColumn>
         <addNotNullConstraint tableName="m_auction" columnName="currency_id" />
