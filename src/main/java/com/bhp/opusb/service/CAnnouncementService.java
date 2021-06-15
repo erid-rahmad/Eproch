@@ -145,8 +145,8 @@ public class CAnnouncementService {
         }
 
         // Update the announcement published date.
-//         cAnnouncement.setPublishDate(ZonedDateTime.now());
-//        cAnnouncementRepository.save(cAnnouncement);
+         cAnnouncement.setPublishDate(ZonedDateTime.now());
+        cAnnouncementRepository.save(cAnnouncement);
     }
 
     public Map<String,Object> emailInvitation (Long id){
