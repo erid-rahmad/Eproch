@@ -155,7 +155,7 @@
     <changeSet id="20210612071800" author="Ananta Aryadewa">
         <addColumn tableName="m_auction">
             <column name="document_type_id" type="bigint">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
         </addColumn>
         <addNotNullConstraint tableName="m_auction" columnName="currency_id" />
