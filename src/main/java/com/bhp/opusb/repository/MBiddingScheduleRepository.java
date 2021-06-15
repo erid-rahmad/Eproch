@@ -18,6 +18,6 @@ import org.springframework.stereotype.Repository;
 public interface MBiddingScheduleRepository extends JpaRepository<MBiddingSchedule, Long>, JpaSpecificationExecutor<MBiddingSchedule> {
 
   @Modifying
-  @Query("DELETE FROM MBiddingSchedule s WHERE s.eventTypeLine.id NOT IN (:lineIds)")
-  int deleteByEventTypeLineIdNotIn(@Param("lineIds") Collection<Long> eventTypeLineIds);
+  @Query("DELETE FROM MBiddingSchedule s WHERE s.eventTypeLine.id NOT IN (:lineIds) AND s.bidding.id = :biddingId")
+  int deleteByEventTypeLineIdNotIn(@Param("lineIds") Collection<Long> eventTypeLineIds, @Param("biddingId") Long biddingId);
 }

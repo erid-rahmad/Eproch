@@ -89,11 +89,11 @@ public class MBiddingScheduleService {
             mBiddingScheduleRepository.saveAll(schedules);
         } else {
             // Delete unrelated schedules.
-            mBiddingScheduleRepository.deleteByEventTypeLineIdNotIn(
-                cEventTypelineDTOs.stream()
-                    .map(CEventTypelineDTO::getId)
-                    .collect(Collectors.toList())
-            );
+            final List<Long> lineIds = cEventTypelineDTOs.stream()
+                .map(CEventTypelineDTO::getId)
+                .collect(Collectors.toList());
+
+            mBiddingScheduleRepository.deleteByEventTypeLineIdNotIn(lineIds, mBidding.getId());
         }
     }
 
