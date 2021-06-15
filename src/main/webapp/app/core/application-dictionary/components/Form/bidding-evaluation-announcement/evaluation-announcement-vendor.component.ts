@@ -90,9 +90,14 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
 
     this.commonService("api/m-bidding-results")
       .retrieve({
-        criteriaQuery: this.updateCriteria([
-
-        ])
+        criteriaQuery: [
+          'active.equals=true'
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id,desc']
+        }
       })
       .then(res => {
         this.biddingResults=res.data;
