@@ -10,25 +10,21 @@ import org.mapstruct.Mapping;
 /**
  * Mapper for the entity {@link MAuctionSubmission} and its DTO {@link MAuctionSubmissionDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, MAuctionItemMapper.class, CVendorMapper.class})
+@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, MAuctionMapper.class, CVendorMapper.class})
 public interface MAuctionSubmissionMapper extends EntityMapper<MAuctionSubmissionDTO, MAuctionSubmission> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
-    @Mapping(source = "auctionItem.id", target = "auctionItemId")
-    @Mapping(source = "auctionItem.product.name", target = "auctionItemName")
-    @Mapping(source = "auctionItem.uom.code", target = "auctionItemUom")
-    @Mapping(source = "auctionItem.quantity", target = "auctionItemQuantity")
-    @Mapping(source = "auctionItem.ceilingPrice", target = "auctionItemCeilingPrice")
-    @Mapping(source = "auctionItem.bidDecrement", target = "auctionItemBidDecrement")
-    @Mapping(source = "auctionItem.protectBackBuffer", target = "auctionItemBackBuffer")
-    @Mapping(source = "auctionItem.protectFrontBuffer", target = "auctionItemFrontBuffer")
+    @Mapping(source = "auction.id", target = "auctionId")
+    @Mapping(source = "auction.name", target = "auctionName")
+    @Mapping(source = "auction.documentNo", target = "auctionDocumentNo")
+    @Mapping(source = "auction.documentStatus", target = "auctionDocumentStatus")
     @Mapping(source = "vendor.id", target = "vendorId")
     @Mapping(source = "vendor.name", target = "vendorName")
     MAuctionSubmissionDTO toDto(MAuctionSubmission mAuctionSubmission);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")
-    @Mapping(source = "auctionItemId", target = "auctionItem")
+    @Mapping(source = "auctionId", target = "auction")
     @Mapping(source = "vendorId", target = "vendor")
     MAuctionSubmission toEntity(MAuctionSubmissionDTO mAuctionSubmissionDTO);
 

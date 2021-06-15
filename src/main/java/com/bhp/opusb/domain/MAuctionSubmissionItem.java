@@ -1,5 +1,6 @@
 package com.bhp.opusb.domain;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -19,17 +20,21 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * A MAuctionSubmission.
+ * A MAuctionSubmissionItem.
  */
 @Entity
-@Table(name = "m_auction_submission")
+@Table(name = "m_auction_submission_item")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MAuctionSubmission extends AbstractAuditingEntity {
+public class MAuctionSubmissionItem extends AbstractAuditingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
+
+    @NotNull
+    @Column(name = "price", precision = 21, scale = 2, nullable = false)
+    private BigDecimal price;
 
     @Column(name = "uid")
     private UUID uid;
@@ -39,18 +44,18 @@ public class MAuctionSubmission extends AbstractAuditingEntity {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("mAuctionSubmissions")
+    @JsonIgnoreProperties("mAuctionSubmissionItems")
     private ADOrganization adOrganization;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("mAuctionSubmissions")
-    private MAuction auction;
+    @JsonIgnoreProperties("mAuctionSubmissionItems")
+    private MAuctionSubmission auctionSubmission;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("mAuctionSubmissions")
-    private CVendor vendor;
+    @JsonIgnoreProperties("mAuctionSubmissionItems")
+    private MAuctionItem auctionItem;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -61,11 +66,24 @@ public class MAuctionSubmission extends AbstractAuditingEntity {
         this.id = id;
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public MAuctionSubmissionItem price(BigDecimal price) {
+        this.price = price;
+        return this;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
     public UUID getUid() {
         return uid;
     }
 
-    public MAuctionSubmission uid(UUID uid) {
+    public MAuctionSubmissionItem uid(UUID uid) {
         this.uid = uid;
         return this;
     }
@@ -78,7 +96,7 @@ public class MAuctionSubmission extends AbstractAuditingEntity {
         return active;
     }
 
-    public MAuctionSubmission active(Boolean active) {
+    public MAuctionSubmissionItem active(Boolean active) {
         this.active = active;
         return this;
     }
@@ -91,7 +109,7 @@ public class MAuctionSubmission extends AbstractAuditingEntity {
         return adOrganization;
     }
 
-    public MAuctionSubmission adOrganization(ADOrganization aDOrganization) {
+    public MAuctionSubmissionItem adOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
         return this;
     }
@@ -100,30 +118,30 @@ public class MAuctionSubmission extends AbstractAuditingEntity {
         this.adOrganization = aDOrganization;
     }
 
-    public MAuction getAuction() {
-        return auction;
+    public MAuctionSubmission getAuctionSubmission() {
+        return auctionSubmission;
     }
 
-    public MAuctionSubmission auction(MAuction mAuction) {
-        this.auction = mAuction;
+    public MAuctionSubmissionItem auctionSubmission(MAuctionSubmission mAuctionSubmission) {
+        this.auctionSubmission = mAuctionSubmission;
         return this;
     }
 
-    public void setAuction(MAuction mAuction) {
-        this.auction = mAuction;
+    public void setAuctionSubmission(MAuctionSubmission mAuctionSubmission) {
+        this.auctionSubmission = mAuctionSubmission;
     }
 
-    public CVendor getVendor() {
-        return vendor;
+    public MAuctionItem getAuctionItem() {
+        return auctionItem;
     }
 
-    public MAuctionSubmission vendor(CVendor cVendor) {
-        this.vendor = cVendor;
+    public MAuctionSubmissionItem auctionItem(MAuctionItem mAuctionItem) {
+        this.auctionItem = mAuctionItem;
         return this;
     }
 
-    public void setVendor(CVendor cVendor) {
-        this.vendor = cVendor;
+    public void setAuctionItem(MAuctionItem mAuctionItem) {
+        this.auctionItem = mAuctionItem;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -137,10 +155,10 @@ public class MAuctionSubmission extends AbstractAuditingEntity {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof MAuctionSubmission)) {
+        if (!(o instanceof MAuctionSubmissionItem)) {
             return false;
         }
-        return id != null && id.equals(((MAuctionSubmission) o).id);
+        return id != null && id.equals(((MAuctionSubmissionItem) o).id);
     }
 
     @Override
@@ -150,8 +168,9 @@ public class MAuctionSubmission extends AbstractAuditingEntity {
 
     @Override
     public String toString() {
-        return "MAuctionSubmission{" +
+        return "MAuctionSubmissionItem{" +
             "id=" + getId() +
+            ", price=" + getPrice() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

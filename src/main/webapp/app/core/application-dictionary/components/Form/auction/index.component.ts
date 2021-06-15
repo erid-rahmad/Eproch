@@ -254,7 +254,7 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
   private retrieveAuctionStatuses() {
     this.commonService(null).retrieveReferenceLists('auctionStatus')
       .then(res => this.biddingStatuses = res)
-      .catch(err => this.$message.warning('Failed to get bidding statuses'));
+      .catch(err => this.$message.warning('Failed to get auction statuses'));
   }
 
   private retrieveDocStatuses() {

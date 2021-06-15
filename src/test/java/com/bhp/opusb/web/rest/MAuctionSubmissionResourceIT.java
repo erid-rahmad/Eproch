@@ -3,7 +3,7 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MAuctionSubmission;
 import com.bhp.opusb.domain.ADOrganization;
-import com.bhp.opusb.domain.MAuctionItem;
+import com.bhp.opusb.domain.MAuction;
 import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.repository.MAuctionSubmissionRepository;
 import com.bhp.opusb.service.MAuctionSubmissionService;
@@ -22,7 +22,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,10 +38,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @WithMockUser
 public class MAuctionSubmissionResourceIT {
-
-    private static final BigDecimal DEFAULT_PRICE = new BigDecimal(1);
-    private static final BigDecimal UPDATED_PRICE = new BigDecimal(2);
-    private static final BigDecimal SMALLER_PRICE = new BigDecimal(1 - 1);
 
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
@@ -78,7 +73,6 @@ public class MAuctionSubmissionResourceIT {
      */
     public static MAuctionSubmission createEntity(EntityManager em) {
         MAuctionSubmission mAuctionSubmission = new MAuctionSubmission()
-            .price(DEFAULT_PRICE)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -92,15 +86,15 @@ public class MAuctionSubmissionResourceIT {
         }
         mAuctionSubmission.setAdOrganization(aDOrganization);
         // Add required entity
-        MAuctionItem mAuctionItem;
-        if (TestUtil.findAll(em, MAuctionItem.class).isEmpty()) {
-            mAuctionItem = MAuctionItemResourceIT.createEntity(em);
-            em.persist(mAuctionItem);
+        MAuction mAuction;
+        if (TestUtil.findAll(em, MAuction.class).isEmpty()) {
+            mAuction = MAuctionResourceIT.createEntity(em);
+            em.persist(mAuction);
             em.flush();
         } else {
-            mAuctionItem = TestUtil.findAll(em, MAuctionItem.class).get(0);
+            mAuction = TestUtil.findAll(em, MAuction.class).get(0);
         }
-        mAuctionSubmission.setAuctionItem(mAuctionItem);
+        mAuctionSubmission.setAuction(mAuction);
         // Add required entity
         CVendor cVendor;
         if (TestUtil.findAll(em, CVendor.class).isEmpty()) {
@@ -121,7 +115,6 @@ public class MAuctionSubmissionResourceIT {
      */
     public static MAuctionSubmission createUpdatedEntity(EntityManager em) {
         MAuctionSubmission mAuctionSubmission = new MAuctionSubmission()
-            .price(UPDATED_PRICE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -135,15 +128,15 @@ public class MAuctionSubmissionResourceIT {
         }
         mAuctionSubmission.setAdOrganization(aDOrganization);
         // Add required entity
-        MAuctionItem mAuctionItem;
-        if (TestUtil.findAll(em, MAuctionItem.class).isEmpty()) {
-            mAuctionItem = MAuctionItemResourceIT.createUpdatedEntity(em);
-            em.persist(mAuctionItem);
+        MAuction mAuction;
+        if (TestUtil.findAll(em, MAuction.class).isEmpty()) {
+            mAuction = MAuctionResourceIT.createUpdatedEntity(em);
+            em.persist(mAuction);
             em.flush();
         } else {
-            mAuctionItem = TestUtil.findAll(em, MAuctionItem.class).get(0);
+            mAuction = TestUtil.findAll(em, MAuction.class).get(0);
         }
-        mAuctionSubmission.setAuctionItem(mAuctionItem);
+        mAuctionSubmission.setAuction(mAuction);
         // Add required entity
         CVendor cVendor;
         if (TestUtil.findAll(em, CVendor.class).isEmpty()) {
@@ -178,7 +171,6 @@ public class MAuctionSubmissionResourceIT {
         List<MAuctionSubmission> mAuctionSubmissionList = mAuctionSubmissionRepository.findAll();
         assertThat(mAuctionSubmissionList).hasSize(databaseSizeBeforeCreate + 1);
         MAuctionSubmission testMAuctionSubmission = mAuctionSubmissionList.get(mAuctionSubmissionList.size() - 1);
-        assertThat(testMAuctionSubmission.getPrice()).isEqualTo(DEFAULT_PRICE);
         assertThat(testMAuctionSubmission.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testMAuctionSubmission.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -206,25 +198,6 @@ public class MAuctionSubmissionResourceIT {
 
     @Test
     @Transactional
-    public void checkPriceIsRequired() throws Exception {
-        int databaseSizeBeforeTest = mAuctionSubmissionRepository.findAll().size();
-        // set the field null
-        mAuctionSubmission.setPrice(null);
-
-        // Create the MAuctionSubmission, which fails.
-        MAuctionSubmissionDTO mAuctionSubmissionDTO = mAuctionSubmissionMapper.toDto(mAuctionSubmission);
-
-        restMAuctionSubmissionMockMvc.perform(post("/api/m-auction-submissions")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(mAuctionSubmissionDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<MAuctionSubmission> mAuctionSubmissionList = mAuctionSubmissionRepository.findAll();
-        assertThat(mAuctionSubmissionList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllMAuctionSubmissions() throws Exception {
         // Initialize the database
         mAuctionSubmissionRepository.saveAndFlush(mAuctionSubmission);
@@ -234,7 +207,6 @@ public class MAuctionSubmissionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mAuctionSubmission.getId().intValue())))
-            .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -250,7 +222,6 @@ public class MAuctionSubmissionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(mAuctionSubmission.getId().intValue()))
-            .andExpect(jsonPath("$.price").value(DEFAULT_PRICE.intValue()))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -272,111 +243,6 @@ public class MAuctionSubmissionResourceIT {
 
         defaultMAuctionSubmissionShouldBeFound("id.lessThanOrEqual=" + id);
         defaultMAuctionSubmissionShouldNotBeFound("id.lessThan=" + id);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllMAuctionSubmissionsByPriceIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mAuctionSubmissionRepository.saveAndFlush(mAuctionSubmission);
-
-        // Get all the mAuctionSubmissionList where price equals to DEFAULT_PRICE
-        defaultMAuctionSubmissionShouldBeFound("price.equals=" + DEFAULT_PRICE);
-
-        // Get all the mAuctionSubmissionList where price equals to UPDATED_PRICE
-        defaultMAuctionSubmissionShouldNotBeFound("price.equals=" + UPDATED_PRICE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMAuctionSubmissionsByPriceIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        mAuctionSubmissionRepository.saveAndFlush(mAuctionSubmission);
-
-        // Get all the mAuctionSubmissionList where price not equals to DEFAULT_PRICE
-        defaultMAuctionSubmissionShouldNotBeFound("price.notEquals=" + DEFAULT_PRICE);
-
-        // Get all the mAuctionSubmissionList where price not equals to UPDATED_PRICE
-        defaultMAuctionSubmissionShouldBeFound("price.notEquals=" + UPDATED_PRICE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMAuctionSubmissionsByPriceIsInShouldWork() throws Exception {
-        // Initialize the database
-        mAuctionSubmissionRepository.saveAndFlush(mAuctionSubmission);
-
-        // Get all the mAuctionSubmissionList where price in DEFAULT_PRICE or UPDATED_PRICE
-        defaultMAuctionSubmissionShouldBeFound("price.in=" + DEFAULT_PRICE + "," + UPDATED_PRICE);
-
-        // Get all the mAuctionSubmissionList where price equals to UPDATED_PRICE
-        defaultMAuctionSubmissionShouldNotBeFound("price.in=" + UPDATED_PRICE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMAuctionSubmissionsByPriceIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        mAuctionSubmissionRepository.saveAndFlush(mAuctionSubmission);
-
-        // Get all the mAuctionSubmissionList where price is not null
-        defaultMAuctionSubmissionShouldBeFound("price.specified=true");
-
-        // Get all the mAuctionSubmissionList where price is null
-        defaultMAuctionSubmissionShouldNotBeFound("price.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllMAuctionSubmissionsByPriceIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        mAuctionSubmissionRepository.saveAndFlush(mAuctionSubmission);
-
-        // Get all the mAuctionSubmissionList where price is greater than or equal to DEFAULT_PRICE
-        defaultMAuctionSubmissionShouldBeFound("price.greaterThanOrEqual=" + DEFAULT_PRICE);
-
-        // Get all the mAuctionSubmissionList where price is greater than or equal to UPDATED_PRICE
-        defaultMAuctionSubmissionShouldNotBeFound("price.greaterThanOrEqual=" + UPDATED_PRICE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMAuctionSubmissionsByPriceIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        mAuctionSubmissionRepository.saveAndFlush(mAuctionSubmission);
-
-        // Get all the mAuctionSubmissionList where price is less than or equal to DEFAULT_PRICE
-        defaultMAuctionSubmissionShouldBeFound("price.lessThanOrEqual=" + DEFAULT_PRICE);
-
-        // Get all the mAuctionSubmissionList where price is less than or equal to SMALLER_PRICE
-        defaultMAuctionSubmissionShouldNotBeFound("price.lessThanOrEqual=" + SMALLER_PRICE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMAuctionSubmissionsByPriceIsLessThanSomething() throws Exception {
-        // Initialize the database
-        mAuctionSubmissionRepository.saveAndFlush(mAuctionSubmission);
-
-        // Get all the mAuctionSubmissionList where price is less than DEFAULT_PRICE
-        defaultMAuctionSubmissionShouldNotBeFound("price.lessThan=" + DEFAULT_PRICE);
-
-        // Get all the mAuctionSubmissionList where price is less than UPDATED_PRICE
-        defaultMAuctionSubmissionShouldBeFound("price.lessThan=" + UPDATED_PRICE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMAuctionSubmissionsByPriceIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        mAuctionSubmissionRepository.saveAndFlush(mAuctionSubmission);
-
-        // Get all the mAuctionSubmissionList where price is greater than DEFAULT_PRICE
-        defaultMAuctionSubmissionShouldNotBeFound("price.greaterThan=" + DEFAULT_PRICE);
-
-        // Get all the mAuctionSubmissionList where price is greater than SMALLER_PRICE
-        defaultMAuctionSubmissionShouldBeFound("price.greaterThan=" + SMALLER_PRICE);
     }
 
 
@@ -502,17 +368,17 @@ public class MAuctionSubmissionResourceIT {
 
     @Test
     @Transactional
-    public void getAllMAuctionSubmissionsByAuctionItemIsEqualToSomething() throws Exception {
+    public void getAllMAuctionSubmissionsByAuctionIsEqualToSomething() throws Exception {
         // Get already existing entity
-        MAuctionItem auctionItem = mAuctionSubmission.getAuctionItem();
+        MAuction auction = mAuctionSubmission.getAuction();
         mAuctionSubmissionRepository.saveAndFlush(mAuctionSubmission);
-        Long auctionItemId = auctionItem.getId();
+        Long auctionId = auction.getId();
 
-        // Get all the mAuctionSubmissionList where auctionItem equals to auctionItemId
-        defaultMAuctionSubmissionShouldBeFound("auctionItemId.equals=" + auctionItemId);
+        // Get all the mAuctionSubmissionList where auction equals to auctionId
+        defaultMAuctionSubmissionShouldBeFound("auctionId.equals=" + auctionId);
 
-        // Get all the mAuctionSubmissionList where auctionItem equals to auctionItemId + 1
-        defaultMAuctionSubmissionShouldNotBeFound("auctionItemId.equals=" + (auctionItemId + 1));
+        // Get all the mAuctionSubmissionList where auction equals to auctionId + 1
+        defaultMAuctionSubmissionShouldNotBeFound("auctionId.equals=" + (auctionId + 1));
     }
 
 
@@ -539,7 +405,6 @@ public class MAuctionSubmissionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mAuctionSubmission.getId().intValue())))
-            .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -589,7 +454,6 @@ public class MAuctionSubmissionResourceIT {
         // Disconnect from session so that the updates on updatedMAuctionSubmission are not directly saved in db
         em.detach(updatedMAuctionSubmission);
         updatedMAuctionSubmission
-            .price(UPDATED_PRICE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         MAuctionSubmissionDTO mAuctionSubmissionDTO = mAuctionSubmissionMapper.toDto(updatedMAuctionSubmission);
@@ -603,7 +467,6 @@ public class MAuctionSubmissionResourceIT {
         List<MAuctionSubmission> mAuctionSubmissionList = mAuctionSubmissionRepository.findAll();
         assertThat(mAuctionSubmissionList).hasSize(databaseSizeBeforeUpdate);
         MAuctionSubmission testMAuctionSubmission = mAuctionSubmissionList.get(mAuctionSubmissionList.size() - 1);
-        assertThat(testMAuctionSubmission.getPrice()).isEqualTo(UPDATED_PRICE);
         assertThat(testMAuctionSubmission.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testMAuctionSubmission.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

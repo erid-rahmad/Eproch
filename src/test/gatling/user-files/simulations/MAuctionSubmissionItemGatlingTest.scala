@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.duration._
 
 /**
- * Performance test for the MAuctionSubmission entity.
+ * Performance test for the MAuctionSubmissionItem entity.
  */
-class MAuctionSubmissionGatlingTest extends Simulation {
+class MAuctionSubmissionItemGatlingTest extends Simulation {
 
     val context: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
     // Log all HTTP requests
@@ -43,7 +43,7 @@ class MAuctionSubmissionGatlingTest extends Simulation {
         "Authorization" -> "${access_token}"
     )
 
-    val scn = scenario("Test the MAuctionSubmission entity")
+    val scn = scenario("Test the MAuctionSubmissionItem entity")
         .exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headers_http)
@@ -62,30 +62,31 @@ class MAuctionSubmissionGatlingTest extends Simulation {
         .check(status.is(200)))
         .pause(10)
         .repeat(2) {
-            exec(http("Get all mAuctionSubmissions")
-            .get("/api/m-auction-submissions")
+            exec(http("Get all mAuctionSubmissionItems")
+            .get("/api/m-auction-submission-items")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
-            .exec(http("Create new mAuctionSubmission")
-            .post("/api/m-auction-submissions")
+            .exec(http("Create new mAuctionSubmissionItem")
+            .post("/api/m-auction-submission-items")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "price":"0"
                 , "uid":null
                 , "active":null
                 }""")).asJson
             .check(status.is(201))
-            .check(headerRegex("Location", "(.*)").saveAs("new_mAuctionSubmission_url"))).exitHereIfFailed
+            .check(headerRegex("Location", "(.*)").saveAs("new_mAuctionSubmissionItem_url"))).exitHereIfFailed
             .pause(10)
             .repeat(5) {
-                exec(http("Get created mAuctionSubmission")
-                .get("${new_mAuctionSubmission_url}")
+                exec(http("Get created mAuctionSubmissionItem")
+                .get("${new_mAuctionSubmissionItem_url}")
                 .headers(headers_http_authenticated))
                 .pause(10)
             }
-            .exec(http("Delete created mAuctionSubmission")
-            .delete("${new_mAuctionSubmission_url}")
+            .exec(http("Delete created mAuctionSubmissionItem")
+            .delete("${new_mAuctionSubmissionItem_url}")
             .headers(headers_http_authenticated))
             .pause(10)
         }

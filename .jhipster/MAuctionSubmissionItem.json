@@ -1,6 +1,13 @@
 {
-    "name": "MAuctionSubmission",
+    "name": "MAuctionSubmissionItem",
     "fields": [
+        {
+            "fieldName": "price",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
         {
             "fieldName": "uid",
             "fieldType": "UUID"
@@ -14,30 +21,30 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "mAuctionSubmission",
+            "otherEntityRelationshipName": "mAuctionSubmissionItem",
             "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "mAuction",
-            "otherEntityRelationshipName": "mAuctionSubmission",
+            "otherEntityName": "mAuctionSubmission",
+            "otherEntityRelationshipName": "mAuctionSubmissionItem",
             "relationshipValidateRules": "required",
-            "relationshipName": "auction",
+            "relationshipName": "auctionSubmission",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "cVendor",
-            "otherEntityRelationshipName": "mAuctionSubmission",
+            "otherEntityName": "mAuctionItem",
+            "otherEntityRelationshipName": "mAuctionSubmissionItem",
             "relationshipValidateRules": "required",
-            "relationshipName": "vendor",
+            "relationshipName": "auctionItem",
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20210609111000",
-    "entityTableName": "m_auction_submission",
+    "changelogDate": "20210615102600",
+    "entityTableName": "m_auction_submission_item",
     "dto": "mapstruct",
     "pagination": "pagination",
     "service": "serviceClass",

@@ -128,18 +128,22 @@ export default class AuctionInvitation extends Mixins(AccessLevelMixin) {
   onSelectItems() {
     this.loading = true;
 
-    const submissions = this.selectedItems.map(item => ({
+    const submission = {
       adOrganizationId: this.selectedRow.adOrganizationId,
-      auctionItemId: item.id,
-      vendorId: this.vendorInfo.id
-    }));
+      auctionId: this.selectedRow.auctionId,
+      vendorId: this.vendorInfo.id,
+      submissionItems: this.selectedItems.map(item => ({
+        adOrganizationId: this.selectedRow.adOrganizationId,
+        auctionItemId: item.id,
+      }))
+    };
 
     this.commonService(`${baseApiAuctionSubmission}/attend`)
-      .create(submissions)
+      .create(submission)
       .then(() => this.$message.success('You are attending the auction of the selected item(s)'))
       .catch(err => {
         console.error('Failed to process the auction attendance', err);
-        this.$message.error('Failed to process the auction attendance')
+        this.$message.error('Failed to process the auction attendance');
       })
       .finally(() => this.loading = false);
   }

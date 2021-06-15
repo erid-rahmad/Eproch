@@ -8,10 +8,10 @@
 
     
     <!--
-        Added the entity MAuctionSubmission.
+        Added the entity MAuctionSubmissionItem.
     -->
-    <changeSet id="20210609111000-1" author="jhipster">
-        <createTable tableName="m_auction_submission">
+    <changeSet id="20210615102600-1" author="jhipster">
+        <createTable tableName="m_auction_submission_item">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -27,6 +27,9 @@
             <column name="ad_organization_id" type="bigint">
                 <constraints nullable="false" />
             </column>
+            <column name="auction_submission_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
             <column name="auction_item_id" type="bigint">
                 <constraints nullable="false" />
             </column>
@@ -34,13 +37,13 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="20210609111000-1-relations" author="jhipster">
+    <changeSet id="20210615102600-1-relations" author="jhipster">
 
     </changeSet>
     
     <!-- Added the entity audit columns -->
-    <changeSet id="20210609111000-audit-1" author="jhipster-entity-audit">
-        <addColumn tableName="m_auction_submission">
+    <changeSet id="20210615102600-audit-1" author="jhipster-entity-audit">
+        <addColumn tableName="m_auction_submission_item">
             <column name="created_by" type="varchar(50)" defaultValue="system">
                 <constraints nullable="false"/>
             </column>
@@ -61,36 +64,20 @@
           This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
           Spring Boot configuration key.
     -->
-    <changeSet id="20210609111000-1-data" author="jhipster" context="faker">
+    <changeSet id="20210615102600-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/m_auction_submission.csv"
+                  file="config/liquibase/fake-data/m_auction_submission_item.csv"
                   separator=";"
-                  tableName="m_auction_submission">
+                  tableName="m_auction_submission_item">
             <column name="id" type="numeric"/>
+            <column name="price" type="numeric"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
-            <column name="auction_id" type="numeric"/>
-            <column name="vendor_id" type="numeric"/>
+            <column name="auction_submission_id" type="numeric"/>
+            <column name="auction_item_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
-    </changeSet>
-
-    <changeSet id="20210615095900" author="Ananta Aryadewa">
-        <addColumn tableName="m_auction_submission">
-            <column name="vendor_id" type="bigint">
-                <constraints nullable="false" />
-            </column>
-        </addColumn>
-    </changeSet>
-
-    <changeSet id="20210615160101" author="Ananta Aryadewa">
-        <dropColumn tableName="m_auction_submission" columnName="price"/>
-        <addColumn tableName="m_auction_submission">
-            <column name="auction_id" type="bigint">
-                <constraints nullable="false" />
-            </column>
-        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

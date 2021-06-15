@@ -1,10 +1,10 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import { Component, Inject, Mixins, Vue, Watch } from "vue-property-decorator";
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
+import AuctionContent from '../components/auction-content.vue';
+import AuctionInfo from '../components/auction-info.vue';
+import AuctionItem from '../components/auction-item.vue';
 import AuctionPrerequisite from '../components/auction-prerequisite.vue';
-import AuctionContent from '../setup/auction-content.vue';
-import AuctionInfo from '../setup/auction-info.vue';
-import AuctionItem from '../setup/auction-item.vue';
 
 const tabPaneComponent = new Map<string, string>([
   ['CTN', 'auction-content'],

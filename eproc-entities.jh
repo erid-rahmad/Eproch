@@ -1127,6 +1127,11 @@ entity MAuctionItem {
 }
 
 entity MAuctionSubmission {
+	uid UUID
+	active Boolean
+}
+
+entity MAuctionSubmissionItem {
 	price BigDecimal required
 
 	uid UUID
@@ -2029,8 +2034,12 @@ relationship ManyToOne {
 	MAuctionInvitation{vendor required} to CVendor
 
 	MAuctionSubmission{adOrganization required} to ADOrganization
-	MAuctionSubmission{auctionItem required} to MAuctionItem
+	MAuctionSubmission{auction required} to MAuction
 	MAuctionSubmission{vendor required} to CVendor
+
+	MAuctionSubmissionItem{adOrganization required} to ADOrganization
+	MAuctionSubmissionItem{auctionSubmission required} to MAuctionSubmission
+	MAuctionSubmissionItem{auctionItem required} to MAuctionItem
 
 	MAuctionSubmissionLog{auctionItem required} to MAuctionItem
 

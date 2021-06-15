@@ -1,10 +1,9 @@
 package com.bhp.opusb.service.dto;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MAuctionSubmission} entity.
@@ -12,9 +11,6 @@ import javax.validation.constraints.NotNull;
 public class MAuctionSubmissionDTO extends AbstractAuditingDTO {
     
     private Long id;
-
-    @NotNull
-    private BigDecimal price = new BigDecimal(0);
 
     private UUID uid;
 
@@ -24,17 +20,15 @@ public class MAuctionSubmissionDTO extends AbstractAuditingDTO {
     private Long adOrganizationId;
     private String adOrganizationName;
 
-    private Long auctionItemId;
-    private String auctionItemName;
-    private String auctionItemUom;
-    private BigDecimal auctionItemQuantity;
-    private BigDecimal auctionItemCeilingPrice;
-    private BigDecimal auctionItemBidDecrement;
-    private BigDecimal auctionItemBackBuffer;
-    private BigDecimal auctionItemFrontBuffer;
+    private Long auctionId;
+    private String auctionName;
+    private String auctionDocumentNo;
+    private String auctionDocumentStatus;
 
     private Long vendorId;
     private String vendorName;
+
+    private List<MAuctionSubmissionItemDTO> submissionItems = new ArrayList<>();
     
     public Long getId() {
         return id;
@@ -42,14 +36,6 @@ public class MAuctionSubmissionDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
     }
 
     public UUID getUid() {
@@ -84,68 +70,36 @@ public class MAuctionSubmissionDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
-    public Long getAuctionItemId() {
-        return auctionItemId;
+    public Long getAuctionId() {
+        return auctionId;
     }
 
-    public void setAuctionItemId(Long mAuctionItemId) {
-        this.auctionItemId = mAuctionItemId;
+    public void setAuctionId(Long mAuctionId) {
+        this.auctionId = mAuctionId;
     }
 
-    public String getAuctionItemName() {
-        return auctionItemName;
+    public String getAuctionName() {
+        return auctionName;
     }
 
-    public void setAuctionItemName(String auctionItemName) {
-        this.auctionItemName = auctionItemName;
+    public void setAuctionName(String auctionName) {
+        this.auctionName = auctionName;
     }
 
-    public String getAuctionItemUom() {
-        return auctionItemUom;
+    public String getAuctionDocumentNo() {
+        return auctionDocumentNo;
     }
 
-    public void setAuctionItemUom(String auctionItemUom) {
-        this.auctionItemUom = auctionItemUom;
+    public void setAuctionDocumentNo(String auctionDocumentNo) {
+        this.auctionDocumentNo = auctionDocumentNo;
     }
 
-    public BigDecimal getAuctionItemQuantity() {
-        return auctionItemQuantity;
+    public String getAuctionDocumentStatus() {
+        return auctionDocumentStatus;
     }
 
-    public void setAuctionItemQuantity(BigDecimal auctionItemQuantity) {
-        this.auctionItemQuantity = auctionItemQuantity;
-    }
-
-    public BigDecimal getAuctionItemCeilingPrice() {
-        return auctionItemCeilingPrice;
-    }
-
-    public void setAuctionItemCeilingPrice(BigDecimal auctionItemCeilingPrice) {
-        this.auctionItemCeilingPrice = auctionItemCeilingPrice;
-    }
-
-    public BigDecimal getAuctionItemBidDecrement() {
-        return auctionItemBidDecrement;
-    }
-
-    public void setAuctionItemBidDecrement(BigDecimal auctionItemBidDecrement) {
-        this.auctionItemBidDecrement = auctionItemBidDecrement;
-    }
-
-    public BigDecimal getAuctionItemBackBuffer() {
-        return auctionItemBackBuffer;
-    }
-
-    public void setAuctionItemBackBuffer(BigDecimal auctionItemBackBuffer) {
-        this.auctionItemBackBuffer = auctionItemBackBuffer;
-    }
-
-    public BigDecimal getAuctionItemFrontBuffer() {
-        return auctionItemFrontBuffer;
-    }
-
-    public void setAuctionItemFrontBuffer(BigDecimal auctionItemFrontBuffer) {
-        this.auctionItemFrontBuffer = auctionItemFrontBuffer;
+    public void setAuctionDocumentStatus(String auctionDocumentStatus) {
+        this.auctionDocumentStatus = auctionDocumentStatus;
     }
 
     public Long getVendorId() {
@@ -162,6 +116,14 @@ public class MAuctionSubmissionDTO extends AbstractAuditingDTO {
 
     public void setVendorName(String vendorName) {
         this.vendorName = vendorName;
+    }
+
+    public List<MAuctionSubmissionItemDTO> getSubmissionItems() {
+        return submissionItems;
+    }
+
+    public void setSubmissionItems(List<MAuctionSubmissionItemDTO> submissionItems) {
+        this.submissionItems = submissionItems;
     }
 
     @Override
@@ -189,11 +151,10 @@ public class MAuctionSubmissionDTO extends AbstractAuditingDTO {
     public String toString() {
         return "MAuctionSubmissionDTO{" +
             "id=" + getId() +
-            ", price=" + getPrice() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", auctionItemId=" + getAuctionItemId() +
+            ", auctionId=" + getAuctionId() +
             ", vendorId=" + getVendorId() +
             "}";
     }
