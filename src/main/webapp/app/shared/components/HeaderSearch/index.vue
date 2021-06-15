@@ -99,7 +99,12 @@ export default class HeaderSearch extends Vue {
   }
 
   private change(route: RouteConfig) {
-    this.$router.push(route.path)
+    this.$router.push({
+      path: route.path,
+      query: {
+        t: `${Date.now()}`
+      }
+    })
     this.search = ''
     this.options = []
     this.$nextTick(() => {
@@ -147,7 +152,7 @@ export default class HeaderSearch extends Vue {
         // generate internationalized title
         const i18ntitle = this.translationService()
           .internationalization
-          .t(`route.${router.meta.title}`).toString()
+          .t(router.meta.title).toString()
 
         data.meta.title = [...data.meta.title, i18ntitle]
         if (router.redirect !== 'noRedirect') {
