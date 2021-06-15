@@ -33,6 +33,14 @@
             "relationshipValidateRules": "required",
             "relationshipName": "auctionItem",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "mAuctionSubmission",
+            "relationshipValidateRules": "required",
+            "relationshipName": "vendor",
+            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20210609111000",

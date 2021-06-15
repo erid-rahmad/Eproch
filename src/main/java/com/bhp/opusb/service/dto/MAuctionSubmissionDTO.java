@@ -14,7 +14,7 @@ public class MAuctionSubmissionDTO extends AbstractAuditingDTO {
     private Long id;
 
     @NotNull
-    private BigDecimal price;
+    private BigDecimal price = new BigDecimal(0);
 
     private UUID uid;
 
@@ -32,6 +32,9 @@ public class MAuctionSubmissionDTO extends AbstractAuditingDTO {
     private BigDecimal auctionItemBidDecrement;
     private BigDecimal auctionItemBackBuffer;
     private BigDecimal auctionItemFrontBuffer;
+
+    private Long vendorId;
+    private String vendorName;
     
     public Long getId() {
         return id;
@@ -145,6 +148,22 @@ public class MAuctionSubmissionDTO extends AbstractAuditingDTO {
         this.auctionItemFrontBuffer = auctionItemFrontBuffer;
     }
 
+    public Long getVendorId() {
+        return vendorId;
+    }
+
+    public void setVendorId(Long cVendorId) {
+        this.vendorId = cVendorId;
+    }
+
+    public String getVendorName() {
+        return vendorName;
+    }
+
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -175,6 +194,7 @@ public class MAuctionSubmissionDTO extends AbstractAuditingDTO {
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", auctionItemId=" + getAuctionItemId() +
+            ", vendorId=" + getVendorId() +
             "}";
     }
 }

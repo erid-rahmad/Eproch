@@ -13,6 +13,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -32,6 +33,11 @@ public class CAuctionPrerequisite extends AbstractAuditingEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
+
+    @NotNull
+    @Size(max = 30)
+    @Column(name = "name", length = 30, nullable = false)
+    private String name;
 
     @Lob
     @Type(type = "org.hibernate.type.TextType")
@@ -56,6 +62,19 @@ public class CAuctionPrerequisite extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public CAuctionPrerequisite name(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -136,6 +155,7 @@ public class CAuctionPrerequisite extends AbstractAuditingEntity {
     public String toString() {
         return "CAuctionPrerequisite{" +
             "id=" + getId() +
+            ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +

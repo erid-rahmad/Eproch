@@ -17,7 +17,6 @@
             "fieldName": "documentAction",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required",
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": "10"

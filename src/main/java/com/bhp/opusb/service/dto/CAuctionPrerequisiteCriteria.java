@@ -7,6 +7,7 @@ import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.Filter;
 import io.github.jhipster.service.filter.LongFilter;
+import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -24,6 +25,8 @@ public class CAuctionPrerequisiteCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
+    private StringFilter name;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -35,6 +38,7 @@ public class CAuctionPrerequisiteCriteria implements Serializable, Criteria {
 
     public CAuctionPrerequisiteCriteria(CAuctionPrerequisiteCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.name = other.name == null ? null : other.name.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -51,6 +55,14 @@ public class CAuctionPrerequisiteCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public StringFilter getName() {
+        return name;
+    }
+
+    public void setName(StringFilter name) {
+        this.name = name;
     }
 
     public UUIDFilter getUid() {
@@ -89,6 +101,7 @@ public class CAuctionPrerequisiteCriteria implements Serializable, Criteria {
         final CAuctionPrerequisiteCriteria that = (CAuctionPrerequisiteCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(name, that.name) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId);
@@ -98,6 +111,7 @@ public class CAuctionPrerequisiteCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
+        name,
         uid,
         active,
         adOrganizationId
@@ -108,6 +122,7 @@ public class CAuctionPrerequisiteCriteria implements Serializable, Criteria {
     public String toString() {
         return "CAuctionPrerequisiteCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (name != null ? "name=" + name + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

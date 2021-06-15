@@ -13,6 +13,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -31,6 +32,10 @@ public class MAuctionItem extends AbstractAuditingEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
+
+    @Size(max = 10)
+    @Column(name = "auction_status", length = 10)
+    private String auctionStatus;
 
     @Column(name = "quantity", precision = 21, scale = 2)
     private BigDecimal quantity;
@@ -95,6 +100,19 @@ public class MAuctionItem extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getAuctionStatus() {
+        return auctionStatus;
+    }
+
+    public MAuctionItem auctionStatus(String auctionStatus) {
+        this.auctionStatus = auctionStatus;
+        return this;
+    }
+
+    public void setAuctionStatus(String auctionStatus) {
+        this.auctionStatus = auctionStatus;
     }
 
     public BigDecimal getQuantity() {
@@ -279,6 +297,7 @@ public class MAuctionItem extends AbstractAuditingEntity {
     public String toString() {
         return "MAuctionItem{" +
             "id=" + getId() +
+            ", auctionStatus='" + getAuctionStatus() + "'" +
             ", quantity=" + getQuantity() +
             ", ceilingPrice=" + getCeilingPrice() +
             ", amount=" + getAmount() +

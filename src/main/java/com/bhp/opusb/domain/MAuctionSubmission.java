@@ -52,6 +52,11 @@ public class MAuctionSubmission extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mAuctionSubmissions")
     private MAuctionItem auctionItem;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mAuctionSubmissions")
+    private CVendor vendor;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -124,6 +129,19 @@ public class MAuctionSubmission extends AbstractAuditingEntity {
 
     public void setAuctionItem(MAuctionItem mAuctionItem) {
         this.auctionItem = mAuctionItem;
+    }
+
+    public CVendor getVendor() {
+        return vendor;
+    }
+
+    public MAuctionSubmission vendor(CVendor cVendor) {
+        this.vendor = cVendor;
+        return this;
+    }
+
+    public void setVendor(CVendor cVendor) {
+        this.vendor = cVendor;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

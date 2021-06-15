@@ -64,12 +64,21 @@
                   separator=";"
                   tableName="c_auction_prerequisite">
             <column name="id" type="numeric"/>
+            <column name="name" type="string"/>
             <column name="description" type="clob"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20210614112800" author="Ananta Aryadewa">
+        <addColumn tableName="c_auction_prerequisite">
+            <column name="name" type="varchar(30)">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

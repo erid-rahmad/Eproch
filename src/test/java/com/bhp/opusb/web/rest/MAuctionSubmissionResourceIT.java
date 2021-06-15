@@ -4,6 +4,7 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MAuctionSubmission;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.MAuctionItem;
+import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.repository.MAuctionSubmissionRepository;
 import com.bhp.opusb.service.MAuctionSubmissionService;
 import com.bhp.opusb.service.dto.MAuctionSubmissionDTO;
@@ -100,6 +101,16 @@ public class MAuctionSubmissionResourceIT {
             mAuctionItem = TestUtil.findAll(em, MAuctionItem.class).get(0);
         }
         mAuctionSubmission.setAuctionItem(mAuctionItem);
+        // Add required entity
+        CVendor cVendor;
+        if (TestUtil.findAll(em, CVendor.class).isEmpty()) {
+            cVendor = CVendorResourceIT.createEntity(em);
+            em.persist(cVendor);
+            em.flush();
+        } else {
+            cVendor = TestUtil.findAll(em, CVendor.class).get(0);
+        }
+        mAuctionSubmission.setVendor(cVendor);
         return mAuctionSubmission;
     }
     /**
@@ -133,6 +144,16 @@ public class MAuctionSubmissionResourceIT {
             mAuctionItem = TestUtil.findAll(em, MAuctionItem.class).get(0);
         }
         mAuctionSubmission.setAuctionItem(mAuctionItem);
+        // Add required entity
+        CVendor cVendor;
+        if (TestUtil.findAll(em, CVendor.class).isEmpty()) {
+            cVendor = CVendorResourceIT.createUpdatedEntity(em);
+            em.persist(cVendor);
+            em.flush();
+        } else {
+            cVendor = TestUtil.findAll(em, CVendor.class).get(0);
+        }
+        mAuctionSubmission.setVendor(cVendor);
         return mAuctionSubmission;
     }
 
@@ -492,6 +513,22 @@ public class MAuctionSubmissionResourceIT {
 
         // Get all the mAuctionSubmissionList where auctionItem equals to auctionItemId + 1
         defaultMAuctionSubmissionShouldNotBeFound("auctionItemId.equals=" + (auctionItemId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMAuctionSubmissionsByVendorIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CVendor vendor = mAuctionSubmission.getVendor();
+        mAuctionSubmissionRepository.saveAndFlush(mAuctionSubmission);
+        Long vendorId = vendor.getId();
+
+        // Get all the mAuctionSubmissionList where vendor equals to vendorId
+        defaultMAuctionSubmissionShouldBeFound("vendorId.equals=" + vendorId);
+
+        // Get all the mAuctionSubmissionList where vendor equals to vendorId + 1
+        defaultMAuctionSubmissionShouldNotBeFound("vendorId.equals=" + (vendorId + 1));
     }
 
     /**

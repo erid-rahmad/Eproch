@@ -19,6 +19,7 @@
         :is="activeComponent"
         :key="item.id"
         :data="data"
+        @items-selected="onItemsSelected"
         @saved="onTabSaved"
       ></component>
     </el-tab-pane>

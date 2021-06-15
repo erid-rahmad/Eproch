@@ -1,5 +1,5 @@
 <template>
-  <div class="auction-item">
+  <div class="auction-rule">
     <el-form
       disabled
       :label-position="formSettings.labelPosition"

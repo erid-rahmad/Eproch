@@ -104,9 +104,19 @@ public class MAuctionSubmissionQueryService extends QueryService<MAuctionSubmiss
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(MAuctionSubmission_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
+            if (criteria.getAuctionId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAuctionId(),
+                    root -> root.join(MAuctionSubmission_.auctionItem, JoinType.LEFT)
+                        .join(MAuctionItem_.auction)
+                        .get(MAuction_.id)));
+            }
             if (criteria.getAuctionItemId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAuctionItemId(),
                     root -> root.join(MAuctionSubmission_.auctionItem, JoinType.LEFT).get(MAuctionItem_.id)));
+            }
+            if (criteria.getVendorId() != null) {
+                specification = specification.and(buildSpecification(criteria.getVendorId(),
+                    root -> root.join(MAuctionSubmission_.vendor, JoinType.LEFT).get(CVendor_.id)));
             }
         }
         return specification;

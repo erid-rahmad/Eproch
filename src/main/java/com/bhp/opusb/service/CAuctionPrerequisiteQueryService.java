@@ -91,6 +91,9 @@ public class CAuctionPrerequisiteQueryService extends QueryService<CAuctionPrere
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), CAuctionPrerequisite_.id));
             }
+            if (criteria.getName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getName(), CAuctionPrerequisite_.name));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), CAuctionPrerequisite_.uid));
             }

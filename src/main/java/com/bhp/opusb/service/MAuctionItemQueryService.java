@@ -91,6 +91,9 @@ public class MAuctionItemQueryService extends QueryService<MAuctionItem> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), MAuctionItem_.id));
             }
+            if (criteria.getAuctionStatus() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getAuctionStatus(), MAuctionItem_.auctionStatus));
+            }
             if (criteria.getQuantity() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getQuantity(), MAuctionItem_.quantity));
             }

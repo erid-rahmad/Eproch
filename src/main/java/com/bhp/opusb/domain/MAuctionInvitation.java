@@ -40,9 +40,8 @@ public class MAuctionInvitation extends AbstractAuditingEntity {
     @Column(name = "document_no", length = 30)
     private String documentNo;
 
-    @NotNull
     @Size(max = 10)
-    @Column(name = "document_action", length = 10, nullable = false)
+    @Column(name = "document_action", length = 10)
     private String documentAction;
 
     /**

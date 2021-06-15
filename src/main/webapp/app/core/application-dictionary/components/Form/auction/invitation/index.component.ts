@@ -11,6 +11,7 @@ const enum AuctionPage {
 }
 
 const baseApiAuctionInvitation = 'api/m-auction-invitations';
+const baseApiAuctionSubmission = 'api/m-auction-submissions';
 const baseApiDocType = 'api/c-document-types';
 const baseApiReferenceList = 'api/ad-reference-lists';
 
@@ -24,16 +25,13 @@ export default class AuctionInvitation extends Mixins(AccessLevelMixin) {
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
-  confirmationVisible: boolean = false;
-  deleteConfirmationVisible: boolean = false;
   loading: boolean = false;
   setupTabName: string = 'INF';
 
   gridData: any[] = [];
 
-  schedule: any = {};
   selectedRow: any = {};
-  evaluationList: any[] = [];
+  selectedItems: any[] = [];
 
   section: AuctionPage = AuctionPage.MAIN;
 
@@ -53,16 +51,27 @@ export default class AuctionInvitation extends Mixins(AccessLevelMixin) {
 
   get auctionData() {
     return {
-      id: this.selectedRow.auctionId,
-      name: this.selectedRow.auctionName,
-      documentNo: this.selectedRow.documentNo,
-      documentStatus: this.selectedRow.documentStatus,
-      documentTypeName: this.selectedRow.documentTypeName,
-      currencyId: this.selectedRow.auctionCurrencyId,
-      contentId: this.selectedRow.auctionContentId,
-      prerequisiteId: this.selectedRow.auctionPrerequisiteId,
-      ruleId: this.selectedRow.auctionRuleId,
+      ...this.selectedRow,
+      ...{
+        documentNo: this.selectedRow.documentNo,
+        documentStatus: this.selectedRow.documentStatus,
+        name: this.selectedRow.auctionName,
+        auctionDocumentNo: this.selectedRow.auctionDocumentNo,
+        currencyId: this.selectedRow.auctionCurrencyId,
+        contentId: this.selectedRow.auctionContentId,
+        prerequisiteId: this.selectedRow.auctionPrerequisiteId,
+        ruleId: this.selectedRow.auctionRuleId,
+      }
     }
+  }
+
+  set auctionData(data: any) {
+    this.selectedRow.documentAction = data.documentAction;
+    this.selectedRow.documentStatus = data.documentStatus;
+  }
+
+  get hasItems() {
+    return this.selectedItems.length > 0;
   }
 
   get isAccepted() {
@@ -75,6 +84,14 @@ export default class AuctionInvitation extends Mixins(AccessLevelMixin) {
 
   get isDraft() {
     return this.selectedRow.documentStatus === 'DRF';
+  }
+
+  get isStarted() {
+    return this.selectedRow.documentStatus === 'STR';
+  }
+
+  get isItemSelectionTab() {
+    return this.setupTabName === 'ITM';
   }
 
   get isVendor() {
@@ -108,32 +125,29 @@ export default class AuctionInvitation extends Mixins(AccessLevelMixin) {
     this.transition();
   }
 
-  onDeleteClicked() {
-    this.deleteConfirmationVisible = true;
-  }
+  onSelectItems() {
+    this.loading = true;
 
-  onAcceptClicked() {
-    this.documentAction = 'ACC';
-    this.confirmationVisible = true;
-  }
+    const submissions = this.selectedItems.map(item => ({
+      adOrganizationId: this.selectedRow.adOrganizationId,
+      auctionItemId: item.id,
+      vendorId: this.vendorInfo.id
+    }));
 
-  onDeclineClicked() {
-    this.documentAction = 'DCL';
-    this.confirmationVisible = true;
+    this.commonService(`${baseApiAuctionSubmission}/attend`)
+      .create(submissions)
+      .then(() => this.$message.success('You are attending the auction of the selected item(s)'))
+      .catch(err => {
+        console.error('Failed to process the auction attendance', err);
+        this.$message.error('Failed to process the auction attendance')
+      })
+      .finally(() => this.loading = false);
   }
 
   created() {
     this.retrieveDocumentType('Auction Invitation');
     this.retrieveDocStatuses();
     this.transition();
-  }
-
-  acceptInvitation() {
-    (<any>this.$refs.reviewPage).accept();
-  }
-
-  declineInvitation() {
-    (<any>this.$refs.reviewPage).decline();
   }
 
   public changeOrder(propOrder): void {

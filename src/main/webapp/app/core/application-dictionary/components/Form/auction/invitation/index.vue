@@ -11,24 +11,17 @@
         Close
       </el-button>
 
-      <el-button-group style="margin-left: 5px">
-        <el-button
-          v-if="reviewPage && isDraft && setupTabName === 'PRQ'"
-          size="mini"
-          type="primary"
-          @click="onAcceptClicked"
-        >
-          <svg-icon name="icomoo/273-checkmark"></svg-icon> Accept
-        </el-button>
-        <el-button
-          v-if="reviewPage && isDraft && setupTabName === 'PRQ'"
-          size="mini"
-          type="danger"
-          @click="onDeclineClicked"
-        >
-          <svg-icon name="icomoo/272-cross"></svg-icon> Decline
-        </el-button>
-      </el-button-group>
+      <el-button
+        v-if="!isStarted && isItemSelectionTab"
+        :disabled="!hasItems"
+        :loading="loading"
+        icon="el-icon-check"
+        size="mini"
+        type="primary"
+        @click="onSelectItems"
+      >
+        Select Items
+      </el-button>
     </div>
 
     <div class="card">
@@ -86,6 +79,16 @@
           </el-table-column>
 
           <el-table-column
+            label="Invitation Status"
+            min-width="140"
+            sortable
+          >
+            <template slot-scope="{ row }">
+              {{ printDocStatus(row.documentStatus) }}
+            </template>
+          </el-table-column>
+
+          <el-table-column
             fixed="right"
             width="180"
             label="Action"
@@ -130,38 +133,11 @@
         v-else-if="reviewPage"
         ref="reviewPage"
         :data.sync="auctionData"
+        :selected-items.sync="selectedItems"
         :tab.sync="setupTabName"
       ></auction-invitation-detail>
 
     </div>
-
-    <el-dialog
-      width="40%"
-      :visible.sync="confirmationVisible"
-      :title="`${selectedAction} Invitation`"
-    >
-      <template>
-        <p>Are you sure you want to {{ selectedAction }} the invitation?</p>
-        <div slot="footer">
-          <el-button
-            style="margin-left: 0px;"
-            size="mini"
-            icon="el-icon-close"
-            @click="confirmationVisible = false"
-          >
-            {{ $t('entity.action.cancel') }}
-          </el-button>
-          <el-button
-            style="margin-left: 0px;"
-            size="mini"
-            icon="el-icon-check"
-            :type="documentAction === 'DCL' ? 'danger' : 'primary'"
-          >
-            {{ selectedAction }}
-          </el-button>
-        </div>
-      </template>
-    </el-dialog>
   </div>
 </template>
 <script lang="ts" src="./index.component.ts"></script>

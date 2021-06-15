@@ -4,12 +4,15 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 
 const HtmlEditorProps = Vue.extend({
   props: {
+    disabled: Boolean,
+
     size: {
       type: String,
       default: () => {
         return 'small'
       }
     },
+
     value: String
   }
 })
@@ -24,6 +27,13 @@ export default class HtmlEditor extends HtmlEditorProps {
 
   editor: Editor = null;
 
+  @Watch('disabled')
+  onDisabledChanged(disabled: boolean) {
+    this.editor?.setOptions({
+      editable: !disabled
+    });
+  }
+
   @Watch('value')
   onValueChanged(value: string) {
     if (this.editor?.getHTML() !== value) {
@@ -33,6 +43,7 @@ export default class HtmlEditor extends HtmlEditorProps {
   
   mounted() {
     this.editor = new Editor({
+      editable: ! this.disabled,
       extensions: [
         new Blockquote(),
         new CodeBlock(),

@@ -21,9 +21,8 @@ public class MAuctionInvitationDTO extends AbstractAuditingDTO {
     @Size(max = 30)
     private String documentNo;
 
-    @NotNull
     @Size(max = 10)
-    private String documentAction = "ACC";
+    private String documentAction;
 
     /**
      * By default is SMT (submit). Available statuses are: ACC (Accept) and DCL (Decline).
@@ -49,7 +48,7 @@ public class MAuctionInvitationDTO extends AbstractAuditingDTO {
 
     private UUID uid;
 
-    private Boolean active = true;
+    private Boolean active;
 
 
     private Long adOrganizationId;

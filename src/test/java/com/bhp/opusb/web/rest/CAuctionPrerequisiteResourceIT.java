@@ -38,6 +38,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class CAuctionPrerequisiteResourceIT {
 
+    private static final String DEFAULT_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_NAME = "BBBBBBBBBB";
+
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
@@ -75,6 +78,7 @@ public class CAuctionPrerequisiteResourceIT {
      */
     public static CAuctionPrerequisite createEntity(EntityManager em) {
         CAuctionPrerequisite cAuctionPrerequisite = new CAuctionPrerequisite()
+            .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
@@ -98,6 +102,7 @@ public class CAuctionPrerequisiteResourceIT {
      */
     public static CAuctionPrerequisite createUpdatedEntity(EntityManager em) {
         CAuctionPrerequisite cAuctionPrerequisite = new CAuctionPrerequisite()
+            .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
@@ -135,6 +140,7 @@ public class CAuctionPrerequisiteResourceIT {
         List<CAuctionPrerequisite> cAuctionPrerequisiteList = cAuctionPrerequisiteRepository.findAll();
         assertThat(cAuctionPrerequisiteList).hasSize(databaseSizeBeforeCreate + 1);
         CAuctionPrerequisite testCAuctionPrerequisite = cAuctionPrerequisiteList.get(cAuctionPrerequisiteList.size() - 1);
+        assertThat(testCAuctionPrerequisite.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCAuctionPrerequisite.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testCAuctionPrerequisite.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCAuctionPrerequisite.isActive()).isEqualTo(DEFAULT_ACTIVE);
@@ -163,6 +169,25 @@ public class CAuctionPrerequisiteResourceIT {
 
     @Test
     @Transactional
+    public void checkNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = cAuctionPrerequisiteRepository.findAll().size();
+        // set the field null
+        cAuctionPrerequisite.setName(null);
+
+        // Create the CAuctionPrerequisite, which fails.
+        CAuctionPrerequisiteDTO cAuctionPrerequisiteDTO = cAuctionPrerequisiteMapper.toDto(cAuctionPrerequisite);
+
+        restCAuctionPrerequisiteMockMvc.perform(post("/api/c-auction-prerequisites")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(cAuctionPrerequisiteDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<CAuctionPrerequisite> cAuctionPrerequisiteList = cAuctionPrerequisiteRepository.findAll();
+        assertThat(cAuctionPrerequisiteList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllCAuctionPrerequisites() throws Exception {
         // Initialize the database
         cAuctionPrerequisiteRepository.saveAndFlush(cAuctionPrerequisite);
@@ -172,6 +197,7 @@ public class CAuctionPrerequisiteResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cAuctionPrerequisite.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
@@ -188,6 +214,7 @@ public class CAuctionPrerequisiteResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cAuctionPrerequisite.getId().intValue()))
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
@@ -210,6 +237,84 @@ public class CAuctionPrerequisiteResourceIT {
 
         defaultCAuctionPrerequisiteShouldBeFound("id.lessThanOrEqual=" + id);
         defaultCAuctionPrerequisiteShouldNotBeFound("id.lessThan=" + id);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCAuctionPrerequisitesByNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cAuctionPrerequisiteRepository.saveAndFlush(cAuctionPrerequisite);
+
+        // Get all the cAuctionPrerequisiteList where name equals to DEFAULT_NAME
+        defaultCAuctionPrerequisiteShouldBeFound("name.equals=" + DEFAULT_NAME);
+
+        // Get all the cAuctionPrerequisiteList where name equals to UPDATED_NAME
+        defaultCAuctionPrerequisiteShouldNotBeFound("name.equals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCAuctionPrerequisitesByNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cAuctionPrerequisiteRepository.saveAndFlush(cAuctionPrerequisite);
+
+        // Get all the cAuctionPrerequisiteList where name not equals to DEFAULT_NAME
+        defaultCAuctionPrerequisiteShouldNotBeFound("name.notEquals=" + DEFAULT_NAME);
+
+        // Get all the cAuctionPrerequisiteList where name not equals to UPDATED_NAME
+        defaultCAuctionPrerequisiteShouldBeFound("name.notEquals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCAuctionPrerequisitesByNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        cAuctionPrerequisiteRepository.saveAndFlush(cAuctionPrerequisite);
+
+        // Get all the cAuctionPrerequisiteList where name in DEFAULT_NAME or UPDATED_NAME
+        defaultCAuctionPrerequisiteShouldBeFound("name.in=" + DEFAULT_NAME + "," + UPDATED_NAME);
+
+        // Get all the cAuctionPrerequisiteList where name equals to UPDATED_NAME
+        defaultCAuctionPrerequisiteShouldNotBeFound("name.in=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCAuctionPrerequisitesByNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cAuctionPrerequisiteRepository.saveAndFlush(cAuctionPrerequisite);
+
+        // Get all the cAuctionPrerequisiteList where name is not null
+        defaultCAuctionPrerequisiteShouldBeFound("name.specified=true");
+
+        // Get all the cAuctionPrerequisiteList where name is null
+        defaultCAuctionPrerequisiteShouldNotBeFound("name.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCAuctionPrerequisitesByNameContainsSomething() throws Exception {
+        // Initialize the database
+        cAuctionPrerequisiteRepository.saveAndFlush(cAuctionPrerequisite);
+
+        // Get all the cAuctionPrerequisiteList where name contains DEFAULT_NAME
+        defaultCAuctionPrerequisiteShouldBeFound("name.contains=" + DEFAULT_NAME);
+
+        // Get all the cAuctionPrerequisiteList where name contains UPDATED_NAME
+        defaultCAuctionPrerequisiteShouldNotBeFound("name.contains=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCAuctionPrerequisitesByNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        cAuctionPrerequisiteRepository.saveAndFlush(cAuctionPrerequisite);
+
+        // Get all the cAuctionPrerequisiteList where name does not contain DEFAULT_NAME
+        defaultCAuctionPrerequisiteShouldNotBeFound("name.doesNotContain=" + DEFAULT_NAME);
+
+        // Get all the cAuctionPrerequisiteList where name does not contain UPDATED_NAME
+        defaultCAuctionPrerequisiteShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
     }
 
 
@@ -340,6 +445,7 @@ public class CAuctionPrerequisiteResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cAuctionPrerequisite.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
@@ -390,6 +496,7 @@ public class CAuctionPrerequisiteResourceIT {
         // Disconnect from session so that the updates on updatedCAuctionPrerequisite are not directly saved in db
         em.detach(updatedCAuctionPrerequisite);
         updatedCAuctionPrerequisite
+            .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
@@ -404,6 +511,7 @@ public class CAuctionPrerequisiteResourceIT {
         List<CAuctionPrerequisite> cAuctionPrerequisiteList = cAuctionPrerequisiteRepository.findAll();
         assertThat(cAuctionPrerequisiteList).hasSize(databaseSizeBeforeUpdate);
         CAuctionPrerequisite testCAuctionPrerequisite = cAuctionPrerequisiteList.get(cAuctionPrerequisiteList.size() - 1);
+        assertThat(testCAuctionPrerequisite.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCAuctionPrerequisite.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testCAuctionPrerequisite.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCAuctionPrerequisite.isActive()).isEqualTo(UPDATED_ACTIVE);

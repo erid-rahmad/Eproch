@@ -88,6 +88,7 @@
                   separator=";"
                   tableName="m_auction_item">
             <column name="id" type="numeric"/>
+            <column name="auction_status" type="string"/>
             <column name="quantity" type="numeric"/>
             <column name="ceiling_price" type="numeric"/>
             <column name="amount" type="numeric"/>
@@ -102,6 +103,14 @@
             <column name="uom_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20210615095801" author="Ananta Aryadewa">
+        <addColumn tableName="m_auction_item">
+            <column name="auction_status" type="varchar(10)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

@@ -72,6 +72,7 @@ class MAuctionItemGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "auctionStatus":"SAMPLE_TEXT"
                 , "quantity":"0"
                 , "ceilingPrice":"0"
                 , "amount":"0"

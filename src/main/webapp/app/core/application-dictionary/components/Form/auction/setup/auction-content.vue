@@ -1,5 +1,5 @@
 <template>
-  <div class="auction-item">
+  <div class="auction-content">
     <el-form
       disabled
       :label-position="formSettings.labelPosition"
@@ -17,8 +17,12 @@
         >
           <el-form-item label="Auction No.">
             <el-input
+              v-if="isInvitation"
+              v-model="auction.auctionDocumentNo"
+            ></el-input>
+            <el-input
+              v-else
               v-model="auction.documentNo"
-              clearable
             ></el-input>
           </el-form-item>
         </el-col>
@@ -47,7 +51,11 @@
       :model="content"
       :size="formSettings.size"
     >
-      <html-editor v-model="content.description" size="mini"></html-editor>
+      <html-editor
+        v-model="content.description"
+        :disabled="readOnly"
+        size="mini"
+      ></html-editor>
     </el-form>
   </div>
 </template>
