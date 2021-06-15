@@ -87,7 +87,21 @@ public class MAuctionInvitationService {
         MAuctionInvitation mAuctionInvitation = mAuctionInvitationMapper.toEntity(mAuctionInvitationDTO);
 
         if (mAuctionInvitation.getDocumentNo() == null) {
-            mAuctionInvitation.setDocumentNo(DocumentUtil.buildDocumentNumber(document.getDocumentNumberPrefix(), mAuctionInvitationRepository));
+            mAuctionInvitation.setDocumentNo(
+                    DocumentUtil.buildDocumentNumber(document.getDocumentNumberPrefix(), mAuctionInvitationRepository));
+        }
+
+        final String documentAction = mAuctionInvitation.getDocumentAction();
+        final boolean processed = Boolean.TRUE.equals(mAuctionInvitation.isProcessed());
+        final boolean accept = DocumentUtil.isAccept(documentAction);
+
+        // It is transitioned from draft.
+        if ( ! processed && documentAction != null && DocumentUtil.isDraft(mAuctionInvitation.getDocumentStatus())) {
+            mAuctionInvitation
+                .approved(accept)
+                .processed(true)
+                .documentAction(null)
+                .documentStatus(documentAction);
         }
 
         mAuctionInvitation = mAuctionInvitationRepository.save(mAuctionInvitation);

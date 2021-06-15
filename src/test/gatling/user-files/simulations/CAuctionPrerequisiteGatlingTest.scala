@@ -72,6 +72,7 @@ class CAuctionPrerequisiteGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "name":"SAMPLE_TEXT"
                 , "description":null
                 , "uid":null
                 , "active":null

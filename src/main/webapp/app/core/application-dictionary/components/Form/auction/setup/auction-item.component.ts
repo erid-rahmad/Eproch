@@ -8,7 +8,7 @@ import { ElTable } from 'element-ui/types/table';
 import AdInputLookup from '@/shared/components/AdInput/ad-input-lookup.vue';
 
 const baseApiAuctionItem = 'api/m-auction-items';
-const baseApiUom = 'api/c-unit-of-measures';
+const baseApiAuctionSubmission = 'api/m-auction-submissions';
 
 const AuctionItemProps = Vue.extend({
   props: {
@@ -64,6 +64,10 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
   };
 
   items: any[] = [];
+  selectedItems: any[] = [];
+
+  watchedItemIds: Set<number> = new Set();
+
 
   /**
    * Products are dynamically loaded each time
@@ -76,6 +80,10 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
 
   gutterSize: number = 24;
 
+  get isInvitation() {
+    return this.auction.documentTypeName === 'Auction Invitation';
+  }
+
   get formSettings() {
     return settings.form;
   }
@@ -85,6 +93,10 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
   }
 
   get readOnly() {
+    if (this.isInvitation) {
+      return true;
+    }
+
     return this.auction.documentStatus && this.auction.documentStatus !== 'DRF';
   }
 
@@ -157,6 +169,15 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
     })
   }
 
+  /**
+   * Handles the items that is selected by vendor.
+   * @param items The selected items.
+   */
+  onSelectionChanged(items: any[]) {
+    this.selectedItems = items;
+    this.$emit('items-selected', items);
+  }
+
   onCeilingPriceChange(row: any, price: number) {
     row.amount = row.quantity * price;
   }
@@ -171,9 +192,14 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
     }
   }
 
-  created() {
+  async created() {
     this.auction = {...this.data};
-    this.retrieveItems(this.data.id);
+
+    if (this.isInvitation) {
+      await this.retrieveWatchedItems(this.data.auctionId, this.vendorInfo.id);
+    }
+
+    this.retrieveItems(this.isInvitation ? this.data.auctionId : this.data.id);
     this.retrieveBidImprovementUnitOptions();
     this.retrieveTieBidsRuleOptions();
   }
@@ -209,6 +235,37 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
     return this.tieBidsRuleOptions.find(item => item.value === value)?.name || value;
   }
 
+  private retrieveWatchedItems(auctionId: number, vendorId) {
+    this.loadingItems = true;
+    return new Promise(resolve => {
+      this.commonService(baseApiAuctionSubmission)
+        .retrieve({
+          criteriaQuery: [
+            `active.equals=true`,
+            `auctionId.equals=${auctionId}`,
+            `vendorId.equals=${vendorId}`
+          ],
+          paginationQuery: {
+            page: 0,
+            size: 500,
+            sort: ['id']
+          }
+        })
+        .then(res => {
+          res.data.forEach(item => {
+            this.watchedItemIds.add(item.auctionItemId);
+          });
+          resolve(true);
+        })
+        .catch(err => {
+          console.error('Failed to get the item watch list', err);
+          this.$message.error('Failed to get the item watch list');
+          resolve(false);
+        })
+        .finally(() => this.loadingItems = false);
+    })
+  }
+
   private retrieveItems(auctionId: number) {
     this.loadingItems = true;
     this.commonService(baseApiAuctionItem)
@@ -226,10 +283,18 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
       .then(res => {
         this.items = res.data.map(item => {
           item.editing = false;
+
           return item;
         });
 
-        if (this.items.length) {
+        if (this.isInvitation) {
+          this.$nextTick(() => {
+            this.items.forEach(item => {
+              (<ElTable>this.$refs.itemGrid)
+                .toggleRowSelection(item, this.watchedItemIds.has(item.id));
+            });
+          });
+        } else if (this.items.length) {
           this.setRow(this.items[0]);
         }
       })

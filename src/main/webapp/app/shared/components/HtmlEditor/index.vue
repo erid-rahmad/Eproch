@@ -1,6 +1,7 @@
 <template>
   <div class="html-editor">
     <editor-menu-bar
+      v-if="!disabled"
       :editor="editor"
       v-slot="{ commands, isActive }"
     >

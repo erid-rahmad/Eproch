@@ -124,4 +124,8 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20210615080900" author="Ananta Aryadewa">
+        <dropNotNullConstraint tableName="m_auction_invitation" columnName="document_action" />
+    </changeSet>
+
 </databaseChangeLog>

@@ -20,6 +20,13 @@
       >
         <el-form-item label="Auction No.">
           <el-input
+            v-if="isInvitation"
+            v-model="auction.auctionDocumentNo"
+            ref="documentNo"
+            disabled
+          ></el-input>
+          <el-input
+            v-else
             v-model="auction.documentNo"
             ref="documentNo"
             clearable

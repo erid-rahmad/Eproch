@@ -281,25 +281,6 @@ public class MAuctionInvitationResourceIT {
 
     @Test
     @Transactional
-    public void checkDocumentActionIsRequired() throws Exception {
-        int databaseSizeBeforeTest = mAuctionInvitationRepository.findAll().size();
-        // set the field null
-        mAuctionInvitation.setDocumentAction(null);
-
-        // Create the MAuctionInvitation, which fails.
-        MAuctionInvitationDTO mAuctionInvitationDTO = mAuctionInvitationMapper.toDto(mAuctionInvitation);
-
-        restMAuctionInvitationMockMvc.perform(post("/api/m-auction-invitations")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(mAuctionInvitationDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<MAuctionInvitation> mAuctionInvitationList = mAuctionInvitationRepository.findAll();
-        assertThat(mAuctionInvitationList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void checkDocumentStatusIsRequired() throws Exception {
         int databaseSizeBeforeTest = mAuctionInvitationRepository.findAll().size();
         // set the field null

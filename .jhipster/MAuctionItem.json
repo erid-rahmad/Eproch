@@ -2,6 +2,14 @@
     "name": "MAuctionItem",
     "fields": [
         {
+            "fieldName": "auctionStatus",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
             "fieldName": "quantity",
             "fieldType": "BigDecimal"
         },

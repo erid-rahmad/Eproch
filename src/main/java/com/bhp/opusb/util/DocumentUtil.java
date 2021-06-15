@@ -29,6 +29,14 @@ public class DocumentUtil {
     return STATUS_APPROVE.equals(documentStatus);
   }
 
+  public static boolean isAccept(String documentStatus) {
+    return STATUS_ACCEPT.equals(documentStatus);
+  }
+
+  public static boolean isDecline(String documentStatus) {
+    return STATUS_DECLINE.equals(documentStatus);
+  }
+
   public static boolean isDraft(String documentStatus) {
     return STATUS_DRAFT.equals(documentStatus);
   }

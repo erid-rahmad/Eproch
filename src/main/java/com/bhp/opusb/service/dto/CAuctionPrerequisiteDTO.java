@@ -4,6 +4,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 import javax.persistence.Lob;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CAuctionPrerequisite} entity.
@@ -12,12 +14,16 @@ public class CAuctionPrerequisiteDTO extends AbstractAuditingDTO {
     
     private Long id;
 
+    @NotNull
+    @Size(max = 30)
+    private String name;
+
     @Lob
     private String description;
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
 
     private Long adOrganizationId;
@@ -29,6 +35,14 @@ public class CAuctionPrerequisiteDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -96,6 +110,7 @@ public class CAuctionPrerequisiteDTO extends AbstractAuditingDTO {
     public String toString() {
         return "CAuctionPrerequisiteDTO{" +
             "id=" + getId() +
+            ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +

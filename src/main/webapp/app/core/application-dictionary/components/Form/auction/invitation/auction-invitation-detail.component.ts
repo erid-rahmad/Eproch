@@ -22,6 +22,13 @@ const AuctionInvitationDetailProps = Vue.extend({
       }
     },
 
+    selectedItems: {
+      type: Array,
+      default: () => {
+        return [];
+      }
+    },
+
     tab: {
       type: String,
       default: () => {
@@ -54,16 +61,9 @@ export default class AuctionInvitationDetail extends Mixins(AccessLevelMixin, Au
     return tabPaneComponent.get(this.activeTab);
   }
 
-  get isTabContent() {
-    return this.activeTab === 'CTN';
-  }
-
-  get isTabRul() {
-    return this.activeTab === 'RUL';
-  }
-
-  get isTabInfo() {
-    return this.activeTab === 'INF';
+  get documentStatus() {
+    const { documentStatus } = this.data;
+    return documentStatus;
   }
 
   @Watch('activeTab')
@@ -71,19 +71,31 @@ export default class AuctionInvitationDetail extends Mixins(AccessLevelMixin, Au
     this.$emit('update:tab', tabName);
   }
 
-  onTabSaved(data: any) {
-    if (this.isTabInfo || this.isTabRul || this.isTabContent) {
-      this.$emit('update:data', data);
-
-      if (this.isTabInfo) {
-        this.tabs = this.tabs
-          .map(tab => {
-            const item = {...tab};
-            item.disabled = false;
-            return item;
-          });
-      }
+  @Watch('documentStatus')
+  onDocumentStatusChanged(status: string, oldStatus: string) {
+    if (status === 'ACC' && oldStatus === 'DRF') {
+      this.activeTab = 'ITM';
     }
+
+    this.tabs = this.tabs
+      .map(tab => {
+        if (tab.value === 'PRQ') {
+          tab.hidden = status === 'ACC';
+        } else if (tab.value === 'ITM' || tab.value === 'CTN') {
+          tab.disabled = ['DRF', 'DCL'].includes(status);
+        }
+
+        return tab;
+      })
+      .filter(tab => ! tab.hidden);
+  }
+
+  onItemsSelected(items: any[]) {
+    this.$emit('update:selectedItems', items);
+  }
+
+  onTabSaved(data: any) {
+    this.$emit('update:data', data);
   }
 
   created() {
@@ -99,7 +111,7 @@ export default class AuctionInvitationDetail extends Mixins(AccessLevelMixin, Au
         id: 1010,
         name: 'Prerequisites',
         value: 'PRQ',
-        hidden: this.data.documentStatus !== 'DRF'
+        hidden: this.data.documentStatus === 'ACC'
       },
       {
         id: 1020,
@@ -114,8 +126,6 @@ export default class AuctionInvitationDetail extends Mixins(AccessLevelMixin, Au
         disabled: this.data.documentStatus === 'DRF'
       },
     ].filter(tab => ! tab.hidden);
-
-    console.log('tabs:', this.tabs);
   }
 
   save() {

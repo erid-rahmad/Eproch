@@ -21,4 +21,14 @@
                                  referencedTableName="m_auction_item"/>
 
     </changeSet>
+
+    <changeSet id="20210615095802" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="vendor_id"
+                                 baseTableName="m_auction_submission"
+                                 constraintName="fk_m_auction_submission_vendor_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_vendor"/>
+
+    </changeSet>
 </databaseChangeLog>

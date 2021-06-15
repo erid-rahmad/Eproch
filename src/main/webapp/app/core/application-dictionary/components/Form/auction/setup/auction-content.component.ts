@@ -41,6 +41,14 @@ export default class AuctionContent extends Mixins(AccessLevelMixin, AuctionCont
     return settings.form;
   }
 
+  get isInvitation() {
+    return this.auction.documentTypeName === 'Auction Invitation';
+  }
+
+  get readOnly() {
+    return this.auction.documentTypeName === 'Auction Invitation' || (this.auction.documentStatus && this.auction.documentStatus !== 'DRF');
+  }
+
   created() {
     this.auction = {...this.data};
 

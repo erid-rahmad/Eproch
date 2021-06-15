@@ -1089,12 +1089,14 @@ entity MAuctionContent {
 }
 
 entity CAuctionPrerequisite {
+	name String required maxlength(30)
 	description TextBlob
 	uid UUID
 	active Boolean
 }
 
 entity MAuctionItem {
+	auctionStatus String maxlength(10)
 	quantity BigDecimal
 
 	/* Specify the ceiling price of the item. */
@@ -1210,7 +1212,7 @@ entity MAuctionInvitation {
 	// Common transactional fields.
 	dateTrx ZonedDateTime
 	documentNo String maxlength(30)
-	documentAction String required maxlength(10)
+	documentAction String maxlength(10)
 
 	/** By default is SMT (submit). Available statuses are: ACC (Accept) and DCL (Decline). */
 	documentStatus String required maxlength(12)
@@ -2028,6 +2030,7 @@ relationship ManyToOne {
 
 	MAuctionSubmission{adOrganization required} to ADOrganization
 	MAuctionSubmission{auctionItem required} to MAuctionItem
+	MAuctionSubmission{vendor required} to CVendor
 
 	MAuctionSubmissionLog{auctionItem required} to MAuctionItem
 

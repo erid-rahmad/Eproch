@@ -8,6 +8,7 @@ import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.Filter;
 import io.github.jhipster.service.filter.LongFilter;
+import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -24,6 +25,8 @@ public class MAuctionItemCriteria implements Serializable, Criteria {
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
+
+    private StringFilter auctionStatus;
 
     private BigDecimalFilter quantity;
 
@@ -54,6 +57,7 @@ public class MAuctionItemCriteria implements Serializable, Criteria {
 
     public MAuctionItemCriteria(MAuctionItemCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.auctionStatus = other.auctionStatus == null ? null : other.auctionStatus.copy();
         this.quantity = other.quantity == null ? null : other.quantity.copy();
         this.ceilingPrice = other.ceilingPrice == null ? null : other.ceilingPrice.copy();
         this.amount = other.amount == null ? null : other.amount.copy();
@@ -79,6 +83,14 @@ public class MAuctionItemCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public StringFilter getAuctionStatus() {
+        return auctionStatus;
+    }
+
+    public void setAuctionStatus(StringFilter auctionStatus) {
+        this.auctionStatus = auctionStatus;
     }
 
     public BigDecimalFilter getQuantity() {
@@ -189,6 +201,7 @@ public class MAuctionItemCriteria implements Serializable, Criteria {
         final MAuctionItemCriteria that = (MAuctionItemCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(auctionStatus, that.auctionStatus) &&
             Objects.equals(quantity, that.quantity) &&
             Objects.equals(ceilingPrice, that.ceilingPrice) &&
             Objects.equals(amount, that.amount) &&
@@ -207,6 +220,7 @@ public class MAuctionItemCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
+        auctionStatus,
         quantity,
         ceilingPrice,
         amount,
@@ -226,6 +240,7 @@ public class MAuctionItemCriteria implements Serializable, Criteria {
     public String toString() {
         return "MAuctionItemCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (auctionStatus != null ? "auctionStatus=" + auctionStatus + ", " : "") +
                 (quantity != null ? "quantity=" + quantity + ", " : "") +
                 (ceilingPrice != null ? "ceilingPrice=" + ceilingPrice + ", " : "") +
                 (amount != null ? "amount=" + amount + ", " : "") +

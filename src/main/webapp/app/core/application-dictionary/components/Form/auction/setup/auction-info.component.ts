@@ -54,8 +54,12 @@ export default class AuctionInfo extends Mixins(AccessLevelMixin, AuctionInfoPro
     return settings.form;
   }
 
+  get isInvitation() {
+    return this.auction.documentTypeName === 'Auction Invitation';
+  }
+
   get readOnly() {
-    return this.auction.documentTypeName === 'Auction Invitation' || (this.auction.documentStatus && this.auction.documentStatus !== 'DRF');
+    return this.isInvitation || (this.auction.documentStatus && this.auction.documentStatus !== 'DRF');
   }
 
   created() {

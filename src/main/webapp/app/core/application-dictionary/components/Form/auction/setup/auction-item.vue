@@ -17,8 +17,12 @@
         >
           <el-form-item label="Auction No.">
             <el-input
+              v-if="isInvitation"
+              v-model="auction.auctionDocumentNo"
+            ></el-input>
+            <el-input
+              v-else
               v-model="auction.documentNo"
-              clearable
             ></el-input>
           </el-form-item>
         </el-col>
@@ -50,14 +54,27 @@
       size="mini"
       stripe
       @current-change="onCurrentRowChanged"
+      @selection-change="onSelectionChanged"
     >
-      <el-table-column width="50" label="No">
+      <el-table-column
+        v-if="isInvitation"
+        align="center"
+        fixed
+        type="selection"
+        width="50"
+      ></el-table-column>
+      <el-table-column
+        v-else
+        width="50"
+        label="No"
+      >
         <template slot-scope="{ $index }">
           {{ $index + 1 }}
         </template>
       </el-table-column>
 
       <el-table-column
+        v-if="!isInvitation"
         label="Code"
         width="130"
         show-overflow-tooltip
@@ -256,6 +273,7 @@
     </el-table>
 
     <el-form
+      v-if="!isInvitation"
       :disabled="!selectedRow.editing"
       :label-position="formSettings.labelPosition"
       :label-width="formSettings.labelWidth"
@@ -281,6 +299,7 @@
               v-model="selectedRow.bidDecrement"
               controls-position="right"
               :min="0"
+              :max="auction.ruleBidImprovementUnit === 'P' ? 100 : Infinity"
             ></el-input-number>
           </el-form-item>
           <el-form-item label="Leading Bid Front Buffer">

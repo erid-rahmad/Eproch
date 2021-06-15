@@ -41,6 +41,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class MAuctionItemResourceIT {
 
+    private static final String DEFAULT_AUCTION_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_AUCTION_STATUS = "BBBBBBBBBB";
+
     private static final BigDecimal DEFAULT_QUANTITY = new BigDecimal(1);
     private static final BigDecimal UPDATED_QUANTITY = new BigDecimal(2);
     private static final BigDecimal SMALLER_QUANTITY = new BigDecimal(1 - 1);
@@ -99,6 +102,7 @@ public class MAuctionItemResourceIT {
      */
     public static MAuctionItem createEntity(EntityManager em) {
         MAuctionItem mAuctionItem = new MAuctionItem()
+            .auctionStatus(DEFAULT_AUCTION_STATUS)
             .quantity(DEFAULT_QUANTITY)
             .ceilingPrice(DEFAULT_CEILING_PRICE)
             .amount(DEFAULT_AMOUNT)
@@ -157,6 +161,7 @@ public class MAuctionItemResourceIT {
      */
     public static MAuctionItem createUpdatedEntity(EntityManager em) {
         MAuctionItem mAuctionItem = new MAuctionItem()
+            .auctionStatus(UPDATED_AUCTION_STATUS)
             .quantity(UPDATED_QUANTITY)
             .ceilingPrice(UPDATED_CEILING_PRICE)
             .amount(UPDATED_AMOUNT)
@@ -229,6 +234,7 @@ public class MAuctionItemResourceIT {
         List<MAuctionItem> mAuctionItemList = mAuctionItemRepository.findAll();
         assertThat(mAuctionItemList).hasSize(databaseSizeBeforeCreate + 1);
         MAuctionItem testMAuctionItem = mAuctionItemList.get(mAuctionItemList.size() - 1);
+        assertThat(testMAuctionItem.getAuctionStatus()).isEqualTo(DEFAULT_AUCTION_STATUS);
         assertThat(testMAuctionItem.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
         assertThat(testMAuctionItem.getCeilingPrice()).isEqualTo(DEFAULT_CEILING_PRICE);
         assertThat(testMAuctionItem.getAmount()).isEqualTo(DEFAULT_AMOUNT);
@@ -271,6 +277,7 @@ public class MAuctionItemResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mAuctionItem.getId().intValue())))
+            .andExpect(jsonPath("$.[*].auctionStatus").value(hasItem(DEFAULT_AUCTION_STATUS)))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY.intValue())))
             .andExpect(jsonPath("$.[*].ceilingPrice").value(hasItem(DEFAULT_CEILING_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.intValue())))
@@ -292,6 +299,7 @@ public class MAuctionItemResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(mAuctionItem.getId().intValue()))
+            .andExpect(jsonPath("$.auctionStatus").value(DEFAULT_AUCTION_STATUS))
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY.intValue()))
             .andExpect(jsonPath("$.ceilingPrice").value(DEFAULT_CEILING_PRICE.intValue()))
             .andExpect(jsonPath("$.amount").value(DEFAULT_AMOUNT.intValue()))
@@ -319,6 +327,84 @@ public class MAuctionItemResourceIT {
 
         defaultMAuctionItemShouldBeFound("id.lessThanOrEqual=" + id);
         defaultMAuctionItemShouldNotBeFound("id.lessThan=" + id);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMAuctionItemsByAuctionStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mAuctionItemRepository.saveAndFlush(mAuctionItem);
+
+        // Get all the mAuctionItemList where auctionStatus equals to DEFAULT_AUCTION_STATUS
+        defaultMAuctionItemShouldBeFound("auctionStatus.equals=" + DEFAULT_AUCTION_STATUS);
+
+        // Get all the mAuctionItemList where auctionStatus equals to UPDATED_AUCTION_STATUS
+        defaultMAuctionItemShouldNotBeFound("auctionStatus.equals=" + UPDATED_AUCTION_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMAuctionItemsByAuctionStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mAuctionItemRepository.saveAndFlush(mAuctionItem);
+
+        // Get all the mAuctionItemList where auctionStatus not equals to DEFAULT_AUCTION_STATUS
+        defaultMAuctionItemShouldNotBeFound("auctionStatus.notEquals=" + DEFAULT_AUCTION_STATUS);
+
+        // Get all the mAuctionItemList where auctionStatus not equals to UPDATED_AUCTION_STATUS
+        defaultMAuctionItemShouldBeFound("auctionStatus.notEquals=" + UPDATED_AUCTION_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMAuctionItemsByAuctionStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        mAuctionItemRepository.saveAndFlush(mAuctionItem);
+
+        // Get all the mAuctionItemList where auctionStatus in DEFAULT_AUCTION_STATUS or UPDATED_AUCTION_STATUS
+        defaultMAuctionItemShouldBeFound("auctionStatus.in=" + DEFAULT_AUCTION_STATUS + "," + UPDATED_AUCTION_STATUS);
+
+        // Get all the mAuctionItemList where auctionStatus equals to UPDATED_AUCTION_STATUS
+        defaultMAuctionItemShouldNotBeFound("auctionStatus.in=" + UPDATED_AUCTION_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMAuctionItemsByAuctionStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mAuctionItemRepository.saveAndFlush(mAuctionItem);
+
+        // Get all the mAuctionItemList where auctionStatus is not null
+        defaultMAuctionItemShouldBeFound("auctionStatus.specified=true");
+
+        // Get all the mAuctionItemList where auctionStatus is null
+        defaultMAuctionItemShouldNotBeFound("auctionStatus.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMAuctionItemsByAuctionStatusContainsSomething() throws Exception {
+        // Initialize the database
+        mAuctionItemRepository.saveAndFlush(mAuctionItem);
+
+        // Get all the mAuctionItemList where auctionStatus contains DEFAULT_AUCTION_STATUS
+        defaultMAuctionItemShouldBeFound("auctionStatus.contains=" + DEFAULT_AUCTION_STATUS);
+
+        // Get all the mAuctionItemList where auctionStatus contains UPDATED_AUCTION_STATUS
+        defaultMAuctionItemShouldNotBeFound("auctionStatus.contains=" + UPDATED_AUCTION_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMAuctionItemsByAuctionStatusNotContainsSomething() throws Exception {
+        // Initialize the database
+        mAuctionItemRepository.saveAndFlush(mAuctionItem);
+
+        // Get all the mAuctionItemList where auctionStatus does not contain DEFAULT_AUCTION_STATUS
+        defaultMAuctionItemShouldNotBeFound("auctionStatus.doesNotContain=" + DEFAULT_AUCTION_STATUS);
+
+        // Get all the mAuctionItemList where auctionStatus does not contain UPDATED_AUCTION_STATUS
+        defaultMAuctionItemShouldBeFound("auctionStatus.doesNotContain=" + UPDATED_AUCTION_STATUS);
     }
 
 
@@ -1127,6 +1213,7 @@ public class MAuctionItemResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mAuctionItem.getId().intValue())))
+            .andExpect(jsonPath("$.[*].auctionStatus").value(hasItem(DEFAULT_AUCTION_STATUS)))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY.intValue())))
             .andExpect(jsonPath("$.[*].ceilingPrice").value(hasItem(DEFAULT_CEILING_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.intValue())))
@@ -1182,6 +1269,7 @@ public class MAuctionItemResourceIT {
         // Disconnect from session so that the updates on updatedMAuctionItem are not directly saved in db
         em.detach(updatedMAuctionItem);
         updatedMAuctionItem
+            .auctionStatus(UPDATED_AUCTION_STATUS)
             .quantity(UPDATED_QUANTITY)
             .ceilingPrice(UPDATED_CEILING_PRICE)
             .amount(UPDATED_AMOUNT)
@@ -1201,6 +1289,7 @@ public class MAuctionItemResourceIT {
         List<MAuctionItem> mAuctionItemList = mAuctionItemRepository.findAll();
         assertThat(mAuctionItemList).hasSize(databaseSizeBeforeUpdate);
         MAuctionItem testMAuctionItem = mAuctionItemList.get(mAuctionItemList.size() - 1);
+        assertThat(testMAuctionItem.getAuctionStatus()).isEqualTo(UPDATED_AUCTION_STATUS);
         assertThat(testMAuctionItem.getQuantity()).isEqualTo(UPDATED_QUANTITY);
         assertThat(testMAuctionItem.getCeilingPrice()).isEqualTo(UPDATED_CEILING_PRICE);
         assertThat(testMAuctionItem.getAmount()).isEqualTo(UPDATED_AMOUNT);

@@ -1,18 +1,19 @@
 package com.bhp.opusb.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.bhp.opusb.domain.MAuctionSubmission;
 import com.bhp.opusb.repository.MAuctionSubmissionRepository;
 import com.bhp.opusb.service.dto.MAuctionSubmissionDTO;
 import com.bhp.opusb.service.mapper.MAuctionSubmissionMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link MAuctionSubmission}.
@@ -43,6 +44,16 @@ public class MAuctionSubmissionService {
         MAuctionSubmission mAuctionSubmission = mAuctionSubmissionMapper.toEntity(mAuctionSubmissionDTO);
         mAuctionSubmission = mAuctionSubmissionRepository.save(mAuctionSubmission);
         return mAuctionSubmissionMapper.toDto(mAuctionSubmission);
+    }
+
+    /**
+     * Watch auction items that has to be submitted by the vendor
+     * @param items
+     * @return
+     */
+    public List<MAuctionSubmissionDTO> attend(List<MAuctionSubmissionDTO> items) {
+        List<MAuctionSubmission> mAuctionSubmissions = mAuctionSubmissionMapper.toEntity(items);
+        return mAuctionSubmissionMapper.toDto(mAuctionSubmissionRepository.saveAll(mAuctionSubmissions));
     }
 
     /**

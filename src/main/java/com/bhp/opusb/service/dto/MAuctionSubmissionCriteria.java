@@ -33,7 +33,10 @@ public class MAuctionSubmissionCriteria implements Serializable, Criteria {
 
     private LongFilter adOrganizationId;
 
+    private LongFilter auctionId;
     private LongFilter auctionItemId;
+
+    private LongFilter vendorId;
 
     public MAuctionSubmissionCriteria() {
     }
@@ -44,7 +47,9 @@ public class MAuctionSubmissionCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.auctionId = other.auctionId == null ? null : other.auctionId.copy();
         this.auctionItemId = other.auctionItemId == null ? null : other.auctionItemId.copy();
+        this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
     }
 
     @Override
@@ -92,12 +97,28 @@ public class MAuctionSubmissionCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
+    public LongFilter getAuctionId() {
+        return auctionId;
+    }
+
+    public void setAuctionId(LongFilter auctionId) {
+        this.auctionId = auctionId;
+    }
+
     public LongFilter getAuctionItemId() {
         return auctionItemId;
     }
 
     public void setAuctionItemId(LongFilter auctionItemId) {
         this.auctionItemId = auctionItemId;
+    }
+
+    public LongFilter getVendorId() {
+        return vendorId;
+    }
+
+    public void setVendorId(LongFilter vendorId) {
+        this.vendorId = vendorId;
     }
 
 
@@ -116,7 +137,9 @@ public class MAuctionSubmissionCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(auctionItemId, that.auctionItemId);
+            Objects.equals(auctionId, that.auctionId) &&
+            Objects.equals(auctionItemId, that.auctionItemId) &&
+            Objects.equals(vendorId, that.vendorId);
     }
 
     @Override
@@ -127,7 +150,9 @@ public class MAuctionSubmissionCriteria implements Serializable, Criteria {
         uid,
         active,
         adOrganizationId,
-        auctionItemId
+        auctionId,
+        auctionItemId,
+        vendorId
         );
     }
 
@@ -139,7 +164,9 @@ public class MAuctionSubmissionCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (auctionId != null ? "auctionId=" + auctionId + ", " : "") +
                 (auctionItemId != null ? "auctionItemId=" + auctionItemId + ", " : "") +
+                (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
             "}";
     }
 

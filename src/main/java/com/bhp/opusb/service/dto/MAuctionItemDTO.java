@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
+import javax.validation.constraints.Size;
+
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -12,6 +14,9 @@ import io.swagger.annotations.ApiModelProperty;
 public class MAuctionItemDTO extends AbstractAuditingDTO {
     
     private Long id;
+
+    @Size(max = 10)
+    private String auctionStatus;
 
     private BigDecimal quantity;
 
@@ -69,6 +74,14 @@ public class MAuctionItemDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getAuctionStatus() {
+        return auctionStatus;
+    }
+
+    public void setAuctionStatus(String auctionStatus) {
+        this.auctionStatus = auctionStatus;
     }
 
     public BigDecimal getQuantity() {
@@ -232,6 +245,7 @@ public class MAuctionItemDTO extends AbstractAuditingDTO {
     public String toString() {
         return "MAuctionItemDTO{" +
             "id=" + getId() +
+            ", auctionStatus='" + getAuctionStatus() + "'" +
             ", quantity=" + getQuantity() +
             ", ceilingPrice=" + getCeilingPrice() +
             ", amount=" + getAmount() +
