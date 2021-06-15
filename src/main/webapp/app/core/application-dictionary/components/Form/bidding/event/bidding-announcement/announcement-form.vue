@@ -35,7 +35,7 @@
               <svg-icon name="icomoo/206-attachment"></svg-icon> Attachment
             </el-button>
             <el-button v-if="hasAttachment" icon="el-icon-view" size="mini" type="primary" @click="handlePreview">
-              {{ attachmentName }}
+              {{ formData.attachmentName }}
             </el-button>
             <el-button v-if="hasAttachment" icon="el-icon-close" size="mini" type="primary" @click="cancelAttachment"></el-button>
             <el-button icon="el-icon-view" size="mini" type="primary" @click="emailPreviewVisible = true">

@@ -17,6 +17,7 @@ const EvaluationFormDetailComponentProp = Vue.extend({
   props: {
     loading: Boolean,
     readOnly: Boolean,
+    title:String,
     evaluationFormProp: {
       type: Object,
       default: () => {
