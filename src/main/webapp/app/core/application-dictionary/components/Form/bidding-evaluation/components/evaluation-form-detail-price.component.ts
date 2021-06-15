@@ -9,6 +9,7 @@ const baseApiEvalResultLine='api/m-bidding-eval-result-lines';
 
 const DetailPriceProp = Vue.extend({
   props: {
+    title:String,
     evaluationFormProp: {
       type: Object,
       default: () => {

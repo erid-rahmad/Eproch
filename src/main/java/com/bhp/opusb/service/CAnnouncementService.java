@@ -112,7 +112,7 @@ public class CAnnouncementService {
         final List<AdUserDTO> users = cAnnouncementPublishDTO.getUsers();
         final MBidding mBidding = mBiddingMapper.toEntity(mBiddingDTO);
 
-        String body = content.replace("#biddingTitle", mBiddingDTO.getName());
+        String body = content.replace("#biddingTitle", cAnnouncementPublishDTO.getAnnouncement().getDescription());
         List<Long> vendorlist = new ArrayList<>();
 
 
@@ -145,8 +145,8 @@ public class CAnnouncementService {
         }
 
         // Update the announcement published date.
-        cAnnouncement.setPublishDate(ZonedDateTime.now());
-        cAnnouncementRepository.save(cAnnouncement);
+//         cAnnouncement.setPublishDate(ZonedDateTime.now());
+//        cAnnouncementRepository.save(cAnnouncement);
     }
 
     public Map<String,Object> emailInvitation (Long id){

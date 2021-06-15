@@ -1,5 +1,6 @@
 <template>
     <div v-if="" class="bidding-evaluation card-view">
+
         <el-row class="toolbar">
             <el-col :span="24">
                 <el-button size="mini"
@@ -87,6 +88,9 @@
             </el-col>
         </el-row>
         <div class="card">
+            <header v-if="title">
+                <h3 align="center"> {{changeCode(title)}} Proposal</h3>
+            </header>
             <el-form v-if="FormMenu===0 || FormMenu===2|| FormMenu===3" ref="productCatalog" label-position="left"
                      label-width="130px"
                      size="mini">
@@ -108,14 +112,14 @@
             </el-form>
             <div v-if="FormMenu===1">
                 <EvaluationTeamDetailPrice ref="evaluationFormDetail" :evaluationFormProp="evaluationFormProp"
-                                           :readOnly="readOnly"></EvaluationTeamDetailPrice>
+                                           :readOnly="readOnly" ></EvaluationTeamDetailPrice>
             </div>
             <div v-if="FormMenu===2">
                 <el-divider content-position="left">
                     <h4>Evaluation</h4>
                 </el-divider>
                 <EvaluationFormDetail :SelectVendorScoringLine="SelectVendorScoringLine" :evaluationFormProp="evaluationFormProp"
-                                      :readOnly="readOnly"></EvaluationFormDetail>
+                                      :readOnly="readOnly" ></EvaluationFormDetail>
             </div>
 
         </div>

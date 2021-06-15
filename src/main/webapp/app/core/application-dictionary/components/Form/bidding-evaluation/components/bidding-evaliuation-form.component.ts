@@ -55,6 +55,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   dialogSubmitEvaluation:boolean=false;
   dialogApproveEvaluation:boolean=false;
   dialogRejectEvaluation:boolean=false;
+  title='';
 
 
   mainForm: any = {};
@@ -71,6 +72,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   }
 
   setEvaluation(data :any){
+    this.title=data.evaluation;
     this.SelectVendorScoringLine=data;
     this.vendorId=this.evaluation.vendorId;
     this.evaluationFormProp.vendorId=this.evaluation.vendorId;
@@ -82,12 +84,15 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
   changeCode(code :String){
     if(code==="T"){
+      // this.title="Technic";
       return "Technic"
     }
     if(code==="A"){
+      // this.title="Administrasi";
       return "Administrasi"
     }
     if(code==="P"){
+      // this.title="Price";
       return "Price"
     }
   }

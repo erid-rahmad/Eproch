@@ -36,8 +36,6 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
   emailPreviewVisible = false;
   recipientListVisible = false;
 
-
-
   public biddingData: any = {};
   public value: any = {};
   public itemname: any = {};
@@ -90,9 +88,7 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
       this.$set(this.formData, 'biddingId', mainForm.biddingId);
       this.$set(this.formData, 'biddingScheduleId', mainForm.id);
     }
-
     this.retrieveVendorSuggestions(mainForm.biddingId);
-
     if (!this.newRecord) {
       this.retrieveAnnouncement(mainForm.biddingId, mainForm.id);
     }
@@ -106,12 +102,11 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
     }
   }
 
-
-
   changedata() {
     this.emailList = this.dataForAnnouncment.emaillist;
     this.vendorSuggestions = this.dataForAnnouncment.vendorlist;
   }
+
   private retrieveBiddings() {
     this.commonService(baseApiBidding)
       .retrieve({
@@ -263,6 +258,7 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
   }
 
   handlePreview() {
+    console.log(this.formData.attachmentUrl)
     window.open(this.formData.attachmentUrl, '_blank');
   }
 
@@ -290,7 +286,7 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
     this.formData.attachment = response.attachment;
     this.formData.attachmentId = response.attachment.id;
     this.formData.attachmentName = response.attachment.name;
-    this.formData.attachmentUrl = response.attachment.downloadUrl;
+    this.formData.attachmentUrl = response.downloadUri;
     this.file = file;
   }
 
@@ -324,6 +320,8 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
 
   publish() {
 
+
+
     (<ElForm>this.$refs.mainForm).validate((passed, errors) => {
       if (passed) {
         this.loading = true;
@@ -331,6 +329,7 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
           .create(this.formData)
           .then(res => {
             this.formData = res;
+            console.log("this form data",this.formData)
             this.$message.success('Announcement has been saved successfully');
 
 
@@ -342,9 +341,8 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
               const data = {
                 announcement: this.formData,
                 bidding: {
-                  id: this.mainForm.biddingId,
-                  name: this.mainForm.biddingTitle,
-                  documentNo: this.mainForm.biddingNo
+                  id: this.formData.biddingId,
+
                 },
                 users: [],
                 vendor: this.vendorSuggestions,
@@ -362,6 +360,7 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
                 } = recipient;
                 data.users.push(user);
               }
+              console.log("this data",data)
 
               this.commonService(`${baseApiAnnouncement}/publish/${data.announcement.id}`)
                 .create(data)
@@ -379,11 +378,6 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
           .finally(() => this.loading = false);
       }
     })
-
-
-
-
-
   }
 
   saveAsDraft() {
@@ -405,7 +399,6 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
   saveAttachment() {
     this.formData.attachmentId = this.formData.attachment.id;
     this.formData.attachmentName = this.formData.attachment.fileName;
-    this.formData.attachmentUrl = this.formData.attachment.downloadUrl;
     this.attachmentFormVisible = false;
   }
 }
