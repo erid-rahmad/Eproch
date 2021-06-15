@@ -29,7 +29,6 @@ export default class BiddingSubmissionGridComponent extends mixins( AlertMixin,A
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
-
   formatBiddingStatus(value: string) {
     return this.biddingStatuses.find(status => status.key === value)?.value;
   }
@@ -60,7 +59,6 @@ export default class BiddingSubmissionGridComponent extends mixins( AlertMixin,A
             this.scheduleFromGrid = item;
           }
         })
-        console.log("this schedule",this.scheduleFromGrid);
         this.index=false;
       })
       .catch(err => {
@@ -76,18 +74,22 @@ export default class BiddingSubmissionGridComponent extends mixins( AlertMixin,A
     this.index=true;
   }
 
-
-
   public retrieveAllRecords(): void {
     this.processing = true;
     this.commonService(baseApiUrl)
       .retrieve({
-        criteriaQuery: this.updateCriteria([
+        criteriaQuery: [
           'active.equals=true'
-        ]),
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id,desc']
+        }
       })
       .then(res => {
         this.gridData = res.data;
+        console.log("grid data",this.gridData);
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
 

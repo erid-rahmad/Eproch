@@ -47,13 +47,13 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin,AccessLe
     this.loading=true;
     this.commonService('/api/m-biddings')
       .retrieve({
-        criteriaQuery: this.updateCriteria([
+        criteriaQuery: [
           'active.equals=true'
-        ]),
+        ],
         paginationQuery: {
           page: 0,
-          size: 10000,
-          sort: ['id']
+          size: 100,
+          sort: ['id,desc']
         }
       })
       .then(res => {

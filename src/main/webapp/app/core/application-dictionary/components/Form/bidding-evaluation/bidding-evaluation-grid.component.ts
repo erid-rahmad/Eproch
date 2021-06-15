@@ -50,7 +50,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
         paginationQuery: {
           page: 0,
           size: 10000,
-          sort: ['documentNo']
+          sort: ['id,desc']
         }
       })
       .then(res => {
