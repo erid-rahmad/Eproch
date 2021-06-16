@@ -80,6 +80,8 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
     if (this.evaluationFormProp.evaluationResultLine) {
       this.evaluationResultLine = this.evaluationFormProp.evaluationResultLine;
     };
+    this.evaluationResultLine.score=0;
+
 
   }
 
@@ -90,6 +92,8 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
     if (this.evaluationFormProp.evaluationResultLine) {
       this.evaluationResultLine = this.evaluationFormProp.evaluationResultLine;
     };
+    this.evaluationResultLine.score=0;
+
   }
 
   getEvaluationtype(){
@@ -254,8 +258,6 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
         else if (this.title==="A"){
           this.retrieveAnswerAdmin(this.evaluationFormProp.biddingSubmission.id);
         }
-
-
       })
       .catch(err => {
         const message = 'Failed to get vendor scoring requirements';
@@ -286,7 +288,6 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
           }
         });
         this.retrieveAttachment(this.evaluationFormProp.biddingSubmission.id);
-
       })
       .catch(err => {
         const message = 'Failed to get vendor scoring requirements';
@@ -309,7 +310,6 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
         }
       })
       .then(res => {
-
         res.data.forEach((criteria: any) => {
           try {
             let question = this.questions.get(criteria.biddingSubCriteriaLineId);

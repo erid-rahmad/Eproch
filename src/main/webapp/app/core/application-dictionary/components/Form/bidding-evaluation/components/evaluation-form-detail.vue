@@ -160,7 +160,7 @@
                     </el-col>
                     <el-col :span="6">
                         <div class="grid-content bg-purple">
-                            <el-form-item label="Average Score">
+                            <el-form-item  v-if="evaluationType" label="Average Score">
                                 <el-input disabled="true" v-model="evaluationResultLine.score" :disabled="true" placeholder="Please input"></el-input>
                             </el-form-item>
                         </div>

@@ -33,7 +33,7 @@
                       ref="multipleTable"
                       stripe @selection-change="onRecipientSelectionChanged"
                       border
-             
+
                       v-loading="loading"
                       style="width: 100%">
                 <el-table-column label="Summary"
