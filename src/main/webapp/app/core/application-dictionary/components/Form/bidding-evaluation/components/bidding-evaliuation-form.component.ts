@@ -172,45 +172,13 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
         let evaluationResult = res.data;
         this.button=3;
         this.dialogApproveEvaluation=false;
-        this.createTableNegotiation();
+        // this.createTableNegotiation();
       })
       .catch(_err => this.$message.error('fail create records evalResult'))
       .finally(()=>{});
   }
 
-  createTableNegotiation(){
-    let biddingSchedule:any={};
-    this.commonService(baseApiBiddingSchedule)
-      .retrieve({
-        criteriaQuery: this.updateCriteria([
-          `biddingId.equals=${this.evaluationResult.biddingId}`
-        ])
-      })
-      .then(res => {
-        res.data.forEach(schedule=>{
-//need Change
-          if (schedule.formType=="AN"){
-            biddingSchedule.startDate=schedule.startDate;
-            biddingSchedule.endDate=schedule.endDate;
-            biddingSchedule.id=schedule.id;
-          }
-        });
-        const bidingNego ={
-          biddingEvalResultId:this.evaluationResult.id,
-          biddingScheduleId:biddingSchedule.id,
-          adOrganizationId:this.evaluationResult.adOrganizationId,
-          startDate:biddingSchedule.startDate,
-          endDate:biddingSchedule.startDate
-        }
-        this.commonService(baseApiNegotiation)
-          .create(bidingNego)
-          .then(res => {
-          })
-          .catch(_err => this.$message.error('fail create record negotiation'))
-          .finally(()=>{this.button=3});
-      })
-      .catch(err => this.$message.error('Failed to get baseApiBiddingSchedule'))
-  }
+
 
   rejectEvaluation(){
     this.evaluationResult.evaluationStatus="RJC";

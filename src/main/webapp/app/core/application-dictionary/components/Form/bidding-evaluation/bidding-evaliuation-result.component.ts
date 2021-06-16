@@ -8,6 +8,8 @@ import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMi
 import ResultDetail from './components/result-detail.vue';
 
 const baseApiEvalResults = 'api/m-bidding-eval-results';
+const baseApiNegotiation ='api/m-bidding-negotiations';
+const baseApiBiddingSchedule='api/m-bidding-schedules';
 
 const ProductCatalogProp = Vue.extend({
   props: {
@@ -24,8 +26,6 @@ const ProductCatalogProp = Vue.extend({
   components: {
     ResultDetail,
   }
-
-
 })
 export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertMixin, AccessLevelMixin, ProductCatalogProp) {
 
@@ -35,6 +35,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   private evaluationResult: any = [];
   private evaluationResultProp: any = {};
   private loading: boolean = false;
+  private selectedWiner = [];
 
   created() {
     this.retriveEvaluationResult(this.pickRow.id);
@@ -79,8 +80,49 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
         })
         this.evaluationResult = data_;
         console.log("this ",this.evaluationResult)
+        console.log("this ",this.evaluationResult.biddingId)
       })
       .finally(() => this.loading = false);
+  }
+
+  onRecipientSelectionChanged(val) {
+    this.selectedWiner = val;
+  }
+  createTableNegotiation(){
+    this.selectedWiner.forEach(data=>{
+      let biddingSchedule:any={};
+      this.commonService(baseApiBiddingSchedule)
+        .retrieve({
+          criteriaQuery: this.updateCriteria([
+            `biddingId.equals=${this.pickRow.id}`
+          ])
+        })
+        .then(res => {
+          res.data.forEach(schedule=>{
+//need Change
+            if (schedule.formType=="AN"){
+              biddingSchedule.startDate=schedule.startDate;
+              biddingSchedule.endDate=schedule.endDate;
+              biddingSchedule.id=schedule.id;
+            }
+          });
+          const bidingNego ={
+            biddingEvalResultId:data.id,
+            biddingScheduleId:biddingSchedule.id,
+            adOrganizationId:data.adOrganizationId,
+            startDate:biddingSchedule.startDate,
+            endDate:biddingSchedule.startDate
+          }
+          this.commonService(baseApiNegotiation)
+            .create(bidingNego)
+            .then(res => {
+              this.$message.success('create record negotiation');
+            })
+            .catch(_err => this.$message.error('fail create record negotiation'))
+            .finally(()=>{});
+        })
+        .catch(err => this.$message.error('Failed to get baseApiBiddingSchedule'))
+    })
   }
 
   detailScore(row) {

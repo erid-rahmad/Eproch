@@ -5,7 +5,13 @@
                 <el-button icon="el-icon-close" plain size="mini" type="danger" @click="close">
                     Back
                 </el-button>
+                <el-button icon="el-icon-arrow-right" plain size="mini" type="primary" @click="createTableNegotiation">
+                    Submit
+                </el-button>
             </el-col>
+
+
+
         </el-row>
         <div v-if="index" class="card">
             <el-form ref="productCatalog" label-position="left" label-width="130px"
@@ -24,7 +30,10 @@
             <el-table :data="evaluationResult" align="center"
                       :default-sort="{prop: 'date', order: 'descending'}"
                       size="mini"
+                      ref="multipleTable"
+                      stripe @selection-change="onRecipientSelectionChanged"
                       border
+             
                       v-loading="loading"
                       style="width: 100%">
                 <el-table-column label="Summary"
@@ -39,10 +48,8 @@
                         </el-button>
                     </template>
                 </el-table-column>
-                <el-table-column label="Winer Recomendation" align="center" show-overflow-tooltip  min-width="100">
-                    <template slot-scope="row">
-                        <el-checkbox v-model="row.checked"></el-checkbox>
-                    </template>
+                <el-table-column label="Winer Recomendation" align="center"   min-width="100">
+                    <el-table-column type="selection" width="100"></el-table-column>
                 </el-table-column>
                 <el-table-column label="Vendor Name" align="center" min-width="180" prop="vendorName" sortable>
                 </el-table-column>
