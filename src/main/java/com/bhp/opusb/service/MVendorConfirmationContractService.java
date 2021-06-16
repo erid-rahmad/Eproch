@@ -1,6 +1,7 @@
 package com.bhp.opusb.service;
 
 import com.bhp.opusb.domain.AdUser;
+import com.bhp.opusb.domain.MBidding;
 import com.bhp.opusb.domain.MVendorConfirmationContract;
 import com.bhp.opusb.domain.MVendorConfirmationLine;
 import com.bhp.opusb.repository.AdUserRepository;
@@ -78,6 +79,9 @@ public class MVendorConfirmationContractService {
         // updates the line status to published as well
         MVendorConfirmationLine mvcl = mVendorConfirmationLineRepository.findById(mVendorConfirmationContractDTO.getVendorConfirmationLineId()).get();
         mvcl.setStatus("P");
+
+        MBidding mb = mvcl.getVendorConfirmation().getBidding();
+        mb.setBiddingStatus("F");
 
         String emailBody = "Contract for bidding " + mvcl.getVendorConfirmation().getBidding().getName() + " is available for confirmation.";
 

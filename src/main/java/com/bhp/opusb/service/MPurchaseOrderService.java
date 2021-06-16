@@ -15,11 +15,13 @@ import javax.sql.DataSource;
 import com.bhp.opusb.config.ApplicationProperties;
 import com.bhp.opusb.config.ApplicationProperties.Document;
 import com.bhp.opusb.domain.CVendorTax;
+import com.bhp.opusb.domain.MBidding;
 import com.bhp.opusb.domain.MPurchaseOrder;
 import com.bhp.opusb.domain.MPurchaseOrderLine;
 import com.bhp.opusb.domain.MRequisitionLine;
 import com.bhp.opusb.repository.CDocumentTypeRepository;
 import com.bhp.opusb.repository.CVendorTaxRepository;
+import com.bhp.opusb.repository.MBiddingRepository;
 import com.bhp.opusb.repository.MPurchaseOrderLineRepository;
 import com.bhp.opusb.repository.MPurchaseOrderRepository;
 import com.bhp.opusb.repository.MRequisitionLineRepository;
@@ -69,11 +71,13 @@ public class MPurchaseOrderService {
     private final MPurchaseOrderLineMapper mPurchaseOrderLineMapper;
     private final Document document;
 
+    private final MBiddingRepository mBiddingRepository;
+
     public MPurchaseOrderService(ApplicationProperties applicationProperties,
             MPurchaseOrderRepository mPurchaseOrderRepository, CDocumentTypeRepository cDocumentTypeRepository,
             MRequisitionRepository mRequisitionRepository, MRequisitionLineRepository mRequisitionLineRepository, MPurchaseOrderLineRepository mPurchaseOrderLineRepository,
             CVendorTaxRepository cVendorTaxRepository, MPurchaseOrderMapper mPurchaseOrderMapper, MPurchaseOrderLineMapper mPurchaseOrderLineMapper,
-            MRequisitionLineMapper mRequisitionLineMapper, DataSource dataSource) {
+            MBiddingRepository mBiddingRepository, MRequisitionLineMapper mRequisitionLineMapper, DataSource dataSource) {
         this.mPurchaseOrderRepository = mPurchaseOrderRepository;
         this.mPurchaseOrderLineRepository = mPurchaseOrderLineRepository;
         this.mRequisitionRepository = mRequisitionRepository;
@@ -84,6 +88,7 @@ public class MPurchaseOrderService {
         this.mRequisitionLineMapper = mRequisitionLineMapper;
         this.mPurchaseOrderLineMapper = mPurchaseOrderLineMapper;
         this.dataSource = dataSource;
+        this.mBiddingRepository = mBiddingRepository;
 
         document = applicationProperties.getDocuments().get("purchaseOrder");
     }
@@ -191,6 +196,11 @@ public class MPurchaseOrderService {
         for(MPurchaseOrderLineDTO lines: mpoDto.getPoLines()){
             lines.setPurchaseOrderId(savedDto.getId());
             mpols.add(mPurchaseOrderLineMapper.toEntity(lines));
+        }
+        MBidding bidding = mBiddingRepository.findById(mpoDto.getBiddingId()).get();
+        if(!"F".contentEquals(bidding.getBiddingStatus())){
+            bidding.setBiddingStatus("F");
+            mBiddingRepository.save(bidding);
         }
         mPurchaseOrderLineRepository.saveAll(mpols);
         return savedDto;

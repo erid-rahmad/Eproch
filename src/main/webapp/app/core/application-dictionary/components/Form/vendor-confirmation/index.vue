@@ -69,6 +69,13 @@
         sortable
       ></el-table-column>
       <el-table-column
+        v-if="!isVendor"
+        label="Bidding Status"
+        min-width="100"
+        sortable
+      ><template slot-scope="{ row }">{{formatBiddingStatus(row.biddingStatus)}}</template>
+      </el-table-column>
+      <el-table-column
         label="Amount"
         min-width="150"
         sortable

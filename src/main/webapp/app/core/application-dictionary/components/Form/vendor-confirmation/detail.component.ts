@@ -296,6 +296,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
           "paymentTermId": 1951601,
           "vendorId": row.vendorId,
           "warehouseId": this.mainForm.warehouseId,
+          "biddingId": this.mainForm.biddingId,
           "poLines": []
         };
 

@@ -17,6 +17,7 @@ public interface MVendorConfirmationMapper extends EntityMapper<MVendorConfirmat
     @Mapping(source = "bidding.requisition.warehouse.id", target = "warehouseId")
     @Mapping(source = "bidding.name", target = "biddingTitle")
     @Mapping(source = "bidding.biddingType.name", target = "biddingTypeName")
+    @Mapping(source = "bidding.biddingStatus", target = "biddingStatus")
     @Mapping(source = "bidding.ceilingPrice", target = "amount")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "currency.id", target = "currencyId")
