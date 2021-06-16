@@ -135,7 +135,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
             status="Fail";
           }{status="Pass"}
         })
-        average=average/loop;
+
         this.evaluationResult.status=status;
         this.evaluationResult.score=average;
         this.updateEvalResult();
@@ -205,7 +205,6 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
         this.commonService(baseApiNegotiation)
           .create(bidingNego)
           .then(res => {
-            console.log("sukses",res.data)
           })
           .catch(_err => this.$message.error('fail create record negotiation'))
           .finally(()=>{this.button=3});
