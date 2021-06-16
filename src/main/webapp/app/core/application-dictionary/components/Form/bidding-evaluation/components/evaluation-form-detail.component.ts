@@ -74,25 +74,27 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
 
   @Watch('SelectVendorScoringLine')
   loaddata() {
+    this.evaluationResultLine.score=0;
    this.getEvaluationtype();
     this.retrieveEvaluationMethodCriteria(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLineId,
       this.evaluationFormProp.SelectVendorScoringLine.id);
     if (this.evaluationFormProp.evaluationResultLine) {
       this.evaluationResultLine = this.evaluationFormProp.evaluationResultLine;
     };
-    this.evaluationResultLine.score=0;
+
 
 
   }
 
   created() {
+    this.evaluationResultLine.score=0;
     this.getEvaluationtype();
     this.retrieveEvaluationMethodCriteria(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLineId,
       this.evaluationFormProp.SelectVendorScoringLine.id);
     if (this.evaluationFormProp.evaluationResultLine) {
       this.evaluationResultLine = this.evaluationFormProp.evaluationResultLine;
     };
-    this.evaluationResultLine.score=0;
+
 
   }
 
