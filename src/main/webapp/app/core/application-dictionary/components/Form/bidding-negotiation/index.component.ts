@@ -122,6 +122,7 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
   clearSummary(){
     this.negoSummary = [];
     this.showSummary = false;
+    this.refreshHeader();
   }
 
   viewSchedule2(row){
@@ -147,7 +148,7 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
     }).then(res => {
       console.log(res.data);
       this.biddingNegotiations = (<any[]>res.data).filter((elem)=>{
-        return elem.biddingStatus!='F';
+        return elem.biddingStatus!=='F' && elem.evaluationStatus!=='SMT';
       });
     });
   }
@@ -168,9 +169,8 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
         this.clearSummary();
       }).catch((error)=>{
         console.log(error);
-        this.$message.error("Failed creating vendor confirmation");
+        this.$message.error("Failed creating vendor confirmation.");
       })
-
     } else {
       this.$message.error("Please choose at least 1 winner.");
     }

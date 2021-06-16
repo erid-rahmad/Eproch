@@ -58,7 +58,7 @@ public class MVendorConfirmationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/m-vendor-confirmations")
-    public ResponseEntity<MVendorConfirmationDTO> createMVendorConfirmation(@Valid @RequestBody MVendorConfirmationDTO mVendorConfirmationDTO) throws URISyntaxException {
+    public ResponseEntity<MVendorConfirmationDTO> createMVendorConfirmation(@Valid @RequestBody MVendorConfirmationDTO mVendorConfirmationDTO) throws URISyntaxException, BadRequestAlertException {
         log.debug("REST request to save MVendorConfirmation : {}", mVendorConfirmationDTO);
         if (mVendorConfirmationDTO.getId() != null) {
             throw new BadRequestAlertException("A new mVendorConfirmation cannot already have an ID", ENTITY_NAME, "idexists");

@@ -12,6 +12,8 @@ import com.bhp.opusb.service.dto.MVendorConfirmationDTO;
 import com.bhp.opusb.service.dto.MVendorConfirmationLineDTO;
 import com.bhp.opusb.service.mapper.MVendorConfirmationLineMapper;
 import com.bhp.opusb.service.mapper.MVendorConfirmationMapper;
+import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,6 +105,9 @@ public class MVendorConfirmationService {
     }
 
     public MVendorConfirmationDTO generateConfirmation(@Valid MBiddingNegotiationDTO mBiddingNegotiationDTO) {
+        if(mVendorConfirmationRepository.findIdsByBiddingId(mBiddingNegotiationDTO.getBiddingId()).size()>0){
+            throw new BadRequestAlertException("Cannot generate a new mVendorConfirmation with an existing bidding ID.", "mVendorConfirmation", "biddingIdExists");
+        }
         MVendorConfirmationDTO dto = new MVendorConfirmationDTO();
 
         dto.setBiddingId(mBiddingNegotiationDTO.getBiddingId());
