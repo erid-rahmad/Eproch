@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service Implementation for managing {@link MBidding}.
  */
-@Service
+@Service("mBiddingService")
 @Transactional
 public class MBiddingService {
 
@@ -331,5 +331,13 @@ public class MBiddingService {
     public void delete(Long id) {
         log.debug("Request to delete MBidding : {}", id);
         mBiddingRepository.deleteById(id);
+    }
+
+    // For workflow
+    public MBidding toEntity(MBiddingDTO dto){
+        return mBiddingMapper.toEntity(dto);
+    }
+    public MBiddingDTO toDto(MBidding entity){
+        return mBiddingMapper.toDto(entity);
     }
 }

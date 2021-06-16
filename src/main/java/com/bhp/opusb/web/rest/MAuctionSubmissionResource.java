@@ -77,16 +77,16 @@ public class MAuctionSubmissionResource {
     }
 
     /**
-     * {@code POST  /m-auction-submissions/follow} : Follow the auction items.
-     * This will create new MAuctionSubmission records based on the selected Auction Items.
+     * {@code POST  /m-auction-submissions/attend} : Attend the auction items.
+     * This will create new MAuctionSubmission and its items based on the selected Auction Items.
      *
-     * @param mAuctionSubmissionDTOs the list of mAuctionSubmissionDTOs to create.
-     * @return the {@link ResponseEntity} with status {@code 200 (Okay)} and with body the list of mAuctionSubmissionDTOs.
+     * @param mAuctionSubmissionDTO the mAuctionSubmissionDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 200 (Okay)} and with body the mAuctionSubmissionDTO.
      */
     @PostMapping("/m-auction-submissions/attend")
-    public ResponseEntity<List<MAuctionSubmissionDTO>> createMAuctionSubmissions(@RequestBody List<MAuctionSubmissionDTO> mAuctionSubmissionDTOs) {
-        log.debug("REST request to save MAuctionSubmissions. count : {}", mAuctionSubmissionDTOs.size());
-        List<MAuctionSubmissionDTO> result = mAuctionSubmissionService.attend(mAuctionSubmissionDTOs);
+    public ResponseEntity<MAuctionSubmissionDTO> createMAuctionSubmissions(@RequestBody MAuctionSubmissionDTO mAuctionSubmissionDTO) {
+        log.debug("REST request to save MAuctionSubmission : {}", mAuctionSubmissionDTO);
+        MAuctionSubmissionDTO result = mAuctionSubmissionService.attend(mAuctionSubmissionDTO);
         return ResponseEntity.ok().body(result);
     }
 

@@ -187,6 +187,7 @@
     <include file="config/liquibase/changelog/20210609111000_added_entity_MAuctionSubmission.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210609111100_added_entity_MAuctionSubmissionLog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210609111500_added_entity_MAuctionInvitation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210615102600_added_entity_MAuctionSubmissionItem.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
@@ -355,5 +356,6 @@
     <include file="config/liquibase/changelog/20210609111500_added_entity_constraints_MAuctionInvitation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210609111000_added_entity_constraints_MAuctionSubmission.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210609111100_added_entity_constraints_MAuctionSubmissionLog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210615102600_added_entity_constraints_MAuctionSubmissionItem.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

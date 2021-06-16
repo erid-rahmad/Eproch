@@ -31,4 +31,16 @@
                                  referencedTableName="c_vendor"/>
 
     </changeSet>
+
+    <changeSet id="20210615155701" author="Ananta Aryadewa">
+        <dropForeignKeyConstraint baseTableName="m_auction_submission" constraintName="fk_m_auction_submission_auction_item_id"/>
+        <dropColumn tableName="m_auction_submission" columnName="auction_item_id"/>
+
+        <addForeignKeyConstraint baseColumnNames="auction_id"
+                                 baseTableName="m_auction_submission"
+                                 constraintName="fk_m_auction_submission_auction_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_auction"/>
+
+    </changeSet>
 </databaseChangeLog>

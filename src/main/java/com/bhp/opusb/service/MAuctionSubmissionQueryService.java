@@ -91,9 +91,6 @@ public class MAuctionSubmissionQueryService extends QueryService<MAuctionSubmiss
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), MAuctionSubmission_.id));
             }
-            if (criteria.getPrice() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getPrice(), MAuctionSubmission_.price));
-            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), MAuctionSubmission_.uid));
             }
@@ -106,13 +103,7 @@ public class MAuctionSubmissionQueryService extends QueryService<MAuctionSubmiss
             }
             if (criteria.getAuctionId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAuctionId(),
-                    root -> root.join(MAuctionSubmission_.auctionItem, JoinType.LEFT)
-                        .join(MAuctionItem_.auction)
-                        .get(MAuction_.id)));
-            }
-            if (criteria.getAuctionItemId() != null) {
-                specification = specification.and(buildSpecification(criteria.getAuctionItemId(),
-                    root -> root.join(MAuctionSubmission_.auctionItem, JoinType.LEFT).get(MAuctionItem_.id)));
+                    root -> root.join(MAuctionSubmission_.auction, JoinType.LEFT).get(MAuction_.id)));
             }
             if (criteria.getVendorId() != null) {
                 specification = specification.and(buildSpecification(criteria.getVendorId(),

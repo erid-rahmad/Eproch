@@ -40,6 +40,7 @@
         <profile.tls />
 
         <!-- Dependency versions -->
+        <flowable.version>6.6.0</flowable.version>
         <jhipster-dependencies.version>3.6.0</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
@@ -103,6 +104,11 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>org.flowable</groupId>
+            <artifactId>flowable-spring-boot-starter-process</artifactId>
+            <version>${flowable.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.github.jhipster</groupId>
             <artifactId>jhipster-framework</artifactId>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" targetNamespace="http://www.flowable.org/processdef">
+  <process id="docBiddingProcess" name="docBiddingProcess" isExecutable="true">
+    <startEvent id="Event_0v89617" name="Start" flowable:formFieldValidation="true">
+      <outgoing>Flow_0orobop</outgoing>
+    </startEvent>
+    <exclusiveGateway id="Gateway_1pkloz3">
+      <incoming>Flow_0orobop</incoming>
+      <outgoing>Flow_00hpsdu</outgoing>
+      <outgoing>Flow_1hy0agb</outgoing>
+    </exclusiveGateway>
+    <sequenceFlow id="Flow_0orobop" sourceRef="Event_0v89617" targetRef="Gateway_1pkloz3" />
+    <serviceTask id="Activity_0x4ecp7" name="Approve Bidding" flowable:expression="#{docProcessorService.approveIt(execution)}">
+      <incoming>Flow_00hpsdu</incoming>
+    </serviceTask>
+    <sequenceFlow id="Flow_00hpsdu" sourceRef="Gateway_1pkloz3" targetRef="Activity_0x4ecp7">
+        <conditionExpression xsi:type="tFormalExpression"><![CDATA[${doc.getDocumentAction() == "APV"}]]></conditionExpression>
+    </sequenceFlow>
+    <serviceTask id="Activity_1qjpfkr" name="Reject Bidding" flowable:expression="#{docProcessorService.rejectIt(execution)}">
+      <incoming>Flow_1hy0agb</incoming>
+    </serviceTask>
+    <sequenceFlow id="Flow_1hy0agb" sourceRef="Gateway_1pkloz3" targetRef="Activity_1qjpfkr">
+        <conditionExpression xsi:type="tFormalExpression"><![CDATA[${doc.getDocumentAction() == "RJC"}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_docBiddingProcess">
+    <bpmndi:BPMNPlane id="BPMNPlane_docBiddingProcess" bpmnElement="docBiddingProcess">
+      <bpmndi:BPMNEdge id="Flow_0orobop_di" bpmnElement="Flow_0orobop">
+        <omgdi:waypoint x="248" y="210" />
+        <omgdi:waypoint x="305" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00hpsdu_di" bpmnElement="Flow_00hpsdu">
+        <omgdi:waypoint x="355" y="210" />
+        <omgdi:waypoint x="420" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1hy0agb_di" bpmnElement="Flow_1hy0agb">
+        <omgdi:waypoint x="330" y="235" />
+        <omgdi:waypoint x="330" y="320" />
+        <omgdi:waypoint x="420" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0v89617_di" bpmnElement="Event_0v89617">
+        <omgdc:Bounds x="212" y="192" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="218" y="235" width="25" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1pkloz3_di" bpmnElement="Gateway_1pkloz3" isMarkerVisible="true">
+        <omgdc:Bounds x="305" y="185" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0x4ecp7_di" bpmnElement="Activity_0x4ecp7">
+        <omgdc:Bounds x="420" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1qjpfkr_di" bpmnElement="Activity_1qjpfkr">
+        <omgdc:Bounds x="420" y="280" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,6 +1,5 @@
 package com.bhp.opusb.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import com.bhp.opusb.domain.MAuctionSubmission;
@@ -25,11 +24,15 @@ public class MAuctionSubmissionService {
     private final Logger log = LoggerFactory.getLogger(MAuctionSubmissionService.class);
 
     private final MAuctionSubmissionRepository mAuctionSubmissionRepository;
+    private final MAuctionSubmissionItemService mAuctionSubmissionItemService;
 
     private final MAuctionSubmissionMapper mAuctionSubmissionMapper;
 
-    public MAuctionSubmissionService(MAuctionSubmissionRepository mAuctionSubmissionRepository, MAuctionSubmissionMapper mAuctionSubmissionMapper) {
+    public MAuctionSubmissionService(MAuctionSubmissionRepository mAuctionSubmissionRepository,
+            MAuctionSubmissionItemService mAuctionSubmissionItemRepository,
+            MAuctionSubmissionMapper mAuctionSubmissionMapper) {
         this.mAuctionSubmissionRepository = mAuctionSubmissionRepository;
+        this.mAuctionSubmissionItemService = mAuctionSubmissionItemRepository;
         this.mAuctionSubmissionMapper = mAuctionSubmissionMapper;
     }
 
@@ -51,9 +54,14 @@ public class MAuctionSubmissionService {
      * @param items
      * @return
      */
-    public List<MAuctionSubmissionDTO> attend(List<MAuctionSubmissionDTO> items) {
-        List<MAuctionSubmission> mAuctionSubmissions = mAuctionSubmissionMapper.toEntity(items);
-        return mAuctionSubmissionMapper.toDto(mAuctionSubmissionRepository.saveAll(mAuctionSubmissions));
+    public MAuctionSubmissionDTO attend(MAuctionSubmissionDTO mAuctionSubmissionDTO) {
+        mAuctionSubmissionRepository
+            .findFirstByAuction_IdAndVendor_Id(mAuctionSubmissionDTO.getAuctionId(), mAuctionSubmissionDTO.getVendorId())
+            .ifPresent(submission -> mAuctionSubmissionDTO.setId(submission.getId()));
+            
+        MAuctionSubmissionDTO result = save(mAuctionSubmissionDTO);
+        mAuctionSubmissionItemService.saveAll(mAuctionSubmissionDTO.getSubmissionItems(), result);
+        return result;
     }
 
     /**

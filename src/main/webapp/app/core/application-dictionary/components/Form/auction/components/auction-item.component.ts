@@ -8,7 +8,7 @@ import { ElTable } from 'element-ui/types/table';
 import AdInputLookup from '@/shared/components/AdInput/ad-input-lookup.vue';
 
 const baseApiAuctionItem = 'api/m-auction-items';
-const baseApiAuctionSubmission = 'api/m-auction-submissions';
+const baseApiAuctionSubmissionItem = 'api/m-auction-submission-items';
 
 const AuctionItemProps = Vue.extend({
   props: {
@@ -238,7 +238,7 @@ export default class AuctionItem extends Mixins(AccessLevelMixin, AuctionItemPro
   private retrieveWatchedItems(auctionId: number, vendorId) {
     this.loadingItems = true;
     return new Promise(resolve => {
-      this.commonService(baseApiAuctionSubmission)
+      this.commonService(baseApiAuctionSubmissionItem)
         .retrieve({
           criteriaQuery: [
             `active.equals=true`,

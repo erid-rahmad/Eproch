@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.bhp.opusb.workflow.WorkflowDoc;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.Cache;
@@ -28,7 +29,7 @@ import org.hibernate.annotations.Formula;
 @Entity
 @Table(name = "m_bidding")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MBidding extends AbstractAuditingEntity {
+public class MBidding extends AbstractAuditingEntity implements WorkflowDoc{
 
     private static final long serialVersionUID = 1L;
 
@@ -534,5 +535,26 @@ public class MBidding extends AbstractAuditingEntity {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";
+    }
+
+    @Override
+    public void setProcessing(Boolean isProcessing) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public Boolean isProcessing() {
+        return false;
+    }
+
+    @Override
+    public String getSummary() {
+        return null;
+    }
+
+    @Override
+    public BigDecimal getApprovalAmount() {
+        return new BigDecimal("0");
     }
 }

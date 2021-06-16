@@ -1,11 +1,11 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import { Component, Inject, Mixins, Vue, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
-import AuctionContent from './auction-content.vue';
-import AuctionInfo from './auction-info.vue';
-import AuctionItem from './auction-item.vue';
-import AuctionParticipant from './auction-participant.vue';
+import AuctionContent from '../components/auction-content.vue';
+import AuctionInfo from '../components/auction-info.vue';
+import AuctionItem from '../components/auction-item.vue';
 import AuctionPrerequisite from '../components/auction-prerequisite.vue';
+import AuctionParticipant from './auction-participant.vue';
 import AuctionRule from './auction-rule.vue';
 import AuctionSummary from './auction-summary.vue';
 import AuctionTeam from './auction-team.vue';
