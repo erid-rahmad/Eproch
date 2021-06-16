@@ -86,7 +86,7 @@ export default class BiddingNegotiationLine extends mixins(AccessLevelMixin, Neg
     
     this.commonService(this.negotiationLineApi).retrieve({
       criteriaQuery: this.updateCriteria([
-        //'active.equals=true',
+        'active.equals=true',
         `negotiationId.equals=${this.negotiation.id}`
       ]),
       paginationQuery: {

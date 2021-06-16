@@ -1,8 +1,12 @@
 package com.bhp.opusb.service;
 
 import com.bhp.opusb.domain.MBiddingNegotiation;
+import com.bhp.opusb.domain.MBiddingNegotiationLine;
+import com.bhp.opusb.repository.MBiddingNegotiationLineRepository;
 import com.bhp.opusb.repository.MBiddingNegotiationRepository;
 import com.bhp.opusb.service.dto.MBiddingNegotiationDTO;
+import com.bhp.opusb.service.dto.MBiddingNegotiationLineDTO;
+import com.bhp.opusb.service.mapper.MBiddingNegotiationLineMapper;
 import com.bhp.opusb.service.mapper.MBiddingNegotiationMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -24,12 +30,17 @@ public class MBiddingNegotiationService {
     private final Logger log = LoggerFactory.getLogger(MBiddingNegotiationService.class);
 
     private final MBiddingNegotiationRepository mBiddingNegotiationRepository;
+    private final MBiddingNegotiationLineRepository mBiddingNegotiationLineRepository;
 
     private final MBiddingNegotiationMapper mBiddingNegotiationMapper;
+    private final MBiddingNegotiationLineMapper mBiddingNegotiationLineMapper;
 
-    public MBiddingNegotiationService(MBiddingNegotiationRepository mBiddingNegotiationRepository, MBiddingNegotiationMapper mBiddingNegotiationMapper) {
+    public MBiddingNegotiationService(MBiddingNegotiationRepository mBiddingNegotiationRepository, MBiddingNegotiationMapper mBiddingNegotiationMapper,
+        MBiddingNegotiationLineRepository mBiddingNegotiationLineRepository, MBiddingNegotiationLineMapper mBiddingNegotiationLineMapper) {
         this.mBiddingNegotiationRepository = mBiddingNegotiationRepository;
         this.mBiddingNegotiationMapper = mBiddingNegotiationMapper;
+        this.mBiddingNegotiationLineRepository = mBiddingNegotiationLineRepository;
+        this.mBiddingNegotiationLineMapper = mBiddingNegotiationLineMapper;
     }
 
     /**
@@ -42,6 +53,16 @@ public class MBiddingNegotiationService {
         log.debug("Request to save MBiddingNegotiation : {}", mBiddingNegotiationDTO);
         MBiddingNegotiation mBiddingNegotiation = mBiddingNegotiationMapper.toEntity(mBiddingNegotiationDTO);
         mBiddingNegotiation = mBiddingNegotiationRepository.save(mBiddingNegotiation);
+
+        if(mBiddingNegotiationDTO.getLine()!=null){
+            List<MBiddingNegotiationLine> lines = new ArrayList<>();
+            for(MBiddingNegotiationLineDTO dto: mBiddingNegotiationDTO.getLine()){
+                dto.setNegotiationId(mBiddingNegotiation.getId());
+                MBiddingNegotiationLine line = mBiddingNegotiationLineMapper.toEntity(dto);
+                lines.add(line);
+            }
+            mBiddingNegotiationLineRepository.saveAll(lines);
+        }
         return mBiddingNegotiationMapper.toDto(mBiddingNegotiation);
     }
 

@@ -69,7 +69,6 @@
         sortable
       ></el-table-column>
       <el-table-column
-        v-if="!isVendor"
         label="Bidding Status"
         min-width="100"
         sortable

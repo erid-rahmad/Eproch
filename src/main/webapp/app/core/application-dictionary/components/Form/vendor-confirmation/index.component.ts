@@ -153,6 +153,7 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
 
     this.commonService('/api/m-vendor-confirmation-responses').create(data).then(res=>{
       this.submitting = false;
+      this.selectedRow.status = this.isAccept?'A':'R'
       this.clearReason();
       this.$message.success("Reason submitted successfully.");
     }).catch(err => {

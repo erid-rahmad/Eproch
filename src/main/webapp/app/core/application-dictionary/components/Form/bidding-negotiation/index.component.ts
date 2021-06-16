@@ -23,6 +23,7 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
 
   showSchedule=false;
   showSummary=false;
+  showVendor=false;
 
   biddingNegotiations: any[] = [];
   biddingStates: any[] = [];
@@ -138,7 +139,7 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
   refreshHeader(){
     this.commonService(this.negotiationsApi).retrieve({
       criteriaQuery: this.updateCriteria([
-        //'active.equals=true'
+        'active.equals=true'
       ]),
       paginationQuery: {
         page: 0,
@@ -148,9 +149,32 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
     }).then(res => {
       console.log(res.data);
       this.biddingNegotiations = (<any[]>res.data).filter((elem)=>{
-        return elem.biddingStatus!=='F' && elem.evaluationStatus!=='SMT';
+        return elem.biddingStatus!=='F' && elem.evaluationStatus!=='APV';
       });
     });
+  }
+
+  viewJoinVendor(negoId:number){
+    this.commonService(this.negotiationLineApi).retrieve({
+      criteriaQuery: this.updateCriteria([
+        //'active.equals=true',
+        `negotiationId.equals=${negoId}`
+      ]),
+      paginationQuery: {
+        page: 0,
+        size: 10000,
+        sort: ['id']
+      }
+    }).then((res)=>{
+      this.negoSummary = res.data;
+    });
+    this.showVendor=true;
+  }
+
+  closeVendorScreen(){
+    this.negoSummary = [];
+    this.showVendor = false;
+    this.refreshHeader();
   }
 
   createConfirmation(){

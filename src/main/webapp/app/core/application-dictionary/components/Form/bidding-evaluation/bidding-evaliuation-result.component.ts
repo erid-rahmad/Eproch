@@ -89,8 +89,19 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     this.selectedWiner = val;
   }
   createTableNegotiation(){
-    this.selectedWiner.forEach(data=>{
+    const bidingNego ={
+      biddingEvalResultId:'',//data.id,
+      biddingScheduleId:'',//biddingSchedule.id,
+      adOrganizationId:'',//data.adOrganizationId,
+      startDate:'',//biddingSchedule.startDate,
+      endDate:'',//biddingSchedule.startDate
+      active:true,
+      line:[]
+    }
+    let max = this.selectedWiner.length;
+    this.selectedWiner.forEach((data,idx,array)=>{
       let biddingSchedule:any={};
+      let curIdx = idx;
       this.commonService(baseApiBiddingSchedule)
         .retrieve({
           criteriaQuery: this.updateCriteria([
@@ -106,20 +117,26 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
               biddingSchedule.id=schedule.id;
             }
           });
-          const bidingNego ={
-            biddingEvalResultId:data.id,
-            biddingScheduleId:biddingSchedule.id,
-            adOrganizationId:data.adOrganizationId,
-            startDate:biddingSchedule.startDate,
-            endDate:biddingSchedule.startDate
-          }
-          this.commonService(baseApiNegotiation)
+          bidingNego.biddingEvalResultId = data.id;
+          bidingNego.biddingScheduleId = biddingSchedule.id;
+          bidingNego.adOrganizationId = data.adOrganizationId;
+          bidingNego.startDate = biddingSchedule.startDate;
+          bidingNego.endDate = biddingSchedule.endDate;
+          bidingNego.line.push({active:true,
+            negotiationStatus:'not started',
+            adOrganizationId:data.adOrganizationId, 
+            biddingEvalResultId:data.id});
+
+          if(curIdx==max-1){
+            console.log(bidingNego);
+            this.commonService(baseApiNegotiation)
             .create(bidingNego)
             .then(res => {
               this.$message.success('create record negotiation');
             })
             .catch(_err => this.$message.error('fail create record negotiation'))
             .finally(()=>{});
+          }
         })
         .catch(err => this.$message.error('Failed to get baseApiBiddingSchedule'))
     })

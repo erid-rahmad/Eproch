@@ -63,6 +63,13 @@ public class MBiddingNegotiationLine extends AbstractAuditingEntity implements S
     @Formula("(select mbnp.id from m_bid_nego_price mbnp where mbnp.negotiation_line_id = id)")
     private Long negoPriceId;
 
+    @Formula("(select concat(cl.address_1,' ',cl.address_2,' ',cl.address_3,' ',cl.address_4) from c_location cl where cl.id = ("+
+    "select cvl.location_id from c_vendor_location cvl where cvl.vendor_id = ("+
+    "select mbs.vendor_id from m_bidding_submission mbs where mbs.id = ("+
+    "select mber.bidding_submission_id from m_bidding_eval_result mber where mber.id = ("+
+    "select mbnl.bidding_eval_result_id from m_bidding_negotiation_line mbnl where mbnl.id = id))) order by cvl.tax_invoice_address desc limit 1))")
+    private String vendorAddress;
+
     @PrePersist
     public void assignUUID() {
         this.active=true;
@@ -76,6 +83,13 @@ public class MBiddingNegotiationLine extends AbstractAuditingEntity implements S
 
     public void setId(Long id) {
         this.id = id;
+    }
+    public String getVendorAddress() {
+        return vendorAddress;
+    }
+
+    public void setVendorAddress(String vendorAddress) {
+        this.vendorAddress = vendorAddress;
     }
 
     public String getNegotiationStatus() {

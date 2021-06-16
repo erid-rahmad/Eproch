@@ -67,7 +67,7 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   refreshChat(){
     this.commonService(this.negotiationChatApi).retrieve({
       criteriaQuery: this.updateCriteria([
-        //'active.equals=true',
+        'active.equals=true',
         `negotiationLineId.equals=${this.line.id}`
       ]),
       paginationQuery: {
