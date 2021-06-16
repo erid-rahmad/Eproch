@@ -59,6 +59,16 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
     return this.biddingStates.find(status => status.key === value)?.value;
   }
 
+  formatEvalStatus(value: string){
+    switch(value){
+      case "SMT": return "Submitted"
+      case "RJC": return "Rejected"
+      case "APP": return "Approved"
+      case "DRF": return "Dratfed"
+      default: return value
+    }
+  }
+
   viewSchedule(row: any){
     this.showSchedule = true;
     this.selectedRow = row;
@@ -136,7 +146,9 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
       }
     }).then(res => {
       console.log(res.data);
-      this.biddingNegotiations = res.data;
+      this.biddingNegotiations = (<any[]>res.data).filter((elem)=>{
+        return elem.biddingStatus!='F';
+      });
     });
   }
 

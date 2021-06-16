@@ -94,9 +94,10 @@ public class MBiddingNegotiationChatService {
             mbnl.setNegotiationStatus("in progress");
             mBiddingNegotiationLineRepository.save(mbnl);
 
+            /*
             mbn.setBiddingStatus("P");
             mBiddingNegotiationRepository.save(mbn);
-
+            */
             List<MProposalPrice> pps = mProposalPriceRepository.findByBiddingSubmission(mbn.getBiddingEvalResult().getBiddingSubmission());
             if(pps.size()>0) {
                 MProposalPrice pp = pps.get(0);

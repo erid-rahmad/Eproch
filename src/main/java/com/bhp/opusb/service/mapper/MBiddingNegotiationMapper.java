@@ -13,10 +13,11 @@ import org.mapstruct.*;
 public interface MBiddingNegotiationMapper extends EntityMapper<MBiddingNegotiationDTO, MBiddingNegotiation> {
 
     @Mapping(source = "biddingEvalResult.id", target = "biddingEvalResultId")
-
     @Mapping(source = "biddingEvalResult.biddingSubmission.bidding.id", target = "biddingId")
     @Mapping(source = "biddingEvalResult.biddingSubmission.bidding.documentNo", target = "biddingNo")
     @Mapping(source = "biddingEvalResult.biddingSubmission.bidding.name", target = "biddingTitle")
+    @Mapping(source = "biddingEvalResult.evaluationStatus", target = "evaluationStatus")
+    @Mapping(source = "biddingEvalResult.biddingSubmission.bidding.biddingStatus", target = "biddingStatus")
     @Mapping(source = "biddingEvalResult.biddingSubmission.bidding.biddingType.name", target = "biddingType")
     @Mapping(source = "biddingEvalResult.biddingSubmission.bidding.eventType.name", target = "eventType")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")

@@ -78,8 +78,10 @@
       <el-table-column
         label="Evaluation Status"
         min-width="100"
-        prop="evaluationStatus"
-      ></el-table-column>
+        sortable
+      >
+        <template slot-scope="{ row }">{{formatEvalStatus(row.evaluationStatus)}}</template>
+      </el-table-column>
       <el-table-column
         label="Vendor"
         min-width="100"

@@ -41,7 +41,10 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
   };
 
   vendorConfirmations = []
-  vendorConfirmation: any[] = [];
+
+  vendorConfirmation: any[] = []; 
+  biddingStates: any[] = [];
+
 /*
     {
       biddingNo: 'BN-00001',
@@ -84,6 +87,20 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
         this.viewDetail(row);
       }
     }
+    this.refreshHeader();
+    this.commonService(null)
+      .retrieveReferenceLists('vendorConfirmation')
+      .then(res => {
+        this.vendorConfirmation = res.map(item => ({ key: item.value, value: item.name }));
+      });
+    this.commonService(null)
+      .retrieveReferenceLists('biddingStatus')
+      .then(res => {
+        this.biddingStates = res.map(item => ({ key: item.value, value: item.name }));
+      });
+  }
+
+  refreshHeader(){
     this.commonService('/api/m-vendor-confirmations').retrieve({
       criteriaQuery: this.updateCriteria([
         'active.equals=true'
@@ -100,11 +117,6 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
         if(elem.negoAmount) elem.amount = elem.negoAmount;
       })
     });
-    this.commonService(null)
-      .retrieveReferenceLists('vendorConfirmation')
-      .then(res => {
-        this.vendorConfirmation = res.map(item => ({ key: item.value, value: item.name }));
-      });
   }
 
   mounted() {
@@ -119,6 +131,7 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
 
   closeDetail() {
     this.index = true;
+    this.refreshHeader();
   }
 
   revise() {
@@ -176,6 +189,10 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
       };
       this.index = false;
     })
+  }
+
+  formatBiddingStatus(value: string) {
+    return this.biddingStates.find(status => status.key === value)?.value;
   }
 
   formatConfirmationStatus(value: string) {
