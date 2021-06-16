@@ -128,7 +128,8 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
         let AllEvalResultLine =res.data;
         let average=0,loop=0,status;
         AllEvalResultLine.forEach(data=>{
-            average=average+data.score;
+          // console.log("this data",data)
+            average=average+data.score*data.evaluationMethodLineWeight/100;
             ++loop;
           if(data.status==="Fail"){
             status="Fail";

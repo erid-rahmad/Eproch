@@ -2,6 +2,7 @@ package com.bhp.opusb.service.dto;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -25,8 +26,17 @@ public class MBiddingEvalResultLineDTO implements Serializable {
 
     private Long evaluationMethodLineId;
     private String evaluationMethodLineName;
+    private  BigDecimal evaluationMethodLineWeight;
 
     private Long biddingEvalResultId;
+
+    public BigDecimal getEvaluationMethodLineWeight() {
+        return evaluationMethodLineWeight;
+    }
+
+    public void setEvaluationMethodLineWeight(BigDecimal evaluationMethodLineWeight) {
+        this.evaluationMethodLineWeight = evaluationMethodLineWeight;
+    }
 
     public String getEvaluationMethodLineName() {
         return evaluationMethodLineName;

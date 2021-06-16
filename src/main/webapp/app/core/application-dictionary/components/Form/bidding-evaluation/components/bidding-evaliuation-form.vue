@@ -119,7 +119,7 @@
                     <h4>Evaluation</h4>
                 </el-divider>
                 <EvaluationFormDetail :SelectVendorScoringLine="SelectVendorScoringLine" :evaluationFormProp="evaluationFormProp"
-                                      :readOnly="readOnly" ></EvaluationFormDetail>
+                                      :readOnly="readOnly" :title="title" ></EvaluationFormDetail>
             </div>
 
         </div>

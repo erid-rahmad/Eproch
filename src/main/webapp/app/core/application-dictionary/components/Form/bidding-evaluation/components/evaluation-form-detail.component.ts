@@ -58,8 +58,9 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
   private evaluationType:Boolean;
   private questions: Map<number, any> = new Map();
   private evaluationResultLine:any= {};
-  attachmentHandler: Map<number, string> = new Map();
-  biddingSubCriteria: Map<number, string> = new Map();
+  private attachmentHandler: Map<number, string> = new Map();
+  private counting: Map<number, number> = new Map();
+  private biddingSubCriteria: Map<number, string> = new Map();
   statusReadOnly:boolean=false;
 
 
@@ -79,9 +80,8 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
     if (this.evaluationFormProp.evaluationResultLine) {
       this.evaluationResultLine = this.evaluationFormProp.evaluationResultLine;
     };
+
   }
-
-
 
   created() {
     this.getEvaluationtype();
@@ -189,6 +189,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
         this.evaluationMethodCriteria = res.data.map((evalMethodCriteria: any) => {
           x=x+evalMethodCriteria.weight;
           let y =0;
+          let p=0;
           evalMethodCriteria.evalMethodSubCriteriaList.forEach((evalMethodSubCriteria: any) => {
             y=y+evalMethodSubCriteria.weight;
             evalMethodSubCriteria.biddingSubCriteriaDTO.forEach((biddingSubCriteria: any) => {
@@ -196,32 +197,27 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
               biddingSubCriteria.attachmentName=null;
               biddingSubCriteria.attachmentUrl=null;
               this.attachmentHandler.set(biddingSubCriteria.id,biddingSubCriteria);
-              let z=0;
               biddingSubCriteria.criteriaLineDTO.forEach((subCriteriaLine: any) => {
                 subCriteriaLine.SubCriteriaWeight=evalMethodSubCriteria.weight;
                 subCriteriaLine.CriteriaWeight=evalMethodCriteria.weight;
                 this.questions.set(subCriteriaLine.id, subCriteriaLine);
-                z=z+subCriteriaLine.score;
+                p++;
               });
+              this.counting.set(biddingSubCriteria.id,p);
+              p=0;
             });
           });
           if(y!==100){
             this.$message.error(`Average MethodSubCriteria = ${y}`);
           }
-          // console.log("this y",y)
           return evalMethodCriteria;
         })
         if(x!==100){
           this.$message.error(`Average MethodCriteria = ${x}`);
         }
-        // console.log("this x ",x)
       })
       .finally(() => {
         this.retrieveVendorScoringCriteria(vendorScoringLineId);
-        console.log("this atach",this.attachmentHandler)
-
-
-
       });
   }
 
@@ -231,7 +227,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
    * @param vendorScoringLineId
    * @param evaluationMethodLineId
    */
-  private retrieveVendorScoringCriteria(vendorScoringLineId: number) {
+   retrieveVendorScoringCriteria(vendorScoringLineId: number) {
     this.commonService(baseApiVendorScoringCriteria)
       .retrieve({
         criteriaQuery: [
@@ -250,22 +246,25 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
             let question = this.questions.get(criteria.biddingSubCriteriaLineId);
             question.requirement = criteria.requirement;
             question.vendorScoringLineId = criteria.vendorScoringLineId;
-
           }catch (e) {}
         })
-        this.retrieveAnswerAdmin(this.evaluationFormProp.biddingSubmission.id);
-        this.retrieveAnswerTechnical(this.evaluationFormProp.biddingSubmission.id);
+        if(this.title==="T"){
+          this.retrieveAnswerTechnical(this.evaluationFormProp.biddingSubmission.id);
+        }
+        else if (this.title==="A"){
+          this.retrieveAnswerAdmin(this.evaluationFormProp.biddingSubmission.id);
+        }
+
 
       })
       .catch(err => {
         const message = 'Failed to get vendor scoring requirements';
         console.log(message, err);
         this.$message.error(message);
-
       });
   }
 
-  private retrieveAnswerTechnical(SubmissionId: number) {
+   retrieveAnswerTechnical(SubmissionId: number) {
     this.commonService(baseApiTechnicalAnswer)
       .retrieve({
         criteriaQuery: [
@@ -286,7 +285,8 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
           }catch (e) {
           }
         });
-        this.retrieveEvaluation(this.evaluationFormProp.SelectVendorScoringLine.biddingId);
+        this.retrieveAttachment(this.evaluationFormProp.biddingSubmission.id);
+
       })
       .catch(err => {
         const message = 'Failed to get vendor scoring requirements';
@@ -295,7 +295,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
       });
   }
 
-  private retrieveAnswerAdmin(SubmissionId: number) {
+   retrieveAnswerAdmin(SubmissionId: number) {
     this.commonService(baseApiAdministrationAnswer)
       .retrieve({
         criteriaQuery: [
@@ -309,13 +309,14 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
         }
       })
       .then(res => {
+
         res.data.forEach((criteria: any) => {
           try {
             let question = this.questions.get(criteria.biddingSubCriteriaLineId);
             question.answer = criteria.answer;
-          }catch (e) {
-          }
+          }catch (e) {}
         });
+        this.retrieveAttachment(this.evaluationFormProp.biddingSubmission.id);
       })
       .catch(err => {
         const message = 'Failed to get vendor scoring requirements';
@@ -323,60 +324,6 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
         this.$message.error(message);
       });
   }
-
-  private retrieveEvaluation(biddingId: number) {
-
-    this.commonService(baseApiBiddingEvaluation)
-      .retrieve({
-        criteriaQuery: [
-          `biddingId.equals=${biddingId}`,
-          `vendorId.equals=${this.evaluationFormProp.vendorId}`
-        ],
-        paginationQuery: {
-          page: 0,
-          size: 100,
-          sort: ['id']
-        }
-      })
-      .then(res => {
-        res.data.forEach((criteria: any) => {
-          try {
-            const question = this.questions.get(criteria.biddingSubCriteriaLineId);
-            question.evaluation = criteria.evaluation;
-            question.notes = criteria.notes;
-            question.evaluationid = criteria.id;
-          } catch (e) {}
-        });
-        this.retrieveAttachment(this.evaluationFormProp.biddingSubmission.id);
-
-      })
-      .catch(err => {
-        const message = 'Failed to get evaluation';
-        console.log(message, err);
-        this.$message.error(message);
-      });
-  }
-
-  average(){
-    console.log("change");
-    let x=0;
-    let s=0;
-    this.questions.forEach(question_=>{
-      console.log("this ques",question_)
-      let y=100*question_.SubCriteriaWeight/100*question_.CriteriaWeight/100;
-      x=x+y;
-      s++;
-    })
-    this.evaluationResultLine.score =x;
-
-    if(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLinePassingGrade>=0){
-      this.statusReadOnly=true;
-      if (x>this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLinePassingGrade){
-        this.evaluationResultLine.status="Pass";
-      }else { this.evaluationResultLine.status="Fail";}
-    }
-  }
-
 
   retrieveAttachment(submissionId){
     this.commonService(baseApiProposalTechnicalFile)
@@ -402,15 +349,77 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
             // @ts-ignore
             item.attachmentUrl = proposal.attachmentUrl;
           }catch (e) {}
-
-        }
+        };
+        // this.loadingAll=false;
+        this.retrieveEvaluation(this.evaluationFormProp.SelectVendorScoringLine.biddingId);
       })
       .catch(err => {
         console.error('Failed',err);
         this.$message.error(`Failed reload attachment `);
       })
-      .finally(()=>    this.loadingAll=false);
+
   }
+
+   retrieveEvaluation(biddingId: number) {
+    this.commonService(baseApiBiddingEvaluation)
+      .retrieve({
+        criteriaQuery: [
+          `biddingId.equals=${biddingId}`,
+          `vendorId.equals=${this.evaluationFormProp.vendorId}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        res.data.forEach((criteria: any) => {
+          try {
+            console.log("this criteria",criteria)
+            let question = this.questions.get(criteria.biddingSubCriteriaLineId);
+              question.evaluation = criteria.evaluation;
+              question.notes = criteria.notes;
+              question.evaluationid = criteria.id;
+
+              if (question.evaluation===null){
+                console.log("its null")
+              }
+
+
+          } catch (e) {}
+        });
+        this.loadingAll=false
+
+      })
+      .catch(err => {
+        const message = 'Failed to get evaluation';
+        console.log(message, err);
+        this.$message.error(message);
+      });
+  }
+
+  average(){
+    let x=0;
+    let s=0;
+    console.log("counting",this.counting);
+    this.questions.forEach(question_=>{
+      console.log("this ques",question_)
+      let z =this.counting.get(question_.biddingSubCriteriaId);
+      let y=question_.evaluation/z*question_.SubCriteriaWeight/100*question_.CriteriaWeight/100;
+      x=x+y;
+      s++;
+    })
+    this.evaluationResultLine.score =x;
+    if(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLinePassingGrade>=0){
+      this.statusReadOnly=true;
+      if (x>this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLinePassingGrade){
+        this.evaluationResultLine.status="Pass";
+      }else { this.evaluationResultLine.status="Fail";}
+    }
+  }
+
+
 
   handlePreview(biddingSubCriteria){
     window.open(biddingSubCriteria.attachmentUrl, '_blank');

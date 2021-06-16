@@ -15,6 +15,7 @@ public interface MBiddingEvalResultLineMapper extends EntityMapper<MBiddingEvalR
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "evaluationMethodLine.id", target = "evaluationMethodLineId")
     @Mapping(source = "evaluationMethodLine.evaluation", target = "evaluationMethodLineName")
+    @Mapping(source = "evaluationMethodLine.weight", target = "evaluationMethodLineWeight")
     @Mapping(source = "biddingEvalResult.id", target = "biddingEvalResultId")
     MBiddingEvalResultLineDTO toDto(MBiddingEvalResultLine mBiddingEvalResultLine);
 
