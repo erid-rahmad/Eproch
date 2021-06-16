@@ -29,7 +29,7 @@ public interface MBiddingMapper extends EntityMapper<MBiddingDTO, MBidding> {
     @Mapping(source = "biddingType.name", target = "biddingTypeName")
     @Mapping(source = "eventType.id", target = "eventTypeId")
     @Mapping(source = "eventType.name", target = "eventTypeName")
-    @Mapping(source = "adUser.user.id", target = "adUserUserId")
+    @Mapping(source = "adUser.id", target = "adUserUserId")
     @Mapping(source = "adUser.user.login", target = "adUserUserName")
     MBiddingDTO toDto(MBidding mBidding);
 

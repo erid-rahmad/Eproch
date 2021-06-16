@@ -8,6 +8,13 @@
                 <svg-icon name="icomoo/273-checkmark"></svg-icon>
                 Save
             </el-button>
+            <el-button v-if="!index && !selectedRow.approved" size="mini" type="primary" @click="onApprove">
+                <svg-icon name="icomoo/273-checkmark"></svg-icon>
+                Approve
+            </el-button>
+            <el-button v-if="!index && !selectedRow.approved" icon="el-icon-close" size="mini" type="danger" @click="onReject">
+                Reject
+            </el-button>
             <el-button v-if="index" class="button" icon="el-icon-plus" size="mini" type="primary"
                        @click="onCreateClicked"></el-button>
         </div>
@@ -144,6 +151,21 @@
                 <el-button size="mini" style="margin-left: 0px;" type="danger" @click="confirmTermination">
                     <svg-icon name="icomoo/183-switch"></svg-icon>
                     Terminate
+                </el-button>
+            </div>
+        </el-dialog>
+        <el-dialog :visible.sync="showRejectionDialog" title="Terminate Bidding Confirmation" width="30%" :before-close="onCloseRejection">
+            <p>Are you sure you want to reject this bidding process?</p>
+            <p>Please type the reason:</p>
+            <el-input v-model="terminationReason" type="textarea" :autosize="{ minRows: 2, maxRows: 4 }"></el-input>
+            <div slot="footer">
+                <el-button icon="el-icon-close" size="mini" style="margin-left: 0px;"
+                        @click="onCloseRejection">
+                    {{ $t('entity.action.cancel') }}
+                </el-button>
+                <el-button size="mini" style="margin-left: 0px;" type="danger" @click="confirmRejection">
+                    <svg-icon name="icomoo/183-switch"></svg-icon>
+                    Reject
                 </el-button>
             </div>
         </el-dialog>

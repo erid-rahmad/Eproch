@@ -9,6 +9,7 @@ import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import StepForm from '../bidding/steps-form.vue';
 
 const baseApiUrl = 'api/m-biddings';
+const baseWorkflowUrl = 'api/workflows';
 const baseApiInvitation = 'api/m-bidding-invitations';
 
 @Component({
@@ -51,6 +52,7 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
 
   showJoinedVendors = false;
   showTerminationDialog = false;
+  showRejectionDialog = false;
   showDocumentActionConfirm = false;
   editMode: boolean = false;
   stepIndex: number = 0;
@@ -263,5 +265,53 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
       })
       .then(res => this.joinedVendors = res.data)
       .finally(() => this.loadingJoinedVendors = false);
+  }
+
+  onApprove(){
+    if(this.selectedRow.documentAction == 'RJC'){
+      this.selectedRow.documentAction = 'APV'
+      this.commonService(baseApiUrl).update(this.selectedRow).then((res)=>{
+        this.processDoc(true);
+      }).catch((err)=>{
+        console.log(err);
+        this.$message.error(`Unable to approve bidding ${this.selectedRow.documentNo}.`);
+      });
+    } else this.processDoc(true);
+  }
+
+  onReject(){
+    this.showRejectionDialog = true;
+  }
+
+  onCloseRejection(){
+    this.showRejectionDialog = false;
+    this.terminationReason = null;
+  }
+
+  confirmRejection(){
+    this.selectedRow.documentAction = 'RJC'
+    this.selectedRow.rejectedReason = this.terminationReason;
+
+    this.commonService(baseApiUrl).update(this.selectedRow).then((res)=>{
+      console.log(res);
+      this.processDoc(false);
+    }).catch((err)=>{
+      console.log(err);
+      this.$message.error(`Unable to reject bidding ${this.selectedRow.documentNo}.`);
+    });
+  }
+
+  processDoc(approve: boolean){
+    this.commonService(baseWorkflowUrl+'/start').update(JSON.parse(`{
+      "tableName":"m_bidding",
+      "id":"${this.selectedRow.id}"
+    }`)).then((res)=>{
+      this.$message.success((approve?"Approved":"Rejected")+" bidding.");
+      this.onCloseRejection();
+      this.onFormClosed();
+    }).catch((err)=>{
+      console.log(err);
+      this.$message.error('Unable to start workflow.');
+    });
   }
 }
