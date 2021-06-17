@@ -30,6 +30,7 @@ public class MVendorSuggestionDTO extends AbstractAuditingDTO {
     private String businessSubCategoryName;
 
     private Long vendorId;
+    private String vendorCode;
     private String vendorName;
 
     public Long getId() {
@@ -110,6 +111,14 @@ public class MVendorSuggestionDTO extends AbstractAuditingDTO {
 
     public void setVendorId(Long cVendorId) {
         this.vendorId = cVendorId;
+    }
+
+    public String getVendorCode() {
+        return vendorCode;
+    }
+
+    public void setVendorCode(String vendorCode) {
+        this.vendorCode = vendorCode;
     }
 
     public String getVendorName() {

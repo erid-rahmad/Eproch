@@ -56,7 +56,7 @@
       </el-table>
       <el-transfer
         v-else
-        v-model="attendedParticipants"
+        v-model="includedParticipants"
         :data="availableVendors"
         filterable
         :titles="['Available Vendors', 'Included Vendors']"

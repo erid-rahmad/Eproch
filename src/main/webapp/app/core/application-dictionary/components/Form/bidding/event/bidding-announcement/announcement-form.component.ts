@@ -202,30 +202,10 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
       .finally(() => this.loadingEmailList = false);
   }
 
-  private getDataForAnnouncment() {
-    this.commonService(`/api/c-announcementemaillist/${this.value}`)
-      .retrieve({
-        criteriaQuery: this.updateCriteria([
-          'active.equals=true'
-
-        ]),
-        paginationQuery: {
-          page: 0,
-          size: 10000,
-          sort: ['id']
-        }
-      })
-      .then(res => {
-        this.dataForAnnouncment = res.data;
-        console.log("dataForAnnouncment",this.dataForAnnouncment);
-
-      });
-  }
-
   onRecipientSelectionChanged(val) {
     this.selectedRecipients = val;
   }
-// upload
+
   handleBeforeUpload(file: any) {
     // File size limitation
     const isLt5M = file.size / 1024 / 1024 < 5;
@@ -252,7 +232,7 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
         type: 'warning',
         duration: 3000
       });
-      return !isExt;
+      return false;
     }
 
   }
@@ -319,30 +299,24 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
   }
 
   publish() {
-
-
-
     (<ElForm>this.$refs.mainForm).validate((passed, errors) => {
       if (passed) {
         this.loading = true;
         this.commonService(baseApiAnnouncement)
           .create(this.formData)
           .then(res => {
-            this.formData = res;
-            console.log("this form data",this.formData)
-            this.$message.success('Announcement has been saved successfully');
-
-
+            this.formData = { ...this.formData, ...res };
             this.loading = true;
-            console.log("this vendor suggestion ",this.vendorSuggestions)
+
             if (this.selectedRecipients.length == 0) {
               this.$message.error('Please select at least one recipient');
             } else {
               const data = {
                 announcement: this.formData,
                 bidding: {
-                  id: this.formData.biddingId,
-
+                  id: this.mainForm.biddingId,
+                  name: this.mainForm.biddingTitle,
+                  documentNo: this.mainForm.biddingNo
                 },
                 users: [],
                 vendor: this.vendorSuggestions,
@@ -360,7 +334,6 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
                 } = recipient;
                 data.users.push(user);
               }
-              console.log("this data",data)
 
               this.commonService(`${baseApiAnnouncement}/publish/${data.announcement.id}`)
                 .create(data)
@@ -387,7 +360,7 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
         this.commonService(baseApiAnnouncement)
           .create(this.formData)
           .then(res => {
-            this.formData = res;
+            this.formData = {...this.formData, ...res};
             this.$message.success('Announcement has been saved successfully');
           })
           .catch(_err => this.$message.error('Failed to save the announcement'))

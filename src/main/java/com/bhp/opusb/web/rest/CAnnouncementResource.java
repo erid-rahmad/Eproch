@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.mail.MessagingException;
@@ -162,12 +161,6 @@ public class CAnnouncementResource {
         log.debug("REST request to get CAnnouncement : {}", id);
         Optional<CAnnouncementDTO> cAnnouncementDTO = cAnnouncementService.findOne(id);
         return ResponseUtil.wrapOrNotFound(cAnnouncementDTO);
-    }
-
-    @GetMapping("/c-announcementemaillist/{id}")
-    public ResponseEntity<Map<String,Object>> listemail(@PathVariable Long id) throws URISyntaxException {
-        log.debug("REST request to list CAnnouncement : {}");
-        return ResponseEntity.ok(cAnnouncementService.emailInvitation(id));
     }
 
     /**

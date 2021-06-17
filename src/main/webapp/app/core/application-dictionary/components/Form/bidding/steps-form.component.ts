@@ -98,7 +98,7 @@ export default class StepsForm extends StepsFormProps {
     this.$emit('change', false);
 
     if (! this.editMode && data.id) {
-      this.editMode = true;
+      this.$emit('update:editMode', true);
     }
 
     let active = this.active;

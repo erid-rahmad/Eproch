@@ -107,7 +107,7 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
     this.showSummary = true;
     this.commonService(this.negotiationLineApi).retrieve({
       criteriaQuery: this.updateCriteria([
-        //'active.equals=true',
+        'active.equals=true',
         `negotiationId.equals=${this.selectedRow.id}`
       ]),
       paginationQuery: {
@@ -157,7 +157,7 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
   viewJoinVendor(negoId:number){
     this.commonService(this.negotiationLineApi).retrieve({
       criteriaQuery: this.updateCriteria([
-        //'active.equals=true',
+        'active.equals=true',
         `negotiationId.equals=${negoId}`
       ]),
       paginationQuery: {

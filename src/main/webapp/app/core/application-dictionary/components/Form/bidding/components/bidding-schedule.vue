@@ -37,11 +37,7 @@
       </el-row>
     </el-form>
     <el-row>
-      <el-col
-        :xs="24"
-        :sm="24"
-        :xl="18"
-      >
+      <el-col :span="24">
         <el-divider content-position="left"><h4>Event Schedule</h4></el-divider>
         <el-table
           v-loading="processing"
