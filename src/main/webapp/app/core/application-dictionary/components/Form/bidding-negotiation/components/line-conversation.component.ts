@@ -229,24 +229,10 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
 
   viewNegoDetail(){
     this.showNegoForm=true;
-    this.commonService(this.negoPriceLineApi).retrieve({
-      criteriaQuery: this.updateCriteria([
-        //'active.equals=true',
-        `negotiationPriceId.equals=${this.line.negoPriceId}`
-      ]),
-      paginationQuery: {
-        page: 0,
-        size: 10000,
-        sort: ['id']
-      }
-    }).then((res)=>{
-      console.log(res.data);
-      this.negoPriceLine=res.data;
-    });
     this.commonService(this.negoPriceApi).retrieve({
       criteriaQuery: this.updateCriteria([
-        //'active.equals=true',
-        `negotiationPriceId.equals=${this.line.negoPriceId}`
+        'active.equals=true',
+        `negotiationLineId.equals=${this.line.id}`
       ]),
       paginationQuery: {
         page: 0,
@@ -262,6 +248,20 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
       if(this.negoPrice.attachmentId){
         this.fileList2 = [{"name":this.negoPrice.fileName, "url":this.negoPrice.downloadUrl}];
       }
+      this.commonService(this.negoPriceLineApi).retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `negotiationPriceId.equals=${this.negoPrice.id}`
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      }).then((res)=>{
+        console.log(res.data);
+        this.negoPriceLine=res.data;
+      });
     })
   }
 
