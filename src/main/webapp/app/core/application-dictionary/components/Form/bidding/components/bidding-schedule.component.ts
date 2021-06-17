@@ -158,7 +158,7 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
               new Date(item.actualEndDate)
             ];
           }
-          
+
           return item;
         }));
         resolve(true);
@@ -188,7 +188,9 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
 
   editSchedule(event: any) {
     this.selectedEvent = event;
-    this.editScheduleVisible = true;
+    if (event.status==="F"){
+      this.editScheduleVisible = false;
+    }else { this.editScheduleVisible = true;}
   }
 
   async viewEvent(event: any) {
