@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Formula;
 
 /**
  * A MBiddingInvitation.
@@ -67,6 +68,11 @@ public class MBiddingInvitation extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mBiddingInvitations")
     private CVendor vendor;
 
+    @Formula("(select concat(cl.address_1,' ',cl.address_2,' ',cl.address_3,' ',cl.address_4) from c_location cl where cl.id = ("+
+    "select cvl.location_id from c_vendor_location cvl where cvl.vendor_id = ("+
+    "select mbi.vendor_id from m_bidding_invitation mbi where mbi.id = id) order by cvl.tax_invoice_address desc limit 1))")
+    private String location;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -74,6 +80,14 @@ public class MBiddingInvitation extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getInvitationStatus() {

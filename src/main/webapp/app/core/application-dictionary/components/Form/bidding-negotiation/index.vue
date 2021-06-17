@@ -139,14 +139,14 @@
       ></bidding-schedule>
     </el-dialog>
 
-    <el-dialog title="Vendor List" :visible.sync="showVendor" width="60%" :before-close="closeVendorScreen">
+    <el-dialog title="Joined Vendors" :visible.sync="showVendor" width="60%" :before-close="closeVendorScreen">
       <el-table border :data="negoSummary" size="mini">
         <el-table-column width="60" label="No">
           <template slot-scope="row">
             {{ row.$index + 1 }}
           </template>
         </el-table-column>
-        <el-table-column property="vendorName" label="Vendor" min-width="200" show-overflow-tooltip></el-table-column>
+        <el-table-column property="vendorName" sortable label="Vendor" min-width="200" show-overflow-tooltip></el-table-column>
         <el-table-column property="vendorAddress" label="Address" min-width="200" show-overflow-tooltip></el-table-column>
       </el-table>
     </el-dialog>
