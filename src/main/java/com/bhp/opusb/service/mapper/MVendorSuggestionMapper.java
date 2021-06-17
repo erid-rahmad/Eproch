@@ -1,10 +1,11 @@
 package com.bhp.opusb.service.mapper;
 
 
-import com.bhp.opusb.domain.*;
+import com.bhp.opusb.domain.MVendorSuggestion;
 import com.bhp.opusb.service.dto.MVendorSuggestionDTO;
 
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * Mapper for the entity {@link MVendorSuggestion} and its DTO {@link MVendorSuggestionDTO}.
@@ -19,6 +20,7 @@ public interface MVendorSuggestionMapper extends EntityMapper<MVendorSuggestionD
     @Mapping(source = "businessSubCategory.id", target = "businessSubCategoryId")
     @Mapping(source = "businessSubCategory.name", target = "businessSubCategoryName")
     @Mapping(source = "vendor.id", target = "vendorId")
+    @Mapping(source = "vendor.code", target = "vendorCode")
     @Mapping(source = "vendor.name", target = "vendorName")
     MVendorSuggestionDTO toDto(MVendorSuggestion mVendorSuggestion);
 

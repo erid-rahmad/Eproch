@@ -107,7 +107,7 @@
             v-else
             ref="biddingForm"
             :data="selectedRow"
-            :edit-mode="editMode"
+            :edit-mode.sync="editMode"
             :step-index="stepIndex"
             class="card"
             @change="onStepChanged"
