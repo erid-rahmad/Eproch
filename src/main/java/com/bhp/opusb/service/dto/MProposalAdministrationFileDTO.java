@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MProposalAdministrationFile} entity.
  */
-public class MProposalAdministrationFileDTO implements Serializable {
+public class MProposalAdministrationFileDTO extends AbstractAuditingDTO {
 
     private Long id;
 

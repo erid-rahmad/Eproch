@@ -4,6 +4,7 @@ import { Component, Inject, Mixins, Vue, Watch } from "vue-property-decorator";
 import { AccountStoreModule } from '@/shared/config/store/account-store';
 import Schema from "async-validator";
 import AccountService from "@/account/account.service";
+import {create} from "domain";
 
 
 const baseApiEvalMethodCriteria = 'api/c-evaluation-method-criteria';
@@ -187,6 +188,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
           try {
             const item = this.answers.get(proposal.biddingSubCriteriaLineId);
             item.answer = proposal.answer;
+            item.answerId=proposal.id
             item.documentEvaluation = proposal.documentEvaluation;
           }catch (e) {}
         };
@@ -326,7 +328,6 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
 
     this.answers.forEach(answer => {
       const {
-        id,
         name,
         score,
         adOrganizationName,
@@ -335,7 +336,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
         uid,
         ...proposal
       } = answer;
-
+      proposal.id=answer.answerId;
       proposal.biddingSubmissionId = this.submissionId;
       proposal.biddingSubCriteriaLineId = answer.id;
       data.push(proposal);
@@ -388,6 +389,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
       .then(_res => {
         this.$message.success(`${evaluationName} proposal has been saved successfully`);
         this.PushProposalTechnicalFile();
+        this.retrieveProposalData(this.submissionId);
       })
       .catch(err => {
         console.error('Failed to save the proposal. %O', err);
