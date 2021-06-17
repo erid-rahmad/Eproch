@@ -81,9 +81,6 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
     if (this.evaluationFormProp.evaluationResultLine) {
       this.evaluationResultLine = this.evaluationFormProp.evaluationResultLine;
     };
-
-
-
   }
 
   created() {
@@ -94,7 +91,6 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
     if (this.evaluationFormProp.evaluationResultLine) {
       this.evaluationResultLine = this.evaluationFormProp.evaluationResultLine;
     };
-
 
   }
 
@@ -213,12 +209,12 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
               p=0;
             });
           });
-          if(y!==100){
+          if(y!==100 && y!==0){
             this.$message.error(`Average MethodSubCriteria = ${y}`);
           }
           return evalMethodCriteria;
         })
-        if(x!==100){
+        if(x!==100 && x!==0){
           this.$message.error(`Average MethodCriteria = ${x}`);
         }
       })
@@ -378,14 +374,14 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
       .then(res => {
         res.data.forEach((criteria: any) => {
           try {
-            console.log("this criteria",criteria)
+
             let question = this.questions.get(criteria.biddingSubCriteriaLineId);
               question.evaluation = criteria.evaluation;
               question.notes = criteria.notes;
               question.evaluationid = criteria.id;
 
               if (question.evaluation===null){
-                console.log("its null")
+
               }
 
 
@@ -404,9 +400,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
   average(){
     let x=0;
     let s=0;
-    console.log("counting",this.counting);
     this.questions.forEach(question_=>{
-      console.log("this ques",question_)
       let z =this.counting.get(question_.biddingSubCriteriaId);
       let y=question_.evaluation/z*question_.SubCriteriaWeight/100*question_.CriteriaWeight/100;
       x=x+y;

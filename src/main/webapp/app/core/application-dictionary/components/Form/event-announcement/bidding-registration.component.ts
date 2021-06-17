@@ -153,12 +153,12 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
         paginationQuery: {
           page: 0,
           size: 10000,
-          sort: ['id']
+          sort: ['id,desc']
         }
       })
       .then(res => {
         this.biddingInvitationsGridData = res.data;
-        console.log("biddingInvitationsGridData",this.biddingInvitationsGridData)
+//         console.log("biddingInvitationsGridData",this.biddingInvitationsGridData)
       })
       .finally(()=>this.loading=false);
   }
@@ -182,7 +182,7 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
           paginationQuery: {
             page: 0,
             size: 1000,
-            sort: ['id']
+            sort: ['id,desc']
           }
         })
         .then(res => {

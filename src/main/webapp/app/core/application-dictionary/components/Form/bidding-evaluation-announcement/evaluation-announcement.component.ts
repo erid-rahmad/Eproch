@@ -7,6 +7,8 @@ import EmailGrid from './evaluation-announcement-email-grid.vue';
 import DynamicWindowService from "@/core/application-dictionary/components/DynamicWindow/dynamic-window.service";
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 
+const baseApiBiddingSchedule = 'api/m-bidding-schedules'
+
 
 @Component({
   components: {
@@ -57,7 +59,30 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin,AccessLe
         }
       })
       .then(res => {
-        this.biddingGrid = res.data;
+
+        const data:any=[]
+        res.data.forEach(item=>{
+          this.commonService(baseApiBiddingSchedule)
+            .retrieve({
+              criteriaQuery: this.updateCriteria([
+                `biddingId.equals=${item.id}`,
+                `formType.equals=RS`
+              ]),
+              paginationQuery: {
+                page: 0,
+                size: 1,
+                sort: ['id']
+              }
+            })
+            .then(res1 =>{
+              const data1 = { ...res1.data[0]};
+              if (data1.actualStartDate){
+                data.push(item);
+              }
+            });
+        });
+
+        this.biddingGrid = data;
       })
       .finally(()=>this.loading=false);
   }

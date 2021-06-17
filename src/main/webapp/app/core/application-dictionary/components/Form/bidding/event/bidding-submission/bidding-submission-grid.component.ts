@@ -6,6 +6,7 @@ import DynamicWindowService from "@/core/application-dictionary/components/Dynam
 import biddingSubmission from"./bidding-submission.vue";
 const baseApiUrl = 'api/m-biddings';
 const baseApiSchedule = 'api/m-bidding-schedules';
+const baseApiBiddingSchedule = 'api/m-bidding-schedules'
 
 
 @Component({
@@ -88,12 +89,28 @@ export default class BiddingSubmissionGridComponent extends mixins( AlertMixin,A
         }
       })
       .then(res => {
-        this.gridData = res.data;
-        console.log("grid data",this.gridData);
-        this.totalItems = Number(res.headers['x-total-count']);
-        this.queryCount = this.totalItems;
-
-
+        const data:any=[]
+        res.data.forEach(item=>{
+          this.commonService(baseApiBiddingSchedule)
+            .retrieve({
+              criteriaQuery: this.updateCriteria([
+                `biddingId.equals=${item.id}`,
+                `formType.equals=S1`
+              ]),
+              paginationQuery: {
+                page: 0,
+                size: 1,
+                sort: ['id']
+              }
+            })
+            .then(res1 =>{
+              const data1 = { ...res1.data[0]};
+              if (data1.actualStartDate){
+                data.push(item);
+              }
+            });
+        });
+        this.gridData=data;
       })
       .catch(err => {
         console.error('Failed getting the record. %O', err);

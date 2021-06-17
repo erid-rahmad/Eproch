@@ -96,7 +96,7 @@ export default class BidSubmission extends Mixins(AccessLevelMixin, BidSubmissio
     if (!this.auction.actualEndDate) {
       return '';
     }
-/* 
+/*
     if (this.currentDate >= new Date(this.auction.actualEndDate)) {
       return 'Event has been ended';
     }
@@ -151,7 +151,7 @@ export default class BidSubmission extends Mixins(AccessLevelMixin, BidSubmissio
         paginationQuery: {
           page: 0,
           size: 1000,
-          sort: ['id']
+          sort: ['id,desc']
         }
       })
       .then(res => {

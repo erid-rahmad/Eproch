@@ -47,26 +47,6 @@
             <!-- <AddAnnouncementForm @back="back"></AddAnnouncementForm> -->
              <EmailGrid  @back="back" :pickRow="pickRow" ></EmailGrid>
         </div>
-        <el-dialog title="Bidding Schedule" :visible.sync="ScheduleListVisible" width="90%">
-            <el-table border :data="BiddingSchedule" size="mini">
-                <el-table-column width="60" label="No">
-                    <template slot-scope="row">
-                        {{ row.$index + 1 }}
-                    </template>
-                </el-table-column>
-                <el-table-column property="event" label="Event" width="200" show-overflow-tooltip></el-table-column>
-                <el-table-column property="startdate" label="Start Date" min-width="200" show-overflow-tooltip></el-table-column>
-
-                <el-table-column property="finisdate" label="Finish Date" min-width="200" show-overflow-tooltip></el-table-column>
-                <el-table-column min-width="100" label="Action">
-                    <template slot-scope="{ row }">
-                        <el-button class="button" icon="el-icon-caret-right" size="mini" type="primary" @click="view(row)">
-                            Action
-                        </el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </el-dialog>
     </div>
 </template>
 
