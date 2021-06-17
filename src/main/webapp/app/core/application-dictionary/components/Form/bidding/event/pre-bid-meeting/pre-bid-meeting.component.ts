@@ -135,8 +135,8 @@ export default class PreBidMeeting extends Mixins(ScheduleEventMixin) {
         resolve(true);
       })
       .catch(err => {
-        console.error('Failed to get bidding schedules. %O', err);
-        this.$message.error('Failed to get schedule details');
+        console.error('Failed to get pre-bid meeting data', err);
+        this.$message.error('Failed to get pre-bid meeting data');
         resolve(false);
       })
       .finally(() => {
@@ -149,7 +149,7 @@ export default class PreBidMeeting extends Mixins(ScheduleEventMixin) {
     this.loading = true;
     this.commonService(baseApiPreBidMeeting)
       .create(data)
-      .then(res => this.preBidMeeting = res.data)
+      .then(res => this.preBidMeeting = res)
       .catch(_err => this.$message.error('Failed to save Pre-bid Meeting record'))
       .finally(() => this.loading = false);
   }
@@ -195,8 +195,8 @@ export default class PreBidMeeting extends Mixins(ScheduleEventMixin) {
         resolve(true);
       })
       .catch(err => {
-        console.error('Failed to get bidding schedules. %O', err);
-        this.$message.error('Failed to get schedule details');
+        console.error('Failed to get attachments. %O', err);
+        this.$message.error('Failed to get attachments');
         resolve(false);
       })
       .finally(() => {

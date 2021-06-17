@@ -27,18 +27,19 @@ export default class ParticipantList extends Mixins(AccessLevelMixin, Participan
   loading: boolean = false;
   updatingAttendees: boolean = false;
 
-  attendedParticipants: number[] = [];
+  includedParticipants: number[] = [];
   availableVendors: any[] = [];
   participants: any[] = [];
 
   /**
-   * Cache the 
+   * Cache the vendor IDs.
    */
+  includedVendorIds: Set<number> = new Set();
   attendedVendorIds: Set<number> = new Set();
   vendorTypes: any[] = [];
 
   /**
-   * The list of included vendor IDs.
+   * The list of added vendor IDs.
    */
   addedParticipants: number[] = [];
 
@@ -49,7 +50,7 @@ export default class ParticipantList extends Mixins(AccessLevelMixin, Participan
 
   onAdd() {
     this.index = false;
-    this.attendedVendorIds = new Set(this.participants.map(attendee => attendee.vendorId));
+    this.includedVendorIds = new Set(this.participants.map(attendee => attendee.vendorId));
     this.retrieveVendorTypes();
     this.retrieveAvailableVendors();
   }
@@ -58,20 +59,29 @@ export default class ParticipantList extends Mixins(AccessLevelMixin, Participan
     this.noUpdate = false;
     
     if (direction === 'left') {
-      movedItems.filter(vendorId => this.attendedVendorIds.has(vendorId))
+      movedItems.filter(vendorId => this.includedVendorIds.has(vendorId))
         .forEach(id => this.removedParticipants.add(id));
+    } else {
+      movedItems.filter(vendorId => this.removedParticipants.has(vendorId))
+        .forEach(id => this.removedParticipants.delete(id));
     }
 
     // Add only those that are not already included in the attendee list.
-    this.addedParticipants = value.filter(vendorId => !this.attendedVendorIds.has(vendorId));
-    console.log('addedParticipants:', this.addedParticipants);
-    console.log('removedParticipants:', this.removedParticipants);
+    this.addedParticipants = value.filter(vendorId => !this.includedVendorIds.has(vendorId));
+
+    if (! this.removedParticipants.size && this.addedParticipants.every(id => this.includedVendorIds.has(id))) {
+      this.noUpdate = true;
+    }
   }
 
   onAttendStatusChange(row: any) {
     this.commonService(baseApiPreBidMeetingParticipant)
       .update(row)
-      .then(() => this.$message.success('Attendee status has been changed successfully'))
+      .then(res => {
+        row.attended = res.attended;
+        this.attendedVendorIds.add(row.vendorId)
+        this.$message.success('Attendee status has been changed successfully')
+      })
       .catch(err => {
         console.log('Faild to update the attendee status', err);
         this.$message.error('Failed to update the attendee status');
@@ -131,7 +141,8 @@ export default class ParticipantList extends Mixins(AccessLevelMixin, Participan
 
   private resetForm() {
     this.noUpdate = true;
-    this.attendedParticipants = [];
+    this.includedParticipants = [];
+    this.attendedVendorIds.clear();
     this.availableVendors = [];
     this.participants = [];
     this.addedParticipants = [];
@@ -154,7 +165,10 @@ export default class ParticipantList extends Mixins(AccessLevelMixin, Participan
       })
       .then(res => {
         this.participants = res.data;
-        this.attendedParticipants = this.participants.map(participant => participant.vendorId);
+        this.includedParticipants = this.participants.map(participant => participant.vendorId);
+        this.attendedVendorIds = new Set(this.participants
+          .filter(participant => participant.attended)
+          .map(participant => participant.vendorId));
       })
       .catch(err => {
         console.log('Failed to get the participants', err);
@@ -169,6 +183,7 @@ export default class ParticipantList extends Mixins(AccessLevelMixin, Participan
       .retrieve({
         criteriaQuery: this.updateCriteria([
           'active.equals=true',
+          `biddingId.equals=${this.biddingId}`,
           `invitationStatus.equals=R`
         ]),
         paginationQuery: {
@@ -181,7 +196,8 @@ export default class ParticipantList extends Mixins(AccessLevelMixin, Participan
         this.availableVendors = res.data
           .map((item: any) => ({
             key: item.vendorId,
-            label: `${item.vendorCode} - ${item.vendorName} (${this.printVendorType(item.vendorType)})`
+            label: `${item.vendorCode} - ${item.vendorName} (${this.printVendorType(item.vendorType)})`,
+            disabled: this.attendedVendorIds.has(item.vendorId)
           }));
       })
       .catch(err => {
