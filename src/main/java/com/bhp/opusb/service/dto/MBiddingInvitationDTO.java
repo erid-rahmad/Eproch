@@ -40,8 +40,18 @@ public class MBiddingInvitationDTO extends AbstractAuditingDTO {
     private String vendorName;
     private String vendorType;
 
+    private String location;
+
     public ZonedDateTime getAnnouncementEndDate() {
         return announcementEndDate;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public void setAnnouncementEndDate(ZonedDateTime announcementEndDate) {
