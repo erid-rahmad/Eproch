@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface MRfqRepository extends JpaRepository<MRfq, Long>, JpaSpecificationExecutor<MRfq> {
+public interface MRfqRepository extends GenericDocumentRepository<MRfq, Long>, JpaSpecificationExecutor<MRfq> {
 }

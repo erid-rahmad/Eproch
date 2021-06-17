@@ -251,7 +251,7 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
       this.commonService(this.negoPriceLineApi).retrieve({
         criteriaQuery: this.updateCriteria([
           'active.equals=true',
-          `negotiationPriceId.equals=${this.negoPrice.id}`
+          `bidNegoPriceId.equals=${this.negoPrice.id}`
         ]),
         paginationQuery: {
           page: 0,

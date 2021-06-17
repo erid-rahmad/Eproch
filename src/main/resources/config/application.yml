@@ -224,3 +224,6 @@ application:
     purchaseRequisition:
       documentType: 'Purchase Requisition'
       documentNumberPrefix: 'PR-'
+    quotation:
+      documentType: 'Quotation'
+      documentNumberPrefix: 'RQ-'

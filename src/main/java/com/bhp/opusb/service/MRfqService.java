@@ -1,9 +1,14 @@
 package com.bhp.opusb.service;
 
+import com.bhp.opusb.config.ApplicationProperties;
+import com.bhp.opusb.config.ApplicationProperties.Document;
 import com.bhp.opusb.domain.MRfq;
+import com.bhp.opusb.repository.CDocumentTypeRepository;
 import com.bhp.opusb.repository.MRfqRepository;
 import com.bhp.opusb.service.dto.MRfqDTO;
 import com.bhp.opusb.service.mapper.MRfqMapper;
+import com.bhp.opusb.util.DocumentUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,13 +28,22 @@ public class MRfqService {
 
     private final Logger log = LoggerFactory.getLogger(MRfqService.class);
 
-    private final MRfqRepository mRfqRepository;
+    private final ADOrganizationService adOrganizationService;
+    private final CDocumentTypeRepository cDocumentTypeRepository;
 
+    private final MRfqRepository mRfqRepository;
     private final MRfqMapper mRfqMapper;
 
-    public MRfqService(MRfqRepository mRfqRepository, MRfqMapper mRfqMapper) {
+    private final Document document;
+
+    public MRfqService(ApplicationProperties applicationProperties, MRfqRepository mRfqRepository, MRfqMapper mRfqMapper,
+    ADOrganizationService adOrganizationService, CDocumentTypeRepository cDocumentTypeRepository) {
         this.mRfqRepository = mRfqRepository;
         this.mRfqMapper = mRfqMapper;
+        this.adOrganizationService=adOrganizationService;
+        this.cDocumentTypeRepository=cDocumentTypeRepository;
+        
+        document = applicationProperties.getDocuments().get("quotation");
     }
 
     /**
@@ -41,6 +55,20 @@ public class MRfqService {
     public MRfqDTO save(MRfqDTO mRfqDTO) {
         log.debug("Request to save MRfq : {}", mRfqDTO);
         MRfq mRfq = mRfqMapper.toEntity(mRfqDTO);
+
+        if (mRfq.getDocumentNo() == null) {
+            mRfq.documentNo(DocumentUtil.buildDocumentNumber(document.getDocumentNumberPrefix(), mRfqRepository));
+        }
+
+        if (mRfq.getDocumentType() == null) {
+            cDocumentTypeRepository.findFirstByName(document.getDocumentType())
+                .ifPresent(mRfq::setDocumentType);
+        }
+
+        if (mRfq.getAdOrganization() == null) {
+            mRfq.setAdOrganization(adOrganizationService.getDefaultOrganization());
+        }
+
         mRfq = mRfqRepository.save(mRfq);
         return mRfqMapper.toDto(mRfq);
     }
