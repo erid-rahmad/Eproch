@@ -191,14 +191,13 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
   editSchedule(event: any) {
     this.selectedEvent = event;
     if (event.status==="N"){
+      let a=0
       this.bidding.biddingSchedules.forEach(item=>{
-        if (item.status==="P"){
-          this.editScheduleVisible = false;
-        }
+        if (item.status==="P"){ a=1;}
       })
-    }
-    if (event.status==="F"){
-      this.editScheduleVisible = false;
+      if (a===0){
+        this.editScheduleVisible = true;
+      }
     }
     if (event.status==="P"){
       this.editScheduleVisible = true;
