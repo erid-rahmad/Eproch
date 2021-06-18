@@ -112,7 +112,8 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       this.commonService(baseApiEvalResults)
         .create(item)
         .then(_res => {
-          this.$message.success(`Requirements has been saved successfully`);
+          this.$message.success(`successfully`);
+          this.retriveEvaluationResult(this.pickRow.id)
         })
         .catch(err => {
         })

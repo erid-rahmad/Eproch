@@ -190,7 +190,11 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
 
   editSchedule(event: any) {
     this.selectedEvent = event;
-    if (event.status==="N"){
+    let S:String="A";
+    if(event.status){
+      S=event.status;
+    }
+    if (S==="N"){
       let a=0
       this.bidding.biddingSchedules.forEach(item=>{
         if (item.status==="P"){ a=1;}
@@ -199,9 +203,21 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
         this.editScheduleVisible = true;
       }
     }
-    if (event.status==="P"){
+    if (S==="P"){
       this.editScheduleVisible = true;
     }
+    if (S==="F"){
+    }
+    if(S==="A") {
+      let a=0
+      this.bidding.biddingSchedules.forEach(item=>{
+        if (item.status==="P"){ a=1;}
+      })
+      if (a===0){
+        this.editScheduleVisible = true;
+      }
+    }
+
   }
 
   async viewEvent(event: any) {
