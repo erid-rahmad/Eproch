@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -59,6 +60,8 @@ public class MRfqDTO extends AbstractAuditingDTO implements Serializable {
     private Long costCenterId;
 
     private Long documentTypeId;
+    
+    private List<MRequisitionLineDTO> requisitionLines;
     
     public Long getId() {
         return id;
@@ -255,5 +258,13 @@ public class MRfqDTO extends AbstractAuditingDTO implements Serializable {
             ", warehouseId=" + getWarehouseId() +
             ", costCenterId=" + getCostCenterId() +
             "}";
+    }
+
+    public List<MRequisitionLineDTO> getRequisitionLines() {
+        return requisitionLines;
+    }
+
+    public void setRequisitionLines(List<MRequisitionLineDTO> requisitionLines) {
+        this.requisitionLines = requisitionLines;
     }
 }

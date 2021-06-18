@@ -2,10 +2,17 @@ package com.bhp.opusb.service;
 
 import com.bhp.opusb.config.ApplicationProperties;
 import com.bhp.opusb.config.ApplicationProperties.Document;
+import com.bhp.opusb.domain.MRequisitionLine;
 import com.bhp.opusb.domain.MRfq;
+import com.bhp.opusb.domain.MRfqLine;
 import com.bhp.opusb.repository.CDocumentTypeRepository;
+import com.bhp.opusb.repository.MRequisitionLineRepository;
+import com.bhp.opusb.repository.MRequisitionRepository;
+import com.bhp.opusb.repository.MRfqLineRepository;
 import com.bhp.opusb.repository.MRfqRepository;
+import com.bhp.opusb.service.dto.MRequisitionLineDTO;
 import com.bhp.opusb.service.dto.MRfqDTO;
+import com.bhp.opusb.service.mapper.MRequisitionLineMapper;
 import com.bhp.opusb.service.mapper.MRfqMapper;
 import com.bhp.opusb.util.DocumentUtil;
 
@@ -17,7 +24,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
+import javax.validation.Valid;
 
 /**
  * Service Implementation for managing {@link MRfq}.
@@ -34,14 +47,26 @@ public class MRfqService {
     private final MRfqRepository mRfqRepository;
     private final MRfqMapper mRfqMapper;
 
+    private final MRfqLineRepository mRfqLineRepository;
+    private final MRequisitionRepository mRequisitionRepository;
+
+    private final MRequisitionLineRepository mRequisitionLineRepository;
+    private final MRequisitionLineMapper mRequisitionLineMapper;
+
     private final Document document;
 
     public MRfqService(ApplicationProperties applicationProperties, MRfqRepository mRfqRepository, MRfqMapper mRfqMapper,
-    ADOrganizationService adOrganizationService, CDocumentTypeRepository cDocumentTypeRepository) {
+    ADOrganizationService adOrganizationService, CDocumentTypeRepository cDocumentTypeRepository,
+    MRequisitionLineMapper mRequisitionLineMapper, MRfqLineRepository mRfqLineRepository,
+    MRequisitionRepository mRequisitionRepository, MRequisitionLineRepository mRequisitionLineRepository) {
         this.mRfqRepository = mRfqRepository;
         this.mRfqMapper = mRfqMapper;
         this.adOrganizationService=adOrganizationService;
         this.cDocumentTypeRepository=cDocumentTypeRepository;
+        this.mRequisitionLineMapper = mRequisitionLineMapper;
+        this.mRfqLineRepository = mRfqLineRepository;
+        this.mRequisitionRepository = mRequisitionRepository;
+        this.mRequisitionLineRepository = mRequisitionLineRepository;
         
         document = applicationProperties.getDocuments().get("quotation");
     }
@@ -57,7 +82,7 @@ public class MRfqService {
         MRfq mRfq = mRfqMapper.toEntity(mRfqDTO);
 
         if (mRfq.getDocumentNo() == null) {
-            mRfq.documentNo(DocumentUtil.buildDocumentNumber(document.getDocumentNumberPrefix(), mRfqRepository));
+            mRfq.documentNo(initDocumentNumber());
         }
 
         if (mRfq.getDocumentType() == null) {
@@ -107,5 +132,108 @@ public class MRfqService {
     public void delete(Long id) {
         log.debug("Request to delete MRfq : {}", id);
         mRfqRepository.deleteById(id);
+    }
+
+    /**
+     * Generate mPurchaseOrders from requisition.
+     *
+     * @param mPurchaseOrderDTO the entity to save.
+     * @return the persisted entity.
+     */
+    public List<MRfqDTO> saveFromRequisition(MRfqDTO mRfqDTO) {
+        log.debug("Request to generate MRfq : {}", mRfqDTO);
+        
+        // Map of vendorId and Rfq entity.
+        // Temporarily map the Rfq entity for each vendor.
+        Map<Long, MRfq> quotations = new HashMap<>();
+        List<MRequisitionLineDTO> requisitionLines = mRfqDTO.getRequisitionLines();
+        List<MRfqLine> rfqLines = new ArrayList<>(requisitionLines.size());
+
+        for (MRequisitionLineDTO mRequisitionLineDTO : requisitionLines) {
+            MRequisitionLine mRequisitionLine = mRequisitionLineMapper.toEntity(mRequisitionLineDTO);
+            
+            MRfq rfq = quotations.computeIfAbsent(mRequisitionLineDTO.getVendorId(),
+                    key -> initQuotation(mRfqDTO, mRequisitionLine));
+
+            MRfqLine mRfqLine = initPurchaseOrderLine(rfq, mRequisitionLine);
+            //final BigDecimal grandTotal = mPurchaseOrder.getGrandTotal().add(mPurchaseOrderLine.getOrderAmount());
+
+            //mPurchaseOrder.setGrandTotal(grandTotal);
+            rfqLines.add(mRfqLine);
+        }
+        
+        List<MRfqDTO> result = mRfqMapper.toDto(mRfqRepository.saveAll(quotations.values()));
+        mRfqLineRepository.saveAll(rfqLines);
+        mRequisitionLineRepository.saveAll(mRequisitionLineMapper.toEntity(requisitionLines));
+        return result;
+    }
+
+    /**
+     * First initialization of MPurchaseOrder entity.
+     * @param mRfqDTO
+     * @param mRequisitionLine
+     * @return
+     */
+    private MRfq initQuotation(MRfqDTO mRfqDTO, MRequisitionLine mRequisitionLine) {
+        MRfq mRfq = mRfqMapper.toEntity(mRfqDTO);
+        //Optional<CVendorTax> vendorTaxInfo = cVendorTaxRepository.findFirstByVendor(mRequisitionLine.getVendor());
+        //boolean taxable = false;
+
+        /*
+        if (vendorTaxInfo.isPresent()) {
+            taxable = Boolean.TRUE.equals(vendorTaxInfo.get().isTaxableEmployers());
+        }
+        */
+        // Set the default Purchase Order document type.
+        if (mRfq.getDocumentType() == null) {
+            cDocumentTypeRepository.findFirstByName(document.getDocumentType())
+                .ifPresent(mRfq::setDocumentType);
+        }
+
+        // Set the requestor of the purchase order.
+        mRequisitionRepository.findById(mRequisitionLine.getRequisition().getId())
+                .ifPresent(mRequisition
+                    -> mRfq
+                        .costCenter(mRequisition.getCostCenter())
+                        .businessCategory(mRfq.getBusinessClassification())
+                        .businessClassification(mRfq.getBusinessClassification())
+                        .adOrganization(mRfq.getAdOrganization())
+                        .warehouse(mRequisition.getWarehouse())
+                        .documentAction("SMT").documentStatus("DRF")
+                        .setCreatedBy(mRequisition.getCreatedBy()));
+
+        return mRfq.active(true)
+            .documentNo(initDocumentNumber());
+            //.grandTotal(new BigDecimal(0))
+            //.tax(taxable)
+            //.vendor(mRequisitionLine.getVendor());
+    }
+
+    private String initDocumentNumber() {
+        return DocumentUtil.buildDocumentNumber(document.getDocumentNumberPrefix(), mRfqRepository);
+    }
+
+    private MRfqLine initPurchaseOrderLine(MRfq mPurchaseOrder, MRequisitionLine mRequisitionLine) {
+        final MRfqLine mPurchaseOrderLine = new MRfqLine();
+        //final BigDecimal orderAmount = mRequisitionLine.getQuantityOrdered().multiply(mRequisitionLine.getUnitPrice());
+
+        mPurchaseOrderLine.active(true)
+            .adOrganization(mPurchaseOrder.getAdOrganization())
+            .businessCategory(mPurchaseOrder.getBusinessCategory())
+            .documentDate(mPurchaseOrder.getDateTrx())
+            .dateRequired(mPurchaseOrder.getDateRequired())
+            .documentAction("SMT")
+            .documentStatus("DRF")
+            .product(mRequisitionLine.getProduct())
+            .quotation(mPurchaseOrder)
+            .releaseQty(mRequisitionLine.getQuantityOrdered().intValue())
+            .remark(mRequisitionLine.getRemark())
+            //.requisition(mRequisitionLine.getRequisition())
+            //.unitPrice(mRequisitionLine.getUnitPrice())
+            .uom(mRequisitionLine.getUom());
+            //.vendor(mRequisitionLine.getVendor())
+            //.warehouse(mPurchaseOrder.getWarehouse());
+
+        return mPurchaseOrderLine;
     }
 }

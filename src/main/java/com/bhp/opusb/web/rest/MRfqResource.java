@@ -25,6 +25,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing {@link com.bhp.opusb.domain.MRfq}.
@@ -140,5 +141,27 @@ public class MRfqResource {
         log.debug("REST request to delete MRfq : {}", id);
         mRfqService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    /**
+     * {@code POST  /m-rfqs} : Create a new mRfq.
+     *
+     * @param mRfqDTO the mRfqDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new mRfqDTO, or with status {@code 400 (Bad Request)} if the mRfq has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/m-rfqs/generate")
+    public ResponseEntity<List<MRfqDTO>> generateRfqFromRequisition(@Valid @RequestBody MRfqDTO mRfqDTO) throws URISyntaxException {
+        log.debug("REST request to generate MRfq : {}", mRfqDTO);
+        if (mRfqDTO.getId() != null) {
+            throw new BadRequestAlertException("A new mRfq cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        if (mRfqDTO.getRequisitionLines() == null) {
+            throw new BadRequestAlertException("The submitted quotation has no lines", ENTITY_NAME, "poNoLines");
+        }
+        List<MRfqDTO> result = mRfqService.saveFromRequisition(mRfqDTO);
+        String queryString = result.stream().map(po -> "id.equals=" + po.getId()).collect(Collectors.joining("&"));
+        return ResponseEntity.created(new URI("/api/m-rfqs/" + queryString))
+            .body(result);
     }
 }

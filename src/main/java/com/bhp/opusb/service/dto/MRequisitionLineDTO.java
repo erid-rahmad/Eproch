@@ -47,7 +47,7 @@ public class MRequisitionLineDTO extends AbstractAuditingDTO {
 
 
     private Long requisitionId;
-    private String requisitionName;
+    private String requisitionName, requisitionType, businessCategory;
 
     private Long adOrganizationId;
     private String adOrganizationName;
@@ -69,6 +69,22 @@ public class MRequisitionLineDTO extends AbstractAuditingDTO {
 
     public Long getId() {
         return id;
+    }
+
+    public String getBusinessCategory() {
+        return businessCategory;
+    }
+
+    public void setBusinessCategory(String businessCategory) {
+        this.businessCategory = businessCategory;
+    }
+
+    public String getRequisitionType() {
+        return requisitionType;
+    }
+
+    public void setRequisitionType(String requisitionType) {
+        this.requisitionType = requisitionType;
     }
 
     public void setId(Long id) {
