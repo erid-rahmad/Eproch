@@ -1,0 +1,11 @@
+id;date_trx;date_required;document_no;document_action;document_status;approved;processed;date_promised;description;uid;active;ad_organization_id;business_classification_id;business_category_id;currency_id;warehouse_id;cost_center_id;document_type_id
+1;2021-06-16;2021-06-16;Madagascar;JBOD;Money Mark;false;false;2021-06-16;Marketing deposit;29291de0-c694-4f4f-8060-59942480e888;false;1;1;1;1;1;1;1
+2;2021-06-16;2021-06-16;Plastic Electronics;visionary ;attitude-o;true;true;2021-06-17;Re-contextualized;59a69818-11d4-40dc-8540-18f71ab2ef04;false;2;2;2;2;2;2;2
+3;2021-06-16;2021-06-16;quantify;Jewelery;Soft Strea;true;true;2021-06-17;withdrawal;6b7ee4a6-a166-4b6d-a33c-0ab8be1011df;true;3;3;3;3;3;3;3
+4;2021-06-16;2021-06-16;Spain Netherlands;connect Fa;Incredible;false;false;2021-06-16;programming;005a255e-6b74-4066-9f34-663747308fdd;false;4;4;4;4;4;4;4
+5;2021-06-17;2021-06-16;Ports invoice;Product;data-wareh;true;true;2021-06-17;Berkshire payment;90fab36c-1737-43a7-b812-2f33a7d15d52;true;5;5;5;5;5;5;5
+6;2021-06-16;2021-06-16;Web;Human with;primary;true;true;2021-06-17;partnerships;9c28369d-a58f-44b6-9121-13ca2fa3e12a;true;6;6;6;6;6;6;6
+7;2021-06-17;2021-06-16;Avon networks;moderator ;Technician;true;false;2021-06-16;24/365;f564c6f7-097d-4e67-8df9-57deb84d469d;false;7;7;7;7;7;7;7
+8;2021-06-16;2021-06-16;Wooden Unbranded mobile;bleeding-e;Plastic Bo;true;false;2021-06-16;Rial Omani transmit Venezuela;98b02885-f779-4b47-a1cc-dd7f0a6ae786;false;8;8;8;8;8;8;8
+9;2021-06-17;2021-06-16;networks Avon;quantifyin;Administra;true;false;2021-06-16;Rubber mindshare;94131666-b740-4f02-8d27-73cebad6e9bc;false;9;9;9;9;9;9;9
+10;2021-06-16;2021-06-16;national;French Pol;Incredible;false;true;2021-06-16;primary;75428cff-c6f8-44d1-98ec-3a9931f81d87;false;10;10;10;10;10;10;10

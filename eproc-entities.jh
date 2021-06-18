@@ -899,6 +899,36 @@ entity MPurchaseOrderLine {
 	active Boolean
 }
 
+entity MRfq {
+	dateTrx LocalDate
+	dateRequired LocalDate
+	documentNo String maxlength(30)
+	documentAction String required maxlength(10)
+	documentStatus String required maxlength(10)
+	approved Boolean
+	processed Boolean
+
+	datePromised LocalDate
+	description String
+	uid UUID
+	active Boolean
+}
+
+entity MRfqLine {
+	lineNo Integer
+	uid UUID
+	active Boolean
+	
+	documentAction String required maxlength(10)
+	documentStatus String required maxlength(10)
+	approved Boolean
+	processed Boolean
+	releaseQty Integer
+	documentDate LocalDate
+	dateRequired LocalDate
+	remark String
+}
+
 entity CBiddingType {
 	name String required maxlength(30)
 	description String
@@ -1919,6 +1949,21 @@ relationship ManyToOne {
 	MPurchaseOrderLine{costCenter} to CCostCenter
 	MPurchaseOrderLine{uom required} to CUnitOfMeasure
 	MPurchaseOrderLine{vendor} to CVendor
+
+	/** Quotation */
+	MRfq{adOrganization required} to ADOrganization
+	MRfq{businessClassification required} to CBusinessCategory
+	MRfq{businessCategory required} to CBusinessCategory
+	MRfq{currency required} to CCurrency
+	MRfq{warehouse required} to CWarehouse
+	MRfq{costCenter required} to CCostCenter
+	MRfq{documentType required} to CDocumentType
+
+	MRfqLine{quotation required} to MRfq
+	MRfqLine{adOrganization required} to ADOrganization
+	MRfqLine{product required} to CProduct
+	MRfqLine{uom required} to CUnitOfMeasure
+	MRfqLine{businessCategory required} to CBusinessCategory
 
 	CAuctionPrerequisite{adOrganization required} to ADOrganization
 
