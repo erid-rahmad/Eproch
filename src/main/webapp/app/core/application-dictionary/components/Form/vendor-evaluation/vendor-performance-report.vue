@@ -1,14 +1,28 @@
 <template>
-  <div class="app-container vendor-performance-report">
+  <div class="app-container card-view">
     <div class="toolbar">
+        <el-button
+            icon="el-icon-close"
+            size="mini"
+            type="danger"
+            @click="viewDetail=false"
+            v-if="viewDetail"
+        >
+            close
+        </el-button>
       <el-button
         icon="el-icon-search"
         size="mini"
         type="primary"
+        v-if="!viewDetail"
       >
         Search
       </el-button>
+
     </div>
+
+
+      <div class="card" v-if="!viewDetail">
     <el-form
       ref="filterForm"
       label-position="left"
@@ -139,8 +153,27 @@
           min-width="100"
           prop="rating"
         ></el-table-column>
+          <el-table-column
+
+              min-width="100"
+              prop="rating"
+          > <template slot-scope="{ row }">
+              <el-button
+                  icon="el-icon-search"
+                  size="mini"
+                  type="primary"
+                  @click="viewDetail=true"
+              >
+                  View
+              </el-button>
+          </template></el-table-column>
       </el-table>
     </el-form>
+  </div>
+
+      <div v-if="viewDetail">
+          <vendor-analis></vendor-analis>
+      </div>
   </div>
 </template>
 <script lang="ts" src="./vendor-performance-report.component.ts"></script>

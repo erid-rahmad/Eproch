@@ -20,8 +20,6 @@
                 size="mini"
                 stripe
             >
-
-
                 <el-table-column align="center" fixed="right" width="100">
                     <template slot-scope="{ row }">
                         <el-button :underline="false" icon="el-icon-search" size="mini" title="View" type="primary"

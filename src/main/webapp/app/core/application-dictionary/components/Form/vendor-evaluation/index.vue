@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container vendor-evaluation">
+  <div class="app-container card-view">
     <div class="toolbar">
       <el-button
         v-if="!index"
@@ -20,6 +20,8 @@
         Save
       </el-button>
     </div>
+
+      <div class="card">
 
     <el-table
       v-if="index"
@@ -98,6 +100,7 @@
       v-else
       :data="selectedRow"
     ></vendor-evaluation-detail>
+      </div>
   </div>
 </template>
 <script lang="ts" src="./index.component.ts"></script>
