@@ -56,7 +56,7 @@
                 </el-table-column>
                 <el-table-column  label="Winer Recomendation" v-if="show" align="center" min-width="180"  sortable>
                     <template slot-scope="{row}">
-                        <el-checkbox v-model="row.winnerStatus"></el-checkbox>
+                        <el-checkbox disabled="true" v-model="row.winnerStatus"></el-checkbox>
                     </template>
                 </el-table-column>
                 <el-table-column label="Vendor Name" align="center" min-width="180" prop="vendorName" sortable>
@@ -142,6 +142,14 @@
 
 .el-table__fixed {
     box-shadow: none;
+}
+
+.el-table .warning-row {
+    background: oldlace;
+}
+
+.el-table .success-row {
+    background: #f0f9eb;
 }
 
 .main {
