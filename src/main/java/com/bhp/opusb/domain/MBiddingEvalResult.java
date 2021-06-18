@@ -32,6 +32,9 @@ public class MBiddingEvalResult extends AbstractAuditingEntity {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "winner_status")
+    private Boolean winnerStatus;
+
     @Column(name = "score")
     private Integer score;
 
@@ -87,6 +90,19 @@ public class MBiddingEvalResult extends AbstractAuditingEntity {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Boolean isWinnerStatus() {
+        return winnerStatus;
+    }
+
+    public MBiddingEvalResult winnerStatus(Boolean winnerStatus) {
+        this.winnerStatus = winnerStatus;
+        return this;
+    }
+
+    public void setWinnerStatus(Boolean winnerStatus) {
+        this.winnerStatus = winnerStatus;
     }
 
     public Integer getScore() {
@@ -196,6 +212,7 @@ public class MBiddingEvalResult extends AbstractAuditingEntity {
             "id=" + getId() +
             ", evaluationStatus='" + getEvaluationStatus() + "'" +
             ", status='" + getStatus() + "'" +
+            ", winnerStatus='" + isWinnerStatus() + "'" +
             ", score=" + getScore() +
             ", rank=" + getRank() +
             ", uid='" + getUid() + "'" +

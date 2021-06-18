@@ -92,5 +92,12 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet id="20210618123123" author="erid">
+        <addColumn tableName="m_bidding_eval_result">
+            <column name="winner_status" type="boolean">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>

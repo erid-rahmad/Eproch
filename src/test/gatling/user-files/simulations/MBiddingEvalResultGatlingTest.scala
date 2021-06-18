@@ -74,6 +74,7 @@ class MBiddingEvalResultGatlingTest extends Simulation {
                 "id":null
                 , "evaluationStatus":"SAMPLE_TEXT"
                 , "status":"SAMPLE_TEXT"
+                , "winnerStatus":null
                 , "score":"0"
                 , "rank":"0"
                 , "uid":null

@@ -10,6 +10,10 @@
             "fieldType": "String"
         },
         {
+            "fieldName": "winnerStatus",
+            "fieldType": "Boolean"
+        },
+        {
             "fieldName": "score",
             "fieldType": "Integer"
         },

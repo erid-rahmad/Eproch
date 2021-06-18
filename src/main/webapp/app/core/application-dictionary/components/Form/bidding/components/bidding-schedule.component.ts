@@ -119,6 +119,7 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
     this.recordsLoaded = false;
     this.bidding = {...this.data};
     this.bidding.step = BiddingStep.SCHEDULE;
+    console.log("this bid",this.bidding.biddingSchedules);
 
     this.retrieveEventStatuses();
 

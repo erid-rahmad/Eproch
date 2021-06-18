@@ -101,7 +101,7 @@
                                             <el-input-number
                                                 v-model="row.evaluation"
                                                 :disabled="readOnly"
-                                                :max="10"
+                                                :max="100"
                                                 :min="0"
                                                 @change="average"
                                                 size="mini">

@@ -97,6 +97,9 @@ public class MBiddingEvalResultQueryService extends QueryService<MBiddingEvalRes
             if (criteria.getStatus() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getStatus(), MBiddingEvalResult_.status));
             }
+            if (criteria.getWinnerStatus() != null) {
+                specification = specification.and(buildSpecification(criteria.getWinnerStatus(), MBiddingEvalResult_.winnerStatus));
+            }
             if (criteria.getScore() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getScore(), MBiddingEvalResult_.score));
             }
