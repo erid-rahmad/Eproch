@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity MVendorEvaluation.
+    -->
+    <changeSet id="20210618095600-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="m_vendor_evaluation"
+                                 constraintName="fk_m_vendor_evaluation_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="contract_id"
+                                 baseTableName="m_vendor_evaluation"
+                                 constraintName="fk_m_vendor_evaluation_contract_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_contract"/>
+
+        <addForeignKeyConstraint baseColumnNames="reviewer_user_id"
+                                 baseTableName="m_vendor_evaluation"
+                                 constraintName="fk_m_vendor_evaluation_reviewer_id"
+                                 referencedColumnNames="user_id"
+                                 referencedTableName="ad_user"/>
+
+    </changeSet>
+</databaseChangeLog>

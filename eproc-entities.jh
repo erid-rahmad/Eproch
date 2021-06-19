@@ -1333,6 +1333,47 @@ entity MBiddingSubmission {
 	active Boolean
 }
 
+entity MContract {
+	name String required maxlength(50)
+	description String
+
+	// Berita Acara Negosiasi.
+	useBanCode Boolean
+	banCode String
+
+	/** Types could be N (New Contract) or R (Renewal). */
+	contractType String
+
+	/** Whether the contract is for Project or Non-project purpose. */
+	purpose String
+
+	forPriceConfirmation Boolean
+
+	startDate LocalDate required
+	expirationDate LocalDate required
+	evaluationPeriod String
+
+	// Common transactional fields.
+	dateTrx ZonedDateTime
+	documentNo String maxlength(30)
+	documentAction String required maxlength(10)
+	documentStatus String required maxlength(12)
+	approved Boolean
+	processed Boolean
+	dateApprove ZonedDateTime
+	dateReject ZonedDateTime
+	rejectedReason String
+
+	uid UUID
+	active Boolean
+}
+
+entity MContractDocument {
+	name String required
+	uid UUID
+	active Boolean
+}
+
 entity MProposalAdministration {
 	answer String required
 	documentEvaluation Boolean
@@ -1409,17 +1450,17 @@ entity MBiddingEvaluationLine {
 }
 
 entity MBiddingEvalResult {
-    evaluationStatus String
-    status String
-    score Integer
-    rank Integer
+	evaluationStatus String
+	status String
+	score Integer
+	rank Integer
 	uid UUID
 	active Boolean
 }
 
 entity MBiddingEvalResultLine {
-    status String
-    score Integer
+	status String
+	score Integer
 	uid UUID
 	active Boolean
 }
@@ -1545,6 +1586,32 @@ entity MVendorConfirmationResponse {
 	active Boolean
 	needRevision TextBlob
 	accept TextBlob
+}
+
+entity MVendorEvaluation {
+	score BigDecimal required
+	evaluationDate LocalDate
+
+	// Common transactional fields.
+	dateTrx ZonedDateTime
+	documentNo String maxlength(30)
+	documentAction String required maxlength(10)
+	documentStatus String required maxlength(12)
+	approved Boolean
+	processed Boolean
+	dateApprove ZonedDateTime
+	dateReject ZonedDateTime
+	rejectedReason String
+
+	uid UUID
+	active Boolean
+}
+
+entity MVendorEvaluationLine {
+	score BigDecimal required
+	remark String
+	uid UUID
+	active Boolean
 }
 
 entity MVendorInvitation {
@@ -1725,9 +1792,9 @@ relationship ManyToOne {
 	CAnnouncement{attachment} to CAttachment
 
 	CAnnouncementResult{adOrganization required} to ADOrganization
-    CAnnouncementResult{bidding required} to MBidding
-    CAnnouncementResult{biddingSchedule required} to MBiddingSchedule
-    CAnnouncementResult{attachment} to CAttachment
+	CAnnouncementResult{bidding required} to MBidding
+	CAnnouncementResult{biddingSchedule required} to MBiddingSchedule
+	CAnnouncementResult{attachment} to CAttachment
 
 	CVendor{adOrganization required} to ADOrganization
 	CVendor{documentType required} to CDocumentType
@@ -1803,6 +1870,16 @@ relationship ManyToOne {
 
 	MBrand{adOrganization required} to ADOrganization
 
+	MContract{adOrganization required} to ADOrganization
+	MContract{costCenter required} to CCostCenter
+	MContract{pic required} to AdUser
+	MContract{vendor required} to CVendor
+	MContract{vendorEvaluation} to CVendorEvaluation
+
+	MContractDocument{adOrganization required} to ADOrganization
+	MContractDocument{contract required} to MContract
+	MContractDocument{attachment required} to CAttachment
+
 	MProductCatalog{adOrganization required} to ADOrganization
 	MProductCatalog{cDocumentType required} to CDocumentType
 	MProductCatalog{cCurrency required} to CCurrency
@@ -1817,6 +1894,14 @@ relationship ManyToOne {
 	MShoppingCart{adUser required} to AdUser
 	MShoppingCartItem{adOrganization required} to ADOrganization
 	MShoppingCartItem{mProductCatalog required} to MProductCatalog
+
+	MVendorEvaluation{adOrganization required} to ADOrganization
+	MVendorEvaluation{contract required} to MContract
+	MVendorEvaluation{reviewer} to AdUser
+
+	MVendorEvaluationLine{adOrganization required} to ADOrganization
+	MVendorEvaluationLine{vendorEvaluation required} to MVendorEvaluation
+	MVendorEvaluationLine{evaluationLine required} to CVendorEvaluationLine
 
 	// releated vendor invoice verification
 	MVerification{adOrganization required} to ADOrganization

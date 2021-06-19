@@ -1,0 +1,62 @@
+{
+    "name": "MVendorEvaluationLine",
+    "fields": [
+        {
+            "fieldName": "score",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "remark",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mVendorEvaluationLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mVendorEvaluation",
+            "otherEntityRelationshipName": "mVendorEvaluationLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "vendorEvaluation",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendorEvaluationLine",
+            "otherEntityRelationshipName": "mVendorEvaluationLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "evaluationLine",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210618095700",
+    "entityTableName": "m_vendor_evaluation_line",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}
