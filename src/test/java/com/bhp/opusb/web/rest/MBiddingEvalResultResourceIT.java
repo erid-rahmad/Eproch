@@ -44,6 +44,9 @@ public class MBiddingEvalResultResourceIT {
     private static final String DEFAULT_STATUS = "AAAAAAAAAA";
     private static final String UPDATED_STATUS = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_WINNER_STATUS = false;
+    private static final Boolean UPDATED_WINNER_STATUS = true;
+
     private static final Integer DEFAULT_SCORE = 1;
     private static final Integer UPDATED_SCORE = 2;
     private static final Integer SMALLER_SCORE = 1 - 1;
@@ -88,6 +91,7 @@ public class MBiddingEvalResultResourceIT {
         MBiddingEvalResult mBiddingEvalResult = new MBiddingEvalResult()
             .evaluationStatus(DEFAULT_EVALUATION_STATUS)
             .status(DEFAULT_STATUS)
+            .winnerStatus(DEFAULT_WINNER_STATUS)
             .score(DEFAULT_SCORE)
             .rank(DEFAULT_RANK)
             .uid(DEFAULT_UID)
@@ -124,6 +128,7 @@ public class MBiddingEvalResultResourceIT {
         MBiddingEvalResult mBiddingEvalResult = new MBiddingEvalResult()
             .evaluationStatus(UPDATED_EVALUATION_STATUS)
             .status(UPDATED_STATUS)
+            .winnerStatus(UPDATED_WINNER_STATUS)
             .score(UPDATED_SCORE)
             .rank(UPDATED_RANK)
             .uid(UPDATED_UID)
@@ -174,6 +179,7 @@ public class MBiddingEvalResultResourceIT {
         MBiddingEvalResult testMBiddingEvalResult = mBiddingEvalResultList.get(mBiddingEvalResultList.size() - 1);
         assertThat(testMBiddingEvalResult.getEvaluationStatus()).isEqualTo(DEFAULT_EVALUATION_STATUS);
         assertThat(testMBiddingEvalResult.getStatus()).isEqualTo(DEFAULT_STATUS);
+        assertThat(testMBiddingEvalResult.isWinnerStatus()).isEqualTo(DEFAULT_WINNER_STATUS);
         assertThat(testMBiddingEvalResult.getScore()).isEqualTo(DEFAULT_SCORE);
         assertThat(testMBiddingEvalResult.getRank()).isEqualTo(DEFAULT_RANK);
         assertThat(testMBiddingEvalResult.getUid()).isEqualTo(DEFAULT_UID);
@@ -214,6 +220,7 @@ public class MBiddingEvalResultResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(mBiddingEvalResult.getId().intValue())))
             .andExpect(jsonPath("$.[*].evaluationStatus").value(hasItem(DEFAULT_EVALUATION_STATUS)))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
+            .andExpect(jsonPath("$.[*].winnerStatus").value(hasItem(DEFAULT_WINNER_STATUS.booleanValue())))
             .andExpect(jsonPath("$.[*].score").value(hasItem(DEFAULT_SCORE)))
             .andExpect(jsonPath("$.[*].rank").value(hasItem(DEFAULT_RANK)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
@@ -233,6 +240,7 @@ public class MBiddingEvalResultResourceIT {
             .andExpect(jsonPath("$.id").value(mBiddingEvalResult.getId().intValue()))
             .andExpect(jsonPath("$.evaluationStatus").value(DEFAULT_EVALUATION_STATUS))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS))
+            .andExpect(jsonPath("$.winnerStatus").value(DEFAULT_WINNER_STATUS.booleanValue()))
             .andExpect(jsonPath("$.score").value(DEFAULT_SCORE))
             .andExpect(jsonPath("$.rank").value(DEFAULT_RANK))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
@@ -414,6 +422,58 @@ public class MBiddingEvalResultResourceIT {
         defaultMBiddingEvalResultShouldBeFound("status.doesNotContain=" + UPDATED_STATUS);
     }
 
+
+    @Test
+    @Transactional
+    public void getAllMBiddingEvalResultsByWinnerStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultRepository.saveAndFlush(mBiddingEvalResult);
+
+        // Get all the mBiddingEvalResultList where winnerStatus equals to DEFAULT_WINNER_STATUS
+        defaultMBiddingEvalResultShouldBeFound("winnerStatus.equals=" + DEFAULT_WINNER_STATUS);
+
+        // Get all the mBiddingEvalResultList where winnerStatus equals to UPDATED_WINNER_STATUS
+        defaultMBiddingEvalResultShouldNotBeFound("winnerStatus.equals=" + UPDATED_WINNER_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingEvalResultsByWinnerStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultRepository.saveAndFlush(mBiddingEvalResult);
+
+        // Get all the mBiddingEvalResultList where winnerStatus not equals to DEFAULT_WINNER_STATUS
+        defaultMBiddingEvalResultShouldNotBeFound("winnerStatus.notEquals=" + DEFAULT_WINNER_STATUS);
+
+        // Get all the mBiddingEvalResultList where winnerStatus not equals to UPDATED_WINNER_STATUS
+        defaultMBiddingEvalResultShouldBeFound("winnerStatus.notEquals=" + UPDATED_WINNER_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingEvalResultsByWinnerStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultRepository.saveAndFlush(mBiddingEvalResult);
+
+        // Get all the mBiddingEvalResultList where winnerStatus in DEFAULT_WINNER_STATUS or UPDATED_WINNER_STATUS
+        defaultMBiddingEvalResultShouldBeFound("winnerStatus.in=" + DEFAULT_WINNER_STATUS + "," + UPDATED_WINNER_STATUS);
+
+        // Get all the mBiddingEvalResultList where winnerStatus equals to UPDATED_WINNER_STATUS
+        defaultMBiddingEvalResultShouldNotBeFound("winnerStatus.in=" + UPDATED_WINNER_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingEvalResultsByWinnerStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultRepository.saveAndFlush(mBiddingEvalResult);
+
+        // Get all the mBiddingEvalResultList where winnerStatus is not null
+        defaultMBiddingEvalResultShouldBeFound("winnerStatus.specified=true");
+
+        // Get all the mBiddingEvalResultList where winnerStatus is null
+        defaultMBiddingEvalResultShouldNotBeFound("winnerStatus.specified=false");
+    }
 
     @Test
     @Transactional
@@ -770,6 +830,7 @@ public class MBiddingEvalResultResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(mBiddingEvalResult.getId().intValue())))
             .andExpect(jsonPath("$.[*].evaluationStatus").value(hasItem(DEFAULT_EVALUATION_STATUS)))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
+            .andExpect(jsonPath("$.[*].winnerStatus").value(hasItem(DEFAULT_WINNER_STATUS.booleanValue())))
             .andExpect(jsonPath("$.[*].score").value(hasItem(DEFAULT_SCORE)))
             .andExpect(jsonPath("$.[*].rank").value(hasItem(DEFAULT_RANK)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
@@ -823,6 +884,7 @@ public class MBiddingEvalResultResourceIT {
         updatedMBiddingEvalResult
             .evaluationStatus(UPDATED_EVALUATION_STATUS)
             .status(UPDATED_STATUS)
+            .winnerStatus(UPDATED_WINNER_STATUS)
             .score(UPDATED_SCORE)
             .rank(UPDATED_RANK)
             .uid(UPDATED_UID)
@@ -840,6 +902,7 @@ public class MBiddingEvalResultResourceIT {
         MBiddingEvalResult testMBiddingEvalResult = mBiddingEvalResultList.get(mBiddingEvalResultList.size() - 1);
         assertThat(testMBiddingEvalResult.getEvaluationStatus()).isEqualTo(UPDATED_EVALUATION_STATUS);
         assertThat(testMBiddingEvalResult.getStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testMBiddingEvalResult.isWinnerStatus()).isEqualTo(UPDATED_WINNER_STATUS);
         assertThat(testMBiddingEvalResult.getScore()).isEqualTo(UPDATED_SCORE);
         assertThat(testMBiddingEvalResult.getRank()).isEqualTo(UPDATED_RANK);
         assertThat(testMBiddingEvalResult.getUid()).isEqualTo(UPDATED_UID);

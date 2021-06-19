@@ -14,6 +14,7 @@ public interface MRequisitionLineMapper extends EntityMapper<MRequisitionLineDTO
 
     @Mapping(source = "requisition.id", target = "requisitionId")
     @Mapping(source = "requisition.documentNo", target = "requisitionName")
+    @Mapping(source = "requisition.documentType.name", target = "requisitionType")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "product.id", target = "productId")

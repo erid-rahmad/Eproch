@@ -35,7 +35,9 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   private evaluationResult: any = [];
   private evaluationResultProp: any = {};
   private loading: boolean = false;
+  private show: boolean = false;
   private selectedWiner = [];
+  private disableSubmit:boolean=false;
 
   created() {
     this.retriveEvaluationResult(this.pickRow.id);
@@ -53,6 +55,15 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     }
     else {return "Drafted"}
   }
+
+  // tableRowClassName({row, rowIndex}) {
+  //   console.log("row index",row)
+  //   if (row.winnerStatus === true) {
+  //     return 'success-row';
+  //   } else {
+  //     return 'warning-row';
+  //   }
+  // }
 
   retriveEvaluationResult(biddingId) {
     this.loading = true;
@@ -73,7 +84,11 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
         res.data.forEach(data => {
           if (data.biddingId === biddingId) {
+
             data.rank=x;
+            if (data.winnerStatus===true){
+              this.disableSubmit=true;
+            }
             data_.push(data);
             x++;
           }
@@ -81,6 +96,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
         this.evaluationResult = data_;
         console.log("this ",this.evaluationResult)
         console.log("this ",this.evaluationResult.biddingId)
+
       })
       .finally(() => this.loading = false);
   }
@@ -88,6 +104,22 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   onRecipientSelectionChanged(val) {
     this.selectedWiner = val;
   }
+
+  updateWinnerStatus(){
+    this.selectedWiner.forEach(item=>{
+      console.log("this item");
+      item.winnerStatus=true;
+      this.commonService(baseApiEvalResults)
+        .create(item)
+        .then(_res => {
+          this.$message.success(`successfully`);
+          this.retriveEvaluationResult(this.pickRow.id)
+        })
+        .catch(err => {
+        })
+    })
+  }
+
   createTableNegotiation(){
     const bidingNego ={
       biddingEvalResultId:'',//data.id,
@@ -124,7 +156,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
           bidingNego.endDate = biddingSchedule.endDate;
           bidingNego.line.push({active:true,
             negotiationStatus:'not started',
-            adOrganizationId:data.adOrganizationId, 
+            adOrganizationId:data.adOrganizationId,
             biddingEvalResultId:data.id});
 
           if(curIdx==max-1){
@@ -133,6 +165,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
             .create(bidingNego)
             .then(res => {
               this.$message.success('create record negotiation');
+              this.updateWinnerStatus();
             })
             .catch(_err => this.$message.error('fail create record negotiation'))
             .finally(()=>{});

@@ -31,6 +31,8 @@ public class MBiddingEvalResultCriteria implements Serializable, Criteria {
 
     private StringFilter status;
 
+    private BooleanFilter winnerStatus;
+
     private IntegerFilter score;
 
     private IntegerFilter rank;
@@ -50,6 +52,7 @@ public class MBiddingEvalResultCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.evaluationStatus = other.evaluationStatus == null ? null : other.evaluationStatus.copy();
         this.status = other.status == null ? null : other.status.copy();
+        this.winnerStatus = other.winnerStatus == null ? null : other.winnerStatus.copy();
         this.score = other.score == null ? null : other.score.copy();
         this.rank = other.rank == null ? null : other.rank.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
@@ -85,6 +88,14 @@ public class MBiddingEvalResultCriteria implements Serializable, Criteria {
 
     public void setStatus(StringFilter status) {
         this.status = status;
+    }
+
+    public BooleanFilter getWinnerStatus() {
+        return winnerStatus;
+    }
+
+    public void setWinnerStatus(BooleanFilter winnerStatus) {
+        this.winnerStatus = winnerStatus;
     }
 
     public IntegerFilter getScore() {
@@ -149,6 +160,7 @@ public class MBiddingEvalResultCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(evaluationStatus, that.evaluationStatus) &&
             Objects.equals(status, that.status) &&
+            Objects.equals(winnerStatus, that.winnerStatus) &&
             Objects.equals(score, that.score) &&
             Objects.equals(rank, that.rank) &&
             Objects.equals(uid, that.uid) &&
@@ -163,6 +175,7 @@ public class MBiddingEvalResultCriteria implements Serializable, Criteria {
         id,
         evaluationStatus,
         status,
+        winnerStatus,
         score,
         rank,
         uid,
@@ -178,6 +191,7 @@ public class MBiddingEvalResultCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (evaluationStatus != null ? "evaluationStatus=" + evaluationStatus + ", " : "") +
                 (status != null ? "status=" + status + ", " : "") +
+                (winnerStatus != null ? "winnerStatus=" + winnerStatus + ", " : "") +
                 (score != null ? "score=" + score + ", " : "") +
                 (rank != null ? "rank=" + rank + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +

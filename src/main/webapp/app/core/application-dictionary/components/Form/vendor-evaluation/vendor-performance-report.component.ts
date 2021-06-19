@@ -1,9 +1,16 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import { ElTable } from 'element-ui/types/table';
 import Component, { mixins } from 'vue-class-component';
+import VendorAnalis from './vendor-analis.vue';
 
-@Component
+@Component({
+  components: {
+    VendorAnalis
+  }
+})
 export default class VendorPerformanceReport extends mixins(AccessLevelMixin) {
+
+  viewDetail=false;
 
   columnSpacing = 24;
   selectedRow: any = {};

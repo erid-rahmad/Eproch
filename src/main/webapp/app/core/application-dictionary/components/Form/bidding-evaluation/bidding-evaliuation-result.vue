@@ -5,8 +5,11 @@
                 <el-button icon="el-icon-close" plain size="mini" type="danger" @click="close">
                     Back
                 </el-button>
-                <el-button icon="el-icon-arrow-right" plain size="mini" type="primary" @click="createTableNegotiation">
+                <el-button icon="el-icon-arrow-right" v-if="!disableSubmit"  plain size="mini" type="primary" @click="createTableNegotiation">
                     Submit
+                </el-button>
+                <el-button icon="el-icon-arrow-right" v-if="disableSubmit"  plain size="mini" type="primary" @click="show=true">
+                    Show Winner
                 </el-button>
             </el-col>
 
@@ -48,16 +51,23 @@
                         </el-button>
                     </template>
                 </el-table-column>
-                <el-table-column label="Winer Recomendation" align="center"   min-width="100">
-                    <el-table-column type="selection" width="100"></el-table-column>
+                <el-table-column label="Winer Recomendation 1" v-if="!disableSubmit"  align="center" min-width="100">
+                    <el-table-column type="selection"  width="100"></el-table-column>
+                </el-table-column>
+                <el-table-column  label="Winer Recomendation" v-if="show" align="center" min-width="180"  sortable>
+                    <template slot-scope="{row}">
+                        <el-checkbox disabled="true" v-model="row.winnerStatus"></el-checkbox>
+                    </template>
                 </el-table-column>
                 <el-table-column label="Vendor Name" align="center" min-width="180" prop="vendorName" sortable>
                 </el-table-column>
+
                 <el-table-column label="Date Submited" align="center" min-width="180"  sortable>
                     <template slot-scope="{row}">
                         {{ row.submitDate | formatDate }}
                     </template>
                 </el-table-column>
+
                 <el-table-column label="Status" align="center" min-width="80" prop="status" sortable>
                 </el-table-column>
                 <el-table-column label="Score" align="center" min-width="80" prop="score" sortable>
@@ -132,6 +142,14 @@
 
 .el-table__fixed {
     box-shadow: none;
+}
+
+.el-table .warning-row {
+    background: oldlace;
+}
+
+.el-table .success-row {
+    background: #f0f9eb;
 }
 
 .main {

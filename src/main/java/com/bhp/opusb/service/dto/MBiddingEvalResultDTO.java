@@ -18,6 +18,8 @@ public class MBiddingEvalResultDTO extends AbstractAuditingDTO {
 
     private String status;
 
+    private Boolean winnerStatus;
+
     private Integer score;
 
     private Integer rank;
@@ -119,6 +121,14 @@ public class MBiddingEvalResultDTO extends AbstractAuditingDTO {
         this.status = status;
     }
 
+    public Boolean isWinnerStatus() {
+        return winnerStatus;
+    }
+
+    public void setWinnerStatus(Boolean winnerStatus) {
+        this.winnerStatus = winnerStatus;
+    }
+
     public Integer getScore() {
         return score;
     }
@@ -199,6 +209,7 @@ public class MBiddingEvalResultDTO extends AbstractAuditingDTO {
             "id=" + id +
             ", evaluationStatus='" + evaluationStatus + '\'' +
             ", status='" + status + '\'' +
+            ", winnerStatus=" + winnerStatus +
             ", score=" + score +
             ", rank=" + rank +
             ", uid=" + uid +
@@ -209,6 +220,7 @@ public class MBiddingEvalResultDTO extends AbstractAuditingDTO {
             ", vendorName='" + vendorName + '\'' +
             ", biddingNo='" + biddingNo + '\'' +
             ", biddingType='" + biddingType + '\'' +
+            ", submitDate=" + submitDate +
             ", biddingId=" + biddingId +
             ", biddingName='" + biddingName + '\'' +
             '}';

@@ -1452,6 +1452,7 @@ entity MBiddingEvaluationLine {
 entity MBiddingEvalResult {
 	evaluationStatus String
 	status String
+	winnerStatus Boolean
 	score Integer
 	rank Integer
 	uid UUID

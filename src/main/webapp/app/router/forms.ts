@@ -29,6 +29,7 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['shoppingCart', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/marketplace/shopping-cart.vue')],
   ['bhinnekaCatalogImporter', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/marketplace/bhinneka-catalog-importer.vue')],
   ['generatePo', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/generate-po/generate-po.vue')],
+  ['generateQuotation', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/generate-rfq/generate-rfq.vue')],
 
   // Auction
   ['auction', () => import(/* webpackChunkName: "auction" */'@/core/application-dictionary/components/Form/auction/index.vue')],

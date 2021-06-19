@@ -1,5 +1,5 @@
 <template>
-  <div class="vendor-evaluation-detail">
+  <div class="vendor-evaluation-detail card-view">
     <el-form
       ref="mainForm"
       label-position="left"
@@ -175,11 +175,15 @@
             width="150"
           >
             <template slot-scope="{ row }">
-              <el-rate
-                v-model="row.rate"
-                :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-                @change="onRateChanged"
-              ></el-rate>
+<!--              <el-rate-->
+<!--                v-model="row.rate"-->
+<!--                :colors="['#99A9BF', '#F7BA2A', '#FF9900']"-->
+<!--                @change="onRateChanged"-->
+<!--              ></el-rate>-->
+                <div class="block">
+                    <span class="demonstration"></span>
+                    <el-slider v-model="row.rate"></el-slider>
+                </div>
             </template>
           </el-table-column>
 

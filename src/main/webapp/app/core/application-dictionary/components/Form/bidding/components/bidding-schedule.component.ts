@@ -120,6 +120,7 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
     this.bidding = {...this.data};
     this.bidding.step = BiddingStep.SCHEDULE;
 
+
     this.retrieveEventStatuses();
 
     this.retrieveBiddingSchedules(this.bidding.id)
@@ -144,6 +145,7 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
         }
       })
       .then(async res => {
+
         this.$set(this.bidding, 'biddingSchedules', res.data.map(item => {
           if (item.startDate && item.endDate) {
             item.schedule = [
@@ -188,9 +190,34 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
 
   editSchedule(event: any) {
     this.selectedEvent = event;
-    if (event.status==="F"){
-      this.editScheduleVisible = false;
-    }else { this.editScheduleVisible = true;}
+    let S:String="A";
+    if(event.status){
+      S=event.status;
+    }
+    if (S==="N"){
+      let a=0
+      this.bidding.biddingSchedules.forEach(item=>{
+        if (item.status==="P"){ a=1;}
+      })
+      if (a===0){
+        this.editScheduleVisible = true;
+      }
+    }
+    if (S==="P"){
+      this.editScheduleVisible = true;
+    }
+    if (S==="F"){
+    }
+    if(S==="A") {
+      let a=0
+      this.bidding.biddingSchedules.forEach(item=>{
+        if (item.status==="P"){ a=1;}
+      })
+      if (a===0){
+        this.editScheduleVisible = true;
+      }
+    }
+
   }
 
   async viewEvent(event: any) {

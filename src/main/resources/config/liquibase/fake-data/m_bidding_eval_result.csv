@@ -1,11 +1,11 @@
-id;evaluation_status;status;score;rank;uid;active;ad_organization_id;bidding_submission_id
-1;Bedfordshire;deposit Dynamic;69199;53208;02b3ec08-41a2-4de7-a886-54e4263b0df5;true;1;1
-2;Kazakhstan Cambridgeshire Mississippi;Sleek functionalities;9654;97023;a0255eed-9e09-42c9-8346-d6abc4d67965;false;2;2
-3;multi-byte;Architect attitude-oriented Money Market Account;48837;75455;beedbea6-9ba3-48c3-b971-92673dc29c5f;true;3;3
-4;Refined Soft Hat Rustic;Niger XSS;23609;90303;d9007309-7ca5-4f9e-9248-956df7bdcfa6;false;4;4
-5;Australian Dollar local area network Chips;Sports magenta Licensed;58844;61839;8412ce8a-495f-48a0-bd24-3e474d56d996;false;5;5
-6;Fantastic networks;Fantastic Concrete Mouse frictionless;45591;93699;2a053684-59fc-41a1-b4e2-d25339c90f39;true;6;6
-7;Wooden Dominica;Aruba Tennessee Mouse;67279;27731;942ab4c6-785c-4e37-9cdd-587e4f32de3d;false;7;7
-8;Pants;white deploy;12157;89301;2f54562e-46ce-4a3c-95f7-e2ab50ac5888;true;8;8
-9;invoice;RSS;91112;27055;120fff88-2719-420c-b708-cd4393da4018;true;9;9
-10;Brand capacitor array;Chief Tasty Frozen Bike;89733;14006;0b58f3c0-43fb-4fe5-bb91-c32560dcfa44;false;10;10
+id;evaluation_status;status;winner_status;score;rank;uid;active;ad_organization_id;bidding_submission_id
+1;Bedfordshire;deposit Dynamic;true;53208;280;2b3ec084-1a2d-4e76-8865-4e4263b0df5b;true;1;1
+2;Mews generating;Checking Account Berkshire;true;9654;97023;a0255eed-9e09-42c9-8346-d6abc4d67965;false;2;2
+3;multi-byte;Architect attitude-oriented Money Market Account;false;75455;74861;eedbea69-ba38-4c33-9719-2673dc29c5ff;true;3;3
+4;USB;Rustic payment;true;85349;95396;3ed90073-097c-4a5f-9e92-48956df7bdcf;true;4;4
+5;magenta Australian Dollar;Delaware;true;84678;2198;d3b1c998-412c-4e8a-895f-8a0fd243e474;true;5;5
+6;generate New Mexico;Landing Fantastic;false;83101;58462;1633557e-2a05-4368-859f-c1a1b4e2d253;false;6;6
+7;quantify Tasty Concrete Soap;Avon Granite Triple-buffered;true;4747;57452;d22a4942-ab4c-4678-9ce3-71cdd587e4f3;false;7;7
+8;Future AGP Decentralized;channels Integrated;false;12157;89301;2f54562e-46ce-4a3c-95f7-e2ab50ac5888;true;8;8
+9;invoice;RSS;true;27055;11738;20fff882-7192-40cf-b08c-d4393da4018d;true;9;9
+10;Handmade Frozen Chicken seamless Chief;Usability;false;89733;14006;0b58f3c0-43fb-4fe5-bb91-c32560dcfa44;false;10;10
