@@ -40,6 +40,10 @@
             "fieldType": "Boolean"
         },
         {
+            "fieldName": "confirmed",
+            "fieldType": "Boolean"
+        },
+        {
             "fieldName": "grandTotal",
             "fieldType": "BigDecimal"
         },

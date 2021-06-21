@@ -65,6 +65,9 @@ public class MPurchaseOrderResourceIT {
     private static final Boolean DEFAULT_PROCESSED = false;
     private static final Boolean UPDATED_PROCESSED = true;
 
+    private static final Boolean DEFAULT_CONFIRMED = false;
+    private static final Boolean UPDATED_CONFIRMED = true;
+
     private static final BigDecimal DEFAULT_GRAND_TOTAL = new BigDecimal(1);
     private static final BigDecimal UPDATED_GRAND_TOTAL = new BigDecimal(2);
     private static final BigDecimal SMALLER_GRAND_TOTAL = new BigDecimal(1 - 1);
@@ -119,6 +122,7 @@ public class MPurchaseOrderResourceIT {
             .documentStatus(DEFAULT_DOCUMENT_STATUS)
             .approved(DEFAULT_APPROVED)
             .processed(DEFAULT_PROCESSED)
+            .confirmed(DEFAULT_CONFIRMED)
             .grandTotal(DEFAULT_GRAND_TOTAL)
             .tax(DEFAULT_TAX)
             .datePromised(DEFAULT_DATE_PROMISED)
@@ -211,6 +215,7 @@ public class MPurchaseOrderResourceIT {
             .documentStatus(UPDATED_DOCUMENT_STATUS)
             .approved(UPDATED_APPROVED)
             .processed(UPDATED_PROCESSED)
+            .confirmed(UPDATED_CONFIRMED)
             .grandTotal(UPDATED_GRAND_TOTAL)
             .tax(UPDATED_TAX)
             .datePromised(UPDATED_DATE_PROMISED)
@@ -317,6 +322,7 @@ public class MPurchaseOrderResourceIT {
         assertThat(testMPurchaseOrder.getDocumentStatus()).isEqualTo(DEFAULT_DOCUMENT_STATUS);
         assertThat(testMPurchaseOrder.isApproved()).isEqualTo(DEFAULT_APPROVED);
         assertThat(testMPurchaseOrder.isProcessed()).isEqualTo(DEFAULT_PROCESSED);
+        assertThat(testMPurchaseOrder.isConfirmed()).isEqualTo(DEFAULT_CONFIRMED);
         assertThat(testMPurchaseOrder.getGrandTotal()).isEqualTo(DEFAULT_GRAND_TOTAL);
         assertThat(testMPurchaseOrder.isTax()).isEqualTo(DEFAULT_TAX);
         assertThat(testMPurchaseOrder.getDatePromised()).isEqualTo(DEFAULT_DATE_PROMISED);
@@ -401,6 +407,7 @@ public class MPurchaseOrderResourceIT {
             .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
             .andExpect(jsonPath("$.[*].approved").value(hasItem(DEFAULT_APPROVED.booleanValue())))
             .andExpect(jsonPath("$.[*].processed").value(hasItem(DEFAULT_PROCESSED.booleanValue())))
+            .andExpect(jsonPath("$.[*].confirmed").value(hasItem(DEFAULT_CONFIRMED.booleanValue())))
             .andExpect(jsonPath("$.[*].grandTotal").value(hasItem(DEFAULT_GRAND_TOTAL.intValue())))
             .andExpect(jsonPath("$.[*].tax").value(hasItem(DEFAULT_TAX.booleanValue())))
             .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
@@ -426,6 +433,7 @@ public class MPurchaseOrderResourceIT {
             .andExpect(jsonPath("$.documentStatus").value(DEFAULT_DOCUMENT_STATUS))
             .andExpect(jsonPath("$.approved").value(DEFAULT_APPROVED.booleanValue()))
             .andExpect(jsonPath("$.processed").value(DEFAULT_PROCESSED.booleanValue()))
+            .andExpect(jsonPath("$.confirmed").value(DEFAULT_CONFIRMED.booleanValue()))
             .andExpect(jsonPath("$.grandTotal").value(DEFAULT_GRAND_TOTAL.intValue()))
             .andExpect(jsonPath("$.tax").value(DEFAULT_TAX.booleanValue()))
             .andExpect(jsonPath("$.datePromised").value(DEFAULT_DATE_PROMISED.toString()))
@@ -895,6 +903,58 @@ public class MPurchaseOrderResourceIT {
 
         // Get all the mPurchaseOrderList where processed is null
         defaultMPurchaseOrderShouldNotBeFound("processed.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByConfirmedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where confirmed equals to DEFAULT_CONFIRMED
+        defaultMPurchaseOrderShouldBeFound("confirmed.equals=" + DEFAULT_CONFIRMED);
+
+        // Get all the mPurchaseOrderList where confirmed equals to UPDATED_CONFIRMED
+        defaultMPurchaseOrderShouldNotBeFound("confirmed.equals=" + UPDATED_CONFIRMED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByConfirmedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where confirmed not equals to DEFAULT_CONFIRMED
+        defaultMPurchaseOrderShouldNotBeFound("confirmed.notEquals=" + DEFAULT_CONFIRMED);
+
+        // Get all the mPurchaseOrderList where confirmed not equals to UPDATED_CONFIRMED
+        defaultMPurchaseOrderShouldBeFound("confirmed.notEquals=" + UPDATED_CONFIRMED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByConfirmedIsInShouldWork() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where confirmed in DEFAULT_CONFIRMED or UPDATED_CONFIRMED
+        defaultMPurchaseOrderShouldBeFound("confirmed.in=" + DEFAULT_CONFIRMED + "," + UPDATED_CONFIRMED);
+
+        // Get all the mPurchaseOrderList where confirmed equals to UPDATED_CONFIRMED
+        defaultMPurchaseOrderShouldNotBeFound("confirmed.in=" + UPDATED_CONFIRMED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByConfirmedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where confirmed is not null
+        defaultMPurchaseOrderShouldBeFound("confirmed.specified=true");
+
+        // Get all the mPurchaseOrderList where confirmed is null
+        defaultMPurchaseOrderShouldNotBeFound("confirmed.specified=false");
     }
 
     @Test
@@ -1466,6 +1526,7 @@ public class MPurchaseOrderResourceIT {
             .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
             .andExpect(jsonPath("$.[*].approved").value(hasItem(DEFAULT_APPROVED.booleanValue())))
             .andExpect(jsonPath("$.[*].processed").value(hasItem(DEFAULT_PROCESSED.booleanValue())))
+            .andExpect(jsonPath("$.[*].confirmed").value(hasItem(DEFAULT_CONFIRMED.booleanValue())))
             .andExpect(jsonPath("$.[*].grandTotal").value(hasItem(DEFAULT_GRAND_TOTAL.intValue())))
             .andExpect(jsonPath("$.[*].tax").value(hasItem(DEFAULT_TAX.booleanValue())))
             .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
@@ -1525,6 +1586,7 @@ public class MPurchaseOrderResourceIT {
             .documentStatus(UPDATED_DOCUMENT_STATUS)
             .approved(UPDATED_APPROVED)
             .processed(UPDATED_PROCESSED)
+            .confirmed(UPDATED_CONFIRMED)
             .grandTotal(UPDATED_GRAND_TOTAL)
             .tax(UPDATED_TAX)
             .datePromised(UPDATED_DATE_PROMISED)
@@ -1548,6 +1610,7 @@ public class MPurchaseOrderResourceIT {
         assertThat(testMPurchaseOrder.getDocumentStatus()).isEqualTo(UPDATED_DOCUMENT_STATUS);
         assertThat(testMPurchaseOrder.isApproved()).isEqualTo(UPDATED_APPROVED);
         assertThat(testMPurchaseOrder.isProcessed()).isEqualTo(UPDATED_PROCESSED);
+        assertThat(testMPurchaseOrder.isConfirmed()).isEqualTo(UPDATED_CONFIRMED);
         assertThat(testMPurchaseOrder.getGrandTotal()).isEqualTo(UPDATED_GRAND_TOTAL);
         assertThat(testMPurchaseOrder.isTax()).isEqualTo(UPDATED_TAX);
         assertThat(testMPurchaseOrder.getDatePromised()).isEqualTo(UPDATED_DATE_PROMISED);

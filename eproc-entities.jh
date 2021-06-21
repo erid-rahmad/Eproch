@@ -880,6 +880,7 @@ entity MPurchaseOrder {
 	documentStatus String required maxlength(10)
 	approved Boolean
 	processed Boolean
+	confirmed Boolean
 	grandTotal BigDecimal
 	tax Boolean
 	datePromised LocalDate

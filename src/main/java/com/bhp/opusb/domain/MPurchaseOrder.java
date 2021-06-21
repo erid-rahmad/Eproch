@@ -59,6 +59,9 @@ public class MPurchaseOrder extends AbstractAuditingEntity {
     @Column(name = "processed")
     private Boolean processed;
 
+    @Column(name = "confirmed")
+    private Boolean confirmed;
+
     @Column(name = "grand_total", precision = 21, scale = 2)
     private BigDecimal grandTotal;
 
@@ -200,6 +203,19 @@ public class MPurchaseOrder extends AbstractAuditingEntity {
 
     public void setProcessed(Boolean processed) {
         this.processed = processed;
+    }
+
+    public Boolean isConfirmed() {
+        return confirmed;
+    }
+
+    public MPurchaseOrder confirmed(Boolean confirmed) {
+        this.confirmed = confirmed;
+        return this;
+    }
+
+    public void setConfirmed(Boolean confirmed) {
+        this.confirmed = confirmed;
     }
 
     public BigDecimal getGrandTotal() {
@@ -403,6 +419,7 @@ public class MPurchaseOrder extends AbstractAuditingEntity {
             ", documentStatus='" + getDocumentStatus() + "'" +
             ", approved='" + isApproved() + "'" +
             ", processed='" + isProcessed() + "'" +
+            ", confirmed='" + isConfirmed() + "'" +
             ", grandTotal=" + getGrandTotal() +
             ", tax='" + isTax() + "'" +
             ", datePromised='" + getDatePromised() + "'" +

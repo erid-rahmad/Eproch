@@ -84,6 +84,12 @@
             <column name="last_modified_date" type="timestamp"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="20210112051200-confirm-1" author="ricky-kurniawan">
+        <addColumn tableName="m_purchase_order">
+            <column name="confirmed" type="boolean" defaultValue="false" />
+        </addColumn>
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
     <!--
