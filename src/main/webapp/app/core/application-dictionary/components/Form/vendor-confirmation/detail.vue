@@ -3,10 +3,10 @@
     <el-scrollbar class="form-wrapper">
       <el-form
         ref="mainForm"
-        label-position="left"
-        label-width="200px"
+        :label-position="formSettings.labelPosition"
+        :label-width="formSettings.labelWidth"
         :model="mainForm"
-        size="mini"
+        :size="formSettings.size"
       >
         <el-row
           :gutter="columnSpacing"
@@ -141,30 +141,27 @@
                 width="140"
               >
                 <template slot-scope="{ row }">
-                  <div v-if="row.status!=='P' && row.status!=='A'">
-                    <el-button
-                      class="button"
-                      icon="el-icon-document-checked"
-                      size="mini"
-                      style="width: 100%"
-                      type="primary"
-                      @click="openConfirmationForm(row)"
-                    >
-                      Action
-                    </el-button>
-                  </div>
-                  <div v-if="row.status==='A'">
-                    <el-button
-                      class="button"
-                      icon="el-icon-document-checked"
-                      size="mini"
-                      style="width: 100%"
-                      type="primary"
-                      @click="generatePo(row)"
-                    >
-                      Generate PO
-                    </el-button>
-                  </div>
+                  <el-button
+                    v-if="row.status !== 'P' && row.status !== 'A'"
+                    class="button"
+                    icon="el-icon-document-checked"
+                    size="mini"
+                    style="width: 100%"
+                    type="primary"
+                    @click="openConfirmationForm(row)"
+                  >
+                    Action
+                  </el-button>
+                  <el-button
+                    v-if="row.status === 'A'"
+                    class="button"
+                    icon="el-icon-document-checked"
+                    size="mini"
+                    type="primary"
+                    @click="openContractParameter(row)"
+                  >
+                    Generate Contract
+                  </el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -209,6 +206,74 @@
           @click="publish"
         >
           Yes
+        </el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog
+      width="30%"
+      :visible.sync="contractParameterFormVisible"
+      title="Generate Contract"
+    >
+      <el-form
+        v-loading="generatingContract"
+        ref="mainForm"
+        :label-position="formSettings.labelPosition"
+        :label-width="formSettings.labelWidth"
+        :model="contractParameter"
+        :size="formSettings.size"
+      >
+        <el-form-item label="Start Date">
+          <el-date-picker
+            v-model="contractParameter.startDate"
+            disabled
+            :format="dateDisplayFormat"
+            size="mini"
+            type="date"
+            :value-format="dateValueFormat"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="Expiration Date">
+          <el-date-picker
+            v-model="contractParameter.expirationDate"
+            disabled
+            :format="dateDisplayFormat"
+            size="mini"
+            type="date"
+            :value-format="dateValueFormat"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="Evaluation Type">
+          <ad-input-lookup
+            v-model="contractParameter.vendorEvaluationId"
+            placeholder="Select Evaluation Type"
+            table-name="c_vendor_evaluation"
+          ></ad-input-lookup>
+        </el-form-item>
+        <el-form-item label="Evaluation Period">
+          <ad-input-list
+            v-model="contractParameter.evaluationPeriod"
+            placeholder="Select Evaluation Period"
+            reference-key="vendorEvaluationPeriod"
+          ></ad-input-list>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button
+          icon="el-icon-close"
+          size="mini"
+          @click="contractParameterFormVisible = false"
+        >
+          Cancel
+        </el-button>
+        <el-button
+          icon="el-icon-check"
+          :loading="generatingContract"
+          size="mini"
+          type="primary"
+          @click="generateContract"
+        >
+          Generate
         </el-button>
       </div>
     </el-dialog>
@@ -302,6 +367,15 @@
           @click="showDetail = false"
         >
           Close
+        </el-button>
+        <el-button
+          class="button"
+          icon="el-icon-document-checked"
+          size="mini"
+          type="primary"
+          @click="generatePo(row)"
+        >
+          Generate PO
         </el-button>
       </div>
     </el-dialog>

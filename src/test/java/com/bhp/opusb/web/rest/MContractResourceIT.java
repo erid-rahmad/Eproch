@@ -3,6 +3,7 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MContract;
 import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.MBidding;
 import com.bhp.opusb.domain.CCostCenter;
 import com.bhp.opusb.domain.CDocumentType;
 import com.bhp.opusb.domain.AdUser;
@@ -172,6 +173,16 @@ public class MContractResourceIT {
         }
         mContract.setAdOrganization(aDOrganization);
         // Add required entity
+        MBidding mBidding;
+        if (TestUtil.findAll(em, MBidding.class).isEmpty()) {
+            mBidding = MBiddingResourceIT.createEntity(em);
+            em.persist(mBidding);
+            em.flush();
+        } else {
+            mBidding = TestUtil.findAll(em, MBidding.class).get(0);
+        }
+        mContract.setBidding(mBidding);
+        // Add required entity
         CCostCenter cCostCenter;
         if (TestUtil.findAll(em, CCostCenter.class).isEmpty()) {
             cCostCenter = CCostCenterResourceIT.createEntity(em);
@@ -251,6 +262,16 @@ public class MContractResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         mContract.setAdOrganization(aDOrganization);
+        // Add required entity
+        MBidding mBidding;
+        if (TestUtil.findAll(em, MBidding.class).isEmpty()) {
+            mBidding = MBiddingResourceIT.createUpdatedEntity(em);
+            em.persist(mBidding);
+            em.flush();
+        } else {
+            mBidding = TestUtil.findAll(em, MBidding.class).get(0);
+        }
+        mContract.setBidding(mBidding);
         // Add required entity
         CCostCenter cCostCenter;
         if (TestUtil.findAll(em, CCostCenter.class).isEmpty()) {
@@ -2091,6 +2112,22 @@ public class MContractResourceIT {
 
         // Get all the mContractList where adOrganization equals to adOrganizationId + 1
         defaultMContractShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMContractsByBiddingIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        MBidding bidding = mContract.getBidding();
+        mContractRepository.saveAndFlush(mContract);
+        Long biddingId = bidding.getId();
+
+        // Get all the mContractList where bidding equals to biddingId
+        defaultMContractShouldBeFound("biddingId.equals=" + biddingId);
+
+        // Get all the mContractList where bidding equals to biddingId + 1
+        defaultMContractShouldNotBeFound("biddingId.equals=" + (biddingId + 1));
     }
 
 

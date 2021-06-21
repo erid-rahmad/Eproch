@@ -69,6 +69,25 @@ public class MContractResource {
     }
 
     /**
+     * {@code POST  /m-contracts/generate-from-vc} : Create a new mContract from MVendorConfirmation.
+     *
+     * @param mContractDTO the mContractDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new mContractDTO, or with status {@code 400 (Bad Request)} if the mContract has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/m-contracts/generate-from-vc")
+    public ResponseEntity<MContractDTO> generateFromVendorConfirmation(@Valid @RequestBody MContractDTO mContractDTO) throws URISyntaxException {
+        log.debug("REST request to generate MContract from MVendorConfirmation : {}", mContractDTO);
+        if (mContractDTO.getId() != null) {
+            throw new BadRequestAlertException("A new mContract cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        MContractDTO result = mContractService.generateFromVendorConfirmation(mContractDTO);
+        return ResponseEntity.created(new URI("/api/m-contracts/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+    /**
      * {@code PUT  /m-contracts} : Updates an existing mContract.
      *
      * @param mContractDTO the mContractDTO to update.

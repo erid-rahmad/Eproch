@@ -114,6 +114,11 @@ public class MContract extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mContracts")
+    private MBidding bidding;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mContracts")
     private CCostCenter costCenter;
 
     /**
@@ -418,6 +423,19 @@ public class MContract extends AbstractAuditingEntity {
 
     public void setAdOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
+    }
+
+    public MBidding getBidding() {
+        return bidding;
+    }
+
+    public MContract bidding(MBidding mBidding) {
+        this.bidding = mBidding;
+        return this;
+    }
+
+    public void setBidding(MBidding mBidding) {
+        this.bidding = mBidding;
     }
 
     public CCostCenter getCostCenter() {

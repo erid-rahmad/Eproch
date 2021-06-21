@@ -69,6 +69,8 @@ public class MContractCriteria implements Serializable, Criteria {
 
     private LongFilter adOrganizationId;
 
+    private LongFilter biddingId;
+
     private LongFilter costCenterId;
 
     private LongFilter documentTypeId;
@@ -105,6 +107,7 @@ public class MContractCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.biddingId = other.biddingId == null ? null : other.biddingId.copy();
         this.costCenterId = other.costCenterId == null ? null : other.costCenterId.copy();
         this.documentTypeId = other.documentTypeId == null ? null : other.documentTypeId.copy();
         this.picId = other.picId == null ? null : other.picId.copy();
@@ -293,6 +296,14 @@ public class MContractCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
+    public LongFilter getBiddingId() {
+        return biddingId;
+    }
+
+    public void setBiddingId(LongFilter biddingId) {
+        this.biddingId = biddingId;
+    }
+
     public LongFilter getCostCenterId() {
         return costCenterId;
     }
@@ -366,6 +377,7 @@ public class MContractCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(biddingId, that.biddingId) &&
             Objects.equals(costCenterId, that.costCenterId) &&
             Objects.equals(documentTypeId, that.documentTypeId) &&
             Objects.equals(picId, that.picId) &&
@@ -398,6 +410,7 @@ public class MContractCriteria implements Serializable, Criteria {
         uid,
         active,
         adOrganizationId,
+        biddingId,
         costCenterId,
         documentTypeId,
         picId,
@@ -431,6 +444,7 @@ public class MContractCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (biddingId != null ? "biddingId=" + biddingId + ", " : "") +
                 (costCenterId != null ? "costCenterId=" + costCenterId + ", " : "") +
                 (documentTypeId != null ? "documentTypeId=" + documentTypeId + ", " : "") +
                 (picId != null ? "picId=" + picId + ", " : "") +

@@ -1,21 +1,21 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
+import javax.validation.constraints.Size;
+
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MVendorConfirmationLine} entity.
  */
-public class MVendorConfirmationLineDTO extends AbstractAuditingDTO implements Serializable {
+public class MVendorConfirmationLineDTO extends AbstractAuditingDTO {
     
     private Long id;
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
     @Size(max = 10)
     private String status;
@@ -28,7 +28,14 @@ public class MVendorConfirmationLineDTO extends AbstractAuditingDTO implements S
 
     private Long biddingEvalResultId;
 
-    private Long vendorConfirmationId, negoLineId;
+    private Long vendorConfirmationId;
+    private Long vendorConfirmationBiddingId;
+    private String vendorConfirmationBiddingName;
+    private String vendorConfirmationBiddingNo;
+    private Long vendorConfirmationCostCenterId;
+    private Long vendorConfirmationPicId;
+    
+    private Long negoLineId;
     private BigDecimal negoAmount;
     
     public Long getId() {
@@ -117,6 +124,46 @@ public class MVendorConfirmationLineDTO extends AbstractAuditingDTO implements S
 
     public void setVendorConfirmationId(Long mVendorConfirmationId) {
         this.vendorConfirmationId = mVendorConfirmationId;
+    }
+
+    public Long getVendorConfirmationBiddingId() {
+        return vendorConfirmationBiddingId;
+    }
+
+    public void setVendorConfirmationBiddingId(Long vendorConfirmationBiddingId) {
+        this.vendorConfirmationBiddingId = vendorConfirmationBiddingId;
+    }
+
+    public String getVendorConfirmationBiddingName() {
+        return vendorConfirmationBiddingName;
+    }
+
+    public void setVendorConfirmationBiddingName(String vendorConfirmationBiddingName) {
+        this.vendorConfirmationBiddingName = vendorConfirmationBiddingName;
+    }
+
+    public String getVendorConfirmationBiddingNo() {
+        return vendorConfirmationBiddingNo;
+    }
+
+    public void setVendorConfirmationBiddingNo(String vendorConfirmationBiddingNo) {
+        this.vendorConfirmationBiddingNo = vendorConfirmationBiddingNo;
+    }
+
+    public Long getVendorConfirmationCostCenterId() {
+        return vendorConfirmationCostCenterId;
+    }
+
+    public void setVendorConfirmationCostCenterId(Long vendorConfirmationCostCenterId) {
+        this.vendorConfirmationCostCenterId = vendorConfirmationCostCenterId;
+    }
+
+    public Long getVendorConfirmationPicId() {
+        return vendorConfirmationPicId;
+    }
+
+    public void setVendorConfirmationPicId(Long vendorConfirmationPicId) {
+        this.vendorConfirmationPicId = vendorConfirmationPicId;
     }
 
     @Override

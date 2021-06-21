@@ -3,10 +3,10 @@
     <el-scrollbar class="form-wrapper">
       <el-form
         ref="mainForm"
-        label-position="left"
-        label-width="200px"
+        :label-position="formSettings.labelPosition"
+        :label-width="formSettings.labelWidth"
         :model="mainForm"
-        size="mini"
+        :size="formSettings.size"
       >
         <el-row
           :gutter="columnSpacing"
@@ -24,16 +24,24 @@
               ></el-input>
             </el-form-item>
             <el-form-item label="Contract Start Date">
-              <el-input
-                v-model="mainForm.contractStartDate"
-                disabled
-              ></el-input>
+              <el-date-picker
+                v-model="contractParameter.contractStartDate"
+                :disabled="isVendor"
+                :format="dateDisplayFormat"
+                size="mini"
+                type="date"
+                :value-format="dateValueFormat"
+              ></el-date-picker>
             </el-form-item>
             <el-form-item label="Contract End Date">
-              <el-input
-                v-model="mainForm.contractEndDate"
-                disabled
-              ></el-input>
+              <el-date-picker
+                v-model="contractParameter.contractEndDate"
+                :disabled="isVendor"
+                :format="dateDisplayFormat"
+                size="mini"
+                type="date"
+                :value-format="dateValueFormat"
+              ></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col

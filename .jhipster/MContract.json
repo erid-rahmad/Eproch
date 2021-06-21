@@ -119,6 +119,14 @@
         },
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "mBidding",
+            "otherEntityRelationshipName": "mContract",
+            "relationshipValidateRules": "required",
+            "relationshipName": "bidding",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "cCostCenter",
             "otherEntityRelationshipName": "mContract",
             "relationshipValidateRules": "required",

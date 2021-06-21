@@ -1,10 +1,17 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
+import settings from '@/settings';
+import AdInputList from '@/shared/components/AdInput/ad-input-list.vue';
+import AdInputLookup from '@/shared/components/AdInput/ad-input-lookup.vue';
 import { ElForm } from 'element-ui/types/form';
 import { ElUpload } from 'element-ui/types/upload';
 import Vue from 'vue';
 import Component, { mixins } from 'vue-class-component';
 import { Inject } from 'vue-property-decorator';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
+
+const baseApiConfirmationLine = 'api/m-vendor-confirmation-lines';
+const baseApiConfirmationContract = 'api/m-vendor-confirmation-contracts';
+const baseApiContract = 'api/m-contracts';
 
 const VendorConfirmationDetailProp = Vue.extend({
   props: {
@@ -17,8 +24,14 @@ const VendorConfirmationDetailProp = Vue.extend({
   }
 });
 
-@Component
+@Component({
+  components: {
+    AdInputList,
+    AdInputLookup
+  }
+})
 export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, VendorConfirmationDetailProp) {
+  
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
@@ -28,6 +41,9 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   private file: any = {};
 
   private fileList: any[] = [];
+
+  contractParameterFormVisible: boolean = false;
+  generatingContract: boolean = false;
 
   contractFormValidationSchema = {
     confirmationNo: {
@@ -50,67 +66,33 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
 
   poNumber: string = "";
 
-  mainForm:any = {};
+  mainForm: any = {};
 
-  contract:any = {};
-/*
-    confirmationNo: "",
-    contractStartDate: '2021-05-28',
-    contractEndDate: '2021-05-28',
-    contractDetail: null
-  };
-*/
+  contract: any = {};
+
+  /**
+   * This is used to generate MContract.
+   */
+  contractParameter: any = {};
 
   confirmations = []
-/*
-    {
-      vendorName: 'Supplier 3',
-      amount: 29310000000,
-      quantity: 180,
-      documentStatus: 'A',
-      lines: [
-        {
-          item: 'Honda 2015',
-          quantity: 50,
-          unitPrice: 238000000,
-          totalLine: 11900000000
-        },
-        {
-          item: 'Honda Civic 2017',
-          quantity: 30,
-          unitPrice: 439000000,
-          totalLine: 13710000000
-        },
-        {
-          item: 'Honda 2020',
-          quantity: 100,
-          unitPrice: 45000000,
-          totalLine: 4500000000
-        }
-      ]
-    }
-  ];
-*/
 
   history = [];
-/*
-    {
-      contractNo: '112001',
-      lastModifiedDate: '2021-03-31',
-      status: 'Accepted',
-      reason: 'Sudah sesuai'
-    },
-    {
-      contractNo: '112001',
-      lastModifiedDate: '2021-03-28',
-      status: 'Need Revision',
-      reason: 'Mohon konfirmasi'
-    }
-  ];
-*/
 
   selectedConfirmation: any = {};
   vendorConfirmation: any[] = [];
+
+  get dateDisplayFormat() {
+    return settings.dateDisplayFormat;
+  }
+
+  get dateValueFormat() {
+    return settings.dateValueFormat;
+  }
+
+  get formSettings() {
+    return settings.form;
+  }
 
   created() {
     console.log('component detail created');
@@ -125,26 +107,67 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
     this.refreshLine();
   }
 
-  refreshLine(){
-    this.commonService('/api/m-vendor-confirmation-lines').retrieve({
-      criteriaQuery: this.updateCriteria([
-        'active.equals=true',
-        `vendorConfirmationId.equals=${this.mainForm.id}`
-      ]),
-      paginationQuery: {
-        page: 0,
-        size: 10000,
-        sort: ['id']
-      }
-    }).then(res=>{console.log(res.data);this.confirmations = res.data});
+  generateContract() {
+    this.generatingContract = true;
+    this.commonService(`${baseApiContract}/generate-from-vc`)
+      .create(this.contractParameter)
+      .then(res => this.$message.success(`Contract ${res.documentNo} has been generated successfully`))
+      .catch(err => {
+        console.error('Failed to generate contract', err);
+        this.$message.error('Failed to generate contract');
+        this.contractParameterFormVisible = false;
+      })
+      .finally(() => this.generatingContract = false);
+  }
+
+  refreshLine() {
+    this.commonService(baseApiConfirmationLine)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `vendorConfirmationId.equals=${this.mainForm.id}`
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.confirmations = res.data;
+      });
   }
 
   formatConfirmationStatus(value: string) {
     return this.vendorConfirmation.find(status => status.key === value)?.value;
   }
 
-  beforeDestroy() {
-    console.log('before destroy component detail');
+  retrieveLastConfirmationContract(lineId: number): Promise<any> {
+    return new Promise(resolve => {
+      this.commonService(baseApiConfirmationContract)
+        .retrieve({
+          criteriaQuery: [
+            'active.equals=true',
+            `vendorConfirmationLineId.equals=${lineId}`
+          ],
+          paginationQuery: {
+            page: 0,
+            size: 1,
+            sort: ['id,desc']
+          }
+        })
+        .then(res => {
+          if (res.data.length) {
+            resolve(res.data[0]);
+          } else {
+            resolve({});
+          }
+        })
+        .catch(err => {
+          console.warn('Failed to get line contract', err);
+          resolve({});
+        });
+    });
   }
 
   viewDetail(row: any) {
@@ -213,67 +236,69 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
     }).then(res=>{this.history = res.data}).catch((err)=>{
       console.log(err);
       this.$message.error("Unable to load history.")
-    }).finally(()=>{
-    });;
+    })
+
     this.showHistory = true;
   }
 
   openConfirmationForm(_row: any) {
     this.selectedConfirmation = _row;
-    this.commonService('/api/m-vendor-confirmation-contracts').retrieve({
+    this.commonService(baseApiConfirmationContract)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `vendorConfirmationLineId.equals=${_row.id}`
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.contract =
+          res.data[0] ? res.data[0] : {
+            confirmationNo: Date.now(),
+            contractStartDate: new Date(),
+            contractEndDate: null,
+            contractDetail: null,
+            adOrganizationId: this.mainForm.adOrganizationId,
+            vendorConfirmationLineId: _row.id
+          }
+
+        if (this.contract.attachmentId) {
+          this.fileList.push({ "name": this.contract.attachment.fileName, "url": this.contract.downloadUrl })
+        }
+        console.log(this.contract);
+      });
+    this.showConfirmationForm = true;
+  }
+
+  generatePo(row: any) {
+    this.selectedConfirmation = row;
+    this.commonService('/api/m-bid-nego-prices').retrieve({
       criteriaQuery: this.updateCriteria([
         'active.equals=true',
-        `vendorConfirmationLineId.equals=${_row.id}`
+        `biddingId.equals=${this.mainForm.biddingId}`,
+        `negotiationLineId.equals=${row.negoLineId}`
       ]),
       paginationQuery: {
         page: 0,
         size: 10000,
         sort: ['id']
       }
-    }).then(res=>{this.contract = 
-      res.data[0]?res.data[0]:{
-        confirmationNo: Date.now(),
-        contractStartDate: '2021-05-28',
-        contractEndDate: '2021-05-28',
-        contractDetail: null,
-        adOrganizationId: this.mainForm.adOrganizationId,
-        vendorConfirmationLineId: _row.id
-      }
-      
-      if(this.contract.attachmentId){
-        this.fileList.push({"name":this.contract.attachment.fileName, "url":this.contract.downloadUrl})
-      }
-      console.log(this.contract);
-    });
-    this.showConfirmationForm = true;
-  }
-
-  generatePo(row: any) {
-    this.selectedConfirmation = row;
-    let today = new Date();
-    this.commonService('/api/m-bid-nego-prices').retrieve({
-      criteriaQuery: this.updateCriteria([
-        'active.equals=true',
-        `biddingId.equals=${this.mainForm.biddingId}`,
-        `negotiationLineId.equals=${row.negoLineId}`
-        ]),
-      paginationQuery: {
-        page: 0,
-        size: 10000,
-        sort: ['id']
-      }
-    }).then(res=>{
+    }).then(res => {
       this.commonService('/api/m-bid-nego-price-lines').retrieve({
         criteriaQuery: this.updateCriteria([
           'active.equals=true',
           `bidNegoPriceId.equals=${res.data[0].id}`
-          ]),
+        ]),
         paginationQuery: {
           page: 0,
           size: 10000,
           sort: ['id']
         }
-      }).then((res)=>{
+      }).then((res) => {
         let amount = 0;
         console.log(res.data);
         res.data.forEach(element => {
@@ -283,48 +308,42 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
         let lines = res.data;
 
         let poBody: any = {
-          "active": true,
-          "adOrganizationId": row.adOrganizationId,
-          "costCenterId": this.mainForm.costCenterId,
-          "currencyId": this.mainForm.currencyId,
-          "datePromised": "2021-06-01",
-          "dateRequired": "2021-06-01",
-          "dateTrx": `${today.getFullYear()}-${((today.getMonth()+1)<10?'0':'')+(today.getMonth()+1)}-${(today.getDate()<10?'0':'')+(today.getDate())}`,
-          "description": "PO for bidding "+this.mainForm.biddingTitle,
-          "documentTypeId": 874953,
-          "grandTotal": amount,
-          "paymentTermId": 1951601,
-          "vendorId": row.vendorId,
-          "warehouseId": this.mainForm.warehouseId,
-          "biddingId": this.mainForm.biddingId,
-          "poLines": []
+          active: true,
+          adOrganizationId: row.adOrganizationId,
+          costCenterId: this.mainForm.costCenterId,
+          currencyId: this.mainForm.currencyId,
+          // datePromised: "2021-06-01",
+          // dateRequired: "2021-06-01",
+          // dateTrx: `${today.getFullYear()}-${((today.getMonth()+1)<10?'0':'')+(today.getMonth()+1)}-${(today.getDate()<10?'0':'')+(today.getDate())}`,
+          description: "PO for bidding " + this.mainForm.biddingTitle,
+          // documentTypeId: 874953,
+          grandTotal: amount,
+          // paymentTermId: 1951601,
+          vendorId: row.vendorId,
+          warehouseId: this.mainForm.warehouseId,
+          biddingId: this.mainForm.biddingId,
+
+          poLines: lines.map(line => ({
+            active: true,
+            dateTrx: poBody.dateTrx,
+            orderAmount: line.totalNegotiationPrice,
+            quantity: line.quantity,
+            unitPrice: line.priceNegotiation,
+            adOrganizationId: poBody.adOrganizationId,
+            productId: line.productId,
+            warehouseId: poBody.warehouseId,
+            costCenterId: poBody.costCenterId,
+            uomId: line.uomId,
+            vendorId: this.selectedConfirmation.vendorId,
+            dateRequired: poBody.dateRequired,
+            datePromised: poBody.datePromised
+          }))
         };
 
-        lines.forEach((element)=>{
-          let lineBody = {
-            "active": true,
-            "dateTrx": poBody.dateTrx,
-            "orderAmount": element.totalNegotiationPrice,
-            "quantity": element.quantity,
-            "unitPrice": element.priceNegotiation,
-            "adOrganizationId": poBody.adOrganizationId,
-            "productId": element.productId,
-            "warehouseId": poBody.warehouseId,
-            "costCenterId": poBody.costCenterId,
-            "uomId": element.uomId,
-            "vendorId": this.selectedConfirmation.vendorId,
-            "dateRequired": poBody.dateRequired,
-            "datePromised": poBody.datePromised
-          }
-          poBody.poLines.push(lineBody);
-          console.log(lineBody);
-        });
-        console.log(poBody);
-
-        this.commonService('/api/m-purchase-orders/generate-from-vc').create(poBody).then(res=>{
+        this.commonService('/api/m-purchase-orders/generate-from-vc').create(poBody).then(res => {
           this.poNumber = res.documentNo;
           this.showPoForm = true;
-        }).catch(error=>{
+        }).catch(error => {
           this.$message.error("Unable to generate PO.");
         });
       });
@@ -404,11 +423,42 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
         type: 'warning',
         duration: 3000
       });
-      return !isExt;
+      return false;
     }
 
   }
-  saveAsDraft(){
+
+  async openContractParameter(row: any) {
+    const lineContract = await this.retrieveLastConfirmationContract(row.id);
+    const fileName = lineContract.attachmentName;
+    const strippedName = fileName.substring(fileName.indexOf('_') + 1, fileName.lastIndexOf('.'));
+    const contractName: string = `C${row.vendorConfirmationBiddingNo}-${strippedName}`;
+
+    this.contractParameter = {
+      adOrganizationId: row.adOrganizationId,
+      biddingId: row.vendorConfirmationBiddingId,
+      name: contractName.length > 50 ? contractName.substring(0, 49) : contractName,
+      costCenterId: row.vendorConfirmationCostCenterId,
+      picUserId: row.vendorConfirmationPicId,
+      vendorId: row.vendorId,
+      startDate: lineContract.contractStartDate,
+      expirationDate: lineContract.contractEndDate,
+      vendorEvaluationId: null,
+      evaluationPeriod: null,
+      contractDocuments: [
+        {
+          adOrganizationId: row.adOrganizationId,
+          name: contractName,
+          attachmentId: lineContract.attachmentId,
+        }
+      ]
+    };
+
+    console.log('contract param:', this.contractParameter);
+    this.contractParameterFormVisible = true;
+  }
+
+  saveAsDraft() {
     (<ElForm>this.$refs.contractForm).validate(passed => {
       if (passed) {
         if (!this.contract.attachmentId) {
@@ -420,37 +470,37 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
           });
         } else {
           if (this.contract.id) {
-          this.commonService('/api/m-vendor-confirmation-contracts')
-            .update(this.contract)
-            .then(_res => {
-              this.$message.success('Contract has been saved!');
+            this.commonService('/api/m-vendor-confirmation-contracts')
+              .update(this.contract)
+              .then(_res => {
+                this.$message.success('Contract has been saved!');
 
-              this.resetForm();
-              this.refreshLine();
-            }).catch(err => {
-              console.error('Failed to save the contract.', err);
-              this.$message.error(`Failed saving the contract`);
-            });
+                this.resetForm();
+                this.refreshLine();
+              }).catch(err => {
+                console.error('Failed to save the contract.', err);
+                this.$message.error(`Failed saving the contract`);
+              });
           } else {
             this.commonService('/api/m-vendor-confirmation-contracts')
-            .create(this.contract)
-            .then(_res => {
-              this.$message.success('Contract has been saved!');
+              .create(this.contract)
+              .then(_res => {
+                this.$message.success('Contract has been saved!');
 
-              this.resetForm();
-              this.refreshLine();
-            }).catch(err => {
-              console.error('Failed to save the contract.', err);
-              this.$message.error(`Failed saving the contract`);
-            });
+                this.resetForm();
+                this.refreshLine();
+              }).catch(err => {
+                console.error('Failed to save the contract.', err);
+                this.$message.error(`Failed saving the contract`);
+              });
           }
         }
       }
     });
   }
 
-  publish(){
-    if(this.contract.id){
+  publish() {
+    if (this.contract.id) {
       this.commonService(`/api/m-vendor-confirmation-contracts/publish/${this.contract.id}`)
         .create(this.contract)
         .then(_res => {
@@ -466,19 +516,19 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
         });
     } else {
       this.commonService('/api/m-vendor-confirmation-contracts')
-      .create(this.contract)
-      .then(res => {
-        console.log(res);
-        this.contract = res;
-        this.publish();
-      }).catch(err => {
-        console.error('Failed to save the contract.', err);
-        this.$message.error(`Failed saving the contract`);
-      });
+        .create(this.contract)
+        .then(res => {
+          console.log(res);
+          this.contract = res;
+          this.publish();
+        }).catch(err => {
+          console.error('Failed to save the contract.', err);
+          this.$message.error(`Failed saving the contract`);
+        });
     }
   }
 
-  showConfirmPublish(){
+  showConfirmPublish() {
     (<ElForm>this.$refs.contractForm).validate(passed => {
       if (passed) {
         this.confirmPublish = true;

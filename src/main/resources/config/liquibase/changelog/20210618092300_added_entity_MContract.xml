@@ -154,6 +154,7 @@
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
+            <column name="bidding_id" type="numeric"/>
             <column name="cost_center_id" type="numeric"/>
             <column name="document_type_id" type="numeric"/>
             <column name="pic_id" type="numeric"/>
@@ -165,6 +166,15 @@
     <changeSet id="20210621105000" author="Ananta Aryadewa">
         <addColumn tableName="m_contract">
             <column name="document_type_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20210622012000" author="Ananta Aryadewa">
+        <dropColumn tableName="m_contract" columnName="contract_type"/>
+        <addColumn tableName="m_contract">
+            <column name="bidding_id" type="bigint">
                 <constraints nullable="false" />
             </column>
         </addColumn>

@@ -2,6 +2,8 @@ package com.bhp.opusb.service.dto;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -74,6 +76,10 @@ public class MContractDTO extends AbstractAuditingDTO {
     private Long adOrganizationId;
     private String adOrganizationName;
 
+    private Long biddingId;
+    private String biddingName;
+    private String biddingNo;
+
     private Long costCenterId;
     private String costCenterName;
 
@@ -94,6 +100,8 @@ public class MContractDTO extends AbstractAuditingDTO {
     private Long vendorEvaluationId;
     private String vendorEvaluationName;
     
+    private List<MContractDocumentDTO> contractDocuments = new ArrayList<>();
+
     public Long getId() {
         return id;
     }
@@ -278,6 +286,30 @@ public class MContractDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
+    public Long getBiddingId() {
+        return biddingId;
+    }
+
+    public void setBiddingId(Long mBiddingId) {
+        this.biddingId = mBiddingId;
+    }
+
+    public String getBiddingName() {
+        return biddingName;
+    }
+
+    public void setBiddingName(String biddingName) {
+        this.biddingName = biddingName;
+    }
+
+    public String getBiddingNo() {
+        return biddingNo;
+    }
+
+    public void setBiddingNo(String biddingNo) {
+        this.biddingNo = biddingNo;
+    }
+
     public Long getCostCenterId() {
         return costCenterId;
     }
@@ -358,6 +390,14 @@ public class MContractDTO extends AbstractAuditingDTO {
         this.vendorEvaluationName = vendorEvaluationName;
     }
 
+    public List<MContractDocumentDTO> getContractDocuments() {
+        return contractDocuments;
+    }
+
+    public void setContractDocuments(List<MContractDocumentDTO> contractDocuments) {
+        this.contractDocuments = contractDocuments;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -404,6 +444,7 @@ public class MContractDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", biddingId=" + getBiddingId() +
             ", costCenterId=" + getCostCenterId() +
             ", documentTypeId=" + getDocumentTypeId() +
             ", picId=" + getPicUserId() +

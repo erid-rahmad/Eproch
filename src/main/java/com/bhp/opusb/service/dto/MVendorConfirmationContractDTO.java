@@ -1,22 +1,21 @@
 package com.bhp.opusb.service.dto;
 
 import java.time.LocalDate;
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+
 import javax.persistence.Lob;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MVendorConfirmationContract} entity.
  */
-public class MVendorConfirmationContractDTO extends AbstractAuditingDTO implements Serializable {
+public class MVendorConfirmationContractDTO extends AbstractAuditingDTO {
     
     private Long id;
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
     private String confirmationNo;
 
@@ -34,6 +33,7 @@ public class MVendorConfirmationContractDTO extends AbstractAuditingDTO implemen
 
     private CAttachmentDTO attachment;
     private Long attachmentId;
+    private String attachmentName;
     private String downloadUrl;
 
     private Long vendorConfirmationLineId;
@@ -152,6 +152,14 @@ public class MVendorConfirmationContractDTO extends AbstractAuditingDTO implemen
 
     public void setAttachmentId(Long cAttachmentId) {
         this.attachmentId = cAttachmentId;
+    }
+
+    public String getAttachmentName() {
+        return attachmentName;
+    }
+
+    public void setAttachmentName(String attachmentName) {
+        this.attachmentName = attachmentName;
     }
 
     public Long getVendorConfirmationLineId() {

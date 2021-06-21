@@ -49,4 +49,14 @@
                                  referencedTableName="c_document_type"/>
 
     </changeSet>
+
+    <changeSet id="20210622011900" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="bidding_id"
+                                 baseTableName="m_contract"
+                                 constraintName="fk_m_contract_bidding_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_bidding"/>
+
+    </changeSet>
 </databaseChangeLog>
