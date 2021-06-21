@@ -142,8 +142,7 @@
     </el-form>
     <el-row>
       <el-col
-        :xs="24"
-        :sm="12"
+
       >
         <el-table
           ref="evaluationLines"
@@ -151,28 +150,31 @@
           class="evaluation-line-table"
           :data="evaluationLines"
           highlight-current-row
-          :max-height="gridSchema.maxHeight"
           size="mini"
+
+
           stripe
         >
 
           <el-table-column
             label="Question Category"
-            width="150"
+            min-width="80"
             prop="cQuestionCategoryName"
             show-overflow-tooltip
           ></el-table-column>
 
           <el-table-column
             label="Question"
-            width="200"
+            min-width="180"
+
             prop="question"
             show-overflow-tooltip
           ></el-table-column>
 
           <el-table-column
-            label="Score"
-            width="150"
+            label="Score %"
+            min-width="250"
+
           >
             <template slot-scope="{ row }">
 <!--              <el-rate-->
@@ -182,14 +184,14 @@
 <!--              ></el-rate>-->
                 <div class="block">
                     <span class="demonstration"></span>
-                    <el-slider v-model="row.rate"></el-slider>
+                    <el-slider v-model="row.rate" :marks="marks"></el-slider>
                 </div>
             </template>
           </el-table-column>
 
           <el-table-column
             label="Remark"
-            min-width="200"
+            min-width="150"
           >
             <template slot-scope="{ row }">
               <el-input

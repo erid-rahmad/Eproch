@@ -30,6 +30,17 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
     }]
   ]);
 
+  marks= {
+    0: '0 %',
+    50: {
+      style: {
+        color: '#1989FA'
+      },
+      label: this.$createElement('strong', '50%')
+    },
+    100: '100 %',
+  }
+
   mainForm = {
     documentNo: '11011',
     reviewer: 'Admin Evaluator',
@@ -47,19 +58,19 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
     {
       cQuestionCategoryName: 'Cost',
       question: 'Vendor tidak menaikkan harga setelah menerima PO',
-      rate: 3,
+      rate: 60,
       remark: null
     },
     {
       cQuestionCategoryName: 'Delivery',
       question: 'Ketepatan waktu pengiriman',
-      rate: 5,
+      rate: 30,
       remark: null
     },
     {
       cQuestionCategoryName: 'Quality',
       question: 'Kualitas produk sesuai permintaan',
-      rate: 3,
+      rate: 80,
       remark: null
     }
   ];
