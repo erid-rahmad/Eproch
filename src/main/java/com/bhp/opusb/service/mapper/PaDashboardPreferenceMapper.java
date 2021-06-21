@@ -1,10 +1,11 @@
 package com.bhp.opusb.service.mapper;
 
 
-import com.bhp.opusb.domain.*;
+import com.bhp.opusb.domain.PaDashboardPreference;
 import com.bhp.opusb.service.dto.PaDashboardPreferenceDTO;
 
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * Mapper for the entity {@link PaDashboardPreference} and its DTO {@link PaDashboardPreferenceDTO}.
@@ -15,7 +16,7 @@ public interface PaDashboardPreferenceMapper extends EntityMapper<PaDashboardPre
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "adUser.user.id", target = "adUserUserId")
-    @Mapping(source = "adUser.user.login", target = "adUserName")
+    @Mapping(source = "adUser.user.login", target = "adUserUserName")
     @Mapping(source = "paDashboardItem.id", target = "paDashboardItemId")
     @Mapping(source = "paDashboardItem.name", target = "paDashboardItemName")
     PaDashboardPreferenceDTO toDto(PaDashboardPreference paDashboardPreference);
