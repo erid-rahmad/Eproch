@@ -4,6 +4,7 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MContract;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CCostCenter;
+import com.bhp.opusb.domain.CDocumentType;
 import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.domain.CVendorEvaluation;
@@ -58,9 +59,6 @@ public class MContractResourceIT {
 
     private static final String DEFAULT_BAN_CODE = "AAAAAAAAAA";
     private static final String UPDATED_BAN_CODE = "BBBBBBBBBB";
-
-    private static final String DEFAULT_CONTRACT_TYPE = "AAAAAAAAAA";
-    private static final String UPDATED_CONTRACT_TYPE = "BBBBBBBBBB";
 
     private static final String DEFAULT_PURPOSE = "AAAAAAAAAA";
     private static final String UPDATED_PURPOSE = "BBBBBBBBBB";
@@ -147,7 +145,6 @@ public class MContractResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .useBanCode(DEFAULT_USE_BAN_CODE)
             .banCode(DEFAULT_BAN_CODE)
-            .contractType(DEFAULT_CONTRACT_TYPE)
             .purpose(DEFAULT_PURPOSE)
             .forPriceConfirmation(DEFAULT_FOR_PRICE_CONFIRMATION)
             .startDate(DEFAULT_START_DATE)
@@ -185,6 +182,16 @@ public class MContractResourceIT {
         }
         mContract.setCostCenter(cCostCenter);
         // Add required entity
+        CDocumentType cDocumentType;
+        if (TestUtil.findAll(em, CDocumentType.class).isEmpty()) {
+            cDocumentType = CDocumentTypeResourceIT.createEntity(em);
+            em.persist(cDocumentType);
+            em.flush();
+        } else {
+            cDocumentType = TestUtil.findAll(em, CDocumentType.class).get(0);
+        }
+        mContract.setDocumentType(cDocumentType);
+        // Add required entity
         AdUser adUser;
         if (TestUtil.findAll(em, AdUser.class).isEmpty()) {
             adUser = AdUserResourceIT.createEntity(em);
@@ -218,7 +225,6 @@ public class MContractResourceIT {
             .description(UPDATED_DESCRIPTION)
             .useBanCode(UPDATED_USE_BAN_CODE)
             .banCode(UPDATED_BAN_CODE)
-            .contractType(UPDATED_CONTRACT_TYPE)
             .purpose(UPDATED_PURPOSE)
             .forPriceConfirmation(UPDATED_FOR_PRICE_CONFIRMATION)
             .startDate(UPDATED_START_DATE)
@@ -255,6 +261,16 @@ public class MContractResourceIT {
             cCostCenter = TestUtil.findAll(em, CCostCenter.class).get(0);
         }
         mContract.setCostCenter(cCostCenter);
+        // Add required entity
+        CDocumentType cDocumentType;
+        if (TestUtil.findAll(em, CDocumentType.class).isEmpty()) {
+            cDocumentType = CDocumentTypeResourceIT.createUpdatedEntity(em);
+            em.persist(cDocumentType);
+            em.flush();
+        } else {
+            cDocumentType = TestUtil.findAll(em, CDocumentType.class).get(0);
+        }
+        mContract.setDocumentType(cDocumentType);
         // Add required entity
         AdUser adUser;
         if (TestUtil.findAll(em, AdUser.class).isEmpty()) {
@@ -303,7 +319,6 @@ public class MContractResourceIT {
         assertThat(testMContract.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testMContract.isUseBanCode()).isEqualTo(DEFAULT_USE_BAN_CODE);
         assertThat(testMContract.getBanCode()).isEqualTo(DEFAULT_BAN_CODE);
-        assertThat(testMContract.getContractType()).isEqualTo(DEFAULT_CONTRACT_TYPE);
         assertThat(testMContract.getPurpose()).isEqualTo(DEFAULT_PURPOSE);
         assertThat(testMContract.isForPriceConfirmation()).isEqualTo(DEFAULT_FOR_PRICE_CONFIRMATION);
         assertThat(testMContract.getStartDate()).isEqualTo(DEFAULT_START_DATE);
@@ -453,7 +468,6 @@ public class MContractResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].useBanCode").value(hasItem(DEFAULT_USE_BAN_CODE.booleanValue())))
             .andExpect(jsonPath("$.[*].banCode").value(hasItem(DEFAULT_BAN_CODE)))
-            .andExpect(jsonPath("$.[*].contractType").value(hasItem(DEFAULT_CONTRACT_TYPE)))
             .andExpect(jsonPath("$.[*].purpose").value(hasItem(DEFAULT_PURPOSE)))
             .andExpect(jsonPath("$.[*].forPriceConfirmation").value(hasItem(DEFAULT_FOR_PRICE_CONFIRMATION.booleanValue())))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
@@ -487,7 +501,6 @@ public class MContractResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.useBanCode").value(DEFAULT_USE_BAN_CODE.booleanValue()))
             .andExpect(jsonPath("$.banCode").value(DEFAULT_BAN_CODE))
-            .andExpect(jsonPath("$.contractType").value(DEFAULT_CONTRACT_TYPE))
             .andExpect(jsonPath("$.purpose").value(DEFAULT_PURPOSE))
             .andExpect(jsonPath("$.forPriceConfirmation").value(DEFAULT_FOR_PRICE_CONFIRMATION.booleanValue()))
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
@@ -809,84 +822,6 @@ public class MContractResourceIT {
 
         // Get all the mContractList where banCode does not contain UPDATED_BAN_CODE
         defaultMContractShouldBeFound("banCode.doesNotContain=" + UPDATED_BAN_CODE);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllMContractsByContractTypeIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mContractRepository.saveAndFlush(mContract);
-
-        // Get all the mContractList where contractType equals to DEFAULT_CONTRACT_TYPE
-        defaultMContractShouldBeFound("contractType.equals=" + DEFAULT_CONTRACT_TYPE);
-
-        // Get all the mContractList where contractType equals to UPDATED_CONTRACT_TYPE
-        defaultMContractShouldNotBeFound("contractType.equals=" + UPDATED_CONTRACT_TYPE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMContractsByContractTypeIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        mContractRepository.saveAndFlush(mContract);
-
-        // Get all the mContractList where contractType not equals to DEFAULT_CONTRACT_TYPE
-        defaultMContractShouldNotBeFound("contractType.notEquals=" + DEFAULT_CONTRACT_TYPE);
-
-        // Get all the mContractList where contractType not equals to UPDATED_CONTRACT_TYPE
-        defaultMContractShouldBeFound("contractType.notEquals=" + UPDATED_CONTRACT_TYPE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMContractsByContractTypeIsInShouldWork() throws Exception {
-        // Initialize the database
-        mContractRepository.saveAndFlush(mContract);
-
-        // Get all the mContractList where contractType in DEFAULT_CONTRACT_TYPE or UPDATED_CONTRACT_TYPE
-        defaultMContractShouldBeFound("contractType.in=" + DEFAULT_CONTRACT_TYPE + "," + UPDATED_CONTRACT_TYPE);
-
-        // Get all the mContractList where contractType equals to UPDATED_CONTRACT_TYPE
-        defaultMContractShouldNotBeFound("contractType.in=" + UPDATED_CONTRACT_TYPE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMContractsByContractTypeIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        mContractRepository.saveAndFlush(mContract);
-
-        // Get all the mContractList where contractType is not null
-        defaultMContractShouldBeFound("contractType.specified=true");
-
-        // Get all the mContractList where contractType is null
-        defaultMContractShouldNotBeFound("contractType.specified=false");
-    }
-                @Test
-    @Transactional
-    public void getAllMContractsByContractTypeContainsSomething() throws Exception {
-        // Initialize the database
-        mContractRepository.saveAndFlush(mContract);
-
-        // Get all the mContractList where contractType contains DEFAULT_CONTRACT_TYPE
-        defaultMContractShouldBeFound("contractType.contains=" + DEFAULT_CONTRACT_TYPE);
-
-        // Get all the mContractList where contractType contains UPDATED_CONTRACT_TYPE
-        defaultMContractShouldNotBeFound("contractType.contains=" + UPDATED_CONTRACT_TYPE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMContractsByContractTypeNotContainsSomething() throws Exception {
-        // Initialize the database
-        mContractRepository.saveAndFlush(mContract);
-
-        // Get all the mContractList where contractType does not contain DEFAULT_CONTRACT_TYPE
-        defaultMContractShouldNotBeFound("contractType.doesNotContain=" + DEFAULT_CONTRACT_TYPE);
-
-        // Get all the mContractList where contractType does not contain UPDATED_CONTRACT_TYPE
-        defaultMContractShouldBeFound("contractType.doesNotContain=" + UPDATED_CONTRACT_TYPE);
     }
 
 
@@ -2177,6 +2112,22 @@ public class MContractResourceIT {
 
     @Test
     @Transactional
+    public void getAllMContractsByDocumentTypeIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CDocumentType documentType = mContract.getDocumentType();
+        mContractRepository.saveAndFlush(mContract);
+        Long documentTypeId = documentType.getId();
+
+        // Get all the mContractList where documentType equals to documentTypeId
+        defaultMContractShouldBeFound("documentTypeId.equals=" + documentTypeId);
+
+        // Get all the mContractList where documentType equals to documentTypeId + 1
+        defaultMContractShouldNotBeFound("documentTypeId.equals=" + (documentTypeId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMContractsByPicIsEqualToSomething() throws Exception {
         // Get already existing entity
         AdUser pic = mContract.getPic();
@@ -2238,7 +2189,6 @@ public class MContractResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].useBanCode").value(hasItem(DEFAULT_USE_BAN_CODE.booleanValue())))
             .andExpect(jsonPath("$.[*].banCode").value(hasItem(DEFAULT_BAN_CODE)))
-            .andExpect(jsonPath("$.[*].contractType").value(hasItem(DEFAULT_CONTRACT_TYPE)))
             .andExpect(jsonPath("$.[*].purpose").value(hasItem(DEFAULT_PURPOSE)))
             .andExpect(jsonPath("$.[*].forPriceConfirmation").value(hasItem(DEFAULT_FOR_PRICE_CONFIRMATION.booleanValue())))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
@@ -2306,7 +2256,6 @@ public class MContractResourceIT {
             .description(UPDATED_DESCRIPTION)
             .useBanCode(UPDATED_USE_BAN_CODE)
             .banCode(UPDATED_BAN_CODE)
-            .contractType(UPDATED_CONTRACT_TYPE)
             .purpose(UPDATED_PURPOSE)
             .forPriceConfirmation(UPDATED_FOR_PRICE_CONFIRMATION)
             .startDate(UPDATED_START_DATE)
@@ -2338,7 +2287,6 @@ public class MContractResourceIT {
         assertThat(testMContract.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testMContract.isUseBanCode()).isEqualTo(UPDATED_USE_BAN_CODE);
         assertThat(testMContract.getBanCode()).isEqualTo(UPDATED_BAN_CODE);
-        assertThat(testMContract.getContractType()).isEqualTo(UPDATED_CONTRACT_TYPE);
         assertThat(testMContract.getPurpose()).isEqualTo(UPDATED_PURPOSE);
         assertThat(testMContract.isForPriceConfirmation()).isEqualTo(UPDATED_FOR_PRICE_CONFIRMATION);
         assertThat(testMContract.getStartDate()).isEqualTo(UPDATED_START_DATE);

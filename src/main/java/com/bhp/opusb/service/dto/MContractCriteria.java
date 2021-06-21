@@ -2,15 +2,13 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
+import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 import io.github.jhipster.service.filter.ZonedDateTimeFilter;
 
@@ -36,8 +34,6 @@ public class MContractCriteria implements Serializable, Criteria {
     private BooleanFilter useBanCode;
 
     private StringFilter banCode;
-
-    private StringFilter contractType;
 
     private StringFilter purpose;
 
@@ -75,6 +71,8 @@ public class MContractCriteria implements Serializable, Criteria {
 
     private LongFilter costCenterId;
 
+    private LongFilter documentTypeId;
+
     private LongFilter picId;
 
     private LongFilter vendorId;
@@ -90,7 +88,6 @@ public class MContractCriteria implements Serializable, Criteria {
         this.description = other.description == null ? null : other.description.copy();
         this.useBanCode = other.useBanCode == null ? null : other.useBanCode.copy();
         this.banCode = other.banCode == null ? null : other.banCode.copy();
-        this.contractType = other.contractType == null ? null : other.contractType.copy();
         this.purpose = other.purpose == null ? null : other.purpose.copy();
         this.forPriceConfirmation = other.forPriceConfirmation == null ? null : other.forPriceConfirmation.copy();
         this.startDate = other.startDate == null ? null : other.startDate.copy();
@@ -109,6 +106,7 @@ public class MContractCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.costCenterId = other.costCenterId == null ? null : other.costCenterId.copy();
+        this.documentTypeId = other.documentTypeId == null ? null : other.documentTypeId.copy();
         this.picId = other.picId == null ? null : other.picId.copy();
         this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
         this.vendorEvaluationId = other.vendorEvaluationId == null ? null : other.vendorEvaluationId.copy();
@@ -157,14 +155,6 @@ public class MContractCriteria implements Serializable, Criteria {
 
     public void setBanCode(StringFilter banCode) {
         this.banCode = banCode;
-    }
-
-    public StringFilter getContractType() {
-        return contractType;
-    }
-
-    public void setContractType(StringFilter contractType) {
-        this.contractType = contractType;
     }
 
     public StringFilter getPurpose() {
@@ -311,6 +301,14 @@ public class MContractCriteria implements Serializable, Criteria {
         this.costCenterId = costCenterId;
     }
 
+    public LongFilter getDocumentTypeId() {
+        return documentTypeId;
+    }
+
+    public void setDocumentTypeId(LongFilter documentTypeId) {
+        this.documentTypeId = documentTypeId;
+    }
+
     public LongFilter getPicId() {
         return picId;
     }
@@ -351,7 +349,6 @@ public class MContractCriteria implements Serializable, Criteria {
             Objects.equals(description, that.description) &&
             Objects.equals(useBanCode, that.useBanCode) &&
             Objects.equals(banCode, that.banCode) &&
-            Objects.equals(contractType, that.contractType) &&
             Objects.equals(purpose, that.purpose) &&
             Objects.equals(forPriceConfirmation, that.forPriceConfirmation) &&
             Objects.equals(startDate, that.startDate) &&
@@ -370,6 +367,7 @@ public class MContractCriteria implements Serializable, Criteria {
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(costCenterId, that.costCenterId) &&
+            Objects.equals(documentTypeId, that.documentTypeId) &&
             Objects.equals(picId, that.picId) &&
             Objects.equals(vendorId, that.vendorId) &&
             Objects.equals(vendorEvaluationId, that.vendorEvaluationId);
@@ -383,7 +381,6 @@ public class MContractCriteria implements Serializable, Criteria {
         description,
         useBanCode,
         banCode,
-        contractType,
         purpose,
         forPriceConfirmation,
         startDate,
@@ -402,6 +399,7 @@ public class MContractCriteria implements Serializable, Criteria {
         active,
         adOrganizationId,
         costCenterId,
+        documentTypeId,
         picId,
         vendorId,
         vendorEvaluationId
@@ -416,7 +414,6 @@ public class MContractCriteria implements Serializable, Criteria {
                 (description != null ? "description=" + description + ", " : "") +
                 (useBanCode != null ? "useBanCode=" + useBanCode + ", " : "") +
                 (banCode != null ? "banCode=" + banCode + ", " : "") +
-                (contractType != null ? "contractType=" + contractType + ", " : "") +
                 (purpose != null ? "purpose=" + purpose + ", " : "") +
                 (forPriceConfirmation != null ? "forPriceConfirmation=" + forPriceConfirmation + ", " : "") +
                 (startDate != null ? "startDate=" + startDate + ", " : "") +
@@ -435,6 +432,7 @@ public class MContractCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (costCenterId != null ? "costCenterId=" + costCenterId + ", " : "") +
+                (documentTypeId != null ? "documentTypeId=" + documentTypeId + ", " : "") +
                 (picId != null ? "picId=" + picId + ", " : "") +
                 (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
                 (vendorEvaluationId != null ? "vendorEvaluationId=" + vendorEvaluationId + ", " : "") +

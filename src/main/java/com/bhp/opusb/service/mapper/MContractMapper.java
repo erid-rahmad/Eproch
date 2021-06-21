@@ -10,13 +10,15 @@ import org.mapstruct.Mapping;
 /**
  * Mapper for the entity {@link MContract} and its DTO {@link MContractDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, CCostCenterMapper.class, AdUserMapper.class, CVendorMapper.class, CVendorEvaluationMapper.class})
+@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, CCostCenterMapper.class, CDocumentTypeMapper.class, AdUserMapper.class, CVendorMapper.class, CVendorEvaluationMapper.class})
 public interface MContractMapper extends EntityMapper<MContractDTO, MContract> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "costCenter.id", target = "costCenterId")
     @Mapping(source = "costCenter.name", target = "costCenterName")
+    @Mapping(source = "documentType.id", target = "documentTypeId")
+    @Mapping(source = "documentType.name", target = "documentTypeName")
     @Mapping(source = "pic.id", target = "picUserId")
     @Mapping(source = "pic.user.login", target = "picUserName")
     @Mapping(source = "vendor.id", target = "vendorId")
@@ -27,6 +29,7 @@ public interface MContractMapper extends EntityMapper<MContractDTO, MContract> {
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "costCenterId", target = "costCenter")
+    @Mapping(source = "documentTypeId", target = "documentType")
     @Mapping(source = "picUserId", target = "pic")
     @Mapping(source = "vendorId", target = "vendor")
     @Mapping(source = "vendorEvaluationId", target = "vendorEvaluation")

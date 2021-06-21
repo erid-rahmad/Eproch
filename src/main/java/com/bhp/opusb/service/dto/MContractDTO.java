@@ -28,12 +28,6 @@ public class MContractDTO extends AbstractAuditingDTO {
     private String banCode;
 
     /**
-     * Types could be N (New Contract) or R (Renewal).
-     */
-    @ApiModelProperty(value = "Types could be N (New Contract) or R (Renewal).")
-    private String contractType = "N";
-
-    /**
      * Whether the contract is for Project or Non-project purpose.
      */
     @ApiModelProperty(value = "Whether the contract is for Project or Non-project purpose.")
@@ -83,6 +77,14 @@ public class MContractDTO extends AbstractAuditingDTO {
     private Long costCenterId;
     private String costCenterName;
 
+    /**
+     * documentType can be New Contract or Contract Renewal.
+     */
+    @ApiModelProperty(value = "documentType can be New Contract or Contract Renewal.")
+
+    private Long documentTypeId;
+    private String documentTypeName;
+
     private Long picUserId;
     private String picUserName;
 
@@ -130,14 +132,6 @@ public class MContractDTO extends AbstractAuditingDTO {
 
     public void setBanCode(String banCode) {
         this.banCode = banCode;
-    }
-
-    public String getContractType() {
-        return contractType;
-    }
-
-    public void setContractType(String contractType) {
-        this.contractType = contractType;
     }
 
     public String getPurpose() {
@@ -300,6 +294,22 @@ public class MContractDTO extends AbstractAuditingDTO {
         this.costCenterName = costCenterName;
     }
 
+    public Long getDocumentTypeId() {
+        return documentTypeId;
+    }
+
+    public void setDocumentTypeId(Long cDocumentTypeId) {
+        this.documentTypeId = cDocumentTypeId;
+    }
+
+    public String getDocumentTypeName() {
+        return documentTypeName;
+    }
+
+    public void setDocumentTypeName(String documentTypeName) {
+        this.documentTypeName = documentTypeName;
+    }
+
     public Long getPicUserId() {
         return picUserId;
     }
@@ -377,7 +387,6 @@ public class MContractDTO extends AbstractAuditingDTO {
             ", description='" + getDescription() + "'" +
             ", useBanCode='" + isUseBanCode() + "'" +
             ", banCode='" + getBanCode() + "'" +
-            ", contractType='" + getContractType() + "'" +
             ", purpose='" + getPurpose() + "'" +
             ", forPriceConfirmation='" + isForPriceConfirmation() + "'" +
             ", startDate='" + getStartDate() + "'" +
@@ -396,6 +405,7 @@ public class MContractDTO extends AbstractAuditingDTO {
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", costCenterId=" + getCostCenterId() +
+            ", documentTypeId=" + getDocumentTypeId() +
             ", picId=" + getPicUserId() +
             ", vendorId=" + getVendorId() +
             ", vendorEvaluationId=" + getVendorEvaluationId() +

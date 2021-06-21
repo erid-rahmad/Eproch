@@ -23,11 +23,6 @@
             "fieldType": "String"
         },
         {
-            "fieldName": "contractType",
-            "javadoc": "Types could be N (New Contract) or R (Renewal).",
-            "fieldType": "String"
-        },
-        {
             "fieldName": "purpose",
             "javadoc": "Whether the contract is for Project or Non-project purpose.",
             "fieldType": "String"
@@ -128,6 +123,15 @@
             "otherEntityRelationshipName": "mContract",
             "relationshipValidateRules": "required",
             "relationshipName": "costCenter",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cDocumentType",
+            "otherEntityRelationshipName": "mContract",
+            "relationshipValidateRules": "required",
+            "javadoc": "documentType can be New Contract or Contract Renewal.",
+            "relationshipName": "documentType",
             "otherEntityField": "id"
         },
         {

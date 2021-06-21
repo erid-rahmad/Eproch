@@ -76,7 +76,6 @@ class MContractGatlingTest extends Simulation {
                 , "description":"SAMPLE_TEXT"
                 , "useBanCode":null
                 , "banCode":"SAMPLE_TEXT"
-                , "contractType":"SAMPLE_TEXT"
                 , "purpose":"SAMPLE_TEXT"
                 , "forPriceConfirmation":null
                 , "startDate":"2020-01-01T00:00:00.000Z"

@@ -49,12 +49,6 @@ public class MContract extends AbstractAuditingEntity {
     private String banCode;
 
     /**
-     * Types could be N (New Contract) or R (Renewal).
-     */
-    @Column(name = "contract_type")
-    private String contractType;
-
-    /**
      * Whether the contract is for Project or Non-project purpose.
      */
     @Column(name = "purpose")
@@ -121,6 +115,14 @@ public class MContract extends AbstractAuditingEntity {
     @NotNull
     @JsonIgnoreProperties("mContracts")
     private CCostCenter costCenter;
+
+    /**
+     * documentType can be New Contract or Contract Renewal.
+     */
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mContracts")
+    private CDocumentType documentType;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -195,19 +197,6 @@ public class MContract extends AbstractAuditingEntity {
 
     public void setBanCode(String banCode) {
         this.banCode = banCode;
-    }
-
-    public String getContractType() {
-        return contractType;
-    }
-
-    public MContract contractType(String contractType) {
-        this.contractType = contractType;
-        return this;
-    }
-
-    public void setContractType(String contractType) {
-        this.contractType = contractType;
     }
 
     public String getPurpose() {
@@ -444,6 +433,19 @@ public class MContract extends AbstractAuditingEntity {
         this.costCenter = cCostCenter;
     }
 
+    public CDocumentType getDocumentType() {
+        return documentType;
+    }
+
+    public MContract documentType(CDocumentType cDocumentType) {
+        this.documentType = cDocumentType;
+        return this;
+    }
+
+    public void setDocumentType(CDocumentType cDocumentType) {
+        this.documentType = cDocumentType;
+    }
+
     public AdUser getPic() {
         return pic;
     }
@@ -513,7 +515,6 @@ public class MContract extends AbstractAuditingEntity {
             ", description='" + getDescription() + "'" +
             ", useBanCode='" + isUseBanCode() + "'" +
             ", banCode='" + getBanCode() + "'" +
-            ", contractType='" + getContractType() + "'" +
             ", purpose='" + getPurpose() + "'" +
             ", forPriceConfirmation='" + isForPriceConfirmation() + "'" +
             ", startDate='" + getStartDate() + "'" +

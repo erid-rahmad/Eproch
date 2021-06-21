@@ -1341,9 +1341,6 @@ entity MContract {
 	useBanCode Boolean
 	banCode String
 
-	/** Types could be N (New Contract) or R (Renewal). */
-	contractType String
-
 	/** Whether the contract is for Project or Non-project purpose. */
 	purpose String
 
@@ -1873,6 +1870,9 @@ relationship ManyToOne {
 
 	MContract{adOrganization required} to ADOrganization
 	MContract{costCenter required} to CCostCenter
+
+	/** documentType can be New Contract or Contract Renewal. */
+	MContract{documentType required} to CDocumentType
 	MContract{pic required} to AdUser
 	MContract{vendor required} to CVendor
 	MContract{vendorEvaluation} to CVendorEvaluation

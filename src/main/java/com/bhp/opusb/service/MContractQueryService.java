@@ -103,9 +103,6 @@ public class MContractQueryService extends QueryService<MContract> {
             if (criteria.getBanCode() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getBanCode(), MContract_.banCode));
             }
-            if (criteria.getContractType() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getContractType(), MContract_.contractType));
-            }
             if (criteria.getPurpose() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPurpose(), MContract_.purpose));
             }
@@ -161,6 +158,10 @@ public class MContractQueryService extends QueryService<MContract> {
             if (criteria.getCostCenterId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCostCenterId(),
                     root -> root.join(MContract_.costCenter, JoinType.LEFT).get(CCostCenter_.id)));
+            }
+            if (criteria.getDocumentTypeId() != null) {
+                specification = specification.and(buildSpecification(criteria.getDocumentTypeId(),
+                    root -> root.join(MContract_.documentType, JoinType.LEFT).get(CDocumentType_.id)));
             }
             if (criteria.getPicId() != null) {
                 specification = specification.and(buildSpecification(criteria.getPicId(),

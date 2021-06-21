@@ -137,7 +137,6 @@
             <column name="description" type="string"/>
             <column name="use_ban_code" type="boolean"/>
             <column name="ban_code" type="string"/>
-            <column name="contract_type" type="string"/>
             <column name="purpose" type="string"/>
             <column name="for_price_confirmation" type="boolean"/>
             <column name="start_date" type="date"/>
@@ -156,10 +155,19 @@
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
             <column name="cost_center_id" type="numeric"/>
+            <column name="document_type_id" type="numeric"/>
             <column name="pic_id" type="numeric"/>
             <column name="vendor_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20210621105000" author="Ananta Aryadewa">
+        <addColumn tableName="m_contract">
+            <column name="document_type_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>
