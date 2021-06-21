@@ -6,6 +6,7 @@
                 label-position="left"
                 label-width="150px"
                 size="mini"
+                disabled="true"
             >
                 <el-col span="12">
                     <el-divider content-position="left">
