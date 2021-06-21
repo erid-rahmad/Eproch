@@ -1,6 +1,7 @@
 package com.bhp.opusb.workflow;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public interface WorkflowDoc {
 
@@ -18,6 +19,12 @@ public interface WorkflowDoc {
 
     public void setDocumentAction(String docAction);
     public String getDocumentAction();
+
+    public LocalDate getDateApprove();
+    public void setDateApprove(LocalDate dateApprove);
+
+    public LocalDate getDateReject();
+    public void setDateReject(LocalDate dateReject);
 
     public String getSummary();
     public String getDocumentNo();

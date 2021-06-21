@@ -1,5 +1,6 @@
 package com.bhp.opusb.workflow;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +55,7 @@ public abstract class AbstractDocActionHandler<D, E extends WorkflowDoc> impleme
         E e = toEntity(dto);
         e.setApproved(true);
         e.setDocumentStatus("APV");
+        e.setDateApprove(LocalDate.now());
         e = save(e);
         D d = toDto(e);
         return d;
@@ -65,6 +67,7 @@ public abstract class AbstractDocActionHandler<D, E extends WorkflowDoc> impleme
         E e = toEntity(dto);
         e.setApproved(false);
         e.setDocumentStatus("RJC");
+        e.setDateReject(LocalDate.now());
         e = save(e);
         D d = toDto(e);
         return d;
