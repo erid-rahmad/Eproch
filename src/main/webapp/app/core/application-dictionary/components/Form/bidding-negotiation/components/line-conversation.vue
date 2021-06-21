@@ -57,7 +57,7 @@
       >
       <el-scrollbar class="form-wrapper" v-if="chatHistory.length">
         <div v-for="(c,index) in chatHistory" :key="index">
-          <h4>{{c.vendorText?"Vendor":"Buyer"}}
+          <h4>{{c.vendorText?line.vendorName:"Buyer"}}
             <el-button
               class="btn-attachment"
               icon="el-icon-download"
@@ -66,10 +66,10 @@
               v-if="c.attachmentId"
               @click="downloadAttachment(c)"
             >
-              Download
             </el-button>
           </h4>
           <p>{{c.vendorText?c.vendorText:c.buyerText}}</p>
+          <el-divider></el-divider>
         </div>
       </el-scrollbar>
       <el-scrollbar class="form-wrapper" v-else>

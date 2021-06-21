@@ -108,7 +108,7 @@
             icon="el-icon-search"
             size="mini"
             type="primary"
-            v-if="!isVendor&&((row.vendorCount==row.finishedCount && row.vendorCount>0)||((new Date(row.endDate)).getTime()<today.getTime()))"
+            v-if="!isVendor&&(row.vendorCount==row.finishedCount && row.vendorCount>0)"
             @click="viewSummary(row)"
           >
             Summary

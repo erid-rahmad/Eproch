@@ -272,7 +272,7 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
       row.priceNegotiation = row.proposedPrice;
     }
     row.totalNegotiationPrice = row.quantity * row.priceNegotiation;
-    row.negotiationPercentage = ((row.proposedPrice-row.priceNegotiation)/row.proposedPrice)*100
+    row.negotiationPercentage = this.truncateDecimals(((row.proposedPrice-row.priceNegotiation)/row.proposedPrice)*100,2);
     this.reCalcTotal();
   }
 
