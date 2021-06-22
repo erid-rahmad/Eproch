@@ -1,6 +1,6 @@
 <template>
     <div class="price-proposal">
-        <h3 style="margin-top: 0">Price Proposal aa</h3>
+        <h3 style="margin-top: 0">Price Proposal</h3>
 
         <el-form
             ref="mainForm"
