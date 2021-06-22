@@ -399,7 +399,7 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
     if (referenceNo) {
       this.loadingReferenceNo = true;
 
-      this.commonService('/api/m-requisitions')
+      this.commonService('/api/m-rfqs')
         .retrieve({
           criteriaQuery: this.updateCriteria([
             'active.equals=true',
@@ -423,7 +423,7 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
             this.$set(this.bidding, 'currencyName', document.currencyName);
             this.$set(this.bidding, 'currencyId', document.currencyId);
             this.$set(this.bidding, 'costCenterId', document.costCenterId);
-            this.$set(this.bidding, 'requisitionId', document.id);
+            this.$set(this.bidding, 'quotationId', document.id);
             this.$set(this.bidding, 'referenceTypeName', document.documentTypeName);
             this.$set(this.bidding, 'referenceTypeId', document.documentTypeId);
 
@@ -443,11 +443,11 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
   }
 
   private retreiveReferenceLines(referenceId: number): void {
-    this.commonService('/api/m-requisition-lines')
+    this.commonService('/api/m-rfq-lines')
       .retrieve({
         criteriaQuery: this.updateCriteria([
           'active.equals=true',
-          `requisitionId.equals=${referenceId}`
+          `rfqId.equals=${referenceId}`
         ]),
         paginationQuery: {
           page: 0,
@@ -456,20 +456,20 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
         }
       })
       .then(res => {
-        const lines = (res.data as any[]).map(prLine => {
+        const lines = (res.data as any[]).map(line => {
           return {
-            adOrganizationId: prLine.adOrganizationId,
+            adOrganizationId: line.adOrganizationId,
             costCenterId: this.bidding.costCenterId,
-            productId: prLine.productId,
-            productName: prLine.productName,
+            productId: line.productId,
+            productName: line.productName,
             subItemId: null,
-            quantity: prLine.quantity,
-            uomId: prLine.uomId,
-            uomName: prLine.uomName,
-            ceilingPrice: prLine.unitPrice,
-            totalCeilingPrice: prLine.requisitionAmount,
-            deliveryDate: prLine.datePromised,
-            remark: prLine.remark
+            quantity: line.releaseQty,
+            uomId: line.uomId,
+            uomName: line.uomName,
+            ceilingPrice: 0,
+            totalCeilingPrice: 0,
+            deliveryDate: null,
+            remark: line.remark
           };
         });
 
@@ -579,9 +579,8 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
         type: 'warning',
         duration: 3000
       });
-      return !isExt;
+      return false;
     }
-
   }
 
   printBiddingStatus(value: string) {
@@ -625,7 +624,6 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
   }
   
   showDownloadStats(row: any, index: number) {
-    // this.downloadStats = this.projectInfoStats.get(index);
     this.projectInfo = row;
     this.showDownloadStatsDialog = true;
   }

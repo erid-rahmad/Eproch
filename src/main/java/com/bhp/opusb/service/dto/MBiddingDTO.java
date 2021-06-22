@@ -75,6 +75,9 @@ public class MBiddingDTO extends AbstractAuditingDTO {
     private Long requisitionId;
     private String requisitionName;
 
+    private Long quotationId;
+    private String quotationName;
+
     private Long referenceTypeId;
     private String referenceTypeName;
 
@@ -315,6 +318,22 @@ public class MBiddingDTO extends AbstractAuditingDTO {
         this.requisitionName = requisitionName;
     }
 
+    public Long getQuotationId() {
+        return quotationId;
+    }
+
+    public void setQuotationId(Long mRfqId) {
+        this.quotationId = mRfqId;
+    }
+
+    public String getQuotationName() {
+        return quotationName;
+    }
+
+    public void setQuotationName(String quotationName) {
+        this.quotationName = quotationName;
+    }
+
     public Long getReferenceTypeId() {
         return referenceTypeId;
     }
@@ -442,6 +461,7 @@ public class MBiddingDTO extends AbstractAuditingDTO {
             ", currencyId=" + getCurrencyId() +
             ", documentTypeId=" + getDocumentTypeId() +
             ", requisitionId=" + getRequisitionId() +
+            ", quotationId=" + getQuotationId() +
             ", referenceTypeId=" + getReferenceTypeId() +
             ", biddingTypeId=" + getBiddingTypeId() +
             ", eventTypeId=" + getEventTypeId() +

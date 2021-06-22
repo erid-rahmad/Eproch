@@ -174,4 +174,13 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20210622110300" author="Ananta Aryadewa">
+        <dropNotNullConstraint tableName="m_bidding" columnName="requisition_id" />
+        <addColumn tableName="m_bidding">
+            <column name="quotation_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

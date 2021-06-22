@@ -1870,6 +1870,7 @@ relationship ManyToOne {
 	MBrand{adOrganization required} to ADOrganization
 
 	MContract{adOrganization required} to ADOrganization
+	MContract{bidding required} to MBidding
 	MContract{costCenter required} to CCostCenter
 
 	/** documentType can be New Contract or Contract Renewal. */
@@ -2179,7 +2180,8 @@ relationship ManyToOne {
 	MBidding{costCenter required} to CCostCenter
 	MBidding{currency required} to CCurrency
 	MBidding{documentType required} to CDocumentType
-	MBidding{requisition required} to MRequisition
+	MBidding{requisition} to MRequisition
+	MBidding{quotation} to MRfq
 	MBidding{referenceType required} to CDocumentType
 	MBidding{biddingType required} to CBiddingType
 	MBidding{eventType required} to CEventType
