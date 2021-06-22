@@ -3,11 +3,11 @@ package com.bhp.opusb.service.dto;
 import java.util.List;
 import java.util.Map;
 
-import com.bhp.opusb.domain.enumeration.VendorType;
-
 public class RegistrationDTO {
     CompanyProfile companyProfile;
     List<Long> businesses;
+    Map<String,Object> businessCategories;
+
     List<CRegistrationDocumentDTO> mainDocuments;
     List<CRegistrationDocumentDTO> additionalDocuments;
     List<AdUserDTO> contacts;
@@ -15,6 +15,14 @@ public class RegistrationDTO {
     List<CVendorBankAcctDTO> payments;
     List<CVendorTaxDTO> taxes;
     Map<String, Boolean> taxInformations;
+
+    public Map<String, Object> getBusinessCategories() {
+        return businessCategories;
+    }
+
+    public void setBusinessCategories(Map<String, Object> businessCategories) {
+        this.businessCategories = businessCategories;
+    }
 
     public CompanyProfile getCompanyProfile() {
         return companyProfile;
@@ -280,4 +288,19 @@ public class RegistrationDTO {
         }
     }
 
+    @Override
+    public String toString() {
+        return "RegistrationDTO{" +
+            "companyProfile=" + companyProfile +
+            ", businesses=" + businesses +
+
+            ", mainDocuments=" + mainDocuments +
+            ", additionalDocuments=" + additionalDocuments +
+            ", contacts=" + contacts +
+            ", functionaries=" + functionaries +
+            ", payments=" + payments +
+            ", taxes=" + taxes +
+            ", taxInformations=" + taxInformations +
+            '}';
+    }
 }

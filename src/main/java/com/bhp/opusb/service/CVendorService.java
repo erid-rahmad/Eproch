@@ -87,7 +87,7 @@ public class CVendorService {
         CVendor vendor = registrationMapper.toVendor(registrationDTO.getCompanyProfile());
         cDocumentTypeRepository.findFirstByName("Supplier Registration")
             .ifPresent(vendor::setDocumentType);
-        
+
         cVendorRepository.save(vendor);
 
         CLocation location = registrationMapper.toLocation(registrationDTO.getCompanyProfile());
@@ -110,7 +110,7 @@ public class CVendorService {
         }
 
         // Make links between vendor and business categories.
-        cVendorBusinessCatService.saveAll(registrationDTO.getBusinesses(), vendor, organization);
+        cVendorBusinessCatService.saveAll(registrationDTO.getBusinesses(),registrationDTO.getBusinessCategories(),vendor, organization);
 
         // Batch save registration documents.
         cRegistrationDocumentService.saveAll(registrationDTO.getMainDocuments(), vendor, organization);
