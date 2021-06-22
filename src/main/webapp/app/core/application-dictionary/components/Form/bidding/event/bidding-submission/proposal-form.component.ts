@@ -268,6 +268,18 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
     }
   }
 
+  changeCode(code :String){
+    if(code==="T"){
+      return "Technic"
+    }
+    if(code==="A"){
+      return "Administrasi"
+    }
+    if(code==="P"){
+      return "Price"
+    }
+  }
+
   onUploadSuccess(response, file, fileList) {
     this.formData.attachment = response.attachment;
     this.formData.attachmentId = response.attachment.id;
