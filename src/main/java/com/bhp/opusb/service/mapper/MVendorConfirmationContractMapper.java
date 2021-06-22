@@ -1,10 +1,11 @@
 package com.bhp.opusb.service.mapper;
 
 
-import com.bhp.opusb.domain.*;
+import com.bhp.opusb.domain.MVendorConfirmationContract;
 import com.bhp.opusb.service.dto.MVendorConfirmationContractDTO;
 
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * Mapper for the entity {@link MVendorConfirmationContract} and its DTO {@link MVendorConfirmationContractDTO}.
@@ -14,6 +15,7 @@ public interface MVendorConfirmationContractMapper extends EntityMapper<MVendorC
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "attachment.id", target = "attachmentId")
+    @Mapping(source = "attachment.fileName", target = "attachmentName")
     @Mapping(source = "attachment.downloadUrl", target = "downloadUrl")
     @Mapping(source = "vendorConfirmationLine.id", target = "vendorConfirmationLineId")
     MVendorConfirmationContractDTO toDto(MVendorConfirmationContract mVendorConfirmationContract);

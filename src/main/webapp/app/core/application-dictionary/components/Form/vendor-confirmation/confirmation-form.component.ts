@@ -1,4 +1,5 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
+import settings from '@/settings';
 import Vue from 'vue';
 import Component, { mixins } from 'vue-class-component';
 import { Inject } from 'vue-property-decorator';
@@ -78,6 +79,18 @@ export default class ConfirmationForm extends mixins(AccessLevelMixin, Confirmat
   ];
 
   selectedConfirmation = {};
+
+  get dateDisplayFormat() {
+    return settings.dateDisplayFormat;
+  }
+
+  get dateValueFormat() {
+    return settings.dateValueFormat;
+  }
+
+  get formSettings() {
+    return settings.form;
+  }
 
   created() {
     console.log('component confirmation-form created');

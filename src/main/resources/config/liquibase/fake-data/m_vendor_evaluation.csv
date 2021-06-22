@@ -1,0 +1,11 @@
+id;score;evaluation_date;date_trx;document_no;document_action;document_status;approved;processed;date_approve;date_reject;rejected_reason;uid;active;ad_organization_id;contract_id
+1;14600;2021-06-17;2021-06-17T15:06:38;Web;zero defec;Sleek Soft P;true;true;2021-06-18T02:25:27;2021-06-18T08:44:11;Credit Card Account Granite;8fd6d144-8757-4f27-97d4-6cf0d2642cc5;true;1;1
+2;39137;2021-06-18;2021-06-17T18:07:15;algorithm;Rustic par;pixel;true;false;2021-06-18T04:54:00;2021-06-18T03:53:42;supply-chains;8205cabb-4b28-44f7-bc5e-9aa555063847;false;2;2
+3;9744;2021-06-18;2021-06-17T11:26:29;generate;deposit;Handcrafted ;true;true;2021-06-18T07:19:20;2021-06-18T03:11:01;olive;c8a0a0ec-3f25-47ca-a575-ccba2de0b07e;true;3;3
+4;66058;2021-06-17;2021-06-17T17:47:26;Granite engineer invoice;Guadeloupe;East Caribbe;true;true;2021-06-17T19:08:34;2021-06-17T21:24:41;data-warehouse;1507a7ef-852b-49f1-b9a1-00a487dec19f;false;4;4
+5;69228;2021-06-17;2021-06-18T06:18:19;maroon Handmade Mobility;Saudi Riya;Personal Loa;false;false;2021-06-17T22:35:53;2021-06-17T16:45:51;Handcrafted cultivate;34812859-e0b4-42e9-8e8c-56f5ac9e6300;false;5;5
+6;22807;2021-06-18;2021-06-17T18:41:54;Assimilated;connecting;discrete sca;true;false;2021-06-17T16:30:49;2021-06-17T14:44:47;quantify Pizza;db8baaae-d0eb-4301-a0c1-3d3e79199352;true;6;6
+7;6810;2021-06-17;2021-06-17T15:19:24;Unbranded Soft Cheese Libyan D;Small Broo;primary Kans;true;false;2021-06-18T08:04:57;2021-06-17T20:31:59;New Jersey;c78c2a73-1f6f-4e41-a08b-72e7ac9728fc;true;7;7
+8;32900;2021-06-18;2021-06-18T06:25:55;Berkshire Buckinghamshire;Identity n;Optimized;false;false;2021-06-17T23:04:39;2021-06-17T23:04:42;Georgia hack;a047edcc-488e-4126-9078-fabb8c34fd4d;true;8;8
+9;6596;2021-06-17;2021-06-18T00:45:04;Games Union;granular B;Zloty Cambri;true;true;2021-06-17T17:00:29;2021-06-17T21:14:59;Gloves high-level;4e2259fb-f8a6-4cc6-bae6-2a1d485c5256;true;9;9
+10;89604;2021-06-17;2021-06-18T06:11:28;Markets;UAE Dirham;India;true;false;2021-06-18T08:01:11;2021-06-18T09:21:41;navigate connecting Tasty Cotton Sausages;f9de1f3b-bc58-4158-a538-506b922ed294;true;10;10

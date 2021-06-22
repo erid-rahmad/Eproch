@@ -1,7 +1,5 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
@@ -9,13 +7,13 @@ import java.util.UUID;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MVendorConfirmation} entity.
  */
-public class MVendorConfirmationDTO extends AbstractAuditingDTO implements Serializable {
+public class MVendorConfirmationDTO extends AbstractAuditingDTO {
     
     private Long id;
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
     private Long biddingId;
     private String biddingNo;

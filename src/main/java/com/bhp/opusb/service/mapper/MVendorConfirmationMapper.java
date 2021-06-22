@@ -1,10 +1,11 @@
 package com.bhp.opusb.service.mapper;
 
 
-import com.bhp.opusb.domain.*;
+import com.bhp.opusb.domain.MVendorConfirmation;
 import com.bhp.opusb.service.dto.MVendorConfirmationDTO;
 
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * Mapper for the entity {@link MVendorConfirmation} and its DTO {@link MVendorConfirmationDTO}.
@@ -21,7 +22,7 @@ public interface MVendorConfirmationMapper extends EntityMapper<MVendorConfirmat
     @Mapping(source = "bidding.ceilingPrice", target = "amount")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "currency.id", target = "currencyId")
-    @Mapping(source = "currency.name", target = "currencyName")
+    @Mapping(source = "currency.code", target = "currencyName")
     @Mapping(source = "costCenter.id", target = "costCenterId")
     @Mapping(source = "costCenter.name", target = "costCenterName")
     @Mapping(source = "pic.id", target = "picId")

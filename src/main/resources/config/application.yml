@@ -218,6 +218,12 @@ application:
     biddingSubmission:
       documentType: 'Bidding Submission'
       documentNumberPrefix: 'BS-'
+    contract:
+      documentType: 'New Contract'
+      documentNumberPrefix: 'CT-'
+    contractRenewal:
+      documentType: 'Contract Renewal'
+      documentNumberPrefix: 'CT-'
     purchaseOrder:
       documentType: 'Purchase Order'
       documentNumberPrefix: 'PO-'

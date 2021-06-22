@@ -39,6 +39,8 @@ public class MPurchaseOrderDTO extends AbstractAuditingDTO {
     private Boolean approved = false;
 
     private Boolean processed = false;
+    
+    private Boolean confirmed = false;
 
     private BigDecimal grandTotal;
 
@@ -85,6 +87,14 @@ public class MPurchaseOrderDTO extends AbstractAuditingDTO {
     
     public Long getId() {
         return id;
+    }
+
+    public Boolean getConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(Boolean confirmed) {
+        this.confirmed = confirmed;
     }
 
     public Long getBiddingId() {

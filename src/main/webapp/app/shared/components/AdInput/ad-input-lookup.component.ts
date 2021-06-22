@@ -8,7 +8,7 @@ const baseApiColumn: string = 'api/ad-columns';
 
 const AdInputLookupProps = Vue.extend({
   props: {
-    classNames: Array,
+    classNames: [Array, Object],
     disabled: Boolean,
     items: Array,
     labelFields: Array,

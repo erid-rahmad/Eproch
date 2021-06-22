@@ -2,14 +2,16 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-
 import io.github.jhipster.service.Criteria;
-import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.LocalDateFilter;
+import io.github.jhipster.service.filter.FloatFilter;
+import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.BigDecimalFilter;
+import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -38,6 +40,8 @@ public class MPurchaseOrderCriteria implements Serializable, Criteria {
     private BooleanFilter approved;
 
     private BooleanFilter processed;
+
+    private BooleanFilter confirmed;
 
     private BigDecimalFilter grandTotal;
 
@@ -76,6 +80,7 @@ public class MPurchaseOrderCriteria implements Serializable, Criteria {
         this.documentStatus = other.documentStatus == null ? null : other.documentStatus.copy();
         this.approved = other.approved == null ? null : other.approved.copy();
         this.processed = other.processed == null ? null : other.processed.copy();
+        this.confirmed = other.confirmed == null ? null : other.confirmed.copy();
         this.grandTotal = other.grandTotal == null ? null : other.grandTotal.copy();
         this.tax = other.tax == null ? null : other.tax.copy();
         this.datePromised = other.datePromised == null ? null : other.datePromised.copy();
@@ -150,6 +155,14 @@ public class MPurchaseOrderCriteria implements Serializable, Criteria {
 
     public void setProcessed(BooleanFilter processed) {
         this.processed = processed;
+    }
+
+    public BooleanFilter getConfirmed() {
+        return confirmed;
+    }
+
+    public void setConfirmed(BooleanFilter confirmed) {
+        this.confirmed = confirmed;
     }
 
     public BigDecimalFilter getGrandTotal() {
@@ -274,6 +287,7 @@ public class MPurchaseOrderCriteria implements Serializable, Criteria {
             Objects.equals(documentStatus, that.documentStatus) &&
             Objects.equals(approved, that.approved) &&
             Objects.equals(processed, that.processed) &&
+            Objects.equals(confirmed, that.confirmed) &&
             Objects.equals(grandTotal, that.grandTotal) &&
             Objects.equals(tax, that.tax) &&
             Objects.equals(datePromised, that.datePromised) &&
@@ -299,6 +313,7 @@ public class MPurchaseOrderCriteria implements Serializable, Criteria {
         documentStatus,
         approved,
         processed,
+        confirmed,
         grandTotal,
         tax,
         datePromised,
@@ -325,6 +340,7 @@ public class MPurchaseOrderCriteria implements Serializable, Criteria {
                 (documentStatus != null ? "documentStatus=" + documentStatus + ", " : "") +
                 (approved != null ? "approved=" + approved + ", " : "") +
                 (processed != null ? "processed=" + processed + ", " : "") +
+                (confirmed != null ? "confirmed=" + confirmed + ", " : "") +
                 (grandTotal != null ? "grandTotal=" + grandTotal + ", " : "") +
                 (tax != null ? "tax=" + tax + ", " : "") +
                 (datePromised != null ? "datePromised=" + datePromised + ", " : "") +

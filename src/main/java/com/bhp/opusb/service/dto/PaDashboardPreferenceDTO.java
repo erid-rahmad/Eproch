@@ -32,7 +32,7 @@ public class PaDashboardPreferenceDTO extends AbstractAuditingDTO {
     private String adOrganizationName;
 
     private Long adUserUserId;
-    private String adUserName;
+    private String adUserUserName;
     
     private Long paDashboardItemId;
     private String paDashboardItemName;
@@ -102,12 +102,12 @@ public class PaDashboardPreferenceDTO extends AbstractAuditingDTO {
         this.adUserUserId = adUserUserId;
     }
 
-    public String getAdUserName() {
-        return adUserName;
+    public String getAdUserUserName() {
+        return adUserUserName;
     }
 
-    public void setAdUserName(String adUserName) {
-        this.adUserName = adUserName;
+    public void setAdUserUserName(String adUserUserName) {
+        this.adUserUserName = adUserUserName;
     }
 
     public Long getPaDashboardItemId() {

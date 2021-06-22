@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity MContract.
+    -->
+    <changeSet id="20210618092300-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="m_contract"
+                                 constraintName="fk_m_contract_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="cost_center_id"
+                                 baseTableName="m_contract"
+                                 constraintName="fk_m_contract_cost_center_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_cost_center"/>
+
+        <addForeignKeyConstraint baseColumnNames="pic_user_id"
+                                 baseTableName="m_contract"
+                                 constraintName="fk_m_contract_pic_id"
+                                 referencedColumnNames="user_id"
+                                 referencedTableName="ad_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="vendor_id"
+                                 baseTableName="m_contract"
+                                 constraintName="fk_m_contract_vendor_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_vendor"/>
+
+        <addForeignKeyConstraint baseColumnNames="vendor_evaluation_id"
+                                 baseTableName="m_contract"
+                                 constraintName="fk_m_contract_vendor_evaluation_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_vendor_evaluation"/>
+
+    </changeSet>
+
+    <changeSet id="20210621104900" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="document_type_id"
+                                 baseTableName="m_contract"
+                                 constraintName="fk_m_contract_document_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_document_type"/>
+
+    </changeSet>
+
+    <changeSet id="20210622011900" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="bidding_id"
+                                 baseTableName="m_contract"
+                                 constraintName="fk_m_contract_bidding_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_bidding"/>
+
+    </changeSet>
+</databaseChangeLog>

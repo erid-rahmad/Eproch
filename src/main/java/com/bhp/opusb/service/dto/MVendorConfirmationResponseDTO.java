@@ -1,21 +1,20 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+
 import javax.persistence.Lob;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MVendorConfirmationResponse} entity.
  */
-public class MVendorConfirmationResponseDTO extends AbstractAuditingDTO implements Serializable {
+public class MVendorConfirmationResponseDTO extends AbstractAuditingDTO {
     
     private Long id;
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
     @Lob
     private String needRevision;

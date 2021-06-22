@@ -17,6 +17,11 @@ public interface MVendorConfirmationLineMapper extends EntityMapper<MVendorConfi
     @Mapping(source = "vendor.name", target = "vendorName")
     @Mapping(source = "biddingEvalResult.id", target = "biddingEvalResultId")
     @Mapping(source = "vendorConfirmation.id", target = "vendorConfirmationId")
+    @Mapping(source = "vendorConfirmation.bidding.id", target = "vendorConfirmationBiddingId")
+    @Mapping(source = "vendorConfirmation.bidding.name", target = "vendorConfirmationBiddingName")
+    @Mapping(source = "vendorConfirmation.bidding.documentNo", target = "vendorConfirmationBiddingNo")
+    @Mapping(source = "vendorConfirmation.costCenter.id", target = "vendorConfirmationCostCenterId")
+    @Mapping(source = "vendorConfirmation.pic.id", target = "vendorConfirmationPicId")
     MVendorConfirmationLineDTO toDto(MVendorConfirmationLine mVendorConfirmationLine);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")
