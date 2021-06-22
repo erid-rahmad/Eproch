@@ -58,18 +58,18 @@ public class MVendorConfirmationLine extends AbstractAuditingEntity implements S
     private MVendorConfirmation vendorConfirmation;
 
     @Formula("(select mbnp.negotiation_price from m_bid_nego_price mbnp where mbnp.negotiation_line_id = ("
-        +"select distinct(mbnc.negotiation_line_id) from m_bidding_negotiation_chat mbnc where mbnc.bidding_id = ("
-        +"select mbs.bidding_id from m_bidding_submission mbs where mbs.id = ("
-        +"select mber.bidding_submission_id from m_bidding_eval_result mber where mber.id = ("
-        +"select mvcl.bidding_eval_result_id from m_vendor_confirmation_line mvcl where mvcl.id = id)) and mbnc.vendor_id = ("
-        +"select cv.id from c_vendor cv where cv.id = (select mvcl.vendor_id from m_vendor_confirmation_line mvcl where mvcl.id = id)))))")
+    +"select distinct(mbnc.negotiation_line_id) from m_bidding_negotiation_chat mbnc where mbnc.bidding_id = ("
+    +"select mbs.bidding_id from m_bidding_submission mbs where mbs.id = ("
+    +"select mber.bidding_submission_id from m_bidding_eval_result mber where mber.id = ("
+    +"select mvcl.bidding_eval_result_id from m_vendor_confirmation_line mvcl where mvcl.id = id)) and mbnc.vendor_id = ("
+    +"select mvcl.vendor_id from m_vendor_confirmation_line mvcl where mvcl.id = id))))")
     private BigDecimal negoAmount;
 
     @Formula("(select distinct(mbnc.negotiation_line_id) from m_bidding_negotiation_chat mbnc where mbnc.bidding_id = ("
     +"select mbs.bidding_id from m_bidding_submission mbs where mbs.id = ("
     +"select mber.bidding_submission_id from m_bidding_eval_result mber where mber.id = ("
     +"select mvcl.bidding_eval_result_id from m_vendor_confirmation_line mvcl where mvcl.id = id)) and mbnc.vendor_id = ("
-    +"select cv.id from c_vendor cv where cv.id = (select mvcl.vendor_id from m_vendor_confirmation_line mvcl where mvcl.id = id))))")
+    +"select mvcl.vendor_id from m_vendor_confirmation_line mvcl where mvcl.id = id)))")
     private Long negoLineId;
 
     @PrePersist
