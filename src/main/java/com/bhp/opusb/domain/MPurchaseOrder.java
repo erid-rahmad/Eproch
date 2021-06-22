@@ -71,7 +71,7 @@ public class MPurchaseOrder extends AbstractAuditingEntity {
     @Column(name = "date_promised")
     private LocalDate datePromised;
 
-    @Column(name = "date_promised")
+    @Column(name = "date_delivered")
     private LocalDate dateDelivered;
 
     @Column(name = "date_shipped")
