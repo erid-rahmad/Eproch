@@ -161,7 +161,7 @@ export default class ContractDocument extends Mixins(AccessLevelMixin, ContractD
       .then(() => {
         this.$message.success('Document has been removed successfully');
         this.retrieveDocuments(this.data.id);
-      })
+      });
   }
 
   saveDocument() {

@@ -23,6 +23,7 @@ export default class VendorContract extends Mixins(AccessLevelMixin) {
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
   deleteConfirmationVisible: boolean = false;
+  terminationConfirmationVisible: boolean = false;
   loading: boolean = false;
   detailTabName: string = 'INF';
 
@@ -77,8 +78,12 @@ export default class VendorContract extends Mixins(AccessLevelMixin) {
     this.deleteConfirmationVisible = true;
   }
 
-  onFormSaved() {
+  onSaveClicked() {
     (<any>this.$refs.detailPage).save();
+  }
+
+  onTerminateClicked() {
+    this.terminationConfirmationVisible = true;
   }
 
   created() {
@@ -137,6 +142,20 @@ export default class VendorContract extends Mixins(AccessLevelMixin) {
       .catch(err => {
         console.error('Failed to delete the contract', err);
         this.$message.error(`Failed to delete contract ${this.selectedRow.documentNo}`);
+      });
+  }
+
+  terminateContract(){
+    this.selectedRow.documentAction = 'TRM';
+    this.commonService(baseApiContract)
+      .update(this.selectedRow)
+      .then(() => {
+        this.$message.success(`Contract ${this.selectedRow.documentNo} has been terminated.`);
+        this.terminationConfirmationVisible = false;
+        this.retrieveAllRecords();
+      }).catch((err)=>{
+        console.log(err);
+        this.$message.success(`Unable to terminate bidding ${this.selectedRow.documentNo}.`);
       });
   }
 

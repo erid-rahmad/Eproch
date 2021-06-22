@@ -1,11 +1,13 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import { Component, Mixins, Vue, Watch } from 'vue-property-decorator';
 import ContractDocument from './contract-document.vue';
+import ContractEvaluation from './contract-evaluation.vue';
 import ContractInfo from './contract-info.vue';
 
 const tabPaneComponent = new Map<string, string>([
   ['INF', 'contract-info'],
   ['DOC', 'contract-document'],
+  ['EVA', 'contract-evaluation'],
 ])
 
 const ContractDetailProps = Vue.extend({
@@ -29,6 +31,7 @@ const ContractDetailProps = Vue.extend({
 @Component({
   components: {
     ContractInfo,
+    ContractEvaluation,
     ContractDocument
   }
 })
@@ -46,6 +49,11 @@ export default class ContractDetail extends Mixins(AccessLevelMixin, ContractDet
       id: 2,
       name: 'Documents',
       value: 'DOC',
+    },
+    {
+      id: 3,
+      name: 'Vendor Evaluations',
+      value: 'EVA',
     }
   ];
 

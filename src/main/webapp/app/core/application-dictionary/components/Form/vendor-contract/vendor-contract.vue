@@ -33,9 +33,18 @@
         v-if="detailPage && isDraft && detailTabName === 'INF'"
         size="mini"
         type="primary"
-        @click="onFormSaved"
+        @click="onSaveClicked"
       >
         <svg-icon name="icomoo/273-checkmark"></svg-icon> Save
+      </el-button>
+
+      <el-button
+        :disabled="isDraft"
+        size="mini"
+        type="danger"
+        @click="onTerminateClicked"
+      >
+        <svg-icon name="icomoo/273-checkmark"></svg-icon> Terminate
       </el-button>
     </div>
 
@@ -179,6 +188,33 @@
         :tab.sync="detailTabName"
       ></contract-detail>
     </div>
+
+    <el-dialog
+      :visible.sync="terminationConfirmationVisible"
+      title="Terminate Contract"
+      width="30%"
+    >
+        <p>Are you sure you want to terminate the contract?</p>
+        <div slot="footer">
+          <el-button
+            icon="el-icon-close"
+            size="mini"
+            style="margin-left: 0px;"
+            @click="terminationConfirmationVisible = false"
+          >
+            {{ $t('entity.action.cancel') }}
+          </el-button>
+          <el-button
+            size="mini"
+            style="margin-left: 0px;"
+            type="danger"
+            @click="terminateContract"
+          >
+            <svg-icon name="icomoo/183-switch"></svg-icon>
+            Terminate
+          </el-button>
+        </div>
+    </el-dialog>
 
     <el-dialog
       width="30%"

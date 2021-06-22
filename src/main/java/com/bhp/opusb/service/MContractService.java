@@ -56,6 +56,8 @@ public class MContractService {
     public MContractDTO save(MContractDTO mContractDTO) {
         log.debug("Request to save MContract : {}", mContractDTO);
         MContract mContract = mContractMapper.toEntity(mContractDTO);
+        final String docAction = mContract.getDocumentAction();
+        final String docStatus = mContract.getDocumentStatus();
 
         if (mContract.getDocumentNo() == null) {
             mContract.setDocumentNo(DocumentUtil.buildDocumentNumber(document.getDocumentNumberPrefix(), mContractRepository));
@@ -64,6 +66,10 @@ public class MContractService {
         if (mContract.getDocumentType() == null) {
             cDocumentTypeRepository.findFirstByName(document.getDocumentType())
                 .ifPresent(mContract::setDocumentType);
+        }
+
+        if (! DocumentUtil.isTerminate(docStatus) && DocumentUtil.isTerminate(docAction)) {
+            mContract.setDocumentStatus(docAction);
         }
 
         mContract = mContractRepository.save(mContract);
