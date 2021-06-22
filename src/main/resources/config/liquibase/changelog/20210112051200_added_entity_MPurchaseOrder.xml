@@ -90,6 +90,20 @@
             <column name="confirmed" type="boolean" defaultValue="false" />
         </addColumn>
     </changeSet>
+
+    <changeSet id="20210112051200-confirm-2" author="ricky-kurniawan">
+        <addColumn tableName="m_purchase_order">
+            <column name="date_delivered" type="date">
+                <constraints nullable="true"/>
+            </column>
+            <column name="date_shipped" type="date">
+                <constraints nullable="true"/>
+            </column>
+            <column name="confirmation" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
     <!--
@@ -112,9 +126,13 @@
             <column name="document_status" type="string"/>
             <column name="approved" type="boolean"/>
             <column name="processed" type="boolean"/>
+            <column name="confirmed" type="boolean"/>
             <column name="grand_total" type="numeric"/>
             <column name="tax" type="boolean"/>
             <column name="date_promised" type="date"/>
+            <column name="date_delivered" type="date"/>
+            <column name="date_shipped" type="date"/>
+            <column name="confirmation" type="string"/>
             <column name="description" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>

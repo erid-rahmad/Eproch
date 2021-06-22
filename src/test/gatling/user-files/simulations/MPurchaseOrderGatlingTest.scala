@@ -82,6 +82,9 @@ class MPurchaseOrderGatlingTest extends Simulation {
                 , "grandTotal":"0"
                 , "tax":null
                 , "datePromised":"2020-01-01T00:00:00.000Z"
+                , "dateDelivered":"2020-01-01T00:00:00.000Z"
+                , "dateShipped":"2020-01-01T00:00:00.000Z"
+                , "confirmation":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
                 , "uid":null
                 , "active":null

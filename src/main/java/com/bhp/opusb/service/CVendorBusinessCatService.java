@@ -1,6 +1,7 @@
 package com.bhp.opusb.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -50,19 +51,26 @@ public class CVendorBusinessCatService {
         return cVendorBusinessCatMapper.toDto(cVendorBusinessCat);
     }
 
-    public List<CVendorBusinessCatDTO> saveAll(List<Long> businessCategoryIds, CVendor vendor, ADOrganization organization) {
-        log.debug("Request to save CVendorBusinessCats. List size: {}", businessCategoryIds.size());
-        List<CVendorBusinessCat> businessCategories = businessCategoryIds
-            .stream()
-            .map(id -> {
+    public List<CVendorBusinessCatDTO> saveAll(List<Long> businessCategoryIds, Map<String,Object> category, CVendor vendor, ADOrganization organization) {
+        List<List> ListCategory = (List<List>) category.get("values");
+        List<CVendorBusinessCat> businessCategories = ListCategory
+            .stream().map(list -> {
                 CBusinessCategory businessCategory = new CBusinessCategory();
-                businessCategory.setId(id);
-                
+                CBusinessCategory businessCategory1 = new CBusinessCategory();
+                CBusinessCategory businessCategory2 = new CBusinessCategory();
+
+                businessCategory.setId(Long.valueOf(list.get(0).toString()));
+                businessCategory1.setId(Long.valueOf(list.get(1).toString()));
+                businessCategory2.setId(Long.valueOf(list.get(2).toString()));
+
+
                 return new CVendorBusinessCat()
                     .active(true)
                     .adOrganization(organization)
                     .vendor(vendor)
-                    .businessCategory(businessCategory);
+                    .businessClassification(businessCategory)
+                    .subBusinessCategory(businessCategory2)
+                    .businessCategory(businessCategory1);
             })
             .collect(Collectors.toList());
 

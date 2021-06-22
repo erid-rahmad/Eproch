@@ -1,14 +1,15 @@
 <template>
-    <div class="vendor-evaluation-detail card">
+    <div class="vendor-evaluation-detail ">
         <el-row :gutter="24">
 
             <el-form
                 label-position="left"
-                label-width="150px"
+                label-width="220px"
                 size="mini"
                 disabled="true"
             >
-                <el-col span="12">
+                <el-col span="24" >
+                <el-col class="card" span="11" >
                     <el-divider content-position="left">
                         <h4>Sourcing And Contracts</h4>
                     </el-divider>
@@ -53,7 +54,7 @@
                         </el-input>
                     </el-form-item>
                 </el-col>
-                <el-col span="12">
+                <el-col class="card" span="11">
                     <el-divider content-position="left">
                         <h4>Procedure And Pay</h4>
                     </el-divider>
@@ -89,8 +90,10 @@
                             placeholder="Please Enter Reference No">
                         </el-input>
                     </el-form-item>
-                    <el-form-item label="% Invoice Without Exception" prop="referenceNo">
+
+                    <el-form-item label="% Invoice Without Exception"   prop="referenceNo">
                         <el-input
+
                             ref="% Invoice Without Exception"
                             v-model="analis1.awarded4"
                             clearable
@@ -98,7 +101,9 @@
                         </el-input>
                     </el-form-item>
                 </el-col>
-                <el-col span="12">
+                </el-col>
+                <el-col span="24">
+                <el-col class="card" span="11">
                     <el-divider content-position="left">
                         <h4>Active Contract</h4>
                     </el-divider>
@@ -129,7 +134,7 @@
                     </el-table>
 
                 </el-col>
-                <el-col span="12">
+                <el-col class="card" span="11">
                     <el-divider content-position="left">
                         <h4>Vendor Performance Project Analysis</h4>
                     </el-divider>
@@ -158,6 +163,7 @@
                         </el-table-column>
                     </el-table>
 
+                </el-col>
                 </el-col>
             </el-form>
         </el-row>
