@@ -447,7 +447,7 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
       .retrieve({
         criteriaQuery: this.updateCriteria([
           'active.equals=true',
-          `rfqId.equals=${referenceId}`
+          `quotationId.equals=${referenceId}`
         ]),
         paginationQuery: {
           page: 0,
