@@ -7,6 +7,7 @@ import com.bhp.opusb.domain.CCostCenter;
 import com.bhp.opusb.domain.CCurrency;
 import com.bhp.opusb.domain.CDocumentType;
 import com.bhp.opusb.domain.MRequisition;
+import com.bhp.opusb.domain.MRfq;
 import com.bhp.opusb.domain.CBiddingType;
 import com.bhp.opusb.domain.CEventType;
 import com.bhp.opusb.domain.AdUser;
@@ -190,16 +191,6 @@ public class MBiddingResourceIT {
         }
         mBidding.setDocumentType(cDocumentType);
         // Add required entity
-        MRequisition mRequisition;
-        if (TestUtil.findAll(em, MRequisition.class).isEmpty()) {
-            mRequisition = MRequisitionResourceIT.createEntity(em);
-            em.persist(mRequisition);
-            em.flush();
-        } else {
-            mRequisition = TestUtil.findAll(em, MRequisition.class).get(0);
-        }
-        mBidding.setRequisition(mRequisition);
-        // Add required entity
         mBidding.setReferenceType(cDocumentType);
         // Add required entity
         CBiddingType cBiddingType;
@@ -298,16 +289,6 @@ public class MBiddingResourceIT {
             cDocumentType = TestUtil.findAll(em, CDocumentType.class).get(0);
         }
         mBidding.setDocumentType(cDocumentType);
-        // Add required entity
-        MRequisition mRequisition;
-        if (TestUtil.findAll(em, MRequisition.class).isEmpty()) {
-            mRequisition = MRequisitionResourceIT.createUpdatedEntity(em);
-            em.persist(mRequisition);
-            em.flush();
-        } else {
-            mRequisition = TestUtil.findAll(em, MRequisition.class).get(0);
-        }
-        mBidding.setRequisition(mRequisition);
         // Add required entity
         mBidding.setReferenceType(cDocumentType);
         // Add required entity
@@ -2011,8 +1992,12 @@ public class MBiddingResourceIT {
     @Test
     @Transactional
     public void getAllMBiddingsByRequisitionIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        MRequisition requisition = mBidding.getRequisition();
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+        MRequisition requisition = MRequisitionResourceIT.createEntity(em);
+        em.persist(requisition);
+        em.flush();
+        mBidding.setRequisition(requisition);
         mBiddingRepository.saveAndFlush(mBidding);
         Long requisitionId = requisition.getId();
 
@@ -2021,6 +2006,26 @@ public class MBiddingResourceIT {
 
         // Get all the mBiddingList where requisition equals to requisitionId + 1
         defaultMBiddingShouldNotBeFound("requisitionId.equals=" + (requisitionId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByQuotationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+        MRfq quotation = MRfqResourceIT.createEntity(em);
+        em.persist(quotation);
+        em.flush();
+        mBidding.setQuotation(quotation);
+        mBiddingRepository.saveAndFlush(mBidding);
+        Long quotationId = quotation.getId();
+
+        // Get all the mBiddingList where quotation equals to quotationId
+        defaultMBiddingShouldBeFound("quotationId.equals=" + quotationId);
+
+        // Get all the mBiddingList where quotation equals to quotationId + 1
+        defaultMBiddingShouldNotBeFound("quotationId.equals=" + (quotationId + 1));
     }
 
 

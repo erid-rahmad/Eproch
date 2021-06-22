@@ -74,8 +74,8 @@ public class MBidding extends AbstractAuditingEntity implements WorkflowDoc{
     private String documentAction;
 
     @NotNull
-    @Size(max = 10)
-    @Column(name = "document_status", length = 10, nullable = false)
+    @Size(max = 12)
+    @Column(name = "document_status", length = 12, nullable = false)
     private String documentStatus;
 
     @Column(name = "approved")
@@ -119,10 +119,13 @@ public class MBidding extends AbstractAuditingEntity implements WorkflowDoc{
     @JsonIgnoreProperties("mBiddings")
     private CDocumentType documentType;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     @JsonIgnoreProperties("mBiddings")
     private MRequisition requisition;
+
+    @ManyToOne
+    @JsonIgnoreProperties("mBiddings")
+    private MRfq quotation;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -439,6 +442,19 @@ public class MBidding extends AbstractAuditingEntity implements WorkflowDoc{
         this.requisition = mRequisition;
     }
 
+    public MRfq getQuotation() {
+        return quotation;
+    }
+
+    public MBidding quotation(MRfq mRfq) {
+        this.quotation = mRfq;
+        return this;
+    }
+
+    public void setQuotation(MRfq mRfq) {
+        this.quotation = mRfq;
+    }
+
     public CDocumentType getReferenceType() {
         return referenceType;
     }
@@ -497,6 +513,26 @@ public class MBidding extends AbstractAuditingEntity implements WorkflowDoc{
         this.uid = UUID.randomUUID();
     }
 
+
+    @Override
+    public void setProcessing(Boolean isProcessing) {
+        // No implementation.
+    }
+
+    @Override
+    public Boolean isProcessing() {
+        return false;
+    }
+
+    @Override
+    public String getSummary() {
+        return null;
+    }
+
+    @Override
+    public BigDecimal getApprovalAmount() {
+        return new BigDecimal("0");
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -535,26 +571,5 @@ public class MBidding extends AbstractAuditingEntity implements WorkflowDoc{
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";
-    }
-
-    @Override
-    public void setProcessing(Boolean isProcessing) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public Boolean isProcessing() {
-        return false;
-    }
-
-    @Override
-    public String getSummary() {
-        return null;
-    }
-
-    @Override
-    public BigDecimal getApprovalAmount() {
-        return new BigDecimal("0");
     }
 }

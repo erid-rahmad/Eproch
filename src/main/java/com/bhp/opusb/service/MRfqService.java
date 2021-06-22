@@ -1,5 +1,11 @@
 package com.bhp.opusb.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import com.bhp.opusb.config.ApplicationProperties;
 import com.bhp.opusb.config.ApplicationProperties.Document;
 import com.bhp.opusb.domain.MRequisitionLine;
@@ -18,19 +24,10 @@ import com.bhp.opusb.util.DocumentUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.validation.Valid;
 
 /**
  * Service Implementation for managing {@link MRfq}.
@@ -235,5 +232,27 @@ public class MRfqService {
             //.warehouse(mPurchaseOrder.getWarehouse());
 
         return mPurchaseOrderLine;
+    }
+
+    /**
+     * TODO Use a generic method to update the document status for every entities.
+     * TODO Use the workflow engine for maintaining the flow state.
+     */
+    public void updateDocumentStatus(MRfqDTO mRfqDTO) {
+        log.debug("Request to update MRfq's document status : {}", mRfqDTO);
+        MRfq mRfq = mRfqMapper.toEntity(mRfqDTO);
+        String action = mRfq.getDocumentAction();
+        String status = mRfq.getDocumentStatus();
+        boolean approved = false;
+        boolean processed = false;
+
+        if (DocumentUtil.isApprove(mRfq.getDocumentStatus())) {
+            approved = true;
+            processed = true;
+        } else if (DocumentUtil.isReject(mRfq.getDocumentStatus())) {
+            processed = true;
+        }
+
+        mRfqRepository.updateDocumentStatus(mRfq.getId(), action, status, approved, processed);
     }
 }

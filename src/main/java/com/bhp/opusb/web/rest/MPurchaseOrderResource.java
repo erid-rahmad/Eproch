@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -209,5 +211,25 @@ public class MPurchaseOrderResource {
 
         JasperPrint jasperPrint = mPurchaseOrderService.exportPurchaseOrder(poNo);
         JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+    }
+
+    /**
+     * TODO Make a single endpoint for document status update.
+     * {@code PUT  /c-purchase-orders} : Apply the document action to an existing mRequisitions.
+     *
+     * @param mPurchaseOrderDTO the mPurchaseOrderDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated mPurchaseOrderDTO,
+     * or with status {@code 400 (Bad Request)} if the mPurchaseOrderDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the mPurchaseOrderDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/m-purchase-orders/update-doc-status")
+    @ResponseStatus(HttpStatus.OK)
+    public void applyDocumentAction(@Valid @RequestBody MPurchaseOrderDTO mPurchaseOrderDTO) {
+        log.debug("REST request to apply MPurchaseOrderDTO's document action : {}", mPurchaseOrderDTO);
+        if (mPurchaseOrderDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        mPurchaseOrderService.updateDocumentStatus(mPurchaseOrderDTO);
     }
 }

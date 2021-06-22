@@ -164,4 +164,24 @@ public class MRfqResource {
         return ResponseEntity.created(new URI("/api/m-rfqs/" + queryString))
             .body(result);
     }
+
+    /**
+     * TODO Make a single endpoint for document status update.
+     * {@code PUT  /c-rfqs/update-doc-status} : Apply the document action to an existing mRequisitions.
+     *
+     * @param mRfqDTO the mRfqDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated mRfqDTO,
+     * or with status {@code 400 (Bad Request)} if the mRfqDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the mRfqDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/m-rfqs/update-doc-status")
+    @ResponseStatus(HttpStatus.OK)
+    public void applyDocumentAction(@Valid @RequestBody MRfqDTO mRfqDTO) {
+        log.debug("REST request to apply MRfqDTO's document action : {}", mRfqDTO);
+        if (mRfqDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        mRfqService.updateDocumentStatus(mRfqDTO);
+    }
 }

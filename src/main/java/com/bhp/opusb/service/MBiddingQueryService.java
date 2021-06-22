@@ -162,6 +162,10 @@ public class MBiddingQueryService extends QueryService<MBidding> {
                 specification = specification.and(buildSpecification(criteria.getRequisitionId(),
                     root -> root.join(MBidding_.requisition, JoinType.LEFT).get(MRequisition_.id)));
             }
+            if (criteria.getQuotationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getQuotationId(),
+                    root -> root.join(MBidding_.quotation, JoinType.LEFT).get(MRfq_.id)));
+            }
             if (criteria.getReferenceTypeId() != null) {
                 specification = specification.and(buildSpecification(criteria.getReferenceTypeId(),
                     root -> root.join(MBidding_.referenceType, JoinType.LEFT).get(CDocumentType_.id)));

@@ -72,6 +72,8 @@ public class MBiddingCriteria implements Serializable, Criteria {
 
     private LongFilter requisitionId;
 
+    private LongFilter quotationId;
+
     private LongFilter referenceTypeId;
 
     private LongFilter biddingTypeId;
@@ -107,6 +109,7 @@ public class MBiddingCriteria implements Serializable, Criteria {
         this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
         this.documentTypeId = other.documentTypeId == null ? null : other.documentTypeId.copy();
         this.requisitionId = other.requisitionId == null ? null : other.requisitionId.copy();
+        this.quotationId = other.quotationId == null ? null : other.quotationId.copy();
         this.referenceTypeId = other.referenceTypeId == null ? null : other.referenceTypeId.copy();
         this.biddingTypeId = other.biddingTypeId == null ? null : other.biddingTypeId.copy();
         this.eventTypeId = other.eventTypeId == null ? null : other.eventTypeId.copy();
@@ -302,6 +305,14 @@ public class MBiddingCriteria implements Serializable, Criteria {
         this.requisitionId = requisitionId;
     }
 
+    public LongFilter getQuotationId() {
+        return quotationId;
+    }
+
+    public void setQuotationId(LongFilter quotationId) {
+        this.quotationId = quotationId;
+    }
+
     public LongFilter getReferenceTypeId() {
         return referenceTypeId;
     }
@@ -368,6 +379,7 @@ public class MBiddingCriteria implements Serializable, Criteria {
             Objects.equals(currencyId, that.currencyId) &&
             Objects.equals(documentTypeId, that.documentTypeId) &&
             Objects.equals(requisitionId, that.requisitionId) &&
+            Objects.equals(quotationId, that.quotationId) &&
             Objects.equals(referenceTypeId, that.referenceTypeId) &&
             Objects.equals(biddingTypeId, that.biddingTypeId) &&
             Objects.equals(eventTypeId, that.eventTypeId) &&
@@ -400,6 +412,7 @@ public class MBiddingCriteria implements Serializable, Criteria {
         currencyId,
         documentTypeId,
         requisitionId,
+        quotationId,
         referenceTypeId,
         biddingTypeId,
         eventTypeId,
@@ -433,6 +446,7 @@ public class MBiddingCriteria implements Serializable, Criteria {
                 (currencyId != null ? "currencyId=" + currencyId + ", " : "") +
                 (documentTypeId != null ? "documentTypeId=" + documentTypeId + ", " : "") +
                 (requisitionId != null ? "requisitionId=" + requisitionId + ", " : "") +
+                (quotationId != null ? "quotationId=" + quotationId + ", " : "") +
                 (referenceTypeId != null ? "referenceTypeId=" + referenceTypeId + ", " : "") +
                 (biddingTypeId != null ? "biddingTypeId=" + biddingTypeId + ", " : "") +
                 (eventTypeId != null ? "eventTypeId=" + eventTypeId + ", " : "") +

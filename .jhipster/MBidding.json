@@ -127,8 +127,14 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "mRequisition",
             "otherEntityRelationshipName": "mBidding",
-            "relationshipValidateRules": "required",
             "relationshipName": "requisition",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mRfq",
+            "otherEntityRelationshipName": "mBidding",
+            "relationshipName": "quotation",
             "otherEntityField": "id"
         },
         {

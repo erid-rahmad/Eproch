@@ -1,15 +1,16 @@
 package com.bhp.opusb.service.dto;
 
 import java.time.LocalDate;
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MRfqLine} entity.
  */
-public class MRfqLineDTO extends AbstractAuditingDTO implements Serializable {
+public class MRfqLineDTO extends AbstractAuditingDTO {
     
     private Long id;
 
@@ -41,14 +42,19 @@ public class MRfqLineDTO extends AbstractAuditingDTO implements Serializable {
 
 
     private Long quotationId;
+    private String quotationName;
 
     private Long adOrganizationId;
+    private String adOrganizationName;
 
     private Long productId;
+    private String productName;
 
     private Long uomId;
+    private String uomName;
 
     private Long businessCategoryId;
+    private String businessCategoryName;
     
     public Long getId() {
         return id;
@@ -154,12 +160,28 @@ public class MRfqLineDTO extends AbstractAuditingDTO implements Serializable {
         this.quotationId = mRfqId;
     }
 
+    public String getQuotationName() {
+        return quotationName;
+    }
+
+    public void setQuotationName(String quotationName) {
+        this.quotationName = quotationName;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
 
     public void setAdOrganizationId(Long aDOrganizationId) {
         this.adOrganizationId = aDOrganizationId;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
     }
 
     public Long getProductId() {
@@ -170,6 +192,14 @@ public class MRfqLineDTO extends AbstractAuditingDTO implements Serializable {
         this.productId = cProductId;
     }
 
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
     public Long getUomId() {
         return uomId;
     }
@@ -178,12 +208,28 @@ public class MRfqLineDTO extends AbstractAuditingDTO implements Serializable {
         this.uomId = cUnitOfMeasureId;
     }
 
+    public String getUomName() {
+        return uomName;
+    }
+
+    public void setUomName(String uomName) {
+        this.uomName = uomName;
+    }
+
     public Long getBusinessCategoryId() {
         return businessCategoryId;
     }
 
     public void setBusinessCategoryId(Long cBusinessCategoryId) {
         this.businessCategoryId = cBusinessCategoryId;
+    }
+
+    public String getBusinessCategoryName() {
+        return businessCategoryName;
+    }
+
+    public void setBusinessCategoryName(String businessCategoryName) {
+        this.businessCategoryName = businessCategoryName;
     }
 
     @Override

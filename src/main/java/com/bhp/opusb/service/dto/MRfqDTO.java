@@ -1,17 +1,19 @@
 package com.bhp.opusb.service.dto;
 
-import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MRfq} entity.
  */
-public class MRfqDTO extends AbstractAuditingDTO implements Serializable {
+public class MRfqDTO extends AbstractAuditingDTO {
     
     private Long id;
 
@@ -48,31 +50,30 @@ public class MRfqDTO extends AbstractAuditingDTO implements Serializable {
     @ApiModelProperty(value = "Quotation")
 
     private Long adOrganizationId;
+    private String adOrganizationName;
 
     private Long businessClassificationId;
+    private String businessClassificationName;
 
     private Long businessCategoryId;
+    private String businessCategoryName;
 
     private Long currencyId;
+    private String currencyName;
 
     private Long warehouseId;
+    private String warehouseName;
 
     private Long costCenterId;
+    private String costCenterName;
 
     private Long documentTypeId;
+    private String documentTypeName;
     
     private List<MRequisitionLineDTO> requisitionLines;
     
     public Long getId() {
         return id;
-    }
-
-    public Long getDocumentTypeId() {
-        return documentTypeId;
-    }
-
-    public void setDocumentTypeId(Long documentTypeId) {
-        this.documentTypeId = documentTypeId;
     }
 
     public void setId(Long id) {
@@ -175,12 +176,28 @@ public class MRfqDTO extends AbstractAuditingDTO implements Serializable {
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
     public Long getBusinessClassificationId() {
         return businessClassificationId;
     }
 
     public void setBusinessClassificationId(Long cBusinessCategoryId) {
         this.businessClassificationId = cBusinessCategoryId;
+    }
+
+    public String getBusinessClassificationName() {
+        return businessClassificationName;
+    }
+
+    public void setBusinessClassificationName(String businessClassificationName) {
+        this.businessClassificationName = businessClassificationName;
     }
 
     public Long getBusinessCategoryId() {
@@ -191,12 +208,28 @@ public class MRfqDTO extends AbstractAuditingDTO implements Serializable {
         this.businessCategoryId = cBusinessCategoryId;
     }
 
+    public String getBusinessCategoryName() {
+        return businessCategoryName;
+    }
+
+    public void setBusinessCategoryName(String businessCategoryName) {
+        this.businessCategoryName = businessCategoryName;
+    }
+
     public Long getCurrencyId() {
         return currencyId;
     }
 
     public void setCurrencyId(Long cCurrencyId) {
         this.currencyId = cCurrencyId;
+    }
+
+    public String getCurrencyName() {
+        return currencyName;
+    }
+
+    public void setCurrencyName(String currencyName) {
+        this.currencyName = currencyName;
     }
 
     public Long getWarehouseId() {
@@ -207,12 +240,44 @@ public class MRfqDTO extends AbstractAuditingDTO implements Serializable {
         this.warehouseId = cWarehouseId;
     }
 
+    public String getWarehouseName() {
+        return warehouseName;
+    }
+
+    public void setWarehouseName(String warehouseName) {
+        this.warehouseName = warehouseName;
+    }
+
     public Long getCostCenterId() {
         return costCenterId;
     }
 
     public void setCostCenterId(Long cCostCenterId) {
         this.costCenterId = cCostCenterId;
+    }
+
+    public String getCostCenterName() {
+        return costCenterName;
+    }
+
+    public void setCostCenterName(String costCenterName) {
+        this.costCenterName = costCenterName;
+    }
+
+    public Long getDocumentTypeId() {
+        return documentTypeId;
+    }
+
+    public void setDocumentTypeId(Long documentTypeId) {
+        this.documentTypeId = documentTypeId;
+    }
+
+    public String getDocumentTypeName() {
+        return documentTypeName;
+    }
+
+    public void setDocumentTypeName(String documentTypeName) {
+        this.documentTypeName = documentTypeName;
     }
 
     @Override

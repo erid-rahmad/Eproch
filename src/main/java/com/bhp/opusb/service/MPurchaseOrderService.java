@@ -278,4 +278,26 @@ public class MPurchaseOrderService {
         return JasperFillManager.fillReport(jasperReport, parameters, dataSource.getConnection());
 
     }
+
+    /**
+     * TODO Use a generic method to update the document status for every entities.
+     * TODO Use the workflow engine for maintaining the flow state.
+     */
+    public void updateDocumentStatus(MPurchaseOrderDTO mPurchaseOrderDTO) {
+        log.debug("Request to update MRequisition's document status : {}", mPurchaseOrderDTO);
+        MPurchaseOrder mPurchaseOrder = mPurchaseOrderMapper.toEntity(mPurchaseOrderDTO);
+        String action = mPurchaseOrder.getDocumentAction();
+        String status = mPurchaseOrder.getDocumentStatus();
+        boolean approved = false;
+        boolean processed = false;
+
+        if (DocumentUtil.isApprove(mPurchaseOrder.getDocumentStatus())) {
+            approved = true;
+            processed = true;
+        } else if (DocumentUtil.isReject(mPurchaseOrder.getDocumentStatus())) {
+            processed = true;
+        }
+
+        mPurchaseOrderRepository.updateDocumentStatus(mPurchaseOrder.getId(), action, status, approved, processed);
+    }
 }
