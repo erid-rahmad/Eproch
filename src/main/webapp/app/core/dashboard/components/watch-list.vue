@@ -47,9 +47,13 @@
         prop="count"
         width="64"
       />
-      <el-table-column
-        prop="name"
-      />
+      <el-table-column>
+        <template slot-scope="{row}">
+          <div @click="onCardClicked(row)">
+            {{row.name}}
+          </div>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
