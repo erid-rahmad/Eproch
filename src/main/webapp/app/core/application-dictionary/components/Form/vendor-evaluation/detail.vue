@@ -1,10 +1,11 @@
 <template>
   <div class="vendor-evaluation-detail card-view">
     <el-form
+      v-loading="loading"
       ref="mainForm"
       label-position="left"
       label-width="150px"
-      :model="data"
+      :model="evaluation"
       :rules="validationSchema"
       size="mini"
     >
@@ -15,7 +16,7 @@
             prop="evaluationNo"
           >
             <el-input
-              v-model="data.documentNo"
+              v-model="evaluation.documentNo"
               class="form-input"
               clearable
             ></el-input>
@@ -24,62 +25,38 @@
             label="Reviewer"
             prop="reviewer"
           >
-            <el-select
-              v-model="data.reviewer"
-              class="form-input"
-              clearable
-              filterable
-              placeholder="Select a Reviewer"
-              style="width: 100%"
-            >
-              <el-option
-                v-for="item in reviewers"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              />
-            </el-select>
+            <ad-input-lookup
+              v-model="evaluation.reviewerUserId"
+              placeholder="Select Reviewer"
+              table-name="ad_user"
+              :label-fields="['userLogin']"
+              :query="['employee.equals=true']"
+            ></ad-input-lookup>
           </el-form-item>
 
           <el-form-item
             label="Vendor Name"
             prop="vendorId"
           >
-            <el-select
-              v-model="data.vendorId"
-              class="form-input"
-              clearable
-              filterable
-              placeholder="Select a Vendor"
-              style="width: 100%"
-            >
-              <el-option
-                v-for="item in vendorOptions"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              />
-            </el-select>
+            <ad-input-lookup
+              v-model="evaluation.vendorId"
+              placeholder="Select Vendor"
+              lookup-by-field="name"
+              table-name="c_vendor"
+            ></ad-input-lookup>
           </el-form-item>
 
           <el-form-item
-            label="Aggreement No."
-            prop="aggreementNo"
+            label="Contract No."
+            prop="contractId"
           >
-            <el-input
-              ref="aggreementNo"
-              v-model="data.aggreementNo"
-              clearable
-              placeholder="Please Enter Aggreement No."
-              @change="onAggreementChanged"
-            >
-              <el-button
-                icon="el-icon-search"
-                slot="append"
-              >
-                Search
-              </el-button>
-            </el-input>
+            <ad-input-lookup
+              v-model="evaluation.contractId"
+              placeholder="Select Contract"
+              lookup-by-field="name"
+              table-name="m_contracts"
+              @change="onContractIdChanged"
+            ></ad-input-lookup>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -88,7 +65,7 @@
             prop="evaluationType"
           >
             <el-input
-              v-model="data.evaluationType"
+              v-model="evaluation.evaluationTypeName"
               class="form-input"
               clearable
               disabled
@@ -98,22 +75,21 @@
             label="Evaluation Period"
             prop="evaluationPeriod"
           >
-            <el-input
-              v-model="data.evaluationPeriod"
-              class="form-input"
-              clearable
+            <ad-input-list
+              v-model="evaluation.contractEvaluationPeriod"
               disabled
-            ></el-input>
+              placeholder="Select Evaluation Period"
+              reference-key="vendorEvaluationPeriod"
+            ></ad-input-list>
           </el-form-item>
           <el-form-item
             label="Evaluation Date"
             prop="evaluationDate"
           >
             <el-date-picker
-              v-model="data.evaluationDate"
+              v-model="evaluation.evaluationDate"
               class="form-input"
               clearable
-              disabled
               :format="dateDisplayFormat"
               placeholder="Pick a date"
               size="mini"
@@ -126,10 +102,10 @@
         <el-col :span="8">
           <el-form-item
             label="Total Score"
-            prop="totalScore"
+            prop="score"
           >
             <el-input-number
-              v-model="data.totalScore"
+              v-model="evaluation.score"
               class="form-input"
               clearable
               controls-position="right"
@@ -140,72 +116,56 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-row>
-      <el-col
+    <el-table
+      ref="lines"
+      border
+      class="evaluation-line-table"
+      :data="lines"
+      highlight-current-row
+      size="mini"
+      stripe
+    >
+
+      <el-table-column
+        label="Question Category"
+        min-width="80"
+        prop="cQuestionCategoryName"
+        show-overflow-tooltip
+      ></el-table-column>
+
+      <el-table-column
+        label="Question"
+        min-width="180"
+
+        prop="question"
+        show-overflow-tooltip
+      ></el-table-column>
+
+      <el-table-column
+        label="Score %"
+        min-width="250"
 
       >
-        <el-table
-          ref="evaluationLines"
-          border
-          class="evaluation-line-table"
-          :data="evaluationLines"
-          highlight-current-row
-          size="mini"
+        <template slot-scope="{ row }">
+          <el-slider v-model="row.score" :marks="marks" @change="onRateChanged"></el-slider>
+        </template>
+      </el-table-column>
 
-
-          stripe
-        >
-
-          <el-table-column
-            label="Question Category"
-            min-width="80"
-            prop="cQuestionCategoryName"
-            show-overflow-tooltip
-          ></el-table-column>
-
-          <el-table-column
-            label="Question"
-            min-width="180"
-
-            prop="question"
-            show-overflow-tooltip
-          ></el-table-column>
-
-          <el-table-column
-            label="Score %"
-            min-width="250"
-
-          >
-            <template slot-scope="{ row }">
-<!--              <el-rate-->
-<!--                v-model="row.rate"-->
-<!--                :colors="['#99A9BF', '#F7BA2A', '#FF9900']"-->
-<!--                @change="onRateChanged"-->
-<!--              ></el-rate>-->
-                <div class="block">
-                    <span class="demonstration"></span>
-                    <el-slider v-model="row.rate" :marks="marks"></el-slider>
-                </div>
-            </template>
-          </el-table-column>
-
-          <el-table-column
-            label="Remark"
-            min-width="150"
-          >
-            <template slot-scope="{ row }">
-              <el-input
-                v-model="row.remark"
-                class="remark"
-                clearable
-                :maxlength="255"
-                size="mini"
-              ></el-input>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-col>
-    </el-row>
+      <el-table-column
+        label="Remark"
+        min-width="150"
+      >
+        <template slot-scope="{ row }">
+          <el-input
+            v-model="row.remark"
+            class="remark"
+            clearable
+            :maxlength="255"
+            size="mini"
+          ></el-input>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 <script lang="ts" src="./detail.component.ts"></script>

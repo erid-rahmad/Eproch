@@ -1,7 +1,13 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import settings from '@/settings';
-import { Component, Mixins, Vue, Inject } from 'vue-property-decorator';
+import AdInputList from '@/shared/components/AdInput/ad-input-list.vue';
+import AdInputLookup from '@/shared/components/AdInput/ad-input-lookup.vue';
+import { Component, Inject, Mixins, Vue } from 'vue-property-decorator';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
+import { ElForm } from 'element-ui/types/form';
+
+const baseApiContract = 'api/m-contracts';
+const baseApiVendorEvaluation = 'api/m-vendor-evaluations';
 
 const VendorEvaluationDetailProp = Vue.extend({
   props: {
@@ -10,11 +16,18 @@ const VendorEvaluationDetailProp = Vue.extend({
       default: () => {
         return {};
       }
-    }
+    },
+
+    loading: Boolean
   }
 });
 
-@Component
+@Component({
+  components: {
+    AdInputList,
+    AdInputLookup
+  }
+})
 export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, VendorEvaluationDetailProp) {
 
   @Inject('dynamicWindowService')
@@ -41,62 +54,9 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
     100: '100 %',
   }
 
-  mainForm = {
-    documentNo: '11011',
-    reviewer: 'Admin Evaluator',
-    vendorId: null,
-    vendorName: 'Ingram Micro Indonesia',
-    aggreementNo: '13334',
-    evaluationType: 'Vendor Otomotif',
-    evaluationPeriod: 'Yearly',
-    evaluationDate: new Date('2021-03-31T00:00:00.000Z'),
-    totalScore: 3.67,
-    evaluationLines: []
-  }
-
-  evaluationLines = [
-    {
-      cQuestionCategoryName: 'Cost',
-      question: 'Vendor tidak menaikkan harga setelah menerima PO',
-      rate: 60,
-      remark: null
-    },
-    {
-      cQuestionCategoryName: 'Delivery',
-      question: 'Ketepatan waktu pengiriman',
-      rate: 30,
-      remark: null
-    },
-    {
-      cQuestionCategoryName: 'Quality',
-      question: 'Kualitas produk sesuai permintaan',
-      rate: 80,
-      remark: null
-    }
-  ];
-
-  gridSchema = {
-    defaultSort: {},
-    emptyText: 'No Records Found',
-    maxHeight: 256,
-    height: 200
-  };
-
+  evaluation: any = {};
+  lines: any[] = [];
   validationSchema = {};
-
-  reviewers = [
-    {
-      id: 1,
-      name: 'Admin Evaluator'
-    }
-  ];
-
-  vendorOptions = [
-    {
-      id: 1,
-      name: 'Ingram Micro Indonesia'
-    }
-  ];
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -106,83 +66,72 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
     return settings.dateValueFormat;
   }
 
-  onAggreementChanged(documentNo?: string) {
-    if (!documentNo) {
-      this.$set(this.mainForm, 'evaluationType', null);
-      this.$set(this.mainForm, 'evaluationPeriod', null);
-      this.$set(this.mainForm, 'evaluationDate', null);
-    }
+  async onContractIdChanged(id: number) {
+    if (!id) {
+        this.evaluation.evaluationTypeId = null;
+      this.$set(this.evaluation, 'evaluationTypeName', null);
+      this.$set(this.evaluation, 'contractEvaluationPeriod', null);
+      this.lines = [];
+    } else {
+      const contract = await this.retrieveContract(id);
+      if (contract) {
+        this.evaluation.evaluationTypeId = contract.vendorEvaluationId;
+        this.$set(this.evaluation, 'evaluationTypeName', contract.vendorEvaluationName);
+        this.$set(this.evaluation, 'contractEvaluationPeriod', contract.evaluationPeriod);
 
-    const aggreement = this.aggreements.get(documentNo);
-    if (aggreement) {
-      this.$set(this.mainForm, 'evaluationType', aggreement.evaluationType);
-      this.$set(this.mainForm, 'evaluationPeriod', aggreement.evaluationPeriod);
-      this.$set(this.mainForm, 'evaluationDate', aggreement.evaluationDate);
-
-      this.retrieveLines(aggreement.evaluationType);
+        this.retrieveLines(contract.vendorEvaluationId);
+      }
     }
   }
 
-  onRateChanged(_rate: number) {
-    const totalRates = this.mainForm.evaluationLines
-      .map((line: any): number => line.rate || 0)
+  onRateChanged(score: number) {
+    console.log(score);
+    const totalRates = this.lines
+      .map((line: any): number => line.score || 0)
       .reduce((prev, next) => prev + next, 0);
 
-    this.$set(this.mainForm, 'totalScore', totalRates / this.mainForm.evaluationLines.length);
+    this.$set(this.evaluation, 'score', totalRates / this.lines.length);
   }
 
   created() {
-    // this.retrieveReviewers();
-    // this.retrieveVendors();
+    this.evaluation = {...this.data};
   }
 
-  retrieveLines(evaluationType: string) {
+  async retrieveContract(id: number) {
+    return this.commonService(baseApiContract)
+      .find(id)
+      .then(res => res);
+  }
+
+  retrieveLines(evaluationId: string) {
     this.commonService('/api/c-vendor-evaluation-lines')
       .retrieve({
         criteriaQuery: this.updateCriteria([
           'active.equals=true',
-          `cVendorEvaluationName.equals=${evaluationType}`
+          `vendorEvaluationId.equals=${evaluationId}`
         ])
       })
-      .then(res => {
-        this.$set(this.mainForm, 'evaluationLines', res.data);
-      });
+      .then(res => this.lines = res.data);
   }
 
-  private retrieveReviewers() {
-    this.commonService('/api/ad-users')
-      .retrieve({
-        criteriaQuery: this.updateCriteria([
-          'active.equals=true',
-          'employee.equals=true'
-        ]),
-        paginationQuery: {
-          page: 0,
-          size: 1000,
-          sort: ['userLogin']
-        }
-      })
-      .then(res => {
-        this.reviewers = res.data;
-      });
-  }
-
-  private retrieveVendors() {
-    this.commonService('/api/c-vendors')
-      .retrieve({
-        criteriaQuery: this.updateCriteria([
-          'active.equals=true',
-          'processed.equals=true',
-          'approved.equals=true'
-        ]),
-        paginationQuery: {
-          page: 0,
-          size: 1000,
-          sort: ['name', 'code']
-        }
-      })
-      .then(res => {
-        this.vendorOptions = res.data;
-      });
+  save() {
+    (<ElForm>this.$refs.mainForm).validate(passed => {
+      if (passed) {
+        const newRecord = !this.evaluation.id;
+        
+        this.$emit('update:loading', true);
+        this.commonService(baseApiVendorEvaluation)
+          [newRecord ? 'create' : 'update'](this.evaluation)
+          .then(res => {
+            this.$message.success('Vendor Evaluation has been saved successfully');
+            this.evaluation = {...this.evaluation, ...res};
+          })
+          .catch(err => {
+            console.error('Failed to save vendor evaluation', err);
+            this.$message.error('Failed to save Vendor Evaluation');
+          })
+          .finally(() => this.$emit('update:loading', false));
+      }
+    })
   }
 }

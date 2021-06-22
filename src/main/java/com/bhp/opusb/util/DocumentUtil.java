@@ -16,6 +16,7 @@ public class DocumentUtil {
   public static final String STATUS_SUBMIT = "SMT";
   public static final String STATUS_VOID = "CNL";
   public static final String STATUS_PUBLISH = "PUB";
+  public static final String STATUS_TERMINATE = "TRM";
 
   private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyMM");
 
@@ -59,6 +60,10 @@ public class DocumentUtil {
 
   public static boolean isPublish(String documentStatus) {
     return STATUS_PUBLISH.equals(documentStatus);
+  }
+
+  public static boolean isTerminate(String documentStatus) {
+    return STATUS_TERMINATE.equals(documentStatus);
   }
 
   public static String buildRunningNumber(LocalDate dateTrx, GenericDocumentRepository<?, ?> repository) {

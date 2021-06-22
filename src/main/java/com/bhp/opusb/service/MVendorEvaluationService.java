@@ -1,18 +1,21 @@
 package com.bhp.opusb.service;
 
+import java.util.Optional;
+
+import com.bhp.opusb.config.ApplicationProperties;
+import com.bhp.opusb.config.ApplicationProperties.Document;
 import com.bhp.opusb.domain.MVendorEvaluation;
 import com.bhp.opusb.repository.MVendorEvaluationRepository;
 import com.bhp.opusb.service.dto.MVendorEvaluationDTO;
 import com.bhp.opusb.service.mapper.MVendorEvaluationMapper;
+import com.bhp.opusb.util.DocumentUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link MVendorEvaluation}.
@@ -27,9 +30,13 @@ public class MVendorEvaluationService {
 
     private final MVendorEvaluationMapper mVendorEvaluationMapper;
 
-    public MVendorEvaluationService(MVendorEvaluationRepository mVendorEvaluationRepository, MVendorEvaluationMapper mVendorEvaluationMapper) {
+    private final Document document;
+
+    public MVendorEvaluationService(ApplicationProperties properties,
+            MVendorEvaluationRepository mVendorEvaluationRepository, MVendorEvaluationMapper mVendorEvaluationMapper) {
         this.mVendorEvaluationRepository = mVendorEvaluationRepository;
         this.mVendorEvaluationMapper = mVendorEvaluationMapper;
+        this.document = properties.getDocuments().get("vendorEvaluation");
     }
 
     /**
@@ -41,6 +48,11 @@ public class MVendorEvaluationService {
     public MVendorEvaluationDTO save(MVendorEvaluationDTO mVendorEvaluationDTO) {
         log.debug("Request to save MVendorEvaluation : {}", mVendorEvaluationDTO);
         MVendorEvaluation mVendorEvaluation = mVendorEvaluationMapper.toEntity(mVendorEvaluationDTO);
+
+        if (mVendorEvaluation.getDocumentNo() == null) {
+            mVendorEvaluation.setDocumentNo(DocumentUtil.buildDocumentNumber(document.getDocumentNumberPrefix(), mVendorEvaluationRepository));
+        }
+
         mVendorEvaluation = mVendorEvaluationRepository.save(mVendorEvaluation);
         return mVendorEvaluationMapper.toDto(mVendorEvaluation);
     }

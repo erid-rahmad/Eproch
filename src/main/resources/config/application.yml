@@ -233,3 +233,6 @@ application:
     quotation:
       documentType: 'Quotation'
       documentNumberPrefix: 'RQ-'
+    vendorEvaluation:
+      documentType: 'Vendor Evaluation'
+      documentNumberPrefix: 'VE-'

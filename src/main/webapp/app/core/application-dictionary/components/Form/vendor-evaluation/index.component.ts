@@ -1,27 +1,24 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import { ElTable } from 'element-ui/types/table';
-import Vue from 'vue';
 import Component, { mixins } from 'vue-class-component';
 import { Inject } from 'vue-property-decorator';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import VendorEvaluationDetail from './detail.vue';
+import { AccountStoreModule } from '@/shared/config/store/account-store';
 
-const VendorEvaluationProp = Vue.extend({
-  props: {
-    approval: Boolean
-  }
-})
+const baseApiVendorEvaluation = 'api/m-vendor-evaluations';
 
 @Component({
   components: {
     VendorEvaluationDetail
   }
 })
-export default class VendorEvaluation extends mixins(AccessLevelMixin, VendorEvaluationProp) {
+export default class VendorEvaluation extends mixins(AccessLevelMixin) {
 
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
+  loading: boolean = false;
   index = true;
   selectedRow: any = {};
   selectedDocumentAction: any = {};
@@ -35,21 +32,7 @@ export default class VendorEvaluation extends mixins(AccessLevelMixin, VendorEva
     SMT: 'Submitted',
   }
 
-  vendorEvaluations = [
-    {
-      documentNo: '11011',
-      vendorId: 1,
-      vendorName: 'Ingram Micro Indonesia',
-      reviewer: 'Admin Evaluator',
-      aggreementNo: '13334',
-      aggreementTitle: 'Pengadaan Kendaraan Operasional',
-      evaluationType: 'Vendor Otomotif',
-      evaluationPeriod: 'Yearly',
-      evaluationDate: '2021-03-31T00:00:00.000Z',
-      totalScore: 3.67,
-      documentStatus: 'APV',
-    }
-  ];
+  vendorEvaluations = [];
 
   get defaultDocumentAction() {
     return this.selectedRow.documentAction || 'DRF';
@@ -64,7 +47,7 @@ export default class VendorEvaluation extends mixins(AccessLevelMixin, VendorEva
   }
 
   get isDraft() {
-    return this.selectedRow.documentStatus === 'DRF' || this.selectedRow.documentStatus === 'RVS';
+    return ! this.selectedRow.id || this.selectedRow.documentStatus === 'DRF';
   }
 
   onDocumentActionChanged(action: any) {
@@ -76,16 +59,43 @@ export default class VendorEvaluation extends mixins(AccessLevelMixin, VendorEva
     this.selectedRow = row;
   }
 
+  onSaveClicked() {
+    (<any>this.$refs.evaluationForm).save();
+  }
+
+  created() {
+    this.retrieveEvaluations();
+  }
+
   mounted() {
     this.setRow(this.vendorEvaluations[0]);
   }
 
   closeDetail() {
     this.index = true;
+    this.retrieveEvaluations();
   }
 
   printStatus(status: string) {
     return this.documentStatuses[status];
+  }
+
+  private retrieveEvaluations() {
+      this.loading = true;
+      this.commonService(baseApiVendorEvaluation)
+        .retrieve({
+          criteriaQuery: this.updateCriteria([
+            'active.equals=true'
+          ])
+        })
+        .then(res => {
+          this.vendorEvaluations = res.data;
+        })
+        .catch(err => {
+          console.log('Failed to get vendor evaluations. %O', err);
+          this.$message.error('Failed to get vendor evaluations');
+        })
+        .finally(() => this.loading = false);
   }
 
   private setRow(record: any) {
@@ -93,8 +103,17 @@ export default class VendorEvaluation extends mixins(AccessLevelMixin, VendorEva
   }
 
   viewDetail(row: any) {
-    console.log('selected row:', row);
-    this.selectedRow = row;
+    if ( ! row) {
+      this.selectedRow = {
+        evaluationDate: null,
+        adOrganizationId: AccountStoreModule.organizationInfo.id,
+        contractId: null,
+        reviewerUserId: null,
+      };
+    } else {
+      this.selectedRow = row;
+    }
+    
     this.index = false;
   }
 }
