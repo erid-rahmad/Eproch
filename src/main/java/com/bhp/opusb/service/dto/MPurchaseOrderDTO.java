@@ -48,6 +48,12 @@ public class MPurchaseOrderDTO extends AbstractAuditingDTO {
 
     private LocalDate datePromised;
 
+    private LocalDate dateDelivered;
+
+    private LocalDate dateShipped;
+
+    private String confirmation;
+
     private String description;
 
     private UUID uid;
@@ -87,6 +93,30 @@ public class MPurchaseOrderDTO extends AbstractAuditingDTO {
     
     public Long getId() {
         return id;
+    }
+
+    public LocalDate getDateDelivered() {
+        return dateDelivered;
+    }
+
+    public void setDateDelivered(LocalDate dateDelivered) {
+        this.dateDelivered = dateDelivered;
+    }
+
+    public LocalDate getDateShipped() {
+        return dateShipped;
+    }
+
+    public void setDateShipped(LocalDate dateShipped) {
+        this.dateShipped = dateShipped;
+    }
+
+    public String getConfirmation() {
+        return confirmation;
+    }
+
+    public void setConfirmation(String confirmation) {
+        this.confirmation = confirmation;
     }
 
     public Boolean getConfirmed() {

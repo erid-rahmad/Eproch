@@ -1,5 +1,7 @@
 package com.bhp.opusb.repository;
 
+import java.util.List;
+
 import com.bhp.opusb.domain.MPurchaseOrder;
 
 import org.springframework.stereotype.Repository;
@@ -10,4 +12,5 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface MPurchaseOrderRepository extends GenericDocumentRepository<MPurchaseOrder, Long> {
+    List<MPurchaseOrder> findByDocumentNo(String documentNo);
 }

@@ -56,6 +56,18 @@
             "fieldType": "LocalDate"
         },
         {
+            "fieldName": "dateDelivered",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dateShipped",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "confirmation",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "description",
             "fieldType": "String"
         },

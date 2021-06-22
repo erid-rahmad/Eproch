@@ -16,6 +16,7 @@
         :key="field.id"
         :label="field.name"
         :prop="field.value"
+        :required="field.mandatory"
         size="small"
       >
         <el-checkbox
@@ -66,6 +67,12 @@
           :min="getMinValue(field)"
           :max="getMaxValue(field)"
         />
+        <el-date-picker
+          v-else-if="isDateField(field.type)"
+          v-model="parameter[field.value]"
+          size="mini"
+          class="date"
+        ></el-date-picker>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">

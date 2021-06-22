@@ -79,6 +79,17 @@ public class MPurchaseOrderResourceIT {
     private static final LocalDate UPDATED_DATE_PROMISED = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_DATE_PROMISED = LocalDate.ofEpochDay(-1L);
 
+    private static final LocalDate DEFAULT_DATE_DELIVERED = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE_DELIVERED = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_DATE_DELIVERED = LocalDate.ofEpochDay(-1L);
+
+    private static final LocalDate DEFAULT_DATE_SHIPPED = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE_SHIPPED = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_DATE_SHIPPED = LocalDate.ofEpochDay(-1L);
+
+    private static final String DEFAULT_CONFIRMATION = "AAAAAAAAAA";
+    private static final String UPDATED_CONFIRMATION = "BBBBBBBBBB";
+
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
@@ -126,6 +137,9 @@ public class MPurchaseOrderResourceIT {
             .grandTotal(DEFAULT_GRAND_TOTAL)
             .tax(DEFAULT_TAX)
             .datePromised(DEFAULT_DATE_PROMISED)
+            .dateDelivered(DEFAULT_DATE_DELIVERED)
+            .dateShipped(DEFAULT_DATE_SHIPPED)
+            .confirmation(DEFAULT_CONFIRMATION)
             .description(DEFAULT_DESCRIPTION)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
@@ -219,6 +233,9 @@ public class MPurchaseOrderResourceIT {
             .grandTotal(UPDATED_GRAND_TOTAL)
             .tax(UPDATED_TAX)
             .datePromised(UPDATED_DATE_PROMISED)
+            .dateDelivered(UPDATED_DATE_DELIVERED)
+            .dateShipped(UPDATED_DATE_SHIPPED)
+            .confirmation(UPDATED_CONFIRMATION)
             .description(UPDATED_DESCRIPTION)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
@@ -326,6 +343,9 @@ public class MPurchaseOrderResourceIT {
         assertThat(testMPurchaseOrder.getGrandTotal()).isEqualTo(DEFAULT_GRAND_TOTAL);
         assertThat(testMPurchaseOrder.isTax()).isEqualTo(DEFAULT_TAX);
         assertThat(testMPurchaseOrder.getDatePromised()).isEqualTo(DEFAULT_DATE_PROMISED);
+        assertThat(testMPurchaseOrder.getDateDelivered()).isEqualTo(DEFAULT_DATE_DELIVERED);
+        assertThat(testMPurchaseOrder.getDateShipped()).isEqualTo(DEFAULT_DATE_SHIPPED);
+        assertThat(testMPurchaseOrder.getConfirmation()).isEqualTo(DEFAULT_CONFIRMATION);
         assertThat(testMPurchaseOrder.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testMPurchaseOrder.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testMPurchaseOrder.isActive()).isEqualTo(DEFAULT_ACTIVE);
@@ -411,6 +431,9 @@ public class MPurchaseOrderResourceIT {
             .andExpect(jsonPath("$.[*].grandTotal").value(hasItem(DEFAULT_GRAND_TOTAL.intValue())))
             .andExpect(jsonPath("$.[*].tax").value(hasItem(DEFAULT_TAX.booleanValue())))
             .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
+            .andExpect(jsonPath("$.[*].dateDelivered").value(hasItem(DEFAULT_DATE_DELIVERED.toString())))
+            .andExpect(jsonPath("$.[*].dateShipped").value(hasItem(DEFAULT_DATE_SHIPPED.toString())))
+            .andExpect(jsonPath("$.[*].confirmation").value(hasItem(DEFAULT_CONFIRMATION)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
@@ -437,6 +460,9 @@ public class MPurchaseOrderResourceIT {
             .andExpect(jsonPath("$.grandTotal").value(DEFAULT_GRAND_TOTAL.intValue()))
             .andExpect(jsonPath("$.tax").value(DEFAULT_TAX.booleanValue()))
             .andExpect(jsonPath("$.datePromised").value(DEFAULT_DATE_PROMISED.toString()))
+            .andExpect(jsonPath("$.dateDelivered").value(DEFAULT_DATE_DELIVERED.toString()))
+            .andExpect(jsonPath("$.dateShipped").value(DEFAULT_DATE_SHIPPED.toString()))
+            .andExpect(jsonPath("$.confirmation").value(DEFAULT_CONFIRMATION))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
@@ -1221,6 +1247,294 @@ public class MPurchaseOrderResourceIT {
 
     @Test
     @Transactional
+    public void getAllMPurchaseOrdersByDateDeliveredIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where dateDelivered equals to DEFAULT_DATE_DELIVERED
+        defaultMPurchaseOrderShouldBeFound("dateDelivered.equals=" + DEFAULT_DATE_DELIVERED);
+
+        // Get all the mPurchaseOrderList where dateDelivered equals to UPDATED_DATE_DELIVERED
+        defaultMPurchaseOrderShouldNotBeFound("dateDelivered.equals=" + UPDATED_DATE_DELIVERED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByDateDeliveredIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where dateDelivered not equals to DEFAULT_DATE_DELIVERED
+        defaultMPurchaseOrderShouldNotBeFound("dateDelivered.notEquals=" + DEFAULT_DATE_DELIVERED);
+
+        // Get all the mPurchaseOrderList where dateDelivered not equals to UPDATED_DATE_DELIVERED
+        defaultMPurchaseOrderShouldBeFound("dateDelivered.notEquals=" + UPDATED_DATE_DELIVERED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByDateDeliveredIsInShouldWork() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where dateDelivered in DEFAULT_DATE_DELIVERED or UPDATED_DATE_DELIVERED
+        defaultMPurchaseOrderShouldBeFound("dateDelivered.in=" + DEFAULT_DATE_DELIVERED + "," + UPDATED_DATE_DELIVERED);
+
+        // Get all the mPurchaseOrderList where dateDelivered equals to UPDATED_DATE_DELIVERED
+        defaultMPurchaseOrderShouldNotBeFound("dateDelivered.in=" + UPDATED_DATE_DELIVERED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByDateDeliveredIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where dateDelivered is not null
+        defaultMPurchaseOrderShouldBeFound("dateDelivered.specified=true");
+
+        // Get all the mPurchaseOrderList where dateDelivered is null
+        defaultMPurchaseOrderShouldNotBeFound("dateDelivered.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByDateDeliveredIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where dateDelivered is greater than or equal to DEFAULT_DATE_DELIVERED
+        defaultMPurchaseOrderShouldBeFound("dateDelivered.greaterThanOrEqual=" + DEFAULT_DATE_DELIVERED);
+
+        // Get all the mPurchaseOrderList where dateDelivered is greater than or equal to UPDATED_DATE_DELIVERED
+        defaultMPurchaseOrderShouldNotBeFound("dateDelivered.greaterThanOrEqual=" + UPDATED_DATE_DELIVERED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByDateDeliveredIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where dateDelivered is less than or equal to DEFAULT_DATE_DELIVERED
+        defaultMPurchaseOrderShouldBeFound("dateDelivered.lessThanOrEqual=" + DEFAULT_DATE_DELIVERED);
+
+        // Get all the mPurchaseOrderList where dateDelivered is less than or equal to SMALLER_DATE_DELIVERED
+        defaultMPurchaseOrderShouldNotBeFound("dateDelivered.lessThanOrEqual=" + SMALLER_DATE_DELIVERED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByDateDeliveredIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where dateDelivered is less than DEFAULT_DATE_DELIVERED
+        defaultMPurchaseOrderShouldNotBeFound("dateDelivered.lessThan=" + DEFAULT_DATE_DELIVERED);
+
+        // Get all the mPurchaseOrderList where dateDelivered is less than UPDATED_DATE_DELIVERED
+        defaultMPurchaseOrderShouldBeFound("dateDelivered.lessThan=" + UPDATED_DATE_DELIVERED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByDateDeliveredIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where dateDelivered is greater than DEFAULT_DATE_DELIVERED
+        defaultMPurchaseOrderShouldNotBeFound("dateDelivered.greaterThan=" + DEFAULT_DATE_DELIVERED);
+
+        // Get all the mPurchaseOrderList where dateDelivered is greater than SMALLER_DATE_DELIVERED
+        defaultMPurchaseOrderShouldBeFound("dateDelivered.greaterThan=" + SMALLER_DATE_DELIVERED);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByDateShippedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where dateShipped equals to DEFAULT_DATE_SHIPPED
+        defaultMPurchaseOrderShouldBeFound("dateShipped.equals=" + DEFAULT_DATE_SHIPPED);
+
+        // Get all the mPurchaseOrderList where dateShipped equals to UPDATED_DATE_SHIPPED
+        defaultMPurchaseOrderShouldNotBeFound("dateShipped.equals=" + UPDATED_DATE_SHIPPED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByDateShippedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where dateShipped not equals to DEFAULT_DATE_SHIPPED
+        defaultMPurchaseOrderShouldNotBeFound("dateShipped.notEquals=" + DEFAULT_DATE_SHIPPED);
+
+        // Get all the mPurchaseOrderList where dateShipped not equals to UPDATED_DATE_SHIPPED
+        defaultMPurchaseOrderShouldBeFound("dateShipped.notEquals=" + UPDATED_DATE_SHIPPED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByDateShippedIsInShouldWork() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where dateShipped in DEFAULT_DATE_SHIPPED or UPDATED_DATE_SHIPPED
+        defaultMPurchaseOrderShouldBeFound("dateShipped.in=" + DEFAULT_DATE_SHIPPED + "," + UPDATED_DATE_SHIPPED);
+
+        // Get all the mPurchaseOrderList where dateShipped equals to UPDATED_DATE_SHIPPED
+        defaultMPurchaseOrderShouldNotBeFound("dateShipped.in=" + UPDATED_DATE_SHIPPED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByDateShippedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where dateShipped is not null
+        defaultMPurchaseOrderShouldBeFound("dateShipped.specified=true");
+
+        // Get all the mPurchaseOrderList where dateShipped is null
+        defaultMPurchaseOrderShouldNotBeFound("dateShipped.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByDateShippedIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where dateShipped is greater than or equal to DEFAULT_DATE_SHIPPED
+        defaultMPurchaseOrderShouldBeFound("dateShipped.greaterThanOrEqual=" + DEFAULT_DATE_SHIPPED);
+
+        // Get all the mPurchaseOrderList where dateShipped is greater than or equal to UPDATED_DATE_SHIPPED
+        defaultMPurchaseOrderShouldNotBeFound("dateShipped.greaterThanOrEqual=" + UPDATED_DATE_SHIPPED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByDateShippedIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where dateShipped is less than or equal to DEFAULT_DATE_SHIPPED
+        defaultMPurchaseOrderShouldBeFound("dateShipped.lessThanOrEqual=" + DEFAULT_DATE_SHIPPED);
+
+        // Get all the mPurchaseOrderList where dateShipped is less than or equal to SMALLER_DATE_SHIPPED
+        defaultMPurchaseOrderShouldNotBeFound("dateShipped.lessThanOrEqual=" + SMALLER_DATE_SHIPPED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByDateShippedIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where dateShipped is less than DEFAULT_DATE_SHIPPED
+        defaultMPurchaseOrderShouldNotBeFound("dateShipped.lessThan=" + DEFAULT_DATE_SHIPPED);
+
+        // Get all the mPurchaseOrderList where dateShipped is less than UPDATED_DATE_SHIPPED
+        defaultMPurchaseOrderShouldBeFound("dateShipped.lessThan=" + UPDATED_DATE_SHIPPED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByDateShippedIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where dateShipped is greater than DEFAULT_DATE_SHIPPED
+        defaultMPurchaseOrderShouldNotBeFound("dateShipped.greaterThan=" + DEFAULT_DATE_SHIPPED);
+
+        // Get all the mPurchaseOrderList where dateShipped is greater than SMALLER_DATE_SHIPPED
+        defaultMPurchaseOrderShouldBeFound("dateShipped.greaterThan=" + SMALLER_DATE_SHIPPED);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByConfirmationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where confirmation equals to DEFAULT_CONFIRMATION
+        defaultMPurchaseOrderShouldBeFound("confirmation.equals=" + DEFAULT_CONFIRMATION);
+
+        // Get all the mPurchaseOrderList where confirmation equals to UPDATED_CONFIRMATION
+        defaultMPurchaseOrderShouldNotBeFound("confirmation.equals=" + UPDATED_CONFIRMATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByConfirmationIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where confirmation not equals to DEFAULT_CONFIRMATION
+        defaultMPurchaseOrderShouldNotBeFound("confirmation.notEquals=" + DEFAULT_CONFIRMATION);
+
+        // Get all the mPurchaseOrderList where confirmation not equals to UPDATED_CONFIRMATION
+        defaultMPurchaseOrderShouldBeFound("confirmation.notEquals=" + UPDATED_CONFIRMATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByConfirmationIsInShouldWork() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where confirmation in DEFAULT_CONFIRMATION or UPDATED_CONFIRMATION
+        defaultMPurchaseOrderShouldBeFound("confirmation.in=" + DEFAULT_CONFIRMATION + "," + UPDATED_CONFIRMATION);
+
+        // Get all the mPurchaseOrderList where confirmation equals to UPDATED_CONFIRMATION
+        defaultMPurchaseOrderShouldNotBeFound("confirmation.in=" + UPDATED_CONFIRMATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByConfirmationIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where confirmation is not null
+        defaultMPurchaseOrderShouldBeFound("confirmation.specified=true");
+
+        // Get all the mPurchaseOrderList where confirmation is null
+        defaultMPurchaseOrderShouldNotBeFound("confirmation.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByConfirmationContainsSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where confirmation contains DEFAULT_CONFIRMATION
+        defaultMPurchaseOrderShouldBeFound("confirmation.contains=" + DEFAULT_CONFIRMATION);
+
+        // Get all the mPurchaseOrderList where confirmation contains UPDATED_CONFIRMATION
+        defaultMPurchaseOrderShouldNotBeFound("confirmation.contains=" + UPDATED_CONFIRMATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByConfirmationNotContainsSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where confirmation does not contain DEFAULT_CONFIRMATION
+        defaultMPurchaseOrderShouldNotBeFound("confirmation.doesNotContain=" + DEFAULT_CONFIRMATION);
+
+        // Get all the mPurchaseOrderList where confirmation does not contain UPDATED_CONFIRMATION
+        defaultMPurchaseOrderShouldBeFound("confirmation.doesNotContain=" + UPDATED_CONFIRMATION);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMPurchaseOrdersByDescriptionIsEqualToSomething() throws Exception {
         // Initialize the database
         mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
@@ -1530,6 +1844,9 @@ public class MPurchaseOrderResourceIT {
             .andExpect(jsonPath("$.[*].grandTotal").value(hasItem(DEFAULT_GRAND_TOTAL.intValue())))
             .andExpect(jsonPath("$.[*].tax").value(hasItem(DEFAULT_TAX.booleanValue())))
             .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
+            .andExpect(jsonPath("$.[*].dateDelivered").value(hasItem(DEFAULT_DATE_DELIVERED.toString())))
+            .andExpect(jsonPath("$.[*].dateShipped").value(hasItem(DEFAULT_DATE_SHIPPED.toString())))
+            .andExpect(jsonPath("$.[*].confirmation").value(hasItem(DEFAULT_CONFIRMATION)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
@@ -1590,6 +1907,9 @@ public class MPurchaseOrderResourceIT {
             .grandTotal(UPDATED_GRAND_TOTAL)
             .tax(UPDATED_TAX)
             .datePromised(UPDATED_DATE_PROMISED)
+            .dateDelivered(UPDATED_DATE_DELIVERED)
+            .dateShipped(UPDATED_DATE_SHIPPED)
+            .confirmation(UPDATED_CONFIRMATION)
             .description(UPDATED_DESCRIPTION)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
@@ -1614,6 +1934,9 @@ public class MPurchaseOrderResourceIT {
         assertThat(testMPurchaseOrder.getGrandTotal()).isEqualTo(UPDATED_GRAND_TOTAL);
         assertThat(testMPurchaseOrder.isTax()).isEqualTo(UPDATED_TAX);
         assertThat(testMPurchaseOrder.getDatePromised()).isEqualTo(UPDATED_DATE_PROMISED);
+        assertThat(testMPurchaseOrder.getDateDelivered()).isEqualTo(UPDATED_DATE_DELIVERED);
+        assertThat(testMPurchaseOrder.getDateShipped()).isEqualTo(UPDATED_DATE_SHIPPED);
+        assertThat(testMPurchaseOrder.getConfirmation()).isEqualTo(UPDATED_CONFIRMATION);
         assertThat(testMPurchaseOrder.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testMPurchaseOrder.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testMPurchaseOrder.isActive()).isEqualTo(UPDATED_ACTIVE);

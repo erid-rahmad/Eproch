@@ -1,11 +1,11 @@
-id;date_trx;document_no;document_action;document_status;approved;processed;confirmed;grand_total;tax;date_promised;description;uid;active;ad_organization_id;document_type_id;vendor_id;currency_id;warehouse_id;cost_center_id;payment_term_id
-1;2021-01-12;GB Global haptic;digital Fr;contextual;true;true;true;33259;true;2021-01-11;Incredible Equatorial Guinea transmit;861bf5d8-1636-41f9-84c9-2a1d64e95ad9;false;1;1;1;1;1;1;1
-2;2021-01-11;Florida Developer;back up In;monitoring;false;false;true;10012;true;2021-01-12;Security SDD Coordinator;ddf78d6d-6b2c-4d14-b0bc-9abb203c4510;false;2;2;2;2;2;2;2
-3;2021-01-11;Grocery web-readiness Awesome ;protocol i;generating;true;false;true;8646;false;2021-01-11;Division Producer;9b056166-ded2-49ad-bd04-08ed57d75dcf;false;3;3;3;3;3;3;3
-4;2021-01-11;Denar Unbranded Fresh Bacon;Investment;Baby mobil;false;true;true;66386;true;2021-01-11;pixel repurpose;6bf4bbc9-86d8-41e7-8c50-f2f2d0d311a8;true;4;4;4;4;4;4;4
-5;2021-01-12;Roads enhance Cambridgeshire;lime cross;cultivate ;true;false;true;75660;false;2021-01-11;bypassing;742cc547-c885-4792-8f99-72897607834f;false;5;5;5;5;5;5;5
-6;2021-01-11;HTTP;Tasty Wood;Intelligen;false;true;true;31487;false;2021-01-11;Illinois end-to-end Fantastic;6365b594-4c8e-4789-8151-6e10c9e75fc7;false;6;6;6;6;6;6;6
-7;2021-01-11;Tasty networks;revolution;deliver;true;false;false;15972;false;2021-01-11;Synergistic Producer core;71473fb0-20bd-4037-9f85-664ad9fd5c85;false;7;7;7;7;7;7;7
-8;2021-01-12;Money Market Account;conglomera;Garden reb;false;true;false;47685;false;2021-01-12;back up Bedfordshire;c6841138-c9f4-44ba-be12-f5127efa5cd7;false;8;8;8;8;8;8;8
-9;2021-01-12;eco-centric Health Generic;Cambridges;Orchestrat;true;false;true;14426;true;2021-01-11;Netherlands Antillian Guilder Liaison Granite;41023d3e-3e07-4e4b-b9ed-ffed46a2d24f;false;9;9;9;9;9;9;9
-10;2021-01-12;Practical Soft Computer leadin;Associate ;UAE Dirham;false;true;false;6339;false;2021-01-12;Unbranded Auto Loan Account;e5c11489-47e2-4e72-859b-33fc42aa44a2;true;10;10;10;10;10;10;10
+id;date_trx;document_no;document_action;document_status;approved;processed;confirmed;grand_total;tax;date_promised;date_delivered;date_shipped;confirmation;description;uid;active;ad_organization_id;document_type_id;vendor_id;currency_id;warehouse_id;cost_center_id;payment_term_id
+1;2021-01-12;GB Global haptic;digital Fr;contextual;true;true;true;33259;true;2021-01-11;2021-01-11;2021-01-12;Equatorial Guinea;connecting markets matrix;5d816361-f984-4c92-a1d6-4e95ad977992;true;1;1;1;1;1;1;1
+2;2021-01-11;back up International;monitoring;Borders;false;true;false;91176;true;2021-01-12;2021-01-11;2021-01-12;next-generation JBOD Borders;networks visualize Soft;d14f0bc9-abb2-403c-8510-04a0760186e7;true;2;2;2;2;2;2;2
+3;2021-01-12;quantifying generating;North Dako;Refined;false;true;false;96396;true;2021-01-11;2021-01-11;2021-01-12;streamline seize;Creative salmon Uganda Shilling;7d0408ed-57d7-45dc-b168-a80eddfa6f70;true;3;3;3;3;3;3;3
+4;2021-01-11;invoice;salmon Tec;pixel repu;false;true;true;26379;true;2021-01-11;2021-01-11;2021-01-11;engineer Bouvet Island (Bouvetoya);Avenue navigate Industrial;2f2d0d31-1a8b-41a7-b638-de3bc52676e7;false;4;4;4;4;4;4;4
+5;2021-01-11;Mobility hardware;bypassing;Customizab;false;false;false;80940;true;2021-01-11;2021-01-11;2021-01-11;Cheese Intranet;Bedfordshire Borders;7607834f-091e-4010-b1e7-0365ae4dc51b;true;5;5;5;5;5;5;5
+6;2021-01-11;end-to-end;deploy;seize;true;false;true;26965;false;2021-01-11;2021-01-11;2021-01-11;Monaco Ergonomic Plastic Computer;Senior Licensed Rubber Salad;75fc73a7-1f6d-4651-8a34-468f0620ec3d;true;6;6;6;6;6;6;6
+7;2021-01-11;Multi-tiered;human-reso;Quality;false;false;false;70304;true;2021-01-12;2021-01-12;2021-01-11;Designer killer;modular generating;fd5c8572-2941-453a-85ce-7d27109c074c;false;7;7;7;7;7;7;7
+8;2021-01-11;Ergonomic;South Dako;Engineer n;true;false;true;10391;false;2021-01-11;2021-01-11;2021-01-12;Cambridgeshire;withdrawal optical Glen;0f45071a-98dc-46ff-93ba-db2c29adb0f2;false;8;8;8;8;8;8;8
+9;2021-01-11;Small;fuchsia;Future;true;false;false;88827;false;2021-01-11;2021-01-11;2021-01-11;XSS Representative compressing;Congolese Franc GB;4f61606c-148d-4f1c-a385-a0f10e011291;true;9;9;9;9;9;9;9
+10;2021-01-11;PCI bypass Gorgeous;Money Mark;District;false;true;false;58279;true;2021-01-11;2021-01-12;2021-01-11;client-driven payment discrete;Cheese Practical;92ca25e5-74e5-455d-a48c-2460381e1e1d;false;10;10;10;10;10;10;10
