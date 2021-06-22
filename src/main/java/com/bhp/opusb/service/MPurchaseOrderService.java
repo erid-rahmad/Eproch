@@ -298,6 +298,6 @@ public class MPurchaseOrderService {
             processed = true;
         }
 
-        mRequisitionRepository.updateDocumentStatus(mPurchaseOrder.getId(), action, status, approved, processed);
+        mPurchaseOrderRepository.updateDocumentStatus(mPurchaseOrder.getId(), action, status, approved, processed);
     }
 }
