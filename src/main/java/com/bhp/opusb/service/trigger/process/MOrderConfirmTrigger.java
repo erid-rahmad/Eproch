@@ -31,6 +31,7 @@ public class MOrderConfirmTrigger implements ProcessTrigger {
   public TriggerResult run(Map<String, Object> params) {
     String documentNo = (String) params.get("documentNo");
     String description = (String) params.get("description");
+    String confirmation = (String) params.get("confirmation");
     LocalDate deliveryDate = ZonedDateTime.parse((String) params.get("deliveryDate")).plusHours(7).toLocalDate();
     LocalDate shippingDate = ZonedDateTime.parse((String) params.get("shipDate")).plusHours(7).toLocalDate();
     log.debug("Request to confirm Order {}", documentNo);
@@ -38,7 +39,9 @@ public class MOrderConfirmTrigger implements ProcessTrigger {
     mPurchaseOrderRepository.findByDocumentNo(documentNo).forEach(order->{
       order.setConfirmed(true);
       order.setDescription(description);
-      order.setDatePromised(deliveryDate);
+      order.setDateDelivered(deliveryDate);
+      order.setDateShipped(shippingDate);
+      order.setConfirmation(confirmation);
       mPurchaseOrderRepository.save(order);
     });
 

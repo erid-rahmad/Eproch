@@ -884,6 +884,9 @@ entity MPurchaseOrder {
 	grandTotal BigDecimal
 	tax Boolean
 	datePromised LocalDate
+	dateDelivered LocalDate
+	dateShipped LocalDate
+	confirmation String
 	description String
 	uid UUID
 	active Boolean

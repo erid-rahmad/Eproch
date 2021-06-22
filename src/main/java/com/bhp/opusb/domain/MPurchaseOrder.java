@@ -71,6 +71,15 @@ public class MPurchaseOrder extends AbstractAuditingEntity {
     @Column(name = "date_promised")
     private LocalDate datePromised;
 
+    @Column(name = "date_promised")
+    private LocalDate dateDelivered;
+
+    @Column(name = "date_shipped")
+    private LocalDate dateShipped;
+
+    @Column(name = "confirmation")
+    private String confirmation;
+
     @Column(name = "description")
     private String description;
 
@@ -257,6 +266,45 @@ public class MPurchaseOrder extends AbstractAuditingEntity {
         this.datePromised = datePromised;
     }
 
+    public LocalDate getDateDelivered() {
+        return dateDelivered;
+    }
+
+    public MPurchaseOrder dateDelivered(LocalDate dateDelivered) {
+        this.dateDelivered = dateDelivered;
+        return this;
+    }
+
+    public void setDateDelivered(LocalDate dateDelivered) {
+        this.dateDelivered = dateDelivered;
+    }
+
+    public LocalDate getDateShipped() {
+        return dateShipped;
+    }
+
+    public MPurchaseOrder dateShipped(LocalDate dateShipped) {
+        this.dateShipped = dateShipped;
+        return this;
+    }
+
+    public void setDateShipped(LocalDate dateShipped) {
+        this.dateShipped = dateShipped;
+    }
+
+    public String getConfirmation() {
+        return confirmation;
+    }
+
+    public MPurchaseOrder confirmation(String confirmation) {
+        this.confirmation = confirmation;
+        return this;
+    }
+
+    public void setConfirmation(String confirmation) {
+        this.confirmation = confirmation;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -423,6 +471,9 @@ public class MPurchaseOrder extends AbstractAuditingEntity {
             ", grandTotal=" + getGrandTotal() +
             ", tax='" + isTax() + "'" +
             ", datePromised='" + getDatePromised() + "'" +
+            ", dateDelivered='" + getDateDelivered() + "'" +
+            ", dateShipped='" + getDateShipped() + "'" +
+            ", confirmation='" + getConfirmation() + "'" +
             ", description='" + getDescription() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +

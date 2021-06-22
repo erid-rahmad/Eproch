@@ -49,6 +49,12 @@ public class MPurchaseOrderCriteria implements Serializable, Criteria {
 
     private LocalDateFilter datePromised;
 
+    private LocalDateFilter dateDelivered;
+
+    private LocalDateFilter dateShipped;
+
+    private StringFilter confirmation;
+
     private StringFilter description;
 
     private UUIDFilter uid;
@@ -84,6 +90,9 @@ public class MPurchaseOrderCriteria implements Serializable, Criteria {
         this.grandTotal = other.grandTotal == null ? null : other.grandTotal.copy();
         this.tax = other.tax == null ? null : other.tax.copy();
         this.datePromised = other.datePromised == null ? null : other.datePromised.copy();
+        this.dateDelivered = other.dateDelivered == null ? null : other.dateDelivered.copy();
+        this.dateShipped = other.dateShipped == null ? null : other.dateShipped.copy();
+        this.confirmation = other.confirmation == null ? null : other.confirmation.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
@@ -189,6 +198,30 @@ public class MPurchaseOrderCriteria implements Serializable, Criteria {
         this.datePromised = datePromised;
     }
 
+    public LocalDateFilter getDateDelivered() {
+        return dateDelivered;
+    }
+
+    public void setDateDelivered(LocalDateFilter dateDelivered) {
+        this.dateDelivered = dateDelivered;
+    }
+
+    public LocalDateFilter getDateShipped() {
+        return dateShipped;
+    }
+
+    public void setDateShipped(LocalDateFilter dateShipped) {
+        this.dateShipped = dateShipped;
+    }
+
+    public StringFilter getConfirmation() {
+        return confirmation;
+    }
+
+    public void setConfirmation(StringFilter confirmation) {
+        this.confirmation = confirmation;
+    }
+
     public StringFilter getDescription() {
         return description;
     }
@@ -291,6 +324,9 @@ public class MPurchaseOrderCriteria implements Serializable, Criteria {
             Objects.equals(grandTotal, that.grandTotal) &&
             Objects.equals(tax, that.tax) &&
             Objects.equals(datePromised, that.datePromised) &&
+            Objects.equals(dateDelivered, that.dateDelivered) &&
+            Objects.equals(dateShipped, that.dateShipped) &&
+            Objects.equals(confirmation, that.confirmation) &&
             Objects.equals(description, that.description) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
@@ -317,6 +353,9 @@ public class MPurchaseOrderCriteria implements Serializable, Criteria {
         grandTotal,
         tax,
         datePromised,
+        dateDelivered,
+        dateShipped,
+        confirmation,
         description,
         uid,
         active,
@@ -344,6 +383,9 @@ public class MPurchaseOrderCriteria implements Serializable, Criteria {
                 (grandTotal != null ? "grandTotal=" + grandTotal + ", " : "") +
                 (tax != null ? "tax=" + tax + ", " : "") +
                 (datePromised != null ? "datePromised=" + datePromised + ", " : "") +
+                (dateDelivered != null ? "dateDelivered=" + dateDelivered + ", " : "") +
+                (dateShipped != null ? "dateShipped=" + dateShipped + ", " : "") +
+                (confirmation != null ? "confirmation=" + confirmation + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
