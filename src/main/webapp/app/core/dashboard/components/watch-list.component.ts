@@ -40,7 +40,7 @@ export default class WatchList extends WatchListProps {
   }
 
   get type() {
-    return this.items.length > 4 ? DisplayType.List : DisplayType.Card;
+    return /*this.items.length > 4 ? DisplayType.List : */DisplayType.Card;
   }
 
   @Watch('items', { deep: true })
