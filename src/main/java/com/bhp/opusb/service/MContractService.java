@@ -55,7 +55,9 @@ public class MContractService {
      */
     public MContractDTO save(MContractDTO mContractDTO) {
         log.debug("Request to save MContract : {}", mContractDTO);
+        mContractDTO.setBiddingId(1958802l);
         MContract mContract = mContractMapper.toEntity(mContractDTO);
+
         final String docAction = mContract.getDocumentAction();
         final String docStatus = mContract.getDocumentStatus();
 

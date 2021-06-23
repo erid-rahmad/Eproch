@@ -113,7 +113,7 @@ export default class VendorEvaluation extends mixins(AccessLevelMixin) {
     } else {
       this.selectedRow = row;
     }
-    
+
     this.index = false;
   }
 }

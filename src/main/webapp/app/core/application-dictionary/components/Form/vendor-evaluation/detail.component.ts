@@ -8,6 +8,8 @@ import { ElForm } from 'element-ui/types/form';
 
 const baseApiContract = 'api/m-contracts';
 const baseApiVendorEvaluation = 'api/m-vendor-evaluations';
+const baseApiVendorEvaluationLine = 'api/m-vendor-evaluation-lines';
+
 
 const VendorEvaluationDetailProp = Vue.extend({
   props: {
@@ -57,6 +59,8 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
   evaluation: any = {};
   lines: any[] = [];
   validationSchema = {};
+  ContractFilter:any={};
+  readOnly:boolean=false;
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -64,6 +68,22 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
 
   get dateValueFormat() {
     return settings.dateValueFormat;
+  }
+
+  retriveContractFilter(vendorId){
+
+    this.commonService(baseApiContract)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `vendorId.equals=${vendorId}`
+        ])
+      })
+      .then( res => {
+          this.ContractFilter= res.data;
+        }
+      );
+
   }
 
   async onContractIdChanged(id: number) {
@@ -95,12 +115,16 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
 
   created() {
     this.evaluation = {...this.data};
+    if (this.evaluation.id){
+      this.readOnly=true;
+      this.retrieveLinesSaved(this.evaluation.id);
+    }
   }
 
   async retrieveContract(id: number) {
     return this.commonService(baseApiContract)
       .find(id)
-      .then(res => res);
+      .then(res => this.evaluation.contractNo=res.data.contractNo);
   }
 
   retrieveLines(evaluationId: string) {
@@ -111,20 +135,87 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
           `vendorEvaluationId.equals=${evaluationId}`
         ])
       })
-      .then(res => this.lines = res.data);
+      .then( res => {
+        const data:any=[];
+          res.data.forEach(async line=>{
+             let line_=
+              {
+                adOrganizationId: line.adOrganizationId,
+                cQuestionCategoryId: line.cQuestionCategoryId,
+                cQuestionCategoryName:  line.cQuestionCategoryName,
+                cVendorEvaluationId: line.cVendorEvaluationId,
+                cVendorEvaluationName: line.cVendorEvaluationName,
+                cquestionCategoryId: line.cquestionCategoryId,
+                cquestionCategoryName: line.cquestionCategoryName,
+                cvendorEvaluationId: line.cvendorEvaluationId,
+                cvendorEvaluationName: line.cvendorEvaluationName,
+                evaluationLineId:line.id,
+                procurementWeight: line.procurementWeight,
+                question: line.question,
+                userWeight: line.userWeight,
+                weight: line.weight,
+              };
+            console.log("this line",line_)
+             await data.push(line_);
+          })
+        this.lines= data;
+        }
+      );
   }
+
+  retrieveLinesSaved(evaluationId) {
+    this.commonService(baseApiVendorEvaluationLine)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `vendorEvaluationId.equals=${evaluationId}`
+        ])
+      })
+      .then(res => {
+        const data1:any=[];
+        res.data.forEach(async line=>{
+          let line__=
+            {
+              adOrganizationId: line.adOrganizationId,
+              cVendorEvaluationId: line.cVendorEvaluationId,
+              cVendorEvaluationName: line.cVendorEvaluationName,
+              cQuestionCategoryId: line.cquestionCategoryId,
+              cQuestionCategoryName: line.evaluationLineName,
+              cvendorEvaluationId: line.cvendorEvaluationId,
+              cvendorEvaluationName: line.cvendorEvaluationName,
+              procurementWeight: line.procurementWeight,
+              question: line.evaluationLineQuestion,
+              userWeight: line.userWeight,
+              weight: line.weight,
+              evaluationLineId:line.evaluationLineId,
+              id:line.id,
+              score:line.score,
+              remark:line.remark
+            };
+          await data1.push(line__);
+        });
+
+
+        this.lines=data1;
+        console.log("info linesss",this.lines)
+
+        }
+      );
+  }
+
+
 
   save() {
     (<ElForm>this.$refs.mainForm).validate(passed => {
       if (passed) {
         const newRecord = !this.evaluation.id;
-        
         this.$emit('update:loading', true);
         this.commonService(baseApiVendorEvaluation)
           [newRecord ? 'create' : 'update'](this.evaluation)
           .then(res => {
             this.$message.success('Vendor Evaluation has been saved successfully');
-            this.evaluation = {...this.evaluation, ...res};
+             this.evaluation = {...this.evaluation, ...res};
+            this.saveLine(this.evaluation.id);
           })
           .catch(err => {
             console.error('Failed to save vendor evaluation', err);
@@ -132,6 +223,22 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
           })
           .finally(() => this.$emit('update:loading', false));
       }
+    })
+  }
+  saveLine(id:number){
+    this.$emit('update:loading', true);
+    this.lines.forEach(line=>{
+      line.vendorEvaluationId=id;
+      this.commonService(baseApiVendorEvaluationLine)
+        .create(line)
+        .then(res => {
+          this.retrieveLinesSaved(this.evaluation.id);
+        })
+        .catch(err => {
+          console.error('Failed to save vendor evaluation line', err);
+          this.$message.error('Failed to save Vendor Evaluation line');
+        })
+        .finally(() => this.$emit('update:loading', false));
     })
   }
 }

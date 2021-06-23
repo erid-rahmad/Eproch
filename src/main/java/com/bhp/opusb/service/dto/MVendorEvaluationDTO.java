@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
  * A DTO for the {@link com.bhp.opusb.domain.MVendorEvaluation} entity.
  */
 public class MVendorEvaluationDTO extends AbstractAuditingDTO {
-    
+
     private Long id;
 
     @NotNull
@@ -58,10 +58,19 @@ public class MVendorEvaluationDTO extends AbstractAuditingDTO {
     private Long evaluationTypeId;
     private String evaluationTypeName;
     private String contractEvaluationPeriod;
+    private String VendorName;
 
     private Long reviewerUserId;
     private String reviewerUserName;
-    
+
+    public String getVendorName() {
+        return VendorName;
+    }
+
+    public void setVendorName(String vendorName) {
+        VendorName = vendorName;
+    }
+
     public Long getId() {
         return id;
     }

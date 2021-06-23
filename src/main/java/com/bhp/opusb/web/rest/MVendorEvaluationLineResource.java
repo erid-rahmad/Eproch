@@ -60,7 +60,8 @@ public class MVendorEvaluationLineResource {
     public ResponseEntity<MVendorEvaluationLineDTO> createMVendorEvaluationLine(@Valid @RequestBody MVendorEvaluationLineDTO mVendorEvaluationLineDTO) throws URISyntaxException {
         log.debug("REST request to save MVendorEvaluationLine : {}", mVendorEvaluationLineDTO);
         if (mVendorEvaluationLineDTO.getId() != null) {
-            throw new BadRequestAlertException("A new mVendorEvaluationLine cannot already have an ID", ENTITY_NAME, "idexists");
+            updateMVendorEvaluationLine(mVendorEvaluationLineDTO);
+            return ResponseEntity.ok(mVendorEvaluationLineDTO);
         }
         MVendorEvaluationLineDTO result = mVendorEvaluationLineService.save(mVendorEvaluationLineDTO);
         return ResponseEntity.created(new URI("/api/m-vendor-evaluation-lines/" + result.getId()))

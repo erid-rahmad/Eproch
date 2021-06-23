@@ -21,6 +21,7 @@ public interface MVendorEvaluationMapper extends EntityMapper<MVendorEvaluationD
     @Mapping(source = "contract.vendorEvaluation.id", target = "evaluationTypeId")
     @Mapping(source = "contract.vendorEvaluation.name", target = "evaluationTypeName")
     @Mapping(source = "contract.evaluationPeriod", target = "contractEvaluationPeriod")
+    @Mapping(source = "contract.vendor.name", target = "vendorName")
     @Mapping(source = "reviewer.id", target = "reviewerUserId")
     @Mapping(source = "reviewer.user.login", target = "reviewerUserName")
     MVendorEvaluationDTO toDto(MVendorEvaluation mVendorEvaluation);

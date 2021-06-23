@@ -10,7 +10,7 @@
       >
         Close
       </el-button>
-      
+
       <el-button
         v-if="index"
         icon="el-icon-plus"
@@ -77,7 +77,7 @@
         <el-table-column
           label="Total Score"
           min-width="100"
-          prop="totalScore"
+          prop="score"
           sortable
         ></el-table-column>
         <el-table-column
