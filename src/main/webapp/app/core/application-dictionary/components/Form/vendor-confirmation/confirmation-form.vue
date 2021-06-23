@@ -25,7 +25,7 @@
             </el-form-item>
             <el-form-item label="Contract Start Date">
               <el-date-picker
-                v-model="contractParameter.contractStartDate"
+                v-model="mainForm.contractStartDate"
                 :disabled="isVendor"
                 :format="dateDisplayFormat"
                 size="mini"
@@ -35,7 +35,7 @@
             </el-form-item>
             <el-form-item label="Contract End Date">
               <el-date-picker
-                v-model="contractParameter.contractEndDate"
+                v-model="mainForm.contractEndDate"
                 :disabled="isVendor"
                 :format="dateDisplayFormat"
                 size="mini"
