@@ -64,7 +64,7 @@
                     <el-form-item
                         label="Contract No."
                         prop="contractId"
-                        v-if="!evaluation.id"
+                        v-if="!evaluation.contractNo"
                     >
                         <template>
                             <el-select v-model="evaluation.contractId"  @change="onContractIdChanged"  placeholder="Select">
@@ -81,7 +81,7 @@
                     <el-form-item
                         label="Contract No."
                         prop="contractId"
-                        v-if="evaluation.id"
+                        v-if="evaluation.contractNo"
                     >
                         <el-input
                             v-model="evaluation.contractNo"

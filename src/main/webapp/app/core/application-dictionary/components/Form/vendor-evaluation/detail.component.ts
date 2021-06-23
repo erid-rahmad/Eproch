@@ -96,6 +96,7 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
       const contract = await this.retrieveContract(id);
       if (contract) {
         this.evaluation.evaluationTypeId = contract.vendorEvaluationId;
+        this.evaluation.contractNo=contract.documentNo;
         this.$set(this.evaluation, 'evaluationTypeName', contract.vendorEvaluationName);
         this.$set(this.evaluation, 'contractEvaluationPeriod', contract.evaluationPeriod);
 
@@ -124,7 +125,8 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
   async retrieveContract(id: number) {
     return this.commonService(baseApiContract)
       .find(id)
-      .then(res => this.evaluation.contractNo=res.data.contractNo);
+      .then(res => res);
+
   }
 
   retrieveLines(evaluationId: string) {
