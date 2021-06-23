@@ -32,7 +32,7 @@ public class GenericDocHandler extends AbstractDocActionHandler {
 
     @Override
     public boolean acceptTableName(String tableName) {
-        return true;
+        return !"m_bidding".equals(tableName);
     }
 
     @Override
