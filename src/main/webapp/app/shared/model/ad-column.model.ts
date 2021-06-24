@@ -12,7 +12,8 @@ export const enum ADColumnType {
   LOCAL_DATE = 'LOCAL_DATE',
   ZONED_DATE_TIME = 'ZONED_DATE_TIME',
   DURATION = 'DURATION',
-  INSTANT = 'INSTANT'
+  INSTANT = 'INSTANT',
+  BLOB = 'BLOB'
 }
 
 export interface IADColumn {

@@ -11,7 +11,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +34,27 @@ public class WorkflowResource {
         this.workflowService = workflowService;
     }
 
+//  CRUD APIs
+    @GetMapping("/workflows")
+    public ResponseEntity<Object> getAllWorkflows() {
+        log.debug("REST request to get workflows");
+        return ResponseEntity.ok(workflowService.getAllWorkflows());
+    }
+
+    @GetMapping("/workflows/count")
+    public ResponseEntity<Long> countAllWorkflows() {
+        log.debug("REST request to get workflow count");
+        return ResponseEntity.ok(workflowService.countAllWorkflows());
+    }
+
+    @DeleteMapping("/workflows/{id}")
+    public ResponseEntity<Object> removeWorkflow(@PathVariable String id) {
+        log.debug("REST request to remove workflow id {}", id);
+        workflowService.deleteWorkflow(id);
+        return ResponseEntity.noContent().build();
+    }
+
+//  Workflow APIs
     @PutMapping("/workflows/start")
     public ResponseEntity<Object> start(@RequestBody String json) {
         log.debug("REST request to start workflow " + json);
