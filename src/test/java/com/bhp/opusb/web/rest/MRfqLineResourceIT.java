@@ -24,6 +24,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
@@ -68,6 +69,10 @@ public class MRfqLineResourceIT {
     private static final Integer DEFAULT_RELEASE_QTY = 1;
     private static final Integer UPDATED_RELEASE_QTY = 2;
     private static final Integer SMALLER_RELEASE_QTY = 1 - 1;
+
+    private static final BigDecimal DEFAULT_ORDER_AMOUNT = new BigDecimal(1);
+    private static final BigDecimal UPDATED_ORDER_AMOUNT = new BigDecimal(2);
+    private static final BigDecimal SMALLER_ORDER_AMOUNT = new BigDecimal(1 - 1);
 
     private static final LocalDate DEFAULT_DOCUMENT_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DOCUMENT_DATE = LocalDate.now(ZoneId.systemDefault());
@@ -116,6 +121,7 @@ public class MRfqLineResourceIT {
             .approved(DEFAULT_APPROVED)
             .processed(DEFAULT_PROCESSED)
             .releaseQty(DEFAULT_RELEASE_QTY)
+            .orderAmount(DEFAULT_ORDER_AMOUNT)
             .documentDate(DEFAULT_DOCUMENT_DATE)
             .dateRequired(DEFAULT_DATE_REQUIRED)
             .remark(DEFAULT_REMARK);
@@ -187,6 +193,7 @@ public class MRfqLineResourceIT {
             .approved(UPDATED_APPROVED)
             .processed(UPDATED_PROCESSED)
             .releaseQty(UPDATED_RELEASE_QTY)
+            .orderAmount(UPDATED_ORDER_AMOUNT)
             .documentDate(UPDATED_DOCUMENT_DATE)
             .dateRequired(UPDATED_DATE_REQUIRED)
             .remark(UPDATED_REMARK);
@@ -272,6 +279,7 @@ public class MRfqLineResourceIT {
         assertThat(testMRfqLine.isApproved()).isEqualTo(DEFAULT_APPROVED);
         assertThat(testMRfqLine.isProcessed()).isEqualTo(DEFAULT_PROCESSED);
         assertThat(testMRfqLine.getReleaseQty()).isEqualTo(DEFAULT_RELEASE_QTY);
+        assertThat(testMRfqLine.getOrderAmount()).isEqualTo(DEFAULT_ORDER_AMOUNT);
         assertThat(testMRfqLine.getDocumentDate()).isEqualTo(DEFAULT_DOCUMENT_DATE);
         assertThat(testMRfqLine.getDateRequired()).isEqualTo(DEFAULT_DATE_REQUIRED);
         assertThat(testMRfqLine.getRemark()).isEqualTo(DEFAULT_REMARK);
@@ -355,6 +363,7 @@ public class MRfqLineResourceIT {
             .andExpect(jsonPath("$.[*].approved").value(hasItem(DEFAULT_APPROVED.booleanValue())))
             .andExpect(jsonPath("$.[*].processed").value(hasItem(DEFAULT_PROCESSED.booleanValue())))
             .andExpect(jsonPath("$.[*].releaseQty").value(hasItem(DEFAULT_RELEASE_QTY)))
+            .andExpect(jsonPath("$.[*].orderAmount").value(hasItem(DEFAULT_ORDER_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].dateRequired").value(hasItem(DEFAULT_DATE_REQUIRED.toString())))
             .andExpect(jsonPath("$.[*].remark").value(hasItem(DEFAULT_REMARK)));
@@ -379,6 +388,7 @@ public class MRfqLineResourceIT {
             .andExpect(jsonPath("$.approved").value(DEFAULT_APPROVED.booleanValue()))
             .andExpect(jsonPath("$.processed").value(DEFAULT_PROCESSED.booleanValue()))
             .andExpect(jsonPath("$.releaseQty").value(DEFAULT_RELEASE_QTY))
+            .andExpect(jsonPath("$.orderAmount").value(DEFAULT_ORDER_AMOUNT.intValue()))
             .andExpect(jsonPath("$.documentDate").value(DEFAULT_DOCUMENT_DATE.toString()))
             .andExpect(jsonPath("$.dateRequired").value(DEFAULT_DATE_REQUIRED.toString()))
             .andExpect(jsonPath("$.remark").value(DEFAULT_REMARK));
@@ -980,6 +990,111 @@ public class MRfqLineResourceIT {
 
     @Test
     @Transactional
+    public void getAllMRfqLinesByOrderAmountIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where orderAmount equals to DEFAULT_ORDER_AMOUNT
+        defaultMRfqLineShouldBeFound("orderAmount.equals=" + DEFAULT_ORDER_AMOUNT);
+
+        // Get all the mRfqLineList where orderAmount equals to UPDATED_ORDER_AMOUNT
+        defaultMRfqLineShouldNotBeFound("orderAmount.equals=" + UPDATED_ORDER_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByOrderAmountIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where orderAmount not equals to DEFAULT_ORDER_AMOUNT
+        defaultMRfqLineShouldNotBeFound("orderAmount.notEquals=" + DEFAULT_ORDER_AMOUNT);
+
+        // Get all the mRfqLineList where orderAmount not equals to UPDATED_ORDER_AMOUNT
+        defaultMRfqLineShouldBeFound("orderAmount.notEquals=" + UPDATED_ORDER_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByOrderAmountIsInShouldWork() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where orderAmount in DEFAULT_ORDER_AMOUNT or UPDATED_ORDER_AMOUNT
+        defaultMRfqLineShouldBeFound("orderAmount.in=" + DEFAULT_ORDER_AMOUNT + "," + UPDATED_ORDER_AMOUNT);
+
+        // Get all the mRfqLineList where orderAmount equals to UPDATED_ORDER_AMOUNT
+        defaultMRfqLineShouldNotBeFound("orderAmount.in=" + UPDATED_ORDER_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByOrderAmountIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where orderAmount is not null
+        defaultMRfqLineShouldBeFound("orderAmount.specified=true");
+
+        // Get all the mRfqLineList where orderAmount is null
+        defaultMRfqLineShouldNotBeFound("orderAmount.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByOrderAmountIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where orderAmount is greater than or equal to DEFAULT_ORDER_AMOUNT
+        defaultMRfqLineShouldBeFound("orderAmount.greaterThanOrEqual=" + DEFAULT_ORDER_AMOUNT);
+
+        // Get all the mRfqLineList where orderAmount is greater than or equal to UPDATED_ORDER_AMOUNT
+        defaultMRfqLineShouldNotBeFound("orderAmount.greaterThanOrEqual=" + UPDATED_ORDER_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByOrderAmountIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where orderAmount is less than or equal to DEFAULT_ORDER_AMOUNT
+        defaultMRfqLineShouldBeFound("orderAmount.lessThanOrEqual=" + DEFAULT_ORDER_AMOUNT);
+
+        // Get all the mRfqLineList where orderAmount is less than or equal to SMALLER_ORDER_AMOUNT
+        defaultMRfqLineShouldNotBeFound("orderAmount.lessThanOrEqual=" + SMALLER_ORDER_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByOrderAmountIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where orderAmount is less than DEFAULT_ORDER_AMOUNT
+        defaultMRfqLineShouldNotBeFound("orderAmount.lessThan=" + DEFAULT_ORDER_AMOUNT);
+
+        // Get all the mRfqLineList where orderAmount is less than UPDATED_ORDER_AMOUNT
+        defaultMRfqLineShouldBeFound("orderAmount.lessThan=" + UPDATED_ORDER_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByOrderAmountIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where orderAmount is greater than DEFAULT_ORDER_AMOUNT
+        defaultMRfqLineShouldNotBeFound("orderAmount.greaterThan=" + DEFAULT_ORDER_AMOUNT);
+
+        // Get all the mRfqLineList where orderAmount is greater than SMALLER_ORDER_AMOUNT
+        defaultMRfqLineShouldBeFound("orderAmount.greaterThan=" + SMALLER_ORDER_AMOUNT);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMRfqLinesByDocumentDateIsEqualToSomething() throws Exception {
         // Initialize the database
         mRfqLineRepository.saveAndFlush(mRfqLine);
@@ -1361,6 +1476,7 @@ public class MRfqLineResourceIT {
             .andExpect(jsonPath("$.[*].approved").value(hasItem(DEFAULT_APPROVED.booleanValue())))
             .andExpect(jsonPath("$.[*].processed").value(hasItem(DEFAULT_PROCESSED.booleanValue())))
             .andExpect(jsonPath("$.[*].releaseQty").value(hasItem(DEFAULT_RELEASE_QTY)))
+            .andExpect(jsonPath("$.[*].orderAmount").value(hasItem(DEFAULT_ORDER_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].dateRequired").value(hasItem(DEFAULT_DATE_REQUIRED.toString())))
             .andExpect(jsonPath("$.[*].remark").value(hasItem(DEFAULT_REMARK)));
@@ -1419,6 +1535,7 @@ public class MRfqLineResourceIT {
             .approved(UPDATED_APPROVED)
             .processed(UPDATED_PROCESSED)
             .releaseQty(UPDATED_RELEASE_QTY)
+            .orderAmount(UPDATED_ORDER_AMOUNT)
             .documentDate(UPDATED_DOCUMENT_DATE)
             .dateRequired(UPDATED_DATE_REQUIRED)
             .remark(UPDATED_REMARK);
@@ -1441,6 +1558,7 @@ public class MRfqLineResourceIT {
         assertThat(testMRfqLine.isApproved()).isEqualTo(UPDATED_APPROVED);
         assertThat(testMRfqLine.isProcessed()).isEqualTo(UPDATED_PROCESSED);
         assertThat(testMRfqLine.getReleaseQty()).isEqualTo(UPDATED_RELEASE_QTY);
+        assertThat(testMRfqLine.getOrderAmount()).isEqualTo(UPDATED_ORDER_AMOUNT);
         assertThat(testMRfqLine.getDocumentDate()).isEqualTo(UPDATED_DOCUMENT_DATE);
         assertThat(testMRfqLine.getDateRequired()).isEqualTo(UPDATED_DATE_REQUIRED);
         assertThat(testMRfqLine.getRemark()).isEqualTo(UPDATED_REMARK);

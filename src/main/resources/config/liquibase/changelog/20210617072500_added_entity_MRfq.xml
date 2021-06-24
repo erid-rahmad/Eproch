@@ -94,6 +94,13 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet id="20210617072500-addcol-2" author="ricky-k">
+        <addColumn tableName="m_rfq">
+            <column name="grand_total" type="decimal(21,2)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
     <!--
@@ -117,6 +124,7 @@
             <column name="document_status" type="string"/>
             <column name="approved" type="boolean"/>
             <column name="processed" type="boolean"/>
+            <column name="grand_total" type="numeric"/>
             <column name="date_promised" type="date"/>
             <column name="description" type="string"/>
             <column name="uid" type="${uuidType}"/>

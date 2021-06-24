@@ -10,6 +10,7 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
@@ -44,6 +45,8 @@ public class MRfqLineCriteria implements Serializable, Criteria {
 
     private IntegerFilter releaseQty;
 
+    private BigDecimalFilter orderAmount;
+
     private LocalDateFilter documentDate;
 
     private LocalDateFilter dateRequired;
@@ -73,6 +76,7 @@ public class MRfqLineCriteria implements Serializable, Criteria {
         this.approved = other.approved == null ? null : other.approved.copy();
         this.processed = other.processed == null ? null : other.processed.copy();
         this.releaseQty = other.releaseQty == null ? null : other.releaseQty.copy();
+        this.orderAmount = other.orderAmount == null ? null : other.orderAmount.copy();
         this.documentDate = other.documentDate == null ? null : other.documentDate.copy();
         this.dateRequired = other.dateRequired == null ? null : other.dateRequired.copy();
         this.remark = other.remark == null ? null : other.remark.copy();
@@ -160,6 +164,14 @@ public class MRfqLineCriteria implements Serializable, Criteria {
         this.releaseQty = releaseQty;
     }
 
+    public BigDecimalFilter getOrderAmount() {
+        return orderAmount;
+    }
+
+    public void setOrderAmount(BigDecimalFilter orderAmount) {
+        this.orderAmount = orderAmount;
+    }
+
     public LocalDateFilter getDocumentDate() {
         return documentDate;
     }
@@ -244,6 +256,7 @@ public class MRfqLineCriteria implements Serializable, Criteria {
             Objects.equals(approved, that.approved) &&
             Objects.equals(processed, that.processed) &&
             Objects.equals(releaseQty, that.releaseQty) &&
+            Objects.equals(orderAmount, that.orderAmount) &&
             Objects.equals(documentDate, that.documentDate) &&
             Objects.equals(dateRequired, that.dateRequired) &&
             Objects.equals(remark, that.remark) &&
@@ -266,6 +279,7 @@ public class MRfqLineCriteria implements Serializable, Criteria {
         approved,
         processed,
         releaseQty,
+        orderAmount,
         documentDate,
         dateRequired,
         remark,
@@ -289,6 +303,7 @@ public class MRfqLineCriteria implements Serializable, Criteria {
                 (approved != null ? "approved=" + approved + ", " : "") +
                 (processed != null ? "processed=" + processed + ", " : "") +
                 (releaseQty != null ? "releaseQty=" + releaseQty + ", " : "") +
+                (orderAmount != null ? "orderAmount=" + orderAmount + ", " : "") +
                 (documentDate != null ? "documentDate=" + documentDate + ", " : "") +
                 (dateRequired != null ? "dateRequired=" + dateRequired + ", " : "") +
                 (remark != null ? "remark=" + remark + ", " : "") +

@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -103,6 +104,9 @@ public class MRfq extends AbstractAuditingEntity implements Serializable {
     @JsonIgnoreProperties("mRfqs")
     private CDocumentType documentType;
 
+    @Column(name = "grand_total", precision = 21, scale = 2)
+    private BigDecimal grandTotal;
+
     @PrePersist
     public void assignUid(){
         this.uid = UUID.randomUUID();
@@ -117,6 +121,19 @@ public class MRfq extends AbstractAuditingEntity implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public BigDecimal getGrandTotal() {
+        return grandTotal;
+    }
+
+    public MRfq grandTotal(BigDecimal grandTotal) {
+        this.grandTotal = grandTotal;
+        return this;
+    }
+
+    public void setGrandTotal(BigDecimal grandTotal) {
+        this.grandTotal = grandTotal;
     }
 
     public LocalDate getDateTrx() {
@@ -380,6 +397,7 @@ public class MRfq extends AbstractAuditingEntity implements Serializable {
             ", documentAction='" + getDocumentAction() + "'" +
             ", documentStatus='" + getDocumentStatus() + "'" +
             ", approved='" + isApproved() + "'" +
+            ", grandTotal=" + getGrandTotal() +
             ", processed='" + isProcessed() + "'" +
             ", datePromised='" + getDatePromised() + "'" +
             ", description='" + getDescription() + "'" +

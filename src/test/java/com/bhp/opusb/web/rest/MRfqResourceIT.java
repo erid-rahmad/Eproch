@@ -25,6 +25,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
@@ -66,6 +67,10 @@ public class MRfqResourceIT {
 
     private static final Boolean DEFAULT_PROCESSED = false;
     private static final Boolean UPDATED_PROCESSED = true;
+
+    private static final BigDecimal DEFAULT_GRAND_TOTAL = new BigDecimal(1);
+    private static final BigDecimal UPDATED_GRAND_TOTAL = new BigDecimal(2);
+    private static final BigDecimal SMALLER_GRAND_TOTAL = new BigDecimal(1 - 1);
 
     private static final LocalDate DEFAULT_DATE_PROMISED = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DATE_PROMISED = LocalDate.now(ZoneId.systemDefault());
@@ -115,6 +120,7 @@ public class MRfqResourceIT {
             .documentStatus(DEFAULT_DOCUMENT_STATUS)
             .approved(DEFAULT_APPROVED)
             .processed(DEFAULT_PROCESSED)
+            .grandTotal(DEFAULT_GRAND_TOTAL)
             .datePromised(DEFAULT_DATE_PROMISED)
             .description(DEFAULT_DESCRIPTION)
             .uid(DEFAULT_UID)
@@ -198,6 +204,7 @@ public class MRfqResourceIT {
             .documentStatus(UPDATED_DOCUMENT_STATUS)
             .approved(UPDATED_APPROVED)
             .processed(UPDATED_PROCESSED)
+            .grandTotal(UPDATED_GRAND_TOTAL)
             .datePromised(UPDATED_DATE_PROMISED)
             .description(UPDATED_DESCRIPTION)
             .uid(UPDATED_UID)
@@ -295,6 +302,7 @@ public class MRfqResourceIT {
         assertThat(testMRfq.getDocumentStatus()).isEqualTo(DEFAULT_DOCUMENT_STATUS);
         assertThat(testMRfq.isApproved()).isEqualTo(DEFAULT_APPROVED);
         assertThat(testMRfq.isProcessed()).isEqualTo(DEFAULT_PROCESSED);
+        assertThat(testMRfq.getGrandTotal()).isEqualTo(DEFAULT_GRAND_TOTAL);
         assertThat(testMRfq.getDatePromised()).isEqualTo(DEFAULT_DATE_PROMISED);
         assertThat(testMRfq.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testMRfq.getUid()).isEqualTo(DEFAULT_UID);
@@ -378,6 +386,7 @@ public class MRfqResourceIT {
             .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
             .andExpect(jsonPath("$.[*].approved").value(hasItem(DEFAULT_APPROVED.booleanValue())))
             .andExpect(jsonPath("$.[*].processed").value(hasItem(DEFAULT_PROCESSED.booleanValue())))
+            .andExpect(jsonPath("$.[*].grandTotal").value(hasItem(DEFAULT_GRAND_TOTAL.intValue())))
             .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
@@ -402,6 +411,7 @@ public class MRfqResourceIT {
             .andExpect(jsonPath("$.documentStatus").value(DEFAULT_DOCUMENT_STATUS))
             .andExpect(jsonPath("$.approved").value(DEFAULT_APPROVED.booleanValue()))
             .andExpect(jsonPath("$.processed").value(DEFAULT_PROCESSED.booleanValue()))
+            .andExpect(jsonPath("$.grandTotal").value(DEFAULT_GRAND_TOTAL.intValue()))
             .andExpect(jsonPath("$.datePromised").value(DEFAULT_DATE_PROMISED.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
@@ -978,6 +988,111 @@ public class MRfqResourceIT {
 
     @Test
     @Transactional
+    public void getAllMRfqsByGrandTotalIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqRepository.saveAndFlush(mRfq);
+
+        // Get all the mRfqList where grandTotal equals to DEFAULT_GRAND_TOTAL
+        defaultMRfqShouldBeFound("grandTotal.equals=" + DEFAULT_GRAND_TOTAL);
+
+        // Get all the mRfqList where grandTotal equals to UPDATED_GRAND_TOTAL
+        defaultMRfqShouldNotBeFound("grandTotal.equals=" + UPDATED_GRAND_TOTAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqsByGrandTotalIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqRepository.saveAndFlush(mRfq);
+
+        // Get all the mRfqList where grandTotal not equals to DEFAULT_GRAND_TOTAL
+        defaultMRfqShouldNotBeFound("grandTotal.notEquals=" + DEFAULT_GRAND_TOTAL);
+
+        // Get all the mRfqList where grandTotal not equals to UPDATED_GRAND_TOTAL
+        defaultMRfqShouldBeFound("grandTotal.notEquals=" + UPDATED_GRAND_TOTAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqsByGrandTotalIsInShouldWork() throws Exception {
+        // Initialize the database
+        mRfqRepository.saveAndFlush(mRfq);
+
+        // Get all the mRfqList where grandTotal in DEFAULT_GRAND_TOTAL or UPDATED_GRAND_TOTAL
+        defaultMRfqShouldBeFound("grandTotal.in=" + DEFAULT_GRAND_TOTAL + "," + UPDATED_GRAND_TOTAL);
+
+        // Get all the mRfqList where grandTotal equals to UPDATED_GRAND_TOTAL
+        defaultMRfqShouldNotBeFound("grandTotal.in=" + UPDATED_GRAND_TOTAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqsByGrandTotalIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mRfqRepository.saveAndFlush(mRfq);
+
+        // Get all the mRfqList where grandTotal is not null
+        defaultMRfqShouldBeFound("grandTotal.specified=true");
+
+        // Get all the mRfqList where grandTotal is null
+        defaultMRfqShouldNotBeFound("grandTotal.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqsByGrandTotalIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqRepository.saveAndFlush(mRfq);
+
+        // Get all the mRfqList where grandTotal is greater than or equal to DEFAULT_GRAND_TOTAL
+        defaultMRfqShouldBeFound("grandTotal.greaterThanOrEqual=" + DEFAULT_GRAND_TOTAL);
+
+        // Get all the mRfqList where grandTotal is greater than or equal to UPDATED_GRAND_TOTAL
+        defaultMRfqShouldNotBeFound("grandTotal.greaterThanOrEqual=" + UPDATED_GRAND_TOTAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqsByGrandTotalIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqRepository.saveAndFlush(mRfq);
+
+        // Get all the mRfqList where grandTotal is less than or equal to DEFAULT_GRAND_TOTAL
+        defaultMRfqShouldBeFound("grandTotal.lessThanOrEqual=" + DEFAULT_GRAND_TOTAL);
+
+        // Get all the mRfqList where grandTotal is less than or equal to SMALLER_GRAND_TOTAL
+        defaultMRfqShouldNotBeFound("grandTotal.lessThanOrEqual=" + SMALLER_GRAND_TOTAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqsByGrandTotalIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mRfqRepository.saveAndFlush(mRfq);
+
+        // Get all the mRfqList where grandTotal is less than DEFAULT_GRAND_TOTAL
+        defaultMRfqShouldNotBeFound("grandTotal.lessThan=" + DEFAULT_GRAND_TOTAL);
+
+        // Get all the mRfqList where grandTotal is less than UPDATED_GRAND_TOTAL
+        defaultMRfqShouldBeFound("grandTotal.lessThan=" + UPDATED_GRAND_TOTAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqsByGrandTotalIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mRfqRepository.saveAndFlush(mRfq);
+
+        // Get all the mRfqList where grandTotal is greater than DEFAULT_GRAND_TOTAL
+        defaultMRfqShouldNotBeFound("grandTotal.greaterThan=" + DEFAULT_GRAND_TOTAL);
+
+        // Get all the mRfqList where grandTotal is greater than SMALLER_GRAND_TOTAL
+        defaultMRfqShouldBeFound("grandTotal.greaterThan=" + SMALLER_GRAND_TOTAL);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMRfqsByDatePromisedIsEqualToSomething() throws Exception {
         // Initialize the database
         mRfqRepository.saveAndFlush(mRfq);
@@ -1389,6 +1504,7 @@ public class MRfqResourceIT {
             .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
             .andExpect(jsonPath("$.[*].approved").value(hasItem(DEFAULT_APPROVED.booleanValue())))
             .andExpect(jsonPath("$.[*].processed").value(hasItem(DEFAULT_PROCESSED.booleanValue())))
+            .andExpect(jsonPath("$.[*].grandTotal").value(hasItem(DEFAULT_GRAND_TOTAL.intValue())))
             .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
@@ -1447,6 +1563,7 @@ public class MRfqResourceIT {
             .documentStatus(UPDATED_DOCUMENT_STATUS)
             .approved(UPDATED_APPROVED)
             .processed(UPDATED_PROCESSED)
+            .grandTotal(UPDATED_GRAND_TOTAL)
             .datePromised(UPDATED_DATE_PROMISED)
             .description(UPDATED_DESCRIPTION)
             .uid(UPDATED_UID)
@@ -1469,6 +1586,7 @@ public class MRfqResourceIT {
         assertThat(testMRfq.getDocumentStatus()).isEqualTo(UPDATED_DOCUMENT_STATUS);
         assertThat(testMRfq.isApproved()).isEqualTo(UPDATED_APPROVED);
         assertThat(testMRfq.isProcessed()).isEqualTo(UPDATED_PROCESSED);
+        assertThat(testMRfq.getGrandTotal()).isEqualTo(UPDATED_GRAND_TOTAL);
         assertThat(testMRfq.getDatePromised()).isEqualTo(UPDATED_DATE_PROMISED);
         assertThat(testMRfq.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testMRfq.getUid()).isEqualTo(UPDATED_UID);

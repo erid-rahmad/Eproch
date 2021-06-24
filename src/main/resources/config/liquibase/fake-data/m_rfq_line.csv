@@ -1,11 +1,11 @@
-id;line_no;uid;active;document_action;document_status;approved;processed;release_qty;document_date;date_required;remark;quotation_id;ad_organization_id;product_id;uom_id;business_category_id
-1;70937;6fc874c1-9c86-4132-9dc6-bcd9175a1b90;false;convergenc;SQL;true;true;87028;2021-06-17;2021-06-17;challenge Kentucky Principal;1;1;1;1;1
-2;55420;74298f03-8aa0-45ad-8baa-1e99c07ffa2e;true;static;Self-enabl;false;false;14052;2021-06-16;2021-06-16;even-keeled Borders;2;2;2;2;2
-3;39742;22cac5ac-1c91-47ce-80a9-7859117d711b;true;Cotton Div;sexy;false;true;90863;2021-06-16;2021-06-16;application;3;3;3;3;3
-4;96112;fd72b19a-7313-447b-831c-a8f64d679ecc;true;invoice;Summit sys;false;false;71124;2021-06-16;2021-06-16;transmit Response invoice;4;4;4;4;4
-5;33065;797a7385-ad91-46a3-b0b0-5fd41920fcb2;false;Squares;Borders;true;true;78807;2021-06-16;2021-06-16;transmitter;5;5;5;5;5
-6;20973;174fddc3-bc62-465b-a195-946fdcb096ff;true;Sleek Froz;Unions Mon;false;true;12751;2021-06-16;2021-06-16;applications Rand Namibia Dollar;6;6;6;6;6
-7;96240;fae1e1bd-582e-458e-971a-1412d487754a;false;copy explo;Bedfordshi;false;false;63024;2021-06-16;2021-06-16;ADP;7;7;7;7;7
-8;44700;9b2da440-3608-4959-973f-f47e75a5f110;false;Point;Practical ;true;true;55955;2021-06-16;2021-06-16;Applications Tactics;8;8;8;8;8
-9;64568;84373d4d-7044-4233-878d-d287fc8fb76e;false;Business-f;portals in;true;true;10921;2021-06-16;2021-06-17;SQL;9;9;9;9;9
-10;48182;7eb6e63c-f558-4c43-a5eb-0f62b14948cd;false;Pines solu;Books Stra;false;true;73045;2021-06-16;2021-06-16;Dynamic;10;10;10;10;10
+id;line_no;uid;active;document_action;document_status;approved;processed;release_qty;order_amount;document_date;date_required;remark;quotation_id;ad_organization_id;product_id;uom_id;business_category_id
+1;70937;6fc874c1-9c86-4132-9dc6-bcd9175a1b90;false;convergenc;SQL;true;true;87028;26288;2021-06-17;2021-06-16;Towels;1;1;1;1;1
+2;33523;ef874298-f038-4aa0-9ad0-baa1e99c07ff;true;Dynamic;static;false;false;80854;12876;2021-06-16;2021-06-17;Kenyan Shilling even-keeled;2;2;2;2;2
+3;50225;8622cac5-ac1c-4917-8e40-a97859117d71;false;capacitor ;reinvent s;true;true;66039;6111;2021-06-17;2021-06-17;Facilitator Estates Convertible Marks;3;3;3;3;3
+4;56350;a731347b-831c-4a8f-a4d6-79ecce4adf7d;false;redefine u;Accounts p;true;false;46781;58852;2021-06-16;2021-06-16;Open-source cross-platform;4;4;4;4;4
+5;83473;916a3b0b-05fd-4419-a0fc-b2147c1888fc;false;Fish digit;Gardens;true;true;86559;78284;2021-06-17;2021-06-16;channels action-items Jordanian Dinar;5;5;5;5;5
+6;8376;95946fdc-b096-4ffc-817f-6d7e958a5c27;true;applicatio;Technician;true;true;35443;50726;2021-06-17;2021-06-16;Tanzania indexing;6;6;6;6;6
+7;8474;a1412d48-7754-4a69-856d-b74f85c16a5f;false;content Cr;disinterme;true;true;37085;58963;2021-06-16;2021-06-16;Representative;7;7;7;7;7
+8;25449;7e75a5f1-1043-47af-9617-29e78f8ebae7;true;payment co;fuchsia sy;false;false;28836;26885;2021-06-17;2021-06-17;online;8;8;8;8;8
+9;51686;dd287fc8-fb76-4e79-817c-766b6891c41e;false;Valley Nor;enhance pa;true;true;29377;19659;2021-06-16;2021-06-16;protocol Coordinator Metal;9;9;9;9;9
+10;10336;4948cd7c-794d-435a-80ff-3abc90ea467e;true;background;Towels;true;false;38739;59530;2021-06-16;2021-06-16;Ireland bluetooth Profit-focused;10;10;10;10;10

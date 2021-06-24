@@ -1,5 +1,6 @@
 package com.bhp.opusb.service.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
@@ -32,6 +33,8 @@ public class MRfqLineDTO extends AbstractAuditingDTO {
 
     private Boolean processed;
 
+    private BigDecimal orderAmount;
+    
     private Integer releaseQty;
 
     private LocalDate documentDate;
@@ -58,6 +61,14 @@ public class MRfqLineDTO extends AbstractAuditingDTO {
     
     public Long getId() {
         return id;
+    }
+
+    public BigDecimal getOrderAmount() {
+        return orderAmount;
+    }
+
+    public void setOrderAmount(BigDecimal orderAmount) {
+        this.orderAmount = orderAmount;
     }
 
     public void setId(Long id) {

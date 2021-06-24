@@ -112,6 +112,9 @@ public class MRfqQueryService extends QueryService<MRfq> {
             if (criteria.getProcessed() != null) {
                 specification = specification.and(buildSpecification(criteria.getProcessed(), MRfq_.processed));
             }
+            if (criteria.getGrandTotal() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getGrandTotal(), MRfq_.grandTotal));
+            }
             if (criteria.getDatePromised() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDatePromised(), MRfq_.datePromised));
             }

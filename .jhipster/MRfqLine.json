@@ -44,6 +44,10 @@
             "fieldType": "Integer"
         },
         {
+            "fieldName": "orderAmount",
+            "fieldType": "BigDecimal"
+        },
+        {
             "fieldName": "documentDate",
             "fieldType": "LocalDate"
         },

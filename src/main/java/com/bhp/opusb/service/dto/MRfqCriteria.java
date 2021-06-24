@@ -10,6 +10,7 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
@@ -41,6 +42,8 @@ public class MRfqCriteria implements Serializable, Criteria {
     private BooleanFilter approved;
 
     private BooleanFilter processed;
+
+    private BigDecimalFilter grandTotal;
 
     private LocalDateFilter datePromised;
 
@@ -76,6 +79,7 @@ public class MRfqCriteria implements Serializable, Criteria {
         this.documentStatus = other.documentStatus == null ? null : other.documentStatus.copy();
         this.approved = other.approved == null ? null : other.approved.copy();
         this.processed = other.processed == null ? null : other.processed.copy();
+        this.grandTotal = other.grandTotal == null ? null : other.grandTotal.copy();
         this.datePromised = other.datePromised == null ? null : other.datePromised.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
@@ -156,6 +160,14 @@ public class MRfqCriteria implements Serializable, Criteria {
 
     public void setProcessed(BooleanFilter processed) {
         this.processed = processed;
+    }
+
+    public BigDecimalFilter getGrandTotal() {
+        return grandTotal;
+    }
+
+    public void setGrandTotal(BigDecimalFilter grandTotal) {
+        this.grandTotal = grandTotal;
     }
 
     public LocalDateFilter getDatePromised() {
@@ -265,6 +277,7 @@ public class MRfqCriteria implements Serializable, Criteria {
             Objects.equals(documentStatus, that.documentStatus) &&
             Objects.equals(approved, that.approved) &&
             Objects.equals(processed, that.processed) &&
+            Objects.equals(grandTotal, that.grandTotal) &&
             Objects.equals(datePromised, that.datePromised) &&
             Objects.equals(description, that.description) &&
             Objects.equals(uid, that.uid) &&
@@ -289,6 +302,7 @@ public class MRfqCriteria implements Serializable, Criteria {
         documentStatus,
         approved,
         processed,
+        grandTotal,
         datePromised,
         description,
         uid,
@@ -314,6 +328,7 @@ public class MRfqCriteria implements Serializable, Criteria {
                 (documentStatus != null ? "documentStatus=" + documentStatus + ", " : "") +
                 (approved != null ? "approved=" + approved + ", " : "") +
                 (processed != null ? "processed=" + processed + ", " : "") +
+                (grandTotal != null ? "grandTotal=" + grandTotal + ", " : "") +
                 (datePromised != null ? "datePromised=" + datePromised + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +

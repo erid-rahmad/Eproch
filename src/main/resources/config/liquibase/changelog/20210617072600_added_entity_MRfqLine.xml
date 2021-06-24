@@ -83,6 +83,14 @@
             <column name="last_modified_date" type="timestamp"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="20210617072600-addcol-2" author="ricky-k">
+        <addColumn tableName="m_rfq_line">
+            <column name="order_amount" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
     <!--

@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -51,6 +52,10 @@ public class MRfqLine extends AbstractAuditingEntity implements Serializable {
 
     @Column(name = "processed")
     private Boolean processed;
+
+    @NotNull
+    @Column(name = "order_amount", precision = 21, scale = 2, nullable = false)
+    private BigDecimal orderAmount;
 
     @Column(name = "release_qty")
     private Integer releaseQty;
@@ -209,6 +214,19 @@ public class MRfqLine extends AbstractAuditingEntity implements Serializable {
         this.releaseQty = releaseQty;
     }
 
+    public BigDecimal getOrderAmount() {
+        return orderAmount;
+    }
+
+    public MRfqLine orderAmount(BigDecimal orderAmount) {
+        this.orderAmount = orderAmount;
+        return this;
+    }
+
+    public void setOrderAmount(BigDecimal orderAmount) {
+        this.orderAmount = orderAmount;
+    }
+
     public LocalDate getDocumentDate() {
         return documentDate;
     }
@@ -341,6 +359,7 @@ public class MRfqLine extends AbstractAuditingEntity implements Serializable {
             ", documentStatus='" + getDocumentStatus() + "'" +
             ", approved='" + isApproved() + "'" +
             ", processed='" + isProcessed() + "'" +
+            ", orderAmount=" + getOrderAmount() +
             ", releaseQty=" + getReleaseQty() +
             ", documentDate='" + getDocumentDate() + "'" +
             ", dateRequired='" + getDateRequired() + "'" +
