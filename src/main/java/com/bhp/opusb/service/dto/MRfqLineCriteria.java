@@ -45,6 +45,8 @@ public class MRfqLineCriteria implements Serializable, Criteria {
 
     private IntegerFilter releaseQty;
 
+    private BigDecimalFilter unitPrice;
+
     private BigDecimalFilter orderAmount;
 
     private LocalDateFilter documentDate;
@@ -76,6 +78,7 @@ public class MRfqLineCriteria implements Serializable, Criteria {
         this.approved = other.approved == null ? null : other.approved.copy();
         this.processed = other.processed == null ? null : other.processed.copy();
         this.releaseQty = other.releaseQty == null ? null : other.releaseQty.copy();
+        this.unitPrice = other.unitPrice == null ? null : other.unitPrice.copy();
         this.orderAmount = other.orderAmount == null ? null : other.orderAmount.copy();
         this.documentDate = other.documentDate == null ? null : other.documentDate.copy();
         this.dateRequired = other.dateRequired == null ? null : other.dateRequired.copy();
@@ -162,6 +165,14 @@ public class MRfqLineCriteria implements Serializable, Criteria {
 
     public void setReleaseQty(IntegerFilter releaseQty) {
         this.releaseQty = releaseQty;
+    }
+
+    public BigDecimalFilter getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(BigDecimalFilter unitPrice) {
+        this.unitPrice = unitPrice;
     }
 
     public BigDecimalFilter getOrderAmount() {
@@ -256,6 +267,7 @@ public class MRfqLineCriteria implements Serializable, Criteria {
             Objects.equals(approved, that.approved) &&
             Objects.equals(processed, that.processed) &&
             Objects.equals(releaseQty, that.releaseQty) &&
+            Objects.equals(unitPrice, that.unitPrice) &&
             Objects.equals(orderAmount, that.orderAmount) &&
             Objects.equals(documentDate, that.documentDate) &&
             Objects.equals(dateRequired, that.dateRequired) &&
@@ -279,6 +291,7 @@ public class MRfqLineCriteria implements Serializable, Criteria {
         approved,
         processed,
         releaseQty,
+        unitPrice,
         orderAmount,
         documentDate,
         dateRequired,
@@ -303,6 +316,7 @@ public class MRfqLineCriteria implements Serializable, Criteria {
                 (approved != null ? "approved=" + approved + ", " : "") +
                 (processed != null ? "processed=" + processed + ", " : "") +
                 (releaseQty != null ? "releaseQty=" + releaseQty + ", " : "") +
+                (unitPrice != null ? "unitPrice=" + unitPrice + ", " : "") +
                 (orderAmount != null ? "orderAmount=" + orderAmount + ", " : "") +
                 (documentDate != null ? "documentDate=" + documentDate + ", " : "") +
                 (dateRequired != null ? "dateRequired=" + dateRequired + ", " : "") +

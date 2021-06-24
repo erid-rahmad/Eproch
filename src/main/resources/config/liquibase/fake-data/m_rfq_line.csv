@@ -1,11 +1,11 @@
-id;line_no;uid;active;document_action;document_status;approved;processed;release_qty;order_amount;document_date;date_required;remark;quotation_id;ad_organization_id;product_id;uom_id;business_category_id
-1;70937;6fc874c1-9c86-4132-9dc6-bcd9175a1b90;false;convergenc;SQL;true;true;87028;26288;2021-06-17;2021-06-16;Towels;1;1;1;1;1
-2;33523;ef874298-f038-4aa0-9ad0-baa1e99c07ff;true;Dynamic;static;false;false;80854;12876;2021-06-16;2021-06-17;Kenyan Shilling even-keeled;2;2;2;2;2
-3;50225;8622cac5-ac1c-4917-8e40-a97859117d71;false;capacitor ;reinvent s;true;true;66039;6111;2021-06-17;2021-06-17;Facilitator Estates Convertible Marks;3;3;3;3;3
-4;56350;a731347b-831c-4a8f-a4d6-79ecce4adf7d;false;redefine u;Accounts p;true;false;46781;58852;2021-06-16;2021-06-16;Open-source cross-platform;4;4;4;4;4
-5;83473;916a3b0b-05fd-4419-a0fc-b2147c1888fc;false;Fish digit;Gardens;true;true;86559;78284;2021-06-17;2021-06-16;channels action-items Jordanian Dinar;5;5;5;5;5
-6;8376;95946fdc-b096-4ffc-817f-6d7e958a5c27;true;applicatio;Technician;true;true;35443;50726;2021-06-17;2021-06-16;Tanzania indexing;6;6;6;6;6
-7;8474;a1412d48-7754-4a69-856d-b74f85c16a5f;false;content Cr;disinterme;true;true;37085;58963;2021-06-16;2021-06-16;Representative;7;7;7;7;7
-8;25449;7e75a5f1-1043-47af-9617-29e78f8ebae7;true;payment co;fuchsia sy;false;false;28836;26885;2021-06-17;2021-06-17;online;8;8;8;8;8
-9;51686;dd287fc8-fb76-4e79-817c-766b6891c41e;false;Valley Nor;enhance pa;true;true;29377;19659;2021-06-16;2021-06-16;protocol Coordinator Metal;9;9;9;9;9
-10;10336;4948cd7c-794d-435a-80ff-3abc90ea467e;true;background;Towels;true;false;38739;59530;2021-06-16;2021-06-16;Ireland bluetooth Profit-focused;10;10;10;10;10
+id;line_no;uid;active;document_action;document_status;approved;processed;release_qty;unit_price;order_amount;document_date;date_required;remark;quotation_id;ad_organization_id;product_id;uom_id;business_category_id
+1;70937;6fc874c1-9c86-4132-9dc6-bcd9175a1b90;false;convergenc;SQL;true;true;87028;26288;17362;2021-06-16;2021-06-16;Kentucky;1;1;1;1;1
+2;89905;f874298f-038a-4a05-ad0b-aa1e99c07ffa;false;deposit st;Cotton Gra;false;false;50225;52719;39742;2021-06-17;2021-06-17;invoice moratorium primary;2;2;2;2;2
+3;77060;917ce40a-9785-4911-bd71-1bbf17f7f535;true;Interactio;deposit ap;true;true;84333;47449;18533;2021-06-16;2021-06-17;withdrawal Configurable;3;3;3;3;3
+4;20705;47b831ca-8f64-4d67-9ecc-e4adf7d5e6f6;false;Auto Loan ;invoice;false;false;58852;49605;68701;2021-06-16;2021-06-17;cross-platform generating;4;4;4;4;4
+5;8208;6a3b0b05-fd41-4920-bcb2-147c1888fc76;false;digital Gr;PNG Reacti;false;false;35035;68754;39592;2021-06-17;2021-06-16;Indiana experiences;5;5;5;5;5
+6;86508;cb096ffc-017f-46d7-a958-a5c27b77dbff;true;SDD Direct;copying Av;true;true;82473;49724;8474;2021-06-16;2021-06-17;Rustic;6;6;6;6;6
+7;83195;487754a6-9c56-4db7-8f85-c16a5f3e679b;false;Money Mark;Borders;false;true;58893;49627;22563;2021-06-16;2021-06-16;Turnpike;7;7;7;7;7
+8;48778;5a5f1104-37af-4161-b29e-78f8ebae7f5a;true;turquoise;SQL;true;false;5990;28836;26885;2021-06-17;2021-06-17;online;8;8;8;8;8
+9;51686;dd287fc8-fb76-4e79-817c-766b6891c41e;false;Valley Nor;enhance pa;true;true;29377;19659;87554;2021-06-16;2021-06-16;Tasty Cotton Keyboard bandwidth leverage;9;9;9;9;9
+10;25728;8cd7c794-d35a-400f-b3ab-c90ea467e824;false;Towels;Shirt Cred;true;false;79766;61816;25161;2021-06-16;2021-06-16;driver;10;10;10;10;10

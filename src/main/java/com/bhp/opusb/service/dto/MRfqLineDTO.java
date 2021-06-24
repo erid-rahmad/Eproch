@@ -33,7 +33,7 @@ public class MRfqLineDTO extends AbstractAuditingDTO {
 
     private Boolean processed;
 
-    private BigDecimal orderAmount;
+    private BigDecimal orderAmount, unitPrice;
     
     private Integer releaseQty;
 
@@ -61,6 +61,14 @@ public class MRfqLineDTO extends AbstractAuditingDTO {
     
     public Long getId() {
         return id;
+    }
+
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
     }
 
     public BigDecimal getOrderAmount() {

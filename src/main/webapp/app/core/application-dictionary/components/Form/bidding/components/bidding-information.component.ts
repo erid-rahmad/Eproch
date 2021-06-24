@@ -161,7 +161,7 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
     if (this.editMode) {
       this.recordsLoaded = false;
       this.bidding = {...this.data};
-      this.$set(this.bidding, 'referenceNo', this.bidding.requisitionName);
+      this.$set(this.bidding, 'referenceNo', this.bidding.requisitionName || this.bidding.quotationName);
       
       Promise.allSettled([
         this.retrieveEventTypes(this.bidding.biddingTypeId),
@@ -466,8 +466,8 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
             quantity: line.releaseQty,
             uomId: line.uomId,
             uomName: line.uomName,
-            ceilingPrice: 0,
-            totalCeilingPrice: 0,
+            ceilingPrice: line.unitPrice,
+            totalCeilingPrice: line.orderAmount,
             deliveryDate: null,
             remark: line.remark
           };

@@ -53,9 +53,11 @@ public class MRfqLine extends AbstractAuditingEntity implements Serializable {
     @Column(name = "processed")
     private Boolean processed;
 
-    @NotNull
-    @Column(name = "order_amount", precision = 21, scale = 2, nullable = false)
+    @Column(name = "order_amount", precision = 21, scale = 2, nullable = true)
     private BigDecimal orderAmount;
+
+    @Column(name = "unit_price", precision = 21, scale = 2, nullable = true)
+    private BigDecimal unitPrice;
 
     @Column(name = "release_qty")
     private Integer releaseQty;
@@ -225,6 +227,19 @@ public class MRfqLine extends AbstractAuditingEntity implements Serializable {
 
     public void setOrderAmount(BigDecimal orderAmount) {
         this.orderAmount = orderAmount;
+    }
+
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
+    }
+
+    public MRfqLine unitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
+        return this;
+    }
+
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
     }
 
     public LocalDate getDocumentDate() {

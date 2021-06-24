@@ -929,6 +929,7 @@ entity MRfqLine {
 	approved Boolean
 	processed Boolean
 	releaseQty Integer
+	unitPrice BigDecimal
 	orderAmount BigDecimal
 	documentDate LocalDate
 	dateRequired LocalDate

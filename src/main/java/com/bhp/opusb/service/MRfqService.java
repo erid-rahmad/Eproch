@@ -158,6 +158,7 @@ public class MRfqService {
 
             rfq.setGrandTotal(grandTotal);
             rfqLines.add(mRfqLine);
+            mRequisitionLineDTO.setQuantityOrdered(new BigDecimal(0));
         }
         
         List<MRfqDTO> result = mRfqMapper.toDto(mRfqRepository.saveAll(quotations.values()));
@@ -228,7 +229,7 @@ public class MRfqService {
             .remark(mRequisitionLine.getRemark())
             .orderAmount(orderAmount)
             //.requisition(mRequisitionLine.getRequisition())
-            //.unitPrice(mRequisitionLine.getUnitPrice())
+            .unitPrice(mRequisitionLine.getUnitPrice())
             .uom(mRequisitionLine.getUom());
             //.vendor(mRequisitionLine.getVendor())
             //.warehouse(mPurchaseOrder.getWarehouse());

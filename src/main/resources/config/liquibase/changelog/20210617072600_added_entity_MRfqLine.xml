@@ -84,6 +84,14 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20210617072600-addcol-1" author="ricky-k">
+        <addColumn tableName="m_rfq_line">
+            <column name="unit_price" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
     <changeSet id="20210617072600-addcol-2" author="ricky-k">
         <addColumn tableName="m_rfq_line">
             <column name="order_amount" type="decimal(21,2)">
@@ -115,6 +123,8 @@
             <column name="approved" type="boolean"/>
             <column name="processed" type="boolean"/>
             <column name="release_qty" type="numeric"/>
+            <column name="unit_price" type="numeric"/>
+            <column name="order_amount" type="numeric"/>
             <column name="document_date" type="date"/>
             <column name="date_required" type="date"/>
             <column name="remark" type="string"/>
