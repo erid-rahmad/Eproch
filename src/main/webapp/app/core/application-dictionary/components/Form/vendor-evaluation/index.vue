@@ -29,6 +29,17 @@
       >
         Save
       </el-button>
+
+        <el-button
+            v-if="!index && isDraft"
+            icon="el-icon-check"
+            :loading="loading"
+            size="mini"
+            type="primary"
+            @click="onSubmitClicked"
+        >
+            submit
+        </el-button>
     </div>
 
     <div class="card">

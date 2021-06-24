@@ -8,6 +8,7 @@
             label-position="left"
             label-width="150px"
             size="mini"
+            :disabled="readOnly"
         >
             <el-row :gutter="24">
                 <el-col :span="8">
@@ -147,7 +148,7 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-        </el-form>
+
         <el-table
             ref="lines"
             :data="lines"
@@ -198,6 +199,7 @@
                 </template>
             </el-table-column>
         </el-table>
+        </el-form>
     </div>
 </template>
 <script lang="ts" src="./detail.component.ts"></script>

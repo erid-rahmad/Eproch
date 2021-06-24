@@ -28,6 +28,8 @@ export default class ContractEvaluation extends Mixins(AccessLevelMixin, Contrac
   loading: boolean = false;
 
   evaluations: any[] = [];
+  selectRow:any={};
+  vendorEvaluationDetail:boolean=false;
 
   get formSettings() {
     return settings.form;
@@ -57,15 +59,19 @@ export default class ContractEvaluation extends Mixins(AccessLevelMixin, Contrac
   }
 
   viewDetails(row: any) {
-    const location: RawLocation = {
-      path: '/supplier-management/vendor-evaluations',
-    };
+    // const location: RawLocation = {
+    //   path: '/supplier-management/vendor-evaluations',
+    // };
+    //
+    // location.query = {
+    //   t: '' + Date.now(),
+    //   id: row.id
+    // };
+    //
+    // this.$router.push(location);
+    this.selectRow=row;
+    this.vendorEvaluationDetail=true;
 
-    location.query = {
-      t: '' + Date.now(),
-      id: row.id
-    };
 
-    this.$router.push(location);
   }
 }

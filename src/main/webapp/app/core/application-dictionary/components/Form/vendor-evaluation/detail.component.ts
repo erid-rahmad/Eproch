@@ -60,7 +60,7 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
   lines: any[] = [];
   validationSchema = {};
   ContractFilter:any={};
-  readOnly:boolean=false;
+  private readOnly:boolean=false;
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -116,9 +116,13 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
 
   created() {
     this.evaluation = {...this.data};
+
+
     if (this.evaluation.id){
-      this.readOnly=true;
       this.retrieveLinesSaved(this.evaluation.id);
+      if ( this.evaluation.documentStatus==='APV'){
+        this.readOnly=true;
+      }
     }
   }
 
@@ -196,16 +200,26 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
             };
           await data1.push(line__);
         });
-
-
         this.lines=data1;
-        console.log("info linesss",this.lines)
-
         }
       );
   }
 
-
+  submit(){
+    this.$emit('update:loading', true)
+    this.readOnly=true;
+    this.evaluation.documentStatus='APV';
+    this.commonService(baseApiVendorEvaluation)
+      .update(this.evaluation)
+      .then(res => {
+        this.$message.success('Vendor Evaluation has been approved');
+      })
+      .catch(err => {
+        console.error('Failed to approved', err);
+        this.$message.error('Failed to save Vendor Evaluation');
+      })
+      .finally(() => this.$emit('update:loading', false));
+  }
 
   save() {
     (<ElForm>this.$refs.mainForm).validate(passed => {

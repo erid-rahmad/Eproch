@@ -63,6 +63,10 @@ export default class VendorEvaluation extends mixins(AccessLevelMixin) {
     (<any>this.$refs.evaluationForm).save();
   }
 
+  onSubmitClicked() {
+    (<any>this.$refs.evaluationForm).submit();
+  }
+
   created() {
     this.retrieveEvaluations();
   }
