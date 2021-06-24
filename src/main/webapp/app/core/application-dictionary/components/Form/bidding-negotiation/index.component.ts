@@ -148,9 +148,9 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
       }
     }).then(res => {
       console.log(res.data);
-      this.biddingNegotiations = (<any[]>res.data).filter((elem)=>{
+      this.biddingNegotiations = (<any[]>res.data)/*.filter((elem)=>{
         return elem.biddingStatus!=='F' && elem.evaluationStatus!=='APP';
-      });
+      });*/
     });
   }
 

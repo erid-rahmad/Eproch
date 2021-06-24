@@ -60,6 +60,17 @@
           :minlength="getMinLength(field)"
           :maxlength="getMaxLength(field)"
         />
+        <el-upload
+          v-else-if="isFileField(field.type)"
+          action="/api/c-attachments/upload"
+          :limit="1"
+          :before-upload="handleBeforeUpload"
+          :on-success="attachFileId"
+          clearable
+        ><el-button icon="el-icon-search" slot="trigger" type="primary">
+          Select File
+        </el-button>
+        </el-upload>
         <el-input-number
           v-else-if="isNumericField(field.type)"
           v-model="parameter[field.value]"

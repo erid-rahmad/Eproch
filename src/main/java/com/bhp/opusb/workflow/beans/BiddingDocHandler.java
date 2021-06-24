@@ -48,6 +48,8 @@ public class BiddingDocHandler extends AbstractDocActionHandler<MBiddingDTO, MBi
     @Override
     public MBiddingDTO approveIt(MBiddingDTO dto){
         dto.setDateApprove(LocalDate.now());
+        dto.setDocumentStatus("NST");
+        dto.setBiddingStatus("N");
         save(toEntity(dto));
         return dto;
     }
@@ -55,6 +57,8 @@ public class BiddingDocHandler extends AbstractDocActionHandler<MBiddingDTO, MBi
     @Override
     public MBiddingDTO rejectIt(MBiddingDTO dto){
         dto.setDateReject(LocalDate.now());
+        dto.setDocumentStatus("CNL");
+        dto.setBiddingStatus("X");
         save(toEntity(dto));
         return dto;
     }

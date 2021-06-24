@@ -80,6 +80,7 @@ export default class TriggerParameterForm extends Mixins(ContextVariableAccessor
 
   runTask() {
     this.processing = true;
+    console.log(this.parameter);
     this.dynamicWindowService(`/api/ad-triggers/process/${this.data.value}`)
       .create(this.parameter)
       .then(res => {
@@ -228,5 +229,28 @@ export default class TriggerParameterForm extends Mixins(ContextVariableAccessor
 
   public isBooleanField(type: any) {
     return type === ADColumnType.BOOLEAN;
+  }
+
+  public isFileField(type: any) {
+    return type === ADColumnType.BLOB
+  }
+
+  attachFileId(response, file, fileList){
+    // hardcoded field
+    this.parameter['fileId'] = response.attachment.id;
+  }
+
+  handleBeforeUpload(file: any) {
+    // File size limitation
+    const isLt1M = file.size / 1024 / 1024 < 1;
+    if (!isLt1M) {
+      this.$notify({
+          title: 'Warning',
+          message: "files with a size less than 1Mb",
+          type: 'warning',
+          duration: 3000
+      });
+      return isLt1M;
+    }
   }
 }

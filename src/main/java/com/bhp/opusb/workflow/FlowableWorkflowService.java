@@ -12,8 +12,10 @@ import com.bhp.opusb.domain.Authority;
 import com.bhp.opusb.service.UserService;
 import com.bhp.opusb.workflow.exceptions.InvalidDocActionException;
 
+import org.flowable.engine.RepositoryService;
 import org.flowable.engine.RuntimeService;
 import org.flowable.engine.TaskService;
+import org.flowable.engine.repository.ProcessDefinition;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.task.api.Task;
 import org.slf4j.Logger;
@@ -33,16 +35,52 @@ public class FlowableWorkflowService {
     private final RuntimeService runtimeService;
     private final TaskService taskService;
     private final DocProcessorService docProcessorService;
+    private final RepositoryService repositoryService;
 
     private final String WORKFLOW_DOC_PROCESS = "docBiddingProcess";
 
     FlowableWorkflowService(ApplicationContext appContext, UserService userService, RuntimeService runtimeService,
-            TaskService taskService, DocProcessorService docProcessorService) {
+            TaskService taskService, DocProcessorService docProcessorService, RepositoryService repositoryService) {
         this.appContext = appContext;
         this.userService = userService;
         this.runtimeService = runtimeService;
         this.taskService = taskService;
         this.docProcessorService = docProcessorService;
+        this.repositoryService = repositoryService;
+    }
+
+    public List<ProcessDefinitionDTO> getAllWorkflows(){
+        List<ProcessDefinitionDTO> workflowDto = new ArrayList<>();
+        for(ProcessDefinition pd: repositoryService.createProcessDefinitionQuery().orderByDeploymentId().asc().list()){
+            ProcessDefinitionDTO dto = new ProcessDefinitionDTO();
+            dto.setCategory(pd.getCategory());
+            dto.setDeploymentId(pd.getDeploymentId());
+            dto.setDerivedFrom(pd.getDerivedFrom());
+            dto.setDerivedFromRoot(pd.getDerivedFromRoot());
+            dto.setDerivedVersion(pd.getDerivedVersion());
+            dto.setDescription(pd.getDescription());
+            dto.setDgrmResourceName(pd.getDiagramResourceName());
+            dto.setHasGraphicalNotation(pd.hasGraphicalNotation());
+            dto.setId(pd.getId());
+            dto.setKey(pd.getKey());
+            dto.setName(pd.getName());
+            dto.setResourceName(pd.getResourceName());
+            dto.setHasStartFormKey(pd.hasStartFormKey());
+            dto.setSuspensionState(pd.isSuspended()?0:1);
+            dto.setTenantId(pd.getTenantId());
+            dto.setVersion(pd.getVersion());
+            workflowDto.add(dto);
+        }
+        return workflowDto;
+    }
+
+    public Long countAllWorkflows(){
+        return repositoryService.createProcessDefinitionQuery().count();
+    }
+
+    public void deleteWorkflow(String definitionId){
+        ProcessDefinition pd = repositoryService.getProcessDefinition(definitionId);
+        repositoryService.deleteDeployment(pd.getDeploymentId(),true);
     }
 
     public Object startWorkflow(String tableName, Long id) {
