@@ -15,6 +15,7 @@
       ref="mainGrid"
       v-if="index && displayTable"
       border
+      max-height="600"
       :data="biddingNegotiations"
       highlight-current-row
       size="mini"
