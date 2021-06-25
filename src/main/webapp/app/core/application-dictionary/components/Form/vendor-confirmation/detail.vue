@@ -153,7 +153,24 @@
                     Action
                   </el-button>
                   <el-button
-                    v-if="row.status === 'A'"
+                    v-if="row.status==='A'"
+                    class="button"
+                    icon="el-icon-document-checked"
+                    size="mini"
+                    style="width: 100%"
+                    type="primary"
+                    @click="generatePo(row)"
+                  >
+                    Generate PO
+                  </el-button>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="Generate Contract?"
+                width="140"
+              >
+                <template slot-scope="{ row }">
+                  <el-button
                     class="button"
                     icon="el-icon-document-checked"
                     size="mini"
@@ -368,15 +385,6 @@
         >
           Close
         </el-button>
-        <el-button
-          class="button"
-          icon="el-icon-document-checked"
-          size="mini"
-          type="primary"
-          @click="generatePo(row)"
-        >
-          Generate PO
-        </el-button>
       </div>
     </el-dialog>
     
@@ -466,18 +474,25 @@
                 v-model="contract.confirmationNo"
               ></el-input>
             </el-form-item>
-            <el-form-item 
-              label="Contract Start Date">
-              <el-input
-                v-model="contract.contractStartDate"
-                disabled
-              ></el-input>
+            <el-form-item label="Contract Start Date">
+              <el-date-picker
+                v-model="contract.startDate"
+                v-loading="contractLoading"
+                :format="dateDisplayFormat"
+                size="mini"
+                type="date"
+                :value-format="dateValueFormat"
+              ></el-date-picker>
             </el-form-item>
             <el-form-item label="Contract End Date">
-              <el-input
-                v-model="contract.contractEndDate"
-                disabled
-              ></el-input>
+              <el-date-picker
+                v-model="contract.expirationDate"
+                v-loading="contractLoading"
+                :format="dateDisplayFormat"
+                size="mini"
+                type="date"
+                :value-format="dateValueFormat"
+              ></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col
@@ -486,10 +501,11 @@
             :lg="18"
             :xl="12"
           >
-            <el-form-item label="Contract Attachment">
+            <el-form-item label="Confirmation Attachment" prop="attachment">
               <el-upload
                 ref="contractFile"
-                v-model="contract.attachment"
+                v-model="file"
+                v-loading="contractLoading"
                 :action="action"
                 class="upload-demo"
                 :limit="limit"
