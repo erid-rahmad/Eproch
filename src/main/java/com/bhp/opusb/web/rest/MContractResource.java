@@ -69,6 +69,22 @@ public class MContractResource {
     }
 
     /**
+     * {@code POST  /m-contracts} : Create a new mContract.
+     *
+     * @param mContractDTO the mContractDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new mContractDTO, or with status {@code 400 (Bad Request)} if the mContract has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/m-contracts-All")
+    public ResponseEntity<MContractDTO> createMContractWihtLine(@Valid @RequestBody MContractDTO mContractDTO) throws URISyntaxException {
+        log.debug("REST request to save MContract : {}", mContractDTO);
+        MContractDTO result = mContractService.save(mContractDTO);
+        return ResponseEntity.created(new URI("/api/m-contracts/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+    /**
      * {@code POST  /m-contracts/generate-from-vc} : Create a new mContract from MVendorConfirmation.
      *
      * @param mContractDTO the mContractDTO to create.

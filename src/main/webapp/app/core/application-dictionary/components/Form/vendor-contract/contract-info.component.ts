@@ -8,6 +8,8 @@ import { Component, Inject, Mixins, Vue } from "vue-property-decorator";
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 
 const baseApiContract = 'api/m-contracts';
+const baseApiContractAll = 'api/m-contracts-All';
+const baseApiContractLine = 'api/m-contract-lines';
 
 const ContractInfoProps = Vue.extend({
   props: {
@@ -34,6 +36,8 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
   loading: boolean = false;
 
   contract: any = {};
+  contractLine:any=[];
+
 
   validationSchema: any = {
     name: {
@@ -82,6 +86,59 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
 
   created() {
     this.contract = {...this.data};
+    this.retriveContracLine(this.contract.id);
+  }
+
+  async average(){
+    let total = 0;
+    await this.contractLine.forEach(line=>{
+      line.totalCeilingPrice=line.ceilingPrice*line.quantity;
+      total+=line.totalCeilingPrice;
+    })
+    await this.$set(this.contract, 'totalPrice', total);
+
+
+  }
+
+  deleteRow(row) {
+
+  }
+
+  addLine(){
+    var line = {
+      lineNo : null,
+      quantity : null,
+      ceilingPrice : null,
+      totalCeilingPrice : null,
+      deliveryDate : null,
+      remark : null,
+      active : true,
+      contractId : this.contract.id,
+      adOrganizationId : this.contract.adOrganizationId,
+      costCenterId : null,
+      productId : null,
+      uomId : null
+    }
+    this.contractLine.unshift(line);
+  }
+
+  retriveContracLine(ContracId){
+    this.loading = true;
+    this.commonService(baseApiContractLine)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `contractId.equals=${ContracId}`
+        ]),
+      })
+      .then(res => {
+        this.contractLine=res.data
+      })
+      .catch(err => {
+        console.error('Failed getting the record. %O', err);
+        this.$message.error(err.detail || err.message);
+      })
+      .finally(() => this.loading = false);
   }
 
   mounted() {
@@ -94,10 +151,10 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
     (<ElForm>this.$refs.contractInfoForm).validate(passed => {
       if (passed) {
         const newRecord = !this.contract.id;
-
+        this.$set(this.contract, 'lineDTOList', this.contractLine);
         this.loading = true;
-        this.commonService(baseApiContract)
-          [newRecord ? 'create' : 'update'](this.contract)
+        this.commonService(baseApiContractAll)
+          .create(this.contract)
           .then(res => {
             this.contract = {...this.contract, ...res};
             this.$message.success(`Contract has been ${newRecord ? 'created' : 'updated'} successfully`);

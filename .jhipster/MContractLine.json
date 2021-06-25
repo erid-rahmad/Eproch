@@ -1,0 +1,100 @@
+{
+    "name": "MContractLine",
+    "fields": [
+        {
+            "fieldName": "lineNo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "quantity",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "ceilingPrice",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "totalCeilingPrice",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "deliveryDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "remark",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mContract",
+            "otherEntityRelationshipName": "mContractLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "contract",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mContractLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCostCenter",
+            "otherEntityRelationshipName": "mContractLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "costCenter",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cProduct",
+            "otherEntityRelationshipName": "mContractLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "product",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cUnitOfMeasure",
+            "otherEntityRelationshipName": "mContractLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "uom",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210625061000",
+    "entityTableName": "m_contract_line",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

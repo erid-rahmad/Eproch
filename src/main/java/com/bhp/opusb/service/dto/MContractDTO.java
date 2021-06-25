@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiModelProperty;
  * A DTO for the {@link com.bhp.opusb.domain.MContract} entity.
  */
 public class MContractDTO extends AbstractAuditingDTO {
-    
+
     private Long id;
 
     @NotNull
@@ -83,6 +83,16 @@ public class MContractDTO extends AbstractAuditingDTO {
     private Long costCenterId;
     private String costCenterName;
 
+    private List<MContractLineDTO> lineDTOList;
+
+    public List<MContractLineDTO> getLineDTOList() {
+        return lineDTOList;
+    }
+
+    public void setLineDTOList(List<MContractLineDTO> lineDTOList) {
+        this.lineDTOList = lineDTOList;
+    }
+
     /**
      * documentType can be New Contract or Contract Renewal.
      */
@@ -99,7 +109,7 @@ public class MContractDTO extends AbstractAuditingDTO {
 
     private Long vendorEvaluationId;
     private String vendorEvaluationName;
-    
+
     private List<MContractDocumentDTO> contractDocuments = new ArrayList<>();
 
     public Long getId() {
@@ -422,34 +432,44 @@ public class MContractDTO extends AbstractAuditingDTO {
     @Override
     public String toString() {
         return "MContractDTO{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", useBanCode='" + isUseBanCode() + "'" +
-            ", banCode='" + getBanCode() + "'" +
-            ", purpose='" + getPurpose() + "'" +
-            ", forPriceConfirmation='" + isForPriceConfirmation() + "'" +
-            ", startDate='" + getStartDate() + "'" +
-            ", expirationDate='" + getExpirationDate() + "'" +
-            ", evaluationPeriod='" + getEvaluationPeriod() + "'" +
-            ", dateTrx='" + getDateTrx() + "'" +
-            ", documentNo='" + getDocumentNo() + "'" +
-            ", documentAction='" + getDocumentAction() + "'" +
-            ", documentStatus='" + getDocumentStatus() + "'" +
-            ", approved='" + isApproved() + "'" +
-            ", processed='" + isProcessed() + "'" +
-            ", dateApprove='" + getDateApprove() + "'" +
-            ", dateReject='" + getDateReject() + "'" +
-            ", rejectedReason='" + getRejectedReason() + "'" +
-            ", uid='" + getUid() + "'" +
-            ", active='" + isActive() + "'" +
-            ", adOrganizationId=" + getAdOrganizationId() +
-            ", biddingId=" + getBiddingId() +
-            ", costCenterId=" + getCostCenterId() +
-            ", documentTypeId=" + getDocumentTypeId() +
-            ", picId=" + getPicUserId() +
-            ", vendorId=" + getVendorId() +
-            ", vendorEvaluationId=" + getVendorEvaluationId() +
-            "}";
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", description='" + description + '\'' +
+            ", useBanCode=" + useBanCode +
+            ", banCode='" + banCode + '\'' +
+            ", purpose='" + purpose + '\'' +
+            ", forPriceConfirmation=" + forPriceConfirmation +
+            ", startDate=" + startDate +
+            ", expirationDate=" + expirationDate +
+            ", evaluationPeriod='" + evaluationPeriod + '\'' +
+            ", dateTrx=" + dateTrx +
+            ", documentNo='" + documentNo + '\'' +
+            ", documentAction='" + documentAction + '\'' +
+            ", documentStatus='" + documentStatus + '\'' +
+            ", approved=" + approved +
+            ", processed=" + processed +
+            ", dateApprove=" + dateApprove +
+            ", dateReject=" + dateReject +
+            ", rejectedReason='" + rejectedReason + '\'' +
+            ", uid=" + uid +
+            ", active=" + active +
+            ", adOrganizationId=" + adOrganizationId +
+            ", adOrganizationName='" + adOrganizationName + '\'' +
+            ", biddingId=" + biddingId +
+            ", biddingName='" + biddingName + '\'' +
+            ", biddingNo='" + biddingNo + '\'' +
+            ", costCenterId=" + costCenterId +
+            ", costCenterName='" + costCenterName + '\'' +
+            ", lineDTOList=" + lineDTOList +
+            ", documentTypeId=" + documentTypeId +
+            ", documentTypeName='" + documentTypeName + '\'' +
+            ", picUserId=" + picUserId +
+            ", picUserName='" + picUserName + '\'' +
+            ", vendorId=" + vendorId +
+            ", vendorName='" + vendorName + '\'' +
+            ", vendorEvaluationId=" + vendorEvaluationId +
+            ", vendorEvaluationName='" + vendorEvaluationName + '\'' +
+            ", contractDocuments=" + contractDocuments +
+            '}';
     }
 }

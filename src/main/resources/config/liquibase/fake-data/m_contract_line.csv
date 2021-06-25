@@ -1,0 +1,11 @@
+id;line_no;quantity;ceiling_price;total_ceiling_price;delivery_date;remark;uid;active;contract_id;ad_organization_id;cost_center_id;product_id;uom_id
+1;72855;51030;65972;2405;2021-06-24;Bike Licensed;9b8d345e-a5fe-4729-9f9a-3f3867ab8cf7;false;1;1;1;1;1
+2;31924;17909;57268;66719;2021-06-24;Suriname Garden Borders;ea8098ea-1e7f-4020-b1cc-15224a4355a4;true;2;2;2;2;2
+3;93857;24637;73954;39490;2021-06-24;Internal Berkshire Music;caef8f76-42da-4649-b32f-d23e32e41a88;true;3;3;3;3;3
+4;4672;4503;45737;93416;2021-06-24;generate;34561840-078c-449a-a60c-5de200cf141c;false;4;4;4;4;4
+5;21933;8740;25005;86115;2021-06-24;Guatemala Equatorial Guinea Forward;b0aa3fb0-6d00-46fb-a881-5650afa8f7f8;true;5;5;5;5;5
+6;6336;53030;73692;32580;2021-06-24;Intelligent Metal Sausages Pants;54248678-1f0d-4253-b196-fa96017a80e4;false;6;6;6;6;6
+7;87552;72398;34414;38668;2021-06-24;Cambridgeshire connect Shoes;2375b8ea-ef26-4e54-b817-3f4cd2651b87;false;7;7;7;7;7
+8;624;3441;66294;48947;2021-06-25;Ford Money Market Account orange;fe4a9393-4ae2-4558-b658-24c6e1fe04df;false;8;8;8;8;8
+9;86207;22049;54078;963;2021-06-24;application;fa7a5b7d-d220-405c-9bba-4c6bc4798787;false;9;9;9;9;9
+10;17461;40715;25911;52553;2021-06-24;EXE HDD Tanzanian Shilling;04f9a8d4-c1c9-439e-92af-6a0324dce0e4;true;10;10;10;10;10

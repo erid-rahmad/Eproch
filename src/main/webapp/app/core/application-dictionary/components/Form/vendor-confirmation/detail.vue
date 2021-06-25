@@ -167,7 +167,7 @@
             </el-table>
       </el-form>
     </el-scrollbar>
-    
+
     <el-dialog
       width="50%"
       :visible.sync="showPoForm"
@@ -226,7 +226,6 @@
         <el-form-item label="Start Date">
           <el-date-picker
             v-model="contractParameter.startDate"
-            disabled
             :format="dateDisplayFormat"
             size="mini"
             type="date"
@@ -236,7 +235,6 @@
         <el-form-item label="Expiration Date">
           <el-date-picker
             v-model="contractParameter.expirationDate"
-            disabled
             :format="dateDisplayFormat"
             size="mini"
             type="date"
@@ -379,7 +377,7 @@
         </el-button>
       </div>
     </el-dialog>
-    
+
     <el-dialog
       width="50%"
       :visible.sync="showHistory"
@@ -412,7 +410,7 @@
           min-width="100"
         > <template slot-scope="{ row }">
           {{row.lastModifiedDate | formatDate}}
-          </template> 
+          </template>
         </el-table-column>
         <el-table-column
           label="Status"
@@ -458,7 +456,7 @@
             :lg="18"
             :xl="12"
           >
-            <el-form-item 
+            <el-form-item
               label="Confirmation No."
               prop="confirmationNo"
             >
@@ -466,7 +464,7 @@
                 v-model="contract.confirmationNo"
               ></el-input>
             </el-form-item>
-            <el-form-item 
+            <el-form-item
               label="Contract Start Date">
               <el-input
                 v-model="contract.contractStartDate"

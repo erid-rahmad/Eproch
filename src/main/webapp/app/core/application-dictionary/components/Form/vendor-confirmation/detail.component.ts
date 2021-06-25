@@ -31,7 +31,7 @@ const VendorConfirmationDetailProp = Vue.extend({
   }
 })
 export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, VendorConfirmationDetailProp) {
-  
+
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
@@ -49,13 +49,13 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
     confirmationNo: {
       required: true,
       message: 'Confirmation No. is required'
-    }, 
+    },
     contractDetail: {
       required: true,
       message: 'Contract Detail is required'
     }
   };
-  
+
   columnSpacing = 24;
   showDetail = false;
   showConfirmationForm = false;
@@ -103,7 +103,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
       .then(res => {
         this.vendorConfirmation = res.map(item => ({ key: item.value, value: item.name }));
       });
-    
+
     this.refreshLine();
   }
 
@@ -431,13 +431,16 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   async openContractParameter(row: any) {
     const lineContract = await this.retrieveLastConfirmationContract(row.id);
     const fileName = lineContract.attachmentName;
-    const strippedName = fileName.substring(fileName.indexOf('_') + 1, fileName.lastIndexOf('.'));
-    const contractName: string = `C${row.vendorConfirmationBiddingNo}-${strippedName}`;
+    console.log("this file name",fileName);
+    console.log("main",this.mainForm);
+    // const strippedName = fileName.substring(fileName.indexOf('_') + 1, fileName.lastIndexOf('.'));
+    // const contractName: string = `C${row.vendorConfirmationBiddingNo}-${strippedName}`;
 
     this.contractParameter = {
       adOrganizationId: row.adOrganizationId,
       biddingId: row.vendorConfirmationBiddingId,
-      name: contractName.length > 50 ? contractName.substring(0, 49) : contractName,
+      // name: contractName.length > 50 ? contractName.substring(0, 49) : contractName,
+      name:this.mainForm.biddingTitle,
       costCenterId: row.vendorConfirmationCostCenterId,
       picUserId: row.vendorConfirmationPicId,
       vendorId: row.vendorId,
@@ -448,7 +451,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
       contractDocuments: [
         {
           adOrganizationId: row.adOrganizationId,
-          name: contractName,
+          // name: contractName,
           attachmentId: lineContract.attachmentId,
         }
       ]

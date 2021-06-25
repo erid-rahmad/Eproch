@@ -13,6 +13,7 @@ import com.bhp.opusb.util.DocumentUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,8 @@ public class MContractService {
         this.mContractMapper = mContractMapper;
         document = properties.getDocuments().get("contract");
     }
+    @Autowired
+    MContractLineService mContractLineService;
 
     /**
      * Save a mContract.
@@ -55,7 +58,6 @@ public class MContractService {
      */
     public MContractDTO save(MContractDTO mContractDTO) {
         log.debug("Request to save MContract : {}", mContractDTO);
-        mContractDTO.setBiddingId(1958802l);
         MContract mContract = mContractMapper.toEntity(mContractDTO);
 
         final String docAction = mContract.getDocumentAction();
@@ -75,6 +77,15 @@ public class MContractService {
         }
 
         mContract = mContractRepository.save(mContract);
+
+        if (mContractDTO.getLineDTOList()!=null){
+            MContract finalMContract = mContract;
+            mContractDTO.getLineDTOList().forEach(mContractLineDTO -> {
+                mContractLineDTO.setAdOrganizationId(finalMContract.getAdOrganization().getId());
+                mContractLineDTO.setContractId(finalMContract.getId());
+                mContractLineService.save(mContractLineDTO);
+            });
+        }
         return mContractMapper.toDto(mContract);
     }
 
@@ -89,12 +100,12 @@ public class MContractService {
         MContractDTO result = save(mContractDTO);
 
         // Create the documents.
-        mContractDTO.getContractDocuments()
-            .forEach(doc -> {
-                doc.setContractId(result.getId());
-                mContractDocumentService.save(doc);
-                doc.setId(doc.getId());
-            });
+//        mContractDTO.getContractDocuments()
+//            .forEach(doc -> {
+//                doc.setContractId(result.getId());
+//                mContractDocumentService.save(doc);
+//                doc.setId(doc.getId());
+//            });
 
         return result;
     }

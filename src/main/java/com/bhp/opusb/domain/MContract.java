@@ -112,7 +112,7 @@ public class MContract extends AbstractAuditingEntity {
     private ADOrganization adOrganization;
 
     @ManyToOne(optional = false)
-    @NotNull
+
     @JsonIgnoreProperties("mContracts")
     private MBidding bidding;
 

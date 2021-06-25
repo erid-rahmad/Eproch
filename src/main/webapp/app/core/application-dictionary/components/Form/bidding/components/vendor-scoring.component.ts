@@ -59,17 +59,19 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
       message: 'Evaluation Method is required'
     }
   };
-  
+
   evaluationMethods: any[] = [];
   evaluationMethodLines: any[] = [];
   evaluationList: any[] = [];
   evaluationTypes: any[] = [];
-  
+
   selectedRow: any = {};
 
   get readOnly() {
     return this.bidding.biddingStatus === 'P';
   }
+
+
 
   onEvaluationMethodChange(value: number) {
     this.$emit('change');
@@ -117,7 +119,7 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
       })
       .then(res => {
         this.evaluationMethodLines = res.data;
-        
+
         if (this.mainForm.id) {
           this.retrieveVendorScoringLine(this.mainForm.id);
         }
@@ -221,7 +223,7 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
           });
       }
     });
-    
+
   }
 
   saveRequirements() {

@@ -922,7 +922,7 @@ entity MRfqLine {
 	lineNo Integer
 	uid UUID
 	active Boolean
-	
+
 	documentAction String required maxlength(10)
 	documentStatus String required maxlength(10)
 	approved Boolean
@@ -1369,6 +1369,16 @@ entity MContract {
 	active Boolean
 }
 
+entity MContractLine{
+    lineNo Integer
+	quantity BigDecimal required
+	ceilingPrice BigDecimal required
+	totalCeilingPrice BigDecimal
+	deliveryDate LocalDate required
+	remark String
+	uid UUID
+	active Boolean
+}
 entity MContractDocument {
 	name String required
 	uid UUID
@@ -1875,6 +1885,12 @@ relationship ManyToOne {
 	MContract{adOrganization required} to ADOrganization
 	MContract{bidding required} to MBidding
 	MContract{costCenter required} to CCostCenter
+
+	MContractLine{contract required} to MContract
+	MContractLine{adOrganization required} to ADOrganization
+    MContractLine{costCenter required} to CCostCenter
+    MContractLine{product required} to CProduct
+    MContractLine{uom required} to CUnitOfMeasure
 
 	/** documentType can be New Contract or Contract Renewal. */
 	MContract{documentType required} to CDocumentType
