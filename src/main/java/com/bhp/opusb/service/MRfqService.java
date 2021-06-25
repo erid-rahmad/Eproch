@@ -153,6 +153,9 @@ public class MRfqService {
             MRfq rfq = quotations.computeIfAbsent(mRequisitionLineDTO.getVendorId(),
                     key -> initQuotation(mRfqDTO, mRequisitionLine));
 
+            cDocumentTypeRepository.findFirstByName(document.getDocumentType())
+                    .ifPresent(rfq::setDocumentType);
+
             MRfqLine mRfqLine = initPurchaseOrderLine(rfq, mRequisitionLine);
             final BigDecimal grandTotal = rfq.getGrandTotal().add(mRfqLine.getOrderAmount());
 
