@@ -476,7 +476,7 @@
             </el-form-item>
             <el-form-item label="Contract Start Date">
               <el-date-picker
-                v-model="contract.startDate"
+                v-model="contract.contractStartDate"
                 v-loading="contractLoading"
                 :format="dateDisplayFormat"
                 size="mini"
@@ -486,7 +486,7 @@
             </el-form-item>
             <el-form-item label="Contract End Date">
               <el-date-picker
-                v-model="contract.expirationDate"
+                v-model="contract.contractEndDate"
                 v-loading="contractLoading"
                 :format="dateDisplayFormat"
                 size="mini"

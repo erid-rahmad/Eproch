@@ -281,8 +281,8 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
             }
           }).then((res)=>{
             if( ((<any[]>res.data).length) ){
-              this.contract.startDate = res.data[0].startDate;
-              this.contract.endDate = res.data[0].expirationDate;
+              this.contract.contractStartDate = res.data[0].startDate;
+              this.contract.contractEndDate = res.data[0].expirationDate;
               this.commonService(baseApiContractDocument).retrieve({
                 criteriaQuery: this.updateCriteria([
                   `contractId.equals=${res.data[0].id}`
