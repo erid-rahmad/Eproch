@@ -4,6 +4,7 @@ import ScheduleEventMixin from '@/core/application-dictionary/mixins/ScheduleEve
 import settings from '@/settings';
 import { AccountStoreModule } from '@/shared/config/store/account-store';
 import { Component, Inject, Mixins } from "vue-property-decorator";
+import PreBidMeeting from './pre-bid-meeting.vue';
 import ParticipantList from './participant-list.vue';
 
 const baseApiPreBidMeeting = 'api/m-pre-bid-meetings';
@@ -11,10 +12,12 @@ const baseApiPreBidMeetingAttachment = 'api/m-pre-bid-meeting-attachments'
 
 @Component({
   components: {
-    ParticipantList
+    ParticipantList, PreBidMeeting
   }
 })
-export default class PreBidMeeting extends Mixins(ScheduleEventMixin) {
+export default class PreBidMeetingGrid extends Mixins(ScheduleEventMixin) {
+  index = true;
+  selectedRow = {};
 
   @Inject('accountService')
   private accountService: () => AccountService;
@@ -63,5 +66,13 @@ export default class PreBidMeeting extends Mixins(ScheduleEventMixin) {
           this.loading = false;
         });
   }
+  
+  openDetail(row: any){
+    this.index=false;
+    this.selectedRow = row;
+  }
 
+  closeDetail(){
+    this.index=true;
+  }
 }

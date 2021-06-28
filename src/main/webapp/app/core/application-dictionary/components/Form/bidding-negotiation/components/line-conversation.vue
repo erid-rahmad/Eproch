@@ -55,8 +55,8 @@
         :gutter="24"
         style="margin-top: 16px"
       >
-      <el-scrollbar class="form-wrapper" v-if="chatHistory.length">
-        <div v-for="(c,index) in chatHistory" :key="index">
+      <el-scrollbar class="form-wrapper card-view app-container" v-if="chatHistory.length" style="background:#FFFFFF">
+        <div class="card" v-for="(c,index) in chatHistory" :key="index">
           <h4>{{c.vendorText?line.vendorName:"Buyer"}}
             <el-button
               class="btn-attachment"
@@ -69,7 +69,6 @@
             </el-button>
           </h4>
           <p>{{c.vendorText?c.vendorText:c.buyerText}}</p>
-          <el-divider></el-divider>
         </div>
       </el-scrollbar>
       <el-scrollbar class="form-wrapper" v-else>
