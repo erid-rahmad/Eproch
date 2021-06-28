@@ -12,7 +12,7 @@ const baseApiPreBidMeetingAttachment = 'api/m-pre-bid-meeting-attachments'
 
 const Prop = Vue.extend({
   props: {
-    id: {
+    scheduleId: {
       type: Number,
       default: () => {
         return 0;
@@ -112,7 +112,7 @@ export default class PreBidMeeting extends Mixins(ScheduleEventMixin, Prop) {
 
   created() {
     const query = this.$route.query;
-    const biddingScheduleId = this.id ? this.id : parseInt(query.biddingScheduleId as string);
+    const biddingScheduleId = this.scheduleId ? this.scheduleId : parseInt(query.biddingScheduleId as string);
     console.log(biddingScheduleId);
     this.retrievePreBidMeeting(biddingScheduleId);
   }

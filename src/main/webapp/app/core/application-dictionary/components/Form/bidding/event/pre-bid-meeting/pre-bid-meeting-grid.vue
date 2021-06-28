@@ -60,7 +60,7 @@
         </div>
         <div v-else>
             <pre-bid-meeting
-                :id="selectedRow.biddingScheduleId">
+                :scheduleId="selectedRow.biddingScheduleId">
             </pre-bid-meeting>
         </div>
     </div>
