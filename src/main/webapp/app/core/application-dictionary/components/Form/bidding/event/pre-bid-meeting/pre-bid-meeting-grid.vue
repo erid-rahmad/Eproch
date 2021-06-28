@@ -1,6 +1,17 @@
 <template>
     <div class="app-container card-view pre-bid-meeting">
-        <div class="card">
+        <div class="toolbar">
+            <el-button
+                v-if="!index"
+                icon="el-icon-close"
+                size="mini"
+                type="danger"
+                @click="closeDetail"
+            >
+                Close
+            </el-button>
+        </div>
+        <div class="card" v-if="index">
         <el-table v-loading="loading"
                   :data="preBidMeetingGrid"
                   border
@@ -39,14 +50,18 @@
             <el-table-column label="Action" align="center"  min-width="70">
                 <template slot-scope="{ row }">
                     <el-button  icon="el el-download-alt" :underline="false" size="mini" type="primary"
+                    @click="openDetail(row)"
                     >
                         Action
                     </el-button>
                 </template>
             </el-table-column>
-
-
         </el-table>
+        </div>
+        <div v-else>
+            <pre-bid-meeting
+                :id="selectedRow.biddingScheduleId">
+            </pre-bid-meeting>
         </div>
     </div>
 </template>

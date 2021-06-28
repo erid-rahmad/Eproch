@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import AccountService from '@/account/account.service';
 import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
 import ScheduleEventMixin from '@/core/application-dictionary/mixins/ScheduleEventMixin';
@@ -9,12 +10,23 @@ import ParticipantList from './participant-list.vue';
 const baseApiPreBidMeeting = 'api/m-pre-bid-meetings';
 const baseApiPreBidMeetingAttachment = 'api/m-pre-bid-meeting-attachments'
 
+const Prop = Vue.extend({
+  props: {
+    id: {
+      type: Number,
+      default: () => {
+        return 0;
+      }
+    }
+  }
+})
+
 @Component({
   components: {
     ParticipantList
   }
 })
-export default class PreBidMeeting extends Mixins(ScheduleEventMixin) {
+export default class PreBidMeeting extends Mixins(ScheduleEventMixin, Prop) {
 
   @Inject('accountService')
   private accountService: () => AccountService;
@@ -100,7 +112,8 @@ export default class PreBidMeeting extends Mixins(ScheduleEventMixin) {
 
   created() {
     const query = this.$route.query;
-    const biddingScheduleId = parseInt(query.biddingScheduleId as string);
+    const biddingScheduleId = this.id ? this.id : parseInt(query.biddingScheduleId as string);
+    console.log(biddingScheduleId);
     this.retrievePreBidMeeting(biddingScheduleId);
   }
 
