@@ -97,6 +97,7 @@ public class MContractResource {
         if (mContractDTO.getId() != null) {
             throw new BadRequestAlertException("A new mContract cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
         MContractDTO result = mContractService.generateFromVendorConfirmation(mContractDTO);
         return ResponseEntity.created(new URI("/api/m-contracts/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))

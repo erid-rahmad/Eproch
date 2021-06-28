@@ -1,5 +1,8 @@
 package com.bhp.opusb.service.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -68,6 +71,8 @@ public class MContractDTO extends AbstractAuditingDTO {
 
     private String rejectedReason;
 
+    private BigDecimal price;
+
     private UUID uid;
 
     private Boolean active = true;
@@ -82,6 +87,8 @@ public class MContractDTO extends AbstractAuditingDTO {
 
     private Long costCenterId;
     private String costCenterName;
+
+
 
     private List<MContractLineDTO> lineDTOList;
 
@@ -111,6 +118,16 @@ public class MContractDTO extends AbstractAuditingDTO {
     private String vendorEvaluationName;
 
     private List<MContractDocumentDTO> contractDocuments = new ArrayList<>();
+
+    private long negoLineId;
+
+    public long getNegoLineId() {
+        return negoLineId;
+    }
+
+    public void setNegoLineId(long negoLineId) {
+        this.negoLineId = negoLineId;
+    }
 
     public Long getId() {
         return id;
@@ -262,6 +279,14 @@ public class MContractDTO extends AbstractAuditingDTO {
 
     public void setRejectedReason(String rejectedReason) {
         this.rejectedReason = rejectedReason;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public UUID getUid() {
@@ -451,6 +476,7 @@ public class MContractDTO extends AbstractAuditingDTO {
             ", dateApprove=" + dateApprove +
             ", dateReject=" + dateReject +
             ", rejectedReason='" + rejectedReason + '\'' +
+            ", price=" + price +
             ", uid=" + uid +
             ", active=" + active +
             ", adOrganizationId=" + adOrganizationId +
@@ -470,6 +496,7 @@ public class MContractDTO extends AbstractAuditingDTO {
             ", vendorEvaluationId=" + vendorEvaluationId +
             ", vendorEvaluationName='" + vendorEvaluationName + '\'' +
             ", contractDocuments=" + contractDocuments +
+            ", negoLineId=" + negoLineId +
             '}';
     }
 }

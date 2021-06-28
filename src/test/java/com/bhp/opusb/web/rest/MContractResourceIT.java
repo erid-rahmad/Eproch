@@ -26,6 +26,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -108,6 +109,10 @@ public class MContractResourceIT {
     private static final String DEFAULT_REJECTED_REASON = "AAAAAAAAAA";
     private static final String UPDATED_REJECTED_REASON = "BBBBBBBBBB";
 
+    private static final BigDecimal DEFAULT_PRICE = new BigDecimal(1);
+    private static final BigDecimal UPDATED_PRICE = new BigDecimal(2);
+    private static final BigDecimal SMALLER_PRICE = new BigDecimal(1 - 1);
+
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
@@ -160,6 +165,7 @@ public class MContractResourceIT {
             .dateApprove(DEFAULT_DATE_APPROVE)
             .dateReject(DEFAULT_DATE_REJECT)
             .rejectedReason(DEFAULT_REJECTED_REASON)
+            .price(DEFAULT_PRICE)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -250,6 +256,7 @@ public class MContractResourceIT {
             .dateApprove(UPDATED_DATE_APPROVE)
             .dateReject(UPDATED_DATE_REJECT)
             .rejectedReason(UPDATED_REJECTED_REASON)
+            .price(UPDATED_PRICE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -354,6 +361,7 @@ public class MContractResourceIT {
         assertThat(testMContract.getDateApprove()).isEqualTo(DEFAULT_DATE_APPROVE);
         assertThat(testMContract.getDateReject()).isEqualTo(DEFAULT_DATE_REJECT);
         assertThat(testMContract.getRejectedReason()).isEqualTo(DEFAULT_REJECTED_REASON);
+        assertThat(testMContract.getPrice()).isEqualTo(DEFAULT_PRICE);
         assertThat(testMContract.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testMContract.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -503,6 +511,7 @@ public class MContractResourceIT {
             .andExpect(jsonPath("$.[*].dateApprove").value(hasItem(sameInstant(DEFAULT_DATE_APPROVE))))
             .andExpect(jsonPath("$.[*].dateReject").value(hasItem(sameInstant(DEFAULT_DATE_REJECT))))
             .andExpect(jsonPath("$.[*].rejectedReason").value(hasItem(DEFAULT_REJECTED_REASON)))
+            .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -536,6 +545,7 @@ public class MContractResourceIT {
             .andExpect(jsonPath("$.dateApprove").value(sameInstant(DEFAULT_DATE_APPROVE)))
             .andExpect(jsonPath("$.dateReject").value(sameInstant(DEFAULT_DATE_REJECT)))
             .andExpect(jsonPath("$.rejectedReason").value(DEFAULT_REJECTED_REASON))
+            .andExpect(jsonPath("$.price").value(DEFAULT_PRICE.intValue()))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -1997,6 +2007,111 @@ public class MContractResourceIT {
 
     @Test
     @Transactional
+    public void getAllMContractsByPriceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where price equals to DEFAULT_PRICE
+        defaultMContractShouldBeFound("price.equals=" + DEFAULT_PRICE);
+
+        // Get all the mContractList where price equals to UPDATED_PRICE
+        defaultMContractShouldNotBeFound("price.equals=" + UPDATED_PRICE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByPriceIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where price not equals to DEFAULT_PRICE
+        defaultMContractShouldNotBeFound("price.notEquals=" + DEFAULT_PRICE);
+
+        // Get all the mContractList where price not equals to UPDATED_PRICE
+        defaultMContractShouldBeFound("price.notEquals=" + UPDATED_PRICE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByPriceIsInShouldWork() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where price in DEFAULT_PRICE or UPDATED_PRICE
+        defaultMContractShouldBeFound("price.in=" + DEFAULT_PRICE + "," + UPDATED_PRICE);
+
+        // Get all the mContractList where price equals to UPDATED_PRICE
+        defaultMContractShouldNotBeFound("price.in=" + UPDATED_PRICE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByPriceIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where price is not null
+        defaultMContractShouldBeFound("price.specified=true");
+
+        // Get all the mContractList where price is null
+        defaultMContractShouldNotBeFound("price.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByPriceIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where price is greater than or equal to DEFAULT_PRICE
+        defaultMContractShouldBeFound("price.greaterThanOrEqual=" + DEFAULT_PRICE);
+
+        // Get all the mContractList where price is greater than or equal to UPDATED_PRICE
+        defaultMContractShouldNotBeFound("price.greaterThanOrEqual=" + UPDATED_PRICE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByPriceIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where price is less than or equal to DEFAULT_PRICE
+        defaultMContractShouldBeFound("price.lessThanOrEqual=" + DEFAULT_PRICE);
+
+        // Get all the mContractList where price is less than or equal to SMALLER_PRICE
+        defaultMContractShouldNotBeFound("price.lessThanOrEqual=" + SMALLER_PRICE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByPriceIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where price is less than DEFAULT_PRICE
+        defaultMContractShouldNotBeFound("price.lessThan=" + DEFAULT_PRICE);
+
+        // Get all the mContractList where price is less than UPDATED_PRICE
+        defaultMContractShouldBeFound("price.lessThan=" + UPDATED_PRICE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByPriceIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where price is greater than DEFAULT_PRICE
+        defaultMContractShouldNotBeFound("price.greaterThan=" + DEFAULT_PRICE);
+
+        // Get all the mContractList where price is greater than SMALLER_PRICE
+        defaultMContractShouldBeFound("price.greaterThan=" + SMALLER_PRICE);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMContractsByUidIsEqualToSomething() throws Exception {
         // Initialize the database
         mContractRepository.saveAndFlush(mContract);
@@ -2240,6 +2355,7 @@ public class MContractResourceIT {
             .andExpect(jsonPath("$.[*].dateApprove").value(hasItem(sameInstant(DEFAULT_DATE_APPROVE))))
             .andExpect(jsonPath("$.[*].dateReject").value(hasItem(sameInstant(DEFAULT_DATE_REJECT))))
             .andExpect(jsonPath("$.[*].rejectedReason").value(hasItem(DEFAULT_REJECTED_REASON)))
+            .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -2307,6 +2423,7 @@ public class MContractResourceIT {
             .dateApprove(UPDATED_DATE_APPROVE)
             .dateReject(UPDATED_DATE_REJECT)
             .rejectedReason(UPDATED_REJECTED_REASON)
+            .price(UPDATED_PRICE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         MContractDTO mContractDTO = mContractMapper.toDto(updatedMContract);
@@ -2338,6 +2455,7 @@ public class MContractResourceIT {
         assertThat(testMContract.getDateApprove()).isEqualTo(UPDATED_DATE_APPROVE);
         assertThat(testMContract.getDateReject()).isEqualTo(UPDATED_DATE_REJECT);
         assertThat(testMContract.getRejectedReason()).isEqualTo(UPDATED_REJECTED_REASON);
+        assertThat(testMContract.getPrice()).isEqualTo(UPDATED_PRICE);
         assertThat(testMContract.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testMContract.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

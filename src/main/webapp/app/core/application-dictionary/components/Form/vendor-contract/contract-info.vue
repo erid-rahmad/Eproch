@@ -125,7 +125,7 @@
                 </el-form-item>
                 <el-form-item label="Total Price">
                     <el-input
-                        v-model="contract.totalPrice"
+                        v-model="contract.price"
                         clearable
                         disabled
                         v-inputmask="{ alias: 'currency' }"
@@ -161,10 +161,10 @@
                                 ></ad-input-lookup>
                             </template>
                         </el-table-column>
-                        <el-table-column label="Sub Product" min-width="80" size="mini">
-                            <template slot-scope="{row}">
-                            </template>
-                        </el-table-column>
+<!--                        <el-table-column label="Sub Product" min-width="80" size="mini">-->
+<!--                            <template slot-scope="{row}">-->
+<!--                            </template>-->
+<!--                        </el-table-column>-->
                         <el-table-column label="Quantity" min-width="80" size="mini">
                             <template slot-scope="{row}">
                                 <template>

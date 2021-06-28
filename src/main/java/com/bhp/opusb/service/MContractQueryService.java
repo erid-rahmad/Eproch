@@ -145,6 +145,9 @@ public class MContractQueryService extends QueryService<MContract> {
             if (criteria.getRejectedReason() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getRejectedReason(), MContract_.rejectedReason));
             }
+            if (criteria.getPrice() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getPrice(), MContract_.price));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), MContract_.uid));
             }

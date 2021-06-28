@@ -2,13 +2,16 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.LocalDateFilter;
+import io.github.jhipster.service.filter.FloatFilter;
+import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.BigDecimalFilter;
+import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 import io.github.jhipster.service.filter.ZonedDateTimeFilter;
 
@@ -63,6 +66,8 @@ public class MContractCriteria implements Serializable, Criteria {
 
     private StringFilter rejectedReason;
 
+    private BigDecimalFilter price;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -104,6 +109,7 @@ public class MContractCriteria implements Serializable, Criteria {
         this.dateApprove = other.dateApprove == null ? null : other.dateApprove.copy();
         this.dateReject = other.dateReject == null ? null : other.dateReject.copy();
         this.rejectedReason = other.rejectedReason == null ? null : other.rejectedReason.copy();
+        this.price = other.price == null ? null : other.price.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -272,6 +278,14 @@ public class MContractCriteria implements Serializable, Criteria {
         this.rejectedReason = rejectedReason;
     }
 
+    public BigDecimalFilter getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimalFilter price) {
+        this.price = price;
+    }
+
     public UUIDFilter getUid() {
         return uid;
     }
@@ -374,6 +388,7 @@ public class MContractCriteria implements Serializable, Criteria {
             Objects.equals(dateApprove, that.dateApprove) &&
             Objects.equals(dateReject, that.dateReject) &&
             Objects.equals(rejectedReason, that.rejectedReason) &&
+            Objects.equals(price, that.price) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
@@ -407,6 +422,7 @@ public class MContractCriteria implements Serializable, Criteria {
         dateApprove,
         dateReject,
         rejectedReason,
+        price,
         uid,
         active,
         adOrganizationId,
@@ -441,6 +457,7 @@ public class MContractCriteria implements Serializable, Criteria {
                 (dateApprove != null ? "dateApprove=" + dateApprove + ", " : "") +
                 (dateReject != null ? "dateReject=" + dateReject + ", " : "") +
                 (rejectedReason != null ? "rejectedReason=" + rejectedReason + ", " : "") +
+                (price != null ? "price=" + price + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

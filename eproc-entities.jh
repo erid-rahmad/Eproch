@@ -1367,6 +1367,7 @@ entity MContract {
 	dateApprove ZonedDateTime
 	dateReject ZonedDateTime
 	rejectedReason String
+	Price BigDecimal
 
 	uid UUID
 	active Boolean

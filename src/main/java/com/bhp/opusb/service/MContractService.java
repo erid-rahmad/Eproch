@@ -1,13 +1,16 @@
 package com.bhp.opusb.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.bhp.opusb.config.ApplicationProperties;
 import com.bhp.opusb.config.ApplicationProperties.Document;
-import com.bhp.opusb.domain.MContract;
-import com.bhp.opusb.repository.CDocumentTypeRepository;
-import com.bhp.opusb.repository.MContractRepository;
+import com.bhp.opusb.domain.*;
+import com.bhp.opusb.repository.*;
 import com.bhp.opusb.service.dto.MContractDTO;
+import com.bhp.opusb.service.dto.MContractLineDTO;
+import com.bhp.opusb.service.mapper.MContractLineMapper;
 import com.bhp.opusb.service.mapper.MContractMapper;
 import com.bhp.opusb.util.DocumentUtil;
 
@@ -39,16 +42,30 @@ public class MContractService {
     private final Document document;
 
     public MContractService(ApplicationProperties properties, MContractDocumentService mContractDocumentService,
-            CDocumentTypeRepository cDocumentTypeRepository, MContractRepository mContractRepository,
-            MContractMapper mContractMapper) {
+                            CDocumentTypeRepository cDocumentTypeRepository, MContractRepository mContractRepository,
+                            MContractMapper mContractMapper) {
         this.mContractDocumentService = mContractDocumentService;
         this.cDocumentTypeRepository = cDocumentTypeRepository;
         this.mContractRepository = mContractRepository;
         this.mContractMapper = mContractMapper;
         document = properties.getDocuments().get("contract");
     }
+
     @Autowired
     MContractLineService mContractLineService;
+
+    @Autowired
+    MContractLineRepository mContractLineRepository;
+
+    @Autowired
+    MContractLineMapper mContractLineMapper;
+
+    @Autowired
+    MBidNegoPriceRepository mBidNegoPriceRepository;
+
+    @Autowired
+    MBidNegoPriceLineRepository mBidNegoPriceLineRepository;
+
 
     /**
      * Save a mContract.
@@ -63,6 +80,7 @@ public class MContractService {
         final String docAction = mContract.getDocumentAction();
         final String docStatus = mContract.getDocumentStatus();
 
+
         if (mContract.getDocumentNo() == null) {
             mContract.setDocumentNo(DocumentUtil.buildDocumentNumber(document.getDocumentNumberPrefix(), mContractRepository));
         }
@@ -72,13 +90,14 @@ public class MContractService {
                 .ifPresent(mContract::setDocumentType);
         }
 
-        if (! DocumentUtil.isTerminate(docStatus) && DocumentUtil.isTerminate(docAction)) {
+        if (!DocumentUtil.isTerminate(docStatus) && DocumentUtil.isTerminate(docAction)) {
             mContract.setDocumentStatus(docAction);
         }
 
         mContract = mContractRepository.save(mContract);
 
-        if (mContractDTO.getLineDTOList()!=null){
+        if (mContractDTO.getLineDTOList() != null) {
+            log.info("save Mcontract Line");
             MContract finalMContract = mContract;
             mContractDTO.getLineDTOList().forEach(mContractLineDTO -> {
                 mContractLineDTO.setAdOrganizationId(finalMContract.getAdOrganization().getId());
@@ -86,6 +105,9 @@ public class MContractService {
                 mContractLineService.save(mContractLineDTO);
             });
         }
+
+        log.info("this mcontact {}", mContract);
+
         return mContractMapper.toDto(mContract);
     }
 
@@ -97,17 +119,29 @@ public class MContractService {
      */
     public MContractDTO generateFromVendorConfirmation(MContractDTO mContractDTO) {
         log.debug("Request to generate MContract from MVendorConfirmation : {}", mContractDTO);
-        MContractDTO result = save(mContractDTO);
 
-        // Create the documents.
-//        mContractDTO.getContractDocuments()
-//            .forEach(doc -> {
-//                doc.setContractId(result.getId());
-//                mContractDocumentService.save(doc);
-//                doc.setId(doc.getId());
-//            });
-
-        return result;
+        List<MContractLine> mContractLines = new ArrayList<>();
+        List<MBidNegoPrice> mBidNegoPrice = mBidNegoPriceRepository.findbynegoline(mContractDTO.getNegoLineId());
+        mContractDTO.setPrice(mBidNegoPrice.get(0).getNegotiationPrice());
+        MContractDTO mContract = save(mContractDTO);
+        List<MBidNegoPriceLine> mBidNegoPriceLine = mBidNegoPriceLineRepository.findbyHeader(mBidNegoPrice.get(0).getId());
+        mBidNegoPriceLine.forEach(data -> {
+            MContractLine mContractLine = new MContractLine()
+                .product(data.getBiddingLine().getProduct())
+                .quantity(data.getBiddingLine().getQuantity())
+                .uom(data.getBiddingLine().getUom())
+                .costCenter(data.getBiddingLine().getCostCenter())
+                .ceilingPrice(data.getPriceNegotiation())
+                .totalCeilingPrice(data.getTotalNegotiationPrice())
+                .deliveryDate(data.getBiddingLine().getDeliveryDate())
+                .remark(data.getBiddingLine().getRemark())
+                .adOrganization(data.getBiddingLine().getAdOrganization())
+                .contract(mContractMapper.toEntity(mContract))
+                .active(true);
+            mContractLines.add(mContractLine);
+        });
+        mContractLineRepository.saveAll(mContractLines);
+        return mContract;
     }
 
     /**

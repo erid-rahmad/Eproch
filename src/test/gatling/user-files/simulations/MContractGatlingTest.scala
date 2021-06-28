@@ -90,6 +90,7 @@ class MContractGatlingTest extends Simulation {
                 , "dateApprove":"2020-01-01T00:00:00.000Z"
                 , "dateReject":"2020-01-01T00:00:00.000Z"
                 , "rejectedReason":"SAMPLE_TEXT"
+                , "price":"0"
                 , "uid":null
                 , "active":null
                 }""")).asJson

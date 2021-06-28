@@ -1,25 +1,18 @@
 package com.bhp.opusb.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import javax.validation.constraints.*;
+
+import java.io.Serializable;
+import java.util.Objects;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A MContract.
@@ -99,6 +92,9 @@ public class MContract extends AbstractAuditingEntity {
 
     @Column(name = "rejected_reason")
     private String rejectedReason;
+
+    @Column(name = "price", precision = 21, scale = 2)
+    private BigDecimal price;
 
     @Column(name = "uid")
     private UUID uid;
@@ -386,6 +382,19 @@ public class MContract extends AbstractAuditingEntity {
         this.rejectedReason = rejectedReason;
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public MContract price(BigDecimal price) {
+        this.price = price;
+        return this;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
     public UUID getUid() {
         return uid;
     }
@@ -547,6 +556,7 @@ public class MContract extends AbstractAuditingEntity {
             ", dateApprove='" + getDateApprove() + "'" +
             ", dateReject='" + getDateReject() + "'" +
             ", rejectedReason='" + getRejectedReason() + "'" +
+            ", price=" + getPrice() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity MContract.
     -->
@@ -176,6 +176,13 @@
         <addColumn tableName="m_contract">
             <column name="bidding_id" type="bigint">
                 <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="202106281153000" author="erid">
+        <addColumn tableName="m_contract">
+            <column name="price" type="decimal(21,2)">
+                <constraints nullable="true" />
             </column>
         </addColumn>
     </changeSet>

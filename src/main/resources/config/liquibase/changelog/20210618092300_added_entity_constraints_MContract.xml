@@ -7,7 +7,7 @@
         Added the constraints for entity MContract.
     -->
     <changeSet id="20210618092300-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="ad_organization_id"
                                  baseTableName="m_contract"
                                  constraintName="fk_m_contract_ad_organization_id"

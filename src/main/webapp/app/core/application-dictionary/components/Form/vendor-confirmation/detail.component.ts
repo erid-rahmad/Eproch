@@ -41,6 +41,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   private accept: string = ".jpg, .jpeg, .png, .pdf";
   private file: any = {};
 
+
   private fileList: any[] = [];
 
   contractParameterFormVisible: boolean = false;
@@ -91,6 +92,8 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   get formSettings() {
     return settings.form;
   }
+
+
 
   created() {
     console.log('component detail created');
@@ -481,13 +484,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
       expirationDate: lineContract.contractEndDate,
       vendorEvaluationId: null,
       evaluationPeriod: null,
-      // contractDocuments: [
-      //   {
-      //     adOrganizationId: row.adOrganizationId,
-      //     // name: contractName,
-      //     attachmentId: lineContract.attachmentId,
-      //   }
-      // ]
+      negoLineId:row.negoLineId
     };
 
     console.log('contract param:', this.contractParameter);
