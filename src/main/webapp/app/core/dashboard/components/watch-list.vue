@@ -47,7 +47,7 @@
         prop="count"
         width="64"
       />
-      <el-table-column>
+      <el-table-column class="list-item">
         <template slot-scope="{row}">
           <div @click="onCardClicked(row)">
             {{row.name}}
@@ -59,6 +59,10 @@
 </template>
 <script lang="ts" src="./watch-list.component.ts"></script>
 <style lang="scss" scoped>
+.list-item {
+  cursor: pointer;
+}
+
 .panel-group {
   margin-bottom: 18px;
 
@@ -72,8 +76,9 @@
     font-size: 12px;
     position: relative;
     overflow: hidden;
-    color: #666;
-    background: #fff;
+    color: #20283e;
+    background: #a5d8dd;
+    border-radius: 20px;
     box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
     border-color: rgba(0, 0, 0, .05);
 

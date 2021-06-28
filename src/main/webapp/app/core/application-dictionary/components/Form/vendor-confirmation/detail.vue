@@ -329,12 +329,11 @@
               ></el-input-number>
             </el-form-item>
             <el-form-item label="Contract No.">
-              <el-input-number
+              <el-input
                 v-model="selectedConfirmation.contractNo"
-                controls-position="right"
                 disabled
                 size="mini"
-              ></el-input-number>
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
