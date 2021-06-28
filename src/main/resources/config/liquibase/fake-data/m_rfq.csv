@@ -1,11 +1,11 @@
-id;date_trx;date_required;document_no;document_action;document_status;approved;processed;date_promised;description;uid;active;ad_organization_id;business_classification_id;business_category_id;currency_id;warehouse_id;cost_center_id;document_type_id
-1;2021-06-16;2021-06-16;Madagascar;JBOD;Money Mark;false;false;2021-06-16;Marketing deposit;29291de0-c694-4f4f-8060-59942480e888;false;1;1;1;1;1;1;1
-2;2021-06-16;2021-06-16;Plastic Electronics;visionary ;attitude-o;true;true;2021-06-17;Re-contextualized;59a69818-11d4-40dc-8540-18f71ab2ef04;false;2;2;2;2;2;2;2
-3;2021-06-16;2021-06-16;quantify;Jewelery;Soft Strea;true;true;2021-06-17;withdrawal;6b7ee4a6-a166-4b6d-a33c-0ab8be1011df;true;3;3;3;3;3;3;3
-4;2021-06-16;2021-06-16;Spain Netherlands;connect Fa;Incredible;false;false;2021-06-16;programming;005a255e-6b74-4066-9f34-663747308fdd;false;4;4;4;4;4;4;4
-5;2021-06-17;2021-06-16;Ports invoice;Product;data-wareh;true;true;2021-06-17;Berkshire payment;90fab36c-1737-43a7-b812-2f33a7d15d52;true;5;5;5;5;5;5;5
-6;2021-06-16;2021-06-16;Web;Human with;primary;true;true;2021-06-17;partnerships;9c28369d-a58f-44b6-9121-13ca2fa3e12a;true;6;6;6;6;6;6;6
-7;2021-06-17;2021-06-16;Avon networks;moderator ;Technician;true;false;2021-06-16;24/365;f564c6f7-097d-4e67-8df9-57deb84d469d;false;7;7;7;7;7;7;7
-8;2021-06-16;2021-06-16;Wooden Unbranded mobile;bleeding-e;Plastic Bo;true;false;2021-06-16;Rial Omani transmit Venezuela;98b02885-f779-4b47-a1cc-dd7f0a6ae786;false;8;8;8;8;8;8;8
-9;2021-06-17;2021-06-16;networks Avon;quantifyin;Administra;true;false;2021-06-16;Rubber mindshare;94131666-b740-4f02-8d27-73cebad6e9bc;false;9;9;9;9;9;9;9
-10;2021-06-16;2021-06-16;national;French Pol;Incredible;false;true;2021-06-16;primary;75428cff-c6f8-44d1-98ec-3a9931f81d87;false;10;10;10;10;10;10;10
+id;date_trx;date_required;document_no;document_action;document_status;approved;processed;grand_total;date_promised;description;uid;active;ad_organization_id;business_classification_id;business_category_id;currency_id;warehouse_id;cost_center_id;document_type_id
+1;2021-06-16;2021-06-16;Madagascar;JBOD;Money Mark;false;false;39368;2021-06-16;Metal Wooden Georgia;91de0c69-4f4f-4406-8599-42480e8885cf;false;1;1;1;1;1;1;1
+2;2021-06-17;2021-06-16;magenta;PCI Hryvni;Gorgeous;false;true;75548;2021-06-17;Re-contextualized;59a69818-11d4-40dc-8540-18f71ab2ef04;false;2;2;2;2;2;2;2
+3;2021-06-16;2021-06-16;quantify;Jewelery;Soft Strea;true;true;1518;2021-06-17;Berkshire connect;ee4a6a16-6b6d-4a33-80ab-8be1011dffb9;false;3;3;3;3;3;3;3
+4;2021-06-16;2021-06-16;payment connect;front-end;Compatible;false;true;7868;2021-06-16;Small Plastic Tuna Cotton user-centric;6b740669-f346-4637-8730-8fdd527a7aae;false;4;4;4;4;4;4;4
+5;2021-06-16;2021-06-16;data-warehouse Berkshire scale;GB withdra;Alabama Te;true;false;43677;2021-06-16;Flats;73a7b812-2f33-4a7d-95d5-28ad3eaceea7;false;5;5;5;5;5;5;5
+6;2021-06-16;2021-06-17;Sleek Metal Chair Practical Wo;Implemente;sexy Speci;true;false;83807;2021-06-17;Ergonomic;3ca2fa3e-12aa-43e9-816d-55a521faa4d3;false;6;6;6;6;6;6;6
+7;2021-06-16;2021-06-16;e-tailers redundant;Brook Mich;Bedfordshi;true;false;48387;2021-06-16;Moroccan Dirham secured line grid-enabled;9d499d22-1ecf-4457-a250-0e27eb9cd8f9;true;7;7;7;7;7;7;7
+8;2021-06-16;2021-06-17;Malaysia;Analyst Bo;initiative;true;true;46950;2021-06-16;Jamaican Dollar;ae78644d-a6d7-419d-a507-f758e768186b;true;8;8;8;8;8;8;8
+9;2021-06-17;2021-06-17;Cotton;mindshare ;Brand;false;false;81524;2021-06-17;Flats solid state;bad6e9bc-07c0-44aa-841d-19105407d74c;false;9;9;9;9;9;9;9
+10;2021-06-16;2021-06-16;Granite;Strategist;RAM;true;true;87710;2021-06-16;Naira;931f81d8-757e-4354-95ca-2653ee22316f;false;10;10;10;10;10;10;10

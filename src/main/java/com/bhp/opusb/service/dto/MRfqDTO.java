@@ -1,5 +1,6 @@
 package com.bhp.opusb.service.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -44,6 +45,8 @@ public class MRfqDTO extends AbstractAuditingDTO {
 
     private Boolean active;
 
+    private BigDecimal grandTotal;
+
     /**
      * Quotation
      */
@@ -74,6 +77,14 @@ public class MRfqDTO extends AbstractAuditingDTO {
     
     public Long getId() {
         return id;
+    }
+
+    public BigDecimal getGrandTotal() {
+        return grandTotal;
+    }
+
+    public void setGrandTotal(BigDecimal grandTotal) {
+        this.grandTotal = grandTotal;
     }
 
     public void setId(Long id) {

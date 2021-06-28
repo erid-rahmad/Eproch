@@ -153,7 +153,24 @@
                     Action
                   </el-button>
                   <el-button
-                    v-if="row.status === 'A'"
+                    v-if="row.status==='A'"
+                    class="button"
+                    icon="el-icon-document-checked"
+                    size="mini"
+                    style="width: 100%"
+                    type="primary"
+                    @click="generatePo(row)"
+                  >
+                    Generate PO
+                  </el-button>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="Generate Contract?"
+                width="140"
+              >
+                <template slot-scope="{ row }">
+                  <el-button
                     class="button"
                     icon="el-icon-document-checked"
                     size="mini"
@@ -167,7 +184,7 @@
             </el-table>
       </el-form>
     </el-scrollbar>
-
+    
     <el-dialog
       width="50%"
       :visible.sync="showPoForm"
@@ -226,6 +243,7 @@
         <el-form-item label="Start Date">
           <el-date-picker
             v-model="contractParameter.startDate"
+            disabled
             :format="dateDisplayFormat"
             size="mini"
             type="date"
@@ -235,6 +253,7 @@
         <el-form-item label="Expiration Date">
           <el-date-picker
             v-model="contractParameter.expirationDate"
+            disabled
             :format="dateDisplayFormat"
             size="mini"
             type="date"
@@ -366,18 +385,9 @@
         >
           Close
         </el-button>
-        <el-button
-          class="button"
-          icon="el-icon-document-checked"
-          size="mini"
-          type="primary"
-          @click="generatePo(row)"
-        >
-          Generate PO
-        </el-button>
       </div>
     </el-dialog>
-
+    
     <el-dialog
       width="50%"
       :visible.sync="showHistory"
@@ -410,7 +420,7 @@
           min-width="100"
         > <template slot-scope="{ row }">
           {{row.lastModifiedDate | formatDate}}
-          </template>
+          </template> 
         </el-table-column>
         <el-table-column
           label="Status"
@@ -456,7 +466,7 @@
             :lg="18"
             :xl="12"
           >
-            <el-form-item
+            <el-form-item 
               label="Confirmation No."
               prop="confirmationNo"
             >
@@ -464,18 +474,25 @@
                 v-model="contract.confirmationNo"
               ></el-input>
             </el-form-item>
-            <el-form-item
-              label="Contract Start Date">
-              <el-input
+            <el-form-item label="Contract Start Date">
+              <el-date-picker
                 v-model="contract.contractStartDate"
-                disabled
-              ></el-input>
+                v-loading="contractLoading"
+                :format="dateDisplayFormat"
+                size="mini"
+                type="date"
+                :value-format="dateValueFormat"
+              ></el-date-picker>
             </el-form-item>
             <el-form-item label="Contract End Date">
-              <el-input
+              <el-date-picker
                 v-model="contract.contractEndDate"
-                disabled
-              ></el-input>
+                v-loading="contractLoading"
+                :format="dateDisplayFormat"
+                size="mini"
+                type="date"
+                :value-format="dateValueFormat"
+              ></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col
@@ -484,10 +501,11 @@
             :lg="18"
             :xl="12"
           >
-            <el-form-item label="Contract Attachment">
+            <el-form-item label="Confirmation Attachment" prop="attachment">
               <el-upload
                 ref="contractFile"
-                v-model="contract.attachment"
+                v-model="file"
+                v-loading="contractLoading"
                 :action="action"
                 class="upload-demo"
                 :limit="limit"

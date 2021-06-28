@@ -36,6 +36,7 @@
         ref="mainGrid"
         border
         :data="vendorConfirmations"
+        max-height="550"
         highlight-current-row
         size="mini"
         stripe

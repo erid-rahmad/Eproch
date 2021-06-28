@@ -79,6 +79,7 @@ class MRfqGatlingTest extends Simulation {
                 , "documentStatus":"SAMPLE_TEXT"
                 , "approved":null
                 , "processed":null
+                , "grandTotal":"0"
                 , "datePromised":"2020-01-01T00:00:00.000Z"
                 , "description":"SAMPLE_TEXT"
                 , "uid":null

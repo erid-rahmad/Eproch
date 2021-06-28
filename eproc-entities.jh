@@ -911,6 +911,7 @@ entity MRfq {
 	documentStatus String required maxlength(10)
 	approved Boolean
 	processed Boolean
+	grandTotal BigDecimal
 
 	datePromised LocalDate
 	description String
@@ -928,6 +929,8 @@ entity MRfqLine {
 	approved Boolean
 	processed Boolean
 	releaseQty Integer
+	unitPrice BigDecimal
+	orderAmount BigDecimal
 	documentDate LocalDate
 	dateRequired LocalDate
 	remark String

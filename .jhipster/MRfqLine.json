@@ -44,6 +44,14 @@
             "fieldType": "Integer"
         },
         {
+            "fieldName": "unitPrice",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "orderAmount",
+            "fieldType": "BigDecimal"
+        },
+        {
             "fieldName": "documentDate",
             "fieldType": "LocalDate"
         },

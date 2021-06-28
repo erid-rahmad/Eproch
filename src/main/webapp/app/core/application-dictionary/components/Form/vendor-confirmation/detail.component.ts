@@ -12,6 +12,7 @@ import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 const baseApiConfirmationLine = 'api/m-vendor-confirmation-lines';
 const baseApiConfirmationContract = 'api/m-vendor-confirmation-contracts';
 const baseApiContract = 'api/m-contracts';
+const baseApiContractDocument = 'api/m-contract-documents/';
 
 const VendorConfirmationDetailProp = Vue.extend({
   props: {
@@ -31,7 +32,7 @@ const VendorConfirmationDetailProp = Vue.extend({
   }
 })
 export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, VendorConfirmationDetailProp) {
-
+  
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
@@ -46,16 +47,12 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   generatingContract: boolean = false;
 
   contractFormValidationSchema = {
-    confirmationNo: {
-      required: true,
-      message: 'Confirmation No. is required'
-    },
     contractDetail: {
       required: true,
-      message: 'Contract Detail is required'
+      message: 'Confirmation Detail is required'
     }
   };
-
+  
   columnSpacing = 24;
   showDetail = false;
   showConfirmationForm = false;
@@ -63,6 +60,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   showPoForm = false;
   showHistory = false;
   loading = false;
+  contractLoading = true;
 
   poNumber: string = "";
 
@@ -103,7 +101,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
       .then(res => {
         this.vendorConfirmation = res.map(item => ({ key: item.value, value: item.name }));
       });
-
+    
     this.refreshLine();
   }
 
@@ -243,6 +241,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
 
   openConfirmationForm(_row: any) {
     this.selectedConfirmation = _row;
+    this.contractLoading = true;
     this.commonService(baseApiConfirmationContract)
       .retrieve({
         criteriaQuery: this.updateCriteria([
@@ -259,15 +258,49 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
         this.contract =
           res.data[0] ? res.data[0] : {
             confirmationNo: Date.now(),
-            contractStartDate: new Date(),
+            contractStartDate: null,
             contractEndDate: null,
             contractDetail: null,
             adOrganizationId: this.mainForm.adOrganizationId,
             vendorConfirmationLineId: _row.id
           }
 
-        if (this.contract.attachmentId) {
-          this.fileList.push({ "name": this.contract.attachment.fileName, "url": this.contract.downloadUrl })
+        if (res.data[0]) {
+          this.fileList.push({ "name": this.contract.attachment.fileName, "url": this.contract.downloadUrl });
+          this.contractLoading = false;
+        } else {
+          this.commonService(baseApiContract).retrieve({
+            criteriaQuery: this.updateCriteria([
+              `vendorId.equals=${_row.vendorId}`,
+              `biddingId.equals=${this.mainForm.biddingId}`
+            ]),
+            paginationQuery: {
+              page: 0,
+              size: 10,
+              sort: ['id']
+            }
+          }).then((res)=>{
+            if( ((<any[]>res.data).length) ){
+              this.contract.contractStartDate = res.data[0].startDate;
+              this.contract.contractEndDate = res.data[0].expirationDate;
+              this.commonService(baseApiContractDocument).retrieve({
+                criteriaQuery: this.updateCriteria([
+                  `contractId.equals=${res.data[0].id}`
+                ]),
+                paginationQuery: {
+                  page: 0,
+                  size: 10,
+                  sort: ['id']
+                }
+              }).then((res)=>{
+                if( ((<any[]>res.data).length) ){
+                  this.contract.attachmentId = res.data[0].attachmentId;
+                  this.fileList.push({ "name": res.data[0].attachmentName, "url": res.data[0].attachmentUrl });
+                }
+                this.contractLoading = false;
+              })
+            } else this.contractLoading = false;
+          })
         }
         console.log(this.contract);
       });
@@ -382,7 +415,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
       this.contract.attachmentId = response.attachment.id;
       this.file = file;
       this.fileList = [file];
-      //(this.$refs.company as ElForm).clearValidate('file');
+      (this.$refs.contractForm as ElForm).clearValidate('attachment');
   }
 
   handleExceed(files, fileList) {
@@ -431,16 +464,13 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   async openContractParameter(row: any) {
     const lineContract = await this.retrieveLastConfirmationContract(row.id);
     const fileName = lineContract.attachmentName;
-    console.log("this file name",fileName);
-    console.log("main",this.mainForm);
-    // const strippedName = fileName.substring(fileName.indexOf('_') + 1, fileName.lastIndexOf('.'));
-    // const contractName: string = `C${row.vendorConfirmationBiddingNo}-${strippedName}`;
+    const strippedName = fileName.substring(fileName.indexOf('_') + 1, fileName.lastIndexOf('.'));
+    const contractName: string = `C${row.vendorConfirmationBiddingNo}-${strippedName}`;
 
     this.contractParameter = {
       adOrganizationId: row.adOrganizationId,
       biddingId: row.vendorConfirmationBiddingId,
-      // name: contractName.length > 50 ? contractName.substring(0, 49) : contractName,
-      name:this.mainForm.biddingTitle,
+      name: contractName.length > 50 ? contractName.substring(0, 49) : contractName,
       costCenterId: row.vendorConfirmationCostCenterId,
       picUserId: row.vendorConfirmationPicId,
       vendorId: row.vendorId,
@@ -451,7 +481,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
       contractDocuments: [
         {
           adOrganizationId: row.adOrganizationId,
-          // name: contractName,
+          name: contractName,
           attachmentId: lineContract.attachmentId,
         }
       ]
@@ -534,7 +564,16 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   showConfirmPublish() {
     (<ElForm>this.$refs.contractForm).validate(passed => {
       if (passed) {
-        this.confirmPublish = true;
+        if (!this.contract.attachmentId) {
+          this.$notify({
+            title: 'Warning',
+            message: "Please upload contract file.",
+            type: 'warning',
+            duration: 3000
+          });
+        } else {
+          this.confirmPublish = true;
+        }
       }
     });
   }

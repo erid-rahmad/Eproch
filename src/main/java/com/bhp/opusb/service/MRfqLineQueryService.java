@@ -115,6 +115,12 @@ public class MRfqLineQueryService extends QueryService<MRfqLine> {
             if (criteria.getReleaseQty() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getReleaseQty(), MRfqLine_.releaseQty));
             }
+            if (criteria.getUnitPrice() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getUnitPrice(), MRfqLine_.unitPrice));
+            }
+            if (criteria.getOrderAmount() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getOrderAmount(), MRfqLine_.orderAmount));
+            }
             if (criteria.getDocumentDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDocumentDate(), MRfqLine_.documentDate));
             }

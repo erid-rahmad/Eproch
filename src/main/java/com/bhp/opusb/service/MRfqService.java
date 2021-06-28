@@ -1,5 +1,6 @@
 package com.bhp.opusb.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -152,11 +153,15 @@ public class MRfqService {
             MRfq rfq = quotations.computeIfAbsent(mRequisitionLineDTO.getVendorId(),
                     key -> initQuotation(mRfqDTO, mRequisitionLine));
 
-            MRfqLine mRfqLine = initPurchaseOrderLine(rfq, mRequisitionLine);
-            //final BigDecimal grandTotal = mPurchaseOrder.getGrandTotal().add(mPurchaseOrderLine.getOrderAmount());
+            cDocumentTypeRepository.findFirstByName(document.getDocumentType())
+                    .ifPresent(rfq::setDocumentType);
 
-            //mPurchaseOrder.setGrandTotal(grandTotal);
+            MRfqLine mRfqLine = initPurchaseOrderLine(rfq, mRequisitionLine);
+            final BigDecimal grandTotal = rfq.getGrandTotal().add(mRfqLine.getOrderAmount());
+
+            rfq.setGrandTotal(grandTotal);
             rfqLines.add(mRfqLine);
+            mRequisitionLineDTO.setQuantityOrdered(new BigDecimal(0));
         }
         
         List<MRfqDTO> result = mRfqMapper.toDto(mRfqRepository.saveAll(quotations.values()));
@@ -200,8 +205,8 @@ public class MRfqService {
                         .setCreatedBy(mRequisition.getCreatedBy()));
 
         return mRfq.active(true)
-            .documentNo(initDocumentNumber());
-            //.grandTotal(new BigDecimal(0))
+            .documentNo(initDocumentNumber())
+            .grandTotal(new BigDecimal(0));
             //.tax(taxable)
             //.vendor(mRequisitionLine.getVendor());
     }
@@ -212,7 +217,7 @@ public class MRfqService {
 
     private MRfqLine initPurchaseOrderLine(MRfq mPurchaseOrder, MRequisitionLine mRequisitionLine) {
         final MRfqLine mPurchaseOrderLine = new MRfqLine();
-        //final BigDecimal orderAmount = mRequisitionLine.getQuantityOrdered().multiply(mRequisitionLine.getUnitPrice());
+        final BigDecimal orderAmount = mRequisitionLine.getQuantityOrdered().multiply(mRequisitionLine.getUnitPrice());
 
         mPurchaseOrderLine.active(true)
             .adOrganization(mPurchaseOrder.getAdOrganization())
@@ -225,8 +230,9 @@ public class MRfqService {
             .quotation(mPurchaseOrder)
             .releaseQty(mRequisitionLine.getQuantityOrdered().intValue())
             .remark(mRequisitionLine.getRemark())
+            .orderAmount(orderAmount)
             //.requisition(mRequisitionLine.getRequisition())
-            //.unitPrice(mRequisitionLine.getUnitPrice())
+            .unitPrice(mRequisitionLine.getUnitPrice())
             .uom(mRequisitionLine.getUom());
             //.vendor(mRequisitionLine.getVendor())
             //.warehouse(mPurchaseOrder.getWarehouse());

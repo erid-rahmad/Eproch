@@ -80,6 +80,8 @@ class MRfqLineGatlingTest extends Simulation {
                 , "approved":null
                 , "processed":null
                 , "releaseQty":"0"
+                , "unitPrice":"0"
+                , "orderAmount":"0"
                 , "documentDate":"2020-01-01T00:00:00.000Z"
                 , "dateRequired":"2020-01-01T00:00:00.000Z"
                 , "remark":"SAMPLE_TEXT"
