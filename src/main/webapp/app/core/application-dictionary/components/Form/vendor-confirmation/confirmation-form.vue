@@ -23,7 +23,7 @@
                 v-model="mainForm.confirmationNo"
               ></el-input>
             </el-form-item>
-            <el-form-item label="Contract Start Date">
+            <el-form-item label="Confirmation Start Date">
               <el-date-picker
                 v-model="mainForm.contractStartDate"
                 :disabled="isVendor"
@@ -33,7 +33,7 @@
                 :value-format="dateValueFormat"
               ></el-date-picker>
             </el-form-item>
-            <el-form-item label="Contract End Date">
+            <el-form-item label="Confirmation End Date">
               <el-date-picker
                 v-model="mainForm.contractEndDate"
                 :disabled="isVendor"
@@ -50,7 +50,7 @@
             :lg="12"
             :xl="8"
           >
-            <el-form-item label="Contract Attachment">
+            <el-form-item label="Confirmation Attachment">
               <el-button
                 class="btn-attachment"
                 icon="el-icon-download"
@@ -61,7 +61,7 @@
                 Download
               </el-button>
             </el-form-item>
-            <el-form-item label="Contract Detail">
+            <el-form-item label="Confirmation Detail">
               <el-input
                 v-model="mainForm.contractDetail"
                 :autosize="{minRows: 2, maxRows: 7}"

@@ -174,6 +174,23 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   viewDetail(row: any) {
     this.loading = true;
     this.selectedConfirmation = row;
+    this.selectedConfirmation.contractNo = '';
+    this.commonService(baseApiConfirmationContract)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `vendorConfirmationLineId.equals=${row.id}`
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      }).then(res=>{
+        if((<any[]>res.data).length){
+          this.selectedConfirmation.contractNo = res.data[0].documentNo;
+        }
+      });
     this.commonService('/api/m-bid-nego-prices').retrieve({
       criteriaQuery: this.updateCriteria([
         'active.equals=true',

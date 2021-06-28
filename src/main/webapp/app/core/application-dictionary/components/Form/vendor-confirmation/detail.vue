@@ -171,6 +171,7 @@
               >
                 <template slot-scope="{ row }">
                   <el-button
+                    v-if="row.status!=='A'"
                     class="button"
                     icon="el-icon-document-checked"
                     size="mini"
@@ -327,6 +328,14 @@
                 size="mini"
               ></el-input-number>
             </el-form-item>
+            <el-form-item label="Contract No.">
+              <el-input-number
+                v-model="selectedConfirmation.contractNo"
+                controls-position="right"
+                disabled
+                size="mini"
+              ></el-input-number>
+            </el-form-item>
           </el-col>
         </el-row>
         <el-table
@@ -472,7 +481,7 @@
                 v-model="contract.confirmationNo"
               ></el-input>
             </el-form-item>
-            <el-form-item label="Contract Start Date">
+            <el-form-item label="Confirmation Start Date">
               <el-date-picker
                 v-model="contract.contractStartDate"
                 v-loading="contractLoading"
@@ -482,7 +491,7 @@
                 :value-format="dateValueFormat"
               ></el-date-picker>
             </el-form-item>
-            <el-form-item label="Contract End Date">
+            <el-form-item label="Confirmation End Date">
               <el-date-picker
                 v-model="contract.contractEndDate"
                 v-loading="contractLoading"
@@ -534,7 +543,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="Contract Detail" prop="contractDetail">
+        <el-form-item label="Confirmation Detail" prop="contractDetail">
           <el-input
             v-model="contract.contractDetail"
             :rows="7"
