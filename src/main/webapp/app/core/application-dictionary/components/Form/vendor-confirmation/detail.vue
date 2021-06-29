@@ -159,7 +159,7 @@
                     size="mini"
                     style="width: 100%"
                     type="primary"
-                    @click="generatePo(row)"
+                    @click="askGeneratePo(row)"
                   >
                     Generate PO
                   </el-button>
@@ -191,14 +191,22 @@
       :visible.sync="showPoForm"
       title="Generate PO"
     >
-      PO has been generated. Your PO Number is {{poNumber}}.
+      Do you want to generate PO for {{selectedConfirmation.vendorName}}?
       <div slot="footer">
         <el-button
           icon="el-icon-close"
           size="mini"
           @click="showPoForm = false"
         >
-          Close
+          No
+        </el-button>
+        <el-button
+          icon="el-icon-check"
+          size="mini"
+          type="primary"
+          @click="generatePo()"
+        >
+          Yes
         </el-button>
       </div>
     </el-dialog>

@@ -20,6 +20,7 @@ import com.bhp.opusb.domain.MPurchaseOrder;
 import com.bhp.opusb.domain.MPurchaseOrderLine;
 import com.bhp.opusb.domain.MRequisitionLine;
 import com.bhp.opusb.repository.CDocumentTypeRepository;
+import com.bhp.opusb.repository.CPaymentTermRepository;
 import com.bhp.opusb.repository.CVendorTaxRepository;
 import com.bhp.opusb.repository.MBiddingRepository;
 import com.bhp.opusb.repository.MPurchaseOrderLineRepository;
@@ -63,6 +64,7 @@ public class MPurchaseOrderService {
     private final MRequisitionRepository mRequisitionRepository;
     private final MRequisitionLineRepository mRequisitionLineRepository;
     private final CDocumentTypeRepository cDocumentTypeRepository;
+    private final CPaymentTermRepository cPaymentTermRepository;
 
     private final CVendorTaxRepository cVendorTaxRepository;
 
@@ -75,6 +77,7 @@ public class MPurchaseOrderService {
 
     public MPurchaseOrderService(ApplicationProperties applicationProperties,
             MPurchaseOrderRepository mPurchaseOrderRepository, CDocumentTypeRepository cDocumentTypeRepository,
+            CPaymentTermRepository cPaymentTermRepository,
             MRequisitionRepository mRequisitionRepository, MRequisitionLineRepository mRequisitionLineRepository, MPurchaseOrderLineRepository mPurchaseOrderLineRepository,
             CVendorTaxRepository cVendorTaxRepository, MPurchaseOrderMapper mPurchaseOrderMapper, MPurchaseOrderLineMapper mPurchaseOrderLineMapper,
             MBiddingRepository mBiddingRepository, MRequisitionLineMapper mRequisitionLineMapper, DataSource dataSource) {
@@ -89,6 +92,7 @@ public class MPurchaseOrderService {
         this.mPurchaseOrderLineMapper = mPurchaseOrderLineMapper;
         this.dataSource = dataSource;
         this.mBiddingRepository = mBiddingRepository;
+        this.cPaymentTermRepository = cPaymentTermRepository;
 
         document = applicationProperties.getDocuments().get("purchaseOrder");
     }
@@ -106,6 +110,15 @@ public class MPurchaseOrderService {
 
         if (mPurchaseOrder.getDocumentNo() == null) {
             mPurchaseOrder.setDocumentNo(initDocumentNumber());
+        }
+
+        if (mPurchaseOrder.getDocumentType() == null) {
+            cDocumentTypeRepository.findFirstByName(document.getDocumentType())
+                .ifPresent(mPurchaseOrder::setDocumentType);
+        }
+
+        if (mPurchaseOrder.getPaymentTerm() == null) {
+            cPaymentTermRepository.findFirstByCode("3M").ifPresent(mPurchaseOrder::setPaymentTerm);
         }
 
         mPurchaseOrder = mPurchaseOrderRepository.save(mPurchaseOrder);

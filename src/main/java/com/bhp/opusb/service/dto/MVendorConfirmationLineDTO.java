@@ -16,6 +16,7 @@ public class MVendorConfirmationLineDTO extends AbstractAuditingDTO {
     private UUID uid;
 
     private Boolean active = true;
+    private Boolean contractApproved = false;
 
     @Size(max = 10)
     private String status;
@@ -40,6 +41,14 @@ public class MVendorConfirmationLineDTO extends AbstractAuditingDTO {
     
     public Long getId() {
         return id;
+    }
+
+    public Boolean getContractApproved() {
+        return contractApproved;
+    }
+
+    public void setContractApproved(Boolean contractApproved) {
+        this.contractApproved = contractApproved;
     }
 
     public Long getNegoLineId() {
