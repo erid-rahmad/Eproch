@@ -97,4 +97,16 @@ export default class ContractDetail extends Mixins(AccessLevelMixin, ContractDet
   save() {
     (<any>this.$refs[this.activeTab][0]).save();
   }
+
+  submit() {
+    (<any>this.$refs[this.activeTab][0]).submit();
+  }
+
+  approve() {
+    (<any>this.$refs[this.activeTab][0]).approve();
+  }
+
+  reject() {
+    (<any>this.$refs[this.activeTab][0]).reject();
+  }
 }

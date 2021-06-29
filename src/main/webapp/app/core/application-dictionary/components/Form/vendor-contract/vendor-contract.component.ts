@@ -4,6 +4,7 @@ import { ElTable } from 'element-ui/types/table';
 import { Component, Inject, Mixins, Watch } from "vue-property-decorator";
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import ContractDetail from './contract-detail.vue';
+import {log} from "util";
 
 const enum ContractPage {
   MAIN = 'main',
@@ -25,12 +26,15 @@ export default class VendorContract extends Mixins(AccessLevelMixin) {
   deleteConfirmationVisible: boolean = false;
   terminationConfirmationVisible: boolean = false;
   loading: boolean = false;
+  ApprovePA=false;
+  RejectPA=false;
+  SubmitPA=false;
   detailTabName: string = 'INF';
 
   gridData: any[] = [];
 
   selectedRow: any = {};
-  
+
   section: ContractPage = ContractPage.MAIN;
 
   itemsPerPage = 10;
@@ -49,6 +53,14 @@ export default class VendorContract extends Mixins(AccessLevelMixin) {
 
   get isDraft() {
     return ! this.selectedRow.id || this.selectedRow.documentStatus === 'DRF';
+  }
+
+  get isSubmit() {
+    return  this.selectedRow.documentStatus === 'DRF';
+  }
+
+  get isAction() {
+    return  this.selectedRow.documentStatus === 'SMT';
   }
 
   get mainPage() {
@@ -80,6 +92,21 @@ export default class VendorContract extends Mixins(AccessLevelMixin) {
 
   onSaveClicked() {
     (<any>this.$refs.detailPage).save();
+    }
+
+  ApproveClicked(){
+    (<any>this.$refs.detailPage).approve();
+    this.ApprovePA=false;
+  }
+
+  RejectClicked(){
+    (<any>this.$refs.detailPage).reject();
+    this.RejectPA=false;
+  }
+
+  SubmitClicked() {
+    (<any>this.$refs.detailPage).submit();
+    this.SubmitPA=false;
   }
 
   onTerminateClicked() {

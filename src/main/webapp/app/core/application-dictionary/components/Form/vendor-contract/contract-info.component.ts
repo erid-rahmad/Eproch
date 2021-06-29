@@ -89,6 +89,18 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
     this.retriveContracLine(this.contract.id);
   }
 
+  documentStatuses = {
+    APV: 'Approved',
+    DRF: 'Draft',
+    RJC: 'Rejected',
+    RVS: 'Revised',
+    SMT: 'Submitted',
+  }
+
+  printStatus(status: string) {
+    return this.documentStatuses[status];
+  }
+
   async average(){
     let total = 0;
     await this.contractLine.forEach(line=>{
@@ -96,12 +108,11 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
       total+=line.totalCeilingPrice;
     })
     await this.$set(this.contract, 'price', total);
-
-
   }
 
   deleteRow(row) {
-
+    this.contractLine.splice(row.$index,1)
+    this.delleteContactLine(row.row.id);
   }
 
   addLine(){
@@ -123,17 +134,32 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
   }
 
   retriveContracLine(ContracId){
+    try {
+      this.loading = true;
+      this.commonService(baseApiContractLine)
+        .retrieve({
+          criteriaQuery: this.updateCriteria([
+            'active.equals=true',
+            `contractId.equals=${ContracId}`
+          ]),
+          paginationQuery: {
+            page: 0,
+            size: 1000,
+            sort: ['id']
+          }
+        })
+        .then(res => {
+          this.contractLine=res.data
+        })
+        .finally(() => this.loading = false);
+    }catch (e) {}
+  }
+
+  delleteContactLine(Id){
     this.loading = true;
     this.commonService(baseApiContractLine)
-      .retrieve({
-        criteriaQuery: this.updateCriteria([
-          'active.equals=true',
-          `contractId.equals=${ContracId}`
-        ]),
-      })
-      .then(res => {
-        this.contractLine=res.data
-      })
+      .delete(Id)
+      .then()
       .catch(err => {
         console.error('Failed getting the record. %O', err);
         this.$message.error(err.detail || err.message);
@@ -147,18 +173,34 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
     });
   }
 
+  public submit() {
+    this.contract.documentStatus='SMT'
+    this.save()
+  }
+
+  public approve() {
+    this.contract.documentStatus='APV'
+    this.save()
+  }
+
+  public reject() {
+    this.contract.documentStatus='RJC'
+    this.save()
+  }
+
+
   public save() {
     (<ElForm>this.$refs.contractInfoForm).validate(passed => {
       if (passed) {
         const newRecord = !this.contract.id;
-        this.$set(this.contract, 'lineDTOList', this.contractLine);
-        this.loading = true;
+        this.$set(this.contract, 'lineDTOList', this.contractLine)
+        this.loading = true
         this.commonService(baseApiContractAll)
           .create(this.contract)
           .then(res => {
-            this.contract = {...this.contract, ...res};
-            this.$message.success(`Contract has been ${newRecord ? 'created' : 'updated'} successfully`);
-            this.$emit('saved', res);
+            this.contract = {...this.contract, ...res}
+            this.$message.success(`Contract has been ${newRecord ? 'created' : 'updated'} successfully`)
+            this.$emit('saved', res)
           })
           .catch(err => {
             console.error('Failed to save the contract', err);
@@ -168,4 +210,5 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
       }
     })
   }
+
 }

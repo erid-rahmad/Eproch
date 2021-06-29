@@ -35,6 +35,8 @@
                         clearable
                     ></el-input>
                 </el-form-item>
+
+
                 <el-form-item label="Purpose">
                     <el-radio-group v-model="contract.purpose">
                         <el-radio label="P">Project</el-radio>
@@ -68,7 +70,6 @@
                         table-name="c_cost_center"
                     ></ad-input-lookup>
                 </el-form-item>
-
 
             </el-col>
             <el-col
@@ -130,6 +131,12 @@
                         disabled
                         v-inputmask="{ alias: 'currency' }"
                     ></el-input>
+                </el-form-item>
+                <el-form-item
+                    label="Document Status"
+                >
+
+                    {{printStatus(contract.documentStatus)}}
                 </el-form-item>
             </el-col>
             <el-col
