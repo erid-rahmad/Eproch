@@ -8,6 +8,7 @@ import com.bhp.opusb.repository.CEventTypelineRepository;
 import com.bhp.opusb.repository.MBiddingRepository;
 import com.bhp.opusb.repository.MBiddingScheduleRepository;
 import com.bhp.opusb.repository.MPrequalificationDateSetRepository;
+import com.bhp.opusb.service.dto.MPreBidMeetingDTO;
 import com.bhp.opusb.service.dto.MPrequalificationDateSetDTO;
 import com.bhp.opusb.service.mapper.MPrequalificationDateSetMapper;
 import org.slf4j.Logger;
@@ -36,17 +37,20 @@ public class MPrequalificationDateSetService {
     private final MBiddingRepository mBiddingRepository;
     private final MBiddingScheduleRepository mBiddingScheduleRepository;
 
+    private final MPreBidMeetingService mPreBidMeetingService;
+
     private final MPrequalificationDateSetMapper mPrequalificationDateSetMapper;
 
     public MPrequalificationDateSetService(CEventTypelineRepository cEventTypelineRepository,
             MPrequalificationDateSetRepository mPrequalificationDateSetRepository,
             MBiddingRepository mBiddingRepository, MBiddingScheduleRepository mBiddingScheduleRepository,
-            MPrequalificationDateSetMapper mPrequalificationDateSetMapper) {
+            MPrequalificationDateSetMapper mPrequalificationDateSetMapper, MPreBidMeetingService mPreBidMeetingService) {
         this.cEventTypelineRepository = cEventTypelineRepository;
         this.mPrequalificationDateSetRepository = mPrequalificationDateSetRepository;
         this.mBiddingRepository = mBiddingRepository;
         this.mBiddingScheduleRepository = mBiddingScheduleRepository;
         this.mPrequalificationDateSetMapper = mPrequalificationDateSetMapper;
+        this.mPreBidMeetingService = mPreBidMeetingService;
     }
 
     /**
@@ -67,10 +71,19 @@ public class MPrequalificationDateSetService {
         String biddingStatus = null;
 
         if (currentSequence == null) {
+            //for new dates?
             Optional<MBiddingSchedule> mBiddingSchedule = mBiddingScheduleRepository.findById(mPrequalificationDateSetDTO.getBiddingScheduleId());
             if (mBiddingSchedule.isPresent()) {
                 MBiddingSchedule schedule = mBiddingSchedule.get();
                 currentSequence = schedule.getEventTypeLine().getSequence();
+
+                if(schedule.getEventTypeLine().getDescription().toLowerCase().contains("meeting")){
+                    MPreBidMeetingDTO pbm = new MPreBidMeetingDTO();
+                    pbm.setBiddingScheduleId(schedule.getId());
+                    pbm.setAdOrganizationId(schedule.getAdOrganization().getId());
+                    pbm.setActive(true);
+                    mPreBidMeetingService.save(pbm);
+                }
             }
         }
         

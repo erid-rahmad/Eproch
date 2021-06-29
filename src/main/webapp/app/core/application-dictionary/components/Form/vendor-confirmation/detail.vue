@@ -153,7 +153,7 @@
                     Action
                   </el-button>
                   <el-button
-                    v-if="row.status==='A'"
+                    v-if="row.status==='A' && row.contractApproved"
                     class="button"
                     icon="el-icon-document-checked"
                     size="mini"
