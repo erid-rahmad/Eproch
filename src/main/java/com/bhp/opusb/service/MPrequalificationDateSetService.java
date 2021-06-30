@@ -77,7 +77,7 @@ public class MPrequalificationDateSetService {
                 MBiddingSchedule schedule = mBiddingSchedule.get();
                 currentSequence = schedule.getEventTypeLine().getSequence();
 
-                if(schedule.getEventTypeLine().getDescription().toLowerCase().contains("meeting")){
+                if(schedule.getEventTypeLine().getCEvent().getName().toLowerCase().contains("meeting")){
                     MPreBidMeetingDTO pbm = new MPreBidMeetingDTO();
                     pbm.setBiddingScheduleId(schedule.getId());
                     pbm.setAdOrganizationId(schedule.getAdOrganization().getId());
