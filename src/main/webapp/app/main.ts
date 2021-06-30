@@ -52,8 +52,15 @@ import { Store } from 'vuex';
 import TreeItem from './core/application-dictionary/components/TreeView/tree-item.vue';
 import InputFacade from 'vue-input-facade';
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
+////////
 
-/* tslint:enable */
+import VueMaterial from 'vue-material'
+import 'vue-material/dist/vue-material.min.css'
+import 'vue-material/dist/theme/default.css'
+
+Vue.use(VueMaterial)
+
+
 Schema.warning = function() {};
 Vue.use(InputFacade);
 Vue.config.productionTip = false;
