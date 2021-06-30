@@ -21,7 +21,7 @@ public class MVendorConfirmationDTO extends AbstractAuditingDTO {
     private String biddingTypeName;
     private String biddingStatus;
     
-    private Long warehouseId;
+    private Long warehouseId, warehouseIdQuotation;
 
     private Long adOrganizationId;
 
@@ -43,6 +43,14 @@ public class MVendorConfirmationDTO extends AbstractAuditingDTO {
     
     public Long getId() {
         return id;
+    }
+
+    public Long getWarehouseIdQuotation() {
+        return warehouseIdQuotation;
+    }
+
+    public void setWarehouseIdQuotation(Long warehouseIdQuotation) {
+        this.warehouseIdQuotation = warehouseIdQuotation;
     }
 
     public String getBiddingStatus() {

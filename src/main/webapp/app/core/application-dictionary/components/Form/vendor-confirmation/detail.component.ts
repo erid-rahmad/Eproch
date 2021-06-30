@@ -388,7 +388,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
           description: "PO for bidding " + this.mainForm.biddingTitle,
           grandTotal: amount,
           vendorId: this.selectedConfirmation.vendorId,
-          warehouseId: this.mainForm.warehouseId,
+          warehouseId: this.mainForm.warehouseId || this.mainForm.warehouseIdQuotation,
           biddingId: this.mainForm.biddingId,
           poLine: []
         }
