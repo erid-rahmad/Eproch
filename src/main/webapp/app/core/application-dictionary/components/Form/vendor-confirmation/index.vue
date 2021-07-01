@@ -35,6 +35,7 @@
         v-if="index"
         ref="mainGrid"
         border
+        v-loading="loading"
         :data="vendorConfirmations"
         max-height="550"
         highlight-current-row

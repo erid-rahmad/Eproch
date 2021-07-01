@@ -17,6 +17,7 @@
       border
       max-height="600"
       :data="biddingNegotiations"
+      v-loading="loading"
       highlight-current-row
       size="mini"
       stripe

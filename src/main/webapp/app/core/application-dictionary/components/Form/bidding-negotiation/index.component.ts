@@ -20,6 +20,7 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
 
   index = true;
   displayTable = true;
+  loading=true;
 
   showSchedule=false;
   showSummary=false;
@@ -137,6 +138,7 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
   }
 
   refreshHeader(){
+    this.loading=true;
     this.commonService(this.negotiationsApi).retrieve({
       criteriaQuery: this.updateCriteria([
         'active.equals=true'
@@ -151,6 +153,8 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
       this.biddingNegotiations = (<any[]>res.data)/*.filter((elem)=>{
         return elem.biddingStatus!=='F' && elem.evaluationStatus!=='APP';
       });*/
+    }).finally(()=>{
+      this.loading=false;
     });
   }
 

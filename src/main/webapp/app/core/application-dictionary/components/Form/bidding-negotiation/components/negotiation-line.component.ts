@@ -34,6 +34,7 @@ export default class BiddingNegotiationLine extends mixins(AccessLevelMixin, Neg
   negotiation: any = {}
   allowNegotiation = false;
   innerIndex = true;
+  loading = true;
 
   selectedRow:any = {};
 
@@ -79,6 +80,8 @@ export default class BiddingNegotiationLine extends mixins(AccessLevelMixin, Neg
   }
 
   refreshLine(){
+    this.loading=true;
+
     this.agreed = [];
     this.inProgress = [];
     this.disagreed= [];
@@ -125,6 +128,8 @@ export default class BiddingNegotiationLine extends mixins(AccessLevelMixin, Neg
           }
         });
       }
+    }).finally(()=>{
+      this.loading=false;
     });
   }
 

@@ -77,6 +77,7 @@
               :max-height="256"
               size="mini"
               stripe
+              v-loading="lineLoading"
               style="margin-top: 16px; width: 100%"
             >
               <el-table-column

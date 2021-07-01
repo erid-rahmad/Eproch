@@ -79,7 +79,7 @@
       </el-scrollbar>
       <div v-if="!isVendor">
         Agreed vendors
-        <el-table border :data="agreed" size="mini">
+        <el-table border :data="agreed" size="mini" v-loading="loading">
           <el-table-column width="100" label="No">
             <template slot-scope="row">
               {{ row.$index + 1 }}
@@ -99,7 +99,7 @@
         </el-table>
       </div>
       Negotiation in progress
-      <el-table border :data="inProgress" size="mini">
+      <el-table border :data="inProgress" size="mini" v-loading="loading">
         <el-table-column width="50" label="No">
           <template slot-scope="row">
             {{ row.$index + 1 }}
@@ -128,7 +128,7 @@
       </el-table>
       <div v-if="!isVendor">
         Disagreed vendors
-        <el-table border :data="disagreed" size="mini">
+        <el-table border :data="disagreed" size="mini" v-loading="loading">
           <el-table-column width="100" label="No">
             <template slot-scope="row">
               {{ row.$index + 1 }}
@@ -149,7 +149,7 @@
       </div>
       <div v-if="!isVendor">
         Negotiation not started
-        <el-table border :data="notStarted" size="mini">
+        <el-table border :data="notStarted" size="mini" v-loading="loading">
           <el-table-column width="100" label="No">
             <template slot-scope="row">
               {{ row.$index + 1 }}

@@ -60,7 +60,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   confirmPublish = false;
   showPoForm = false;
   showHistory = false;
-  loading = false;
+  loading = false; lineLoading = true;
   contractLoading = true;
 
   poNumber: string = "";
@@ -122,6 +122,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   }
 
   refreshLine() {
+    this.lineLoading = true;
     this.commonService(baseApiConfirmationLine)
       .retrieve({
         criteriaQuery: this.updateCriteria([
@@ -153,6 +154,8 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
             }
           });
         })
+      }).finally(()=>{
+        this.lineLoading = false;
       });
   }
 

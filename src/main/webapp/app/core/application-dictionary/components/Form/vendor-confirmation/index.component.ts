@@ -25,6 +25,7 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
   index = true;
+  loading = true;
   documentAction = null;
   isAccept = false;
 
@@ -101,6 +102,7 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
   }
 
   refreshHeader(){
+    this.loading=true;
     this.commonService('/api/m-vendor-confirmations').retrieve({
       criteriaQuery: this.updateCriteria([
         'active.equals=true'
@@ -116,6 +118,8 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
       this.vendorConfirmations.forEach((elem)=>{
         if(elem.negoAmount) elem.amount = elem.negoAmount;
       })
+    }).finally(()=>{
+      this.loading=false;
     });
   }
 
