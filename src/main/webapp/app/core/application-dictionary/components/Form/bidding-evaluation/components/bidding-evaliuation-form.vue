@@ -1,5 +1,5 @@
 <template>
-    <div v-if="" class="bidding-evaluation card-view">
+    <div class="bidding-evaluation card-view">
 
         <el-row class="toolbar">
             <el-col :span="24">
@@ -80,7 +80,7 @@
                     Approved
                 </el-button>
                 <el-button v-for="MethodLine in VendorScoringLine"
-                           size="mini" style="margin-left: 10px"
+                           size="mini" style="margin-left: 10px" :key="MethodLine.id"
                            type="primary"
                            @click="setEvaluation(MethodLine)">
                     {{ changeCode(MethodLine.evaluationMethodLineName) }}
