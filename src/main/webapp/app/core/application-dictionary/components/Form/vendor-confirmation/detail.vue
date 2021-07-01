@@ -156,7 +156,7 @@
                   <el-button
                     v-if="row.status==='A' && row.contractApproved"
                     class="button"
-                    icon="el-icon-document-checked"
+                    icon="el-icon-s-order"
                     size="mini"
                     style="width: 100%"
                     type="primary"
