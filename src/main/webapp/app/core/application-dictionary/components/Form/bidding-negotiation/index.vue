@@ -11,114 +11,125 @@
         Close
       </el-button>
     </div>
-    <el-table
-      ref="mainGrid"
-      v-if="index && displayTable"
-      border
-      max-height="600"
-      :data="biddingNegotiations"
-      v-loading="loading"
-      highlight-current-row
-      size="mini"
-      stripe
-      style="width: 100%"
-    >
-      <el-table-column
-        label="No."
-        width="50"
+    <div v-if="index && displayTable">
+      <el-table
+        ref="mainGrid"
+        border
+        max-height="600"
+        :data="biddingNegotiations"
+        v-loading="loading"
+        highlight-current-row
+        size="mini"
+        stripe
+        style="width: 100%"
       >
-        <template slot-scope="{ $index }">
-          {{ $index + 1 }}
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="Bidding No."
-        min-width="100"
-        prop="biddingNo"
-        sortable
-      ></el-table-column>
-      <el-table-column
-        label="Title"
-        min-width="200"
-        prop="biddingTitle"
-        sortable
-      ></el-table-column>
-      <el-table-column
-        label="Bidding Type"
-        min-width="100"
-        prop="biddingType"
-        sortable
-      ></el-table-column>
-      <el-table-column
-        label="Event Type"
-        min-width="100"
-        prop="eventType"
-        sortable
-      ></el-table-column>
-      <el-table-column
-        label="Bidding Schedule"
-        min-width="150"
-      >
-        <template slot-scope="{ row }">
-          <el-button
-            icon="el-icon-search"
-            size="mini"
-            type="primary"
-            @click="viewSchedule(row)"
-          >
-            View Schedule
-          </el-button>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="Bidding Status"
-        min-width="100"
-        sortable
-      >
-        <template slot-scope="{ row }">{{formatBiddingStatus(row.biddingStatus)}}</template>
-      </el-table-column>
-      <el-table-column
-        label="Evaluation Status"
-        min-width="100"
-        sortable
-      >
-        <template slot-scope="{ row }">{{formatEvalStatus(row.evaluationStatus)}}</template>
-      </el-table-column>
-      <el-table-column
-        label="Vendor"
-        min-width="100"
-        v-if="!isVendor"
-      >
-        <template slot-scope="{ row }">
-          <el-button class="button" size="mini" style="width: 100%" @click="viewJoinVendor(row.id)">
-            <svg-icon name="icomoo/115-users"></svg-icon>
-            {{ row.vendorCount }}
-          </el-button>
-        </template>
-      </el-table-column>
-      <el-table-column label="Action" min-width="100">
-        <template slot-scope="{ row }">
-          <el-button
-            icon="el-icon-search"
-            size="mini"
-            type="primary"
-            @click="viewDetail(row)"
-          >
-            View
-          </el-button>
-          <el-button
-            icon="el-icon-search"
-            size="mini"
-            type="primary"
-            v-if="!isVendor&&(row.vendorCount==row.finishedCount && row.vendorCount>0)"
-            @click="viewSummary(row)"
-          >
-            Summary
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    
+        <el-table-column
+          label="No."
+          width="50"
+        >
+          <template slot-scope="{ $index }">
+            {{ ((page-1) * itemsPerPage) + $index + 1 }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="Bidding No."
+          min-width="100"
+          prop="biddingNo"
+          sortable
+        ></el-table-column>
+        <el-table-column
+          label="Title"
+          min-width="200"
+          prop="biddingTitle"
+          sortable
+        ></el-table-column>
+        <el-table-column
+          label="Bidding Type"
+          min-width="100"
+          prop="biddingType"
+          sortable
+        ></el-table-column>
+        <el-table-column
+          label="Event Type"
+          min-width="100"
+          prop="eventType"
+          sortable
+        ></el-table-column>
+        <el-table-column
+          label="Bidding Schedule"
+          min-width="150"
+        >
+          <template slot-scope="{ row }">
+            <el-button
+              icon="el-icon-search"
+              size="mini"
+              type="primary"
+              @click="viewSchedule(row)"
+            >
+              View Schedule
+            </el-button>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="Bidding Status"
+          min-width="100"
+          sortable
+        >
+          <template slot-scope="{ row }">{{formatBiddingStatus(row.biddingStatus)}}</template>
+        </el-table-column>
+        <el-table-column
+          label="Evaluation Status"
+          min-width="100"
+          sortable
+        >
+          <template slot-scope="{ row }">{{formatEvalStatus(row.evaluationStatus)}}</template>
+        </el-table-column>
+        <el-table-column
+          label="Vendor"
+          min-width="100"
+          v-if="!isVendor"
+        >
+          <template slot-scope="{ row }">
+            <el-button class="button" size="mini" style="width: 100%" @click="viewJoinVendor(row.id)">
+              <svg-icon name="icomoo/115-users"></svg-icon>
+              {{ row.vendorCount }}
+            </el-button>
+          </template>
+        </el-table-column>
+        <el-table-column label="Action" min-width="100">
+          <template slot-scope="{ row }">
+            <el-button
+              icon="el-icon-search"
+              size="mini"
+              type="primary"
+              @click="viewDetail(row)"
+            >
+              View
+            </el-button>
+            <el-button
+              icon="el-icon-search"
+              size="mini"
+              type="primary"
+              v-if="!isVendor&&(row.vendorCount==row.finishedCount && row.vendorCount>0)"
+              @click="viewSummary(row)"
+            >
+              Summary
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination
+        ref="pagination"
+        :current-page.sync="page"
+        :page-size="itemsPerPage"
+        :page-sizes="[10, 20, 50, 100]"
+        :total="queryCount"
+        background
+        layout="sizes, prev, pager, next"
+        small
+        @size-change="changePageSize"
+      />
+    </div>
     <template v-else>
       <bidding-negotiation-line
         :data="selectedRow"
