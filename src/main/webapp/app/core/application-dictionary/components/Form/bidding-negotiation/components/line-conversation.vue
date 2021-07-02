@@ -56,7 +56,7 @@
         style="margin-top: 16px"
       >
       <el-scrollbar class="form-wrapper card-view app-container" v-if="chatHistory.length" style="background:#FFFFFF">
-        <div class="card" v-for="(c,index) in chatHistory" :key="index">
+        <div class="card" v-for="(c,index) in chatHistory" :key="index" style="border: solid;">
           <h4>{{c.vendorText?line.vendorName:"Buyer"}}
             <el-button
               class="btn-attachment"

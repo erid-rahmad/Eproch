@@ -8,11 +8,10 @@
                 <svg-icon name="icomoo/273-checkmark"></svg-icon>
                 Save
             </el-button>
-            <el-button v-if="!index" size="mini" type="primary" @click="onApprove" :disabled="selectedRow.documentStatus!='DRF'">
-                <svg-icon name="icomoo/273-checkmark"></svg-icon>
+            <el-button v-if="!index" size="mini" type="primary" @click="onApprove" :disabled="selectedRow.documentStatus!='DRF'" icon="el-icon-document-checked">
                 Approve
             </el-button>
-            <el-button v-if="!index" icon="el-icon-close" size="mini" type="danger" @click="onReject" :disabled="selectedRow.documentStatus!='DRF'">
+            <el-button v-if="!index" icon="el-icon-document-delete" size="mini" type="danger" @click="onReject" :disabled="selectedRow.documentStatus!='DRF'">
                 Reject
             </el-button>
             <el-button v-if="index" class="button" icon="el-icon-plus" size="mini" type="primary"

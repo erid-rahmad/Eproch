@@ -3,7 +3,7 @@ import { AccountStoreModule } from '@/shared/config/store/account-store';
 import { ElTable } from 'element-ui/types/table';
 import Vue from 'vue';
 import Component, { mixins } from 'vue-class-component';
-import { Inject } from 'vue-property-decorator';
+import { Inject, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import ConfirmationForm from './confirmation-form.vue';
 import VendorConfirmationDetail from './detail.vue';
@@ -25,6 +25,7 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
   index = true;
+  loading = true;
   documentAction = null;
   isAccept = false;
 
@@ -44,6 +45,14 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
 
   vendorConfirmation: any[] = []; 
   biddingStates: any[] = [];
+
+  // for paging
+  public itemsPerPage = 10;
+  public queryCount: number = null;
+  public page = 1;
+  public previousPage = 1;
+  public reverse = false;
+  public totalItems = 0;
 
 /*
     {
@@ -101,13 +110,14 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
   }
 
   refreshHeader(){
+    this.loading=true;
     this.commonService('/api/m-vendor-confirmations').retrieve({
       criteriaQuery: this.updateCriteria([
         'active.equals=true'
       ]),
       paginationQuery: {
-        page: 0,
-        size: 10000,
+        page: this.page-1,
+        size: this.itemsPerPage,
         sort: ['id']
       }
     })
@@ -116,7 +126,40 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
       this.vendorConfirmations.forEach((elem)=>{
         if(elem.negoAmount) elem.amount = elem.negoAmount;
       })
+      this.totalItems = Number(res.headers['x-total-count']);
+      this.queryCount = this.totalItems;
+    }).finally(()=>{
+      this.loading=false;
     });
+  }
+
+  public changePageSize(size: number) {
+    this.itemsPerPage = size;
+    if(this.page!=1){
+      this.page = 0;
+    }
+    this.refreshHeader();
+  }
+
+  public loadPage(page: number): void {
+    if (page !== this.previousPage) {
+      this.previousPage = page;
+      this.refreshHeader();
+    }
+  }
+
+  public transition(): void {
+    this.refreshHeader();
+  }
+
+  public clear(): void {
+    this.page = 1;
+    this.refreshHeader();
+  }
+
+  @Watch('page')
+  onPageChange(page: number) {
+    this.loadPage(page);
   }
 
   mounted() {

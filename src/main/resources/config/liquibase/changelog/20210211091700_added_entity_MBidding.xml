@@ -183,4 +183,8 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20210630104800" author="ricky-k">
+        <addUniqueConstraint tableName="m_bidding" columnNames="document_no" constraintName="ux_m_bidding_document_no"/>
+    </changeSet>
+
 </databaseChangeLog>

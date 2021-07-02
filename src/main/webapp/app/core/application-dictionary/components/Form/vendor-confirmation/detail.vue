@@ -77,6 +77,7 @@
               :max-height="256"
               size="mini"
               stripe
+              v-loading="lineLoading"
               style="margin-top: 16px; width: 100%"
             >
               <el-table-column
@@ -153,13 +154,13 @@
                     Action
                   </el-button>
                   <el-button
-                    v-if="row.status==='A'"
+                    v-if="row.status==='A' && row.contractApproved"
                     class="button"
-                    icon="el-icon-document-checked"
+                    icon="el-icon-s-order"
                     size="mini"
                     style="width: 100%"
                     type="primary"
-                    @click="generatePo(row)"
+                    @click="askGeneratePo(row)"
                   >
                     Generate PO
                   </el-button>
@@ -191,14 +192,22 @@
       :visible.sync="showPoForm"
       title="Generate PO"
     >
-      PO has been generated. Your PO Number is {{poNumber}}.
+      Do you want to generate PO for {{selectedConfirmation.vendorName}}?
       <div slot="footer">
         <el-button
           icon="el-icon-close"
           size="mini"
           @click="showPoForm = false"
         >
-          Close
+          No
+        </el-button>
+        <el-button
+          icon="el-icon-check"
+          size="mini"
+          type="primary"
+          @click="generatePo()"
+        >
+          Yes
         </el-button>
       </div>
     </el-dialog>

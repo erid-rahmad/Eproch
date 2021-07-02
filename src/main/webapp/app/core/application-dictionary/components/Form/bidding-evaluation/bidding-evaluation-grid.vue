@@ -29,7 +29,7 @@
                                         {{ row.$index + 1 }}
                                     </template>
                                 </el-table-column>
-                                <el-table-column align="center" label="Bidding N0." prop="documentNo" sortable min-width="150">
+                                <el-table-column align="center" label="Bidding No." prop="documentNo" sortable min-width="150">
                                 </el-table-column>
                                 <el-table-column align="center" label="Title" prop="name" show-overflow-tooltip sortable min-width="180">
                                 </el-table-column>

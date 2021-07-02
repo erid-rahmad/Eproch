@@ -31,100 +31,112 @@
     </div>
 
     <div class="card">
-      <el-table
-        v-if="index"
-        ref="mainGrid"
-        border
-        :data="vendorConfirmations"
-        max-height="550"
-        highlight-current-row
-        size="mini"
-        stripe
-        style="width: 100%"
-        @current-change="onCurrentRowChanged"
-      >
-        <el-table-column
-          label="No"
-          width="50"
+      <div v-if="index">
+        <el-table
+          ref="mainGrid"
+          border
+          v-loading="loading"
+          :data="vendorConfirmations"
+          max-height="550"
+          highlight-current-row
+          size="mini"
+          stripe
+          style="width: 100%"
+          @current-change="onCurrentRowChanged"
         >
-          <template slot-scope="{ $index }">
-            {{ $index + 1 }}
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="Bidding No."
-          min-width="130"
-          prop="biddingNo"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="Bidding Title"
-          min-width="200"
-          prop="biddingTitle"
-          show-overflow-tooltip
-          sortable
-        ></el-table-column>
-        <el-table-column
-          v-if="!isVendor"
-          label="Bidding Type"
-          min-width="150"
-          prop="biddingTypeName"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          label="Bidding Status"
-          min-width="150"
-          sortable
-        ><template slot-scope="{ row }">{{formatBiddingStatus(row.biddingStatus)}}</template>
-        </el-table-column>
-        <el-table-column
-          label="Amount"
-          min-width="150"
-          sortable
-        >
-          <template slot-scope="{ row }">
-            {{ row.amount | formatCurrency }}
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="Currency"
-          min-width="100"
-          prop="currencyName"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          v-if="isVendor"
-          label="Status"
-          min-width="100"
-        >
-          <template slot-scope="{ row }">{{formatConfirmationStatus(row.status)}}</template>
-        </el-table-column>
-        <el-table-column
-          v-else
-          label="Selected Winners"
-          min-width="130"
-          prop="selectedWinners"
-        ></el-table-column>
-        <el-table-column
-          fixed="right"
-          min-width="100"
-        >
-          <template slot="header">
-            &nbsp;
-          </template>
-          <template slot-scope="{ row }">
-            <el-button
-              icon="el-icon-search"
-              size="mini"
-              type="primary"
-              @click="viewDetail(row)"
-            >
-              View
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-
+          <el-table-column
+            label="No"
+            width="50"
+          >
+            <template slot-scope="{ $index }">
+              {{ $index + 1 }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="Bidding No."
+            min-width="130"
+            prop="biddingNo"
+            sortable
+          ></el-table-column>
+          <el-table-column
+            label="Bidding Title"
+            min-width="200"
+            prop="biddingTitle"
+            show-overflow-tooltip
+            sortable
+          ></el-table-column>
+          <el-table-column
+            v-if="!isVendor"
+            label="Bidding Type"
+            min-width="150"
+            prop="biddingTypeName"
+            sortable
+          ></el-table-column>
+          <el-table-column
+            label="Bidding Status"
+            min-width="150"
+            sortable
+          ><template slot-scope="{ row }">{{formatBiddingStatus(row.biddingStatus)}}</template>
+          </el-table-column>
+          <el-table-column
+            label="Amount"
+            min-width="150"
+            sortable
+          >
+            <template slot-scope="{ row }">
+              {{ row.amount | formatCurrency }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="Currency"
+            min-width="100"
+            prop="currencyName"
+            sortable
+          ></el-table-column>
+          <el-table-column
+            v-if="isVendor"
+            label="Status"
+            min-width="100"
+          >
+            <template slot-scope="{ row }">{{formatConfirmationStatus(row.status)}}</template>
+          </el-table-column>
+          <el-table-column
+            v-else
+            label="Selected Winners"
+            min-width="130"
+            prop="selectedWinners"
+          ></el-table-column>
+          <el-table-column
+            fixed="right"
+            min-width="100"
+          >
+            <template slot="header">
+              &nbsp;
+            </template>
+            <template slot-scope="{ row }">
+              <el-button
+                icon="el-icon-search"
+                size="mini"
+                type="primary"
+                @click="viewDetail(row)"
+              >
+                View
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          ref="pagination"
+          :current-page.sync="page"
+          :page-size="itemsPerPage"
+          :page-sizes="[10, 20, 50, 100]"
+          :total="queryCount"
+          background
+          layout="sizes, prev, pager, next"
+          small
+          @size-change="changePageSize"
+        />
+      </div>
       <template v-else>
         <confirmation-form
           v-if="isVendor"

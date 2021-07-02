@@ -268,7 +268,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
     this.commonService(baseApiTechnicalAnswer)
       .retrieve({
         criteriaQuery: [
-          'active.equals=true',
+          // 'active.equals=true',
           `biddingSubmissionId.equals=${SubmissionId}`
         ],
         paginationQuery: {
@@ -379,11 +379,6 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
               question.evaluation = criteria.evaluation;
               question.notes = criteria.notes;
               question.evaluationid = criteria.id;
-
-              if (question.evaluation===null){
-
-              }
-
 
           } catch (e) {}
         });

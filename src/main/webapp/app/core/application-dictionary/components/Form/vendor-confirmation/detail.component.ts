@@ -60,7 +60,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   confirmPublish = false;
   showPoForm = false;
   showHistory = false;
-  loading = false;
+  loading = false; lineLoading = true;
   contractLoading = true;
 
   poNumber: string = "";
@@ -122,6 +122,7 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   }
 
   refreshLine() {
+    this.lineLoading = true;
     this.commonService(baseApiConfirmationLine)
       .retrieve({
         criteriaQuery: this.updateCriteria([
@@ -136,6 +137,25 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
       })
       .then(res => {
         this.confirmations = res.data;
+        this.confirmations.forEach((e)=>{
+          this.commonService(baseApiContract).retrieve({
+            criteriaQuery: this.updateCriteria([
+              `vendorId.equals=${e.vendorId}`,
+              `biddingId.equals=${this.mainForm.biddingId}`
+            ]),
+            paginationQuery: {
+              page: 0,
+              size: 10,
+              sort: ['id']
+            }
+          }).then((res)=>{
+            if((<any[]>res.data).length){
+              e.contractApproved = res.data[0].documentStatus=='APV';
+            }
+          });
+        })
+      }).finally(()=>{
+        this.lineLoading = false;
       });
   }
 
@@ -326,13 +346,17 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
     this.showConfirmationForm = true;
   }
 
-  generatePo(row: any) {
+  askGeneratePo(row: any){
     this.selectedConfirmation = row;
+    this.showPoForm=true;
+  }
+
+  generatePo() {
     this.commonService('/api/m-bid-nego-prices').retrieve({
       criteriaQuery: this.updateCriteria([
         'active.equals=true',
         `biddingId.equals=${this.mainForm.biddingId}`,
-        `negotiationLineId.equals=${row.negoLineId}`
+        `negotiationLineId.equals=${this.selectedConfirmation.negoLineId}`
       ]),
       paginationQuery: {
         page: 0,
@@ -361,40 +385,37 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
 
         let poBody: any = {
           active: true,
-          adOrganizationId: row.adOrganizationId,
+          adOrganizationId: this.selectedConfirmation.adOrganizationId,
           costCenterId: this.mainForm.costCenterId,
           currencyId: this.mainForm.currencyId,
-          // datePromised: "2021-06-01",
-          // dateRequired: "2021-06-01",
-          // dateTrx: `${today.getFullYear()}-${((today.getMonth()+1)<10?'0':'')+(today.getMonth()+1)}-${(today.getDate()<10?'0':'')+(today.getDate())}`,
           description: "PO for bidding " + this.mainForm.biddingTitle,
-          // documentTypeId: 874953,
           grandTotal: amount,
-          // paymentTermId: 1951601,
-          vendorId: row.vendorId,
-          warehouseId: this.mainForm.warehouseId,
+          vendorId: this.selectedConfirmation.vendorId,
+          warehouseId: this.mainForm.warehouseId || this.mainForm.warehouseIdQuotation,
           biddingId: this.mainForm.biddingId,
-
-          poLines: lines.map(line => ({
-            active: true,
-            dateTrx: poBody.dateTrx,
-            orderAmount: line.totalNegotiationPrice,
-            quantity: line.quantity,
-            unitPrice: line.priceNegotiation,
-            adOrganizationId: poBody.adOrganizationId,
-            productId: line.productId,
-            warehouseId: poBody.warehouseId,
-            costCenterId: poBody.costCenterId,
-            uomId: line.uomId,
-            vendorId: this.selectedConfirmation.vendorId,
-            dateRequired: poBody.dateRequired,
-            datePromised: poBody.datePromised
-          }))
-        };
-
+          poLine: []
+        }
+        
+        poBody.poLine = lines.map(line => ({
+          active: true,
+          dateTrx: poBody.dateTrx,
+          orderAmount: line.totalNegotiationPrice,
+          quantity: line.quantity,
+          unitPrice: line.priceNegotiation,
+          adOrganizationId: poBody.adOrganizationId,
+          productId: line.productId,
+          warehouseId: poBody.warehouseId,
+          costCenterId: poBody.costCenterId,
+          uomId: line.uomId,
+          vendorId: this.selectedConfirmation.vendorId,
+          dateRequired: poBody.dateRequired,
+          datePromised: poBody.datePromised
+        }));
+        
         this.commonService('/api/m-purchase-orders/generate-from-vc').create(poBody).then(res => {
           this.poNumber = res.documentNo;
-          this.showPoForm = true;
+          this.showPoForm = false;
+          this.$message.success("Successfully generated PO #"+this.poNumber);
         }).catch(error => {
           this.$message.error("Unable to generate PO.");
         });

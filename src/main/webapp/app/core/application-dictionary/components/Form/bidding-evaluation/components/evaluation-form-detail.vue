@@ -161,14 +161,14 @@
                     <el-col :span="6">
                         <div class="grid-content bg-purple">
                             <el-form-item  v-if="evaluationType" label="Average Score">
-                                <el-input disabled="true" v-model="evaluationResultLine.score" :disabled="true" placeholder="Please input"></el-input>
+                                <el-input v-model="evaluationResultLine.score" :disabled="true" placeholder="Please input"></el-input>
                             </el-form-item>
                         </div>
                     </el-col>
                     <el-col :span="6">
                         <div class="grid-content bg-purple-light">
                             <template>
-                                <el-select v-model="evaluationResultLine.status" :disabled="readOnly,statusReadOnly" placeholder="Select" size="mini">
+                                <el-select v-model="evaluationResultLine.status" :disabled="readOnly||statusReadOnly" placeholder="Select" size="mini">
                                     <el-option
                                         v-for="item in options"
                                         :key="item.value"
