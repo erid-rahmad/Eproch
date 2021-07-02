@@ -10,6 +10,7 @@
                                       size="mini"
                                       v-loading="loading"
                                       border
+                                      stripe
                                       style="width: 100%">
 
                                 <el-table-column label="Action" align="center" fixed="right" min-width="180">

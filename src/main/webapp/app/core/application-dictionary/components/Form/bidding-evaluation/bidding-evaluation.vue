@@ -24,7 +24,7 @@
                     {{ pickRow.eventTypeName }}
                 </el-form-item>
                 <el-divider content-position="left">
-                    <h4>Vendor Join</h4>
+                    <h4>Joined Vendor(s)</h4>
                 </el-divider>
             </el-form>
             <el-table :data="biddingSubmission"

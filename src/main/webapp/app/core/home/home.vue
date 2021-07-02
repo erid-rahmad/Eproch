@@ -99,7 +99,6 @@
 .main-dashboard {
   padding: 24px;
   background: #f0f2f5;
-  height: calc(100vh - 84px);
 }
 
 .wscn-http-container {

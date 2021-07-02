@@ -88,8 +88,8 @@
             </el-col>
         </el-row>
         <div class="card">
-            <header v-if="title">
-                <h3 align="center"> {{changeCode(title)}} Proposal</h3>
+            <header v-if="title" v-bind:style="{'padding-bottom':FormMenu===1?'20px':'0px'}">
+                <h3 align="center">{{changeCode(title)}} Proposal</h3>
             </header>
             <el-form v-if="FormMenu===0 || FormMenu===2|| FormMenu===3" ref="productCatalog" label-position="left"
                      label-width="130px"
@@ -115,9 +115,7 @@
                                            :readOnly="readOnly" ></EvaluationTeamDetailPrice>
             </div>
             <div v-if="FormMenu===2">
-                <el-divider content-position="left">
-                    <h4>Evaluation</h4>
-                </el-divider>
+                <h4 align="center">Evaluation</h4>
                 <EvaluationFormDetail :SelectVendorScoringLine="SelectVendorScoringLine" :evaluationFormProp="evaluationFormProp"
                                       :readOnly="readOnly" :title="title" ></EvaluationFormDetail>
             </div>

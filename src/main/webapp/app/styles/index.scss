@@ -367,3 +367,32 @@ aside {
   box-shadow: none;
   border-left: 1px solid #dfe6ec;
 }
+
+//striped / 2nd child
+.el-table--striped .el-table__body tr.el-table__row--striped td{
+  background-color: #e0ffff;
+}
+
+.el-table__body tr:nth-child(even) td {
+  background-color: #e0ffff;
+}
+
+//default color
+.el-table__body td {
+  background-color: #fffafa;
+}
+
+.el-table--mini th {
+  background-color: #fffafa;
+}
+
+//selected row
+.el-table--striped .el-table__body tr.el-table__row--striped.current-row td {
+  background-color: #87cefa;
+}
+
+.el-table__body tr.current-row > td {
+  background-color: #87cefa;
+}
+
+// #87cefa for selection

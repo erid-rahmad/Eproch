@@ -49,7 +49,7 @@
             width="50"
           >
             <template slot-scope="{ $index }">
-              {{ $index + 1 }}
+              {{ ((page-1)*itemsPerPage) + $index + 1 }}
             </template>
           </el-table-column>
           <el-table-column
