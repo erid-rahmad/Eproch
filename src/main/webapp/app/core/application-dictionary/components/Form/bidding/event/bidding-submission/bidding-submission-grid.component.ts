@@ -7,7 +7,7 @@ import biddingSubmission from"./bidding-submission.vue";
 const baseApiUrl = 'api/m-biddings';
 const baseApiSchedule = 'api/m-bidding-schedules';
 const baseApiBiddingSchedule = 'api/m-bidding-schedules'
-
+const baseApiInvitation = 'api/m-bidding-invitations';
 
 @Component({
   components: {
@@ -26,6 +26,10 @@ export default class BiddingSubmissionGridComponent extends mixins( AlertMixin,A
   stepIndex: number = 0;
   biddingStatuses: any[] = [];
   scheduleFromGrid:any={};
+
+  showJoinedVendors = false;
+  loadingJoinedVendors = false;
+  joinedVendors: any[] = [];
 
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
@@ -125,7 +129,22 @@ export default class BiddingSubmissionGridComponent extends mixins( AlertMixin,A
       });
   }
 
-
-
-
+  viewJoinVendor(biddingId: number) {
+    this.showJoinedVendors = true;
+    this.loadingJoinedVendors = true;
+    this.commonService(baseApiInvitation)
+      .retrieve({
+        criteriaQuery: [
+          `biddingId.equals=${biddingId}`,
+          'invitationStatus.equals=R'
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['vendorName']
+        }
+      })
+      .then(res => this.joinedVendors = res.data)
+      .finally(() => this.loadingJoinedVendors = false);
+  }
 }

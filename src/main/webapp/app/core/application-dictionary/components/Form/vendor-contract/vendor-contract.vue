@@ -50,8 +50,8 @@
                 size="mini"
                 type="primary"
                 @click="ApprovePA=true"
+                icon="el-icon-document-checked"
             >
-                <svg-icon name="icomoo/273-checkmark"></svg-icon>
                 Approve
             </el-button>
             <el-button
@@ -59,8 +59,8 @@
                 size="mini"
                 type="danger"
                 @click="RejectPA=true"
+                icon="el-icon-document-delete"
             >
-                <svg-icon name="icomoo/273-checkmark"></svg-icon>
                 Reject
             </el-button>
         </div>

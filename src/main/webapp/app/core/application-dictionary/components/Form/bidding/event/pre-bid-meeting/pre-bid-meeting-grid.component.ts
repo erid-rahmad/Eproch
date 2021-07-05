@@ -3,7 +3,7 @@ import DynamicWindowService from '@/core/application-dictionary/components/Dynam
 import ScheduleEventMixin from '@/core/application-dictionary/mixins/ScheduleEventMixin';
 import settings from '@/settings';
 import { AccountStoreModule } from '@/shared/config/store/account-store';
-import { Component, Inject, Mixins } from "vue-property-decorator";
+import { Component, Inject, Mixins, Watch } from "vue-property-decorator";
 import PreBidMeeting from './pre-bid-meeting.vue';
 import ParticipantList from './participant-list.vue';
 
@@ -28,6 +28,14 @@ export default class PreBidMeetingGrid extends Mixins(ScheduleEventMixin) {
   private preBidMeetingGrid:any={};
   biddingStatuses: any[] = [];
 
+  // for paging
+  public itemsPerPage = 10;
+  public queryCount: number = null;
+  public page = 1;
+  public previousPage = 1;
+  public reverse = false;
+  public totalItems = 0;
+
   created() {
     this.retrievePreBidMeeting();
     this.commonService(null)
@@ -49,14 +57,15 @@ export default class PreBidMeetingGrid extends Mixins(ScheduleEventMixin) {
             // 'active.equals=true',
           ]),
           paginationQuery: {
-            page: 0,
-            size: 100,
+            page: this.page-1,
+            size: this.itemsPerPage,
             sort: ['id']
           }
         })
         .then(res => {
           this.preBidMeetingGrid=res.data;
-          console.log(this.preBidMeetingGrid);
+          this.totalItems = Number(res.headers['x-total-count']);
+          this.queryCount = this.totalItems;
         })
         .catch(err => {
           console.error('Failed to get bidding schedules. %O', err);
@@ -75,4 +84,34 @@ export default class PreBidMeetingGrid extends Mixins(ScheduleEventMixin) {
   closeDetail(){
     this.index=true;
   }
+
+  public changePageSize(size: number) {
+    this.itemsPerPage = size;
+    if(this.page!=1){
+      this.page = 0;
+    }
+    this.retrievePreBidMeeting();
+  }
+
+  public loadPage(page: number): void {
+    if (page !== this.previousPage) {
+      this.previousPage = page;
+      this.retrievePreBidMeeting();
+    }
+  }
+
+  public transition(): void {
+    this.retrievePreBidMeeting();
+  }
+
+  public clear(): void {
+    this.page = 1;
+    this.retrievePreBidMeeting();
+  }
+
+  @Watch('page')
+  onPageChange(page: number) {
+    this.loadPage(page);
+  }
+
 }

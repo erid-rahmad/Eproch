@@ -53,7 +53,7 @@
                 </el-table-column>
                 <el-table-column label="Joined Vendor" min-width="140">
                     <template slot-scope="{ row }">
-                        <el-button class="button" size="mini" style="width: 100%">
+                        <el-button class="button" size="mini" style="width: 100%" @click="viewJoinVendor(row.id)">
                             <svg-icon name="icomoo/115-users"></svg-icon>
                             {{ row.joinedVendorCount }}
                         </el-button>
@@ -71,6 +71,25 @@
             <bidding-submission :scheduleFromGrid="scheduleFromGrid"></bidding-submission>
 
         </div>
+        <el-dialog :visible.sync="showJoinedVendors" class="joined-vendor-dialog" title="Joined Vendors" width="40%">
+            <el-table v-loading="loadingJoinedVendors" :data="joinedVendors" border class="vendor-list"
+                      highlight-current-row size="mini">
+                <el-table-column label="No." width="50">
+                    <template slot-scope="{ $index }">
+                        {{ $index + 1 }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="Vendor" min-width="150" prop="vendorName" show-overflow-tooltip
+                                 sortable></el-table-column>
+                <el-table-column label="Address" min-width="200" prop="location"
+                                 show-overflow-tooltip></el-table-column>
+            </el-table>
+            <div slot="footer">
+                <el-button icon="el-icon-close" size="mini" @click="showJoinedVendors = false">
+                    Close
+                </el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 <script lang="ts" src="./bidding-submission-grid.component.ts">
