@@ -1,7 +1,7 @@
 import AnnouncementForm from '@/core/application-dictionary/components/Form/bidding/event/bidding-announcement/announcement-form.vue';
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
-import { Component, Inject, Mixins } from 'vue-property-decorator';
+import { Component, Inject, Mixins, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import BiddingInvitationResponse from './components/details-announcement.vue';
 
@@ -31,7 +31,15 @@ export default class EventAnnouncement extends Mixins(AccessLevelMixin) {
     height: 500
   };
 
+  // for paging
   page: number = 1;
+  public gridPage = 1;
+  public itemsPerPage = 10;
+  public queryCount: number = null;
+  public previousPage = 1;
+  public reverse = false;
+  public totalItems = 0;
+
   selectedRow: any = {};
 
   onFormClosed() {
@@ -53,16 +61,48 @@ export default class EventAnnouncement extends Mixins(AccessLevelMixin) {
 
         ]),
         paginationQuery: {
-          page: 0,
-          size: 10000,
+          page: this.gridPage-1,
+          size: this.itemsPerPage,
           sort: ['id']
         }
       })
       .then(res => {
         this.gridData = res.data;
+        this.totalItems = Number(res.headers['x-total-count']);
+        this.queryCount = this.totalItems;
       })
       .finally(() => this.loading = false);
   }
+
+  public changePageSize(size: number) {
+    this.itemsPerPage = size;
+    if(this.gridPage!=1){
+      this.gridPage = 0;
+    }
+    this.retrieveAnnouncements();
+  }
+
+  public loadPage(page: number): void {
+    if (page !== this.previousPage) {
+      this.previousPage = page;
+      this.retrieveAnnouncements();
+    }
+  }
+
+  public transition(): void {
+    this.retrieveAnnouncements();
+  }
+
+  public clear(): void {
+    this.page = 1;
+    this.retrieveAnnouncements();
+  }
+
+  @Watch('gridPage')
+  onPageChange(page: number) {
+    this.loadPage(page);
+  }
+
 
   viewBidding(row){
     console.log(row);

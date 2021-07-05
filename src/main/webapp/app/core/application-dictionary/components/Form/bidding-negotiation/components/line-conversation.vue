@@ -55,7 +55,7 @@
         :gutter="24"
         style="margin-top: 16px"
       >
-      <el-scrollbar class="form-wrapper card-view app-container" v-if="chatHistory.length" style="background:#FFFFFF">
+      <div class="form-wrapper card-view app-container" v-if="chatHistory.length" style="background:#FFFFFF">
         <div class="card" v-for="(c,index) in chatHistory" :key="index" style="border: solid;">
           <h4>{{c.vendorText?line.vendorName:"Buyer"}}
             <el-button
@@ -70,10 +70,10 @@
           </h4>
           <p>{{c.vendorText?c.vendorText:c.buyerText}}</p>
         </div>
-      </el-scrollbar>
-      <el-scrollbar class="form-wrapper" v-else>
+      </div>
+      <div class="form-wrapper" v-else>
         <p>Tidak ada percakapan</p>
-      </el-scrollbar>
+      </div>
       <!--
       <el-table border :data="chatHistory" size="mini">
         <el-table-column width="100" label="No">

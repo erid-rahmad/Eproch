@@ -96,10 +96,6 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
 
   created() {
     this.retrieveBiddings();
-    if(this.formData.description===null){
-      this.formData.description='<p><br>Kepada Bapak/Ibu Pimpinan <br>#vendorName <br>Hal: Undangan #biddingTitle <br>Dengan hormat </p><p>Sehubung dengan bidding sesuai judul di atas,kami mengundang Ibu/Bapak untuk mengikuti bidding tersebut. Silahkan Bapak/Ibu melakukan login di login.com untuk mendaftar pada bidding tersebut. Demikian penyampaian ini kami dengan senang hati menerima bila ada yang hendak di komunikasikan silahkan sampaikan ke email eproc.berca.co.id </p><p>Hormat Kami<br>Berca.co.id</p>';
-
-    }
   }
 
   changedata() {
@@ -138,6 +134,10 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
         const data = res.data as any[];
         if (data.length) {
           this.formData = {...this.formData, ...data[0]};
+          console.log(this.formData);
+        }
+        if(this.formData.description===null){
+          this.formData.description='<p><br>Kepada Bapak/Ibu Pimpinan <br>#vendorName <br>Hal: Undangan #biddingTitle <br>Dengan hormat </p><p>Sehubung dengan bidding sesuai judul di atas,kami mengundang Ibu/Bapak untuk mengikuti bidding tersebut. Silahkan Bapak/Ibu melakukan login di login.com untuk mendaftar pada bidding tersebut. Demikian penyampaian ini kami dengan senang hati menerima bila ada yang hendak di komunikasikan silahkan sampaikan ke email eproc.berca.co.id </p><p>Hormat Kami<br>Berca.co.id</p>';
         }
       })
       .catch(err => this.$message.error('Failed to get bidding announcement'))

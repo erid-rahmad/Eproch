@@ -64,6 +64,7 @@ export default class BiddingNegotiationLine extends mixins(AccessLevelMixin, Neg
   viewNegotiationWindow(row:any){
     //hides the outer toolbar (which closes the whole detail)
     (<any>document.querySelector("#innerToolbar")).style.display = "none";
+    (<any>document.querySelector("#innerCard")).style.height = "fit-content";
     row.biddingTitle = this.negotiation.biddingTitle;
     row.biddingId = this.negotiation.biddingId;
     row.biddingNo = this.negotiation.biddingNo;
@@ -74,6 +75,7 @@ export default class BiddingNegotiationLine extends mixins(AccessLevelMixin, Neg
 
   closeLine(){
     (<any>document.querySelector("#innerToolbar")).style.display = "";
+    (<any>document.querySelector("#innerCard")).style.height = "initial";
     this.innerIndex = true;
 
     this.refreshLine();
