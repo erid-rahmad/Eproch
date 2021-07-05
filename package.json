@@ -24,7 +24,7 @@
     "date-fns": "^2.21.2",
     "dayjs": "^1.10.5",
     "dexie": "^3.0.3",
-    "element-ui": "^2.13.0",
+    "element-ui": "^2.15.3",
     "file-saver": "^2.0.2",
     "fuse.js": "^3.6.1",
     "inputmask": "^5.0.5",

@@ -47,6 +47,9 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   negoPrice: any = {};
   negoPriceLine: any[] = [];
 
+  loading = true;
+  detailLoading = true;
+
   chatFormValidationSchema = {
     text: {
       required: true,
@@ -65,6 +68,7 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   }
 
   refreshChat(){
+    this.loading = true;
     this.commonService(this.negotiationChatApi).retrieve({
       criteriaQuery: this.updateCriteria([
         'active.equals=true',
@@ -78,7 +82,7 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
     }).then((res)=>{
       console.log(res.data);
       this.chatHistory = res.data;
-    });
+    }).finally(()=>{this.loading = false});
   }
 
   openChatForm(){
@@ -261,7 +265,7 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
       }).then((res)=>{
         console.log(res.data);
         this.negoPriceLine=res.data;
-      });
+      }).finally(()=>{this.detailLoading=false});
     })
   }
 

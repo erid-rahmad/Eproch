@@ -55,25 +55,37 @@
         :gutter="24"
         style="margin-top: 16px"
       >
-      <div class="form-wrapper card-view app-container" v-if="chatHistory.length" style="background:#FFFFFF">
-        <div class="card" v-for="(c,index) in chatHistory" :key="index" style="border: solid;">
-          <h4>{{c.vendorText?line.vendorName:"Buyer"}}
-            <el-button
-              class="btn-attachment"
-              icon="el-icon-download"
-              size="mini"
-              type="primary"
-              v-if="c.attachmentId"
-              @click="downloadAttachment(c)"
-            >
-            </el-button>
-          </h4>
-          <p>{{c.vendorText?c.vendorText:c.buyerText}}</p>
-        </div>
-      </div>
-      <div class="form-wrapper" v-else>
-        <p>Tidak ada percakapan</p>
-      </div>
+      
+      <el-skeleton :loading="loading" animated :count="3">
+        <template slot="template">
+          <div class="card" style="border: solid; border-width: thin;">
+            <el-skeleton-item variant="h3" style="width: 30%"/>
+            <el-skeleton-item variant="text"/>
+            <el-skeleton-item variant="text" style="width: 65%"/>
+          </div>
+        </template>
+        <template>
+          <div class="form-wrapper card-view app-container" v-if="chatHistory.length" style="background:#FFFFFF">
+            <div class="card" v-for="(c,index) in chatHistory" :key="index" style="border: solid; border-width: thin;">
+              <h4>{{c.vendorText?line.vendorName:"Buyer"}}
+                <el-button
+                  class="btn-attachment"
+                  icon="el-icon-download"
+                  size="mini"
+                  type="primary"
+                  v-if="c.attachmentId"
+                  @click="downloadAttachment(c)"
+                >
+                </el-button>
+              </h4>
+              <p>{{c.vendorText?c.vendorText:c.buyerText}}</p>
+            </div>
+          </div>
+          <div class="form-wrapper" v-else style="text-align: center;">
+            <p>Tidak ada percakapan</p>
+          </div>
+        </template>
+      </el-skeleton>
       <!--
       <el-table border :data="chatHistory" size="mini">
         <el-table-column width="100" label="No">
@@ -244,7 +256,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-table border :data="negoPriceLine" size="mini">
+        <el-table border :data="negoPriceLine" size="mini" v-loading="detailLoading">
           <el-table-column width="60" label="No.">
             <template slot-scope="row">
               {{ row.$index + 1 }}
