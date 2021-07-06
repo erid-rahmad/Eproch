@@ -34,7 +34,7 @@
             >
                 <el-table-column align="center" fixed type="selection" width="48"/>
 
-                <el-table-column fixed="right" width="200">
+                <el-table-column align="center" fixed="right" width="200">
                     <template slot-scope="{ row }">
                         <el-button :underline="false" icon="el-icon-search" size="mini" title="View" type="primary"
                                    @click="viewBidding(row)"

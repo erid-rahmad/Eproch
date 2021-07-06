@@ -40,12 +40,9 @@
                       size="mini"
                       v-loading="loading"
                       border
+                      highlight-current-row
                       style="width: 100%">
-                <el-table-column label="No" min-width="30">
-                    <template slot-scope="row">
-                        {{ row.$index + 1 }}
-                    </template>
-                </el-table-column>
+                <el-table-column align="center" fixed type="selection" width="48"/>
                 <el-table-column label="Vendor Name" min-width="180" prop="vendorName" sortable>
                 </el-table-column>
                 <el-table-column label="Date Submited" min-width="180" prop="dateSubmit" sortable>

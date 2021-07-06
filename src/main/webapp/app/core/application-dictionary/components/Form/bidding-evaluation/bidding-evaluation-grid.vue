@@ -9,6 +9,7 @@
                                       :default-sort="{prop: 'date', order: 'descending'}"
                                       size="mini"
                                       v-loading="loading"
+                                      highlight-current-row
                                       border
                                       stripe
                                       style="width: 100%">
@@ -25,20 +26,16 @@
                                         </el-button>
                                     </template>
                                 </el-table-column>
-                                <el-table-column align="center" label="No" min-width="40">
-                                    <template slot-scope="row">
-                                        {{ row.$index + 1 }}
-                                    </template>
+                                <el-table-column align="center" fixed type="selection" width="48"/>
+                                <el-table-column label="Bidding No." prop="documentNo" sortable min-width="150">
                                 </el-table-column>
-                                <el-table-column align="center" label="Bidding No." prop="documentNo" sortable min-width="150">
+                                <el-table-column label="Title" prop="name" show-overflow-tooltip sortable min-width="180">
                                 </el-table-column>
-                                <el-table-column align="center" label="Title" prop="name" show-overflow-tooltip sortable min-width="180">
+                                <el-table-column label="Bidding Type" prop="biddingTypeName" sortable min-width="180">
                                 </el-table-column>
-                                <el-table-column align="center" label="Biding Type" prop="biddingTypeName" sortable min-width="180">
+                                <el-table-column label="Department type" prop="costCenterName" sortable min-width="180">
                                 </el-table-column>
-                                <el-table-column align="center" label="Depertement type" prop="costCenterName" sortable min-width="180">
-                                </el-table-column>
-                                <el-table-column align="center" label="Biding Schedule" prop="" sortable min-width="180">
+                                <el-table-column align="center" label="Bidding Schedule" prop="" sortable min-width="180">
                                     <template slot-scope="{ row }">
                                         <el-button class="button" size="mini" style="width: 100%" @click="viewBidding(row, 1)">
                                             <svg-icon name="icomoo/084-calendar"></svg-icon> View Schedule
