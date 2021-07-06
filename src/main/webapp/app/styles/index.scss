@@ -368,7 +368,7 @@ aside {
   box-shadow: none;
   border-left: 1px solid #dfe6ec;
 }
-
+/*
 //striped / 2nd child
 .el-table--striped .el-table__body tr.el-table__row--striped td{
   background-color: #e0ffff;
@@ -386,13 +386,29 @@ aside {
 .el-table--mini th {
   background-color: #fffafa;
 }
+*/
+.el-table__body tr:nth-child(even) td {
+  background-color: #fafafa;
+}
 
 //selected row
+.el-table__body tr.current-row > td {
+  background-color: #e0ffff;
+}
+
 .el-table--striped .el-table__body tr.el-table__row--striped.current-row td {
+  background-color: #e0ffff;
+}
+
+.el-table th > .cell {
+  color: #26c6da;
+}
+
+.el-table__body tr.hover-row.current-row > td {
   background-color: #87cefa;
 }
 
-.el-table__body tr.current-row > td {
+.el-table__body tr.hover-row.current-row:nth-child(even) > td {
   background-color: #87cefa;
 }
 

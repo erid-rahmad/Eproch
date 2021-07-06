@@ -120,7 +120,7 @@
   overflow: hidden;
 
   .el-steps--simple {
-    background: #1890ff;
+    background: #26c6da;
 
     .el-step__head {
       &.is-process {
