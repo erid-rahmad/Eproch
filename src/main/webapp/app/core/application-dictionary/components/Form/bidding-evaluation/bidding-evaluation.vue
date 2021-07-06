@@ -11,21 +11,29 @@
             <div class="card">
             <el-form  ref="productCatalog" label-position="left" label-width="130px"
                      size="mini">
-                <el-form-item label="Bidding No">
-                    {{ pickRow.documentNo }}
-                </el-form-item>
-                <el-form-item label="Bidding Name">
-                    {{ pickRow.name }}
-                </el-form-item>
-                <el-form-item label="Bidding Type">
-                    {{ pickRow.biddingTypeName }}
-                </el-form-item>
-                <el-form-item label="Event Type">
-                    {{ pickRow.eventTypeName }}
-                </el-form-item>
-                <el-divider content-position="left">
-                    <h4>Joined Vendor(s)</h4>
-                </el-divider>
+                <el-row> 
+                    <el-col span="12">
+                        <el-form-item label="Bidding No">
+                            {{ pickRow.documentNo }}
+                        </el-form-item>
+                        <el-form-item label="Bidding Name">
+                            {{ pickRow.name }}
+                        </el-form-item>
+                    </el-col>
+                    <el-col span="12">
+                        <el-form-item label="Event Type">
+                            {{ pickRow.eventTypeName }}
+                        </el-form-item>
+                        <el-form-item label="Bidding Type">
+                            {{ pickRow.biddingTypeName }}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-divider content-position="left">
+                        <h4>Joined Vendor(s)</h4>
+                    </el-divider>
+                </el-row>
             </el-form>
             <el-table :data="biddingSubmission"
                       :default-sort="{prop: 'date', order: 'descending'}"

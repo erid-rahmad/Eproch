@@ -38,7 +38,7 @@
 
                     </el-col>
                 </el-row>
-
+                E-Nofa
                 <el-row class="filter" :gutter="24">
                     <el-col :span="24">
 
@@ -137,6 +137,9 @@
                                 sortable
                                 prop="createdDate"
                                 label="Created Date">
+                                <template slot-scope="{ row }">
+                                    {{ row.createdDate | formatDateTime }}
+                                </template>
                             </el-table-column>
 
                         </el-table>

@@ -88,27 +88,31 @@
             </el-col>
         </el-row>
         <div class="card">
-            <header v-if="title" v-bind:style="{'padding-bottom':FormMenu===1?'20px':'0px'}">
+            <header v-if="title" style="padding-bottom:20px">
                 <h3 align="center">{{changeCode(title)}} Proposal</h3>
             </header>
             <el-form v-if="FormMenu===0 || FormMenu===2|| FormMenu===3" ref="productCatalog" label-position="left"
                      label-width="130px"
-                     size="mini">
-                <el-form-item label="Bidding No">
-                    {{ evaluation.biddingNo }}
-                </el-form-item>
-                <el-form-item label="Bidding Name">
-                    {{ evaluation.biddingName }}
-                </el-form-item>
-                <el-form-item label="Bidding Type">
-                    {{ evaluation.biddingTypeName }}
-                </el-form-item>
-                <el-form-item label="Event Type">
-                    {{ evaluation.eventTypeName }}
-                </el-form-item>
-                <el-form-item label="Vendor Name">
-                    {{ evaluation.vendorName }}
-                </el-form-item>
+                     size="mini" >
+                <el-col span="12">
+                    <el-form-item label="Bidding No">
+                        {{ evaluation.biddingNo }}
+                    </el-form-item>
+                    <el-form-item label="Bidding Name">
+                        {{ evaluation.biddingName }}
+                    </el-form-item>
+                    <el-form-item label="Vendor Name">
+                        {{ evaluation.vendorName }}
+                    </el-form-item>
+                </el-col>
+                <el-col span="12" v-bind:style="{'padding-bottom': FormMenu===0?'0%':'5.5%'}">
+                    <el-form-item label="Event Type">
+                        {{ evaluation.eventTypeName }}
+                    </el-form-item>
+                    <el-form-item label="Bidding Type">
+                        {{ evaluation.biddingTypeName }}
+                    </el-form-item>
+                </el-col>
             </el-form>
             <div v-if="FormMenu===1">
                 <EvaluationTeamDetailPrice ref="evaluationFormDetail" :evaluationFormProp="evaluationFormProp"

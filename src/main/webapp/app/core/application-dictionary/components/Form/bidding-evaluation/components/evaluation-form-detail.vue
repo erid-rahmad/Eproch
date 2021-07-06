@@ -139,11 +139,11 @@
                                         </template>
                                     </el-table-column>
                                 </el-table>
+                                <el-divider/>
                             </el-row>
                         </el-col>
                     </el-row>
                 </el-col>
-
             </el-row>
             <div style="margin-bottom: 20px;margin-top: 20px">
                 <el-row>
