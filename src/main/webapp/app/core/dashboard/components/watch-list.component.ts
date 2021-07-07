@@ -29,6 +29,8 @@ export default class WatchList extends WatchListProps {
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
 
+  private data:any={};
+
   items: IAdWatchListItem[] = [];
 
   get isCard() {
@@ -43,11 +45,17 @@ export default class WatchList extends WatchListProps {
     return /*this.items.length > 4 ? DisplayType.List : */DisplayType.Card;
   }
 
-  @Watch('items', { deep: true })
-  onItemsChanged(items: IAdWatchListItem[]) {
-    items.forEach((item, index) => {
+  @Watch('items', {deep: true})
+  async onItemsChanged(items: IAdWatchListItem[]) {
+    await items.forEach((item, index) => {
       this.retrieveWatchListCounter(item, index);
     });
+    await items.forEach(item=>{
+      this.$set(this.data,item.code, item.count);
+      this.$set(this.data,item.code+"data", item);
+    })
+   await console.log("final data",this.data);
+
   }
 
   created() {
@@ -58,7 +66,7 @@ export default class WatchList extends WatchListProps {
     if (! card.count) {
       return;
     }
-    
+
     if (card.actionType === AdWatchListActionType.MENU) {
       card.actionUrl = await this.commonService('/api/ad-menus/full-path').find(card.adMenu.id);
     }
@@ -117,6 +125,8 @@ export default class WatchList extends WatchListProps {
       ])
       .then(count => {
         this.$set(this.items[index], 'count', count);
+        this.$set(this.items[index], 'count', count);
+        console.log("this item count",this.items)
       });
   }
 }

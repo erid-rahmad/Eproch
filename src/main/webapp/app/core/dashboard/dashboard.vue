@@ -55,7 +55,8 @@
                     position: relative;
                     box-shadow: 0px 12px 20px -10px;"
                 >
-                    <circular-color-bar style="padding: 1px"></circular-color-bar>
+<!--                    <circular-color-bar style="padding: 1px"></circular-color-bar>-->
+                    <echartpie style="padding: 1px"></echartpie>
                 </md-card>
                 <md-card md-with-hover style="
                     top: 1%;
@@ -90,183 +91,16 @@
                 </md-card>
             </div>
         </div>
-        <div class=" md-layout md-gutter" style="padding-top: 15px">
-            <div class="md-layout-item">
-                <md-card md-with-hover style="
-                    background: linear-gradient(60deg,#66bb6a,#43a047);
-                            width: 85px;
-                            height: 85px;
-                            margin: 0px;
-                            border-radius: 6px;
-                            top: -5%;
-                            left: 5%;
-                            position: relative;
-                            box-shadow: 0px 12px 20px -10px;"
-                >
-                    <md-card-media>
-                        <md-icon class="el-icon-s-shop card-icon" style="color: white"></md-icon>
-                    </md-card-media>
-                </md-card>
-                <md-card md-with-hover style="
-                            top: 3%;
-                            height: 132px;
-                            position: unset;
-                            border-radius: 6px;
-                            margin-top: -76px;">
 
-                    <md-card-header-text align="right" style="margin-right: 14px;">
-                        <div class="md-title">Reopened Invoices</div>
-                        <div class="md-subhead">50</div>
-                    </md-card-header-text>
-
-                    <div class="md-card-actions md-alignment-left" style="
-                        margin: 32px 11px 7px;
-                        font-size: 12px;
-                        opacity: 0.7;
-                        padding: 4px 0 0 0;
-                        border-top: 1px solid #d0d0d0;">
-                        <div class="stats">
-                            <i class="el-icon-refresh-right"
-                               style="font-size: 20px!important;"></i>
-                            <i style="position: relative;
-                                      top: -3px;"
-                            >Just Updated</i>
-                        </div>
-                    </div>
-                </md-card>
-            </div>
-            <div class="md-layout-item">
-                <md-card md-with-hover style="
-                    background: #ffa726;
-                            width: 85px;
-                            height: 85px;
-                            margin: 0px;
-                            border-radius: 6px;
-                            top: -5%;
-                            left: 5%;
-                            position: relative;
-                            box-shadow: 0px 12px 20px -10px;"
-                >
-                    <md-card-media>
-                        <md-icon class="card-icon el-icon-goods" style="color: white"></md-icon>
-                    </md-card-media>
-                </md-card>
-                <md-card md-with-hover style="
-                            top: 3%;
-                            height: 132px;
-                            position: unset;
-                            border-radius: 6px;
-                            margin-top: -76px;">
-
-                    <md-card-header-text align="right" style="margin-right: 14px;">
-                        <div class="md-title">Waiting</div>
-                        <div class="md-subhead">+51</div>
-                    </md-card-header-text>
-
-                    <div class="md-card-actions md-alignment-left" style="
-                        margin: 32px 11px 7px;
-                        font-size: 12px;
-                        opacity: 0.7;
-                        padding: 4px 0 0 0;
-                        border-top: 1px solid #d0d0d0;">
-                        <div class="stats">
-                            <i class="el-icon-refresh-right"
-                               style="font-size: 20px!important;"></i>
-                            <i style="position: relative;
-                                      top: -3px;"
-                            >Just Updated</i>
-                        </div>
-                    </div>
-                </md-card>
-            </div>
-            <div class="md-layout-item">
-                <md-card md-with-hover style="
-                    background: #ff5252;
-                            width: 85px;
-                            height: 85px;
-                            margin: 0px;
-                            border-radius: 6px;
-                            top: -5%;
-                            left: 5%;
-                            position: relative;
-                            box-shadow: 0px 12px 20px -10px;"
-                >
-                    <md-card-media>
-                        <md-icon class="card-icon el-icon-coordinate" style="color: white"></md-icon>
-                    </md-card-media>
-                </md-card>
-                <md-card md-with-hover style="
-                            top: 3%;
-                            height: 132px;
-                            position: unset;
-                            border-radius: 6px;
-                            margin-top: -76px;">
-
-                    <md-card-header-text align="right" style="margin-right: 14px;">
-                        <div class="md-title">Pending</div>
-                        <div class="md-subhead">90</div>
-                    </md-card-header-text>
-
-                    <div class="md-card-actions md-alignment-left" style="
-                        margin: 32px 11px 7px;
-                        font-size: 12px;
-                        opacity: 0.7;
-                        padding: 4px 0 0 0;
-                        border-top: 1px solid #d0d0d0;">
-                        <div class="stats">
-                            <i class="el-icon-refresh-right"
-                               style="font-size: 20px!important;"></i>
-                            <i style="position: relative;
-                                      top: -3px;"
-                            >Just Updated</i>
-                        </div>
-                    </div>
-                </md-card>
-            </div>
-            <div class="md-layout-item">
-                <md-card md-with-hover style="
-                    background: #26c6da;
-                            width: 85px;
-                            height: 85px;
-                            margin: 0px;
-                            border-radius: 6px;
-                            top: -5%;
-                            left: 5%;
-                            position: relative;
-                            box-shadow: 0px 12px 20px -10px;"
-                >
-                    <md-card-media>
-                        <md-icon class="card-icon el-icon-data-analysis" style="color: white"></md-icon>
-                    </md-card-media>
-                </md-card>
-                <md-card md-with-hover style="
-                            top: 3%;
-                            height: 132px;
-                            position: unset;
-                            border-radius: 6px;
-                            margin-top: -76px;">
-
-                    <md-card-header-text align="right" style="margin-right: 14px;">
-                        <div class="md-title">Benefit</div>
-                        <div class="md-subhead">$51</div>
-                    </md-card-header-text>
-
-                    <div class="md-card-actions md-alignment-left" style="
-                        margin: 32px 11px 7px;
-                        font-size: 12px;
-                        opacity: 0.7;
-                        padding: 4px 0 0 0;
-                        border-top: 1px solid #d0d0d0;">
-                        <div class="stats">
-                            <i class="el-icon-refresh-right"
-                               style="font-size: 20px!important;"></i>
-                            <i style="position: relative;
-                                      top: -3px;"
-                            >Just Updated</i>
-                        </div>
-                    </div>
-                </md-card>
-            </div>
+        <div
+            v-for="item in dashboardItems"
+            :key="item.id"
+        >
+            <watch-list
+                v-if="item.paDashboardItem.type === 'WATCHLIST'"
+                ref="widget"
+                :name="item.paDashboardItem.adWatchListName"
+            />
         </div>
         <div class="md-layout md-gutter">
             <div class="md-layout-item">
@@ -535,127 +369,12 @@
                     </div>
                 </md-card>
             </div>
-
-
         </div>
-        <!--        <div class=" md-layout md-gutter">-->
-        <!--            <div class="md-layout-item">-->
-        <!--                <md-card md-with-hover>-->
-        <!--                    <md-ripple>-->
-        <!--                        <md-card-header style="background-color: #ffa726">-->
-        <!--                            <md-card-header-text>-->
-        <!--                                <div class="md-title">Reopened Invoices</div>-->
-        <!--                                <div class="md-subhead">0</div>-->
-        <!--                            </md-card-header-text>-->
-        <!--                            <md-card-media md-with-hover>-->
-        <!--                                <img alt="People"-->
-        <!--                                     src="https://images.vexels.com/media/users/3/136339/isolated/lists/c834c10f66dc085b7bb02489e10e3638-mail-message-flat-stroke-icon.png">-->
-        <!--                            </md-card-media>-->
-        <!--                        </md-card-header>-->
-        <!--                        <md-card-actions align="left">-->
-        <!--                            <md-button class="md-icon-button">-->
-        <!--                                <md-icon>perm_camera_mic</md-icon>-->
-        <!--                            </md-button>-->
-        <!--                            <md-button class="md-icon-button">-->
-        <!--                                <md-icon>fingerprint</md-icon>-->
-        <!--                            </md-button>-->
-        <!--                            <md-button class="md-icon-button">-->
-        <!--                                <md-icon>private_connectivity</md-icon>-->
-        <!--                            </md-button>-->
-        <!--                        </md-card-actions>-->
-        <!--                    </md-ripple>-->
-        <!--                </md-card>-->
-        <!--            </div>-->
-        <!--            <div class="md-layout-item">-->
-        <!--                <md-card md-with-hover>-->
-        <!--                    <md-ripple>-->
-        <!--                        <md-card-header style="background-color: #ff5252">-->
-        <!--                            <md-card-header-text>-->
-        <!--                                <div class="md-title">Waiting</div>-->
-        <!--                                <div class="md-subhead">6</div>-->
-        <!--                            </md-card-header-text>-->
-        <!--                            <md-card-media md-with-hover>-->
-        <!--                                <img alt="People"-->
-        <!--                                     src="https://images.vexels.com/media/users/3/200959/isolated/lists/737c231918561684922172c250fd94c4-free-delivery-icon.png">-->
-        <!--                            </md-card-media>-->
-        <!--                        </md-card-header>-->
-        <!--                        <md-card-actions align="left">-->
-        <!--                            <md-button class="md-icon-button">-->
-        <!--                                <md-icon>perm_camera_mic</md-icon>-->
-        <!--                            </md-button>-->
-        <!--                            <md-button class="md-icon-button">-->
-        <!--                                <md-icon>fingerprint</md-icon>-->
-        <!--                            </md-button>-->
-        <!--                            <md-button class="md-icon-button">-->
-        <!--                                <md-icon>private_connectivity</md-icon>-->
-        <!--                            </md-button>-->
-        <!--                        </md-card-actions>-->
-        <!--                    </md-ripple>-->
-        <!--                </md-card>-->
-        <!--            </div>-->
-        <!--            <div class="md-layout-item">-->
-        <!--                <md-card md-with-hover>-->
-        <!--                    <md-ripple>-->
-        <!--                        <md-card-header>-->
-        <!--                            <md-card-header-text>-->
-        <!--                                <div class="md-title">New Orders</div>-->
-        <!--                                <div class="md-subhead">4</div>-->
-        <!--                            </md-card-header-text>-->
-        <!--                            <md-card-media md-with-hover>-->
-        <!--                                <img alt="People"-->
-        <!--                                     src="https://images.vexels.com/media/users/3/204644/isolated/lists/e3dd5036fa35b75f401a97a28a5ebe61-around-the-clock-flat-icon.png">-->
-        <!--                            </md-card-media>-->
-        <!--                        </md-card-header>-->
-        <!--                        <md-card-actions align="left">-->
-        <!--                            <md-button class="md-icon-button">-->
-        <!--                                <md-icon>perm_camera_mic</md-icon>-->
-        <!--                            </md-button>-->
-        <!--                            <md-button class="md-icon-button">-->
-        <!--                                <md-icon>fingerprint</md-icon>-->
-        <!--                            </md-button>-->
-        <!--                            <md-button class="md-icon-button">-->
-        <!--                                <md-icon>private_connectivity</md-icon>-->
-        <!--                            </md-button>-->
-        <!--                        </md-card-actions>-->
-        <!--                    </md-ripple>-->
-        <!--                </md-card>-->
-        <!--            </div>-->
-        <!--            <div class="md-layout-item">-->
-        <!--                <md-card md-with-hover>-->
-        <!--                    <md-ripple>-->
-        <!--                        <md-card-actions align="left" style="background-color: #26c6da">-->
-        <!--                        </md-card-actions>-->
-        <!--                        <md-card-header>-->
-        <!--                            <md-card-header-text>-->
-        <!--                                <div class="md-title">Submitted Invoice</div>-->
-        <!--                                <div class="md-subhead">6</div>-->
-        <!--                            </md-card-header-text>-->
-        <!--                            <md-card-media md-with-hover>-->
-        <!--                                <img alt="People"-->
-        <!--                                     src="https://images.vexels.com/media/users/3/136399/isolated/lists/6a12c7b3db96cb17f08966c96c51f405-envelope-with-mail-icon.png">-->
-        <!--                            </md-card-media>-->
-        <!--                        </md-card-header>-->
-        <!--                        <md-card-content style="background-color: #26c6da">-->
-        <!--                            <md-button class="md-icon-button">-->
-        <!--                                <md-icon>perm_camera_mic</md-icon>-->
-        <!--                            </md-button>-->
-        <!--                            <md-button class="md-icon-button">-->
-        <!--                                <md-icon>fingerprint</md-icon>-->
-        <!--                            </md-button>-->
-        <!--                            <md-button class="md-icon-button">-->
-        <!--                                <md-icon>private_connectivity</md-icon>-->
-        <!--                            </md-button>-->
-        <!--                        </md-card-content>-->
-        <!--                    </md-ripple>-->
-        <!--                </md-card>-->
-        <!--            </div>-->
-        <!--        </div>-->
-
-
     </div>
 </template>
 
 <style lang="scss" scoped>
+
 
 .md-title {
     font-size: 16px;
@@ -702,8 +421,17 @@
     width: 500px;
 }
 
+body{
+    background: #35A9DB;
+    font-family: roboto;
+    text-align: center;
+    color: #fff;
+}
+
 
 </style>
+
+
 
 
 <script lang="ts" src="./dashboard.component.ts"></script>

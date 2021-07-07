@@ -2,7 +2,7 @@ import DynamicWindowService from '@/core/application-dictionary/components/Dynam
 import WatchList from "@/core/dashboard/components/watch-list.vue";
 import { AccountStoreModule as accountStore } from "@/shared/config/store/account-store";
 import { IPaDashboardPreference } from '@/shared/model/pa-dashboard-preference.model';
-import { Component, Inject, Vue } from 'vue-property-decorator';
+import {Component, Inject, Mixins, Vue} from 'vue-property-decorator';
 import DashboardService from './dashboard.service';
 import { debounce } from 'lodash';
 
@@ -11,13 +11,17 @@ import liveData from './componentsChart/liveData.vue';
 import lineexample from './componentsChart/simpleLine.vue';
 import lineupdate from './componentsChart/methodUpdate.vue';
 import echart from './componentsChart/echart-bar.vue';
+import echartpie from './componentsChart/echart-pie.vue';
+import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
+
+const baseApiVendor ='api/c-vendors/count';
 
 @Component({
   components: {
-    WatchList,circularColorBar,liveData,lineexample,lineupdate,echart
+    WatchList,circularColorBar,liveData,lineexample,lineupdate,echart,echartpie
   }
 })
-export default class DashBoard extends Vue {
+export default class DashBoard extends  Mixins(AccessLevelMixin) {
 
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
@@ -42,12 +46,35 @@ export default class DashBoard extends Vue {
   }
 
   created() {
+    this.retrieveVendor();
     this.dashboardService = new DashboardService(this);
     this.debouncedRefresh = debounce(this.refresh, 5000);
+    console.log("this dashbord,",this.dashboards);
 
     if (this.dashboards.length) {
       this.switchDashboard(this.dashboards[0].key);
     }
+  }
+
+  retrieveVendor(){
+    this.commonService(baseApiVendor)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+
+        console.log(res.data)
+
+      })
+      .finally();
   }
 
   data() {
@@ -115,6 +142,7 @@ export default class DashBoard extends Vue {
         })
         .then(res => {
           this.dashboardItems = res.data;
+          console.log("info ",this.dashboardItems);
         })
         .catch(err => {
           console.log('Dashboard error', err);
