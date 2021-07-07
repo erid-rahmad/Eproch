@@ -80,18 +80,18 @@
       <div v-if="!isVendor">
         Agreed vendors
         <el-table border :data="agreed" size="mini" v-loading="loading">
-          <el-table-column width="100" label="No">
+          <el-table-column min-width="100" label="No">
             <template slot-scope="row">
               {{ row.$index + 1 }}
             </template>
           </el-table-column>
-          <el-table-column property="vendorName" label="Vendor" width="400"></el-table-column>
-          <el-table-column label="Proposed Price" width="400">
+          <el-table-column property="vendorName" label="Vendor" min-width="400"></el-table-column>
+          <el-table-column label="Proposed Price" min-width="400">
             <template slot-scope="{row}">
               {{ row.proposedPrice | formatCurrency }}
             </template>
           </el-table-column>
-          <el-table-column label="Negotiation Price" width="400">
+          <el-table-column label="Negotiation Price" min-width="400">
             <template slot-scope="{row}">
               {{ row.negotiationPrice | formatCurrency }}
             </template>
@@ -100,23 +100,23 @@
       </div>
       Negotiation in progress
       <el-table border :data="inProgress" size="mini" v-loading="loading">
-        <el-table-column width="50" label="No">
+        <el-table-column min-width="50" label="No">
           <template slot-scope="row">
             {{ row.$index + 1 }}
           </template>
         </el-table-column>
         <el-table-column property="vendorName" label="Vendor" width="400"></el-table-column>
-        <el-table-column label="Proposed Price" width="300">
+        <el-table-column label="Proposed Price" min-width="300">
           <template slot-scope="{row}">
             {{ row.proposedPrice | formatCurrency }}
           </template>
         </el-table-column>
-        <el-table-column label="Negotiation Price" width="300">
+        <el-table-column label="Negotiation Price" min-width="300">
           <template slot-scope="{row}">
             {{ row.negotiationPrice | formatCurrency }}
           </template>
         </el-table-column>
-        <el-table-column width="160" label="Action">
+        <el-table-column min-width="160" label="Action">
             <template slot-scope="{ row }">
               <div v-if="allowNegotiation">
                 <el-button class="button" icon="el-icon-caret-right" size="mini" type="primary" @click="viewNegotiationWindow(row)">
@@ -129,18 +129,18 @@
       <div v-if="!isVendor">
         Disagreed vendors
         <el-table border :data="disagreed" size="mini" v-loading="loading">
-          <el-table-column width="100" label="No">
+          <el-table-column min-width="100" label="No">
             <template slot-scope="row">
               {{ row.$index + 1 }}
             </template>
           </el-table-column>
-          <el-table-column property="vendorName" label="Vendor" width="400"></el-table-column>
-          <el-table-column label="Proposed Price" width="400">
+          <el-table-column property="vendorName" label="Vendor" min-width="400"></el-table-column>
+          <el-table-column label="Proposed Price" min-width="400">
             <template slot-scope="{row}">
               {{ row.proposedPrice | formatCurrency }}
             </template>
           </el-table-column>
-          <el-table-column label="Negotiation Price" width="400">
+          <el-table-column label="Negotiation Price" min-width="400">
             <template slot-scope="{row}">
               {{ row.negotiationPrice | formatCurrency }}
             </template>
@@ -150,18 +150,18 @@
       <div v-if="!isVendor">
         Negotiation not started
         <el-table border :data="notStarted" size="mini" v-loading="loading">
-          <el-table-column width="100" label="No">
+          <el-table-column min-width="100" label="No">
             <template slot-scope="row">
               {{ row.$index + 1 }}
             </template>
           </el-table-column>
-          <el-table-column property="vendorName" label="Vendor" width="400"></el-table-column>
-          <el-table-column label="Proposed Price" width="400">
+          <el-table-column property="vendorName" label="Vendor" min-width="400"></el-table-column>
+          <el-table-column label="Proposed Price" min-width="400">
             <template slot-scope="{row}">
               {{ row.proposedPrice | formatCurrency }}
             </template>
           </el-table-column>
-          <el-table-column width="400" label="Action">
+          <el-table-column min-width="400" label="Action">
             <template slot-scope="{ row }">
               <div v-if="allowNegotiation">
                 <el-button class="button" icon="el-icon-caret-right" size="mini" type="primary" @click="viewNegotiationWindow(row)">
@@ -190,6 +190,11 @@
       th, td {
         height: 35px;
       }
+    }
+
+    .el-table{
+      margin-top: 5px;
+      margin-bottom: 10px;
     }
   }
 }

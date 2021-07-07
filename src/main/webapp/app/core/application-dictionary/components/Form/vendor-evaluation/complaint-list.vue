@@ -31,7 +31,7 @@
         @change="onDocumentActionChanged"
       ></document-action-button>
     </div>
-
+    Complaint
     <el-table
       v-if="index"
       ref="mainGrid"
@@ -134,10 +134,6 @@
 
 <style lang="scss" scoped>
 .complaint {
-  display: grid;
-  grid-template-columns: 100%;
-  grid-template-rows: 36px auto;
-
   .toolbar {
     padding: 4px;
   }

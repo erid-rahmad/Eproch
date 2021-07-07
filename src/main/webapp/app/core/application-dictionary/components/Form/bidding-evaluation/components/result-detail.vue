@@ -10,25 +10,32 @@
         <div class="card">
             <el-form ref="productCatalog" label-position="left" label-width="130px"
                      size="mini">
-                <el-form-item label="Bidding No">
-                    {{ evaluationResultProp.biddingNo }}
-                </el-form-item>
-                <el-form-item label="Bidding Name">
-                    {{ evaluationResultProp.biddingName }}
-                </el-form-item>
-                <el-form-item label="Bidding Type">
-                    {{ evaluationResultProp.biddingType}}
-                </el-form-item>
-                <el-form-item label="Vendor Name">
-                    {{ evaluationResultProp.vendorName }}
-                </el-form-item>
-                <el-form-item label="TotalScore">
-                    {{ evaluationResultProp.score }}
-                </el-form-item>
-
-                <el-divider content-position="left">
-                    <h4>Evaluation</h4>
-                </el-divider>
+                <el-row>
+                    <el-col span="12">
+                        <el-form-item label="Bidding No">
+                            {{ evaluationResultProp.biddingNo }}
+                        </el-form-item>
+                        <el-form-item label="Bidding Name">
+                            {{ evaluationResultProp.biddingName }}
+                        </el-form-item>
+                        <el-form-item label="Total Score">
+                            {{ evaluationResultProp.score }}
+                        </el-form-item>
+                    </el-col>
+                    <el-col span="12">
+                        <el-form-item label="Bidding Type">
+                            {{ evaluationResultProp.biddingType}}
+                        </el-form-item>
+                        <el-form-item label="Vendor Name">
+                            {{ evaluationResultProp.vendorName }}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-divider content-position="left">
+                        <h4>Evaluation</h4>
+                    </el-divider>
+                </el-row>
             </el-form>
 
             <el-table :data="evaluationResultLine"

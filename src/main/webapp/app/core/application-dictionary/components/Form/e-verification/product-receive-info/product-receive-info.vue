@@ -22,7 +22,7 @@
         </el-button>
       </el-col>
     </el-row>
-
+    Product Receive Info
     <el-row class="filter" :gutter="24">
       <el-form
           ref="form"
