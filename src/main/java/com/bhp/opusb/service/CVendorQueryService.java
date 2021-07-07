@@ -77,6 +77,7 @@ public class CVendorQueryService extends QueryService<CVendor> {
     public long countByCriteria(CVendorCriteria criteria) {
         log.debug("count by criteria : {}", criteria);
         final Specification<CVendor> specification = createSpecification(criteria);
+
         return cVendorRepository.count(specification);
     }
 

@@ -39,7 +39,7 @@
                                style="font-size: 20px!important;"></i>
                             <i style="position: relative;
                                       top: -3px;"
-                                    >Just Updated</i>
+                            >Just Updated</i>
                         </div>
                     </div>
                 </md-card>
@@ -55,7 +55,7 @@
                     position: relative;
                     box-shadow: 0px 12px 20px -10px;"
                 >
-<!--                    <circular-color-bar style="padding: 1px"></circular-color-bar>-->
+                    <!--                    <circular-color-bar style="padding: 1px"></circular-color-bar>-->
                     <echartpie style="padding: 1px"></echartpie>
                 </md-card>
                 <md-card md-with-hover style="
@@ -102,6 +102,7 @@
                 :name="item.paDashboardItem.adWatchListName"
             />
         </div>
+
         <div class="md-layout md-gutter">
             <div class="md-layout-item">
                 <md-card md-with-hover style="
@@ -227,17 +228,20 @@
                 </md-card>
             </div>
         </div>
+
         <div class=" md-layout md-gutter" style="padding-top: 25px">
             <div class="md-layout-item">
                 <md-card md-with-hover style="
                     background: #26c6da;
-                            width: 400px;
-                            height: 85px;
-                            margin: 0px;
-                            border-radius: 6px;
-                            top: -5%;
-                            left: 5%;
-                            position: relative;
+                              background: rgb(38, 198, 218);
+                                width: 90%;
+                                height: 85px;
+                                margin: 0px;
+                                margin-bottom: 16px;
+                                border-radius: 6px;
+                                top: -5%;
+                                left: 5%;
+                                position: relative;
                             box-shadow: 0px 12px 20px -10px;">
                     <md-card-media>
                         <div class="md-title-chart"
@@ -250,7 +254,7 @@
                                             ;">
 
                             </i>
-                            <i>Title Table</i>
+                            <i>TOP Vendor Purchase Amount</i>
 
                         </div>
                     </md-card-media>
@@ -266,26 +270,32 @@
                     <md-card-header-text align="right" style="
                         margin-right: 14px;
                         margin-left: 14px;">
-                        <template>
+                        <template >
                             <el-table
-                                :data="tableData"
+                                :data="dataPO"
                                 height="250"
-                                width="250"
                             >
                                 <el-table-column
-                                    label="Date"
-                                    prop="date"
+                                    label="Code"
+                                    width="180px"
+                                    prop="warehouseId"
                                 >
                                 </el-table-column>
                                 <el-table-column
-                                    label="Name"
-                                    prop="name"
+                                    label="Vendor Name"
+                                    width="280px"
+                                    prop="vendorName"
                                 >
                                 </el-table-column>
                                 <el-table-column
-                                    label="Address"
-                                    prop="address">
+                                    label="Total"
+                                    width="280px"
+                                >
+                                    <template slot-scope="{row}">
+                                        {{ row.grandTotal | formatCurrency }}
+                                    </template>
                                 </el-table-column>
+
                             </el-table>
                         </template>
                     </md-card-header-text>
@@ -308,19 +318,33 @@
             </div>
             <div class="md-layout-item">
                 <md-card md-with-hover style="
-                    background: #ff5252;
-                            width: 85px;
-                            height: 85px;
-                            margin: 0px;
-                            border-radius: 6px;
-                            top: -5%;
-                            left: 5%;
-                            position: relative;
-                            box-shadow: 0px 12px 20px -10px;"
-                >
+                    background: #26c6da;
+                              background: rgb(38, 198, 218);
+                                width: 90%;
+                                height: 85px;
+                                margin: 0px;
+                                margin-bottom: 16px;
+                                border-radius: 6px;
+                                top: -5%;
+                                left: 5%;
+                                position: relative;
+                            box-shadow: 0px 12px 20px -10px;">
                     <md-card-media>
-                        <md-icon class="card-icon el-icon-mobile" style="color: white"></md-icon>
+                        <div class="md-title-chart"
+                             style="padding-top: 16px;
+                                    padding-left: 30px;
+                                    font-size: 31px;">
+                            <i class="el-icon-mobile" style="color: white;
+                                            margin-right: 20px;
+                                             font-size: 51px !important;
+                                            ;">
+
+                            </i>
+                            <i>My Document</i>
+
+                        </div>
                     </md-card-media>
+
                 </md-card>
                 <md-card md-with-hover style="
                             top: 3%;
@@ -330,23 +354,26 @@
                             margin-top: -76px;">
 
                     <md-card-header-text align="right" style="
-                                        max-width: 400px;
-                                        margin-right: 14px;
-                                        margin-left: 14px;">
+                        margin-right: 14px;
+                        margin-left: 14px;">
                         <template>
                             <el-table
-                                :data="tableData"
+                                :data="dataAttachment"
                                 height="250"
+
                             >
                                 <el-table-column
-                                    label="Date"
-                                    prop="date"
+                                    label="File Name"
+                                    prop="fileName"
                                 >
                                 </el-table-column>
                                 <el-table-column
-                                    label="Name"
-                                    prop="name"
+                                    label="Date"
+                                    width="180px"
                                 >
+                                    <template slot-scope="{row}">
+                                        {{ row.lastModifiedDate | formatDate }}
+                                    </template>
                                 </el-table-column>
 
                             </el-table>
@@ -370,6 +397,98 @@
                 </md-card>
             </div>
         </div>
+
+        <div class=" md-layout md-gutter" style="padding-top: 25px">
+            <div class="md-layout-item">
+                <md-card md-with-hover style="
+                    background: #26c6da;
+                              background: rgb(38, 198, 218);
+                                width: 90%;
+                                height: 85px;
+                                margin: 0px;
+                                margin-bottom: 16px;
+                                border-radius: 6px;
+                                top: -5%;
+                                left: 5%;
+                                position: relative;
+                            box-shadow: 0px 12px 20px -10px;">
+                    <md-card-media>
+                        <div class="md-title-chart"
+                             style="padding-top: 16px;
+                                    padding-left: 30px;
+                                    font-size: 31px;">
+                            <i class="el-icon-mobile" style="color: white;
+                                            margin-right: 20px;
+                                             font-size: 51px !important;
+                                            ;">
+
+                            </i>
+                            <i>TOP Vendor Purchase Amount</i>
+
+                        </div>
+                    </md-card-media>
+
+                </md-card>
+                <md-card md-with-hover style="
+                            top: 3%;
+                            padding-top: 50px;
+                            position: unset;
+                            border-radius: 6px;
+                            margin-top: -76px;">
+
+                    <md-card-header-text align="right" style="
+                        margin-right: 14px;
+                        margin-left: 14px;">
+                        <template >
+                            <el-table
+                                :data="dataEvaluasi"
+                                height="250"
+                            >
+                                <el-table-column
+                                    label="Vendor Name"
+
+                                    prop="vendorName"
+                                >
+                                </el-table-column>
+                                <el-table-column
+                                    label="score"
+                                    width="280px"
+                                    prop="score"
+                                >
+                                </el-table-column>
+<!--                                <el-table-column-->
+<!--                                    label="Total"-->
+<!--                                    width="280px"-->
+<!--                                >-->
+<!--                                    <template slot-scope="{row}">-->
+<!--                                        {{ row.grandTotal | formatCurrency }}-->
+<!--                                    </template>-->
+<!--                                </el-table-column>-->
+
+                            </el-table>
+                        </template>
+                    </md-card-header-text>
+
+                    <div class="md-card-actions md-alignment-left" style="
+                        margin: 37px 11px 7px;
+                        font-size: 12px;
+                        opacity: 0.7;
+                        padding: 4px 0 0 0;
+                        border-top: 1px solid #d0d0d0;">
+                        <div class="stats">
+                            <i class="el-icon-refresh-right"
+                               style="font-size: 20px!important;"></i>
+                            <i style="position: relative;
+                                      top: -3px;"
+                            >Just Updated</i>
+                        </div>
+                    </div>
+                </md-card>
+            </div>
+
+        </div>
+
+
     </div>
 </template>
 
@@ -421,7 +540,7 @@
     width: 500px;
 }
 
-body{
+body {
     background: #35A9DB;
     font-family: roboto;
     text-align: center;
@@ -430,8 +549,6 @@ body{
 
 
 </style>
-
-
 
 
 <script lang="ts" src="./dashboard.component.ts"></script>

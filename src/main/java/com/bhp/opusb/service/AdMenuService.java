@@ -53,7 +53,7 @@ public class AdMenuService {
         List<AdMenu> adMenus = adMenuDTOs.stream()
             .map(dto -> adMenuMapper.toEntity(dto))
             .collect(Collectors.toList());
-        
+
         return adMenuRepository.saveAll(adMenus).stream()
             .map(entity -> adMenuMapper.toDto(entity))
             .collect(Collectors.toList());
@@ -91,6 +91,9 @@ public class AdMenuService {
      */
     @Transactional(readOnly = true)
     public String getFullPath(Long id) {
+
+        log.debug("this id {}",id);
+
         final StringBuilder fullPath = new StringBuilder();
         boolean hasParent = false;
 

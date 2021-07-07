@@ -2,11 +2,13 @@ import DynamicWindowService from '@/core/application-dictionary/components/Dynam
 import { IAdWatchListItem, AdWatchListActionType } from '@/shared/model/ad-watch-list-item.model';
 import { IAdWatchList } from '@/shared/model/ad-watch-list.model';
 import VueCountTo from "vue-count-to";
-import { Component, Inject, Vue, Watch } from 'vue-property-decorator';
+import {Component, Inject, Mixins, Vue, Watch} from 'vue-property-decorator';
 import buildCriteriaQueryString from '@/shared/filter/filters';
 import { AccountStoreModule as accountStore } from "@/shared/config/store/account-store";
 import { WindowStoreModule as windowStore } from "@/shared/config/store/window-store";
-
+import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
+const baseApiVendor ='api/c-vendors';
+const baseApiBidding ='api/m-biddings';
 enum DisplayType {
   Card = 'card',
   List = 'list'
@@ -24,12 +26,13 @@ const WatchListProps = Vue.extend({
     'count-to': VueCountTo
   }
 })
-export default class WatchList extends WatchListProps {
+export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) {
 
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
 
   private data:any={};
+  dasbordItem:any={};
 
   items: IAdWatchListItem[] = [];
 
@@ -54,22 +57,23 @@ export default class WatchList extends WatchListProps {
       this.$set(this.data,item.code, item.count);
       this.$set(this.data,item.code+"data", item);
     })
-   await console.log("final data",this.data);
+
 
   }
 
   created() {
+    this.retrieveVendor();
+    this.retrieveBidding();
     this.retrieveWatchListItems(this.name);
   }
 
   async onCardClicked(card: IAdWatchListItem) {
-    if (! card.count) {
-      return;
-    }
+    console.log("this card",card)
 
-    if (card.actionType === AdWatchListActionType.MENU) {
+
+      console.log("info menu id",card.adMenu.id)
       card.actionUrl = await this.commonService('/api/ad-menus/full-path').find(card.adMenu.id);
-    }
+
 
     if (card.actionUrl) {
       const timestamp = Date.now();
@@ -117,6 +121,61 @@ export default class WatchList extends WatchListProps {
       });
   }
 
+  retrieveVendor(){
+    this.commonService(baseApiVendor)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        let a =0;
+        res.data.forEach(data=>{
+          const currentTime = new Date();
+          const currentTime1 = new Date(data.createdDate);
+          currentTime.setDate(currentTime.getDate()-30);
+          if (currentTime1>currentTime){
+            a++
+          }
+        })
+        this.dasbordItem.vendorNew=a;
+      })
+      .finally();
+  }
+
+  retrieveBidding(){
+    this.commonService(baseApiBidding)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        let a =0;
+        res.data.forEach(data=>{
+          const currentTime = new Date();
+          const currentTime1 = new Date(data.createdDate);
+          currentTime.setDate(currentTime.getDate()-360);
+          if (currentTime1>currentTime){
+            a++
+          }
+        })
+        this.dasbordItem.eventNew=a;
+      })
+      .finally();
+  }
+
+
   private retrieveWatchListCounter(item: IAdWatchListItem, index?: number) {
     this.commonService(item.restApiEndpoint)
       .count([
@@ -125,8 +184,6 @@ export default class WatchList extends WatchListProps {
       ])
       .then(count => {
         this.$set(this.items[index], 'count', count);
-        this.$set(this.items[index], 'count', count);
-        console.log("this item count",this.items)
       });
   }
 }

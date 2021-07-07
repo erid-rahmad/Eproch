@@ -14,7 +14,10 @@ import echart from './componentsChart/echart-bar.vue';
 import echartpie from './componentsChart/echart-pie.vue';
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 
-const baseApiVendor ='api/c-vendors/count';
+const baseApiVendor ='api/c-vendors';
+const baseApiPO ='api/m-purchase-orders';
+const baseApiAttachment ='api/c-attachments';
+const baseApiEvaluation ='api/m-vendor-evaluations';
 
 @Component({
   components: {
@@ -28,6 +31,9 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
 
   private dashboardService: DashboardService;
   private debouncedRefresh: Function;
+  private dataPO:any=[];
+  private dataAttachment:any=[];
+  private dataEvaluasi:any=[];
 
   dashboardItems: IPaDashboardPreference[] = [];
 
@@ -46,22 +52,23 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
   }
 
   created() {
-    this.retrieveVendor();
+    this.retrievePO();
     this.dashboardService = new DashboardService(this);
     this.debouncedRefresh = debounce(this.refresh, 5000);
-    console.log("this dashbord,",this.dashboards);
+
 
     if (this.dashboards.length) {
       this.switchDashboard(this.dashboards[0].key);
     }
   }
 
-  retrieveVendor(){
+
+
+  retrieveVendorBidding(){
     this.commonService(baseApiVendor)
       .retrieve({
         criteriaQuery: this.updateCriteria([
           'active.equals=true',
-
         ]),
         paginationQuery: {
           page: 0,
@@ -71,7 +78,7 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
       })
       .then(res => {
 
-        console.log(res.data)
+
 
       })
       .finally();
@@ -142,7 +149,7 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
         })
         .then(res => {
           this.dashboardItems = res.data;
-          console.log("info ",this.dashboardItems);
+
         })
         .catch(err => {
           console.log('Dashboard error', err);
@@ -152,6 +159,61 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
           });
         });
     }
+  }
+
+  retrievePO(){
+    this.commonService(baseApiPO)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10,
+          sort: ['grandTotal,desc']
+        }
+      })
+      .then(res => {
+        this.dataPO=res.data;
+      })
+      .finally(()=>this.retrieveAttachment());
+
+  }
+
+  retrieveAttachment(){
+    this.commonService(baseApiAttachment)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10,
+          sort: ['id,desc']
+        }
+      })
+      .then(res => {
+        this.dataAttachment=res.data;
+      })
+      .finally(()=>this.retrieveEvaluasi());
+  }
+
+  retrieveEvaluasi(){
+    this.commonService(baseApiEvaluation)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10,
+          sort: ['id,desc']
+        }
+      })
+      .then(res => {
+        this.dataEvaluasi=res.data;
+      })
+      .finally();
   }
 
   public refresh() {

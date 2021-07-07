@@ -121,8 +121,7 @@ public class AdMenuResource {
     /**
      * {@code GET  /ad-menus/main-menu} : get all the adMenus.
      *
-     * @param pageable the pagination information.
-     * @param criteria the criteria which the requested entities should match.
+
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of adMenus in body.
      */
     @GetMapping("/ad-menus/main-menu")
@@ -134,7 +133,7 @@ public class AdMenuResource {
 
     /**
      * {@code GET /ad-menus/full-path/:id} : get the fullpath to the specific menu.
-     * 
+     *
      * @param id the ID of the target menu.
      */
     @GetMapping("/ad-menus/full-path/{id}")
