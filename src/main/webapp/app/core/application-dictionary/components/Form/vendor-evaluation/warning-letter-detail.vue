@@ -15,10 +15,21 @@
           :xl="8"
         >
           <el-form-item label="Vendor Name">
-            <el-input
-              v-model="mainForm.vendorName"
+            <el-select
+              v-model="mainForm.vendorId"
+              class="form-input"
+              clearable
+              filterable
               :disabled="readOnly"
-            ></el-input>
+              placeholder="Select"
+            >
+              <el-option
+                v-for="item in vendorOptions"
+                :key="item.key"
+                :label="item.value"
+                :value="item.key"
+              ></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="Report Date">
             <el-date-picker
@@ -95,7 +106,7 @@
         >
           <el-form-item label="Warning Message">
             <el-input
-              v-model="mainForm.message"
+              v-model="mainForm.warning"
               clearable
               :disabled="readOnly"
               :rows="7"

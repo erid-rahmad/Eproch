@@ -4,9 +4,10 @@ import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMi
 import Vue from 'vue';
 import Component, { mixins } from 'vue-class-component';
 import WarningLetterDetail from './warning-letter-detail.vue';
-import { Inject } from 'vue-property-decorator';
+import { Inject, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import { ElTable } from 'element-ui/types/table';
+import { AccountStoreModule } from '@/shared/config/store/account-store';
 
 const WarningLetterProp = Vue.extend({
   props: {
@@ -22,24 +23,40 @@ const WarningLetterProp = Vue.extend({
   }
 })
 export default class WarningLetter extends mixins(AccessLevelMixin, WarningLetterProp) {
-
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
   index = true;
+  loading = false;
   selectedRow: any = {};
   selectedDocumentAction: any = {};
   showDocumentActionConfirm = false;
 
-  documentStatuses = {
-    APV: 'Approved',
-    DRF: 'Draft',
-    RJC: 'Rejected',
-    RVS: 'Revised',
-    SMT: 'Submitted',
-  }
+  docTypeId = 0;
+  docTypeName = '';
+
+  warningTypes = [
+    {
+      id: 1,
+      name: 'Admonition',
+      value: 'A'
+    },
+    {
+      id: 2,
+      name: 'Admonition 1',
+      value: 'A1'
+    },
+    {
+      id: 3,
+      name: 'Admonition 2',
+      value: 'A2'
+    }
+  ];
+
+  documentStatuses = [];
 
   warningLetters = [
+    /*
     {
       documentTypeId: null,
       documentTypeName: null,
@@ -49,10 +66,10 @@ export default class WarningLetter extends mixins(AccessLevelMixin, WarningLette
       subCategory: 'Car',
       startDate: '2021-03-31T00:00:00.000Z',
       endDate: '2021-04-14T00:00:00.000Z',
-      warningType: 'Admonition',
+      warningType: 'A',
       location: null,
-      message: null,
-      requestor: 'Admin',
+      warning: null,
+      createdBy: 'Admin',
       documentAction: 'SMT',
       documentStatus: 'DRF',
       status: 'Open'
@@ -66,15 +83,24 @@ export default class WarningLetter extends mixins(AccessLevelMixin, WarningLette
       subCategory: 'Car',
       startDate: '2021-01-01T00:00:00.000Z',
       endDate: '2021-01-20T00:00:00.000Z',
-      warningType: 'Admonition',
+      warningType: 'A',
       location: null,
-      message: 'First warning!',
-      requestor: 'Admin',
+      warning: 'First warning!',
+      createdBy: 'Admin',
       documentAction: 'CLS',
       documentStatus: 'CLS',
       status: 'Close'
     },
+    */
   ];
+
+  // for paging
+  public itemsPerPage = 10;
+  public queryCount: number = null;
+  public page = 1;
+  public previousPage = 1;
+  public reverse = false;
+  public totalItems = 0;
 
   get defaultDocumentAction() {
     return this.selectedRow.documentAction || 'DRF';
@@ -102,8 +128,70 @@ export default class WarningLetter extends mixins(AccessLevelMixin, WarningLette
   }
 
   created() {
+    this.refreshHeader();
+    this.commonService(null)
+      .retrieveReferenceLists('docStatus')
+      .then(res => {
+        this.documentStatuses = res.map(item => 
+          ({
+            key: item.value,
+            label: item.name
+          })
+        );
+      });
     this.retrieveDocumentType('Warning Letter');
   }
+
+  refreshHeader(){
+    this.loading = true;
+    this.commonService("/api/m-warning-letters").retrieve(
+      {
+        criteriaQuery: this.updateCriteria([
+        'active.equals=true']),
+        paginationQuery: {
+          page: this.page-1,
+          size: this.itemsPerPage,
+          sort: ['id']
+        }
+      }).then((res)=>{
+        this.warningLetters = res.data;
+        console.log(this.warningLetters);
+
+        this.totalItems = Number(res.headers['x-total-count']);
+        this.queryCount = this.totalItems;
+      }
+    ).finally(()=>{this.loading=false})
+  }
+
+  public changePageSize(size: number) {
+    this.itemsPerPage = size;
+    if(this.page!=1){
+      this.page = 0;
+    }
+    this.refreshHeader();
+  }
+
+  public loadPage(page: number): void {
+    if (page !== this.previousPage) {
+      this.previousPage = page;
+      this.refreshHeader();
+    }
+  }
+
+  public transition(): void {
+    this.refreshHeader();
+  }
+
+  public clear(): void {
+    this.page = 1;
+    this.refreshHeader();
+  }
+
+  @Watch('page')
+  onPageChange(page: number) {
+    this.loadPage(page);
+  }
+
 
   mounted() {
     this.setRow(this.warningLetters[0]);
@@ -113,8 +201,8 @@ export default class WarningLetter extends mixins(AccessLevelMixin, WarningLette
     this.index = true;
   }
 
-  printStatus(status: string) {
-    return this.documentStatuses[status];
+  printStatus(value: string) {
+    return this.documentStatuses.find(status => status.key === value)?.label;
   }
 
   private retrieveDocumentType(name: string) {
@@ -137,6 +225,8 @@ export default class WarningLetter extends mixins(AccessLevelMixin, WarningLette
             item.documentTypeName = res.data[0].name;
             return item;
           });
+          this.docTypeId = res.data[0].id;
+          this.docTypeName = res.data[0].name;
         }
       });
   }
@@ -149,5 +239,59 @@ export default class WarningLetter extends mixins(AccessLevelMixin, WarningLette
     console.log('selected row:', row);
     this.selectedRow = row;
     this.index = false;
+  }
+
+  onCreateClicked(){
+    const empty = {
+      documentTypeId: this.docTypeId,
+      documentTypeName: this.docTypeName,
+      reportDate: '',
+      vendorName: '',
+      vendorId: null,
+      businessCategory: '',
+      subCategory: '',
+      startDate: '',
+      endDate: '',
+      warningType: '',
+      location: '',
+      warning: '',
+      documentAction: 'SMT',
+      documentStatus: 'DRF',
+      dateTrx: new Date(),
+      adOrganizationId: AccountStoreModule.organizationInfo.id,
+      status: ''
+    }
+    this.selectedRow = empty;
+    this.index = false;
+  }
+
+  formatWarningType(value: string) {
+    return this.warningTypes.find(status => status.value === value)?.name || value;
+  }
+
+  onSaveClicked(){
+    this.commonService('/api/m-warning-letters')[this.selectedRow.id?'update':'create'](this.selectedRow).
+      then((res)=>{
+        this.selectedRow = res;
+        this.$message.success(`Warning letter ${this.selectedRow.id?'updated':'created'}.`)
+      }).catch((res)=>{
+        this.$message.error(`Error during ${this.selectedRow.id?'updating':'creating'} a warning letter`)
+      });
+  }
+
+  confirmed(action: any){
+    console.log(action);
+    
+    this.selectedRow.documentAction = action.value;
+    this.selectedRow.documentStatus = action.value;
+    this.commonService('/api/m-warning-letters').update(this.selectedRow).
+    then((res)=>{
+      this.selectedRow = res;
+      this.$message.success(`${action.name} Warning Letter ${this.selectedRow.documentNo} success.`);
+      this.showDocumentActionConfirm = false;
+      this.refreshHeader();
+    }).catch((res)=>{
+      this.$message.error(`${action.name} Warning Letter ${this.selectedRow.documentNo} failed.`)
+    });
   }
 }

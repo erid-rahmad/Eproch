@@ -1656,6 +1656,24 @@ entity MVendorScoringCriteria {
 	active Boolean
 }
 
+entity MWarningLetter {
+	uid UUID
+	active Boolean
+	reportDate LocalDate required
+	warningType String maxlength(12)
+	startDate LocalDate required
+	endDate LocalDate required
+	location String required
+	warning TextBlob
+
+	dateTrx LocalDate required
+	documentNo String maxlength(30)
+	documentAction String required maxlength(10)
+	documentStatus String required maxlength(10)
+	approved Boolean
+	processed Boolean
+}
+
 // Enums
 enum AdAccessLevel {
 	SYS, SYS_CLN, CLN, CLN_ORG, CLN_VND
@@ -2377,6 +2395,9 @@ relationship ManyToOne {
 	MBiddingResult{bidding required} to MBidding
 	MBiddingResult{vendor required} to CVendor
 	MBiddingResult{biddingEvalResult required} to MBiddingEvalResult
+
+	MWarningLetter{adOrganization required} to ADOrganization
+	MWarningLetter{vendor required} to CVendor
 }
 
 // Allow filtering to all entities.

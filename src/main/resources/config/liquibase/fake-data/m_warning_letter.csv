@@ -1,0 +1,11 @@
+id;uid;active;report_date;warning_type;start_date;end_date;location;warning;date_trx;document_no;document_action;document_status;approved;processed;ad_organization_id;vendor_id
+1;9c7cf746-a216-4526-9e0c-f560efc4863c;true;2021-07-07;cutting-edge;2021-07-07;2021-07-06;impactful Team-oriented;../fake-data/blob/hipster.txt;2021-07-06;deposit orange;sticky;Berkshire ;false;false;1;1
+2;e0db6362-5d42-4546-aae1-4699bb194aa4;false;2021-07-06;Coordinator ;2021-07-06;2021-07-06;protocol;../fake-data/blob/hipster.txt;2021-07-06;Boliviano Mvdol Soap generatin;methodolog;Sports;true;false;2;2
+3;5e6921fd-c682-4438-9202-2df37eccc400;false;2021-07-06;initiatives ;2021-07-06;2021-07-06;back up Lake;../fake-data/blob/hipster.txt;2021-07-06;compressing;yellow Int;1080p;true;true;3;3
+4;c1de2469-b804-47d9-a509-83cf0037b417;false;2021-07-07;Metal Home L;2021-07-06;2021-07-06;Assistant;../fake-data/blob/hipster.txt;2021-07-07;Rustic Home;Generic Di;Handcrafte;true;true;4;4
+5;a31b557c-8e21-4558-bd92-bd1cc1cef3e1;false;2021-07-06;AI Metal;2021-07-07;2021-07-06;invoice Investment Account Baby;../fake-data/blob/hipster.txt;2021-07-06;Street;Progressiv;executive;true;false;5;5
+6;9a1301e2-7403-41a3-8fcd-f50ef5b8dc51;false;2021-07-06;PCI system S;2021-07-06;2021-07-07;Shoes;../fake-data/blob/hipster.txt;2021-07-06;bandwidth New Hampshire Tala;Web Plasti;B2B envisi;true;true;6;6
+7;1baeb5fb-278b-4d68-9f03-7ded7aca944c;true;2021-07-06;Functionalit;2021-07-06;2021-07-07;Games Bermuda Cheese;../fake-data/blob/hipster.txt;2021-07-06;plum;deposit;Poland Fre;false;false;7;7
+8;5eee499a-7bf6-43da-9db9-dd17f50da796;true;2021-07-06;Sao Tome and;2021-07-06;2021-07-06;Incredible Concrete Salad;../fake-data/blob/hipster.txt;2021-07-07;deposit;solid stat;Product ha;false;true;8;8
+9;4b05ee0f-30b9-4e12-b1a1-799cd3d7b9cf;true;2021-07-07;productivity;2021-07-06;2021-07-06;payment;../fake-data/blob/hipster.txt;2021-07-06;RSS solid state;lime Small;Bedfordshi;true;false;9;9
+10;ff0ebd34-745f-4096-9da4-107e6412e56f;true;2021-07-06;Berkshire We;2021-07-06;2021-07-06;deposit Pass;../fake-data/blob/hipster.txt;2021-07-06;payment optical;Gorgeous p;payment Gl;false;true;10;10

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    
+    <!--
+        Added the entity MWarningLetter.
+    -->
+    <changeSet id="20210707092500-1" author="jhipster">
+        <createTable tableName="m_warning_letter">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="uid" type="${uuidType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="active" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="report_date" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="warning_type" type="varchar(12)">
+                <constraints nullable="true" />
+            </column>
+            <column name="start_date" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="end_date" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="location" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="warning" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="ad_organization_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="vendor_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20210707092500-1-relations" author="jhipster">
+
+    </changeSet>
+
+    <changeSet id="20210707092500-audit-1" author="jhipster-entity-audit">
+        <addColumn tableName="m_warning_letter">
+            <column name="created_by" type="varchar(50)" defaultValue="system">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20210707092500-col-1" author="ricky-k">
+        <addColumn tableName="m_warning_letter">
+            <column name="date_trx" type="date" defaultValueDate="${now}">
+                <constraints nullable="false" />
+            </column>
+            <column name="document_no" type="varchar(30)">
+                <constraints nullable="true" />
+            </column>
+            <column name="document_action" type="varchar(10)" defaultValue="SMT">
+                <constraints nullable="false" />
+            </column>
+            <column name="document_status" type="varchar(10)" defaultValue="DRF">
+                <constraints nullable="false" />
+            </column>
+            <column name="approved" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="processed" type="boolean">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>   
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
+
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/fake-data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+    <changeSet id="20210707092500-1-data" author="jhipster" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/m_warning_letter.csv"
+                  separator=";"
+                  tableName="m_warning_letter">
+            <column name="id" type="numeric"/>
+            <column name="uid" type="${uuidType}"/>
+            <column name="active" type="boolean"/>
+            <column name="report_date" type="date"/>
+            <column name="warning_type" type="string"/>
+            <column name="start_date" type="date"/>
+            <column name="end_date" type="date"/>
+            <column name="location" type="string"/>
+            <column name="warning" type="clob"/>
+            <column name="date_trx" type="date"/>
+            <column name="document_no" type="string"/>
+            <column name="document_action" type="string"/>
+            <column name="document_status" type="string"/>
+            <column name="approved" type="boolean"/>
+            <column name="processed" type="boolean"/>
+            <column name="ad_organization_id" type="numeric"/>
+            <column name="vendor_id" type="numeric"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
+        </loadData>
+    </changeSet>
+
+</databaseChangeLog>
