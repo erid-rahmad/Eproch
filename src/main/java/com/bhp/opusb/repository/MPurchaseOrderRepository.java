@@ -13,4 +13,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MPurchaseOrderRepository extends GenericDocumentRepository<MPurchaseOrder, Long> {
     List<MPurchaseOrder> findByDocumentNo(String documentNo);
+    List<MPurchaseOrder> findByDocumentStatus(String documentStatus);
 }

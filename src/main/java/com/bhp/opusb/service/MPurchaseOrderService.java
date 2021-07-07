@@ -4,29 +4,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import javax.sql.DataSource;
 
 import com.bhp.opusb.config.ApplicationProperties;
 import com.bhp.opusb.config.ApplicationProperties.Document;
-import com.bhp.opusb.domain.CVendorTax;
-import com.bhp.opusb.domain.MBidding;
-import com.bhp.opusb.domain.MPurchaseOrder;
-import com.bhp.opusb.domain.MPurchaseOrderLine;
-import com.bhp.opusb.domain.MRequisitionLine;
-import com.bhp.opusb.repository.CDocumentTypeRepository;
-import com.bhp.opusb.repository.CPaymentTermRepository;
-import com.bhp.opusb.repository.CVendorTaxRepository;
-import com.bhp.opusb.repository.MBiddingRepository;
-import com.bhp.opusb.repository.MPurchaseOrderLineRepository;
-import com.bhp.opusb.repository.MPurchaseOrderRepository;
-import com.bhp.opusb.repository.MRequisitionLineRepository;
-import com.bhp.opusb.repository.MRequisitionRepository;
+import com.bhp.opusb.domain.*;
+import com.bhp.opusb.repository.*;
 import com.bhp.opusb.service.dto.MPurchaseOrderDTO;
 import com.bhp.opusb.service.dto.MPurchaseOrderLineDTO;
 import com.bhp.opusb.service.dto.MRequisitionLineDTO;
@@ -35,6 +20,8 @@ import com.bhp.opusb.service.mapper.MPurchaseOrderMapper;
 import com.bhp.opusb.service.mapper.MRequisitionLineMapper;
 import com.bhp.opusb.util.DocumentUtil;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -65,6 +52,8 @@ public class MPurchaseOrderService {
     private final MRequisitionLineRepository mRequisitionLineRepository;
     private final CDocumentTypeRepository cDocumentTypeRepository;
     private final CPaymentTermRepository cPaymentTermRepository;
+    private final CProductRepository cProductRepository;
+
 
     private final CVendorTaxRepository cVendorTaxRepository;
 
@@ -76,11 +65,11 @@ public class MPurchaseOrderService {
     private final MBiddingRepository mBiddingRepository;
 
     public MPurchaseOrderService(ApplicationProperties applicationProperties,
-            MPurchaseOrderRepository mPurchaseOrderRepository, CDocumentTypeRepository cDocumentTypeRepository,
-            CPaymentTermRepository cPaymentTermRepository,
-            MRequisitionRepository mRequisitionRepository, MRequisitionLineRepository mRequisitionLineRepository, MPurchaseOrderLineRepository mPurchaseOrderLineRepository,
-            CVendorTaxRepository cVendorTaxRepository, MPurchaseOrderMapper mPurchaseOrderMapper, MPurchaseOrderLineMapper mPurchaseOrderLineMapper,
-            MBiddingRepository mBiddingRepository, MRequisitionLineMapper mRequisitionLineMapper, DataSource dataSource) {
+                                 MPurchaseOrderRepository mPurchaseOrderRepository, CDocumentTypeRepository cDocumentTypeRepository,
+                                 CPaymentTermRepository cPaymentTermRepository,
+                                 MRequisitionRepository mRequisitionRepository, MRequisitionLineRepository mRequisitionLineRepository, MPurchaseOrderLineRepository mPurchaseOrderLineRepository,
+                                 CVendorTaxRepository cVendorTaxRepository, MPurchaseOrderMapper mPurchaseOrderMapper, MPurchaseOrderLineMapper mPurchaseOrderLineMapper,
+                                 MBiddingRepository mBiddingRepository, MRequisitionLineMapper mRequisitionLineMapper, DataSource dataSource, CProductRepository cProductRepository) {
         this.mPurchaseOrderRepository = mPurchaseOrderRepository;
         this.mPurchaseOrderLineRepository = mPurchaseOrderLineRepository;
         this.mRequisitionRepository = mRequisitionRepository;
@@ -95,6 +84,7 @@ public class MPurchaseOrderService {
         this.cPaymentTermRepository = cPaymentTermRepository;
 
         document = applicationProperties.getDocuments().get("purchaseOrder");
+        this.cProductRepository = cProductRepository;
     }
 
     /**
@@ -142,7 +132,7 @@ public class MPurchaseOrderService {
 
         for (MRequisitionLineDTO mRequisitionLineDTO : requisitionLines) {
             MRequisitionLine mRequisitionLine = mRequisitionLineMapper.toEntity(mRequisitionLineDTO);
-            
+
             MPurchaseOrder mPurchaseOrder = purchaseOrders.computeIfAbsent(mRequisitionLineDTO.getVendorId(),
                     key -> initPurchaseOrder(mPurchaseOrderDTO, mRequisitionLine));
 
@@ -152,7 +142,7 @@ public class MPurchaseOrderService {
             mPurchaseOrder.setGrandTotal(grandTotal);
             purchaseOrderLines.add(mPurchaseOrderLine);
         }
-        
+
         List<MPurchaseOrderDTO> result = mPurchaseOrderMapper.toDto(mPurchaseOrderRepository.saveAll(purchaseOrders.values()));
         mPurchaseOrderLineRepository.saveAll(purchaseOrderLines);
         mRequisitionLineRepository.saveAll(mRequisitionLineMapper.toEntity(requisitionLines));
@@ -200,7 +190,7 @@ public class MPurchaseOrderService {
 
     /**
      * Build Purchase Order from Vendor Confirmation
-     * @param mPurchaseOrderDTO with PO Lines
+     *
      * @return persisted DTO
      */
     public MPurchaseOrderDTO generatePurchaseOrderFromVendor(MPurchaseOrderDTO mpoDto) {
@@ -217,11 +207,11 @@ public class MPurchaseOrderService {
         }
         mPurchaseOrderLineRepository.saveAll(mpols);
         return savedDto;
-    } 
+    }
 
     /**
      * Build MPurchaseOrderLine from an MRequisitionLineDTO.
-     * @param mRequisitionLineDTO
+     * @param
      * @return
      */
     private MPurchaseOrderLine initPurchaseOrderLine(MPurchaseOrder mPurchaseOrder, MRequisitionLine mRequisitionLine) {
@@ -260,6 +250,48 @@ public class MPurchaseOrderService {
             .map(mPurchaseOrderMapper::toDto);
     }
 
+    @Transactional(readOnly = true)
+    public  List<MPurchaseOrderLineDTO> findAllForDashbord() {
+       List<MPurchaseOrder> mPurchaseOrder = mPurchaseOrderRepository.findByDocumentStatus("APV");
+       List<CProduct> cProducts = cProductRepository.findAll();
+       Map<String,BigDecimal> map = new HashMap<>();
+       List<MPurchaseOrderLine> data = new ArrayList<>();
+       mPurchaseOrder.forEach(mPurchaseOrder1 -> {
+           data.addAll(mPurchaseOrderLineRepository.mPOlinebyidpr(mPurchaseOrder1.getId()));
+       });
+
+       ArrayList<String> listProduct =new ArrayList<>();
+
+       data.forEach(mPurchaseOrderLine -> {
+           BigDecimal pas = map.get(mPurchaseOrderLine.getProduct().getName());
+            if (!listProduct.contains(mPurchaseOrderLine.getProduct().getName())){
+                listProduct.add(mPurchaseOrderLine.getProduct().getName());
+            }
+           if (pas==null){
+               map.put(mPurchaseOrderLine.getProduct().getName(),
+                   mPurchaseOrderLine.getOrderAmount());
+           }else { map.put(mPurchaseOrderLine.getProduct().getName(),
+               mPurchaseOrderLine.getOrderAmount().add(pas));}
+       });
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            String json = objectMapper.writeValueAsString(map);
+            System.out.println(json);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        List<MPurchaseOrderLineDTO> mPurchaseOrderLineDTOS = new ArrayList<>();
+
+        listProduct.forEach(s -> {
+            MPurchaseOrderLineDTO mPurchaseOrderLineDTO = new MPurchaseOrderLineDTO();
+            mPurchaseOrderLineDTO.setProductName(s);
+            mPurchaseOrderLineDTO.setOrderAmount(map.get(s));
+            mPurchaseOrderLineDTOS.add(mPurchaseOrderLineDTO);
+
+        });
+       return mPurchaseOrderLineDTOS;
+    }
     /**
      * Get one mPurchaseOrder by id.
      *

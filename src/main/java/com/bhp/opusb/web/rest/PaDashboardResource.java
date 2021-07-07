@@ -1,6 +1,7 @@
 package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.service.PaDashboardService;
+import com.bhp.opusb.service.dto.DashboardMyDocument;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
 import com.bhp.opusb.service.dto.PaDashboardDTO;
 import com.bhp.opusb.service.dto.PaDashboardCriteria;
@@ -102,6 +103,11 @@ public class PaDashboardResource {
         Page<PaDashboardDTO> page = paDashboardQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/pa-dashboards/mydocument")
+    public ResponseEntity<List<DashboardMyDocument>> getAllPaDashboards() {
+        return ResponseEntity.ok().body(paDashboardService.findAllMyDocument());
     }
 
     /**

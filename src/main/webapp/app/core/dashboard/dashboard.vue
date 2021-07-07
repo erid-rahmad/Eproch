@@ -12,7 +12,7 @@
                     position: relative;
                     box-shadow: 0px 12px 20px -10px;"
                 >
-                    <live-data style="padding: 1px"></live-data>
+                    <echart style="padding-left: 1px;padding-right: 1px"></echart>
                 </md-card>
                 <md-card md-with-hover style="
                     top: 1%;
@@ -358,21 +358,32 @@
                         margin-left: 14px;">
                         <template>
                             <el-table
-                                :data="dataAttachment"
+                                :data="dataMyDocument"
                                 height="250"
 
                             >
                                 <el-table-column
-                                    label="File Name"
-                                    prop="fileName"
+                                    label="Document No"
+                                    prop="documentNo"
                                 >
                                 </el-table-column>
+                                <el-table-column
+                                    label="Title"
+                                    prop="title"
+                                >
+                                </el-table-column>
+                                <el-table-column
+                                label="Status"
+
+                            ><template slot-scope="{row}">{{printStatus(row.status)}}</template>
+                            </el-table-column>
+
                                 <el-table-column
                                     label="Date"
                                     width="180px"
                                 >
                                     <template slot-scope="{row}">
-                                        {{ row.lastModifiedDate | formatDate }}
+                                        {{ row.date | formatDate }}
                                     </template>
                                 </el-table-column>
 

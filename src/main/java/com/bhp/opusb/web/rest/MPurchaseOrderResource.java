@@ -2,10 +2,12 @@ package com.bhp.opusb.web.rest;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -16,6 +18,7 @@ import com.bhp.opusb.service.MPurchaseOrderQueryService;
 import com.bhp.opusb.service.MPurchaseOrderService;
 import com.bhp.opusb.service.dto.MPurchaseOrderCriteria;
 import com.bhp.opusb.service.dto.MPurchaseOrderDTO;
+import com.bhp.opusb.service.dto.MPurchaseOrderLineDTO;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
 
 import org.slf4j.Logger;
@@ -163,6 +166,11 @@ public class MPurchaseOrderResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+    @GetMapping("/m-purchase-orders/dashbordView")
+    public ResponseEntity< List<MPurchaseOrderLineDTO>> getAllMPurchaseOrdersDashbord() {
+        log.debug("REST request to get MPurchaseOrders by dashbord: {}");
+        return ResponseEntity.ok(mPurchaseOrderService.findAllForDashbord());
+    }
     /**
      * {@code GET  /m-purchase-orders/count} : count all the mPurchaseOrders.
      *

@@ -16,7 +16,7 @@ import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMi
 
 const baseApiVendor ='api/c-vendors';
 const baseApiPO ='api/m-purchase-orders';
-const baseApiAttachment ='api/c-attachments';
+const baseApiDocument ='api/pa-dashboards/mydocument';
 const baseApiEvaluation ='api/m-vendor-evaluations';
 
 @Component({
@@ -32,7 +32,7 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
   private dashboardService: DashboardService;
   private debouncedRefresh: Function;
   private dataPO:any=[];
-  private dataAttachment:any=[];
+  private dataMyDocument:any=[];
   private dataEvaluasi:any=[];
 
   dashboardItems: IPaDashboardPreference[] = [];
@@ -52,6 +52,10 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
   }
 
   created() {
+
+
+
+
     this.retrievePO();
     this.dashboardService = new DashboardService(this);
     this.debouncedRefresh = debounce(this.refresh, 5000);
@@ -126,6 +130,17 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
     });
   }
 
+  documentStatuses = {
+    APV: 'Approved',
+    DRF: 'Draft',
+    RJC: 'Rejected',
+    RVS: 'Revised',
+    SMT: 'Submitted',
+  }
+  printStatus(status: string) {
+    return this.documentStatuses[status];
+  }
+
   beforeDestroy() {
     this.dashboardService.unsubscribe();
   }
@@ -176,12 +191,12 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
       .then(res => {
         this.dataPO=res.data;
       })
-      .finally(()=>this.retrieveAttachment());
+      .finally(()=>this.retrieveMyDocument());
 
   }
 
-  retrieveAttachment(){
-    this.commonService(baseApiAttachment)
+  retrieveMyDocument(){
+    this.commonService(baseApiDocument)
       .retrieve({
         criteriaQuery: this.updateCriteria([
           'active.equals=true',
@@ -189,11 +204,25 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
         paginationQuery: {
           page: 0,
           size: 10,
-          sort: ['id,desc']
+          sort: ['date']
         }
       })
-      .then(res => {
-        this.dataAttachment=res.data;
+      .then(async res => {
+        const myDocument = res.data;
+        function compare(a, b) {
+          // Use toUpperCase() to ignore character casing
+          const bandA = a.date;
+          const bandB = b.date;
+          let comparison = 0;
+          if (bandA < bandB) {
+            comparison = 1;
+          } else if (bandA > bandB) {
+            comparison = -1;
+          }
+          return comparison;
+        }
+        await myDocument.sort(compare);
+        this.dataMyDocument=myDocument;
       })
       .finally(()=>this.retrieveEvaluasi());
   }
