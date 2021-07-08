@@ -138,6 +138,14 @@ public class MWarningLetterQueryService extends QueryService<MWarningLetter> {
                 specification = specification.and(buildSpecification(criteria.getVendorId(),
                     root -> root.join(MWarningLetter_.vendor, JoinType.LEFT).get(CVendor_.id)));
             }
+            if (criteria.getBusinessCategoryId() != null) {
+                specification = specification.and(buildSpecification(criteria.getBusinessCategoryId(),
+                    root -> root.join(MWarningLetter_.businessCategory, JoinType.LEFT).get(CBusinessCategory_.id)));
+            }
+            if (criteria.getSubBusinessCategoryId() != null) {
+                specification = specification.and(buildSpecification(criteria.getSubBusinessCategoryId(),
+                    root -> root.join(MWarningLetter_.subBusinessCategory, JoinType.LEFT).get(CBusinessCategory_.id)));
+            }
         }
         return specification;
     }

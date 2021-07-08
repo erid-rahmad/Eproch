@@ -233,6 +233,12 @@ application:
     quotation:
       documentType: 'Quotation'
       documentNumberPrefix: 'RQ-'
+    warningLetter:
+      documentType: 'Warning Letter'
+      documentNumberPrefix: 'WL-'
+    complaint:
+      documentType: 'Complaint'
+      documentNumberPrefix: 'CM-'
     vendorEvaluation:
       documentType: 'Vendor Evaluation'
       documentNumberPrefix: 'VE-'

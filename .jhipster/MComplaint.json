@@ -1,5 +1,5 @@
 {
-    "name": "MWarningLetter",
+    "name": "MComplaint",
     "fields": [
         {
             "fieldName": "uid",
@@ -17,38 +17,17 @@
             ]
         },
         {
-            "fieldName": "warningType",
+            "fieldName": "warning",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "type",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"
             ],
-            "fieldValidateRulesMaxlength": "12"
-        },
-        {
-            "fieldName": "startDate",
-            "fieldType": "LocalDate",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "endDate",
-            "fieldType": "LocalDate",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "location",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "warning",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text"
+            "fieldValidateRulesMaxlength": "10"
         },
         {
             "fieldName": "dateTrx",
@@ -96,7 +75,7 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "mWarningLetter",
+            "otherEntityRelationshipName": "mComplaint",
             "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
@@ -104,15 +83,31 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "cVendor",
-            "otherEntityRelationshipName": "mWarningLetter",
+            "otherEntityRelationshipName": "mComplaint",
             "relationshipValidateRules": "required",
             "relationshipName": "vendor",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "cCostCenter",
+            "otherEntityRelationshipName": "mComplaint",
+            "relationshipValidateRules": "required",
+            "relationshipName": "costCenter",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mContract",
+            "otherEntityRelationshipName": "mComplaint",
+            "relationshipValidateRules": "required",
+            "relationshipName": "contract",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "cBusinessCategory",
-            "otherEntityRelationshipName": "mWarningLetter",
+            "otherEntityRelationshipName": "mComplaint",
             "relationshipValidateRules": "required",
             "relationshipName": "businessCategory",
             "otherEntityField": "id"
@@ -120,13 +115,13 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "cBusinessCategory",
-            "otherEntityRelationshipName": "mWarningLetter",
+            "otherEntityRelationshipName": "mComplaint",
             "relationshipName": "subBusinessCategory",
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20210707092500",
-    "entityTableName": "m_warning_letter",
+    "changelogDate": "20210708042100",
+    "entityTableName": "m_complaint",
     "dto": "mapstruct",
     "pagination": "pagination",
     "service": "serviceClass",

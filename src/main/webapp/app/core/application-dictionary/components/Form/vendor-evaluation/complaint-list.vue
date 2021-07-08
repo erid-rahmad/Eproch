@@ -1,6 +1,14 @@
 <template>
   <div class="app-container complaint">
     <div class="toolbar">
+      <el-button v-if="index" 
+        class="button" 
+        icon="el-icon-plus" 
+        size="mini" 
+        type="primary"
+        @click="onCreateClicked">
+        Add New
+      </el-button>
       <el-button
         v-if="!index"
         icon="el-icon-close"
@@ -17,6 +25,7 @@
         size="mini"
         style="margin-left: 1px"
         type="primary"
+        @click="onSaveClicked"
       >
         Save
       </el-button>
@@ -32,91 +41,107 @@
       ></document-action-button>
     </div>
     Complaint
-    <el-table
-      v-if="index"
-      ref="mainGrid"
-      border
-      :data="complaints"
-      highlight-current-row
-      size="mini"
-      stripe
-      style="width: 100%"
-      @current-change="onCurrentRowChanged"
-    >
-      <el-table-column
-        label="No"
-        width="50"
+    <div v-if="index">
+      <el-table
+        v-if="index"
+        ref="mainGrid"
+        border
+        :data="complaints"
+        highlight-current-row
+        size="mini"
+        stripe
+        style="width: 100%"
+        @current-change="onCurrentRowChanged"
       >
-        <template slot-scope="{ $index }">
-          {{ $index + 1 }}
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="Report Date"
-        width="130"
-        sortable
-      >
-        <template slot-scope="{ row }">
-          {{ row.dateTrx | formatDate(true) }}
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="Vendor Name"
-        min-width="150"
-        prop="vendorName"
-        show-overflow-tooltip
-        sortable
-      ></el-table-column>
-      <el-table-column
-        label="Business Category"
-        min-width="200"
-        prop="businessCategory"
-        show-overflow-tooltip
-        sortable
-      ></el-table-column>
-      <el-table-column
-        label="Sub Category"
-        min-width="150"
-        prop="subCategory"
-        show-overflow-tooltip
-        sortable
-      ></el-table-column>
-      <el-table-column
-        label="Notes"
-        min-width="200"
-        prop="message"
-        sortable
-      ></el-table-column>
-      <el-table-column
-        label="Requestor"
-        min-width="100"
-        prop="requestor"
-      ></el-table-column>
-      <el-table-column
-        label="Status"
-        min-width="100"
-        prop="status"
-        sortable
-      ></el-table-column>
-      <el-table-column
-        fixed="right"
-        width="90"
-      >
-        <template slot="header">
-          &nbsp;
-        </template>
-        <template slot-scope="{ row }">
-          <el-button
-            icon="el-icon-edit"
-            size="mini"
-            type="primary"
-            @click="viewDetail(row)"
-          >
-            View
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+        <el-table-column
+          label="No"
+          width="50"
+        >
+          <template slot-scope="{ $index }">
+            {{ $index + 1 }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="Report Date"
+          width="130"
+          sortable
+        >
+          <template slot-scope="{ row }">
+            {{ row.dateTrx | formatDate(true) }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="Vendor Name"
+          min-width="150"
+          prop="vendorName"
+          show-overflow-tooltip
+          sortable
+        ></el-table-column>
+        <el-table-column
+          label="Business Category"
+          min-width="200"
+          prop="businessCategoryName"
+          show-overflow-tooltip
+          sortable
+        ></el-table-column>
+        <el-table-column
+          label="Sub Category"
+          min-width="150"
+          prop="subBusinessCategoryName"
+          show-overflow-tooltip
+          sortable
+        ></el-table-column>
+        <el-table-column
+          label="Notes"
+          min-width="200"
+          prop="warning"
+          sortable
+        ></el-table-column>
+        <el-table-column
+          label="Requestor"
+          min-width="100"
+          prop="createdBy"
+        ></el-table-column>
+        <el-table-column
+          label="Status"
+          min-width="100"
+          sortable
+        >
+          <template slot-scope="{ row }">
+            {{ printStatus(row.documentStatus) }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          fixed="right"
+          width="90"
+        >
+          <template slot="header">
+            &nbsp;
+          </template>
+          <template slot-scope="{ row }">
+            <el-button
+              icon="el-icon-edit"
+              size="mini"
+              type="primary"
+              @click="viewDetail(row)"
+            >
+              View
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination
+        ref="pagination"
+        :current-page.sync="page"
+        :page-size="itemsPerPage"
+        :page-sizes="[10, 20, 50, 100]"
+        :total="queryCount"
+        background
+        layout="sizes, prev, pager, next"
+        small
+        @size-change="changePageSize"
+      ></el-pagination>
+    </div>
 
     <complaint-detail
       v-else
@@ -127,6 +152,7 @@
       :action="selectedDocumentAction"
       :data="selectedRow"
       :visible.sync="showDocumentActionConfirm"
+      @confirmed="confirmed"
     ></document-action-confirm>
   </div>
 </template>

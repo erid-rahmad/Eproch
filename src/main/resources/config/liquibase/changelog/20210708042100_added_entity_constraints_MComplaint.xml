@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity MComplaint.
+    -->
+    <changeSet id="20210708042100-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="m_complaint"
+                                 constraintName="fk_m_complaint_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="vendor_id"
+                                 baseTableName="m_complaint"
+                                 constraintName="fk_m_complaint_vendor_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_vendor"/>
+
+        <addForeignKeyConstraint baseColumnNames="cost_center_id"
+                                 baseTableName="m_complaint"
+                                 constraintName="fk_m_complaint_cost_center_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_cost_center"/>
+
+        <addForeignKeyConstraint baseColumnNames="contract_id"
+                                 baseTableName="m_complaint"
+                                 constraintName="fk_m_complaint_contract_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_contract"/>
+
+        <addForeignKeyConstraint baseColumnNames="business_category_id"
+                                 baseTableName="m_complaint"
+                                 constraintName="fk_m_complaint_business_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_business_category"/>
+
+        <addForeignKeyConstraint baseColumnNames="sub_business_category_id"
+                                 baseTableName="m_complaint"
+                                 constraintName="fk_m_complaint_sub_business_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_business_category"/>
+
+    </changeSet>
+</databaseChangeLog>

@@ -196,6 +196,7 @@
     <include file="config/liquibase/changelog/20210618095700_added_entity_MVendorEvaluationLine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210625061000_added_entity_MContractLine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210707092500_added_entity_MWarningLetter.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210708042100_added_entity_MComplaint.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
@@ -373,5 +374,6 @@
     <include file="config/liquibase/changelog/20210618095700_added_entity_constraints_MVendorEvaluationLine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210625061000_added_entity_constraints_MContractLine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210707092500_added_entity_constraints_MWarningLetter.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210708042100_added_entity_constraints_MComplaint.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

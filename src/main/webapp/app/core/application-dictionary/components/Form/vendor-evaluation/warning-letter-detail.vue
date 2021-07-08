@@ -14,6 +14,24 @@
           :lg="12"
           :xl="8"
         >
+          <el-form-item label="Business Category">
+            <el-select
+              v-model="mainForm.businessCategoryId"
+              class="form-input"
+              clearable
+              filterable
+              :disabled="readOnly"
+              placeholder="Select"
+              @change="updateVendorList"
+            >
+              <el-option
+                v-for="item in categoryOptions"
+                :key="item.key"
+                :label="item.value"
+                :value="item.key"
+              ></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="Vendor Name">
             <el-select
               v-model="mainForm.vendorId"
@@ -63,6 +81,25 @@
           :lg="12"
           :xl="8"
         >
+          <el-form-item label="Sub Business Category">
+            <el-select
+              v-model="mainForm.subBusinessCategoryId"
+              :loading="loadingVendorList"
+              class="form-input"
+              clearable
+              filterable
+              :disabled="readOnly"
+              placeholder="Select"
+              @change="updateVendorList"
+            >
+              <el-option
+                v-for="item in categoryOptions"
+                :key="item.key"
+                :label="item.value"
+                :value="item.key"
+              ></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="Start Date">
             <el-date-picker
               v-model="mainForm.startDate"
@@ -119,8 +156,3 @@
   </div>
 </template>
 <script lang="ts" src="./warning-letter-detail.component.ts"></script>
-<style lang="scss">
-.warning-letter-detail {
-
-}
-</style>
