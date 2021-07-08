@@ -40,6 +40,7 @@
         @change="onDocumentActionChanged"
       ></document-action-button>
     </div>
+    Warning Letter
     <div v-if="index">
       <el-table
         ref="mainGrid"
@@ -79,14 +80,14 @@
         <el-table-column
           label="Business Category"
           min-width="200"
-          prop="businessCategory"
+          prop="businessCategoryName"
           show-overflow-tooltip
           sortable
         ></el-table-column>
         <el-table-column
           label="Sub Category"
           min-width="150"
-          prop="subCategory"
+          prop="subBusinessCategoryName"
           show-overflow-tooltip
           sortable
         ></el-table-column>
@@ -180,9 +181,6 @@
 
 <style lang="scss" scoped>
 .warning-letter {
-  display: grid;
-  grid-template-columns: 100%;
-  grid-template-rows: 36px auto;
 
   .toolbar {
     padding: 4px;

@@ -14,15 +14,15 @@ import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
- * Criteria class for the {@link com.bhp.opusb.domain.MWarningLetter} entity. This class is used
- * in {@link com.bhp.opusb.web.rest.MWarningLetterResource} to receive all the possible filtering options from
+ * Criteria class for the {@link com.bhp.opusb.domain.MComplaint} entity. This class is used
+ * in {@link com.bhp.opusb.web.rest.MComplaintResource} to receive all the possible filtering options from
  * the Http GET request parameters.
  * For example the following could be a valid request:
- * {@code /m-warning-letters?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
+ * {@code /m-complaints?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
  * As Spring is unable to properly convert the types, unless specific {@link Filter} class are used, we need to use
  * fix type specific filters.
  */
-public class MWarningLetterCriteria implements Serializable, Criteria {
+public class MComplaintCriteria implements Serializable, Criteria {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,13 +34,7 @@ public class MWarningLetterCriteria implements Serializable, Criteria {
 
     private LocalDateFilter reportDate;
 
-    private StringFilter warningType;
-
-    private LocalDateFilter startDate;
-
-    private LocalDateFilter endDate;
-
-    private StringFilter location;
+    private StringFilter type;
 
     private LocalDateFilter dateTrx;
 
@@ -58,22 +52,23 @@ public class MWarningLetterCriteria implements Serializable, Criteria {
 
     private LongFilter vendorId;
 
+    private LongFilter costCenterId;
+
+    private LongFilter contractId;
+
     private LongFilter businessCategoryId;
 
     private LongFilter subBusinessCategoryId;
 
-    public MWarningLetterCriteria() {
+    public MComplaintCriteria() {
     }
 
-    public MWarningLetterCriteria(MWarningLetterCriteria other) {
+    public MComplaintCriteria(MComplaintCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.reportDate = other.reportDate == null ? null : other.reportDate.copy();
-        this.warningType = other.warningType == null ? null : other.warningType.copy();
-        this.startDate = other.startDate == null ? null : other.startDate.copy();
-        this.endDate = other.endDate == null ? null : other.endDate.copy();
-        this.location = other.location == null ? null : other.location.copy();
+        this.type = other.type == null ? null : other.type.copy();
         this.dateTrx = other.dateTrx == null ? null : other.dateTrx.copy();
         this.documentNo = other.documentNo == null ? null : other.documentNo.copy();
         this.documentAction = other.documentAction == null ? null : other.documentAction.copy();
@@ -82,13 +77,15 @@ public class MWarningLetterCriteria implements Serializable, Criteria {
         this.processed = other.processed == null ? null : other.processed.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
+        this.costCenterId = other.costCenterId == null ? null : other.costCenterId.copy();
+        this.contractId = other.contractId == null ? null : other.contractId.copy();
         this.businessCategoryId = other.businessCategoryId == null ? null : other.businessCategoryId.copy();
         this.subBusinessCategoryId = other.subBusinessCategoryId == null ? null : other.subBusinessCategoryId.copy();
     }
 
     @Override
-    public MWarningLetterCriteria copy() {
-        return new MWarningLetterCriteria(this);
+    public MComplaintCriteria copy() {
+        return new MComplaintCriteria(this);
     }
 
     public LongFilter getId() {
@@ -123,36 +120,12 @@ public class MWarningLetterCriteria implements Serializable, Criteria {
         this.reportDate = reportDate;
     }
 
-    public StringFilter getWarningType() {
-        return warningType;
+    public StringFilter getType() {
+        return type;
     }
 
-    public void setWarningType(StringFilter warningType) {
-        this.warningType = warningType;
-    }
-
-    public LocalDateFilter getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDateFilter startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDateFilter getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDateFilter endDate) {
-        this.endDate = endDate;
-    }
-
-    public StringFilter getLocation() {
-        return location;
-    }
-
-    public void setLocation(StringFilter location) {
-        this.location = location;
+    public void setType(StringFilter type) {
+        this.type = type;
     }
 
     public LocalDateFilter getDateTrx() {
@@ -219,6 +192,22 @@ public class MWarningLetterCriteria implements Serializable, Criteria {
         this.vendorId = vendorId;
     }
 
+    public LongFilter getCostCenterId() {
+        return costCenterId;
+    }
+
+    public void setCostCenterId(LongFilter costCenterId) {
+        this.costCenterId = costCenterId;
+    }
+
+    public LongFilter getContractId() {
+        return contractId;
+    }
+
+    public void setContractId(LongFilter contractId) {
+        this.contractId = contractId;
+    }
+
     public LongFilter getBusinessCategoryId() {
         return businessCategoryId;
     }
@@ -244,16 +233,13 @@ public class MWarningLetterCriteria implements Serializable, Criteria {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final MWarningLetterCriteria that = (MWarningLetterCriteria) o;
+        final MComplaintCriteria that = (MComplaintCriteria) o;
         return
             Objects.equals(id, that.id) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(reportDate, that.reportDate) &&
-            Objects.equals(warningType, that.warningType) &&
-            Objects.equals(startDate, that.startDate) &&
-            Objects.equals(endDate, that.endDate) &&
-            Objects.equals(location, that.location) &&
+            Objects.equals(type, that.type) &&
             Objects.equals(dateTrx, that.dateTrx) &&
             Objects.equals(documentNo, that.documentNo) &&
             Objects.equals(documentAction, that.documentAction) &&
@@ -262,6 +248,8 @@ public class MWarningLetterCriteria implements Serializable, Criteria {
             Objects.equals(processed, that.processed) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(vendorId, that.vendorId) &&
+            Objects.equals(costCenterId, that.costCenterId) &&
+            Objects.equals(contractId, that.contractId) &&
             Objects.equals(businessCategoryId, that.businessCategoryId) &&
             Objects.equals(subBusinessCategoryId, that.subBusinessCategoryId);
     }
@@ -273,10 +261,7 @@ public class MWarningLetterCriteria implements Serializable, Criteria {
         uid,
         active,
         reportDate,
-        warningType,
-        startDate,
-        endDate,
-        location,
+        type,
         dateTrx,
         documentNo,
         documentAction,
@@ -285,6 +270,8 @@ public class MWarningLetterCriteria implements Serializable, Criteria {
         processed,
         adOrganizationId,
         vendorId,
+        costCenterId,
+        contractId,
         businessCategoryId,
         subBusinessCategoryId
         );
@@ -292,15 +279,12 @@ public class MWarningLetterCriteria implements Serializable, Criteria {
 
     @Override
     public String toString() {
-        return "MWarningLetterCriteria{" +
+        return "MComplaintCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (reportDate != null ? "reportDate=" + reportDate + ", " : "") +
-                (warningType != null ? "warningType=" + warningType + ", " : "") +
-                (startDate != null ? "startDate=" + startDate + ", " : "") +
-                (endDate != null ? "endDate=" + endDate + ", " : "") +
-                (location != null ? "location=" + location + ", " : "") +
+                (type != null ? "type=" + type + ", " : "") +
                 (dateTrx != null ? "dateTrx=" + dateTrx + ", " : "") +
                 (documentNo != null ? "documentNo=" + documentNo + ", " : "") +
                 (documentAction != null ? "documentAction=" + documentAction + ", " : "") +
@@ -309,6 +293,8 @@ public class MWarningLetterCriteria implements Serializable, Criteria {
                 (processed != null ? "processed=" + processed + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
+                (costCenterId != null ? "costCenterId=" + costCenterId + ", " : "") +
+                (contractId != null ? "contractId=" + contractId + ", " : "") +
                 (businessCategoryId != null ? "businessCategoryId=" + businessCategoryId + ", " : "") +
                 (subBusinessCategoryId != null ? "subBusinessCategoryId=" + subBusinessCategoryId + ", " : "") +
             "}";

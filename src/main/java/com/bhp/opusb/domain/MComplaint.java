@@ -14,12 +14,12 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 /**
- * A MWarningLetter.
+ * A MComplaint.
  */
 @Entity
-@Table(name = "m_warning_letter")
+@Table(name = "m_complaint")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MWarningLetter extends AbstractAuditingEntity implements Serializable {
+public class MComplaint extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,26 +38,14 @@ public class MWarningLetter extends AbstractAuditingEntity implements Serializab
     @Column(name = "report_date", nullable = false)
     private LocalDate reportDate;
 
-    @Size(max = 12)
-    @Column(name = "warning_type", length = 12)
-    private String warningType;
-
-    @NotNull
-    @Column(name = "start_date", nullable = false)
-    private LocalDate startDate;
-
-    @NotNull
-    @Column(name = "end_date", nullable = false)
-    private LocalDate endDate;
-
-    @NotNull
-    @Column(name = "location", nullable = false)
-    private String location;
-
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "warning")
     private String warning;
+
+    @Size(max = 10)
+    @Column(name = "type", length = 10)
+    private String type;
 
     @NotNull
     @Column(name = "date_trx", nullable = false)
@@ -85,21 +73,31 @@ public class MWarningLetter extends AbstractAuditingEntity implements Serializab
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("mWarningLetters")
+    @JsonIgnoreProperties("mComplaints")
     private ADOrganization adOrganization;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("mWarningLetters")
+    @JsonIgnoreProperties("mComplaints")
     private CVendor vendor;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("mWarningLetters")
+    @JsonIgnoreProperties("mComplaints")
+    private CCostCenter costCenter;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mComplaints")
+    private MContract contract;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mComplaints")
     private CBusinessCategory businessCategory;
 
-    @ManyToOne(optional = true)
-    @JsonIgnoreProperties("mWarningLetters")
+    @ManyToOne
+    @JsonIgnoreProperties("mComplaints")
     private CBusinessCategory subBusinessCategory;
 
     @PrePersist
@@ -125,7 +123,7 @@ public class MWarningLetter extends AbstractAuditingEntity implements Serializab
         return uid;
     }
 
-    public MWarningLetter uid(UUID uid) {
+    public MComplaint uid(UUID uid) {
         this.uid = uid;
         return this;
     }
@@ -138,7 +136,7 @@ public class MWarningLetter extends AbstractAuditingEntity implements Serializab
         return active;
     }
 
-    public MWarningLetter active(Boolean active) {
+    public MComplaint active(Boolean active) {
         this.active = active;
         return this;
     }
@@ -151,7 +149,7 @@ public class MWarningLetter extends AbstractAuditingEntity implements Serializab
         return reportDate;
     }
 
-    public MWarningLetter reportDate(LocalDate reportDate) {
+    public MComplaint reportDate(LocalDate reportDate) {
         this.reportDate = reportDate;
         return this;
     }
@@ -160,63 +158,11 @@ public class MWarningLetter extends AbstractAuditingEntity implements Serializab
         this.reportDate = reportDate;
     }
 
-    public String getWarningType() {
-        return warningType;
-    }
-
-    public MWarningLetter warningType(String warningType) {
-        this.warningType = warningType;
-        return this;
-    }
-
-    public void setWarningType(String warningType) {
-        this.warningType = warningType;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public MWarningLetter startDate(LocalDate startDate) {
-        this.startDate = startDate;
-        return this;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public MWarningLetter endDate(LocalDate endDate) {
-        this.endDate = endDate;
-        return this;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public MWarningLetter location(String location) {
-        this.location = location;
-        return this;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public String getWarning() {
         return warning;
     }
 
-    public MWarningLetter warning(String warning) {
+    public MComplaint warning(String warning) {
         this.warning = warning;
         return this;
     }
@@ -225,11 +171,24 @@ public class MWarningLetter extends AbstractAuditingEntity implements Serializab
         this.warning = warning;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public MComplaint type(String type) {
+        this.type = type;
+        return this;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public LocalDate getDateTrx() {
         return dateTrx;
     }
 
-    public MWarningLetter dateTrx(LocalDate dateTrx) {
+    public MComplaint dateTrx(LocalDate dateTrx) {
         this.dateTrx = dateTrx;
         return this;
     }
@@ -242,7 +201,7 @@ public class MWarningLetter extends AbstractAuditingEntity implements Serializab
         return documentNo;
     }
 
-    public MWarningLetter documentNo(String documentNo) {
+    public MComplaint documentNo(String documentNo) {
         this.documentNo = documentNo;
         return this;
     }
@@ -255,7 +214,7 @@ public class MWarningLetter extends AbstractAuditingEntity implements Serializab
         return documentAction;
     }
 
-    public MWarningLetter documentAction(String documentAction) {
+    public MComplaint documentAction(String documentAction) {
         this.documentAction = documentAction;
         return this;
     }
@@ -268,7 +227,7 @@ public class MWarningLetter extends AbstractAuditingEntity implements Serializab
         return documentStatus;
     }
 
-    public MWarningLetter documentStatus(String documentStatus) {
+    public MComplaint documentStatus(String documentStatus) {
         this.documentStatus = documentStatus;
         return this;
     }
@@ -281,7 +240,7 @@ public class MWarningLetter extends AbstractAuditingEntity implements Serializab
         return approved;
     }
 
-    public MWarningLetter approved(Boolean approved) {
+    public MComplaint approved(Boolean approved) {
         this.approved = approved;
         return this;
     }
@@ -294,7 +253,7 @@ public class MWarningLetter extends AbstractAuditingEntity implements Serializab
         return processed;
     }
 
-    public MWarningLetter processed(Boolean processed) {
+    public MComplaint processed(Boolean processed) {
         this.processed = processed;
         return this;
     }
@@ -307,7 +266,7 @@ public class MWarningLetter extends AbstractAuditingEntity implements Serializab
         return adOrganization;
     }
 
-    public MWarningLetter adOrganization(ADOrganization aDOrganization) {
+    public MComplaint adOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
         return this;
     }
@@ -320,7 +279,7 @@ public class MWarningLetter extends AbstractAuditingEntity implements Serializab
         return vendor;
     }
 
-    public MWarningLetter vendor(CVendor cVendor) {
+    public MComplaint vendor(CVendor cVendor) {
         this.vendor = cVendor;
         return this;
     }
@@ -329,11 +288,37 @@ public class MWarningLetter extends AbstractAuditingEntity implements Serializab
         this.vendor = cVendor;
     }
 
+    public CCostCenter getCostCenter() {
+        return costCenter;
+    }
+
+    public MComplaint costCenter(CCostCenter cCostCenter) {
+        this.costCenter = cCostCenter;
+        return this;
+    }
+
+    public void setCostCenter(CCostCenter cCostCenter) {
+        this.costCenter = cCostCenter;
+    }
+
+    public MContract getContract() {
+        return contract;
+    }
+
+    public MComplaint contract(MContract mContract) {
+        this.contract = mContract;
+        return this;
+    }
+
+    public void setContract(MContract mContract) {
+        this.contract = mContract;
+    }
+
     public CBusinessCategory getBusinessCategory() {
         return businessCategory;
     }
 
-    public MWarningLetter businessCategory(CBusinessCategory cBusinessCategory) {
+    public MComplaint businessCategory(CBusinessCategory cBusinessCategory) {
         this.businessCategory = cBusinessCategory;
         return this;
     }
@@ -346,7 +331,7 @@ public class MWarningLetter extends AbstractAuditingEntity implements Serializab
         return subBusinessCategory;
     }
 
-    public MWarningLetter subBusinessCategory(CBusinessCategory cBusinessCategory) {
+    public MComplaint subBusinessCategory(CBusinessCategory cBusinessCategory) {
         this.subBusinessCategory = cBusinessCategory;
         return this;
     }
@@ -361,10 +346,10 @@ public class MWarningLetter extends AbstractAuditingEntity implements Serializab
         if (this == o) {
             return true;
         }
-        if (!(o instanceof MWarningLetter)) {
+        if (!(o instanceof MComplaint)) {
             return false;
         }
-        return id != null && id.equals(((MWarningLetter) o).id);
+        return id != null && id.equals(((MComplaint) o).id);
     }
 
     @Override
@@ -374,16 +359,13 @@ public class MWarningLetter extends AbstractAuditingEntity implements Serializab
 
     @Override
     public String toString() {
-        return "MWarningLetter{" +
+        return "MComplaint{" +
             "id=" + getId() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", reportDate='" + getReportDate() + "'" +
-            ", warningType='" + getWarningType() + "'" +
-            ", startDate='" + getStartDate() + "'" +
-            ", endDate='" + getEndDate() + "'" +
-            ", location='" + getLocation() + "'" +
             ", warning='" + getWarning() + "'" +
+            ", type='" + getType() + "'" +
             ", dateTrx='" + getDateTrx() + "'" +
             ", documentNo='" + getDocumentNo() + "'" +
             ", documentAction='" + getDocumentAction() + "'" +

@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface MWarningLetterRepository extends JpaRepository<MWarningLetter, Long>, JpaSpecificationExecutor<MWarningLetter> {
+public interface MWarningLetterRepository extends GenericDocumentRepository<MWarningLetter, Long>, JpaSpecificationExecutor<MWarningLetter> {
 }

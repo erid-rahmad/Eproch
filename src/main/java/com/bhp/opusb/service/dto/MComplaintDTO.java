@@ -8,9 +8,9 @@ import java.util.UUID;
 import javax.persistence.Lob;
 
 /**
- * A DTO for the {@link com.bhp.opusb.domain.MWarningLetter} entity.
+ * A DTO for the {@link com.bhp.opusb.domain.MComplaint} entity.
  */
-public class MWarningLetterDTO extends AbstractAuditingDTO implements Serializable {
+public class MComplaintDTO extends AbstractAuditingDTO implements Serializable {
     
     private Long id;
 
@@ -21,20 +21,11 @@ public class MWarningLetterDTO extends AbstractAuditingDTO implements Serializab
     @NotNull
     private LocalDate reportDate;
 
-    @Size(max = 12)
-    private String warningType;
-
-    @NotNull
-    private LocalDate startDate;
-
-    @NotNull
-    private LocalDate endDate;
-
-    @NotNull
-    private String location;
-
     @Lob
     private String warning;
+
+    @Size(max = 10)
+    private String type;
 
     @NotNull
     private LocalDate dateTrx;
@@ -59,7 +50,13 @@ public class MWarningLetterDTO extends AbstractAuditingDTO implements Serializab
 
     private Long vendorId;
     private String vendorName;
-    
+
+    private Long costCenterId;
+    private String costCenterName;
+
+    private Long contractId;
+    private String contractNo;
+
     private Long businessCategoryId;
     private String businessCategoryName;
 
@@ -70,12 +67,28 @@ public class MWarningLetterDTO extends AbstractAuditingDTO implements Serializab
         return id;
     }
 
-    public String getSubBusinessCategoryName() {
-        return subBusinessCategoryName;
+    public String getVendorName() {
+        return vendorName;
     }
 
-    public void setSubBusinessCategoryName(String subBusinessCategoryName) {
-        this.subBusinessCategoryName = subBusinessCategoryName;
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
+    }
+
+    public String getCostCenterName() {
+        return costCenterName;
+    }
+
+    public void setCostCenterName(String costCenterName) {
+        this.costCenterName = costCenterName;
+    }
+
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo;
     }
 
     public String getBusinessCategoryName() {
@@ -86,12 +99,12 @@ public class MWarningLetterDTO extends AbstractAuditingDTO implements Serializab
         this.businessCategoryName = businessCategoryName;
     }
 
-    public String getVendorName() {
-        return vendorName;
+    public String getSubBusinessCategoryName() {
+        return subBusinessCategoryName;
     }
 
-    public void setVendorName(String vendorName) {
-        this.vendorName = vendorName;
+    public void setSubBusinessCategoryName(String subBusinessCategoryName) {
+        this.subBusinessCategoryName = subBusinessCategoryName;
     }
 
     public void setId(Long id) {
@@ -122,44 +135,20 @@ public class MWarningLetterDTO extends AbstractAuditingDTO implements Serializab
         this.reportDate = reportDate;
     }
 
-    public String getWarningType() {
-        return warningType;
-    }
-
-    public void setWarningType(String warningType) {
-        this.warningType = warningType;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public String getWarning() {
         return warning;
     }
 
     public void setWarning(String warning) {
         this.warning = warning;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public LocalDate getDateTrx() {
@@ -226,6 +215,22 @@ public class MWarningLetterDTO extends AbstractAuditingDTO implements Serializab
         this.vendorId = cVendorId;
     }
 
+    public Long getCostCenterId() {
+        return costCenterId;
+    }
+
+    public void setCostCenterId(Long cCostCenterId) {
+        this.costCenterId = cCostCenterId;
+    }
+
+    public Long getContractId() {
+        return contractId;
+    }
+
+    public void setContractId(Long mContractId) {
+        this.contractId = mContractId;
+    }
+
     public Long getBusinessCategoryId() {
         return businessCategoryId;
     }
@@ -251,11 +256,11 @@ public class MWarningLetterDTO extends AbstractAuditingDTO implements Serializab
             return false;
         }
 
-        MWarningLetterDTO mWarningLetterDTO = (MWarningLetterDTO) o;
-        if (mWarningLetterDTO.getId() == null || getId() == null) {
+        MComplaintDTO mComplaintDTO = (MComplaintDTO) o;
+        if (mComplaintDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), mWarningLetterDTO.getId());
+        return Objects.equals(getId(), mComplaintDTO.getId());
     }
 
     @Override
@@ -265,16 +270,13 @@ public class MWarningLetterDTO extends AbstractAuditingDTO implements Serializab
 
     @Override
     public String toString() {
-        return "MWarningLetterDTO{" +
+        return "MComplaintDTO{" +
             "id=" + getId() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", reportDate='" + getReportDate() + "'" +
-            ", warningType='" + getWarningType() + "'" +
-            ", startDate='" + getStartDate() + "'" +
-            ", endDate='" + getEndDate() + "'" +
-            ", location='" + getLocation() + "'" +
             ", warning='" + getWarning() + "'" +
+            ", type='" + getType() + "'" +
             ", dateTrx='" + getDateTrx() + "'" +
             ", documentNo='" + getDocumentNo() + "'" +
             ", documentAction='" + getDocumentAction() + "'" +
@@ -283,6 +285,8 @@ public class MWarningLetterDTO extends AbstractAuditingDTO implements Serializab
             ", processed='" + isProcessed() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", vendorId=" + getVendorId() +
+            ", costCenterId=" + getCostCenterId() +
+            ", contractId=" + getContractId() +
             ", businessCategoryId=" + getBusinessCategoryId() +
             ", subBusinessCategoryId=" + getSubBusinessCategoryId() +
             "}";

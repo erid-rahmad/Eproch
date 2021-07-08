@@ -4,6 +4,7 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MWarningLetter;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CVendor;
+import com.bhp.opusb.domain.CBusinessCategory;
 import com.bhp.opusb.repository.MWarningLetterRepository;
 import com.bhp.opusb.service.MWarningLetterService;
 import com.bhp.opusb.service.dto.MWarningLetterDTO;
@@ -149,6 +150,18 @@ public class MWarningLetterResourceIT {
             cVendor = TestUtil.findAll(em, CVendor.class).get(0);
         }
         mWarningLetter.setVendor(cVendor);
+        // Add required entity
+        CBusinessCategory cBusinessCategory;
+        if (TestUtil.findAll(em, CBusinessCategory.class).isEmpty()) {
+            cBusinessCategory = CBusinessCategoryResourceIT.createEntity(em);
+            em.persist(cBusinessCategory);
+            em.flush();
+        } else {
+            cBusinessCategory = TestUtil.findAll(em, CBusinessCategory.class).get(0);
+        }
+        mWarningLetter.setBusinessCategory(cBusinessCategory);
+        // Add required entity
+        mWarningLetter.setSubBusinessCategory(cBusinessCategory);
         return mWarningLetter;
     }
     /**
@@ -193,6 +206,18 @@ public class MWarningLetterResourceIT {
             cVendor = TestUtil.findAll(em, CVendor.class).get(0);
         }
         mWarningLetter.setVendor(cVendor);
+        // Add required entity
+        CBusinessCategory cBusinessCategory;
+        if (TestUtil.findAll(em, CBusinessCategory.class).isEmpty()) {
+            cBusinessCategory = CBusinessCategoryResourceIT.createUpdatedEntity(em);
+            em.persist(cBusinessCategory);
+            em.flush();
+        } else {
+            cBusinessCategory = TestUtil.findAll(em, CBusinessCategory.class).get(0);
+        }
+        mWarningLetter.setBusinessCategory(cBusinessCategory);
+        // Add required entity
+        mWarningLetter.setSubBusinessCategory(cBusinessCategory);
         return mWarningLetter;
     }
 
@@ -1508,6 +1533,38 @@ public class MWarningLetterResourceIT {
 
         // Get all the mWarningLetterList where vendor equals to vendorId + 1
         defaultMWarningLetterShouldNotBeFound("vendorId.equals=" + (vendorId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMWarningLettersByBusinessCategoryIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CBusinessCategory businessCategory = mWarningLetter.getBusinessCategory();
+        mWarningLetterRepository.saveAndFlush(mWarningLetter);
+        Long businessCategoryId = businessCategory.getId();
+
+        // Get all the mWarningLetterList where businessCategory equals to businessCategoryId
+        defaultMWarningLetterShouldBeFound("businessCategoryId.equals=" + businessCategoryId);
+
+        // Get all the mWarningLetterList where businessCategory equals to businessCategoryId + 1
+        defaultMWarningLetterShouldNotBeFound("businessCategoryId.equals=" + (businessCategoryId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMWarningLettersBySubBusinessCategoryIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CBusinessCategory subBusinessCategory = mWarningLetter.getSubBusinessCategory();
+        mWarningLetterRepository.saveAndFlush(mWarningLetter);
+        Long subBusinessCategoryId = subBusinessCategory.getId();
+
+        // Get all the mWarningLetterList where subBusinessCategory equals to subBusinessCategoryId
+        defaultMWarningLetterShouldBeFound("subBusinessCategoryId.equals=" + subBusinessCategoryId);
+
+        // Get all the mWarningLetterList where subBusinessCategory equals to subBusinessCategoryId + 1
+        defaultMWarningLetterShouldNotBeFound("subBusinessCategoryId.equals=" + (subBusinessCategoryId + 1));
     }
 
     /**

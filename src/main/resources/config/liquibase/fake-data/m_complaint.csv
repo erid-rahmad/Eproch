@@ -1,0 +1,11 @@
+id;uid;active;report_date;warning;date_trx;document_no;document_action;document_status;approved;processed;ad_organization_id;vendor_id;cost_center_id;contract_id;business_category_id;sub_business_category_id
+1;195da229-2cbd-464c-917f-464d69ff3f75;false;2021-07-07;../fake-data/blob/hipster.txt;2021-07-07;Mouse overriding Soft;Car Down-s;overriding;true;true;1;1;1;1;1;1
+2;730c9403-e09a-4ab9-8dd0-c4f16c9db5e5;true;2021-07-08;../fake-data/blob/hipster.txt;2021-07-08;morph;reboot Int;leverage b;false;false;2;2;2;2;2;2
+3;55f05a8f-70a0-405f-87d8-7c9e0130b0c9;true;2021-07-07;../fake-data/blob/hipster.txt;2021-07-07;Rustic Fresh Car Auto Loan Acc;e-services;hard drive;true;false;3;3;3;3;3;3
+4;87996316-9476-489e-a2fb-5b1200021b87;true;2021-07-07;../fake-data/blob/hipster.txt;2021-07-07;copying;back up Co;Canyon dep;true;true;4;4;4;4;4;4
+5;83c0fd31-d616-4a19-bb91-bcb1324e71c8;true;2021-07-07;../fake-data/blob/hipster.txt;2021-07-07;paradigm port digital;magenta Sa;Computers;false;true;5;5;5;5;5;5
+6;a63f9f39-cb61-4532-8b73-fb747bfb5095;true;2021-07-07;../fake-data/blob/hipster.txt;2021-07-07;synthesize;dynamic fu;Lead optic;true;true;6;6;6;6;6;6
+7;9c86ad4a-59d5-4dde-ab99-786d5070cc40;false;2021-07-07;../fake-data/blob/hipster.txt;2021-07-07;users Monitored;silver mon;Maryland;true;false;7;7;7;7;7;7
+8;847aa26a-efca-41c3-ae59-636349061037;false;2021-07-07;../fake-data/blob/hipster.txt;2021-07-08;Texas Persistent cross-media;navigate S;Generic mi;false;false;8;8;8;8;8;8
+9;04ec12b8-2056-41b5-81bf-8a5a7e5259be;false;2021-07-07;../fake-data/blob/hipster.txt;2021-07-07;Credit Card Account;Guyana Dol;Tugrik Rub;false;false;9;9;9;9;9;9
+10;d55a863a-4b99-4a29-bf1d-d6502240e05a;false;2021-07-07;../fake-data/blob/hipster.txt;2021-07-08;Steel bypassing;neural;Radial JSO;true;false;10;10;10;10;10;10

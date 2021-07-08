@@ -55,44 +55,7 @@ export default class WarningLetter extends mixins(AccessLevelMixin, WarningLette
 
   documentStatuses = [];
 
-  warningLetters = [
-    /*
-    {
-      documentTypeId: null,
-      documentTypeName: null,
-      reportDate: '2021-03-31T00:00:00.000Z',
-      vendorName: 'INGRAM MICRO INDONESIA',
-      businessCategory: 'Automotive Vehicle',
-      subCategory: 'Car',
-      startDate: '2021-03-31T00:00:00.000Z',
-      endDate: '2021-04-14T00:00:00.000Z',
-      warningType: 'A',
-      location: null,
-      warning: null,
-      createdBy: 'Admin',
-      documentAction: 'SMT',
-      documentStatus: 'DRF',
-      status: 'Open'
-    },
-    {
-      documentTypeId: null,
-      documentTypeName: null,
-      reportDate: '2021-02-01T00:00:00.000Z',
-      vendorName: 'WESTCON INTERNATIONAL INDONESIA',
-      businessCategory: 'Automotive Vehicle',
-      subCategory: 'Car',
-      startDate: '2021-01-01T00:00:00.000Z',
-      endDate: '2021-01-20T00:00:00.000Z',
-      warningType: 'A',
-      location: null,
-      warning: 'First warning!',
-      createdBy: 'Admin',
-      documentAction: 'CLS',
-      documentStatus: 'CLS',
-      status: 'Close'
-    },
-    */
-  ];
+  warningLetters = [];
 
   // for paging
   public itemsPerPage = 10;
@@ -199,6 +162,7 @@ export default class WarningLetter extends mixins(AccessLevelMixin, WarningLette
 
   closeDetail() {
     this.index = true;
+    this.refreshHeader();
   }
 
   printStatus(value: string) {
@@ -248,8 +212,8 @@ export default class WarningLetter extends mixins(AccessLevelMixin, WarningLette
       reportDate: '',
       vendorName: '',
       vendorId: null,
-      businessCategory: '',
-      subCategory: '',
+      businessCategoryId: null,
+      subCategoryId: null,
       startDate: '',
       endDate: '',
       warningType: '',
@@ -272,8 +236,8 @@ export default class WarningLetter extends mixins(AccessLevelMixin, WarningLette
   onSaveClicked(){
     this.commonService('/api/m-warning-letters')[this.selectedRow.id?'update':'create'](this.selectedRow).
       then((res)=>{
-        this.selectedRow = res;
         this.$message.success(`Warning letter ${this.selectedRow.id?'updated':'created'}.`)
+        this.selectedRow = res;
       }).catch((res)=>{
         this.$message.error(`Error during ${this.selectedRow.id?'updating':'creating'} a warning letter`)
       });

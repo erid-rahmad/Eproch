@@ -7,7 +7,6 @@
         Added the constraints for entity MWarningLetter.
     -->
     <changeSet id="20210707092500-2" author="jhipster">
-        
         <addForeignKeyConstraint baseColumnNames="ad_organization_id"
                                  baseTableName="m_warning_letter"
                                  constraintName="fk_m_warning_letter_ad_organization_id"
@@ -20,5 +19,19 @@
                                  referencedColumnNames="id"
                                  referencedTableName="c_vendor"/>
 
+    </changeSet>
+
+    <changeSet id="20210707092500-rel-1" author="ricky-k">
+        <addForeignKeyConstraint baseColumnNames="business_category_id"
+                                 baseTableName="m_warning_letter"
+                                 constraintName="fk_m_warning_letter_business_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_business_category"/>
+
+        <addForeignKeyConstraint baseColumnNames="sub_business_category_id"
+                                 baseTableName="m_warning_letter"
+                                 constraintName="fk_m_warning_letter_sub_business_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_business_category"/>
     </changeSet>
 </databaseChangeLog>

@@ -4,9 +4,10 @@ import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMi
 import Vue from 'vue';
 import Component, { mixins } from 'vue-class-component';
 import ComplaintDetail from './complaint-detail.vue';
-import { Inject } from 'vue-property-decorator';
+import { Inject, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import { ElTable } from 'element-ui/types/table';
+import { AccountStoreModule } from '@/shared/config/store/account-store';
 
 const ComplaintListProp = Vue.extend({
   props: {
@@ -27,56 +28,26 @@ export default class ComplaintList extends mixins(AccessLevelMixin, ComplaintLis
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
   index = true;
+  loading = false;
   selectedRow: any = {};
   selectedDocumentAction: any = {};
   showDocumentActionConfirm = false;
 
-  documentStatuses = {
-    APV: 'Approved',
-    DRF: 'Draft',
-    RJC: 'Rejected',
-    RVS: 'Revised',
-    SMT: 'Submitted',
-  }
+  docTypeId = 0;
+  docTypeName = '';
+
+  documentStatuses = [];
 
   complaints = [
-    {
-      documentTypeId: null,
-      documentTypeName: null,
-      dateTrx: '2021-03-31T00:00:00.000Z',
-      vendorId: 1,
-      vendorName: 'INGRAM MICRO INDONESIA',
-      businessCategory: 'Automotive Vehicle',
-      subCategory: 'Car',
-      message: 'Performa buruk',
-      contractNo: '1113456',
-      costCenterId: 1,
-      costCenterName: 'Procurement',
-      requestor: 'Admin1',
-      type: 'Performance',
-      documentAction: 'SMT',
-      documentStatus: 'DRF',
-      status: 'Drafted'
-    },
-    {
-      documentTypeId: null,
-      documentTypeName: null,
-      dateTrx: '2021-03-31T00:00:00.000Z',
-      vendorId: 2,
-      vendorName: 'WESTCON INTERNATIONAL INDONESIA',
-      businessCategory: 'Automotive Vehicle',
-      subCategory: 'Car',
-      message: 'Performa buruk',
-      contractNo: '1113456',
-      costCenterId: 1,
-      costCenterName: 'Procurement',
-      requestor: 'Admin1',
-      type: 'Performance',
-      documentAction: 'CMP',
-      documentStatus: 'RVW',
-      status: 'Reviewed'
-    },
   ];
+
+  // for paging
+  public itemsPerPage = 10;
+  public queryCount: number = null;
+  public page = 1;
+  public previousPage = 1;
+  public reverse = false;
+  public totalItems = 0;
 
   get defaultDocumentAction() {
     return this.selectedRow.documentAction || 'DRF';
@@ -104,7 +75,68 @@ export default class ComplaintList extends mixins(AccessLevelMixin, ComplaintLis
   }
 
   created() {
+    this.refreshHeader();
+    this.commonService(null)
+      .retrieveReferenceLists('docStatus')
+      .then(res => {
+        this.documentStatuses = res.map(item => 
+          ({
+            key: item.value,
+            label: item.name
+          })
+        );
+      });
     this.retrieveDocumentType('Complaint');
+  }
+
+  refreshHeader(){
+    this.loading = true;
+    this.commonService("/api/m-complaints").retrieve(
+      {
+        criteriaQuery: this.updateCriteria([
+        'active.equals=true']),
+        paginationQuery: {
+          page: this.page-1,
+          size: this.itemsPerPage,
+          sort: ['id']
+        }
+      }).then((res)=>{
+        this.complaints = res.data;
+        console.log(this.complaints);
+
+        this.totalItems = Number(res.headers['x-total-count']);
+        this.queryCount = this.totalItems;
+      }
+    ).finally(()=>{this.loading=false})
+  }
+
+  public changePageSize(size: number) {
+    this.itemsPerPage = size;
+    if(this.page!=1){
+      this.page = 0;
+    }
+    this.refreshHeader();
+  }
+
+  public loadPage(page: number): void {
+    if (page !== this.previousPage) {
+      this.previousPage = page;
+      this.refreshHeader();
+    }
+  }
+
+  public transition(): void {
+    this.refreshHeader();
+  }
+
+  public clear(): void {
+    this.page = 1;
+    this.refreshHeader();
+  }
+
+  @Watch('page')
+  onPageChange(page: number) {
+    this.loadPage(page);
   }
 
   mounted() {
@@ -113,10 +145,11 @@ export default class ComplaintList extends mixins(AccessLevelMixin, ComplaintLis
 
   closeDetail() {
     this.index = true;
+    this.refreshHeader();
   }
 
-  printStatus(status: string) {
-    return this.documentStatuses[status];
+  printStatus(value: string) {
+    return this.documentStatuses.find(status => status.key === value)?.label;
   }
 
   private retrieveDocumentType(name: string) {
@@ -140,6 +173,8 @@ export default class ComplaintList extends mixins(AccessLevelMixin, ComplaintLis
             return item;
           });
         }
+        this.docTypeId = res.data[0].id;
+        this.docTypeName = res.data[0].name;
       });
   }
 
@@ -151,5 +186,57 @@ export default class ComplaintList extends mixins(AccessLevelMixin, ComplaintLis
     console.log('selected row:', row);
     this.selectedRow = row;
     this.index = false;
+  }
+
+  onCreateClicked(){
+    const empty = {
+      documentTypeId: this.docTypeId,
+      documentTypeName: this.docTypeName,
+      dateTrx: new Date(),
+      vendorId: null,
+      vendorName: '',
+      businessCategoryId: null,
+      subCategoryId: null,
+      warning: '',
+      contractId: null,
+      contractNo: null,
+      costCenterId: null,
+      costCenterName: null,
+      type: null,
+      adOrganizationId: AccountStoreModule.organizationInfo.id,
+      createdBy: AccountStoreModule.account.login,
+      documentAction: 'SMT',
+      documentStatus: 'DRF',
+      status: ''
+    }
+
+    this.selectedRow = empty;
+    this.index = false;
+  }
+
+  onSaveClicked(){
+    this.commonService('/api/m-complaints')[this.selectedRow.id?'update':'create'](this.selectedRow).
+      then((res)=>{
+        this.$message.success(`Complaint ${this.selectedRow.id?'updated':'created'}.`)
+        this.selectedRow = res;
+      }).catch((res)=>{
+        this.$message.error(`Error during ${this.selectedRow.id?'updating':'creating'} a complaint`)
+      });
+  }
+
+  confirmed(action: any){
+    console.log(action);
+    
+    this.selectedRow.documentAction = action.value;
+    this.selectedRow.documentStatus = action.value;
+    this.commonService('/api/m-complaints').update(this.selectedRow).
+    then((res)=>{
+      this.selectedRow = res;
+      this.$message.success(`${action.name} Complaint ${this.selectedRow.documentNo} success.`);
+      this.showDocumentActionConfirm = false;
+      this.refreshHeader();
+    }).catch((res)=>{
+      this.$message.error(`${action.name} Complaint ${this.selectedRow.documentNo} failed.`)
+    });
   }
 }

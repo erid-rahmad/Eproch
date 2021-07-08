@@ -1,9 +1,13 @@
 package com.bhp.opusb.service;
 
+import com.bhp.opusb.config.ApplicationProperties;
+import com.bhp.opusb.config.ApplicationProperties.Document;
 import com.bhp.opusb.domain.MWarningLetter;
 import com.bhp.opusb.repository.MWarningLetterRepository;
 import com.bhp.opusb.service.dto.MWarningLetterDTO;
 import com.bhp.opusb.service.mapper.MWarningLetterMapper;
+import com.bhp.opusb.util.DocumentUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,9 +31,18 @@ public class MWarningLetterService {
 
     private final MWarningLetterMapper mWarningLetterMapper;
 
-    public MWarningLetterService(MWarningLetterRepository mWarningLetterRepository, MWarningLetterMapper mWarningLetterMapper) {
+    private final Document document;
+    
+    public MWarningLetterService(ApplicationProperties applicationProperties, 
+        MWarningLetterRepository mWarningLetterRepository, MWarningLetterMapper mWarningLetterMapper) {
         this.mWarningLetterRepository = mWarningLetterRepository;
         this.mWarningLetterMapper = mWarningLetterMapper;
+
+        document = applicationProperties.getDocuments().get("warningLetter");
+    }
+
+    private String initDocumentNumber() {
+        return DocumentUtil.buildDocumentNumber(document.getDocumentNumberPrefix(), mWarningLetterRepository);
     }
 
     /**
@@ -41,6 +54,11 @@ public class MWarningLetterService {
     public MWarningLetterDTO save(MWarningLetterDTO mWarningLetterDTO) {
         log.debug("Request to save MWarningLetter : {}", mWarningLetterDTO);
         MWarningLetter mWarningLetter = mWarningLetterMapper.toEntity(mWarningLetterDTO);
+
+        if (mWarningLetter.getDocumentNo() == null) {
+            mWarningLetter.documentNo(initDocumentNumber());
+        }
+
         mWarningLetter = mWarningLetterRepository.save(mWarningLetter);
         return mWarningLetterMapper.toDto(mWarningLetter);
     }
