@@ -13,6 +13,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import javax.sql.DataSource;
+import javax.validation.Valid;
 
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.MVerification;
@@ -389,5 +390,23 @@ public class MVerificationService {
     public void delete(Long id) {
         log.debug("Request to delete MVerification : {}", id);
         mVerificationRepository.deleteById(id);
+    }
+
+    public void updateDocumentStatus(@Valid MVerificationDTO mVerificationDTO) {
+        log.debug("Request to update MVerification's document status : {}", mVerificationDTO);
+        MVerification mVerification = mVerificationMapper.toEntity(mVerificationDTO);
+        String action = mVerification.getDocumentAction();
+        String status = mVerification.getDocumentStatus();
+        boolean approved = false;
+        boolean processed = false;
+
+        if (DocumentUtil.isApprove(mVerification.getDocumentStatus())) {
+            approved = true;
+            processed = true;
+        } else if (DocumentUtil.isReject(mVerification.getDocumentStatus())) {
+            processed = true;
+        }
+
+        mVerificationRepository.updateDocumentStatus(mVerification.getId(), action, status, approved, processed);
     }
 }

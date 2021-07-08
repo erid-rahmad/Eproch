@@ -21,10 +21,13 @@ export default class WarningLetterDetail extends Mixins(AccessLevelMixin, Warnin
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
 
   columnSpacing = 24;
+
   mainForm = {
     documentAction: null,
     documentStatus: null
   };
+
+  vendorOptions: any[] = [];
 
   warningTypes = [
     {
@@ -53,7 +56,7 @@ export default class WarningLetterDetail extends Mixins(AccessLevelMixin, Warnin
   }
 
   get readOnly() {
-    return this.mainForm.documentStatus === 'CLS';
+    return this.mainForm.documentStatus === 'CLS' || this.mainForm.documentStatus === 'SMT';
   }
 
   @Watch('data')
@@ -63,5 +66,28 @@ export default class WarningLetterDetail extends Mixins(AccessLevelMixin, Warnin
 
   created() {
     this.onDataChanged(this.data);
+
+    this.commonService("/api/c-vendors")
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true'
+        ],
+      })
+      .then(res => {
+        this.vendorOptions = res.data.map((item: any) => {
+          return {
+            key: item.id,
+            value: item.name,
+            code: item.code
+          };
+        });
+      })
+      .catch(err => {
+        console.error('Failed getting the record. %O', err);
+        this.$message({
+          type: 'error',
+          message: err.detail || err.message
+        });
+      });
   }
 }
