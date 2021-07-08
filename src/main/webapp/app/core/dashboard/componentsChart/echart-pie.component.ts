@@ -31,7 +31,7 @@ export default class DashBoard extends Mixins(AccessLevelMixin) {
       .then(async res => {
         await this.chart.setOption({
           title: {
-            text: 'DATA '
+            text: ' '
           },
           tooltip: {
             trigger: 'axis'
@@ -53,7 +53,7 @@ export default class DashBoard extends Mixins(AccessLevelMixin) {
           xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: res.data.Header
+            data: res.data.Header.reverse()
           },
           yAxis: {
             type: 'value'

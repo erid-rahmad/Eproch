@@ -2,6 +2,7 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.service.PaDashboardService;
 import com.bhp.opusb.service.dto.DashboardMyDocument;
+import com.bhp.opusb.service.dto.MPurchaseOrderDTO;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
 import com.bhp.opusb.service.dto.PaDashboardDTO;
 import com.bhp.opusb.service.dto.PaDashboardCriteria;
@@ -114,6 +115,18 @@ public class PaDashboardResource {
     @GetMapping("/pa-dashboards/SpendByCostCenter")
     public Map<String, Object> SpendByCostCenter() {
         return paDashboardService.ContractSpendByCostCenter();
+
+    }
+
+    @GetMapping("/pa-dashboards/vendorConfirmation")
+    public Map<String, Object> vendorConfirmation() {
+        return paDashboardService.vendorConfirmation();
+
+    }
+
+    @GetMapping("/pa-dashboards/topVendorPurchase")
+    public List<MPurchaseOrderDTO> topVendorPurchase() {
+        return paDashboardService.topVendorPurchase();
 
     }
 

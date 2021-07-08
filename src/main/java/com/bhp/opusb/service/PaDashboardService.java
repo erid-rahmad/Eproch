@@ -4,6 +4,7 @@ import com.bhp.opusb.domain.*;
 import com.bhp.opusb.repository.*;
 import com.bhp.opusb.service.dto.DashboardMyDocument;
 import com.bhp.opusb.service.dto.DashboardSpendByCostCenter;
+import com.bhp.opusb.service.dto.MPurchaseOrderDTO;
 import com.bhp.opusb.service.dto.PaDashboardDTO;
 import com.bhp.opusb.service.mapper.PaDashboardMapper;
 import com.bhp.opusb.util.MapperJSONUtil;
@@ -16,12 +17,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.event.ListDataEvent;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
@@ -42,12 +40,13 @@ public class PaDashboardService {
     private final MPurchaseOrderRepository mPurchaseOrderRepository;
     private final MRequisitionRepository mRequisitionRepository;
     private final MRfqRepository mRfqRepository;
+    private final MVendorConfirmationLineRepository mVendorConfirmationLineRepository;
 
 
 
 
 
-    public PaDashboardService(PaDashboardRepository paDashboardRepository, PaDashboardMapper paDashboardMapper, MBiddingRepository mBiddingRepository, MContractRepository mContractRepository, MPurchaseOrderRepository mPurchaseOrderRepository, MRequisitionRepository mRequisitionRepository, MRfqRepository mRfqRepository) {
+    public PaDashboardService(PaDashboardRepository paDashboardRepository, PaDashboardMapper paDashboardMapper, MBiddingRepository mBiddingRepository, MContractRepository mContractRepository, MPurchaseOrderRepository mPurchaseOrderRepository, MRequisitionRepository mRequisitionRepository, MRfqRepository mRfqRepository, MVendorConfirmationLineRepository mVendorConfirmationLineRepository) {
         this.paDashboardRepository = paDashboardRepository;
         this.paDashboardMapper = paDashboardMapper;
         this.mBiddingRepository = mBiddingRepository;
@@ -55,6 +54,7 @@ public class PaDashboardService {
         this.mPurchaseOrderRepository = mPurchaseOrderRepository;
         this.mRequisitionRepository = mRequisitionRepository;
         this.mRfqRepository = mRfqRepository;
+        this.mVendorConfirmationLineRepository = mVendorConfirmationLineRepository;
     }
 
     /**
@@ -155,7 +155,7 @@ public class PaDashboardService {
     }
 
     public Map<String, Object> ContractSpendByCostCenter() {
-       List<MPurchaseOrder> purchaseOrders =mPurchaseOrderRepository.findAll();
+       List<MPurchaseOrder> purchaseOrders =mPurchaseOrderRepository.findByDocumentStatus("APV");
        Map<String,List<MPurchaseOrder>> map = new HashMap<>();
        List<String> costCenterList = new ArrayList<>();
         List<String> header = new ArrayList<>();
@@ -196,35 +196,67 @@ public class PaDashboardService {
                final BigDecimal[] costIn = {BigDecimal.ZERO};
                List<MPurchaseOrder> purchaseOrders_ =map.get(String.valueOf( date.getYear())
                    +String.valueOf( date.getMonth()));
-
-               log.info("this data1 {}",purchaseOrders_);
-
                if (purchaseOrders_!=null) {
-                   log.info("this data2 {}");
                    purchaseOrders_.forEach(mPurchaseOrder -> {
-                       log.info("this data3 {}",mPurchaseOrder);
                        if (mPurchaseOrder.getCostCenter().getName().contains(s)){
                            costIn[0] = costIn[0].add(mPurchaseOrder.getGrandTotal());
-                           log.info("cost1 {}", costIn[0]);
-                           log.info("cost4 {}",(mPurchaseOrder.getGrandTotal()));
                        }
                    });
-                   log.info("cost2 {}", costIn[0]);
                    cost.add(costIn[0]);
                }else {cost.add(BigDecimal.ZERO);}
            }
+
+           Collections.reverse(cost);
            dashboardSpendByCostCenter.setData(cost);
            dashboardSpendByCostCenters.add(dashboardSpendByCostCenter);
        });
-
-
-       log.info("this map {}", MapperJSONUtil.prettyLog(map));
-       log.info("this data list dashbord {}",dashboardSpendByCostCenters);
 
        Map<String,Object> sent =new HashMap<>();
        sent.put("Data",dashboardSpendByCostCenters);
        sent.put("Header",header);
        return sent;
+    }
+
+    public Map<String, Object> vendorConfirmation(){
+        List<MVendorConfirmationLine> mVendorConfirmationLine = mVendorConfirmationLineRepository.findByStatus("P");
+
+        List<Long> jumlah =new ArrayList<>();
+        mVendorConfirmationLine.forEach(mVendorConfirmationLine1 -> {
+            if (!jumlah.contains(mVendorConfirmationLine1.getVendorConfirmation().getId())){
+                jumlah.add(mVendorConfirmationLine1.getVendorConfirmation().getId());
+            }
+
+        });
+        Map<String,Object> map = new HashMap<>();
+        map.put("vendorConfirmation",jumlah.size());
+        return map;
+
+    }
+
+    public List<MPurchaseOrderDTO> topVendorPurchase() {
+        List<MPurchaseOrder> purchaseOrders =mPurchaseOrderRepository.findByDocumentStatus("APV");
+        Map<String,BigDecimal> map = new HashMap<>();
+        List<String> vendor = new ArrayList<>();
+        purchaseOrders.forEach(mPurchaseOrder -> {
+            if (!vendor.contains(mPurchaseOrder.getVendor().getName())){
+                vendor.add(mPurchaseOrder.getVendor().getName());
+            }
+            BigDecimal bigInteger = mPurchaseOrder.getGrandTotal();
+            try {
+                bigInteger.add(map.get(mPurchaseOrder.getVendor().getName()));
+            }catch (Exception e){}
+            map.put(mPurchaseOrder.getVendor().getName(),bigInteger);
+        });
+        List<MPurchaseOrderDTO> mPurchaseOrders = new ArrayList<>();
+        vendor.forEach(s -> {
+            MPurchaseOrderDTO mPurchaseOrderDTO = new MPurchaseOrderDTO();
+
+            mPurchaseOrderDTO.setVendorName( s);
+            mPurchaseOrderDTO.setGrandTotal(map.get(s));
+            mPurchaseOrders.add(mPurchaseOrderDTO);
+
+        });
+        return mPurchaseOrders;
     }
 
     /**

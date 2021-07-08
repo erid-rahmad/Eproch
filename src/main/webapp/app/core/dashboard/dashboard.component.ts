@@ -15,7 +15,7 @@ import echartpie from './componentsChart/echart-pie.vue';
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 
 const baseApiVendor ='api/c-vendors';
-const baseApiPO ='api/m-purchase-orders';
+const baseApiTopVendor ='api/pa-dashboards/topVendorPurchase';
 const baseApiDocument ='api/pa-dashboards/mydocument';
 const baseApiEvaluation ='api/m-vendor-evaluations';
 
@@ -177,39 +177,34 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
   }
 
   retrievePO(){
-    this.commonService(baseApiPO)
+    this.commonService(baseApiTopVendor)
       .retrieve({
         criteriaQuery: this.updateCriteria([
-          'active.equals=true',
+
         ]),
         paginationQuery: {
           page: 0,
           size: 10,
-          sort: ['grandTotal,desc']
+          sort: ['id']
         }
       })
       .then(async res => {
-        this.dataPO=res.data;
-        let ListdataPO :any=[]
-        let map: Map<String, Object> = new Map();
-        await res.data.forEach( data_=>{
-          let ListdataPO=[];
-           ListdataPO.push(data_)
-          let pass = map.get(data_.createdDate.getMonth)
-           if (pass){
-             ListdataPO.push(pass)
-          }
 
-          map.set(new Date(data_.createdDate).getFullYear()+
-            new Date(data_.createdDate).getMonth().toString(),ListdataPO);
-        })
-        let i =0
-        const date = new Date()
-        while ( i < 13) {
-          date.setMonth(date.getMonth() - i);
-          const data =map.get(date.getFullYear()+date.getMonth().toString())
-          i++;
+        function compare(a, b) {
+          // Use toUpperCase() to ignore character casing
+          const bandA = a.grandTotal;
+          const bandB = b.grandTotal;
+          let comparison = 0;
+          if (bandA < bandB) {
+            comparison = 1;
+          } else if (bandA > bandB) {
+            comparison = -1;
+          }
+          return comparison;
         }
+        await res.data.sort(compare);
+        this.dataPO = res.data;
+
       })
       .finally(()=>this.retrieveMyDocument());
   }
@@ -243,26 +238,10 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
         await myDocument.sort(compare);
         this.dataMyDocument=myDocument;
       })
-      .finally(()=>this.retrieveEvaluasi());
-  }
-
-  retrieveEvaluasi(){
-    this.commonService(baseApiEvaluation)
-      .retrieve({
-        criteriaQuery: this.updateCriteria([
-          'active.equals=true',
-        ]),
-        paginationQuery: {
-          page: 0,
-          size: 10,
-          sort: ['id,desc']
-        }
-      })
-      .then(res => {
-        this.dataEvaluasi=res.data;
-      })
       .finally();
   }
+
+
 
   public refresh() {
     const widgets: any[] = <any[]>this.$refs.widget;

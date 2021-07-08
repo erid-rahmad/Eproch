@@ -9,6 +9,7 @@ import { WindowStoreModule as windowStore } from "@/shared/config/store/window-s
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 const baseApiVendor ='api/c-vendors';
 const baseApiBidding ='api/m-biddings';
+const baseApiVendorConfirmation ='api/pa-dashboards/vendorConfirmation';
 enum DisplayType {
   Card = 'card',
   List = 'list'
@@ -63,18 +64,13 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
 
   created() {
     this.retrieveVendor();
+    this.retrieveVendorConfirmation();
     this.retrieveBidding();
     this.retrieveWatchListItems(this.name);
   }
 
   async onCardClicked(card: IAdWatchListItem) {
-    console.log("this card",card)
-
-
-      console.log("info menu id",card.adMenu.id)
       card.actionUrl = await this.commonService('/api/ad-menus/full-path').find(card.adMenu.id);
-
-
     if (card.actionUrl) {
       const timestamp = Date.now();
       windowStore.setWatchlistQuery(card.filterQuery)
@@ -175,6 +171,23 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
       .finally();
   }
 
+  retrieveVendorConfirmation(){
+    this.commonService(baseApiVendorConfirmation)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.dasbordItem.vendorConfirmation=res.data.vendorConfirmation;
+      })
+      .finally();
+  }
 
   private retrieveWatchListCounter(item: IAdWatchListItem, index?: number) {
     this.commonService(item.restApiEndpoint)

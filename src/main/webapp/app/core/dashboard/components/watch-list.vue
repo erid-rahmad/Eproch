@@ -496,50 +496,50 @@
                               </div>
                           </md-card>
                       </div>
-<!--                      <div class="md-layout-item">-->
-<!--                          <md-card md-with-hover style="-->
-<!--                    background: #26c6da;-->
-<!--                            width: 85px;-->
-<!--                            height: 85px;-->
-<!--                            margin: 0px;-->
-<!--                            border-radius: 6px;-->
-<!--                            top: -5%;-->
-<!--                            left: 5%;-->
-<!--                            position: relative;-->
-<!--                            box-shadow: 0px 12px 20px -10px;"-->
-<!--                          >-->
-<!--                              <md-card-media>-->
-<!--                                  <md-icon class="card-icon el-icon-data-analysis" style="color: white"></md-icon>-->
-<!--                              </md-card-media>-->
-<!--                          </md-card>-->
-<!--                          <md-card md-with-hover style="-->
-<!--                            top: 3%;-->
-<!--                            height: 132px;-->
-<!--                            position: unset;-->
-<!--                            border-radius: 6px;-->
-<!--                            margin-top: -76px;">-->
+                      <div class="md-layout-item">
+                          <md-card md-with-hover style="
+                    background: #26c6da;
+                            width: 85px;
+                            height: 85px;
+                            margin: 0px;
+                            border-radius: 6px;
+                            top: -5%;
+                            left: 5%;
+                            position: relative;
+                            box-shadow: 0px 12px 20px -10px;"
+                          >
+                              <md-card-media>
+                                  <md-icon class="card-icon el-icon-data-analysis" style="color: white"></md-icon>
+                              </md-card-media>
+                          </md-card>
+                          <md-card md-with-hover style="
+                            top: 3%;
+                            height: 132px;
+                            position: unset;
+                            border-radius: 6px;
+                            margin-top: -76px;">
 
-<!--                              <md-card-header-text align="right" style="margin-right: 14px;">-->
-<!--                                  <div class="md-title">Benefit</div>-->
-<!--                                  <div class="md-subhead">$51</div>-->
-<!--                              </md-card-header-text>-->
+                              <md-card-header-text align="right" style="margin-right: 14px;">
+                                  <div class="md-title">Vendor Confirmation</div>
+                                  <div class="md-subhead">{{dasbordItem.vendorConfirmation}}</div>
+                              </md-card-header-text>
 
-<!--                              <div class="md-card-actions md-alignment-left" style="-->
-<!--                        margin: 32px 11px 7px;-->
-<!--                        font-size: 12px;-->
-<!--                        opacity: 0.7;-->
-<!--                        padding: 4px 0 0 0;-->
-<!--                        border-top: 1px solid #d0d0d0;">-->
-<!--                                  <div class="stats">-->
-<!--                                      <i class="el-icon-refresh-right"-->
-<!--                                         style="font-size: 20px!important;"></i>-->
-<!--                                      <i style="position: relative;-->
-<!--                                      top: -3px;"-->
-<!--                                      >Just Updated</i>-->
-<!--                                  </div>-->
-<!--                              </div>-->
-<!--                          </md-card>-->
-<!--                      </div>-->
+                              <div class="md-card-actions md-alignment-left" style="
+                        margin: 32px 11px 7px;
+                        font-size: 12px;
+                        opacity: 0.7;
+                        padding: 4px 0 0 0;
+                        border-top: 1px solid #d0d0d0;">
+                                  <div class="stats">
+                                      <i class="el-icon-refresh-right"
+                                         style="font-size: 20px!important;"></i>
+                                      <i style="position: relative;
+                                      top: -3px;"
+                                      >Just Updated</i>
+                                  </div>
+                              </div>
+                          </md-card>
+                      </div>
                   </div>
               </el-carousel-item>
           </el-carousel>

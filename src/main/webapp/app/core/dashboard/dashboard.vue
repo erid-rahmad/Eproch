@@ -292,7 +292,7 @@
                                     width="280px"
                                 >
                                     <template slot-scope="{row}">
-                                        {{ row.grandTotal | formatCurrency }}
+                                        {{ row.grandTotal | formatCurre ncy }}
                                     </template>
                                 </el-table-column>
 
@@ -434,7 +434,7 @@
                                             ;">
 
                             </i>
-                            <i>TOP Vendor Purchase Amount</i>
+                            <i>--</i>
 
                         </div>
                     </md-card-media>
@@ -452,7 +452,7 @@
                         margin-left: 14px;">
                         <template >
                             <el-table
-                                :data="dataEvaluasi"
+                                :data="asdasdas"
                                 height="250"
                             >
                                 <el-table-column
