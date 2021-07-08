@@ -1,59 +1,77 @@
 
-import { Component, Inject, Vue } from 'vue-property-decorator';
+import {Component, Inject, Mixins, Vue} from 'vue-property-decorator';
 // @ts-ignore
 import echarts from 'echarts';
+import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
+import DynamicWindowService from "@/core/application-dictionary/components/DynamicWindow/dynamic-window.service";
+const baseApiDashbord = 'api/pa-dashboards/SpendByCostCenter';
+
 @Component
-export default class DashBoard extends Vue {
+export default class DashBoard extends Mixins(AccessLevelMixin) {
+
+  @Inject('dynamicWindowService')
+  protected commonService: (baseApiUrl: string) => DynamicWindowService;
+
+
   private chart:any;
+  private data:any;
 
-  mounted() {
-    this.chart = echarts.init(document.getElementById("echarts1"));
-    this.chart.setOption({
-
-      tooltip: {
-        trigger: 'item'
-      },
-      legend: {
-        top: '5%',
-        left: 'center'
-      },
-      series: [
-        {
-          name: '访问来源',
-          type: 'pie',
-          radius: ['40%', '70%'],
-          avoidLabelOverlap: false,
-          itemStyle: {
-            borderRadius: 10,
-            borderColor: '#fff',
-            borderWidth: 2
+  retrieveVendorBidding(){
+    this.commonService(baseApiDashbord)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(async res => {
+        await this.chart.setOption({
+          title: {
+            text: 'DATA '
           },
-          label: {
-            show: false,
-            position: 'center'
+          tooltip: {
+            trigger: 'axis'
           },
-          emphasis: {
-            label: {
-              show: true,
-              fontSize: '40',
-              fontWeight: 'bold'
+          legend: {
+            data: res.data.Header
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          toolbox: {
+            feature: {
+              saveAsImage: {}
             }
           },
-          labelLine: {
-            show: false
+          xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: res.data.Header
           },
-          data: [
-            {value: 1048, name: '搜索引擎'},
-            {value: 735, name: '直接访问'},
-            {value: 580, name: '邮件营销'},
-            {value: 484, name: '联盟广告'},
-            {value: 300, name: '视频广告'}
-          ]
-        }
-      ]
+          yAxis: {
+            type: 'value'
+          },
+          series:  res.data.Data
+        });
 
 
-    })
+
+
+      })
+      .finally();
+  }
+
+  mounted() {
+    this.retrieveVendorBidding();
+    this.chart = echarts.init(document.getElementById("echarts1"));
+
   }
 
 

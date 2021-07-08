@@ -25,6 +25,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -108,6 +109,12 @@ public class PaDashboardResource {
     @GetMapping("/pa-dashboards/mydocument")
     public ResponseEntity<List<DashboardMyDocument>> getAllPaDashboards() {
         return ResponseEntity.ok().body(paDashboardService.findAllMyDocument());
+    }
+
+    @GetMapping("/pa-dashboards/SpendByCostCenter")
+    public Map<String, Object> SpendByCostCenter() {
+        return paDashboardService.ContractSpendByCostCenter();
+
     }
 
     /**

@@ -188,11 +188,30 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
           sort: ['grandTotal,desc']
         }
       })
-      .then(res => {
+      .then(async res => {
         this.dataPO=res.data;
+        let ListdataPO :any=[]
+        let map: Map<String, Object> = new Map();
+        await res.data.forEach( data_=>{
+          let ListdataPO=[];
+           ListdataPO.push(data_)
+          let pass = map.get(data_.createdDate.getMonth)
+           if (pass){
+             ListdataPO.push(pass)
+          }
+
+          map.set(new Date(data_.createdDate).getFullYear()+
+            new Date(data_.createdDate).getMonth().toString(),ListdataPO);
+        })
+        let i =0
+        const date = new Date()
+        while ( i < 13) {
+          date.setMonth(date.getMonth() - i);
+          const data =map.get(date.getFullYear()+date.getMonth().toString())
+          i++;
+        }
       })
       .finally(()=>this.retrieveMyDocument());
-
   }
 
   retrieveMyDocument(){

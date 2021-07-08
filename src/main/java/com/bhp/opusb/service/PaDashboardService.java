@@ -3,8 +3,11 @@ package com.bhp.opusb.service;
 import com.bhp.opusb.domain.*;
 import com.bhp.opusb.repository.*;
 import com.bhp.opusb.service.dto.DashboardMyDocument;
+import com.bhp.opusb.service.dto.DashboardSpendByCostCenter;
 import com.bhp.opusb.service.dto.PaDashboardDTO;
 import com.bhp.opusb.service.mapper.PaDashboardMapper;
+import com.bhp.opusb.util.MapperJSONUtil;
+import liquibase.pro.packaged.O;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +17,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.event.ListDataEvent;
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 /**
@@ -34,6 +42,8 @@ public class PaDashboardService {
     private final MPurchaseOrderRepository mPurchaseOrderRepository;
     private final MRequisitionRepository mRequisitionRepository;
     private final MRfqRepository mRfqRepository;
+
+
 
 
 
@@ -137,16 +147,84 @@ public class PaDashboardService {
         List<String> busnisCategory = new ArrayList<>();
         Map<String, BigInteger> map = new HashMap<>();
         mContracts.forEach(mContract -> {
-
             String bc = mContract.getBidding().getQuotation().getBusinessCategory().getName();
             if (!busnisCategory.contains(bc) && bc!=null) {
                 mContract.getBidding().getQuotation().getBusinessCategory().getName();
             }
-
-
         });
+    }
+
+    public Map<String, Object> ContractSpendByCostCenter() {
+       List<MPurchaseOrder> purchaseOrders =mPurchaseOrderRepository.findAll();
+       Map<String,List<MPurchaseOrder>> map = new HashMap<>();
+       List<String> costCenterList = new ArrayList<>();
+        List<String> header = new ArrayList<>();
+       purchaseOrders.forEach(mPurchaseOrder -> {
+
+           if (!costCenterList.contains(mPurchaseOrder.getCostCenter().getName())){
+               costCenterList.add(mPurchaseOrder.getCostCenter().getName());
+           }
 
 
+           ZoneId z = ZoneId.of( "Asia/Tokyo" );
+           LocalDate myDate = mPurchaseOrder.getCreatedDate().atZone(z).toLocalDate(); ;
+           List<MPurchaseOrder> purchaseOrders_ = new ArrayList<>();
+           purchaseOrders_.add(mPurchaseOrder);
+           try {
+               purchaseOrders_.addAll(map.get(String.valueOf( myDate.getYear())
+                   +String.valueOf( myDate.getMonth())));
+           }catch (Exception e){}
+           map.put(String.valueOf( myDate.getYear())+String.valueOf( myDate.getMonth()),purchaseOrders_);
+       });
+
+       List<DashboardSpendByCostCenter> dashboardSpendByCostCenters =new ArrayList<>();
+
+       costCenterList.forEach(s -> {
+           DashboardSpendByCostCenter dashboardSpendByCostCenter = new DashboardSpendByCostCenter();
+           dashboardSpendByCostCenter.setName(s);
+           dashboardSpendByCostCenter.setType("line");
+           List<BigDecimal> cost = new ArrayList<>();
+
+           for (int i = 0; i < 13; i++) {
+
+               LocalDate date = LocalDate.now().minusMonths(i);
+               if (!header.contains(String.valueOf( date.getYear())
+                   +String.valueOf( date.getMonth()))){
+                   header.add(String.valueOf( date.getYear())
+                       +String.valueOf( date.getMonth()));
+               }
+               final BigDecimal[] costIn = {BigDecimal.ZERO};
+               List<MPurchaseOrder> purchaseOrders_ =map.get(String.valueOf( date.getYear())
+                   +String.valueOf( date.getMonth()));
+
+               log.info("this data1 {}",purchaseOrders_);
+
+               if (purchaseOrders_!=null) {
+                   log.info("this data2 {}");
+                   purchaseOrders_.forEach(mPurchaseOrder -> {
+                       log.info("this data3 {}",mPurchaseOrder);
+                       if (mPurchaseOrder.getCostCenter().getName().contains(s)){
+                           costIn[0] = costIn[0].add(mPurchaseOrder.getGrandTotal());
+                           log.info("cost1 {}", costIn[0]);
+                           log.info("cost4 {}",(mPurchaseOrder.getGrandTotal()));
+                       }
+                   });
+                   log.info("cost2 {}", costIn[0]);
+                   cost.add(costIn[0]);
+               }else {cost.add(BigDecimal.ZERO);}
+           }
+           dashboardSpendByCostCenter.setData(cost);
+           dashboardSpendByCostCenters.add(dashboardSpendByCostCenter);
+       });
+
+
+       log.info("this map {}", MapperJSONUtil.prettyLog(map));
+       log.info("this data list dashbord {}",dashboardSpendByCostCenters);
+
+       Map<String,Object> sent =new HashMap<>();
+       sent.put("Data",dashboardSpendByCostCenters);
+       sent.put("Header",header);
+       return sent;
     }
 
     /**

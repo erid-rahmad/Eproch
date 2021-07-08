@@ -52,7 +52,7 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
         await product.sort(compare);
 
         await product.forEach(data=>{
-          this.contenBar.push([data.orderAmount,data.productName])
+          this.contenBar.push([data.orderAmount/1000000,data.productName])
         })
 
         await this.chart.setOption({
@@ -60,7 +60,7 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
             source: this.contenBar
           },
           grid: {containLabel: true},
-          xAxis: {name: 'amount'},
+          xAxis: {name: '(Juta)'},
           yAxis: {type: 'category'},
           series: [
             {
