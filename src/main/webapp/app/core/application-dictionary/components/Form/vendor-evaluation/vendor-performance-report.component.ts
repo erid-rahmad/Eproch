@@ -2,6 +2,7 @@ import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMi
 import { ElTable } from 'element-ui/types/table';
 import Component, { mixins } from 'vue-class-component';
 import { Inject } from 'vue-property-decorator';
+import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import VendorAnalis from './vendor-analis.vue';
 
 @Component({
