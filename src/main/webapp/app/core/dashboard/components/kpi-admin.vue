@@ -1,6 +1,563 @@
 <template>
   <div >
 
+      <div class="md-layout md-gutter">
+          <div class="md-layout-item">
+              <md-card md-with-hover style="
+                    background: white;
+                    margin-right: 20%;
+                    margin-left: 4%;
+                    height: 235px;
+                    border-radius: 7px;
+                    top: 3%;
+                    position: relative;
+                    box-shadow: 0px 12px 20px -10px;"
+              >
+                  <echart style="padding-left: 1px;padding-right: 1px"></echart>
+              </md-card>
+              <md-card md-with-hover style="
+                    top: 1%;
+                    height: 264px;
+                    position: unset;
+                    border-radius: 6px;
+                    margin-top: -197px;
+                    background-color: #ffa726;">
+                  <md-card-content style="padding: 23px"></md-card-content>
+                  <md-card-header-text align="right" style="margin-right: 14px;">
+                      <div class="md-title-chart">This</div>
+                      <div class="md-title-chart">Valid</div>
+                      <div class="md-title-chart">Data</div>
+                  </md-card-header-text>
+
+                  <div class="md-card-actions md-alignment-left" style="
+                        margin: 43px 11px 7px;
+                        font-size: 12px;
+                        opacity: 0.7;
+                        padding: 4px 0 0 0;
+                        border-top: 1px solid #d0d0d0;">
+                      <div class="stats">
+                          <i class="el-icon-refresh-right"
+                             style="font-size: 20px!important;"></i>
+                          <i style="position: relative;
+                                      top: -3px;"
+                          >Just Updated</i>
+                      </div>
+                  </div>
+              </md-card>
+          </div>
+          <div class="md-layout-item">
+              <md-card md-with-hover style="
+                    background: white;
+                    margin-right: 20%;
+                    margin-left: 4%;
+                    height: 235px;
+                    border-radius: 7px;
+                    top: 3%;
+                    position: relative;
+                    box-shadow: 0px 12px 20px -10px;"
+              >
+                  <!--                    <circular-color-bar style="padding: 1px"></circular-color-bar>-->
+                  <echartpie style="padding: 1px"></echartpie>
+              </md-card>
+              <md-card md-with-hover style="
+                    top: 1%;
+
+                    height: 264px;
+                    position: unset;
+                    border-radius: 6px;
+                    margin-top: -197px;
+                    background-color: #26c6da;">
+                  <md-card-content style="padding: 23px"></md-card-content>
+
+                  <md-card-header-text align="right" style="margin-right: 14px;">
+                      <div class="md-title-chart">This</div>
+                      <div class="md-title-chart">Confirm</div>
+                      <div class="md-title-chart">Status</div>
+                  </md-card-header-text>
+
+                  <div class="md-card-actions md-alignment-left" style="
+                        margin: 43px 11px 7px;
+                        font-size: 12px;
+                        opacity: 0.7;
+                        padding: 4px 0 0 0;
+                        border-top: 1px solid #d0d0d0;">
+                      <div class="stats">
+                          <i class="el-icon-refresh-right"
+                             style="font-size: 20px!important;"></i>
+                          <i style="position: relative;
+                                      top: -3px;"
+                          >Just Updated</i>
+                      </div>
+                  </div>
+              </md-card>
+          </div>
+      </div>
+
+      <div class="md-layout md-gutter">
+          <div class="md-layout-item">
+              <md-card md-with-hover style="
+                    background: white;
+                    margin-right: 4%;
+                    margin-left: 4%;
+                    height: 235px;
+                    border-radius: 7px;
+                    top: 3%;
+                    position: relative;
+                    box-shadow: 0px 12px 20px -10px;"
+              >
+                  <echart style="padding-left: 1px;padding-right: 1px"></echart>
+              </md-card>
+              <md-card md-with-hover style="
+                    top: 1%;
+                    height: 264px;
+                    position: unset;
+                    border-radius: 6px;
+                    margin-top: -197px;
+                    background-color: #ff5252;">
+                  <md-card-content style="padding: 89px;"></md-card-content>
+                  <md-card-header-text align="right" style="margin-right: 14px;">
+                      <div class="md-title"></div>
+                      <div class="md-subhead">50</div>
+                  </md-card-header-text>
+                  <div class="md-card-actions md-alignment-left" style="
+                        margin: 37px 11px 7px;
+                        font-size: 12px;
+                        opacity: 0.7;
+                        padding: 4px 0 0 0;
+                        border-top: 1px solid #d0d0d0;">
+                      <div class="stats">
+                          <i class="el-icon-refresh-right"
+                             style="font-size: 20px!important;"></i>
+                          <i style="position: relative;
+                                      top: -3px;"
+                          >Just Updated</i>
+                      </div>
+                  </div>
+              </md-card>
+          </div>
+          <div class="md-layout-item">
+              <md-card md-with-hover style="
+                    background: white;
+                    margin-right: 4%;
+                    margin-left: 4%;
+                    height: 235px;
+                    border-radius: 7px;
+                    top: 3%;
+                    position: relative;
+                    box-shadow: 0px 12px 20px -10px;"
+              >
+                  <lineupdate style="padding: 1px"></lineupdate>
+              </md-card>
+              <md-card md-with-hover style="
+                    top: 1%;
+                    height: 264px;
+                    position: unset;
+                    border-radius: 6px;
+                    margin-top: -197px;
+                    background-color: #ffa726;">
+                  <md-card-content style="padding: 89px;"></md-card-content>
+                  <md-card-header-text align="right" style="margin-right: 14px;">
+                      <div class="md-title"></div>
+                      <div class="md-subhead">50</div>
+                  </md-card-header-text>
+                  <div class="md-card-actions md-alignment-left" style="
+                        margin: 37px 11px 7px;
+                        font-size: 12px;
+                        opacity: 0.7;
+                        padding: 4px 0 0 0;
+                        border-top: 1px solid #d0d0d0;">
+                      <div class="stats">
+                          <i class="el-icon-refresh-right"
+                             style="font-size: 20px!important;"></i>
+                          <i style="position: relative;
+                                      top: -3px;"
+                          >Just Updated</i>
+                      </div>
+                  </div>
+              </md-card>
+          </div>
+          <div class="md-layout-item">
+              <md-card md-with-hover style="
+                    background: white;
+                    margin-right: 4%;
+                    margin-left: 4%;
+                    height: 235px;
+                    border-radius: 7px;
+                    top: 3%;
+                    position: relative;
+                    box-shadow: 0px 12px 20px -10px;"
+              >
+                  <lineexample style="padding: 1px"></lineexample>
+              </md-card>
+              <md-card md-with-hover style="
+                    top: 1%;
+                    height: 264px;
+                    position: unset;
+                    border-radius: 6px;
+                    margin-top: -197px;
+                    background-color: #26c6da;">
+                  <md-card-content style="padding: 89px;"></md-card-content>
+                  <md-card-header-text align="right" style="margin-right: 14px;">
+                      <div class="md-title"></div>
+                      <div class="md-subhead">50</div>
+                  </md-card-header-text>
+                  <div class="md-card-actions md-alignment-left" style="
+                        margin: 37px 11px 7px;
+                        font-size: 12px;
+                        opacity: 0.7;
+                        padding: 4px 0 0 0;
+                        border-top: 1px solid #d0d0d0;">
+                      <div class="stats">
+                          <i class="el-icon-refresh-right"
+                             style="font-size: 20px!important;"></i>
+                          <i style="position: relative;
+                                      top: -3px;"
+                          >Just Updated</i>
+                      </div>
+                  </div>
+              </md-card>
+          </div>
+      </div>
+
+      <div class=" md-layout md-gutter" style="padding-top: 25px">
+          <div class="md-layout-item">
+              <md-card md-with-hover style="
+                    background: #26c6da;
+                              background: rgb(38, 198, 218);
+                                width: 90%;
+                                height: 85px;
+                                margin: 0px;
+                                margin-bottom: 16px;
+                                border-radius: 6px;
+                                top: -5%;
+                                left: 5%;
+                                position: relative;
+                            box-shadow: 0px 12px 20px -10px;">
+                  <md-card-media>
+                      <div class="md-title-chart"
+                           style="padding-top: 16px;
+                                    padding-left: 30px;
+                                    font-size: 31px;">
+                          <i class="el-icon-mobile" style="color: white;
+                                            margin-right: 20px;
+                                             font-size: 51px !important;
+                                            ;">
+
+                          </i>
+                          <i>TOP Vendor Purchase Amount</i>
+
+                      </div>
+                  </md-card-media>
+
+              </md-card>
+              <md-card md-with-hover style="
+                            top: 3%;
+                            padding-top: 50px;
+                            position: unset;
+                            border-radius: 6px;
+                            margin-top: -76px;">
+
+                  <md-card-header-text align="right" style="
+                        margin-right: 14px;
+                        margin-left: 14px;">
+                      <template >
+                          <el-table
+                              :data="dataPO"
+                              height="250"
+                          >
+                              <el-table-column
+                                  label="Code"
+                                  width="180px"
+                                  prop="warehouseId"
+                              >
+                              </el-table-column>
+                              <el-table-column
+                                  label="Vendor Name"
+                                  width="280px"
+                                  prop="vendorName"
+                              >
+                              </el-table-column>
+                              <el-table-column
+                                  label="Total"
+                                  width="280px"
+                              >
+                                  <template slot-scope="{row}">
+                                      {{ row.grandTotal | formatCurre  }}
+                                  </template>
+                              </el-table-column>
+
+                          </el-table>
+                      </template>
+                  </md-card-header-text>
+
+                  <div class="md-card-actions md-alignment-left" style="
+                        margin: 37px 11px 7px;
+                        font-size: 12px;
+                        opacity: 0.7;
+                        padding: 4px 0 0 0;
+                        border-top: 1px solid #d0d0d0;">
+                      <div class="stats">
+                          <i class="el-icon-refresh-right"
+                             style="font-size: 20px!important;"></i>
+                          <i style="position: relative;
+                                      top: -3px;"
+                          >Just Updated</i>
+                      </div>
+                  </div>
+              </md-card>
+          </div>
+          <div class="md-layout-item">
+              <md-card md-with-hover style="
+                    background: #26c6da;
+                              background: rgb(38, 198, 218);
+                                width: 90%;
+                                height: 85px;
+                                margin: 0px;
+                                margin-bottom: 16px;
+                                border-radius: 6px;
+                                top: -5%;
+                                left: 5%;
+                                position: relative;
+                            box-shadow: 0px 12px 20px -10px;">
+                  <md-card-media>
+                      <div class="md-title-chart"
+                           style="padding-top: 16px;
+                                    padding-left: 30px;
+                                    font-size: 31px;">
+                          <i class="el-icon-mobile" style="color: white;
+                                            margin-right: 20px;
+                                             font-size: 51px !important;
+                                            ;">
+
+                          </i>
+                          <i>My Document</i>
+
+                      </div>
+                  </md-card-media>
+
+              </md-card>
+              <md-card md-with-hover style="
+                            top: 3%;
+                            padding-top: 50px;
+                            position: unset;
+                            border-radius: 6px;
+                            margin-top: -76px;">
+
+                  <md-card-header-text align="right" style="
+                        margin-right: 14px;
+                        margin-left: 14px;">
+                      <template>
+                          <el-table
+                              :data="dataMyDocument"
+                              height="250"
+
+                          >
+                              <el-table-column
+                                  label="Document No"
+                                  prop="documentNo"
+                              >
+                              </el-table-column>
+                              <el-table-column
+                                  label="Title"
+                                  prop="title"
+                              >
+                              </el-table-column>
+                              <el-table-column
+                                  label="Status"
+
+                              ><template slot-scope="{row}">{{printStatus(row.status)}}</template>
+                              </el-table-column>
+
+                              <el-table-column
+                                  label="Date"
+                                  width="180px"
+                              >
+                                  <template slot-scope="{row}">
+                                      {{ row.date | formatDate }}
+                                  </template>
+                              </el-table-column>
+
+                          </el-table>
+                      </template>
+                  </md-card-header-text>
+
+                  <div class="md-card-actions md-alignment-left" style="
+                        margin: 37px 11px 7px;
+                        font-size: 12px;
+                        opacity: 0.7;
+                        padding: 4px 0 0 0;
+                        border-top: 1px solid #d0d0d0;">
+                      <div class="stats">
+                          <i class="el-icon-refresh-right"
+                             style="font-size: 20px!important;"></i>
+                          <i style="position: relative;
+                                      top: -3px;"
+                          >Just Updated</i>
+                      </div>
+                  </div>
+              </md-card>
+          </div>
+      </div>
+
+      <div class=" md-layout md-gutter" style="padding-top: 25px">
+          <div class="md-layout-item">
+              <md-card md-with-hover style="
+                    background: #26c6da;
+                              background: rgb(38, 198, 218);
+                                width: 90%;
+                                height: 85px;
+                                margin: 0px;
+                                margin-bottom: 16px;
+                                border-radius: 6px;
+                                top: -5%;
+                                left: 5%;
+                                position: relative;
+                            box-shadow: 0px 12px 20px -10px;">
+                  <md-card-media>
+                      <div class="md-title-chart"
+                           style="padding-top: 16px;
+                                    padding-left: 30px;
+                                    font-size: 31px;">
+                          <i class="el-icon-mobile" style="color: white;
+                                            margin-right: 20px;
+                                             font-size: 51px !important;
+                                            ;">
+
+                          </i>
+                          <i>--</i>
+
+                      </div>
+                  </md-card-media>
+
+              </md-card>
+              <md-card md-with-hover style="
+                            top: 3%;
+                            padding-top: 50px;
+                            position: unset;
+                            border-radius: 6px;
+                            margin-top: -76px;">
+
+                  <md-card-header-text align="right" style="
+                        margin-right: 14px;
+                        margin-left: 14px;">
+                      <template >
+                          <el-table
+                              :data="score"
+                              height="250"
+                          >
+                              <el-table-column
+                                  label="Vendor Name"
+                                  prop="vendorName"
+                              >
+                              </el-table-column>
+                              <el-table-column
+                                  label="Ordered"
+                                  prop="Ordered"
+                              >
+                              </el-table-column>
+                              <el-table-column
+                                  label="Returned"
+                                  prop="Returned"
+                              >
+                              </el-table-column>
+                              <el-table-column
+                                  label="Availability"
+                                  prop="Availability"
+                              >
+                              </el-table-column>
+                              <el-table-column
+                                  label="Defect Rate"
+                                  prop="Defect"
+                              >
+                              </el-table-column>
+                              <el-table-column
+                                  label="score"
+                                  width="280px"
+                                  prop="score"
+                              >
+                              </el-table-column>
+
+                          </el-table>
+                      </template>
+                  </md-card-header-text>
+
+                  <div class="md-card-actions md-alignment-left" style="
+                        margin: 37px 11px 7px;
+                        font-size: 12px;
+                        opacity: 0.7;
+                        padding: 4px 0 0 0;
+                        border-top: 1px solid #d0d0d0;">
+                      <div class="stats">
+                          <i class="el-icon-refresh-right"
+                             style="font-size: 20px!important;"></i>
+                          <i style="position: relative;
+                                      top: -3px;"
+                          >Just Updated</i>
+                      </div>
+                  </div>
+              </md-card>
+          </div>
+
+      </div>
+
   </div>
 </template>
+
 <script lang="ts" src="./kpi-admin.component.ts"></script>
+<style lang="scss" scoped>
+
+
+.md-title {
+    font-size: 16px;
+    opacity: 0.6;
+    letter-spacing: 0;
+    line-height: 49px;
+}
+
+.md-title-chart {
+    font-size: 45px;
+    opacity: 1;
+    color: white;
+    letter-spacing: 0;
+    line-height: 49px;
+}
+
+.md-layout {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.icon-media {
+    width: 43px;
+    margin-top: 26px;
+    margin-left: 23px;
+}
+
+.card-icon {
+    font-size: 40px !important;
+    color: white;
+    margin-top: 29px;
+    margin-left: 30px;
+}
+
+.md-subhead {
+    opacity: 0.9;
+    font-size: 35px;
+    letter-spacing: 0.15em;
+    line-height: 21px;
+}
+
+.chart-size {
+    height: 352px;
+    width: 500px;
+}
+
+body {
+    background: #35A9DB;
+    font-family: roboto;
+    text-align: center;
+    color: #fff;
+}
+
+
+</style>

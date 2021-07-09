@@ -35,6 +35,8 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
   private data:any={};
   dasbordItem:any={};
 
+  isVendor:boolean;
+
   items: IAdWatchListItem[] = [];
 
   get isCard() {
@@ -62,7 +64,10 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
 
   }
 
-  created() {
+  async created() {
+
+    console.log("this vendor", accountStore.userDetails.vendor)
+
     this.retrieveVendor();
     this.retrieveVendorConfirmation();
     this.retrieveBidding();

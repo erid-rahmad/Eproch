@@ -12,6 +12,7 @@ import lineexample from './componentsChart/simpleLine.vue';
 import lineupdate from './componentsChart/methodUpdate.vue';
 import echart from './componentsChart/echart-bar.vue';
 import echartpie from './componentsChart/echart-pie.vue';
+import kpiAdmin from './components/kpi-admin.vue';
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 
 const baseApiVendor ='api/c-vendors';
@@ -21,7 +22,7 @@ const baseApiEvaluation ='api/m-vendor-evaluations';
 
 @Component({
   components: {
-    WatchList,circularColorBar,liveData,lineexample,lineupdate,echart,echartpie
+    WatchList,circularColorBar,liveData,lineexample,lineupdate,echart,echartpie,kpiAdmin
   }
 })
 export default class DashBoard extends  Mixins(AccessLevelMixin) {
@@ -53,9 +54,6 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
 
   created() {
 
-
-
-
     this.retrievePO();
     this.dashboardService = new DashboardService(this);
     this.debouncedRefresh = debounce(this.refresh, 5000);
@@ -66,27 +64,6 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
     }
   }
 
-
-
-  retrieveVendorBidding(){
-    this.commonService(baseApiVendor)
-      .retrieve({
-        criteriaQuery: this.updateCriteria([
-          'active.equals=true',
-        ]),
-        paginationQuery: {
-          page: 0,
-          size: 10000,
-          sort: ['id']
-        }
-      })
-      .then(res => {
-
-
-
-      })
-      .finally();
-  }
 
   data() {
     return {
