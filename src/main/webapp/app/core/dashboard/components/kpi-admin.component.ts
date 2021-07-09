@@ -7,6 +7,7 @@ import lineexample from '../componentsChart/simpleLine.vue';
 import lineupdate from '../componentsChart/methodUpdate.vue';
 import echart from '../componentsChart/echart-bar.vue';
 import echartpie from '../componentsChart/echart-pie.vue';
+import rateOfContract from '../componentsChart/rateOfContract.vue';
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 
 const baseApiTopVendor ='api/pa-dashboards/topVendorPurchase';
@@ -14,7 +15,7 @@ const baseApiDocument ='api/pa-dashboards/mydocument';
 
 @Component({
   components: {
-    WatchList,circularColorBar,liveData,lineexample,lineupdate,echart,echartpie
+    WatchList,circularColorBar,liveData,lineexample,lineupdate,echart,echartpie,rateOfContract
   }
 })
 export default class WatchList extends  Mixins(AccessLevelMixin) {
