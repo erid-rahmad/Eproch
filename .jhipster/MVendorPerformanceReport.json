@@ -1,0 +1,42 @@
+{
+    "name": "MVendorPerformanceReport",
+    "fields": [
+        {
+            "fieldName": "evaluationScore",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "complaints",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "mVendorPerformanceReport",
+            "relationshipValidateRules": "required",
+            "relationshipName": "vendor",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cBusinessCategory",
+            "otherEntityRelationshipName": "mVendorPerformanceReport",
+            "relationshipName": "businessCategory",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210708140800",
+    "entityTableName": "m_vendor_performance_report",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": true,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

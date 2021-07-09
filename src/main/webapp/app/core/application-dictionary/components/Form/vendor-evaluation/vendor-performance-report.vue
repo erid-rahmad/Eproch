@@ -108,15 +108,6 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="Vendor"
-          width="130"
-          sortable
-        >
-          <template slot-scope="{ row }">
-            {{ row.dateTrx | formatDate(true) }}
-          </template>
-        </el-table-column>
-        <el-table-column
           label="Vendor Name"
           min-width="150"
           prop="vendorName"
@@ -126,7 +117,7 @@
         <el-table-column
           label="Business Category"
           min-width="200"
-          prop="businessCategory"
+          prop="businessCategoryName"
           show-overflow-tooltip
           sortable
         ></el-table-column>
@@ -146,7 +137,7 @@
         <el-table-column
           label="Warning Letter Score"
           min-width="200"
-          prop="warningLetterScore"
+          prop="complaints"
         ></el-table-column>
         <el-table-column
           label="Rating"
@@ -162,7 +153,7 @@
                   icon="el-icon-search"
                   size="mini"
                   type="primary"
-                  @click="viewDetail=true"
+                  @click="viewDetailFunc(row)"
               >
                   View
               </el-button>
@@ -172,7 +163,7 @@
   </div>
 
       <div v-if="viewDetail">
-          <vendor-analis></vendor-analis>
+          <vendor-analis :data="selectedRow"></vendor-analis>
       </div>
   </div>
 </template>
