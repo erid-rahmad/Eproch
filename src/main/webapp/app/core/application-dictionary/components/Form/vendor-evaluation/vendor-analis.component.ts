@@ -16,24 +16,7 @@ const VendorEvaluationDetailProp = Vue.extend({
 @Component
 export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, VendorEvaluationDetailProp) {
 
-  analis: any =
-    {
-      awarded: "70.287.000.000",
-      awarded1: "-16.577.000.000",
-      awarded2: "14",
-      awarded3: "60 %",
-      awarded4: "2",
-
-    }
-    analis1: any =
-    {
-      awarded: "55.560.000.000",
-      awarded1: "70.578.000.000",
-      awarded2: "43.560.000.000",
-      awarded3: "55.560.000.000",
-      awarded4: "78 %",
-
-    }
+  analis: any = {}
 
   gridData = [
     {
@@ -67,4 +50,23 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
 
+  created(){
+    console.log(this.data);
+    this.commonService(`/api/m-vendor-performance-report/detail`).retrieve({
+      criteriaQuery: this.updateCriteria([
+        `vendorId=${this.data.vendorId}`
+      ]),
+    })
+    .then(
+      (res)=>{
+        console.log(res.data);
+        this.analis = res.data;
+      })
+    .catch(
+      (res)=>{
+        this.$message.error("Failed to fetch data.");
+        console.log(res);
+      }
+    )
+  }
 }

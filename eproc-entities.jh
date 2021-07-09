@@ -1689,6 +1689,27 @@ entity MComplaint {
 	processed Boolean
 }
 
+/*
+entity MBlacklist {
+	uid UUID
+	active Boolean
+	reportDate LocalDate required
+	warning TextBlob
+	type String maxlength(10)
+
+	dateTrx LocalDate required
+	documentNo String maxlength(30)
+	documentAction String required maxlength(10)
+	documentStatus String required maxlength(10)
+	approved Boolean
+	processed Boolean
+}
+*/
+entity MVendorPerformanceReport {
+	evaluationScore BigDecimal
+	complaints Integer
+}
+
 // Enums
 enum AdAccessLevel {
 	SYS, SYS_CLN, CLN, CLN_ORG, CLN_VND
@@ -2422,6 +2443,9 @@ relationship ManyToOne {
 	MComplaint{contract required} to MContract
 	MComplaint{businessCategory required} to CBusinessCategory
 	MComplaint{subBusinessCategory} to CBusinessCategory
+
+	MVendorPerformanceReport{vendor required} to CVendor
+	MVendorPerformanceReport{businessCategory} to CBusinessCategory
 }
 
 // Allow filtering to all entities.
@@ -2438,3 +2462,6 @@ service * with serviceClass
 
 // Skip generation of client codes except few
 skipClient * except CProduct, CProductCategory, MProductCatalog, CGallery, CGalleryItem, CAttachment, MShoppingCart, MShoppingCartItem
+
+// read-only for view based entities
+readOnly MVendorPerformanceReport

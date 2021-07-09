@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    
+    <!--
+        Added the entity MVendorPerformanceReport.
+    -->
+    <changeSet id="20210708140800-view-1" author="ricky-k">
+        <createView
+            replaceIfExists="true"  
+            viewName="m_vendor_performance_report">
+select row_number () over (order by sq1.vendor_id) id, sq1.vendor_id, sq1.business_category_id, coalesce(avg(sq1.score),0) evaluation_score,
+coalesce(count(mcl.id),0) complaints from (
+select mc.vendor_id, mc.document_no, rfq.business_category_id, coalesce(avg(mve.score),0) score 
+from m_contract mc
+left join m_bidding mb on mb.id = mc.bidding_id
+left join m_rfq rfq on rfq.id = mb.quotation_id 
+left join m_vendor_evaluation mve on mve.contract_id = mc.id 
+group by mc.vendor_id, mc.document_no, rfq.business_category_id) sq1
+left join m_complaint mcl on mcl.vendor_id = sq1.vendor_id and mcl.business_category_id = sq1.business_category_id
+group by sq1.vendor_id, sq1.business_category_id
+order by sq1.vendor_id
+        </createView>
+    </changeSet>
+
+    <changeSet id="20210708140800-view-2" author="ricky-k">
+        <createView
+            replaceIfExists="true"  
+            viewName="m_vendor_performance_report">
+select row_number () over (order by sq1.vendor_id) id, sq1.vendor_id, sq1.business_category_id, coalesce(avg(sq1.score),0) evaluation_score,
+coalesce(count(mwl.id),0) warning_letters from (
+select mc.vendor_id, mc.document_no, rfq.business_category_id, coalesce(avg(mve.score),0) score 
+from m_contract mc
+left join m_bidding mb on mb.id = mc.bidding_id
+left join m_rfq rfq on rfq.id = mb.quotation_id 
+left join m_vendor_evaluation mve on mve.contract_id = mc.id 
+group by mc.vendor_id, mc.document_no, rfq.business_category_id) sq1
+left join m_warning_letter mwl on mwl.vendor_id = sq1.vendor_id
+group by sq1.vendor_id, sq1.business_category_id
+order by sq1.vendor_id
+        </createView>
+    </changeSet>
+</databaseChangeLog>
