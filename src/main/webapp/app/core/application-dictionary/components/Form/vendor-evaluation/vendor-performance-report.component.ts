@@ -24,80 +24,32 @@ export default class VendorPerformanceReport extends mixins(AccessLevelMixin) {
     vendorId: null
   }
 
-  performanceReports = [/*
-    {
-      vendorId: 1,
-      vendorName: 'SISTECH KHARISMA',
-      businessCategory: 'Automotive & Vehicle',
-      subCategory: 'Engine Parts',
-      evaluationScore: '75%',
-      warningLetterScore: '0%',
-      rating: '75%',
-    },
-    {
-      vendorId: 2,
-      vendorName: 'INGRAM MICRO INDONESIA',
-      businessCategory: 'Automotive & Vehicle',
-      subCategory: 'Car',
-      evaluationScore: '65%',
-      warningLetterScore: '0%',
-      rating: '65%',
-    },
-    {
-      vendorId: 3,
-      vendorName: 'WESTCON INTERNATIONAL INDONESIA',
-      businessCategory: 'Automotive & Vehicle',
-      subCategory: 'Motorbike',
-      evaluationScore: '65%',
-      warningLetterScore: '0%',
-      rating: '65%',
-    }
-  */];
+  performanceReports = [];
 
-  categories = [
-    {
-      id: 1,
-      name: 'Automotive & Vehicle',
-    }
-  ];
+  categories = [];
+  subCategories = [];
 
-  subCategories = [
-    {
-      id: 1,
-      name: 'Car',
-    },
-    {
-      id: 2,
-      name: 'Motorbike',
-    },
-    {
-      id: 3,
-      name: 'Engine Parts',
-    }
-  ];
-
-  vendors = [
-    {
-      id: 1,
-      name: 'SISTECH KHARISMA',
-    },
-    {
-      id: 2,
-      name: 'INGRAM MICRO INDONESIA',
-    },
-    {
-      id: 3,
-      name: 'WESTCON INTERNATIONAL INDONESIA',
-    }
-  ];
+  vendors = [];
 
   onCurrentRowChanged(row: any) {
     this.selectedRow = row;
   }
 
-  mounted() {
+  refreshContent() {
+    let filterQuery = [
+      'active.equals=true'
+    ]
+
+    if(!!this.filter.vendorId){
+      filterQuery.push(`vendorId.equals=${this.filter.vendorId}`)
+    }
+    if(!!this.filter.categoryId){
+      filterQuery.push(`businessCategoryId.equals=${this.filter.categoryId}`)
+    }
+
     this.commonService("/api/m-vendor-performance-reports")
       .retrieve({
+        criteriaQuery: filterQuery,
         paginationQuery: {
           page: 0,
           size: 1000,
@@ -112,6 +64,63 @@ export default class VendorPerformanceReport extends mixins(AccessLevelMixin) {
         if((<any[]>res.data).length){
           this.setRow(res.data[0]);
         }
+      });
+  }
+
+  mounted() {
+    this.refreshContent();
+    
+    this.commonService("/api/c-business-categories")
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true'
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 1000,
+          sort:['id']
+        }
+      })
+      .then(res => {
+        this.categories = res.data.map((item: any) => {
+          return {
+            key: item.id,
+            value: item.name,
+            code: item.code
+          };
+        });
+      })
+      .catch(err => {
+        console.error('Failed getting the record. %O', err);
+        this.$message({
+          type: 'error',
+          message: err.detail || err.message
+        });
+      });
+
+      this.commonService("/api/c-vendors").retrieve({
+        criteriaQuery: ['active.equals=true'],
+        paginationQuery: {
+          page: 0,
+          size: 1000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.vendors = res.data.map((item: any) => {
+          return {
+            key: item.id,
+            value: item.name,
+            code: item.code
+          };
+        });
+      })
+      .catch(err => {
+        console.error('Failed getting the record. %O', err);
+        this.$message({
+          type: 'error',
+          message: err.detail || err.message
+        });
       });
   }
 

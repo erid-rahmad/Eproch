@@ -1,13 +1,29 @@
 <template>
     <div class="vendor-evaluation-detail ">
-        <el-row :gutter="24">
-
+          <el-row :gutter="24">
             <el-form
                 label-position="left"
                 label-width="220px"
                 size="mini"
-                disabled="true"
             >
+                <el-col span="11" >
+                <el-form-item label="Period">
+                    <el-select
+                    v-model="period"
+                    @change="refreshContent()"
+                    clearable
+                    filterable
+                    placeholder="Period"
+                    >
+                    <el-option
+                        v-for="item in periodSelections"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                    ></el-option>
+                    </el-select>
+                </el-form-item>
+                </el-col>
                 <el-col span="24" >
                 <el-col class="card" span="11" >
                     <el-divider content-position="left">
@@ -17,6 +33,7 @@
                         <el-input
                             v-model="analis.awardedSpending"
                             clearable
+                            disabled
                             placeholder="Please Enter Reference No">
                         </el-input>
                     </el-form-item>
@@ -24,6 +41,7 @@
                         <el-input
                             v-model="analis.awardedSavings"
                             clearable
+                            disabled
                             placeholder="Please Enter Reference No">
                         </el-input>
                     </el-form-item>
@@ -32,6 +50,7 @@
                             ref="Event Invited"
                             v-model="analis.eventInvited"
                             clearable
+                            disabled
                             placeholder="Please Enter Reference No">
                         </el-input>
                     </el-form-item>
@@ -40,6 +59,7 @@
                             ref="% Participant"
                             v-model="analis.participant"
                             clearable
+                            disabled
                             placeholder="Please Enter Reference No">
                         </el-input>
                     </el-form-item>
@@ -48,6 +68,7 @@
                             ref="Active Contracts"
                             v-model="analis.activeContracts"
                             clearable
+                            disabled
                             placeholder="Please Enter Reference No">
                         </el-input>
                     </el-form-item>
@@ -61,6 +82,7 @@
                             ref="PO Spend"
                             v-model="analis.poSpend"
                             clearable
+                            disabled
                             placeholder="Please Enter Reference No">
                         </el-input>
                     </el-form-item>
@@ -69,6 +91,7 @@
                             ref="PO Count"
                             v-model="analis.poCount"
                             clearable
+                            disabled
                             placeholder="Please Enter Reference No">
                         </el-input>
                     </el-form-item>
@@ -77,6 +100,7 @@
                             ref="Invoice Spend"
                             v-model="analis.invoiceSpend"
                             clearable
+                            disabled
                             placeholder="Please Enter Reference No">
                         </el-input>
                     </el-form-item>
@@ -85,6 +109,7 @@
                             ref="Invoice Count"
                             v-model="analis.invoiceCount"
                             clearable
+                            disabled
                             placeholder="Please Enter Reference No">
                         </el-input>
                     </el-form-item>
@@ -93,6 +118,7 @@
                             ref="% Invoice Without Exception"
                             v-model="analis.invoiceWithoutException"
                             clearable
+                            disabled
                             placeholder="Please Enter Reference No">
                         </el-input>
                     </el-form-item>
@@ -160,6 +186,12 @@
                         </el-table-column>
                     </el-table>
 
+                </el-col>
+                </el-col>
+                <el-col span="24">
+                <el-col class="card" span="22">
+                    <div id="echarts" style="height:400px;">
+                </div>
                 </el-col>
                 </el-col>
             </el-form>

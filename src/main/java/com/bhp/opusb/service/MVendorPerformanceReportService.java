@@ -22,6 +22,7 @@ import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,12 +107,19 @@ public class MVendorPerformanceReportService {
      */
     public MVendorPerformanceReportDetailDTO retrieveDetail(Long vendorId, String interval) {
         if(StringUtils.isEmpty(interval)) interval="1y";
+
+        String[] split = interval.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
+
+        Calendar c = Calendar.getInstance();
+        c.add(split[1].equalsIgnoreCase("m")?Calendar.MONTH: Calendar.YEAR, -Integer.parseInt(split[0]));
+
+        java.sql.Date date = new java.sql.Date(c.getTime().getTime());
         
         MVendorPerformanceReportDetailDTO rep = new MVendorPerformanceReportDetailDTO();
-        rep.setPoCount(mVendorPerformanceReportRepository.getPoCount(vendorId));
-        rep.setPoSpend(mVendorPerformanceReportRepository.getPoSpend(vendorId));
-        rep.setInvoiceCount(mVendorPerformanceReportRepository.getInvoiceCount(vendorId));
-        rep.setInvoiceSpend(mVendorPerformanceReportRepository.getPoCount(vendorId));
+        rep.setPoCount(mVendorPerformanceReportRepository.getPoCount(vendorId, date));
+        rep.setPoSpend(mVendorPerformanceReportRepository.getPoSpend(vendorId, date));
+        rep.setInvoiceCount(mVendorPerformanceReportRepository.getInvoiceCount(vendorId, date));
+        rep.setInvoiceSpend(mVendorPerformanceReportRepository.getPoCount(vendorId, date));
         try{
             rep.setInvoiceWithoutException(rep.getInvoiceSpend().multiply(new BigDecimal("100")).divide(rep.getInvoiceCount(), 2, RoundingMode.HALF_UP) );
         }
@@ -119,9 +127,9 @@ public class MVendorPerformanceReportService {
             e.printStackTrace();
             rep.setInvoiceWithoutException(new BigDecimal("0"));
         }
-        rep.setAwardedSpending(mVendorPerformanceReportRepository.getAwardedSpend(vendorId));
+        rep.setAwardedSpending(mVendorPerformanceReportRepository.getAwardedSpend(vendorId, date));
         rep.setAwardedSavings(new BigDecimal("0"));
-        rep.setEventInvited(mVendorPerformanceReportRepository.getEventInvited(vendorId));
+        rep.setEventInvited(mVendorPerformanceReportRepository.getEventInvited(vendorId, date));
         rep.setActiveContracts(mVendorPerformanceReportRepository.getActiveContractCount(vendorId));
         rep.setEventParticipation(mVendorPerformanceReportRepository.getParticipationCount(vendorId));
 
@@ -143,7 +151,7 @@ public class MVendorPerformanceReportService {
         }
         rep.setActiveContractObj(dtos);
 
-        List<Object[]> perfs = mVendorPerformanceReportRepository.getProjectPerformances(vendorId);
+        List<Object[]> perfs = mVendorPerformanceReportRepository.getProjectPerformances(vendorId, date);
         List<Map<String,Object>> perfDtos = new ArrayList<>();
 
         for(Object[] x: perfs){

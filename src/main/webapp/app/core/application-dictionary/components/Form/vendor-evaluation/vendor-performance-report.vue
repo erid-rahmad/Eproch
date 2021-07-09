@@ -15,6 +15,7 @@
         size="mini"
         type="primary"
         v-if="!viewDetail"
+        @click="refreshContent()"
       >
         Search
       </el-button>
@@ -46,25 +47,27 @@
             >
               <el-option
                 v-for="item in categories"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
+                :key="item.key"
+                :label="item.value"
+                :value="item.key"
               ></el-option>
             </el-select>
           </el-form-item>
+          <!--
           <el-form-item label="Sub Category">
             <el-select
               v-model="filter.subCategoryId"
               placeholder="Search Sub Category"
             >
               <el-option
-                v-for="item in subCategories"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
+                v-for="item in categories"
+                :key="item.key"
+                :label="item.value"
+                :value="item.key"
               ></el-option>
             </el-select>
           </el-form-item>
+          -->
         </el-col>
         <el-col
           :xs="24"
@@ -81,9 +84,9 @@
             >
               <el-option
                 v-for="item in vendors"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
+                :key="item.key"
+                :label="item.value"
+                :value="item.key"
               ></el-option>
             </el-select>
           </el-form-item>

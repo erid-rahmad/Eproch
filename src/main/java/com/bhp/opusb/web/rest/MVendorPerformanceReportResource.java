@@ -69,9 +69,10 @@ public class MVendorPerformanceReportResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the MVendorPerformanceReportDetailDTO in body.
      */
     @GetMapping("/m-vendor-performance-report/detail")
-    public ResponseEntity<MVendorPerformanceReportDetailDTO> getMVendorPerformanceReportDetail(@RequestParam Integer vendorId) {
-        log.debug("REST request to get MVendorPerformanceReportDetail for vendorId: {}", vendorId);
-        MVendorPerformanceReportDetailDTO res = mVendorPerformanceReportService.retrieveDetail(vendorId.longValue(), "1y");
+    public ResponseEntity<MVendorPerformanceReportDetailDTO> getMVendorPerformanceReportDetail(@RequestParam Integer vendorId,
+    @RequestParam(name="period", required = false) String period) {
+        log.debug("REST request to get MVendorPerformanceReportDetail for vendorId: {}, duration: {}", vendorId, period);
+        MVendorPerformanceReportDetailDTO res = mVendorPerformanceReportService.retrieveDetail(vendorId.longValue(), period);
         return ResponseEntity.ok().body(res);
     }
 
