@@ -1,6 +1,14 @@
 <template>
   <div class="app-container vendor-blacklist">
     <div class="toolbar">
+      <el-button v-if="index" 
+        class="button" 
+        icon="el-icon-plus" 
+        size="mini" 
+        type="primary"
+        @click="onCreateClicked">
+        Add New
+      </el-button>
       <el-button
         v-if="!index"
         icon="el-icon-close"
@@ -17,6 +25,7 @@
         size="mini"
         style="margin-left: 1px"
         type="primary"
+        @click="onSaveClicked"
       >
         Save
       </el-button>
@@ -31,102 +40,121 @@
         @change="onDocumentActionChanged"
       ></document-action-button>
     </div>
-
-    <el-table
-      v-if="index"
-      ref="mainGrid"
-      border
-      :data="blacklist"
-      highlight-current-row
-      size="mini"
-      stripe
-      style="width: 100%"
-      @current-change="onCurrentRowChanged"
-    >
-      <el-table-column
-        label="No"
-        width="50"
+    Vendor Blacklist
+    <div v-if="index">
+      <el-table
+        ref="mainGrid"
+        v-loading="loading"
+        border
+        :data="blacklist"
+        highlight-current-row
+        size="mini"
+        stripe
+        style="width: 100%"
+        @current-change="onCurrentRowChanged"
       >
-        <template slot-scope="{ $index }">
-          {{ $index + 1 }}
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="Vendor Name"
-        min-width="150"
-        prop="vendorName"
-        show-overflow-tooltip
-        sortable
-      ></el-table-column>
-      <el-table-column
-        label="Type"
-        min-width="100"
-        prop="type"
-        sortable
-      ></el-table-column>
-      <el-table-column
-        label="Blacklisted Personal"
-        min-width="150"
-        prop="blacklistedPersonalCount"
-        sortable
-      ></el-table-column>
-      <el-table-column
-        label="Blacklist Information"
-        min-width="200"
-        prop="notes"
-        sortable
-      ></el-table-column>
-      <el-table-column
-        label="Document"
-        min-width="150"
-      >
-        <template slot-scope="{ row }">
-          <el-button
-            v-if="row.attachment"
-            class="btn-attachment"
-            icon="el-icon-download"
-            size="mini"
-            :title="row.attachment"
-            type="primary"
-          >
-                {{ row.attachment }}
-          </el-button>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="Status"
-        min-width="100"
-        prop="status"
-        sortable
-      ></el-table-column>
-      <el-table-column
-        label="Approval Date"
-        min-width="150"
-      >
-        <template slot-scope="{ row }">
-          {{ row.approvalDate | formatDate(true) }}
-        </template>
-      </el-table-column>
-      <el-table-column
-        fixed="right"
-        width="90"
-      >
-        <template slot="header">
-          &nbsp;
-        </template>
-        <template slot-scope="{ row }">
-          <el-button
-            icon="el-icon-edit"
-            size="mini"
-            type="primary"
-            @click="viewDetail(row)"
-          >
-            View
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
+        <el-table-column
+          label="No"
+          width="50"
+        >
+          <template slot-scope="{ $index }">
+            {{ $index + 1 }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="Vendor Name"
+          min-width="150"
+          prop="vendorName"
+          show-overflow-tooltip
+          sortable
+        ></el-table-column>
+        <el-table-column
+          label="Type"
+          min-width="100"
+          sortable
+        >
+          <template slot-scope="{ row }">
+            {{ printBlacklistType(row.type) }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="Blacklisted Personal"
+          min-width="150"
+          prop="blacklistedPersonalCount"
+          sortable
+        ></el-table-column>
+        <el-table-column
+          label="Blacklist Information"
+          min-width="200"
+          prop="notes"
+          sortable
+        ></el-table-column>
+        <el-table-column
+          label="Document"
+          min-width="150"
+        >
+          <template slot-scope="{ row }">
+            <el-button
+              v-if="row.attachmentId"
+              class="btn-attachment"
+              icon="el-icon-download"
+              size="mini"
+              :title="row.fileName"
+              type="primary"
+              @click="downloadFile(row)"
+            >
+              {{ row.fileName }}
+            </el-button>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="Status"
+          min-width="100"
+          sortable
+        >
+          <template slot-scope="{ row }">
+            {{ printStatus(row.documentStatus) }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="Approval Date"
+          min-width="150"
+        >
+          <template slot-scope="{ row }">
+            {{ row.approvalDate | formatDate(true) }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          fixed="right"
+          width="90"
+        >
+          <template slot="header">
+            &nbsp;
+          </template>
+          <template slot-scope="{ row }">
+            <el-button
+              icon="el-icon-edit"
+              size="mini"
+              type="primary"
+              @click="viewDetail(row)"
+            >
+              View
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination
+        ref="pagination"
+        :current-page.sync="page"
+        :page-size="itemsPerPage"
+        :page-sizes="[10, 20, 50, 100]"
+        :total="queryCount"
+        background
+        layout="sizes, prev, pager, next"
+        small
+        @size-change="changePageSize"
+      ></el-pagination>
+    </div>
     <vendor-blacklist-detail
       v-else
       :data="selectedRow"
@@ -136,6 +164,7 @@
       :action="selectedDocumentAction"
       :data="selectedRow"
       :visible.sync="showDocumentActionConfirm"
+      @confirmed="confirmed"
     ></document-action-confirm>
   </div>
 </template>
@@ -143,10 +172,11 @@
 
 <style lang="scss" scoped>
 .vendor-blacklist {
+  /*
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: 36px auto;
-
+  */
   .toolbar {
     padding: 4px;
   }

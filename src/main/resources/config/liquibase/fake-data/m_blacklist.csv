@@ -1,0 +1,11 @@
+id;uid;active;report_date;notes;type;date_trx;document_no;document_action;document_status;approved;processed;ad_organization_id;vendor_id;business_category_id
+1;6de7e46f-39d7-4646-a577-09756b7d776d;false;2021-07-11;../fake-data/blob/hipster.txt;brand Home;2021-07-11;architect initiatives Beauty;Incredible;zero defec;false;true;1;1;1
+2;a1f13b5c-7c2c-4e19-b6b0-f1f6e781d791;false;2021-07-11;../fake-data/blob/hipster.txt;Tenge Verm;2021-07-11;Falkland Islands (Malvinas);Egyptian P;Berkshire ;false;false;2;2;2
+3;0c098ba7-ba68-48b4-a31d-e2baa4bdea43;false;2021-07-11;../fake-data/blob/hipster.txt;Silver Bor;2021-07-11;Personal Loan Account Assistan;Home Loan ;distribute;true;false;3;3;3
+4;371a13a6-9243-440d-a2d4-6ec78dcb1ec2;true;2021-07-11;../fake-data/blob/hipster.txt;Tuna;2021-07-12;Upgradable Beauty Industrial;generate N;Gorgeous d;false;true;4;4;4
+5;f8adbae0-cbf0-48c8-8dcc-f8c2b918de2a;true;2021-07-12;../fake-data/blob/hipster.txt;Gloves Aut;2021-07-11;analyzer New Mexico;Group Vill;groupware;true;false;5;5;5
+6;45264791-6937-4329-8a1a-9d6eff8bd6c0;true;2021-07-11;../fake-data/blob/hipster.txt;Mobility f;2021-07-11;green;Cambridges;Functional;true;true;6;6;6
+7;50581f65-3911-491f-99f2-a2be8adb114e;true;2021-07-11;../fake-data/blob/hipster.txt;Sleek Gran;2021-07-12;Hungary Guarani;Accountabi;Computers ;false;true;7;7;7
+8;7418705f-5289-40cf-8846-d2067c5233dd;true;2021-07-12;../fake-data/blob/hipster.txt;Soap US Do;2021-07-11;redundant overriding Music;schemas Av;local onli;false;false;8;8;8
+9;2ffa02d5-dd49-4eb9-ac7b-aef9c4aa0fbd;true;2021-07-11;../fake-data/blob/hipster.txt;Indian Rup;2021-07-11;French Southern Territories in;Valleys Ag;indexing R;false;true;9;9;9
+10;c3479a20-5f58-44bd-9f80-c6f7e336ec22;true;2021-07-11;../fake-data/blob/hipster.txt;empowering;2021-07-11;Buckinghamshire virtual;adapter;sticky;true;false;10;10;10

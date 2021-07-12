@@ -33,7 +33,7 @@ order by sq1.vendor_id
             replaceIfExists="true"  
             viewName="m_vendor_performance_report">
 select row_number () over (order by sq1.vendor_id) id, sq1.vendor_id, sq1.business_category_id, coalesce(avg(sq1.score),0) evaluation_score,
-coalesce(count(mwl.id),0) warning_letters from (
+coalesce(count(mwl.id),0) complaints from (
 select mc.vendor_id, mc.document_no, rfq.business_category_id, coalesce(avg(mve.score),0) score 
 from m_contract mc
 left join m_bidding mb on mb.id = mc.bidding_id

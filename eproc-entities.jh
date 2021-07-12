@@ -1689,12 +1689,11 @@ entity MComplaint {
 	processed Boolean
 }
 
-/*
 entity MBlacklist {
 	uid UUID
 	active Boolean
 	reportDate LocalDate required
-	warning TextBlob
+	notes TextBlob
 	type String maxlength(10)
 
 	dateTrx LocalDate required
@@ -1704,7 +1703,13 @@ entity MBlacklist {
 	approved Boolean
 	processed Boolean
 }
-*/
+
+entity MBlacklistLine {
+	uid UUID
+	active Boolean
+	notes TextBlob
+}
+
 entity MVendorPerformanceReport {
 	evaluationScore BigDecimal
 	complaints Integer
@@ -1766,6 +1771,7 @@ relationship OneToOne {
 	MProposalPrice{biddingSubmission required} to MBiddingSubmission
 
 	MBidNegoPrice{attachment} to CAttachment
+	MBlacklist{attachment} to CAttachment
 }
 
 /**
@@ -2443,6 +2449,16 @@ relationship ManyToOne {
 	MComplaint{contract required} to MContract
 	MComplaint{businessCategory required} to CBusinessCategory
 	MComplaint{subBusinessCategory} to CBusinessCategory
+
+	MBlacklist{adOrganization required} to ADOrganization
+	MBlacklist{vendor required} to CVendor
+	MBlacklist{businessCategory required} to CBusinessCategory
+	MBlacklist{subBusinessCategory} to CBusinessCategory
+
+	MBlacklistLine{blacklist required} to MBlacklist
+	MBlacklistLine{adOrganization required} to ADOrganization
+	MBlacklistLine{pic} to AdUser // for personal
+	MBlacklistLine{functionary} to CFunctionary // for shareholder
 
 	MVendorPerformanceReport{vendor required} to CVendor
 	MVendorPerformanceReport{businessCategory} to CBusinessCategory

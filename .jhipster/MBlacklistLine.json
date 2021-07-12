@@ -1,0 +1,62 @@
+{
+    "name": "MBlacklistLine",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "notes",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBlacklist",
+            "otherEntityRelationshipName": "mBlacklistLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "blacklist",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mBlacklistLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adUser",
+            "otherEntityRelationshipName": "mBlacklistLine",
+            "relationshipName": "pic",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cFunctionary",
+            "otherEntityRelationshipName": "mBlacklistLine",
+            "relationshipName": "functionary",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210712044000",
+    "entityTableName": "m_blacklist_line",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

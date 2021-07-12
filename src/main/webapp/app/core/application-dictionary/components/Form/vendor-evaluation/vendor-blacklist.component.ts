@@ -4,9 +4,10 @@ import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMi
 import { ElTable } from 'element-ui/types/table';
 import Vue from 'vue';
 import Component, { mixins } from 'vue-class-component';
-import { Inject } from 'vue-property-decorator';
+import { Inject, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import VendorBlacklistDetail from './vendor-blacklist-detail.vue';
+import { AccountStoreModule } from '@/shared/config/store/account-store';
 
 const VendorBlacklistProp = Vue.extend({
   props: {
@@ -27,64 +28,37 @@ export default class VendorBlacklist extends mixins(AccessLevelMixin, VendorBlac
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
   index = true;
+  loading = false;
   selectedRow: any = {};
   selectedDocumentAction: any = {};
   showDocumentActionConfirm = false;
 
-  documentStatuses = {
-    APV: 'Approved',
-    DRF: 'Draft',
-    RJC: 'Rejected',
-    RVS: 'Revised',
-    SMT: 'Submitted',
-  }
+  docTypeId = 0;
+  docTypeName = '';
 
-  blacklist = [
+  documentStatuses = [];
+
+  blacklist = [];
+
+  // for paging
+  public itemsPerPage = 10;
+  public queryCount: number = null;
+  public page = 1;
+  public previousPage = 1;
+  public reverse = false;
+  public totalItems = 0;  
+
+  blacklistTypes = [
     {
-      documentTypeId: null,
-      documentTypeName: null,
-      approvalDate: null,
-      vendorId: 1,
-      vendorName: 'INGRAM MICRO INDONESIA',
-      blacklistedPersonalCount: 0,
-      notes: null,
-      attachment: null,
-      type: 'Whitelist',
-      documentAction: 'SMT',
-      documentStatus: 'DRF',
-      approved: false,
-      status: 'Draft'
+      id: 1,
+      name: 'Blacklist',
+      value: 'B'
     },
     {
-      documentTypeId: null,
-      documentTypeName: null,
-      approvalDate: '2021-03-31T00:00:00.000Z',
-      vendorId: 2,
-      vendorName: 'PT. APV',
-      blacklistedPersonalCount: 1,
-      notes: 'Kinerja buruk',
-      attachment: 'Performance Report.pdf',
-      type: 'Blacklist',
-      documentAction: 'APV',
-      documentStatus: 'APV',
-      approved: true,
-      status: 'Approved'
-    },
-    {
-      documentTypeId: null,
-      documentTypeName: null,
-      approvalDate: null,
-      vendorId: 3,
-      vendorName: 'SISTECH KHARISMA',
-      blacklistedPersonalCount: 0,
-      notes: null,
-      attachment: null,
-      type: 'Whitelist',
-      documentAction: 'APV',
-      documentStatus: 'SMT',
-      approved: false,
-      status: 'Submitted'
-    },
+      id: 2,
+      name: 'Whitelist',
+      value: 'W'
+    }
   ];
 
   get defaultDocumentAction() {
@@ -113,7 +87,67 @@ export default class VendorBlacklist extends mixins(AccessLevelMixin, VendorBlac
   }
 
   created() {
+    this.refreshHeader();
+    this.commonService(null)
+      .retrieveReferenceLists('docStatus')
+      .then(res => {
+        this.documentStatuses = res.map(item => 
+          ({
+            key: item.value,
+            label: item.name
+          })
+        );
+      });
     this.retrieveDocumentType('Vendor Blacklist');
+  }
+
+  refreshHeader(){
+    this.loading = true;
+    this.commonService("/api/m-blacklists").retrieve(
+      {
+        criteriaQuery: this.updateCriteria([
+        'active.equals=true']),
+        paginationQuery: {
+          page: this.page-1,
+          size: this.itemsPerPage,
+          sort: ['id']
+        }
+      }).then((res)=>{
+        this.blacklist = res.data;
+        console.log(this.blacklist);
+
+        this.totalItems = Number(res.headers['x-total-count']);
+        this.queryCount = this.totalItems;
+      }
+    ).finally(()=>{this.loading=false})
+  }
+  public changePageSize(size: number) {
+    this.itemsPerPage = size;
+    if(this.page!=1){
+      this.page = 0;
+    }
+    this.refreshHeader();
+  }
+
+  public loadPage(page: number): void {
+    if (page !== this.previousPage) {
+      this.previousPage = page;
+      this.refreshHeader();
+    }
+  }
+
+  public transition(): void {
+    this.refreshHeader();
+  }
+
+  public clear(): void {
+    this.page = 1;
+    this.refreshHeader();
+  }
+
+  @Watch('page')
+  onPageChange(page: number) {
+    this.loadPage(page);
   }
 
   mounted() {
@@ -122,10 +156,15 @@ export default class VendorBlacklist extends mixins(AccessLevelMixin, VendorBlac
 
   closeDetail() {
     this.index = true;
+    this.refreshHeader();
   }
 
-  printStatus(status: string) {
-    return this.documentStatuses[status];
+  printStatus(value: string) {
+    return this.documentStatuses.find(status => status.key === value)?.label;
+  }
+
+  printBlacklistType(value: string) {
+    return this.blacklistTypes.find(status => status.value === value)?.name;
   }
 
   private retrieveDocumentType(name: string) {
@@ -149,6 +188,8 @@ export default class VendorBlacklist extends mixins(AccessLevelMixin, VendorBlac
             return item;
           });
         }
+        this.docTypeId = res.data[0].id;
+        this.docTypeName = res.data[0].name;
       });
   }
 
@@ -159,5 +200,61 @@ export default class VendorBlacklist extends mixins(AccessLevelMixin, VendorBlac
   viewDetail(row: any) {
     this.selectedRow = row;
     this.index = false;
+  }
+
+  onCreateClicked(){
+    const empty = {
+      documentTypeId: this.docTypeId,
+      documentTypeName: this.docTypeName,
+      approvalDate: null,
+      vendorId: null,
+      vendorName: null,
+      blacklistedPersonalCount: 0,
+      notes: null,
+      attachment: null,
+      type: null,
+      adOrganizationId: AccountStoreModule.organizationInfo.id,
+      createdBy: AccountStoreModule.account.login,
+      documentAction: 'SMT',
+      documentStatus: 'DRF',
+      status: '',
+      reportDate: new Date(),
+      dateTrx: new Date(),
+      lines: [],
+      deleteLineIds: []
+    }
+
+    this.selectedRow = empty;
+    this.index = false;
+  }
+
+  onSaveClicked(){
+    this.commonService('/api/m-blacklists')[this.selectedRow.id?'update':'create'](this.selectedRow).
+      then((res)=>{
+        this.$message.success(`Blacklist ${this.selectedRow.id?'updated':'created'}.`)
+        this.selectedRow.id = res.id;
+      }).catch((res)=>{
+        this.$message.error(`Error during ${this.selectedRow.id?'updating':'creating'} a blacklist`)
+      });
+  }
+
+  confirmed(action: any){
+    console.log(action);
+    
+    this.selectedRow.documentAction = action.value;
+    this.selectedRow.documentStatus = action.value;
+    this.commonService('/api/m-blacklists').update(this.selectedRow).
+    then((res)=>{
+      this.selectedRow = res;
+      this.$message.success(`${action.name} Blacklist ${this.selectedRow.documentNo} success.`);
+      this.showDocumentActionConfirm = false;
+      this.refreshHeader();
+    }).catch((res)=>{
+      this.$message.error(`${action.name} Blacklist ${this.selectedRow.documentNo} failed.`)
+    });
+  }
+
+  downloadFile(row){
+    window.open(row.downloadUrl, '_blank');
   }
 }
