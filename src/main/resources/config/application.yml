@@ -239,6 +239,9 @@ application:
     complaint:
       documentType: 'Complaint'
       documentNumberPrefix: 'CM-'
+    blacklist:
+      documentType: 'Vendor Blacklist'
+      documentNumberPrefix: 'BL-'
     vendorEvaluation:
       documentType: 'Vendor Evaluation'
       documentNumberPrefix: 'VE-'

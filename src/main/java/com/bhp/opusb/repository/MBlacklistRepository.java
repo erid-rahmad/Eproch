@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface MBlacklistRepository extends JpaRepository<MBlacklist, Long>, JpaSpecificationExecutor<MBlacklist> {
+public interface MBlacklistRepository extends GenericDocumentRepository<MBlacklist, Long>, JpaSpecificationExecutor<MBlacklist> {
 }

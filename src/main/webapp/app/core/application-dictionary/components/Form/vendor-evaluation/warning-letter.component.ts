@@ -29,6 +29,7 @@ export default class WarningLetter extends mixins(AccessLevelMixin, WarningLette
   index = true;
   loading = false;
   selectedRow: any = {};
+  selectedRows: any[] = [];
   selectedDocumentAction: any = {};
   showDocumentActionConfirm = false;
 
@@ -88,6 +89,11 @@ export default class WarningLetter extends mixins(AccessLevelMixin, WarningLette
 
   onCurrentRowChanged(row: any) {
     this.selectedRow = row;
+  }
+
+  onSelectionChanged(value: any) {
+    this.selectedRows = value;
+    this.$emit('selectedRows', this.selectedRows);
   }
 
   created() {
@@ -245,17 +251,35 @@ export default class WarningLetter extends mixins(AccessLevelMixin, WarningLette
 
   confirmed(action: any){
     console.log(action);
+    if(this.selectedRow.id) this.selectedRows.push(this.selectedRows);
     
-    this.selectedRow.documentAction = action.value;
-    this.selectedRow.documentStatus = action.value;
-    this.commonService('/api/m-warning-letters').update(this.selectedRow).
-    then((res)=>{
-      this.selectedRow = res;
-      this.$message.success(`${action.name} Warning Letter ${this.selectedRow.documentNo} success.`);
+    if(this.selectedRows.length){
+      this.selectedRows.forEach((row)=>{
+        row.documentAction = action.value;
+        row.documentStatus = action.value;
+        this.commonService('/api/m-warning-letters').update(row).
+        then((res)=>{
+          console.log(`${action.name} Warning Letter ${row.documentNo} success.`)
+        }).catch((res)=>{
+          console.log(`${action.name} Warning Letter ${row.documentNo} failed.`)
+        });
+      })
+      this.$message.success(`${action.name} ${this.selectedRows.length} Warning Letter(s) success.`);
       this.showDocumentActionConfirm = false;
+      this.selectedRows = [];
       this.refreshHeader();
-    }).catch((res)=>{
-      this.$message.error(`${action.name} Warning Letter ${this.selectedRow.documentNo} failed.`)
-    });
+    } else {
+      this.selectedRow.documentAction = action.value;
+      this.selectedRow.documentStatus = action.value;
+      this.commonService('/api/m-warning-letters').update(this.selectedRow).
+      then((res)=>{
+        this.selectedRow = res;
+        this.$message.success(`${action.name} Warning Letter ${this.selectedRow.documentNo} success.`);
+        this.showDocumentActionConfirm = false;
+        this.refreshHeader();
+      }).catch((res)=>{
+        this.$message.error(`${action.name} Warning Letter ${this.selectedRow.documentNo} failed.`)
+      });
+    }
   }
 }

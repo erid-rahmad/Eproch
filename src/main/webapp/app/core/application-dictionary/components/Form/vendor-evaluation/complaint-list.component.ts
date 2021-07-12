@@ -30,6 +30,7 @@ export default class ComplaintList extends mixins(AccessLevelMixin, ComplaintLis
   index = true;
   loading = false;
   selectedRow: any = {};
+  selectedRows: any[] = [];
   selectedDocumentAction: any = {};
   showDocumentActionConfirm = false;
 
@@ -72,6 +73,11 @@ export default class ComplaintList extends mixins(AccessLevelMixin, ComplaintLis
 
   onCurrentRowChanged(row: any) {
     this.selectedRow = row;
+  }
+
+  onSelectionChanged(value: any) {
+    this.selectedRows = value;
+    this.$emit('selectedRows', this.selectedRows);
   }
 
   created() {
@@ -227,16 +233,35 @@ export default class ComplaintList extends mixins(AccessLevelMixin, ComplaintLis
   confirmed(action: any){
     console.log(action);
     
-    this.selectedRow.documentAction = action.value;
-    this.selectedRow.documentStatus = action.value;
-    this.commonService('/api/m-complaints').update(this.selectedRow).
-    then((res)=>{
-      this.selectedRow = res;
-      this.$message.success(`${action.name} Complaint ${this.selectedRow.documentNo} success.`);
+    if(this.selectedRow.id) this.selectedRows.push(this.selectedRows);
+
+    if(this.selectedRows.length){
+      this.selectedRows.forEach((row)=>{
+        row.documentAction = action.value;
+        row.documentStatus = action.value;
+        this.commonService('/api/m-complaints').update(row).
+        then((res)=>{
+          console.log(`${action.name} Complaint ${row.documentNo} success.`)
+        }).catch((res)=>{
+          console.log(`${action.name} Complaint ${row.documentNo} failed.`)
+        });
+      })
+      this.$message.success(`${action.name} ${this.selectedRows.length} Complaint(s) success.`);
       this.showDocumentActionConfirm = false;
+      this.selectedRows = [];
       this.refreshHeader();
-    }).catch((res)=>{
-      this.$message.error(`${action.name} Complaint ${this.selectedRow.documentNo} failed.`)
-    });
+    } else {
+      this.selectedRow.documentAction = action.value;
+      this.selectedRow.documentStatus = action.value;
+      this.commonService('/api/m-complaints').update(this.selectedRow).
+      then((res)=>{
+        this.selectedRow = res;
+        this.$message.success(`${action.name} Complaint ${this.selectedRow.documentNo} success.`);
+        this.showDocumentActionConfirm = false;
+        this.refreshHeader();
+      }).catch((res)=>{
+        this.$message.error(`${action.name} Complaint ${this.selectedRow.documentNo} failed.`)
+      });
+    }
   }
 }

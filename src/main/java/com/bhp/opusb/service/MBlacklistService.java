@@ -1,11 +1,14 @@
 package com.bhp.opusb.service;
 
+import com.bhp.opusb.config.ApplicationProperties;
+import com.bhp.opusb.config.ApplicationProperties.Document;
 import com.bhp.opusb.domain.MBlacklist;
 import com.bhp.opusb.domain.MBlacklistLine;
 import com.bhp.opusb.repository.MBlacklistRepository;
 import com.bhp.opusb.repository.MBlacklistLineRepository;
 import com.bhp.opusb.service.dto.MBlacklistDTO;
 import com.bhp.opusb.service.mapper.MBlacklistMapper;
+import com.bhp.opusb.util.DocumentUtil;
 import com.bhp.opusb.service.mapper.MBlacklistLineMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,12 +37,20 @@ public class MBlacklistService {
     private final MBlacklistMapper mBlacklistMapper;
     private final MBlacklistLineMapper mBlacklistLineMapper;
 
-    public MBlacklistService(MBlacklistRepository mBlacklistRepository, MBlacklistMapper mBlacklistMapper,
+    private final Document document;
+
+    public MBlacklistService(ApplicationProperties applicationProperties, 
+        MBlacklistRepository mBlacklistRepository, MBlacklistMapper mBlacklistMapper,
         MBlacklistLineRepository mBlacklistLineRepository, MBlacklistLineMapper mBlacklistLineMapper) {
         this.mBlacklistRepository = mBlacklistRepository;
         this.mBlacklistMapper = mBlacklistMapper;
         this.mBlacklistLineRepository = mBlacklistLineRepository;
         this.mBlacklistLineMapper = mBlacklistLineMapper;
+        document = applicationProperties.getDocuments().get("blacklist");
+    }
+
+    private String initDocumentNumber() {
+        return DocumentUtil.buildDocumentNumber(document.getDocumentNumberPrefix(), mBlacklistRepository);
     }
 
     /**
@@ -61,6 +72,11 @@ public class MBlacklistService {
         List<MBlacklistLine> lines = mBlacklistLineMapper.toEntity(mBlacklistDTO.getLines());
 
         MBlacklist mBlacklist = mBlacklistMapper.toEntity(mBlacklistDTO);
+
+        if (mBlacklist.getDocumentNo() == null) {
+            mBlacklist.documentNo(initDocumentNumber());
+        }
+
         mBlacklist = mBlacklistRepository.save(mBlacklist);
 
         for(MBlacklistLine x: lines){

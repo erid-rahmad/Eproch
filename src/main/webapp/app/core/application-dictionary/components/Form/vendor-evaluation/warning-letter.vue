@@ -52,15 +52,9 @@
         stripe
         style="width: 100%"
         @current-change="onCurrentRowChanged"
+        @selection-change="onSelectionChanged"
       >
-        <el-table-column
-          label="No"
-          width="50"
-        >
-          <template slot-scope="{ $index }">
-            {{ $index + 1 }}
-          </template>
-        </el-table-column>
+        <el-table-column align="center" fixed type="selection" width="48"/>
         <el-table-column
           label="Report Date"
           min-width="150"

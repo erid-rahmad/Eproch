@@ -8,6 +8,7 @@ import { Inject, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import VendorBlacklistDetail from './vendor-blacklist-detail.vue';
 import { AccountStoreModule } from '@/shared/config/store/account-store';
+import { ElForm } from 'element-ui/types/form';
 
 const VendorBlacklistProp = Vue.extend({
   props: {
@@ -30,6 +31,7 @@ export default class VendorBlacklist extends mixins(AccessLevelMixin, VendorBlac
   index = true;
   loading = false;
   selectedRow: any = {};
+  selectedRows: any[] = [];
   selectedDocumentAction: any = {};
   showDocumentActionConfirm = false;
 
@@ -84,6 +86,11 @@ export default class VendorBlacklist extends mixins(AccessLevelMixin, VendorBlac
 
   onCurrentRowChanged(row: any) {
     this.selectedRow = row;
+  }
+
+  onSelectionChanged(value: any) {
+    this.selectedRows = value;
+    this.$emit('selectedRows', this.selectedRows);
   }
 
   created() {
@@ -229,6 +236,16 @@ export default class VendorBlacklist extends mixins(AccessLevelMixin, VendorBlac
   }
 
   onSaveClicked(){
+    if (!this.selectedRow.attachmentId) {
+      this.$message.warning("File harus diupload");
+      return;
+    }
+
+    if (!this.selectedRow.vendorId) {
+      this.$message.warning("Tolong pilih vendor");
+      return;
+    }
+
     this.commonService('/api/m-blacklists')[this.selectedRow.id?'update':'create'](this.selectedRow).
       then((res)=>{
         this.$message.success(`Blacklist ${this.selectedRow.id?'updated':'created'}.`)
@@ -241,17 +258,36 @@ export default class VendorBlacklist extends mixins(AccessLevelMixin, VendorBlac
   confirmed(action: any){
     console.log(action);
     
-    this.selectedRow.documentAction = action.value;
-    this.selectedRow.documentStatus = action.value;
-    this.commonService('/api/m-blacklists').update(this.selectedRow).
-    then((res)=>{
-      this.selectedRow = res;
-      this.$message.success(`${action.name} Blacklist ${this.selectedRow.documentNo} success.`);
+    if(this.selectedRow.id) this.selectedRows.push(this.selectedRows);
+
+    if(this.selectedRows.length){
+      this.selectedRows.forEach((row)=>{
+        row.documentAction = action.value;
+        row.documentStatus = action.value;
+        this.commonService('/api/m-blacklists').update(row).
+        then((res)=>{
+          console.log(`${action.name} Blacklist ${row.documentNo} success.`)
+        }).catch((res)=>{
+          console.log(`${action.name} Blacklist ${row.documentNo} failed.`)
+        });
+      })
+      this.$message.success(`${action.name} ${this.selectedRows.length} Blacklist(s) success.`);
       this.showDocumentActionConfirm = false;
+      this.selectedRows = [];
       this.refreshHeader();
-    }).catch((res)=>{
-      this.$message.error(`${action.name} Blacklist ${this.selectedRow.documentNo} failed.`)
-    });
+    } else {
+      this.selectedRow.documentAction = action.value;
+      this.selectedRow.documentStatus = action.value;
+      this.commonService('/api/m-blacklists').update(this.selectedRow).
+      then((res)=>{
+        this.selectedRow = res;
+        this.$message.success(`${action.name} Blacklist ${this.selectedRow.documentNo} success.`);
+        this.showDocumentActionConfirm = false;
+        this.refreshHeader();
+      }).catch((res)=>{
+        this.$message.error(`${action.name} Blacklist ${this.selectedRow.documentNo} failed.`)
+      });
+    }
   }
 
   downloadFile(row){
