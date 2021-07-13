@@ -72,6 +72,8 @@ class CPrequalificationEventLineGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "description":"SAMPLE_TEXT"
+                , "sequence":"0"
                 , "uid":null
                 , "active":null
                 }""")).asJson

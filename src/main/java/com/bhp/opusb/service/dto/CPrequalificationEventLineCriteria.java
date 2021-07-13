@@ -27,6 +27,10 @@ public class CPrequalificationEventLineCriteria implements Serializable, Criteri
 
     private LongFilter id;
 
+    private StringFilter description;
+
+    private IntegerFilter sequence;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -42,6 +46,8 @@ public class CPrequalificationEventLineCriteria implements Serializable, Criteri
 
     public CPrequalificationEventLineCriteria(CPrequalificationEventLineCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.description = other.description == null ? null : other.description.copy();
+        this.sequence = other.sequence == null ? null : other.sequence.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.prequalificationEventId = other.prequalificationEventId == null ? null : other.prequalificationEventId.copy();
@@ -60,6 +66,22 @@ public class CPrequalificationEventLineCriteria implements Serializable, Criteri
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public StringFilter getDescription() {
+        return description;
+    }
+
+    public void setDescription(StringFilter description) {
+        this.description = description;
+    }
+
+    public IntegerFilter getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(IntegerFilter sequence) {
+        this.sequence = sequence;
     }
 
     public UUIDFilter getUid() {
@@ -114,6 +136,8 @@ public class CPrequalificationEventLineCriteria implements Serializable, Criteri
         final CPrequalificationEventLineCriteria that = (CPrequalificationEventLineCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(description, that.description) &&
+            Objects.equals(sequence, that.sequence) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(prequalificationEventId, that.prequalificationEventId) &&
@@ -125,6 +149,8 @@ public class CPrequalificationEventLineCriteria implements Serializable, Criteri
     public int hashCode() {
         return Objects.hash(
         id,
+        description,
+        sequence,
         uid,
         active,
         prequalificationEventId,
@@ -137,6 +163,8 @@ public class CPrequalificationEventLineCriteria implements Serializable, Criteri
     public String toString() {
         return "CPrequalificationEventLineCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (description != null ? "description=" + description + ", " : "") +
+                (sequence != null ? "sequence=" + sequence + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (prequalificationEventId != null ? "prequalificationEventId=" + prequalificationEventId + ", " : "") +

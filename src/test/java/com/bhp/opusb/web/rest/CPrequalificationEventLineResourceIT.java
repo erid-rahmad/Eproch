@@ -39,6 +39,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class CPrequalificationEventLineResourceIT {
 
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+
+    private static final Integer DEFAULT_SEQUENCE = 0;
+    private static final Integer UPDATED_SEQUENCE = 1;
+    private static final Integer SMALLER_SEQUENCE = 0 - 1;
+
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
@@ -73,6 +80,8 @@ public class CPrequalificationEventLineResourceIT {
      */
     public static CPrequalificationEventLine createEntity(EntityManager em) {
         CPrequalificationEventLine cPrequalificationEventLine = new CPrequalificationEventLine()
+            .description(DEFAULT_DESCRIPTION)
+            .sequence(DEFAULT_SEQUENCE)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -115,6 +124,8 @@ public class CPrequalificationEventLineResourceIT {
      */
     public static CPrequalificationEventLine createUpdatedEntity(EntityManager em) {
         CPrequalificationEventLine cPrequalificationEventLine = new CPrequalificationEventLine()
+            .description(UPDATED_DESCRIPTION)
+            .sequence(UPDATED_SEQUENCE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -171,6 +182,8 @@ public class CPrequalificationEventLineResourceIT {
         List<CPrequalificationEventLine> cPrequalificationEventLineList = cPrequalificationEventLineRepository.findAll();
         assertThat(cPrequalificationEventLineList).hasSize(databaseSizeBeforeCreate + 1);
         CPrequalificationEventLine testCPrequalificationEventLine = cPrequalificationEventLineList.get(cPrequalificationEventLineList.size() - 1);
+        assertThat(testCPrequalificationEventLine.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testCPrequalificationEventLine.getSequence()).isEqualTo(DEFAULT_SEQUENCE);
         assertThat(testCPrequalificationEventLine.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCPrequalificationEventLine.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -198,6 +211,25 @@ public class CPrequalificationEventLineResourceIT {
 
     @Test
     @Transactional
+    public void checkSequenceIsRequired() throws Exception {
+        int databaseSizeBeforeTest = cPrequalificationEventLineRepository.findAll().size();
+        // set the field null
+        cPrequalificationEventLine.setSequence(null);
+
+        // Create the CPrequalificationEventLine, which fails.
+        CPrequalificationEventLineDTO cPrequalificationEventLineDTO = cPrequalificationEventLineMapper.toDto(cPrequalificationEventLine);
+
+        restCPrequalificationEventLineMockMvc.perform(post("/api/c-prequalification-event-lines")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(cPrequalificationEventLineDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<CPrequalificationEventLine> cPrequalificationEventLineList = cPrequalificationEventLineRepository.findAll();
+        assertThat(cPrequalificationEventLineList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllCPrequalificationEventLines() throws Exception {
         // Initialize the database
         cPrequalificationEventLineRepository.saveAndFlush(cPrequalificationEventLine);
@@ -207,6 +239,8 @@ public class CPrequalificationEventLineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cPrequalificationEventLine.getId().intValue())))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].sequence").value(hasItem(DEFAULT_SEQUENCE)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -222,6 +256,8 @@ public class CPrequalificationEventLineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cPrequalificationEventLine.getId().intValue()))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.sequence").value(DEFAULT_SEQUENCE))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -243,6 +279,189 @@ public class CPrequalificationEventLineResourceIT {
 
         defaultCPrequalificationEventLineShouldBeFound("id.lessThanOrEqual=" + id);
         defaultCPrequalificationEventLineShouldNotBeFound("id.lessThan=" + id);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCPrequalificationEventLinesByDescriptionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cPrequalificationEventLineRepository.saveAndFlush(cPrequalificationEventLine);
+
+        // Get all the cPrequalificationEventLineList where description equals to DEFAULT_DESCRIPTION
+        defaultCPrequalificationEventLineShouldBeFound("description.equals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the cPrequalificationEventLineList where description equals to UPDATED_DESCRIPTION
+        defaultCPrequalificationEventLineShouldNotBeFound("description.equals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPrequalificationEventLinesByDescriptionIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cPrequalificationEventLineRepository.saveAndFlush(cPrequalificationEventLine);
+
+        // Get all the cPrequalificationEventLineList where description not equals to DEFAULT_DESCRIPTION
+        defaultCPrequalificationEventLineShouldNotBeFound("description.notEquals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the cPrequalificationEventLineList where description not equals to UPDATED_DESCRIPTION
+        defaultCPrequalificationEventLineShouldBeFound("description.notEquals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPrequalificationEventLinesByDescriptionIsInShouldWork() throws Exception {
+        // Initialize the database
+        cPrequalificationEventLineRepository.saveAndFlush(cPrequalificationEventLine);
+
+        // Get all the cPrequalificationEventLineList where description in DEFAULT_DESCRIPTION or UPDATED_DESCRIPTION
+        defaultCPrequalificationEventLineShouldBeFound("description.in=" + DEFAULT_DESCRIPTION + "," + UPDATED_DESCRIPTION);
+
+        // Get all the cPrequalificationEventLineList where description equals to UPDATED_DESCRIPTION
+        defaultCPrequalificationEventLineShouldNotBeFound("description.in=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPrequalificationEventLinesByDescriptionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cPrequalificationEventLineRepository.saveAndFlush(cPrequalificationEventLine);
+
+        // Get all the cPrequalificationEventLineList where description is not null
+        defaultCPrequalificationEventLineShouldBeFound("description.specified=true");
+
+        // Get all the cPrequalificationEventLineList where description is null
+        defaultCPrequalificationEventLineShouldNotBeFound("description.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCPrequalificationEventLinesByDescriptionContainsSomething() throws Exception {
+        // Initialize the database
+        cPrequalificationEventLineRepository.saveAndFlush(cPrequalificationEventLine);
+
+        // Get all the cPrequalificationEventLineList where description contains DEFAULT_DESCRIPTION
+        defaultCPrequalificationEventLineShouldBeFound("description.contains=" + DEFAULT_DESCRIPTION);
+
+        // Get all the cPrequalificationEventLineList where description contains UPDATED_DESCRIPTION
+        defaultCPrequalificationEventLineShouldNotBeFound("description.contains=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPrequalificationEventLinesByDescriptionNotContainsSomething() throws Exception {
+        // Initialize the database
+        cPrequalificationEventLineRepository.saveAndFlush(cPrequalificationEventLine);
+
+        // Get all the cPrequalificationEventLineList where description does not contain DEFAULT_DESCRIPTION
+        defaultCPrequalificationEventLineShouldNotBeFound("description.doesNotContain=" + DEFAULT_DESCRIPTION);
+
+        // Get all the cPrequalificationEventLineList where description does not contain UPDATED_DESCRIPTION
+        defaultCPrequalificationEventLineShouldBeFound("description.doesNotContain=" + UPDATED_DESCRIPTION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCPrequalificationEventLinesBySequenceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cPrequalificationEventLineRepository.saveAndFlush(cPrequalificationEventLine);
+
+        // Get all the cPrequalificationEventLineList where sequence equals to DEFAULT_SEQUENCE
+        defaultCPrequalificationEventLineShouldBeFound("sequence.equals=" + DEFAULT_SEQUENCE);
+
+        // Get all the cPrequalificationEventLineList where sequence equals to UPDATED_SEQUENCE
+        defaultCPrequalificationEventLineShouldNotBeFound("sequence.equals=" + UPDATED_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPrequalificationEventLinesBySequenceIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cPrequalificationEventLineRepository.saveAndFlush(cPrequalificationEventLine);
+
+        // Get all the cPrequalificationEventLineList where sequence not equals to DEFAULT_SEQUENCE
+        defaultCPrequalificationEventLineShouldNotBeFound("sequence.notEquals=" + DEFAULT_SEQUENCE);
+
+        // Get all the cPrequalificationEventLineList where sequence not equals to UPDATED_SEQUENCE
+        defaultCPrequalificationEventLineShouldBeFound("sequence.notEquals=" + UPDATED_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPrequalificationEventLinesBySequenceIsInShouldWork() throws Exception {
+        // Initialize the database
+        cPrequalificationEventLineRepository.saveAndFlush(cPrequalificationEventLine);
+
+        // Get all the cPrequalificationEventLineList where sequence in DEFAULT_SEQUENCE or UPDATED_SEQUENCE
+        defaultCPrequalificationEventLineShouldBeFound("sequence.in=" + DEFAULT_SEQUENCE + "," + UPDATED_SEQUENCE);
+
+        // Get all the cPrequalificationEventLineList where sequence equals to UPDATED_SEQUENCE
+        defaultCPrequalificationEventLineShouldNotBeFound("sequence.in=" + UPDATED_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPrequalificationEventLinesBySequenceIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cPrequalificationEventLineRepository.saveAndFlush(cPrequalificationEventLine);
+
+        // Get all the cPrequalificationEventLineList where sequence is not null
+        defaultCPrequalificationEventLineShouldBeFound("sequence.specified=true");
+
+        // Get all the cPrequalificationEventLineList where sequence is null
+        defaultCPrequalificationEventLineShouldNotBeFound("sequence.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPrequalificationEventLinesBySequenceIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        cPrequalificationEventLineRepository.saveAndFlush(cPrequalificationEventLine);
+
+        // Get all the cPrequalificationEventLineList where sequence is greater than or equal to DEFAULT_SEQUENCE
+        defaultCPrequalificationEventLineShouldBeFound("sequence.greaterThanOrEqual=" + DEFAULT_SEQUENCE);
+
+        // Get all the cPrequalificationEventLineList where sequence is greater than or equal to UPDATED_SEQUENCE
+        defaultCPrequalificationEventLineShouldNotBeFound("sequence.greaterThanOrEqual=" + UPDATED_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPrequalificationEventLinesBySequenceIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        cPrequalificationEventLineRepository.saveAndFlush(cPrequalificationEventLine);
+
+        // Get all the cPrequalificationEventLineList where sequence is less than or equal to DEFAULT_SEQUENCE
+        defaultCPrequalificationEventLineShouldBeFound("sequence.lessThanOrEqual=" + DEFAULT_SEQUENCE);
+
+        // Get all the cPrequalificationEventLineList where sequence is less than or equal to SMALLER_SEQUENCE
+        defaultCPrequalificationEventLineShouldNotBeFound("sequence.lessThanOrEqual=" + SMALLER_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPrequalificationEventLinesBySequenceIsLessThanSomething() throws Exception {
+        // Initialize the database
+        cPrequalificationEventLineRepository.saveAndFlush(cPrequalificationEventLine);
+
+        // Get all the cPrequalificationEventLineList where sequence is less than DEFAULT_SEQUENCE
+        defaultCPrequalificationEventLineShouldNotBeFound("sequence.lessThan=" + DEFAULT_SEQUENCE);
+
+        // Get all the cPrequalificationEventLineList where sequence is less than UPDATED_SEQUENCE
+        defaultCPrequalificationEventLineShouldBeFound("sequence.lessThan=" + UPDATED_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPrequalificationEventLinesBySequenceIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        cPrequalificationEventLineRepository.saveAndFlush(cPrequalificationEventLine);
+
+        // Get all the cPrequalificationEventLineList where sequence is greater than DEFAULT_SEQUENCE
+        defaultCPrequalificationEventLineShouldNotBeFound("sequence.greaterThan=" + DEFAULT_SEQUENCE);
+
+        // Get all the cPrequalificationEventLineList where sequence is greater than SMALLER_SEQUENCE
+        defaultCPrequalificationEventLineShouldBeFound("sequence.greaterThan=" + SMALLER_SEQUENCE);
     }
 
 
@@ -405,6 +624,8 @@ public class CPrequalificationEventLineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cPrequalificationEventLine.getId().intValue())))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].sequence").value(hasItem(DEFAULT_SEQUENCE)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -454,6 +675,8 @@ public class CPrequalificationEventLineResourceIT {
         // Disconnect from session so that the updates on updatedCPrequalificationEventLine are not directly saved in db
         em.detach(updatedCPrequalificationEventLine);
         updatedCPrequalificationEventLine
+            .description(UPDATED_DESCRIPTION)
+            .sequence(UPDATED_SEQUENCE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         CPrequalificationEventLineDTO cPrequalificationEventLineDTO = cPrequalificationEventLineMapper.toDto(updatedCPrequalificationEventLine);
@@ -467,6 +690,8 @@ public class CPrequalificationEventLineResourceIT {
         List<CPrequalificationEventLine> cPrequalificationEventLineList = cPrequalificationEventLineRepository.findAll();
         assertThat(cPrequalificationEventLineList).hasSize(databaseSizeBeforeUpdate);
         CPrequalificationEventLine testCPrequalificationEventLine = cPrequalificationEventLineList.get(cPrequalificationEventLineList.size() - 1);
+        assertThat(testCPrequalificationEventLine.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testCPrequalificationEventLine.getSequence()).isEqualTo(UPDATED_SEQUENCE);
         assertThat(testCPrequalificationEventLine.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCPrequalificationEventLine.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
