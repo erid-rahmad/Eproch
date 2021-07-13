@@ -12,12 +12,12 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * A CPrequalificationStep.
+ * A CPrequalificationMethod.
  */
 @Entity
-@Table(name = "c_prequalification_step")
+@Table(name = "c_prequalification_method")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class CPrequalificationStep extends AbstractAuditingEntity {
+public class CPrequalificationMethod extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,15 +27,9 @@ public class CPrequalificationStep extends AbstractAuditingEntity {
     private Long id;
 
     @NotNull
-    @Column(name = "name", nullable = false)
+    @Size(max = 60)
+    @Column(name = "name", length = 60, nullable = false)
     private String name;
-
-    @NotNull
-    @Column(name = "description", nullable = false)
-    private String description;
-
-    @Column(name = "type")
-    private String type;
 
     @Column(name = "uid")
     private UUID uid;
@@ -45,7 +39,7 @@ public class CPrequalificationStep extends AbstractAuditingEntity {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("cPrequalificationSteps")
+    @JsonIgnoreProperties("cPrequalificationMethods")
     private ADOrganization adOrganization;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -61,7 +55,7 @@ public class CPrequalificationStep extends AbstractAuditingEntity {
         return name;
     }
 
-    public CPrequalificationStep name(String name) {
+    public CPrequalificationMethod name(String name) {
         this.name = name;
         return this;
     }
@@ -70,37 +64,11 @@ public class CPrequalificationStep extends AbstractAuditingEntity {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public CPrequalificationStep description(String description) {
-        this.description = description;
-        return this;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public CPrequalificationStep type(String type) {
-        this.type = type;
-        return this;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public UUID getUid() {
         return uid;
     }
 
-    public CPrequalificationStep uid(UUID uid) {
+    public CPrequalificationMethod uid(UUID uid) {
         this.uid = uid;
         return this;
     }
@@ -113,7 +81,7 @@ public class CPrequalificationStep extends AbstractAuditingEntity {
         return active;
     }
 
-    public CPrequalificationStep active(Boolean active) {
+    public CPrequalificationMethod active(Boolean active) {
         this.active = active;
         return this;
     }
@@ -126,7 +94,7 @@ public class CPrequalificationStep extends AbstractAuditingEntity {
         return adOrganization;
     }
 
-    public CPrequalificationStep adOrganization(ADOrganization aDOrganization) {
+    public CPrequalificationMethod adOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
         return this;
     }
@@ -141,15 +109,10 @@ public class CPrequalificationStep extends AbstractAuditingEntity {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof CPrequalificationStep)) {
+        if (!(o instanceof CPrequalificationMethod)) {
             return false;
         }
-        return id != null && id.equals(((CPrequalificationStep) o).id);
-    }
-
-    @PrePersist
-    public void prePersist() {
-        uid = UUID.randomUUID();
+        return id != null && id.equals(((CPrequalificationMethod) o).id);
     }
 
     @Override
@@ -159,13 +122,16 @@ public class CPrequalificationStep extends AbstractAuditingEntity {
 
     @Override
     public String toString() {
-        return "CPrequalificationStep{" +
+        return "CPrequalificationMethod{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", type='" + getType() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";
+    }
+
+    @PrePersist
+    public void prePersist() {
+        uid = UUID.randomUUID();
     }
 }

@@ -1060,7 +1060,30 @@ entity CEvaluationCriteria {
 	active Boolean
 }
 
+entity CPrequalificationMethod{
+	name String required maxlength(60)
+	uid UUID
+	active Boolean
+}
+
+entity CPrequalMethodLine{
+	type String required maxlength(10)
+
+	weight BigDecimal max(100)
+	passingGrade BigDecimal
+	uid UUID
+	active Boolean
+}
+
+/*
+entity CPrequalMethodSubcriteria{
+	type String
+	uid UUID
+	active Boolean
+}
+*/
 entity CPrequalificationStep {
+	name String required
 	description String required
 	type String
 	uid UUID
@@ -2198,14 +2221,27 @@ relationship ManyToOne {
 	CEvalMethodSubCriteria{biddingSubCriteria required} to CBiddingSubCriteria
 	CEvalMethodSubCriteria{evaluationMethodCriteria required} to CEvaluationMethodCriteria
 
-
-
 	CEvaluationCriteria{adOrganization required} to ADOrganization
 	CEvaluationCriteria{evaluationMethodLine required} to CEvaluationMethodLine
 	CEvaluationCriteria{biddingCriteria required} to CBiddingCriteria
 	CEvaluationCriteria{biddingSubCriteria required} to CBiddingSubCriteria
 	CEvaluationCriteria{pic required} to AdUser
 
+	CPrequalificationMethod{adOrganization required} to ADOrganization
+
+	CPrequalMethodLine{adOrganization required} to ADOrganization
+	CPrequalMethodLine{prequalMethod required} to CPrequalificationMethod
+
+	/*
+	CPrequalMethodCriteria{biddingCriteria required} to CBiddingCriteria
+	CPrequalMethodCriteria{adOrganization required} to ADOrganization
+	CPrequalMethodCriteria{prequalMethodLine } to CPrequalMethodLine
+
+	CPrequalMethodSubCriteria{adOrganization required} to ADOrganization
+	CPrequalMethodSubCriteria{biddingCriteria required} to CBiddingCriteria
+	CPrequalMethodSubCriteria{biddingSubCriteria required} to CBiddingSubCriteria
+	CPrequalMethodSubCriteria{prequalMethodCriteria required} to CPrequalMethodCriteria
+	*/
 	CPrequalificationStep{adOrganization required} to ADOrganization
 
 	CPrequalificationEvent{adOrganization required} to ADOrganization

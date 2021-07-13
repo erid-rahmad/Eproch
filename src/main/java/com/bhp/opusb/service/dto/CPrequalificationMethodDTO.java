@@ -6,19 +6,15 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * A DTO for the {@link com.bhp.opusb.domain.CPrequalificationStep} entity.
+ * A DTO for the {@link com.bhp.opusb.domain.CPrequalificationMethod} entity.
  */
-public class CPrequalificationStepDTO extends AbstractAuditingDTO {
-
+public class CPrequalificationMethodDTO extends AbstractAuditingDTO implements Serializable {
+    
     private Long id;
 
     @NotNull
+    @Size(max = 60)
     private String name;
-
-    @NotNull
-    private String description;
-
-    private String type;
 
     private UUID uid;
 
@@ -26,7 +22,7 @@ public class CPrequalificationStepDTO extends AbstractAuditingDTO {
 
 
     private Long adOrganizationId;
-
+    
     public Long getId() {
         return id;
     }
@@ -41,22 +37,6 @@ public class CPrequalificationStepDTO extends AbstractAuditingDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public UUID getUid() {
@@ -92,11 +72,11 @@ public class CPrequalificationStepDTO extends AbstractAuditingDTO {
             return false;
         }
 
-        CPrequalificationStepDTO cPrequalificationStepDTO = (CPrequalificationStepDTO) o;
-        if (cPrequalificationStepDTO.getId() == null || getId() == null) {
+        CPrequalificationMethodDTO cPrequalificationMethodDTO = (CPrequalificationMethodDTO) o;
+        if (cPrequalificationMethodDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), cPrequalificationStepDTO.getId());
+        return Objects.equals(getId(), cPrequalificationMethodDTO.getId());
     }
 
     @Override
@@ -106,11 +86,9 @@ public class CPrequalificationStepDTO extends AbstractAuditingDTO {
 
     @Override
     public String toString() {
-        return "CPrequalificationStepDTO{" +
+        return "CPrequalificationMethodDTO{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", type='" + getType() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +

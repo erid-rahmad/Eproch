@@ -200,6 +200,8 @@
     <include file="config/liquibase/changelog/20210708140800_added_entity_MVendorPerformanceReport.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210712043900_added_entity_MBlacklist.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210712044000_added_entity_MBlacklistLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210713082800_added_entity_CPrequalificationMethod.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210713082900_added_entity_CPrequalMethodLine.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
@@ -380,5 +382,7 @@
     <include file="config/liquibase/changelog/20210708042100_added_entity_constraints_MComplaint.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210712043900_added_entity_constraints_MBlacklist.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210712044000_added_entity_constraints_MBlacklistLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210713082800_added_entity_constraints_CPrequalificationMethod.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210713082900_added_entity_constraints_CPrequalMethodLine.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

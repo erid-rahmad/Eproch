@@ -1,0 +1,11 @@
+id;type;weight;passing_grade;uid;active;ad_organization_id;prequal_method_id
+1;redundant ;4;33892;624329b9-85ff-4afc-9c65-fe6c75bad65b;true;1;1
+2;microchip;57;84945;edf192bd-7dc3-4f94-8a2a-cfbc9100f0d4;false;2;2
+3;Alley soli;54;49626;a0881421-5a4a-4c11-ab4d-a1a80489e1a3;true;3;3
+4;Future-pro;55;82350;f4053aef-33f2-4b47-b091-73a3f8a9bf63;true;4;4
+5;Antigua an;92;8300;4f26ef3a-541e-44ae-8958-e001b04cd1b6;false;5;5
+6;scalable;11;51827;bdf04a4f-445f-47ba-9451-33530a09e690;false;6;6
+7;Soft;64;54470;00868e3c-0852-4bcc-a870-0185192c090e;false;7;7
+8;Rubber inp;36;43607;f991327f-a65c-4c01-8e69-606c073d889d;false;8;8
+9;withdrawal;96;14341;964261fe-960f-46e1-bb4d-466269f299c5;true;9;9
+10;array;95;49290;0c8b62f7-e3e9-42e4-a3ed-f596d60395ec;false;10;10

@@ -2,23 +2,25 @@ package com.bhp.opusb.service.dto;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
 /**
- * A DTO for the {@link com.bhp.opusb.domain.CPrequalificationStep} entity.
+ * A DTO for the {@link com.bhp.opusb.domain.CPrequalMethodLine} entity.
  */
-public class CPrequalificationStepDTO extends AbstractAuditingDTO {
-
+public class CPrequalMethodLineDTO extends AbstractAuditingDTO implements Serializable {
+    
     private Long id;
 
     @NotNull
-    private String name;
-
-    @NotNull
-    private String description;
-
+    @Size(max = 10)
     private String type;
+
+    @DecimalMax(value = "100")
+    private BigDecimal weight;
+
+    private BigDecimal passingGrade;
 
     private UUID uid;
 
@@ -27,6 +29,8 @@ public class CPrequalificationStepDTO extends AbstractAuditingDTO {
 
     private Long adOrganizationId;
 
+    private Long prequalMethodId;
+    
     public Long getId() {
         return id;
     }
@@ -35,28 +39,28 @@ public class CPrequalificationStepDTO extends AbstractAuditingDTO {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getType() {
         return type;
     }
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public BigDecimal getWeight() {
+        return weight;
+    }
+
+    public void setWeight(BigDecimal weight) {
+        this.weight = weight;
+    }
+
+    public BigDecimal getPassingGrade() {
+        return passingGrade;
+    }
+
+    public void setPassingGrade(BigDecimal passingGrade) {
+        this.passingGrade = passingGrade;
     }
 
     public UUID getUid() {
@@ -83,6 +87,14 @@ public class CPrequalificationStepDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public Long getPrequalMethodId() {
+        return prequalMethodId;
+    }
+
+    public void setPrequalMethodId(Long cPrequalificationMethodId) {
+        this.prequalMethodId = cPrequalificationMethodId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -92,11 +104,11 @@ public class CPrequalificationStepDTO extends AbstractAuditingDTO {
             return false;
         }
 
-        CPrequalificationStepDTO cPrequalificationStepDTO = (CPrequalificationStepDTO) o;
-        if (cPrequalificationStepDTO.getId() == null || getId() == null) {
+        CPrequalMethodLineDTO cPrequalMethodLineDTO = (CPrequalMethodLineDTO) o;
+        if (cPrequalMethodLineDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), cPrequalificationStepDTO.getId());
+        return Objects.equals(getId(), cPrequalMethodLineDTO.getId());
     }
 
     @Override
@@ -106,14 +118,15 @@ public class CPrequalificationStepDTO extends AbstractAuditingDTO {
 
     @Override
     public String toString() {
-        return "CPrequalificationStepDTO{" +
+        return "CPrequalMethodLineDTO{" +
             "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", description='" + getDescription() + "'" +
             ", type='" + getType() + "'" +
+            ", weight=" + getWeight() +
+            ", passingGrade=" + getPassingGrade() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", prequalMethodId=" + getPrequalMethodId() +
             "}";
     }
 }

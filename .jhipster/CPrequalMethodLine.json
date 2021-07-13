@@ -1,23 +1,26 @@
 {
-    "name": "CPrequalificationStep",
+    "name": "CPrequalMethodLine",
     "fields": [
         {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "description",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "type",
-            "fieldType": "String"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "weight",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "max"
+            ],
+            "fieldValidateRulesMax": "100"
+        },
+        {
+            "fieldName": "passingGrade",
+            "fieldType": "BigDecimal"
         },
         {
             "fieldName": "uid",
@@ -32,14 +35,22 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "cPrequalificationStep",
+            "otherEntityRelationshipName": "cPrequalMethodLine",
             "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cPrequalificationMethod",
+            "otherEntityRelationshipName": "cPrequalMethodLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "prequalMethod",
+            "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20210511075600",
-    "entityTableName": "c_prequalification_step",
+    "changelogDate": "20210713082900",
+    "entityTableName": "c_prequal_method_line",
     "dto": "mapstruct",
     "pagination": "pagination",
     "service": "serviceClass",
