@@ -11,16 +11,16 @@
                 Back
             </el-button>
 
-            <el-button
-                v-if="submissionPage && isVendor"
-                :disabled="submitted"
-                size="mini"
-                type="primary"
-                @click="submitProposals"
-            >
-                <svg-icon name="guide"></svg-icon>
-                Submit
-            </el-button>
+<!--            <el-button-->
+<!--                v-if="submissionPage && isVendor"-->
+<!--                :disabled="submitted"-->
+<!--                size="mini"-->
+<!--                type="primary"-->
+<!--                @click="submitProposals"-->
+<!--            >-->
+<!--                <svg-icon name="guide"></svg-icon>-->
+<!--                Submit-->
+<!--            </el-button>-->
 
             <el-button
                 v-if="!submissionPage "
@@ -31,6 +31,17 @@
             >
                 <svg-icon name="icomoo/273-checkmark"></svg-icon>
                 Save
+            </el-button>
+
+            <el-button
+                v-if="!submissionPage "
+                :loading="loading"
+                size="mini"
+                type="primary"
+                @click="submitSaveProposal"
+            >
+                <svg-icon name="guide"></svg-icon>
+                Submit
             </el-button>
 
             <el-divider
@@ -46,8 +57,9 @@
                 type="primary"
                 @click="openProposalForm(proposal)"
             >
-                {{ printEvaluation(proposal.evaluationMethodLineEvaluation) }} Proposal
+                {{ printEvaluation(proposal.evaluationMethodLineEvaluation) }} Proposal tes
             </el-button>
+
         </div>
 
         <div class="card">

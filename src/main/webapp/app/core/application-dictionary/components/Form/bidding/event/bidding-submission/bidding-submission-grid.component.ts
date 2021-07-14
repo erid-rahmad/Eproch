@@ -100,6 +100,7 @@ export default class BiddingSubmissionGridComponent extends mixins( AlertMixin,A
               criteriaQuery: this.updateCriteria([
                 `biddingId.equals=${item.id}`,
                 `formType.equals=S1`
+
               ]),
               paginationQuery: {
                 page: 0,

@@ -28,6 +28,10 @@ public class MProposalPriceCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
+    private StringFilter documentAction;
+
+    private StringFilter documentStatus;
+
     private BigDecimalFilter proposedPrice;
 
     private BigDecimalFilter ceilingPrice;
@@ -47,6 +51,8 @@ public class MProposalPriceCriteria implements Serializable, Criteria {
 
     public MProposalPriceCriteria(MProposalPriceCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.documentAction = other.documentAction == null ? null : other.documentAction.copy();
+        this.documentStatus = other.documentStatus == null ? null : other.documentStatus.copy();
         this.proposedPrice = other.proposedPrice == null ? null : other.proposedPrice.copy();
         this.ceilingPrice = other.ceilingPrice == null ? null : other.ceilingPrice.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
@@ -67,6 +73,22 @@ public class MProposalPriceCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public StringFilter getDocumentAction() {
+        return documentAction;
+    }
+
+    public void setDocumentAction(StringFilter documentAction) {
+        this.documentAction = documentAction;
+    }
+
+    public StringFilter getDocumentStatus() {
+        return documentStatus;
+    }
+
+    public void setDocumentStatus(StringFilter documentStatus) {
+        this.documentStatus = documentStatus;
     }
 
     public BigDecimalFilter getProposedPrice() {
@@ -137,6 +159,8 @@ public class MProposalPriceCriteria implements Serializable, Criteria {
         final MProposalPriceCriteria that = (MProposalPriceCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(documentAction, that.documentAction) &&
+            Objects.equals(documentStatus, that.documentStatus) &&
             Objects.equals(proposedPrice, that.proposedPrice) &&
             Objects.equals(ceilingPrice, that.ceilingPrice) &&
             Objects.equals(uid, that.uid) &&
@@ -150,6 +174,8 @@ public class MProposalPriceCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
+        documentAction,
+        documentStatus,
         proposedPrice,
         ceilingPrice,
         uid,
@@ -164,6 +190,8 @@ public class MProposalPriceCriteria implements Serializable, Criteria {
     public String toString() {
         return "MProposalPriceCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (documentAction != null ? "documentAction=" + documentAction + ", " : "") +
+                (documentStatus != null ? "documentStatus=" + documentStatus + ", " : "") +
                 (proposedPrice != null ? "proposedPrice=" + proposedPrice + ", " : "") +
                 (ceilingPrice != null ? "ceilingPrice=" + ceilingPrice + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +

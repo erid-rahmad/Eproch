@@ -1,22 +1,15 @@
 package com.bhp.opusb.domain;
 
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import javax.validation.constraints.*;
+
+import java.io.Serializable;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * A MProposalTechnical.
@@ -30,6 +23,26 @@ public class MProposalTechnical extends AbstractAuditingEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
+
+    @Size(max = 10)
+    @Column(name = "document_action", length = 10)
+    private String documentAction;
+
+    @Size(max = 12)
+    @Column(name = "document_status", length = 12)
+    private String documentStatus;
+
+    @Column(name = "notes")
+    private String notes;
+
+    @Column(name = "evaluation")
+    private String evaluation;
+
+    @Column(name = "average_score")
+    private Integer averageScore;
+
+    @Column(name = "pass_fail")
+    private String passFail;
 
     @NotNull
     @Column(name = "answer", nullable = false)
@@ -66,6 +79,84 @@ public class MProposalTechnical extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getDocumentAction() {
+        return documentAction;
+    }
+
+    public MProposalTechnical documentAction(String documentAction) {
+        this.documentAction = documentAction;
+        return this;
+    }
+
+    public void setDocumentAction(String documentAction) {
+        this.documentAction = documentAction;
+    }
+
+    public String getDocumentStatus() {
+        return documentStatus;
+    }
+
+    public MProposalTechnical documentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
+        return this;
+    }
+
+    public void setDocumentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public MProposalTechnical notes(String notes) {
+        this.notes = notes;
+        return this;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getEvaluation() {
+        return evaluation;
+    }
+
+    public MProposalTechnical evaluation(String evaluation) {
+        this.evaluation = evaluation;
+        return this;
+    }
+
+    public void setEvaluation(String evaluation) {
+        this.evaluation = evaluation;
+    }
+
+    public Integer getAverageScore() {
+        return averageScore;
+    }
+
+    public MProposalTechnical averageScore(Integer averageScore) {
+        this.averageScore = averageScore;
+        return this;
+    }
+
+    public void setAverageScore(Integer averageScore) {
+        this.averageScore = averageScore;
+    }
+
+    public String getPassFail() {
+        return passFail;
+    }
+
+    public MProposalTechnical passFail(String passFail) {
+        this.passFail = passFail;
+        return this;
+    }
+
+    public void setPassFail(String passFail) {
+        this.passFail = passFail;
     }
 
     public String getAnswer() {
@@ -185,6 +276,12 @@ public class MProposalTechnical extends AbstractAuditingEntity {
     public String toString() {
         return "MProposalTechnical{" +
             "id=" + getId() +
+            ", documentAction='" + getDocumentAction() + "'" +
+            ", documentStatus='" + getDocumentStatus() + "'" +
+            ", notes='" + getNotes() + "'" +
+            ", evaluation='" + getEvaluation() + "'" +
+            ", averageScore=" + getAverageScore() +
+            ", passFail='" + getPassFail() + "'" +
             ", answer='" + getAnswer() + "'" +
             ", documentEvaluation='" + isDocumentEvaluation() + "'" +
             ", uid='" + getUid() + "'" +

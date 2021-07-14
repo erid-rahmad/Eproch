@@ -39,6 +39,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class MProposalTechnicalResourceIT {
 
+    private static final String DEFAULT_DOCUMENT_ACTION = "AAAAAAAAAA";
+    private static final String UPDATED_DOCUMENT_ACTION = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DOCUMENT_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_DOCUMENT_STATUS = "BBBBBBBBBB";
+
+    private static final String DEFAULT_NOTES = "AAAAAAAAAA";
+    private static final String UPDATED_NOTES = "BBBBBBBBBB";
+
+    private static final String DEFAULT_EVALUATION = "AAAAAAAAAA";
+    private static final String UPDATED_EVALUATION = "BBBBBBBBBB";
+
+    private static final Integer DEFAULT_AVERAGE_SCORE = 1;
+    private static final Integer UPDATED_AVERAGE_SCORE = 2;
+    private static final Integer SMALLER_AVERAGE_SCORE = 1 - 1;
+
+    private static final String DEFAULT_PASS_FAIL = "AAAAAAAAAA";
+    private static final String UPDATED_PASS_FAIL = "BBBBBBBBBB";
+
     private static final String DEFAULT_ANSWER = "AAAAAAAAAA";
     private static final String UPDATED_ANSWER = "BBBBBBBBBB";
 
@@ -79,6 +98,12 @@ public class MProposalTechnicalResourceIT {
      */
     public static MProposalTechnical createEntity(EntityManager em) {
         MProposalTechnical mProposalTechnical = new MProposalTechnical()
+            .documentAction(DEFAULT_DOCUMENT_ACTION)
+            .documentStatus(DEFAULT_DOCUMENT_STATUS)
+            .notes(DEFAULT_NOTES)
+            .evaluation(DEFAULT_EVALUATION)
+            .averageScore(DEFAULT_AVERAGE_SCORE)
+            .passFail(DEFAULT_PASS_FAIL)
             .answer(DEFAULT_ANSWER)
             .documentEvaluation(DEFAULT_DOCUMENT_EVALUATION)
             .uid(DEFAULT_UID)
@@ -123,6 +148,12 @@ public class MProposalTechnicalResourceIT {
      */
     public static MProposalTechnical createUpdatedEntity(EntityManager em) {
         MProposalTechnical mProposalTechnical = new MProposalTechnical()
+            .documentAction(UPDATED_DOCUMENT_ACTION)
+            .documentStatus(UPDATED_DOCUMENT_STATUS)
+            .notes(UPDATED_NOTES)
+            .evaluation(UPDATED_EVALUATION)
+            .averageScore(UPDATED_AVERAGE_SCORE)
+            .passFail(UPDATED_PASS_FAIL)
             .answer(UPDATED_ANSWER)
             .documentEvaluation(UPDATED_DOCUMENT_EVALUATION)
             .uid(UPDATED_UID)
@@ -181,6 +212,12 @@ public class MProposalTechnicalResourceIT {
         List<MProposalTechnical> mProposalTechnicalList = mProposalTechnicalRepository.findAll();
         assertThat(mProposalTechnicalList).hasSize(databaseSizeBeforeCreate + 1);
         MProposalTechnical testMProposalTechnical = mProposalTechnicalList.get(mProposalTechnicalList.size() - 1);
+        assertThat(testMProposalTechnical.getDocumentAction()).isEqualTo(DEFAULT_DOCUMENT_ACTION);
+        assertThat(testMProposalTechnical.getDocumentStatus()).isEqualTo(DEFAULT_DOCUMENT_STATUS);
+        assertThat(testMProposalTechnical.getNotes()).isEqualTo(DEFAULT_NOTES);
+        assertThat(testMProposalTechnical.getEvaluation()).isEqualTo(DEFAULT_EVALUATION);
+        assertThat(testMProposalTechnical.getAverageScore()).isEqualTo(DEFAULT_AVERAGE_SCORE);
+        assertThat(testMProposalTechnical.getPassFail()).isEqualTo(DEFAULT_PASS_FAIL);
         assertThat(testMProposalTechnical.getAnswer()).isEqualTo(DEFAULT_ANSWER);
         assertThat(testMProposalTechnical.isDocumentEvaluation()).isEqualTo(DEFAULT_DOCUMENT_EVALUATION);
         assertThat(testMProposalTechnical.getUid()).isEqualTo(DEFAULT_UID);
@@ -238,6 +275,12 @@ public class MProposalTechnicalResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mProposalTechnical.getId().intValue())))
+            .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
+            .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
+            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES)))
+            .andExpect(jsonPath("$.[*].evaluation").value(hasItem(DEFAULT_EVALUATION)))
+            .andExpect(jsonPath("$.[*].averageScore").value(hasItem(DEFAULT_AVERAGE_SCORE)))
+            .andExpect(jsonPath("$.[*].passFail").value(hasItem(DEFAULT_PASS_FAIL)))
             .andExpect(jsonPath("$.[*].answer").value(hasItem(DEFAULT_ANSWER)))
             .andExpect(jsonPath("$.[*].documentEvaluation").value(hasItem(DEFAULT_DOCUMENT_EVALUATION.booleanValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
@@ -255,6 +298,12 @@ public class MProposalTechnicalResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(mProposalTechnical.getId().intValue()))
+            .andExpect(jsonPath("$.documentAction").value(DEFAULT_DOCUMENT_ACTION))
+            .andExpect(jsonPath("$.documentStatus").value(DEFAULT_DOCUMENT_STATUS))
+            .andExpect(jsonPath("$.notes").value(DEFAULT_NOTES))
+            .andExpect(jsonPath("$.evaluation").value(DEFAULT_EVALUATION))
+            .andExpect(jsonPath("$.averageScore").value(DEFAULT_AVERAGE_SCORE))
+            .andExpect(jsonPath("$.passFail").value(DEFAULT_PASS_FAIL))
             .andExpect(jsonPath("$.answer").value(DEFAULT_ANSWER))
             .andExpect(jsonPath("$.documentEvaluation").value(DEFAULT_DOCUMENT_EVALUATION.booleanValue()))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
@@ -278,6 +327,501 @@ public class MProposalTechnicalResourceIT {
 
         defaultMProposalTechnicalShouldBeFound("id.lessThanOrEqual=" + id);
         defaultMProposalTechnicalShouldNotBeFound("id.lessThan=" + id);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByDocumentActionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where documentAction equals to DEFAULT_DOCUMENT_ACTION
+        defaultMProposalTechnicalShouldBeFound("documentAction.equals=" + DEFAULT_DOCUMENT_ACTION);
+
+        // Get all the mProposalTechnicalList where documentAction equals to UPDATED_DOCUMENT_ACTION
+        defaultMProposalTechnicalShouldNotBeFound("documentAction.equals=" + UPDATED_DOCUMENT_ACTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByDocumentActionIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where documentAction not equals to DEFAULT_DOCUMENT_ACTION
+        defaultMProposalTechnicalShouldNotBeFound("documentAction.notEquals=" + DEFAULT_DOCUMENT_ACTION);
+
+        // Get all the mProposalTechnicalList where documentAction not equals to UPDATED_DOCUMENT_ACTION
+        defaultMProposalTechnicalShouldBeFound("documentAction.notEquals=" + UPDATED_DOCUMENT_ACTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByDocumentActionIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where documentAction in DEFAULT_DOCUMENT_ACTION or UPDATED_DOCUMENT_ACTION
+        defaultMProposalTechnicalShouldBeFound("documentAction.in=" + DEFAULT_DOCUMENT_ACTION + "," + UPDATED_DOCUMENT_ACTION);
+
+        // Get all the mProposalTechnicalList where documentAction equals to UPDATED_DOCUMENT_ACTION
+        defaultMProposalTechnicalShouldNotBeFound("documentAction.in=" + UPDATED_DOCUMENT_ACTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByDocumentActionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where documentAction is not null
+        defaultMProposalTechnicalShouldBeFound("documentAction.specified=true");
+
+        // Get all the mProposalTechnicalList where documentAction is null
+        defaultMProposalTechnicalShouldNotBeFound("documentAction.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByDocumentActionContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where documentAction contains DEFAULT_DOCUMENT_ACTION
+        defaultMProposalTechnicalShouldBeFound("documentAction.contains=" + DEFAULT_DOCUMENT_ACTION);
+
+        // Get all the mProposalTechnicalList where documentAction contains UPDATED_DOCUMENT_ACTION
+        defaultMProposalTechnicalShouldNotBeFound("documentAction.contains=" + UPDATED_DOCUMENT_ACTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByDocumentActionNotContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where documentAction does not contain DEFAULT_DOCUMENT_ACTION
+        defaultMProposalTechnicalShouldNotBeFound("documentAction.doesNotContain=" + DEFAULT_DOCUMENT_ACTION);
+
+        // Get all the mProposalTechnicalList where documentAction does not contain UPDATED_DOCUMENT_ACTION
+        defaultMProposalTechnicalShouldBeFound("documentAction.doesNotContain=" + UPDATED_DOCUMENT_ACTION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByDocumentStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where documentStatus equals to DEFAULT_DOCUMENT_STATUS
+        defaultMProposalTechnicalShouldBeFound("documentStatus.equals=" + DEFAULT_DOCUMENT_STATUS);
+
+        // Get all the mProposalTechnicalList where documentStatus equals to UPDATED_DOCUMENT_STATUS
+        defaultMProposalTechnicalShouldNotBeFound("documentStatus.equals=" + UPDATED_DOCUMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByDocumentStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where documentStatus not equals to DEFAULT_DOCUMENT_STATUS
+        defaultMProposalTechnicalShouldNotBeFound("documentStatus.notEquals=" + DEFAULT_DOCUMENT_STATUS);
+
+        // Get all the mProposalTechnicalList where documentStatus not equals to UPDATED_DOCUMENT_STATUS
+        defaultMProposalTechnicalShouldBeFound("documentStatus.notEquals=" + UPDATED_DOCUMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByDocumentStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where documentStatus in DEFAULT_DOCUMENT_STATUS or UPDATED_DOCUMENT_STATUS
+        defaultMProposalTechnicalShouldBeFound("documentStatus.in=" + DEFAULT_DOCUMENT_STATUS + "," + UPDATED_DOCUMENT_STATUS);
+
+        // Get all the mProposalTechnicalList where documentStatus equals to UPDATED_DOCUMENT_STATUS
+        defaultMProposalTechnicalShouldNotBeFound("documentStatus.in=" + UPDATED_DOCUMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByDocumentStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where documentStatus is not null
+        defaultMProposalTechnicalShouldBeFound("documentStatus.specified=true");
+
+        // Get all the mProposalTechnicalList where documentStatus is null
+        defaultMProposalTechnicalShouldNotBeFound("documentStatus.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByDocumentStatusContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where documentStatus contains DEFAULT_DOCUMENT_STATUS
+        defaultMProposalTechnicalShouldBeFound("documentStatus.contains=" + DEFAULT_DOCUMENT_STATUS);
+
+        // Get all the mProposalTechnicalList where documentStatus contains UPDATED_DOCUMENT_STATUS
+        defaultMProposalTechnicalShouldNotBeFound("documentStatus.contains=" + UPDATED_DOCUMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByDocumentStatusNotContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where documentStatus does not contain DEFAULT_DOCUMENT_STATUS
+        defaultMProposalTechnicalShouldNotBeFound("documentStatus.doesNotContain=" + DEFAULT_DOCUMENT_STATUS);
+
+        // Get all the mProposalTechnicalList where documentStatus does not contain UPDATED_DOCUMENT_STATUS
+        defaultMProposalTechnicalShouldBeFound("documentStatus.doesNotContain=" + UPDATED_DOCUMENT_STATUS);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByNotesIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where notes equals to DEFAULT_NOTES
+        defaultMProposalTechnicalShouldBeFound("notes.equals=" + DEFAULT_NOTES);
+
+        // Get all the mProposalTechnicalList where notes equals to UPDATED_NOTES
+        defaultMProposalTechnicalShouldNotBeFound("notes.equals=" + UPDATED_NOTES);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByNotesIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where notes not equals to DEFAULT_NOTES
+        defaultMProposalTechnicalShouldNotBeFound("notes.notEquals=" + DEFAULT_NOTES);
+
+        // Get all the mProposalTechnicalList where notes not equals to UPDATED_NOTES
+        defaultMProposalTechnicalShouldBeFound("notes.notEquals=" + UPDATED_NOTES);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByNotesIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where notes in DEFAULT_NOTES or UPDATED_NOTES
+        defaultMProposalTechnicalShouldBeFound("notes.in=" + DEFAULT_NOTES + "," + UPDATED_NOTES);
+
+        // Get all the mProposalTechnicalList where notes equals to UPDATED_NOTES
+        defaultMProposalTechnicalShouldNotBeFound("notes.in=" + UPDATED_NOTES);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByNotesIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where notes is not null
+        defaultMProposalTechnicalShouldBeFound("notes.specified=true");
+
+        // Get all the mProposalTechnicalList where notes is null
+        defaultMProposalTechnicalShouldNotBeFound("notes.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByNotesContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where notes contains DEFAULT_NOTES
+        defaultMProposalTechnicalShouldBeFound("notes.contains=" + DEFAULT_NOTES);
+
+        // Get all the mProposalTechnicalList where notes contains UPDATED_NOTES
+        defaultMProposalTechnicalShouldNotBeFound("notes.contains=" + UPDATED_NOTES);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByNotesNotContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where notes does not contain DEFAULT_NOTES
+        defaultMProposalTechnicalShouldNotBeFound("notes.doesNotContain=" + DEFAULT_NOTES);
+
+        // Get all the mProposalTechnicalList where notes does not contain UPDATED_NOTES
+        defaultMProposalTechnicalShouldBeFound("notes.doesNotContain=" + UPDATED_NOTES);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByEvaluationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where evaluation equals to DEFAULT_EVALUATION
+        defaultMProposalTechnicalShouldBeFound("evaluation.equals=" + DEFAULT_EVALUATION);
+
+        // Get all the mProposalTechnicalList where evaluation equals to UPDATED_EVALUATION
+        defaultMProposalTechnicalShouldNotBeFound("evaluation.equals=" + UPDATED_EVALUATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByEvaluationIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where evaluation not equals to DEFAULT_EVALUATION
+        defaultMProposalTechnicalShouldNotBeFound("evaluation.notEquals=" + DEFAULT_EVALUATION);
+
+        // Get all the mProposalTechnicalList where evaluation not equals to UPDATED_EVALUATION
+        defaultMProposalTechnicalShouldBeFound("evaluation.notEquals=" + UPDATED_EVALUATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByEvaluationIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where evaluation in DEFAULT_EVALUATION or UPDATED_EVALUATION
+        defaultMProposalTechnicalShouldBeFound("evaluation.in=" + DEFAULT_EVALUATION + "," + UPDATED_EVALUATION);
+
+        // Get all the mProposalTechnicalList where evaluation equals to UPDATED_EVALUATION
+        defaultMProposalTechnicalShouldNotBeFound("evaluation.in=" + UPDATED_EVALUATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByEvaluationIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where evaluation is not null
+        defaultMProposalTechnicalShouldBeFound("evaluation.specified=true");
+
+        // Get all the mProposalTechnicalList where evaluation is null
+        defaultMProposalTechnicalShouldNotBeFound("evaluation.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByEvaluationContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where evaluation contains DEFAULT_EVALUATION
+        defaultMProposalTechnicalShouldBeFound("evaluation.contains=" + DEFAULT_EVALUATION);
+
+        // Get all the mProposalTechnicalList where evaluation contains UPDATED_EVALUATION
+        defaultMProposalTechnicalShouldNotBeFound("evaluation.contains=" + UPDATED_EVALUATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByEvaluationNotContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where evaluation does not contain DEFAULT_EVALUATION
+        defaultMProposalTechnicalShouldNotBeFound("evaluation.doesNotContain=" + DEFAULT_EVALUATION);
+
+        // Get all the mProposalTechnicalList where evaluation does not contain UPDATED_EVALUATION
+        defaultMProposalTechnicalShouldBeFound("evaluation.doesNotContain=" + UPDATED_EVALUATION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByAverageScoreIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where averageScore equals to DEFAULT_AVERAGE_SCORE
+        defaultMProposalTechnicalShouldBeFound("averageScore.equals=" + DEFAULT_AVERAGE_SCORE);
+
+        // Get all the mProposalTechnicalList where averageScore equals to UPDATED_AVERAGE_SCORE
+        defaultMProposalTechnicalShouldNotBeFound("averageScore.equals=" + UPDATED_AVERAGE_SCORE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByAverageScoreIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where averageScore not equals to DEFAULT_AVERAGE_SCORE
+        defaultMProposalTechnicalShouldNotBeFound("averageScore.notEquals=" + DEFAULT_AVERAGE_SCORE);
+
+        // Get all the mProposalTechnicalList where averageScore not equals to UPDATED_AVERAGE_SCORE
+        defaultMProposalTechnicalShouldBeFound("averageScore.notEquals=" + UPDATED_AVERAGE_SCORE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByAverageScoreIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where averageScore in DEFAULT_AVERAGE_SCORE or UPDATED_AVERAGE_SCORE
+        defaultMProposalTechnicalShouldBeFound("averageScore.in=" + DEFAULT_AVERAGE_SCORE + "," + UPDATED_AVERAGE_SCORE);
+
+        // Get all the mProposalTechnicalList where averageScore equals to UPDATED_AVERAGE_SCORE
+        defaultMProposalTechnicalShouldNotBeFound("averageScore.in=" + UPDATED_AVERAGE_SCORE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByAverageScoreIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where averageScore is not null
+        defaultMProposalTechnicalShouldBeFound("averageScore.specified=true");
+
+        // Get all the mProposalTechnicalList where averageScore is null
+        defaultMProposalTechnicalShouldNotBeFound("averageScore.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByAverageScoreIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where averageScore is greater than or equal to DEFAULT_AVERAGE_SCORE
+        defaultMProposalTechnicalShouldBeFound("averageScore.greaterThanOrEqual=" + DEFAULT_AVERAGE_SCORE);
+
+        // Get all the mProposalTechnicalList where averageScore is greater than or equal to UPDATED_AVERAGE_SCORE
+        defaultMProposalTechnicalShouldNotBeFound("averageScore.greaterThanOrEqual=" + UPDATED_AVERAGE_SCORE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByAverageScoreIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where averageScore is less than or equal to DEFAULT_AVERAGE_SCORE
+        defaultMProposalTechnicalShouldBeFound("averageScore.lessThanOrEqual=" + DEFAULT_AVERAGE_SCORE);
+
+        // Get all the mProposalTechnicalList where averageScore is less than or equal to SMALLER_AVERAGE_SCORE
+        defaultMProposalTechnicalShouldNotBeFound("averageScore.lessThanOrEqual=" + SMALLER_AVERAGE_SCORE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByAverageScoreIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where averageScore is less than DEFAULT_AVERAGE_SCORE
+        defaultMProposalTechnicalShouldNotBeFound("averageScore.lessThan=" + DEFAULT_AVERAGE_SCORE);
+
+        // Get all the mProposalTechnicalList where averageScore is less than UPDATED_AVERAGE_SCORE
+        defaultMProposalTechnicalShouldBeFound("averageScore.lessThan=" + UPDATED_AVERAGE_SCORE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByAverageScoreIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where averageScore is greater than DEFAULT_AVERAGE_SCORE
+        defaultMProposalTechnicalShouldNotBeFound("averageScore.greaterThan=" + DEFAULT_AVERAGE_SCORE);
+
+        // Get all the mProposalTechnicalList where averageScore is greater than SMALLER_AVERAGE_SCORE
+        defaultMProposalTechnicalShouldBeFound("averageScore.greaterThan=" + SMALLER_AVERAGE_SCORE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByPassFailIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where passFail equals to DEFAULT_PASS_FAIL
+        defaultMProposalTechnicalShouldBeFound("passFail.equals=" + DEFAULT_PASS_FAIL);
+
+        // Get all the mProposalTechnicalList where passFail equals to UPDATED_PASS_FAIL
+        defaultMProposalTechnicalShouldNotBeFound("passFail.equals=" + UPDATED_PASS_FAIL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByPassFailIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where passFail not equals to DEFAULT_PASS_FAIL
+        defaultMProposalTechnicalShouldNotBeFound("passFail.notEquals=" + DEFAULT_PASS_FAIL);
+
+        // Get all the mProposalTechnicalList where passFail not equals to UPDATED_PASS_FAIL
+        defaultMProposalTechnicalShouldBeFound("passFail.notEquals=" + UPDATED_PASS_FAIL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByPassFailIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where passFail in DEFAULT_PASS_FAIL or UPDATED_PASS_FAIL
+        defaultMProposalTechnicalShouldBeFound("passFail.in=" + DEFAULT_PASS_FAIL + "," + UPDATED_PASS_FAIL);
+
+        // Get all the mProposalTechnicalList where passFail equals to UPDATED_PASS_FAIL
+        defaultMProposalTechnicalShouldNotBeFound("passFail.in=" + UPDATED_PASS_FAIL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByPassFailIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where passFail is not null
+        defaultMProposalTechnicalShouldBeFound("passFail.specified=true");
+
+        // Get all the mProposalTechnicalList where passFail is null
+        defaultMProposalTechnicalShouldNotBeFound("passFail.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByPassFailContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where passFail contains DEFAULT_PASS_FAIL
+        defaultMProposalTechnicalShouldBeFound("passFail.contains=" + DEFAULT_PASS_FAIL);
+
+        // Get all the mProposalTechnicalList where passFail contains UPDATED_PASS_FAIL
+        defaultMProposalTechnicalShouldNotBeFound("passFail.contains=" + UPDATED_PASS_FAIL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalTechnicalsByPassFailNotContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalTechnicalRepository.saveAndFlush(mProposalTechnical);
+
+        // Get all the mProposalTechnicalList where passFail does not contain DEFAULT_PASS_FAIL
+        defaultMProposalTechnicalShouldNotBeFound("passFail.doesNotContain=" + DEFAULT_PASS_FAIL);
+
+        // Get all the mProposalTechnicalList where passFail does not contain UPDATED_PASS_FAIL
+        defaultMProposalTechnicalShouldBeFound("passFail.doesNotContain=" + UPDATED_PASS_FAIL);
     }
 
 
@@ -570,6 +1114,12 @@ public class MProposalTechnicalResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mProposalTechnical.getId().intValue())))
+            .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
+            .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
+            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES)))
+            .andExpect(jsonPath("$.[*].evaluation").value(hasItem(DEFAULT_EVALUATION)))
+            .andExpect(jsonPath("$.[*].averageScore").value(hasItem(DEFAULT_AVERAGE_SCORE)))
+            .andExpect(jsonPath("$.[*].passFail").value(hasItem(DEFAULT_PASS_FAIL)))
             .andExpect(jsonPath("$.[*].answer").value(hasItem(DEFAULT_ANSWER)))
             .andExpect(jsonPath("$.[*].documentEvaluation").value(hasItem(DEFAULT_DOCUMENT_EVALUATION.booleanValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
@@ -621,6 +1171,12 @@ public class MProposalTechnicalResourceIT {
         // Disconnect from session so that the updates on updatedMProposalTechnical are not directly saved in db
         em.detach(updatedMProposalTechnical);
         updatedMProposalTechnical
+            .documentAction(UPDATED_DOCUMENT_ACTION)
+            .documentStatus(UPDATED_DOCUMENT_STATUS)
+            .notes(UPDATED_NOTES)
+            .evaluation(UPDATED_EVALUATION)
+            .averageScore(UPDATED_AVERAGE_SCORE)
+            .passFail(UPDATED_PASS_FAIL)
             .answer(UPDATED_ANSWER)
             .documentEvaluation(UPDATED_DOCUMENT_EVALUATION)
             .uid(UPDATED_UID)
@@ -636,6 +1192,12 @@ public class MProposalTechnicalResourceIT {
         List<MProposalTechnical> mProposalTechnicalList = mProposalTechnicalRepository.findAll();
         assertThat(mProposalTechnicalList).hasSize(databaseSizeBeforeUpdate);
         MProposalTechnical testMProposalTechnical = mProposalTechnicalList.get(mProposalTechnicalList.size() - 1);
+        assertThat(testMProposalTechnical.getDocumentAction()).isEqualTo(UPDATED_DOCUMENT_ACTION);
+        assertThat(testMProposalTechnical.getDocumentStatus()).isEqualTo(UPDATED_DOCUMENT_STATUS);
+        assertThat(testMProposalTechnical.getNotes()).isEqualTo(UPDATED_NOTES);
+        assertThat(testMProposalTechnical.getEvaluation()).isEqualTo(UPDATED_EVALUATION);
+        assertThat(testMProposalTechnical.getAverageScore()).isEqualTo(UPDATED_AVERAGE_SCORE);
+        assertThat(testMProposalTechnical.getPassFail()).isEqualTo(UPDATED_PASS_FAIL);
         assertThat(testMProposalTechnical.getAnswer()).isEqualTo(UPDATED_ANSWER);
         assertThat(testMProposalTechnical.isDocumentEvaluation()).isEqualTo(UPDATED_DOCUMENT_EVALUATION);
         assertThat(testMProposalTechnical.getUid()).isEqualTo(UPDATED_UID);

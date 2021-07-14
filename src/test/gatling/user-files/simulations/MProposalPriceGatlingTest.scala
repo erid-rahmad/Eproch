@@ -72,6 +72,8 @@ class MProposalPriceGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "documentAction":"SAMPLE_TEXT"
+                , "documentStatus":"SAMPLE_TEXT"
                 , "proposedPrice":"0"
                 , "ceilingPrice":"0"
                 , "uid":null

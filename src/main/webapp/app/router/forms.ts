@@ -49,7 +49,7 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['prequalificationMethod', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/prequalification-method/product-catalog.vue')],
   ['biddingEvaluationTeam', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding/evaluation-team/evaluation-team.vue')],
   // ['biddingAgreement', () => import(/* webpackChunkName: "vendorManagement" */'@/core/application-dictionary/components/Form/bidding-agreement/index.vue')],
-
+  ['biddingEvaluationLanding', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-evaluation/bidding-evaluation-landing.vue')],
   // Bidding events.
   ['biddingAnnouncementForm', () => import(/* webpackChunkName: "biddingEvent" */'@/core/application-dictionary/components/Form/bidding/event/bidding-announcement/bidding-announcement.vue')],
   ['preBidMeeting', () => import(/* webpackChunkName: "biddingEvent" */'@/core/application-dictionary/components/Form/bidding/event/pre-bid-meeting/pre-bid-meeting.vue')],

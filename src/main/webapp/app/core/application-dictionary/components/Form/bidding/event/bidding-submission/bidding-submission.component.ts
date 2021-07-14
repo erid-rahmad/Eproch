@@ -81,7 +81,7 @@ export default class BiddingSubmissionEvent extends SubmissionProps {
   }
 
   onSubmissionFormLoaded(data: any) {
-    console.log("load onSubmissionFormLoaded")
+
     this.formType = data.formType;
     this.schedule = data;
 
@@ -90,13 +90,14 @@ export default class BiddingSubmissionEvent extends SubmissionProps {
   }
 
   created() {
+    console.log("this schedule",this.scheduleFromGrid)
     if (this.scheduleFromGrid){
       this.retrieveVendorScoringLines(this.scheduleFromGrid.biddingId,"S1");
     }
-    console.log("satu",this.scheduleFromGrid);
+
     const submissionId = (this.$route.query.submissionId as string);
     if (submissionId) {
-      console.log("dua")
+
       this.submission = {
         id: submissionId
       };
@@ -138,11 +139,16 @@ export default class BiddingSubmissionEvent extends SubmissionProps {
       })
       .then(res => {
         this.proposals = res.data;
+        console.log("res.data proposal ",res.data)
       })
   }
 
   saveProposal() {
     (<any>this.$refs.proposalForm).save();
+  }
+
+  submitSaveProposal() {
+    (<any>this.$refs.proposalForm).save('SMT');
   }
 
   submitProposals() {

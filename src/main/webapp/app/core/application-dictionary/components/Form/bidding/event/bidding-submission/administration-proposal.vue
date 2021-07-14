@@ -1,7 +1,7 @@
 <template>
     <div class="app-container">
         <el-divider content-position="left">
-            <h4>Administration Proposal</h4>
+            <h4>Administration Proposal </h4>
         </el-divider>
         <el-form ref="biddingInformation" label-position="left" label-width="200px" size="mini">
             <el-row :gutter="24">

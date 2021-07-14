@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity MProposalTechnical.
     -->
@@ -85,6 +85,28 @@
         <addColumn tableName="m_proposal_technical">
             <column name="bidding_sub_criteria_line_id" type="bigint">
                 <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="202108141157123" author="erid">
+        <addColumn tableName="m_proposal_technical">
+            <column name="document_action" type="varchar(10)">
+                <constraints nullable="true" />
+            </column>
+            <column name="document_status" type="varchar(12)">
+                <constraints nullable="true" />
+            </column>
+            <column name="notes" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="evaluation" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="average_score" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="pass_fail" type="varchar(255)">
+                <constraints nullable="true" />
             </column>
         </addColumn>
     </changeSet>

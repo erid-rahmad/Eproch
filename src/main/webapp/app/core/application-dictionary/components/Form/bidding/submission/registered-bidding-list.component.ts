@@ -43,7 +43,7 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
   schedule: any = {};
   selectedRow: any = {};
   evaluationList: any[] = [];
-  
+
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
@@ -238,6 +238,7 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
       })
       .then(res => {
         this.gridData = res.data;
+        console.log("this grid data",this.gridData)
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
 
@@ -258,6 +259,7 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
   }
 
   private retrieveVendorScoringLines(biddingId: number, formType: string) {
+    console.log("this retrive scorline",biddingId,formType)
     this.commonService(baseApiVendorScoringLine)
       .retrieve({
         criteriaQuery: [
@@ -281,6 +283,10 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
 
   saveProposal() {
     (<any>this.$refs.proposalForm).save();
+  }
+
+  SubmmitProposal() {
+    (<any>this.$refs.proposalForm).save('SMT');
   }
 
   submitProposals() {

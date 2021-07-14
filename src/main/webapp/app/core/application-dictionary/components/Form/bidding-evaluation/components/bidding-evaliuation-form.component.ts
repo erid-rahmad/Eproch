@@ -66,6 +66,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     this.evaluationResult=this.data.evaluationResult;
     this.evaluationFormProp.biddingSubmission=this.data.pickrow;
     this.evaluation=this.data.pickrow;
+    console.log("this data pickrow",this.data)
     this.handleButton();
     this.retrieveVendorScoring(this.evaluation.biddingId);
 
@@ -292,7 +293,8 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       .retrieve({
         criteriaQuery: [
           'active.equals=true',
-          `vendorScoringId.equals=${vendorScoringId}`
+          `vendorScoringId.equals=${vendorScoringId}`,
+          `formType.equals=${this.data.formType}`
         ],
         paginationQuery: {
           page: 0,

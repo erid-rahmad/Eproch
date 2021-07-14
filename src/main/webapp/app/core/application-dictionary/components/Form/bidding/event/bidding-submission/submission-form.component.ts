@@ -55,10 +55,13 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
   }
 
   protected onMainFormUpdated(_mainForm: any) {
-
     if (this.isVendor) {
       this.retrieveSubmission(AccountStoreModule.vendorInfo.id);
-      console.log("get isVendor")
+    }
+
+    if (!this.isVendor) {
+        this.retrieveJoinedVendors(_mainForm.biddingId);
+
     }
   }
 
@@ -86,11 +89,11 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
       }
     }, (60 - this.currentDate.getSeconds()) * 1000);
 
-    if (!this.isVendor) {
-      if (this.biddingScheduleId) {
-        this.retrieveJoinedVendors(this.biddingScheduleId);
-      }else { this.retrieveJoinedVendors(this.scheduleFromGrid.id)}
-    }
+    // if (!this.isVendor) {
+    //   if (this.biddingScheduleId) {
+    //     this.retrieveJoinedVendors(this.biddingScheduleId);
+    //   }else { this.retrieveJoinedVendors(this.scheduleFromGrid.id)}
+    // }
   }
 
   beforeDestroy() {
@@ -125,8 +128,9 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
       .retrieve({
         criteriaQuery: this.updateCriteria([
           'active.equals=1',
-          `biddingScheduleId.equals=${scheduleId}`,
-          'documentStatus.equals=SMT'
+          `biddingId.equals=${scheduleId}`,
+          // `biddingScheduleId.equals=${scheduleId}`,
+          // 'documentStatus.equals=SMT'
         ]),
         paginationQuery: {
           page: 0,

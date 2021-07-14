@@ -1,9 +1,9 @@
 package com.bhp.opusb.service.dto;
 
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MProposalTechnical} entity.
@@ -11,6 +11,20 @@ import javax.validation.constraints.NotNull;
 public class MProposalTechnicalDTO extends AbstractAuditingDTO {
 
     private Long id;
+
+    @Size(max = 10)
+    private String documentAction;
+
+    @Size(max = 12)
+    private String documentStatus;
+
+    private String notes;
+
+    private String evaluation;
+
+    private Integer averageScore;
+
+    private String passFail;
 
     @NotNull
     private String answer;
@@ -37,6 +51,54 @@ public class MProposalTechnicalDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getDocumentAction() {
+        return documentAction;
+    }
+
+    public void setDocumentAction(String documentAction) {
+        this.documentAction = documentAction;
+    }
+
+    public String getDocumentStatus() {
+        return documentStatus;
+    }
+
+    public void setDocumentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getEvaluation() {
+        return evaluation;
+    }
+
+    public void setEvaluation(String evaluation) {
+        this.evaluation = evaluation;
+    }
+
+    public Integer getAverageScore() {
+        return averageScore;
+    }
+
+    public void setAverageScore(Integer averageScore) {
+        this.averageScore = averageScore;
+    }
+
+    public String getPassFail() {
+        return passFail;
+    }
+
+    public void setPassFail(String passFail) {
+        this.passFail = passFail;
     }
 
     public String getAnswer() {
@@ -144,6 +206,12 @@ public class MProposalTechnicalDTO extends AbstractAuditingDTO {
     public String toString() {
         return "MProposalTechnicalDTO{" +
             "id=" + getId() +
+            ", documentAction='" + getDocumentAction() + "'" +
+            ", documentStatus='" + getDocumentStatus() + "'" +
+            ", notes='" + getNotes() + "'" +
+            ", evaluation='" + getEvaluation() + "'" +
+            ", averageScore=" + getAverageScore() +
+            ", passFail='" + getPassFail() + "'" +
             ", answer='" + getAnswer() + "'" +
             ", documentEvaluation='" + isDocumentEvaluation() + "'" +
             ", uid='" + getUid() + "'" +

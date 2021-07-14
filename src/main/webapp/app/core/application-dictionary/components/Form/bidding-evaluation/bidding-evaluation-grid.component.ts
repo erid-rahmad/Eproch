@@ -58,12 +58,13 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
       .then(res => {
 
         const data:any=[]
-        res.data.forEach(item=>{
-          this.commonService(baseApiBiddingSchedule)
+        res.data.forEach(async item=>{
+          await this.commonService(baseApiBiddingSchedule)
             .retrieve({
               criteriaQuery: this.updateCriteria([
                 `biddingId.equals=${item.id}`,
                 `formType.equals=E1`
+
               ]),
               paginationQuery: {
                 page: 0,
@@ -71,15 +72,40 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
                 sort: ['id']
               }
             })
-            .then(res1 =>{
+            .then(async res1 =>{
               const data1 = { ...res1.data[0]};
+              item.formType='S1';
               if (data1.actualStartDate){
-                data.push(item);
+                await data.push(item);
+              }
+            });
+
+
+
+          await this.commonService(baseApiBiddingSchedule)
+            .retrieve({
+              criteriaQuery: this.updateCriteria([
+                `biddingId.equals=${item.id}`,
+                `formType.equals=S3`
+              ]),
+              paginationQuery: {
+                page: 0,
+                size: 1,
+                sort: ['id']
+              }
+            })
+            .then(async res1 =>{
+              const data1 = { ...res1.data[0]};
+
+              if (data1.actualStartDate){
+                item.formType='S3';
+                await data.push(item);
               }
             });
         });
 
         this.bidding = data;
+        // this.bidding = res.data;
       })
       .finally(()=> this.loading=false);
   }
@@ -87,6 +113,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
   evaluate(row){
     this.index=1;
     this.pickRow=row;
+    console.log("log row",row)
   }
   result(row){
     this.index=2;

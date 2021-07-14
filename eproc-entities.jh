@@ -1392,6 +1392,12 @@ entity MContractDocument {
 entity MProposalAdministration {
 	answer String required
 	documentEvaluation Boolean
+	documentAction String  maxlength(10)
+    documentStatus String  maxlength(12)
+    notes String
+    evaluation String
+    averageScore Integer
+    passFail String
 
 	uid UUID
 	active Boolean
@@ -1403,6 +1409,8 @@ entity MProposalAdministrationFile {
 }
 
 entity MProposalPrice {
+	documentAction String  maxlength(10)
+	documentStatus String  maxlength(12)
 	proposedPrice BigDecimal required
 	ceilingPrice BigDecimal required
 
@@ -1426,6 +1434,12 @@ entity MProposalPriceSubItem {
 }
 
 entity MProposalTechnical {
+	documentAction String  maxlength(10)
+	documentStatus String  maxlength(12)
+	notes String
+    evaluation String
+    averageScore Integer
+    passFail String
 	answer String required
 	documentEvaluation Boolean
 

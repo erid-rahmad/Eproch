@@ -45,7 +45,7 @@
                 </div>
                 <div class="tombolaction">
                     <el-button class="button"  type="primary" @click="goprice(row)">
-                        Price Proposal
+                        Price Proposal JJ
                     </el-button>
                 </div>
             </div>
@@ -78,7 +78,7 @@
   font-size: 16px;
   cursor: pointer;
   text-align: center;
-     
+
     }
 
 </style>

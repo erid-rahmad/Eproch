@@ -2,6 +2,38 @@
     "name": "MProposalTechnical",
     "fields": [
         {
+            "fieldName": "documentAction",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "documentStatus",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "12"
+        },
+        {
+            "fieldName": "notes",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "evaluation",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "averageScore",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "passFail",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "answer",
             "fieldType": "String",
             "fieldValidateRules": [

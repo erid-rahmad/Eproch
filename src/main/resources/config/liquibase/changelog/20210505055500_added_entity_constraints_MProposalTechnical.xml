@@ -7,7 +7,7 @@
         Added the constraints for entity MProposalTechnical.
     -->
     <changeSet id="20210505055500-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="ad_organization_id"
                                  baseTableName="m_proposal_technical"
                                  constraintName="fk_m_proposal_technical_ad_organization_id"
@@ -23,7 +23,7 @@
     </changeSet>
 
     <changeSet id="20210511054800" author="Ananta Aryadewa">
-        
+
         <addForeignKeyConstraint baseColumnNames="bidding_sub_criteria_line_id"
                                  baseTableName="m_proposal_technical"
                                  constraintName="fk_m_proposal_technical_bidding_sub_criteria_line_id"

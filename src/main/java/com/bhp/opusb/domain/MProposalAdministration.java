@@ -1,22 +1,15 @@
 package com.bhp.opusb.domain;
 
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import javax.validation.constraints.*;
+
+import java.io.Serializable;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * A MProposalAdministration.
@@ -37,6 +30,26 @@ public class MProposalAdministration extends AbstractAuditingEntity {
 
     @Column(name = "document_evaluation")
     private Boolean documentEvaluation;
+
+    @Size(max = 10)
+    @Column(name = "document_action", length = 10)
+    private String documentAction;
+
+    @Size(max = 12)
+    @Column(name = "document_status", length = 12)
+    private String documentStatus;
+
+    @Column(name = "notes")
+    private String notes;
+
+    @Column(name = "evaluation")
+    private String evaluation;
+
+    @Column(name = "average_score")
+    private Integer averageScore;
+
+    @Column(name = "pass_fail")
+    private String passFail;
 
     @Column(name = "uid")
     private UUID uid;
@@ -92,6 +105,84 @@ public class MProposalAdministration extends AbstractAuditingEntity {
 
     public void setDocumentEvaluation(Boolean documentEvaluation) {
         this.documentEvaluation = documentEvaluation;
+    }
+
+    public String getDocumentAction() {
+        return documentAction;
+    }
+
+    public MProposalAdministration documentAction(String documentAction) {
+        this.documentAction = documentAction;
+        return this;
+    }
+
+    public void setDocumentAction(String documentAction) {
+        this.documentAction = documentAction;
+    }
+
+    public String getDocumentStatus() {
+        return documentStatus;
+    }
+
+    public MProposalAdministration documentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
+        return this;
+    }
+
+    public void setDocumentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public MProposalAdministration notes(String notes) {
+        this.notes = notes;
+        return this;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getEvaluation() {
+        return evaluation;
+    }
+
+    public MProposalAdministration evaluation(String evaluation) {
+        this.evaluation = evaluation;
+        return this;
+    }
+
+    public void setEvaluation(String evaluation) {
+        this.evaluation = evaluation;
+    }
+
+    public Integer getAverageScore() {
+        return averageScore;
+    }
+
+    public MProposalAdministration averageScore(Integer averageScore) {
+        this.averageScore = averageScore;
+        return this;
+    }
+
+    public void setAverageScore(Integer averageScore) {
+        this.averageScore = averageScore;
+    }
+
+    public String getPassFail() {
+        return passFail;
+    }
+
+    public MProposalAdministration passFail(String passFail) {
+        this.passFail = passFail;
+        return this;
+    }
+
+    public void setPassFail(String passFail) {
+        this.passFail = passFail;
     }
 
     public UUID getUid() {
@@ -187,6 +278,12 @@ public class MProposalAdministration extends AbstractAuditingEntity {
             "id=" + getId() +
             ", answer='" + getAnswer() + "'" +
             ", documentEvaluation='" + isDocumentEvaluation() + "'" +
+            ", documentAction='" + getDocumentAction() + "'" +
+            ", documentStatus='" + getDocumentStatus() + "'" +
+            ", notes='" + getNotes() + "'" +
+            ", evaluation='" + getEvaluation() + "'" +
+            ", averageScore=" + getAverageScore() +
+            ", passFail='" + getPassFail() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

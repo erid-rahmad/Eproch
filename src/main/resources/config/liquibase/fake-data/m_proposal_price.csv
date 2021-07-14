@@ -1,11 +1,11 @@
-id;proposed_price;ceiling_price;uid;active;bidding_submission_id;ad_organization_id;attachment_id
-1;91471;13372;64c0b410-cf64-4c7e-9768-5c7710aff863;true;1;1;1
-2;7933;30418;469acdcb-8e8f-4dcb-8af5-f8babbd7f375;true;2;2;2
-3;28198;36211;631df30b-f1af-4010-8c72-7cc116c42458;false;3;3;3
-4;56165;28094;def7bf2d-81ae-428b-b5f8-33c19e5a9c24;false;4;4;4
-5;48792;32870;47d6aa47-8a34-4d4f-93cf-954e390a8833;true;5;5;5
-6;82625;86026;66dfd684-bc07-4034-a9dd-14118dbdb275;false;6;6;6
-7;96683;77368;57e0ea54-6114-4bcd-a58d-e12164ea86c9;false;7;7;7
-8;90064;54196;eaceb153-d8fb-414c-83df-2a1a25d72a82;true;8;8;8
-9;7550;1741;609276dd-cd85-4091-bc93-abba7adb43d7;true;9;9;9
-10;62157;85309;bb4315c3-b6d3-46e1-88a3-344d5c01fee1;false;10;10;10
+id;document_action;document_status;proposed_price;ceiling_price;uid;active;bidding_submission_id;ad_organization_id;attachment_id
+1;Cotton pro;parse;41682;26044;c7ed7685-c771-40af-b863-814469acdcb8;true;1;1;1
+2;Assistant ;invoice;34560;99316;8babbd7f-375c-4456-b1df-30bf1af0104c;false;2;2;2
+3;Square;Steel schema;27203;34561;8784def7-bf2d-481a-a28b-f5f833c19e5a;true;3;3;3
+4;Gloves Mul;ADP payment;28544;44948;8a34d4f9-3cf9-454e-b90a-8833cdd66dfd;false;4;4;4
+5;non-volati;Electronics ;58284;81496;d14118db-db27-450f-857e-0ea546114bcd;false;5;5;5
+6;Suriname S;Fantastic;26273;91901;a86c90e8-eace-4b15-bd8f-b14cc3df2a1a;false;6;6;6
+7;indexing;payment;15802;77207;10609276-ddcd-4850-91fc-93abba7adb43;true;7;7;7
+8;Communicat;content-base;87312;22939;6e108a33-44d5-4c01-bee1-370d72bcac0c;false;8;8;8
+9;Chair;compressing;80584;95710;8e101073-4b77-4728-aa53-0a21a70d7ac1;false;9;9;9
+10;Haven Secu;Grove Switch;27651;40773;6c3852f3-e0cc-43eb-8045-f03ca26f3928;false;10;10;10

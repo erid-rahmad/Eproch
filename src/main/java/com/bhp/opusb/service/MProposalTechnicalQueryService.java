@@ -91,6 +91,24 @@ public class MProposalTechnicalQueryService extends QueryService<MProposalTechni
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), MProposalTechnical_.id));
             }
+            if (criteria.getDocumentAction() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDocumentAction(), MProposalTechnical_.documentAction));
+            }
+            if (criteria.getDocumentStatus() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDocumentStatus(), MProposalTechnical_.documentStatus));
+            }
+            if (criteria.getNotes() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getNotes(), MProposalTechnical_.notes));
+            }
+            if (criteria.getEvaluation() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getEvaluation(), MProposalTechnical_.evaluation));
+            }
+            if (criteria.getAverageScore() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getAverageScore(), MProposalTechnical_.averageScore));
+            }
+            if (criteria.getPassFail() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getPassFail(), MProposalTechnical_.passFail));
+            }
             if (criteria.getAnswer() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getAnswer(), MProposalTechnical_.answer));
             }

@@ -45,6 +45,25 @@ public class MProposalAdministrationResourceIT {
     private static final Boolean DEFAULT_DOCUMENT_EVALUATION = false;
     private static final Boolean UPDATED_DOCUMENT_EVALUATION = true;
 
+    private static final String DEFAULT_DOCUMENT_ACTION = "AAAAAAAAAA";
+    private static final String UPDATED_DOCUMENT_ACTION = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DOCUMENT_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_DOCUMENT_STATUS = "BBBBBBBBBB";
+
+    private static final String DEFAULT_NOTES = "AAAAAAAAAA";
+    private static final String UPDATED_NOTES = "BBBBBBBBBB";
+
+    private static final String DEFAULT_EVALUATION = "AAAAAAAAAA";
+    private static final String UPDATED_EVALUATION = "BBBBBBBBBB";
+
+    private static final Integer DEFAULT_AVERAGE_SCORE = 1;
+    private static final Integer UPDATED_AVERAGE_SCORE = 2;
+    private static final Integer SMALLER_AVERAGE_SCORE = 1 - 1;
+
+    private static final String DEFAULT_PASS_FAIL = "AAAAAAAAAA";
+    private static final String UPDATED_PASS_FAIL = "BBBBBBBBBB";
+
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
@@ -81,6 +100,12 @@ public class MProposalAdministrationResourceIT {
         MProposalAdministration mProposalAdministration = new MProposalAdministration()
             .answer(DEFAULT_ANSWER)
             .documentEvaluation(DEFAULT_DOCUMENT_EVALUATION)
+            .documentAction(DEFAULT_DOCUMENT_ACTION)
+            .documentStatus(DEFAULT_DOCUMENT_STATUS)
+            .notes(DEFAULT_NOTES)
+            .evaluation(DEFAULT_EVALUATION)
+            .averageScore(DEFAULT_AVERAGE_SCORE)
+            .passFail(DEFAULT_PASS_FAIL)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -125,6 +150,12 @@ public class MProposalAdministrationResourceIT {
         MProposalAdministration mProposalAdministration = new MProposalAdministration()
             .answer(UPDATED_ANSWER)
             .documentEvaluation(UPDATED_DOCUMENT_EVALUATION)
+            .documentAction(UPDATED_DOCUMENT_ACTION)
+            .documentStatus(UPDATED_DOCUMENT_STATUS)
+            .notes(UPDATED_NOTES)
+            .evaluation(UPDATED_EVALUATION)
+            .averageScore(UPDATED_AVERAGE_SCORE)
+            .passFail(UPDATED_PASS_FAIL)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -183,6 +214,12 @@ public class MProposalAdministrationResourceIT {
         MProposalAdministration testMProposalAdministration = mProposalAdministrationList.get(mProposalAdministrationList.size() - 1);
         assertThat(testMProposalAdministration.getAnswer()).isEqualTo(DEFAULT_ANSWER);
         assertThat(testMProposalAdministration.isDocumentEvaluation()).isEqualTo(DEFAULT_DOCUMENT_EVALUATION);
+        assertThat(testMProposalAdministration.getDocumentAction()).isEqualTo(DEFAULT_DOCUMENT_ACTION);
+        assertThat(testMProposalAdministration.getDocumentStatus()).isEqualTo(DEFAULT_DOCUMENT_STATUS);
+        assertThat(testMProposalAdministration.getNotes()).isEqualTo(DEFAULT_NOTES);
+        assertThat(testMProposalAdministration.getEvaluation()).isEqualTo(DEFAULT_EVALUATION);
+        assertThat(testMProposalAdministration.getAverageScore()).isEqualTo(DEFAULT_AVERAGE_SCORE);
+        assertThat(testMProposalAdministration.getPassFail()).isEqualTo(DEFAULT_PASS_FAIL);
         assertThat(testMProposalAdministration.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testMProposalAdministration.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -229,6 +266,25 @@ public class MProposalAdministrationResourceIT {
 
     @Test
     @Transactional
+    public void checkEvaluationIsRequired() throws Exception {
+        int databaseSizeBeforeTest = mProposalAdministrationRepository.findAll().size();
+        // set the field null
+        mProposalAdministration.setEvaluation(null);
+
+        // Create the MProposalAdministration, which fails.
+        MProposalAdministrationDTO mProposalAdministrationDTO = mProposalAdministrationMapper.toDto(mProposalAdministration);
+
+        restMProposalAdministrationMockMvc.perform(post("/api/m-proposal-administrations")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(mProposalAdministrationDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<MProposalAdministration> mProposalAdministrationList = mProposalAdministrationRepository.findAll();
+        assertThat(mProposalAdministrationList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllMProposalAdministrations() throws Exception {
         // Initialize the database
         mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
@@ -240,10 +296,16 @@ public class MProposalAdministrationResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(mProposalAdministration.getId().intValue())))
             .andExpect(jsonPath("$.[*].answer").value(hasItem(DEFAULT_ANSWER)))
             .andExpect(jsonPath("$.[*].documentEvaluation").value(hasItem(DEFAULT_DOCUMENT_EVALUATION.booleanValue())))
+            .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
+            .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
+            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES)))
+            .andExpect(jsonPath("$.[*].evaluation").value(hasItem(DEFAULT_EVALUATION)))
+            .andExpect(jsonPath("$.[*].averageScore").value(hasItem(DEFAULT_AVERAGE_SCORE)))
+            .andExpect(jsonPath("$.[*].passFail").value(hasItem(DEFAULT_PASS_FAIL)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getMProposalAdministration() throws Exception {
@@ -257,6 +319,12 @@ public class MProposalAdministrationResourceIT {
             .andExpect(jsonPath("$.id").value(mProposalAdministration.getId().intValue()))
             .andExpect(jsonPath("$.answer").value(DEFAULT_ANSWER))
             .andExpect(jsonPath("$.documentEvaluation").value(DEFAULT_DOCUMENT_EVALUATION.booleanValue()))
+            .andExpect(jsonPath("$.documentAction").value(DEFAULT_DOCUMENT_ACTION))
+            .andExpect(jsonPath("$.documentStatus").value(DEFAULT_DOCUMENT_STATUS))
+            .andExpect(jsonPath("$.notes").value(DEFAULT_NOTES))
+            .andExpect(jsonPath("$.evaluation").value(DEFAULT_EVALUATION))
+            .andExpect(jsonPath("$.averageScore").value(DEFAULT_AVERAGE_SCORE))
+            .andExpect(jsonPath("$.passFail").value(DEFAULT_PASS_FAIL))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -410,6 +478,501 @@ public class MProposalAdministrationResourceIT {
         // Get all the mProposalAdministrationList where documentEvaluation is null
         defaultMProposalAdministrationShouldNotBeFound("documentEvaluation.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByDocumentActionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where documentAction equals to DEFAULT_DOCUMENT_ACTION
+        defaultMProposalAdministrationShouldBeFound("documentAction.equals=" + DEFAULT_DOCUMENT_ACTION);
+
+        // Get all the mProposalAdministrationList where documentAction equals to UPDATED_DOCUMENT_ACTION
+        defaultMProposalAdministrationShouldNotBeFound("documentAction.equals=" + UPDATED_DOCUMENT_ACTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByDocumentActionIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where documentAction not equals to DEFAULT_DOCUMENT_ACTION
+        defaultMProposalAdministrationShouldNotBeFound("documentAction.notEquals=" + DEFAULT_DOCUMENT_ACTION);
+
+        // Get all the mProposalAdministrationList where documentAction not equals to UPDATED_DOCUMENT_ACTION
+        defaultMProposalAdministrationShouldBeFound("documentAction.notEquals=" + UPDATED_DOCUMENT_ACTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByDocumentActionIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where documentAction in DEFAULT_DOCUMENT_ACTION or UPDATED_DOCUMENT_ACTION
+        defaultMProposalAdministrationShouldBeFound("documentAction.in=" + DEFAULT_DOCUMENT_ACTION + "," + UPDATED_DOCUMENT_ACTION);
+
+        // Get all the mProposalAdministrationList where documentAction equals to UPDATED_DOCUMENT_ACTION
+        defaultMProposalAdministrationShouldNotBeFound("documentAction.in=" + UPDATED_DOCUMENT_ACTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByDocumentActionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where documentAction is not null
+        defaultMProposalAdministrationShouldBeFound("documentAction.specified=true");
+
+        // Get all the mProposalAdministrationList where documentAction is null
+        defaultMProposalAdministrationShouldNotBeFound("documentAction.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByDocumentActionContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where documentAction contains DEFAULT_DOCUMENT_ACTION
+        defaultMProposalAdministrationShouldBeFound("documentAction.contains=" + DEFAULT_DOCUMENT_ACTION);
+
+        // Get all the mProposalAdministrationList where documentAction contains UPDATED_DOCUMENT_ACTION
+        defaultMProposalAdministrationShouldNotBeFound("documentAction.contains=" + UPDATED_DOCUMENT_ACTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByDocumentActionNotContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where documentAction does not contain DEFAULT_DOCUMENT_ACTION
+        defaultMProposalAdministrationShouldNotBeFound("documentAction.doesNotContain=" + DEFAULT_DOCUMENT_ACTION);
+
+        // Get all the mProposalAdministrationList where documentAction does not contain UPDATED_DOCUMENT_ACTION
+        defaultMProposalAdministrationShouldBeFound("documentAction.doesNotContain=" + UPDATED_DOCUMENT_ACTION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByDocumentStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where documentStatus equals to DEFAULT_DOCUMENT_STATUS
+        defaultMProposalAdministrationShouldBeFound("documentStatus.equals=" + DEFAULT_DOCUMENT_STATUS);
+
+        // Get all the mProposalAdministrationList where documentStatus equals to UPDATED_DOCUMENT_STATUS
+        defaultMProposalAdministrationShouldNotBeFound("documentStatus.equals=" + UPDATED_DOCUMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByDocumentStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where documentStatus not equals to DEFAULT_DOCUMENT_STATUS
+        defaultMProposalAdministrationShouldNotBeFound("documentStatus.notEquals=" + DEFAULT_DOCUMENT_STATUS);
+
+        // Get all the mProposalAdministrationList where documentStatus not equals to UPDATED_DOCUMENT_STATUS
+        defaultMProposalAdministrationShouldBeFound("documentStatus.notEquals=" + UPDATED_DOCUMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByDocumentStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where documentStatus in DEFAULT_DOCUMENT_STATUS or UPDATED_DOCUMENT_STATUS
+        defaultMProposalAdministrationShouldBeFound("documentStatus.in=" + DEFAULT_DOCUMENT_STATUS + "," + UPDATED_DOCUMENT_STATUS);
+
+        // Get all the mProposalAdministrationList where documentStatus equals to UPDATED_DOCUMENT_STATUS
+        defaultMProposalAdministrationShouldNotBeFound("documentStatus.in=" + UPDATED_DOCUMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByDocumentStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where documentStatus is not null
+        defaultMProposalAdministrationShouldBeFound("documentStatus.specified=true");
+
+        // Get all the mProposalAdministrationList where documentStatus is null
+        defaultMProposalAdministrationShouldNotBeFound("documentStatus.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByDocumentStatusContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where documentStatus contains DEFAULT_DOCUMENT_STATUS
+        defaultMProposalAdministrationShouldBeFound("documentStatus.contains=" + DEFAULT_DOCUMENT_STATUS);
+
+        // Get all the mProposalAdministrationList where documentStatus contains UPDATED_DOCUMENT_STATUS
+        defaultMProposalAdministrationShouldNotBeFound("documentStatus.contains=" + UPDATED_DOCUMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByDocumentStatusNotContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where documentStatus does not contain DEFAULT_DOCUMENT_STATUS
+        defaultMProposalAdministrationShouldNotBeFound("documentStatus.doesNotContain=" + DEFAULT_DOCUMENT_STATUS);
+
+        // Get all the mProposalAdministrationList where documentStatus does not contain UPDATED_DOCUMENT_STATUS
+        defaultMProposalAdministrationShouldBeFound("documentStatus.doesNotContain=" + UPDATED_DOCUMENT_STATUS);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByNotesIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where notes equals to DEFAULT_NOTES
+        defaultMProposalAdministrationShouldBeFound("notes.equals=" + DEFAULT_NOTES);
+
+        // Get all the mProposalAdministrationList where notes equals to UPDATED_NOTES
+        defaultMProposalAdministrationShouldNotBeFound("notes.equals=" + UPDATED_NOTES);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByNotesIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where notes not equals to DEFAULT_NOTES
+        defaultMProposalAdministrationShouldNotBeFound("notes.notEquals=" + DEFAULT_NOTES);
+
+        // Get all the mProposalAdministrationList where notes not equals to UPDATED_NOTES
+        defaultMProposalAdministrationShouldBeFound("notes.notEquals=" + UPDATED_NOTES);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByNotesIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where notes in DEFAULT_NOTES or UPDATED_NOTES
+        defaultMProposalAdministrationShouldBeFound("notes.in=" + DEFAULT_NOTES + "," + UPDATED_NOTES);
+
+        // Get all the mProposalAdministrationList where notes equals to UPDATED_NOTES
+        defaultMProposalAdministrationShouldNotBeFound("notes.in=" + UPDATED_NOTES);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByNotesIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where notes is not null
+        defaultMProposalAdministrationShouldBeFound("notes.specified=true");
+
+        // Get all the mProposalAdministrationList where notes is null
+        defaultMProposalAdministrationShouldNotBeFound("notes.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByNotesContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where notes contains DEFAULT_NOTES
+        defaultMProposalAdministrationShouldBeFound("notes.contains=" + DEFAULT_NOTES);
+
+        // Get all the mProposalAdministrationList where notes contains UPDATED_NOTES
+        defaultMProposalAdministrationShouldNotBeFound("notes.contains=" + UPDATED_NOTES);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByNotesNotContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where notes does not contain DEFAULT_NOTES
+        defaultMProposalAdministrationShouldNotBeFound("notes.doesNotContain=" + DEFAULT_NOTES);
+
+        // Get all the mProposalAdministrationList where notes does not contain UPDATED_NOTES
+        defaultMProposalAdministrationShouldBeFound("notes.doesNotContain=" + UPDATED_NOTES);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByEvaluationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where evaluation equals to DEFAULT_EVALUATION
+        defaultMProposalAdministrationShouldBeFound("evaluation.equals=" + DEFAULT_EVALUATION);
+
+        // Get all the mProposalAdministrationList where evaluation equals to UPDATED_EVALUATION
+        defaultMProposalAdministrationShouldNotBeFound("evaluation.equals=" + UPDATED_EVALUATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByEvaluationIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where evaluation not equals to DEFAULT_EVALUATION
+        defaultMProposalAdministrationShouldNotBeFound("evaluation.notEquals=" + DEFAULT_EVALUATION);
+
+        // Get all the mProposalAdministrationList where evaluation not equals to UPDATED_EVALUATION
+        defaultMProposalAdministrationShouldBeFound("evaluation.notEquals=" + UPDATED_EVALUATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByEvaluationIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where evaluation in DEFAULT_EVALUATION or UPDATED_EVALUATION
+        defaultMProposalAdministrationShouldBeFound("evaluation.in=" + DEFAULT_EVALUATION + "," + UPDATED_EVALUATION);
+
+        // Get all the mProposalAdministrationList where evaluation equals to UPDATED_EVALUATION
+        defaultMProposalAdministrationShouldNotBeFound("evaluation.in=" + UPDATED_EVALUATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByEvaluationIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where evaluation is not null
+        defaultMProposalAdministrationShouldBeFound("evaluation.specified=true");
+
+        // Get all the mProposalAdministrationList where evaluation is null
+        defaultMProposalAdministrationShouldNotBeFound("evaluation.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByEvaluationContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where evaluation contains DEFAULT_EVALUATION
+        defaultMProposalAdministrationShouldBeFound("evaluation.contains=" + DEFAULT_EVALUATION);
+
+        // Get all the mProposalAdministrationList where evaluation contains UPDATED_EVALUATION
+        defaultMProposalAdministrationShouldNotBeFound("evaluation.contains=" + UPDATED_EVALUATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByEvaluationNotContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where evaluation does not contain DEFAULT_EVALUATION
+        defaultMProposalAdministrationShouldNotBeFound("evaluation.doesNotContain=" + DEFAULT_EVALUATION);
+
+        // Get all the mProposalAdministrationList where evaluation does not contain UPDATED_EVALUATION
+        defaultMProposalAdministrationShouldBeFound("evaluation.doesNotContain=" + UPDATED_EVALUATION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByAverageScoreIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where averageScore equals to DEFAULT_AVERAGE_SCORE
+        defaultMProposalAdministrationShouldBeFound("averageScore.equals=" + DEFAULT_AVERAGE_SCORE);
+
+        // Get all the mProposalAdministrationList where averageScore equals to UPDATED_AVERAGE_SCORE
+        defaultMProposalAdministrationShouldNotBeFound("averageScore.equals=" + UPDATED_AVERAGE_SCORE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByAverageScoreIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where averageScore not equals to DEFAULT_AVERAGE_SCORE
+        defaultMProposalAdministrationShouldNotBeFound("averageScore.notEquals=" + DEFAULT_AVERAGE_SCORE);
+
+        // Get all the mProposalAdministrationList where averageScore not equals to UPDATED_AVERAGE_SCORE
+        defaultMProposalAdministrationShouldBeFound("averageScore.notEquals=" + UPDATED_AVERAGE_SCORE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByAverageScoreIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where averageScore in DEFAULT_AVERAGE_SCORE or UPDATED_AVERAGE_SCORE
+        defaultMProposalAdministrationShouldBeFound("averageScore.in=" + DEFAULT_AVERAGE_SCORE + "," + UPDATED_AVERAGE_SCORE);
+
+        // Get all the mProposalAdministrationList where averageScore equals to UPDATED_AVERAGE_SCORE
+        defaultMProposalAdministrationShouldNotBeFound("averageScore.in=" + UPDATED_AVERAGE_SCORE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByAverageScoreIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where averageScore is not null
+        defaultMProposalAdministrationShouldBeFound("averageScore.specified=true");
+
+        // Get all the mProposalAdministrationList where averageScore is null
+        defaultMProposalAdministrationShouldNotBeFound("averageScore.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByAverageScoreIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where averageScore is greater than or equal to DEFAULT_AVERAGE_SCORE
+        defaultMProposalAdministrationShouldBeFound("averageScore.greaterThanOrEqual=" + DEFAULT_AVERAGE_SCORE);
+
+        // Get all the mProposalAdministrationList where averageScore is greater than or equal to UPDATED_AVERAGE_SCORE
+        defaultMProposalAdministrationShouldNotBeFound("averageScore.greaterThanOrEqual=" + UPDATED_AVERAGE_SCORE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByAverageScoreIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where averageScore is less than or equal to DEFAULT_AVERAGE_SCORE
+        defaultMProposalAdministrationShouldBeFound("averageScore.lessThanOrEqual=" + DEFAULT_AVERAGE_SCORE);
+
+        // Get all the mProposalAdministrationList where averageScore is less than or equal to SMALLER_AVERAGE_SCORE
+        defaultMProposalAdministrationShouldNotBeFound("averageScore.lessThanOrEqual=" + SMALLER_AVERAGE_SCORE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByAverageScoreIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where averageScore is less than DEFAULT_AVERAGE_SCORE
+        defaultMProposalAdministrationShouldNotBeFound("averageScore.lessThan=" + DEFAULT_AVERAGE_SCORE);
+
+        // Get all the mProposalAdministrationList where averageScore is less than UPDATED_AVERAGE_SCORE
+        defaultMProposalAdministrationShouldBeFound("averageScore.lessThan=" + UPDATED_AVERAGE_SCORE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByAverageScoreIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where averageScore is greater than DEFAULT_AVERAGE_SCORE
+        defaultMProposalAdministrationShouldNotBeFound("averageScore.greaterThan=" + DEFAULT_AVERAGE_SCORE);
+
+        // Get all the mProposalAdministrationList where averageScore is greater than SMALLER_AVERAGE_SCORE
+        defaultMProposalAdministrationShouldBeFound("averageScore.greaterThan=" + SMALLER_AVERAGE_SCORE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByPassFailIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where passFail equals to DEFAULT_PASS_FAIL
+        defaultMProposalAdministrationShouldBeFound("passFail.equals=" + DEFAULT_PASS_FAIL);
+
+        // Get all the mProposalAdministrationList where passFail equals to UPDATED_PASS_FAIL
+        defaultMProposalAdministrationShouldNotBeFound("passFail.equals=" + UPDATED_PASS_FAIL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByPassFailIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where passFail not equals to DEFAULT_PASS_FAIL
+        defaultMProposalAdministrationShouldNotBeFound("passFail.notEquals=" + DEFAULT_PASS_FAIL);
+
+        // Get all the mProposalAdministrationList where passFail not equals to UPDATED_PASS_FAIL
+        defaultMProposalAdministrationShouldBeFound("passFail.notEquals=" + UPDATED_PASS_FAIL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByPassFailIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where passFail in DEFAULT_PASS_FAIL or UPDATED_PASS_FAIL
+        defaultMProposalAdministrationShouldBeFound("passFail.in=" + DEFAULT_PASS_FAIL + "," + UPDATED_PASS_FAIL);
+
+        // Get all the mProposalAdministrationList where passFail equals to UPDATED_PASS_FAIL
+        defaultMProposalAdministrationShouldNotBeFound("passFail.in=" + UPDATED_PASS_FAIL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByPassFailIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where passFail is not null
+        defaultMProposalAdministrationShouldBeFound("passFail.specified=true");
+
+        // Get all the mProposalAdministrationList where passFail is null
+        defaultMProposalAdministrationShouldNotBeFound("passFail.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByPassFailContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where passFail contains DEFAULT_PASS_FAIL
+        defaultMProposalAdministrationShouldBeFound("passFail.contains=" + DEFAULT_PASS_FAIL);
+
+        // Get all the mProposalAdministrationList where passFail contains UPDATED_PASS_FAIL
+        defaultMProposalAdministrationShouldNotBeFound("passFail.contains=" + UPDATED_PASS_FAIL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByPassFailNotContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+
+        // Get all the mProposalAdministrationList where passFail does not contain DEFAULT_PASS_FAIL
+        defaultMProposalAdministrationShouldNotBeFound("passFail.doesNotContain=" + DEFAULT_PASS_FAIL);
+
+        // Get all the mProposalAdministrationList where passFail does not contain UPDATED_PASS_FAIL
+        defaultMProposalAdministrationShouldBeFound("passFail.doesNotContain=" + UPDATED_PASS_FAIL);
+    }
+
 
     @Test
     @Transactional
@@ -572,6 +1135,12 @@ public class MProposalAdministrationResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(mProposalAdministration.getId().intValue())))
             .andExpect(jsonPath("$.[*].answer").value(hasItem(DEFAULT_ANSWER)))
             .andExpect(jsonPath("$.[*].documentEvaluation").value(hasItem(DEFAULT_DOCUMENT_EVALUATION.booleanValue())))
+            .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
+            .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
+            .andExpect(jsonPath("$.[*].notes").value(hasItem(DEFAULT_NOTES)))
+            .andExpect(jsonPath("$.[*].evaluation").value(hasItem(DEFAULT_EVALUATION)))
+            .andExpect(jsonPath("$.[*].averageScore").value(hasItem(DEFAULT_AVERAGE_SCORE)))
+            .andExpect(jsonPath("$.[*].passFail").value(hasItem(DEFAULT_PASS_FAIL)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -623,6 +1192,12 @@ public class MProposalAdministrationResourceIT {
         updatedMProposalAdministration
             .answer(UPDATED_ANSWER)
             .documentEvaluation(UPDATED_DOCUMENT_EVALUATION)
+            .documentAction(UPDATED_DOCUMENT_ACTION)
+            .documentStatus(UPDATED_DOCUMENT_STATUS)
+            .notes(UPDATED_NOTES)
+            .evaluation(UPDATED_EVALUATION)
+            .averageScore(UPDATED_AVERAGE_SCORE)
+            .passFail(UPDATED_PASS_FAIL)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         MProposalAdministrationDTO mProposalAdministrationDTO = mProposalAdministrationMapper.toDto(updatedMProposalAdministration);
@@ -638,6 +1213,12 @@ public class MProposalAdministrationResourceIT {
         MProposalAdministration testMProposalAdministration = mProposalAdministrationList.get(mProposalAdministrationList.size() - 1);
         assertThat(testMProposalAdministration.getAnswer()).isEqualTo(UPDATED_ANSWER);
         assertThat(testMProposalAdministration.isDocumentEvaluation()).isEqualTo(UPDATED_DOCUMENT_EVALUATION);
+        assertThat(testMProposalAdministration.getDocumentAction()).isEqualTo(UPDATED_DOCUMENT_ACTION);
+        assertThat(testMProposalAdministration.getDocumentStatus()).isEqualTo(UPDATED_DOCUMENT_STATUS);
+        assertThat(testMProposalAdministration.getNotes()).isEqualTo(UPDATED_NOTES);
+        assertThat(testMProposalAdministration.getEvaluation()).isEqualTo(UPDATED_EVALUATION);
+        assertThat(testMProposalAdministration.getAverageScore()).isEqualTo(UPDATED_AVERAGE_SCORE);
+        assertThat(testMProposalAdministration.getPassFail()).isEqualTo(UPDATED_PASS_FAIL);
         assertThat(testMProposalAdministration.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testMProposalAdministration.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

@@ -1,11 +1,11 @@
-id;answer;document_evaluation;uid;active;ad_organization_id;bidding_submission_id;bidding_sub_criteria_line_id
-1;black;true;30c4137c-3a98-475e-a5f7-f9a3845f0587;false;1;1;1
-2;content;true;6cdec32e-51fc-4068-9db0-b746a45e9298;true;2;2;2
-3;Security Gorgeous;false;1f744ca4-bbd3-4478-8f56-92bd9ac094f2;true;3;3;3
-4;Alaska Cheese;true;1d082918-fead-43a1-ba43-2f57cb8e1b0e;false;4;4;4
-5;optical generate 24/7;true;a570258a-927b-481b-b01a-54ba9e01a5f8;true;5;5;5
-6;Expressway Handmade Concrete Keyboard Handcrafted Steel Towels;false;0db6cdaf-0491-4075-8a2a-cabec31ad0fc;false;6;6;6
-7;orchid;false;e8aad6a5-e692-474e-9e17-bfbafb6a129b;true;7;7;7
-8;Tanzanian Shilling Metal;true;36aff1a1-9b96-44b9-b35f-c96c8187cfa9;false;8;8;8
-9;bluetooth Vanuatu Configurable;true;83f88f61-62c0-4877-aadc-6bacff125a16;false;9;9;9
-10;bluetooth;true;fd20708c-f7e5-4860-a68b-acf9b0806bd2;false;10;10;10
+id;answer;document_evaluation;document_action;document_status;notes;evaluation;average_score;pass_fail;uid;active;ad_organization_id;bidding_submission_id;bidding_sub_criteria_line_id
+1;black;true;Licensed C;users;Naira;Harbors Regional;37470;Vista Credit Card Account sky blue;45f05872-0678-46cd-ac32-e51fc0681db0;true;1;1;1
+2;groupware withdrawal;false;Savings Ac;Ergonomic cl;Face to face synthesize;monitor;86037;homogeneous;8cf5692b-d9ac-4094-b2d7-902cc1d08291;true;2;2;2
+3;Dynamic SSL deposit;false;concept Ch;generate Bra;Secured optical generate;Kids;66824;Alley Pants;8a927b81-b701-4a54-ba9e-01a5f8ec731b;false;3;3;3
+4;Handcrafted Steel Towels;false;USB;optical Pall;local;Practical Plastic Towels;67497;Syrian Pound;abec31ad-0fc6-4339-9e8a-ad6a5e69274e;false;4;4;4
+5;Practical Soft Sausages calculate Developer;false;Rustic Pen;bypassing pa;Representative Handcrafted;Credit Card Account;60913;optimal Hawaii;35fc96c8-187c-4fa9-bbca-8f41c83f88f6;false;5;5;5
+6;Soft Sleek Cotton Shoes;false;synthesizi;Executive Pl;web-readiness bluetooth;Accountability Steel;48915;Saint Pierre and Miquelon;f7e58606-68ba-4cf9-b080-6bd227a63fdf;true;6;6;6
+7;Handcrafted Rubber Fish Intelligent Metal Shirt;true;backing up;calculate Re;feed;enhance Fantastic Plastic Sausages;52875;Wooden engage;2be8aa52-87d9-4d29-876f-62c0805d510f;true;7;7;7
+8;payment;true;Berkshire ;Communicatio;open system Usability;intermediate Customer;84161;holistic;530c592d-4140-4c10-a5df-5379064bbeb4;true;8;8;8
+9;Facilitator;true;EXE;Zambia Regio;wireless;Sleek;8529;Baht;eaec3cb8-6b67-4b33-97bd-f26384069413;true;9;9;9
+10;interface Granite;false;JSON Turkm;New Leu;SMS;primary mobile platforms;16148;Executive array;31b5e49f-8d6b-4b59-bb38-e91f7cbebae6;true;10;10;10

@@ -27,7 +27,7 @@ const PriceProposalProp = Vue.extend({
 
     },
     scheduleFromGrid:Object,
-    disabled: Boolean,
+
     loading: Boolean,
 
     schedule: {
@@ -61,6 +61,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
   private limit: number = 1;
   private formData:any={};
   private file: any = {};
+  disabled:boolean=true;
   attachmentFormVisible = false;
 
   private lineCache: Map<number, any> = new Map();
@@ -169,7 +170,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
   }
 
   onUploadSuccess(response, file, fileList) {
-    console.log("this response",response)
+
     this.formData.attachment = response.attachment;
     this.formData.attachmentId = response.attachment.id;
     this.formData.attachmentName = response.attachment.fileName;
@@ -217,6 +218,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
   }
 
   get isVendor() {
+   
     return AccountStoreModule.isVendor;
   }
 
@@ -265,7 +267,10 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
   }
 
   created() {
-    console.log("this price proposal",this.scheduleFromGrid)
+    if (this.isVendor){
+      this.disabled=false;
+    }
+
     this.timerId = setTimeout(() => {
       this.intervalId = setInterval(this.updateCurrentDate, 60000);
       this.updateCurrentDate();
@@ -353,7 +358,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
     if(this.scheduleFromGrid){
       biddingId=this.scheduleFromGrid.biddingId;
     }
-    console.log("retrieveBiddingLines",biddingId)
+
     return new Promise((resolve, reject) => {
       this.loadingLines = true;
       this.commonService(baseApiLines)
@@ -425,7 +430,12 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
       .then(res => {
         if (res.data.length) {
           this.mainForm = { ...this.mainForm, ...res.data[0] };
+
           this.retrieveProposedLines(this.mainForm.id);
+        }
+
+        if (this.mainForm.documentStatus=='SMT'){
+          this.disabled=true;
         }
       });
   }
@@ -443,22 +453,26 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
         }
       })
       .then(res => {
-        console.log("this res",res.data);
+
 
         (res.data as any[]).forEach(line => {
-          console.log("this line",line);
+
           const item = this.lineCache.get(line.biddingLineId);
           item.document=line.document;
           item.id=line.id;
           item.deliveryDate = line.deliveryDate;
           item.proposedPrice = line.proposedPrice;
           item.totalPriceSubmission = item.quantity * line.proposedPrice;
-          console.log("this item",item);
+
         })
       })
   }
   // attachmentId=this.formData.attachmentId,
-  save() {
+  save(status) {
+    if(status){
+      this.mainForm.documentStatus=status;
+
+    }
     this.$emit('update:loading', true);
     let valid = true;
     const data = (({
@@ -466,7 +480,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
       adOrganizationId,
       ceilingPrice,
       proposedPrice,
-
+                     documentStatus,
       proposalPriceLines
     }) => ({
       id,
@@ -475,7 +489,8 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
       attachmentId:this.mainForm.attachmentId,
       ceilingPrice,
       proposedPrice,
-      proposalPriceLines
+      proposalPriceLines,
+      documentStatus
     }))(this.mainForm);
 
     // Validate the header.
@@ -491,6 +506,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
           .create(data)
           .then(_res => {
             this.$message.success('Price proposal has been saved successfully');
+            this.retrieveProposal(this.submissionId);
           })
           .catch(err => {
             console.error('Failed to save the proposal. %O', err);

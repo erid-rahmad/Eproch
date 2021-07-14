@@ -1,11 +1,11 @@
-id;answer;document_evaluation;uid;active;ad_organization_id;bidding_submission_id;bidding_sub_criteria_line_id
-1;invoice;true;b4ea8f7b-bf79-4970-91fb-4717a1472cc5;true;1;1;1
-2;seize Savings Account;false;7b27aee8-eb68-49d5-afe3-f244d5429748;true;2;2;2
-3;Gorgeous Designer;true;4a83774f-b861-4646-87cd-779b413b7ddd;false;3;3;3
-4;Sleek infomediaries;false;a799031a-a2bd-4680-977e-dcf1c25a2dae;true;4;4;4
-5;Handmade quantify radical;false;c09ef51d-c6d5-4df3-bf92-fe5f7bfe6e0f;true;5;5;5
-6;protocol systemic;false;9eb1a9cd-9e3f-4c27-9f43-cb32ce60ab66;false;6;6;6
-7;Investor;true;6bbc5213-3465-4c5f-8282-a0b9db3d776a;true;7;7;7
-8;Checking Account Syrian Pound maroon;true;511a0408-582f-4df8-8301-202a80139e79;true;8;8;8
-9;hack;false;637ac117-c29a-4f03-97b2-43c0a07baa47;true;9;9;9
-10;Metrics Jewelery directional;true;edf79df1-797a-4780-a2e1-c679170182e5;false;10;10;10
+id;document_action;document_status;notes;evaluation;average_score;pass_fail;answer;document_evaluation;uid;active;ad_organization_id;bidding_submission_id;bidding_sub_criteria_line_id
+1;invoice;port Dynamic;monitor Administrator;Investment Account Tools;8711;Euro Court Radial;Networked;false;cc5c5659-267b-427a-ae8e-b689d52fe3f2;false;1;1;1
+2;copying;Rubber;intangible Home Loan Account;zero defect;55510;multimedia Hawaii supply-chains;Developer;true;61646c7c-d779-4b41-bb7d-dd57187b6a79;true;2;2;2
+3;Cross-plat;deposit bus;Aruba Missouri;Internal mobile;8755;Plastic deposit quantifying;payment Handmade quantify;false;c1c09ef5-1dc6-4d5d-b37f-92fe5f7bfe6e;false;3;3;3
+4;quantifyin;Washington h;Pennsylvania generating;User-centric digital Path;95639;ivory;purple reboot utilize;true;b6611e98-6bbc-4521-b346-5c5f8282a0b9;true;4;4;4
+5;Synergisti;Web Handcraf;Ergonomic;Gorgeous Steel Towels efficient Chips;85134;Borders Ameliorated Wooden;Tuna;true;0139e79f-5c26-4637-ac11-7c29af0357b2;false;5;5;5
+6;auxiliary;Grocery alar;Multi-lateral Palau Metrics;virtual;28565;Internal Optimization;JBOD Practical Rubber Shoes;true;780e2e1c-6791-4701-82e5-2cf038d16e3f;true;6;6;6
+7;Investor S;Spurs;synthesizing Wooden Personal Loan Account;IB Fantastic;95737;Central;Fresh deploy;true;74075a1e-2eff-4814-9be1-32d5111eaeee;false;7;7;7
+8;haptic rec;Visionary;Marketing Frozen;bricks-and-clicks;23728;secondary Stream withdrawal;functionalities optical;false;2b7b7ab8-cee6-4dc9-b5e7-ff8ce1b05071;false;8;8;8
+9;Jordan Gor;revolutioniz;dynamic;grey;48576;orchid wireless Rustic Concrete Fish;Montana Global Clothing;true;f882cf7d-7626-4bd3-8a61-d4db9de09d7b;true;9;9;9
+10;Cambridges;mesh;user-centric;Product;68349;Cambridgeshire;Generic Soft Keyboard Mobility;false;ea89836e-526f-42de-8d3b-3c985471dcd2;false;10;10;10

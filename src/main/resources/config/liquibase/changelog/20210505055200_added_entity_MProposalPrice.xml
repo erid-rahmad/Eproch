@@ -86,5 +86,15 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet id="202108141150123" author="erid">
+        <addColumn tableName="m_proposal_price">
+            <column name="document_action" type="varchar(10)">
+                <constraints nullable="true" />
+            </column>
+            <column name="document_status" type="varchar(12)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>

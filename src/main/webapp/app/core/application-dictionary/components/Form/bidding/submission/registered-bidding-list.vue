@@ -32,7 +32,7 @@
       </el-button>
 
       <el-button
-        v-if="!mainPage && !submissionPage && !submitted"
+        v-if="!mainPage && !submissionPage "
         :loading="loading"
         size="mini"
         type="primary"
@@ -40,6 +40,16 @@
       >
         <svg-icon name="icomoo/273-checkmark"></svg-icon> Save
       </el-button>
+
+        <el-button
+            v-if="!mainPage && !submissionPage "
+            :loading="loading"
+            size="mini"
+            type="primary"
+            @click="SubmmitProposal"
+        >
+            <svg-icon name="guide"></svg-icon> Submit
+        </el-button>
 
       <el-divider
         v-if="!mainPage"

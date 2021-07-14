@@ -48,13 +48,13 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
 
-    url: jdbc:postgresql://10.71.5.58:5435/eproc_demo
-    username: dbdemo
-    password: AMU53cKgS0Q6cJi
+#    url: jdbc:postgresql://10.71.5.58:5435/eproc_demo
+#    username: dbdemo
+#    password: AMU53cKgS0Q6cJi
 
-#    url: jdbc:postgresql://localhost:5432/DEVELOP
-#    username: postgres
-#    password: root
+    url: jdbc:postgresql://localhost:5432/dev4
+    username: postgres
+    password: root
 
     hikari:
       poolName: Hikari

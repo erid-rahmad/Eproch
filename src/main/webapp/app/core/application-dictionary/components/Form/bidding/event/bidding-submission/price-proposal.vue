@@ -133,13 +133,13 @@
                         ></el-input>
                     </el-form-item>
                     <el-form-item  label="Attachment" style="margin-top: .5rem">
-                        <el-button v-if="!hasAttachment && isVendor" :disabled="disabled" size="mini" type="primary" @click="attachmentFormVisible = true">
+                        <el-button v-if="!hasAttachment && isVendor" :disabled="disabled"  size="mini" type="primary" @click="attachmentFormVisible = true">
                             <svg-icon name="icomoo/206-attachment"></svg-icon> Attachment
                         </el-button>
                         <el-button v-if="hasAttachment" icon="el-icon-view" size="mini" type="primary" @click="handlePreview">
                             {{ mainForm.attachmentName }}
                         </el-button>
-                        <el-button v-if="hasAttachment && isVendor"  :disabled="disabled" icon="el-icon-close" size="mini" type="primary" @click="cancelAttachment"></el-button>
+                        <el-button v-if="hasAttachment && isVendor"  :disabled="disabled"  icon="el-icon-close" size="mini" type="primary" @click="cancelAttachment"></el-button>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -255,7 +255,8 @@
                                 v-model="row.proposedPrice"
                                 v-inputmask="{ alias: 'currency' }"
                                 :class="{ 'is-error': row.proposedPriceError }"
-                                :disabled="disabled"
+                                :disabled="(disabled)"
+
                                 size="mini"
                                 @change="value => onProposedPriceChange(row, $index, value)"
                             ></el-input>
@@ -287,7 +288,8 @@
                                 :ref="`deliveryDate${$index}`"
                                 v-model="row.deliveryDate"
                                 :class="{ 'is-error': row.deliveryDateError }"
-                                :disabled="disabled"
+                                :disabled="(disabled)"
+
                                 :format="dateDisplayFormat"
                                 :value-format="dateValueFormat"
                                 class="form-input"

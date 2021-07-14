@@ -1,11 +1,10 @@
 package com.bhp.opusb.service.mapper;
 
 
-import com.bhp.opusb.domain.MProposalTechnical;
+import com.bhp.opusb.domain.*;
 import com.bhp.opusb.service.dto.MProposalTechnicalDTO;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 /**
  * Mapper for the entity {@link MProposalTechnical} and its DTO {@link MProposalTechnicalDTO}.

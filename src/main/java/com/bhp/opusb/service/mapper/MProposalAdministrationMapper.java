@@ -1,11 +1,10 @@
 package com.bhp.opusb.service.mapper;
 
 
-import com.bhp.opusb.domain.MProposalAdministration;
+import com.bhp.opusb.domain.*;
 import com.bhp.opusb.service.dto.MProposalAdministrationDTO;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 /**
  * Mapper for the entity {@link MProposalAdministration} and its DTO {@link MProposalAdministrationDTO}.
@@ -14,11 +13,8 @@ import org.mapstruct.Mapping;
 public interface MProposalAdministrationMapper extends EntityMapper<MProposalAdministrationDTO, MProposalAdministration> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
-    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "biddingSubmission.id", target = "biddingSubmissionId")
-    @Mapping(source = "biddingSubmission.bidding.name", target = "biddingSubmissionName")
     @Mapping(source = "biddingSubCriteriaLine.id", target = "biddingSubCriteriaLineId")
-    @Mapping(source = "biddingSubCriteriaLine.name", target = "biddingSubCriteriaLineName")
     MProposalAdministrationDTO toDto(MProposalAdministration mProposalAdministration);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")

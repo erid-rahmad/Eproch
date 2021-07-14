@@ -97,6 +97,24 @@ public class MProposalAdministrationQueryService extends QueryService<MProposalA
             if (criteria.getDocumentEvaluation() != null) {
                 specification = specification.and(buildSpecification(criteria.getDocumentEvaluation(), MProposalAdministration_.documentEvaluation));
             }
+            if (criteria.getDocumentAction() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDocumentAction(), MProposalAdministration_.documentAction));
+            }
+            if (criteria.getDocumentStatus() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDocumentStatus(), MProposalAdministration_.documentStatus));
+            }
+            if (criteria.getNotes() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getNotes(), MProposalAdministration_.notes));
+            }
+            if (criteria.getEvaluation() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getEvaluation(), MProposalAdministration_.evaluation));
+            }
+            if (criteria.getAverageScore() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getAverageScore(), MProposalAdministration_.averageScore));
+            }
+            if (criteria.getPassFail() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getPassFail(), MProposalAdministration_.passFail));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), MProposalAdministration_.uid));
             }

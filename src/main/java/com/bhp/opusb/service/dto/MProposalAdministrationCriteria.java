@@ -2,10 +2,12 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.FloatFilter;
+import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
@@ -29,6 +31,18 @@ public class MProposalAdministrationCriteria implements Serializable, Criteria {
 
     private BooleanFilter documentEvaluation;
 
+    private StringFilter documentAction;
+
+    private StringFilter documentStatus;
+
+    private StringFilter notes;
+
+    private StringFilter evaluation;
+
+    private IntegerFilter averageScore;
+
+    private StringFilter passFail;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -46,6 +60,12 @@ public class MProposalAdministrationCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.answer = other.answer == null ? null : other.answer.copy();
         this.documentEvaluation = other.documentEvaluation == null ? null : other.documentEvaluation.copy();
+        this.documentAction = other.documentAction == null ? null : other.documentAction.copy();
+        this.documentStatus = other.documentStatus == null ? null : other.documentStatus.copy();
+        this.notes = other.notes == null ? null : other.notes.copy();
+        this.evaluation = other.evaluation == null ? null : other.evaluation.copy();
+        this.averageScore = other.averageScore == null ? null : other.averageScore.copy();
+        this.passFail = other.passFail == null ? null : other.passFail.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -80,6 +100,54 @@ public class MProposalAdministrationCriteria implements Serializable, Criteria {
 
     public void setDocumentEvaluation(BooleanFilter documentEvaluation) {
         this.documentEvaluation = documentEvaluation;
+    }
+
+    public StringFilter getDocumentAction() {
+        return documentAction;
+    }
+
+    public void setDocumentAction(StringFilter documentAction) {
+        this.documentAction = documentAction;
+    }
+
+    public StringFilter getDocumentStatus() {
+        return documentStatus;
+    }
+
+    public void setDocumentStatus(StringFilter documentStatus) {
+        this.documentStatus = documentStatus;
+    }
+
+    public StringFilter getNotes() {
+        return notes;
+    }
+
+    public void setNotes(StringFilter notes) {
+        this.notes = notes;
+    }
+
+    public StringFilter getEvaluation() {
+        return evaluation;
+    }
+
+    public void setEvaluation(StringFilter evaluation) {
+        this.evaluation = evaluation;
+    }
+
+    public IntegerFilter getAverageScore() {
+        return averageScore;
+    }
+
+    public void setAverageScore(IntegerFilter averageScore) {
+        this.averageScore = averageScore;
+    }
+
+    public StringFilter getPassFail() {
+        return passFail;
+    }
+
+    public void setPassFail(StringFilter passFail) {
+        this.passFail = passFail;
     }
 
     public UUIDFilter getUid() {
@@ -136,6 +204,12 @@ public class MProposalAdministrationCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(answer, that.answer) &&
             Objects.equals(documentEvaluation, that.documentEvaluation) &&
+            Objects.equals(documentAction, that.documentAction) &&
+            Objects.equals(documentStatus, that.documentStatus) &&
+            Objects.equals(notes, that.notes) &&
+            Objects.equals(evaluation, that.evaluation) &&
+            Objects.equals(averageScore, that.averageScore) &&
+            Objects.equals(passFail, that.passFail) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
@@ -149,6 +223,12 @@ public class MProposalAdministrationCriteria implements Serializable, Criteria {
         id,
         answer,
         documentEvaluation,
+        documentAction,
+        documentStatus,
+        notes,
+        evaluation,
+        averageScore,
+        passFail,
         uid,
         active,
         adOrganizationId,
@@ -163,6 +243,12 @@ public class MProposalAdministrationCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (answer != null ? "answer=" + answer + ", " : "") +
                 (documentEvaluation != null ? "documentEvaluation=" + documentEvaluation + ", " : "") +
+                (documentAction != null ? "documentAction=" + documentAction + ", " : "") +
+                (documentStatus != null ? "documentStatus=" + documentStatus + ", " : "") +
+                (notes != null ? "notes=" + notes + ", " : "") +
+                (evaluation != null ? "evaluation=" + evaluation + ", " : "") +
+                (averageScore != null ? "averageScore=" + averageScore + ", " : "") +
+                (passFail != null ? "passFail=" + passFail + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

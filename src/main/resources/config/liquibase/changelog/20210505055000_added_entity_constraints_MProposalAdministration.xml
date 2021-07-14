@@ -7,7 +7,7 @@
         Added the constraints for entity MProposalAdministration.
     -->
     <changeSet id="20210505055000-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="ad_organization_id"
                                  baseTableName="m_proposal_administration"
                                  constraintName="fk_m_proposal_administration_ad_organization_id"

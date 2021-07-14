@@ -74,6 +74,12 @@ class MProposalAdministrationGatlingTest extends Simulation {
                 "id":null
                 , "answer":"SAMPLE_TEXT"
                 , "documentEvaluation":null
+                , "documentAction":"SAMPLE_TEXT"
+                , "documentStatus":"SAMPLE_TEXT"
+                , "notes":"SAMPLE_TEXT"
+                , "evaluation":"SAMPLE_TEXT"
+                , "averageScore":"0"
+                , "passFail":"SAMPLE_TEXT"
                 , "uid":null
                 , "active":null
                 }""")).asJson

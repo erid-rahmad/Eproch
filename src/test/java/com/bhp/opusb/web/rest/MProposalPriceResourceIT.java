@@ -40,6 +40,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class MProposalPriceResourceIT {
 
+    private static final String DEFAULT_DOCUMENT_ACTION = "AAAAAAAAAA";
+    private static final String UPDATED_DOCUMENT_ACTION = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DOCUMENT_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_DOCUMENT_STATUS = "BBBBBBBBBB";
+
     private static final BigDecimal DEFAULT_PROPOSED_PRICE = new BigDecimal(1);
     private static final BigDecimal UPDATED_PROPOSED_PRICE = new BigDecimal(2);
     private static final BigDecimal SMALLER_PROPOSED_PRICE = new BigDecimal(1 - 1);
@@ -82,6 +88,8 @@ public class MProposalPriceResourceIT {
      */
     public static MProposalPrice createEntity(EntityManager em) {
         MProposalPrice mProposalPrice = new MProposalPrice()
+            .documentAction(DEFAULT_DOCUMENT_ACTION)
+            .documentStatus(DEFAULT_DOCUMENT_STATUS)
             .proposedPrice(DEFAULT_PROPOSED_PRICE)
             .ceilingPrice(DEFAULT_CEILING_PRICE)
             .uid(DEFAULT_UID)
@@ -126,6 +134,8 @@ public class MProposalPriceResourceIT {
      */
     public static MProposalPrice createUpdatedEntity(EntityManager em) {
         MProposalPrice mProposalPrice = new MProposalPrice()
+            .documentAction(UPDATED_DOCUMENT_ACTION)
+            .documentStatus(UPDATED_DOCUMENT_STATUS)
             .proposedPrice(UPDATED_PROPOSED_PRICE)
             .ceilingPrice(UPDATED_CEILING_PRICE)
             .uid(UPDATED_UID)
@@ -184,6 +194,8 @@ public class MProposalPriceResourceIT {
         List<MProposalPrice> mProposalPriceList = mProposalPriceRepository.findAll();
         assertThat(mProposalPriceList).hasSize(databaseSizeBeforeCreate + 1);
         MProposalPrice testMProposalPrice = mProposalPriceList.get(mProposalPriceList.size() - 1);
+        assertThat(testMProposalPrice.getDocumentAction()).isEqualTo(DEFAULT_DOCUMENT_ACTION);
+        assertThat(testMProposalPrice.getDocumentStatus()).isEqualTo(DEFAULT_DOCUMENT_STATUS);
         assertThat(testMProposalPrice.getProposedPrice()).isEqualTo(DEFAULT_PROPOSED_PRICE);
         assertThat(testMProposalPrice.getCeilingPrice()).isEqualTo(DEFAULT_CEILING_PRICE);
         assertThat(testMProposalPrice.getUid()).isEqualTo(DEFAULT_UID);
@@ -260,6 +272,8 @@ public class MProposalPriceResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mProposalPrice.getId().intValue())))
+            .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
+            .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
             .andExpect(jsonPath("$.[*].proposedPrice").value(hasItem(DEFAULT_PROPOSED_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].ceilingPrice").value(hasItem(DEFAULT_CEILING_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
@@ -277,6 +291,8 @@ public class MProposalPriceResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(mProposalPrice.getId().intValue()))
+            .andExpect(jsonPath("$.documentAction").value(DEFAULT_DOCUMENT_ACTION))
+            .andExpect(jsonPath("$.documentStatus").value(DEFAULT_DOCUMENT_STATUS))
             .andExpect(jsonPath("$.proposedPrice").value(DEFAULT_PROPOSED_PRICE.intValue()))
             .andExpect(jsonPath("$.ceilingPrice").value(DEFAULT_CEILING_PRICE.intValue()))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
@@ -300,6 +316,162 @@ public class MProposalPriceResourceIT {
 
         defaultMProposalPriceShouldBeFound("id.lessThanOrEqual=" + id);
         defaultMProposalPriceShouldNotBeFound("id.lessThan=" + id);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMProposalPricesByDocumentActionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalPriceRepository.saveAndFlush(mProposalPrice);
+
+        // Get all the mProposalPriceList where documentAction equals to DEFAULT_DOCUMENT_ACTION
+        defaultMProposalPriceShouldBeFound("documentAction.equals=" + DEFAULT_DOCUMENT_ACTION);
+
+        // Get all the mProposalPriceList where documentAction equals to UPDATED_DOCUMENT_ACTION
+        defaultMProposalPriceShouldNotBeFound("documentAction.equals=" + UPDATED_DOCUMENT_ACTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalPricesByDocumentActionIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalPriceRepository.saveAndFlush(mProposalPrice);
+
+        // Get all the mProposalPriceList where documentAction not equals to DEFAULT_DOCUMENT_ACTION
+        defaultMProposalPriceShouldNotBeFound("documentAction.notEquals=" + DEFAULT_DOCUMENT_ACTION);
+
+        // Get all the mProposalPriceList where documentAction not equals to UPDATED_DOCUMENT_ACTION
+        defaultMProposalPriceShouldBeFound("documentAction.notEquals=" + UPDATED_DOCUMENT_ACTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalPricesByDocumentActionIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProposalPriceRepository.saveAndFlush(mProposalPrice);
+
+        // Get all the mProposalPriceList where documentAction in DEFAULT_DOCUMENT_ACTION or UPDATED_DOCUMENT_ACTION
+        defaultMProposalPriceShouldBeFound("documentAction.in=" + DEFAULT_DOCUMENT_ACTION + "," + UPDATED_DOCUMENT_ACTION);
+
+        // Get all the mProposalPriceList where documentAction equals to UPDATED_DOCUMENT_ACTION
+        defaultMProposalPriceShouldNotBeFound("documentAction.in=" + UPDATED_DOCUMENT_ACTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalPricesByDocumentActionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProposalPriceRepository.saveAndFlush(mProposalPrice);
+
+        // Get all the mProposalPriceList where documentAction is not null
+        defaultMProposalPriceShouldBeFound("documentAction.specified=true");
+
+        // Get all the mProposalPriceList where documentAction is null
+        defaultMProposalPriceShouldNotBeFound("documentAction.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMProposalPricesByDocumentActionContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalPriceRepository.saveAndFlush(mProposalPrice);
+
+        // Get all the mProposalPriceList where documentAction contains DEFAULT_DOCUMENT_ACTION
+        defaultMProposalPriceShouldBeFound("documentAction.contains=" + DEFAULT_DOCUMENT_ACTION);
+
+        // Get all the mProposalPriceList where documentAction contains UPDATED_DOCUMENT_ACTION
+        defaultMProposalPriceShouldNotBeFound("documentAction.contains=" + UPDATED_DOCUMENT_ACTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalPricesByDocumentActionNotContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalPriceRepository.saveAndFlush(mProposalPrice);
+
+        // Get all the mProposalPriceList where documentAction does not contain DEFAULT_DOCUMENT_ACTION
+        defaultMProposalPriceShouldNotBeFound("documentAction.doesNotContain=" + DEFAULT_DOCUMENT_ACTION);
+
+        // Get all the mProposalPriceList where documentAction does not contain UPDATED_DOCUMENT_ACTION
+        defaultMProposalPriceShouldBeFound("documentAction.doesNotContain=" + UPDATED_DOCUMENT_ACTION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMProposalPricesByDocumentStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalPriceRepository.saveAndFlush(mProposalPrice);
+
+        // Get all the mProposalPriceList where documentStatus equals to DEFAULT_DOCUMENT_STATUS
+        defaultMProposalPriceShouldBeFound("documentStatus.equals=" + DEFAULT_DOCUMENT_STATUS);
+
+        // Get all the mProposalPriceList where documentStatus equals to UPDATED_DOCUMENT_STATUS
+        defaultMProposalPriceShouldNotBeFound("documentStatus.equals=" + UPDATED_DOCUMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalPricesByDocumentStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProposalPriceRepository.saveAndFlush(mProposalPrice);
+
+        // Get all the mProposalPriceList where documentStatus not equals to DEFAULT_DOCUMENT_STATUS
+        defaultMProposalPriceShouldNotBeFound("documentStatus.notEquals=" + DEFAULT_DOCUMENT_STATUS);
+
+        // Get all the mProposalPriceList where documentStatus not equals to UPDATED_DOCUMENT_STATUS
+        defaultMProposalPriceShouldBeFound("documentStatus.notEquals=" + UPDATED_DOCUMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalPricesByDocumentStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProposalPriceRepository.saveAndFlush(mProposalPrice);
+
+        // Get all the mProposalPriceList where documentStatus in DEFAULT_DOCUMENT_STATUS or UPDATED_DOCUMENT_STATUS
+        defaultMProposalPriceShouldBeFound("documentStatus.in=" + DEFAULT_DOCUMENT_STATUS + "," + UPDATED_DOCUMENT_STATUS);
+
+        // Get all the mProposalPriceList where documentStatus equals to UPDATED_DOCUMENT_STATUS
+        defaultMProposalPriceShouldNotBeFound("documentStatus.in=" + UPDATED_DOCUMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalPricesByDocumentStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProposalPriceRepository.saveAndFlush(mProposalPrice);
+
+        // Get all the mProposalPriceList where documentStatus is not null
+        defaultMProposalPriceShouldBeFound("documentStatus.specified=true");
+
+        // Get all the mProposalPriceList where documentStatus is null
+        defaultMProposalPriceShouldNotBeFound("documentStatus.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMProposalPricesByDocumentStatusContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalPriceRepository.saveAndFlush(mProposalPrice);
+
+        // Get all the mProposalPriceList where documentStatus contains DEFAULT_DOCUMENT_STATUS
+        defaultMProposalPriceShouldBeFound("documentStatus.contains=" + DEFAULT_DOCUMENT_STATUS);
+
+        // Get all the mProposalPriceList where documentStatus contains UPDATED_DOCUMENT_STATUS
+        defaultMProposalPriceShouldNotBeFound("documentStatus.contains=" + UPDATED_DOCUMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProposalPricesByDocumentStatusNotContainsSomething() throws Exception {
+        // Initialize the database
+        mProposalPriceRepository.saveAndFlush(mProposalPrice);
+
+        // Get all the mProposalPriceList where documentStatus does not contain DEFAULT_DOCUMENT_STATUS
+        defaultMProposalPriceShouldNotBeFound("documentStatus.doesNotContain=" + DEFAULT_DOCUMENT_STATUS);
+
+        // Get all the mProposalPriceList where documentStatus does not contain UPDATED_DOCUMENT_STATUS
+        defaultMProposalPriceShouldBeFound("documentStatus.doesNotContain=" + UPDATED_DOCUMENT_STATUS);
     }
 
 
@@ -672,6 +844,8 @@ public class MProposalPriceResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mProposalPrice.getId().intValue())))
+            .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
+            .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
             .andExpect(jsonPath("$.[*].proposedPrice").value(hasItem(DEFAULT_PROPOSED_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].ceilingPrice").value(hasItem(DEFAULT_CEILING_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
@@ -723,6 +897,8 @@ public class MProposalPriceResourceIT {
         // Disconnect from session so that the updates on updatedMProposalPrice are not directly saved in db
         em.detach(updatedMProposalPrice);
         updatedMProposalPrice
+            .documentAction(UPDATED_DOCUMENT_ACTION)
+            .documentStatus(UPDATED_DOCUMENT_STATUS)
             .proposedPrice(UPDATED_PROPOSED_PRICE)
             .ceilingPrice(UPDATED_CEILING_PRICE)
             .uid(UPDATED_UID)
@@ -738,6 +914,8 @@ public class MProposalPriceResourceIT {
         List<MProposalPrice> mProposalPriceList = mProposalPriceRepository.findAll();
         assertThat(mProposalPriceList).hasSize(databaseSizeBeforeUpdate);
         MProposalPrice testMProposalPrice = mProposalPriceList.get(mProposalPriceList.size() - 1);
+        assertThat(testMProposalPrice.getDocumentAction()).isEqualTo(UPDATED_DOCUMENT_ACTION);
+        assertThat(testMProposalPrice.getDocumentStatus()).isEqualTo(UPDATED_DOCUMENT_STATUS);
         assertThat(testMProposalPrice.getProposedPrice()).isEqualTo(UPDATED_PROPOSED_PRICE);
         assertThat(testMProposalPrice.getCeilingPrice()).isEqualTo(UPDATED_CEILING_PRICE);
         assertThat(testMProposalPrice.getUid()).isEqualTo(UPDATED_UID);

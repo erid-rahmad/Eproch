@@ -72,6 +72,12 @@ class MProposalTechnicalGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "documentAction":"SAMPLE_TEXT"
+                , "documentStatus":"SAMPLE_TEXT"
+                , "notes":"SAMPLE_TEXT"
+                , "evaluation":"SAMPLE_TEXT"
+                , "averageScore":"0"
+                , "passFail":"SAMPLE_TEXT"
                 , "answer":"SAMPLE_TEXT"
                 , "documentEvaluation":null
                 , "uid":null

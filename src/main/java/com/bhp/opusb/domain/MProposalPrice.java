@@ -25,6 +25,14 @@ public class MProposalPrice extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+    @Size(max = 10)
+    @Column(name = "document_action", length = 10)
+    private String documentAction;
+
+    @Size(max = 12)
+    @Column(name = "document_status", length = 12)
+    private String documentStatus;
+
     @NotNull
     @Column(name = "proposed_price", precision = 21, scale = 2, nullable = false)
     private BigDecimal proposedPrice;
@@ -61,6 +69,32 @@ public class MProposalPrice extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getDocumentAction() {
+        return documentAction;
+    }
+
+    public MProposalPrice documentAction(String documentAction) {
+        this.documentAction = documentAction;
+        return this;
+    }
+
+    public void setDocumentAction(String documentAction) {
+        this.documentAction = documentAction;
+    }
+
+    public String getDocumentStatus() {
+        return documentStatus;
+    }
+
+    public MProposalPrice documentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
+        return this;
+    }
+
+    public void setDocumentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
     }
 
     public BigDecimal getProposedPrice() {
@@ -180,6 +214,8 @@ public class MProposalPrice extends AbstractAuditingEntity {
     public String toString() {
         return "MProposalPrice{" +
             "id=" + getId() +
+            ", documentAction='" + getDocumentAction() + "'" +
+            ", documentStatus='" + getDocumentStatus() + "'" +
             ", proposedPrice=" + getProposedPrice() +
             ", ceilingPrice=" + getCeilingPrice() +
             ", uid='" + getUid() + "'" +

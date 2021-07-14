@@ -1,7 +1,7 @@
 <template>
   <div class="submission-form">
     <el-divider content-position="left">
-      <h4>Bidding Submission</h4>
+      <h4>Bidding Submission </h4>
     </el-divider>
     <el-form
       ref="biddingInformation"

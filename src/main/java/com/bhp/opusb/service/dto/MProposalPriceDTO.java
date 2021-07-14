@@ -13,6 +13,12 @@ public class MProposalPriceDTO extends AbstractAuditingDTO {
 
     private Long id;
 
+    @Size(max = 10)
+    private String documentAction;
+
+    @Size(max = 12)
+    private String documentStatus;
+
     @NotNull
     private BigDecimal proposedPrice;
 
@@ -56,6 +62,22 @@ public class MProposalPriceDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getDocumentAction() {
+        return documentAction;
+    }
+
+    public void setDocumentAction(String documentAction) {
+        this.documentAction = documentAction;
+    }
+
+    public String getDocumentStatus() {
+        return documentStatus;
+    }
+
+    public void setDocumentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
     }
 
     public BigDecimal getProposedPrice() {
@@ -155,6 +177,8 @@ public class MProposalPriceDTO extends AbstractAuditingDTO {
     public String toString() {
         return "MProposalPriceDTO{" +
             "id=" + getId() +
+            ", documentAction='" + getDocumentAction() + "'" +
+            ", documentStatus='" + getDocumentStatus() + "'" +
             ", proposedPrice=" + getProposedPrice() +
             ", ceilingPrice=" + getCeilingPrice() +
             ", uid='" + getUid() + "'" +

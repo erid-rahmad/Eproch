@@ -7,6 +7,7 @@ import DynamicWindowService from "@/core/application-dictionary/components/Dynam
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 import EvaluationForm from "./components/bidding-evaliuation-form.vue";
 import EvaluationResult from "./components/result-detail.vue"
+import ScheduleEventMixin from "@/core/application-dictionary/mixins/ScheduleEventMixin";
 
 const baseApiEvalResults ='api/m-bidding-eval-results';
 const baseApiBiddingSubmission='/api/m-bidding-submissions';
@@ -27,30 +28,38 @@ const BiddingEvaluationProp = Vue.extend({
     EvaluationForm,
   }
 })
-export default class BiddingEvaluation extends mixins(Vue2Filters.mixin, AlertMixin, AccessLevelMixin, BiddingEvaluationProp) {
+export default class BiddingEvaluationts extends mixins(Vue2Filters.mixin,ScheduleEventMixin, AlertMixin, AccessLevelMixin, BiddingEvaluationProp) {
 
   @Inject('dynamicWindowService')
-  private commonService: (baseApiUrl: string) => DynamicWindowService;
+  public commonService: (baseApiUrl: string) => DynamicWindowService;
 
   private biddingSubmission: any = [];
   private evaluationResult:any={};
-  private loading:boolean=false;
+  public loading:boolean=false;
   index=0;
   private data:any={};
 
   created() {
-    this.getbiddingSubmission();
+    this.getbiddingSubmission(this.pickRow.id);
+  }
+
+  onMainFormUpdateInEvaluation(mainForm: any){
+    console.log("this main form",mainForm);
+    this.getbiddingSubmission(mainForm.biddingId);
+    this.data.formType=mainForm.formType;
+
   }
 
 
 
-  evaluate(row){
-    this.index=1;
-    this.data.pickrow=row;
-    this.data.biddingSubmission=this.biddingSubmission;
-  }
+  // evaluate(row){
+  //   this.data.pickrow=row;
+  //   this.data.formType=this.pickRow;
+  //   this.data.biddingSubmission=this.biddingSubmission;
+  //   this.index=1;
+  // }
 
-  private getbiddingSubmission() {
+  private getbiddingSubmission(biddingId) {
     this.loading=true;
     this.commonService(baseApiBiddingSubmission)
       .retrieve({
@@ -64,7 +73,7 @@ export default class BiddingEvaluation extends mixins(Vue2Filters.mixin, AlertMi
       .then(res => {
         let biddingEvent: any = [];
         res.data.forEach(result => {
-          if (result.biddingId === this.pickRow.id) {
+          if (result.biddingId === biddingId) {
             biddingEvent.push(result);
           }
         });
@@ -114,6 +123,7 @@ export default class BiddingEvaluation extends mixins(Vue2Filters.mixin, AlertMi
       .finally(()=>{
         this.index=1;
         this.data.pickrow=row;
+
         this.data.biddingSubmission=this.biddingSubmission;
         this.data.evaluationResult=this.evaluationResult;
       })

@@ -22,7 +22,6 @@ export const proposalNameMap: Map<string, string> = new Map([
 const ProposalFormProps = Vue.extend({
   props: {
     data: Object,
-    disabled: Boolean,
     loading: Boolean,
     submissionId: Number
   }
@@ -46,6 +45,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
   private file: any = {};
   private subCriteria:any={};
   loading:boolean=false
+  disabled:boolean=true
 
   answers: Map<number, any> = new Map();
   attachmentFormVisible = false;
@@ -54,6 +54,8 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
   validationSchemaAttachment: any = {};
 
   get isVendor() {
+    console.log("is vendor")
+    this.disabled=false;
     return AccountStoreModule.isVendor;
   }
 
@@ -67,6 +69,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
 
   @Watch('data')
   onDataChanged(data: any) {
+    this.disabled=false;
     this.answers.clear();
     this.requirements.clear();
     this.retrieveVendorScoringCriteria(data.id, data.evaluationMethodLineId);
@@ -74,7 +77,8 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
   }
 
   created() {
-    if (this.isVendor) {
+    this.disabled=false;
+       if (this.isVendor) {
       this.validationSchema = {
         answer: {
           type: 'string',
@@ -185,6 +189,10 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
       })
       .then(res => {
         for (const proposal of res.data) {
+          if(proposal.documentStatus==='SMT'){
+            this.disabled=true;
+            console.log("this submit in line")
+          }
           try {
             const item = this.answers.get(proposal.biddingSubCriteriaLineId);
             item.answer = proposal.answer;
@@ -333,11 +341,8 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
   }
   //
 
-  save() {
-
-
+  save(status) {
     const data: any[] = [];
-
     this.answers.forEach(answer => {
       const {
         name,
@@ -349,6 +354,9 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
         ...proposal
       } = answer;
       proposal.id=answer.answerId;
+      if(status) {
+        proposal.documentStatus = status;
+      }
       proposal.biddingSubmissionId = this.submissionId;
       proposal.biddingSubCriteriaLineId = answer.id;
       data.push(proposal);

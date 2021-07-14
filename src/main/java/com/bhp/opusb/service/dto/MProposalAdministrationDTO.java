@@ -1,15 +1,15 @@
 package com.bhp.opusb.service.dto;
 
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MProposalAdministration} entity.
  */
 public class MProposalAdministrationDTO extends AbstractAuditingDTO {
-    
+
     private Long id;
 
     @NotNull
@@ -17,9 +17,23 @@ public class MProposalAdministrationDTO extends AbstractAuditingDTO {
 
     private Boolean documentEvaluation;
 
+    @Size(max = 10)
+    private String documentAction;
+
+    @Size(max = 12)
+    private String documentStatus;
+
+    private String notes;
+
+    private String evaluation;
+
+    private Integer averageScore;
+
+    private String passFail;
+
     private UUID uid;
 
-    private Boolean active = true;
+    private Boolean active;
 
 
     private Long adOrganizationId;
@@ -30,7 +44,7 @@ public class MProposalAdministrationDTO extends AbstractAuditingDTO {
 
     private Long biddingSubCriteriaLineId;
     private String biddingSubCriteriaLineName;
-    
+
     public Long getId() {
         return id;
     }
@@ -53,6 +67,54 @@ public class MProposalAdministrationDTO extends AbstractAuditingDTO {
 
     public void setDocumentEvaluation(Boolean documentEvaluation) {
         this.documentEvaluation = documentEvaluation;
+    }
+
+    public String getDocumentAction() {
+        return documentAction;
+    }
+
+    public void setDocumentAction(String documentAction) {
+        this.documentAction = documentAction;
+    }
+
+    public String getDocumentStatus() {
+        return documentStatus;
+    }
+
+    public void setDocumentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getEvaluation() {
+        return evaluation;
+    }
+
+    public void setEvaluation(String evaluation) {
+        this.evaluation = evaluation;
+    }
+
+    public Integer getAverageScore() {
+        return averageScore;
+    }
+
+    public void setAverageScore(Integer averageScore) {
+        this.averageScore = averageScore;
+    }
+
+    public String getPassFail() {
+        return passFail;
+    }
+
+    public void setPassFail(String passFail) {
+        this.passFail = passFail;
     }
 
     public UUID getUid() {
@@ -146,6 +208,12 @@ public class MProposalAdministrationDTO extends AbstractAuditingDTO {
             "id=" + getId() +
             ", answer='" + getAnswer() + "'" +
             ", documentEvaluation='" + isDocumentEvaluation() + "'" +
+            ", documentAction='" + getDocumentAction() + "'" +
+            ", documentStatus='" + getDocumentStatus() + "'" +
+            ", notes='" + getNotes() + "'" +
+            ", evaluation='" + getEvaluation() + "'" +
+            ", averageScore=" + getAverageScore() +
+            ", passFail='" + getPassFail() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
