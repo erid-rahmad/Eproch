@@ -1075,13 +1075,19 @@ entity CPrequalMethodLine{
 	active Boolean
 }
 
-/*
-entity CPrequalMethodSubcriteria{
-	type String
+entity CPrequalMethodCriteria {
+    weight Integer
 	uid UUID
 	active Boolean
 }
-*/
+
+
+entity CPrequalMethodSubCriteria{
+	weight Integer
+	uid UUID
+	active Boolean
+}
+
 entity CPrequalificationStep {
 	name String required
 	description String required
@@ -2232,7 +2238,6 @@ relationship ManyToOne {
 	CPrequalMethodLine{adOrganization required} to ADOrganization
 	CPrequalMethodLine{prequalMethod required} to CPrequalificationMethod
 
-	/*
 	CPrequalMethodCriteria{biddingCriteria required} to CBiddingCriteria
 	CPrequalMethodCriteria{adOrganization required} to ADOrganization
 	CPrequalMethodCriteria{prequalMethodLine } to CPrequalMethodLine
@@ -2241,7 +2246,7 @@ relationship ManyToOne {
 	CPrequalMethodSubCriteria{biddingCriteria required} to CBiddingCriteria
 	CPrequalMethodSubCriteria{biddingSubCriteria required} to CBiddingSubCriteria
 	CPrequalMethodSubCriteria{prequalMethodCriteria required} to CPrequalMethodCriteria
-	*/
+
 	CPrequalificationStep{adOrganization required} to ADOrganization
 
 	CPrequalificationEvent{adOrganization required} to ADOrganization

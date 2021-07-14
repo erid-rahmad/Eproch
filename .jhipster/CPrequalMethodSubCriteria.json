@@ -1,0 +1,63 @@
+{
+    "name": "CPrequalMethodSubCriteria",
+    "fields": [
+        {
+            "fieldName": "weight",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cPrequalMethodSubCriteria",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cBiddingCriteria",
+            "otherEntityRelationshipName": "cPrequalMethodSubCriteria",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingCriteria",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cBiddingSubCriteria",
+            "otherEntityRelationshipName": "cPrequalMethodSubCriteria",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingSubCriteria",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cPrequalMethodCriteria",
+            "otherEntityRelationshipName": "cPrequalMethodSubCriteria",
+            "relationshipValidateRules": "required",
+            "relationshipName": "prequalMethodCriteria",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210714072200",
+    "entityTableName": "c_prequal_method_sub_criteria",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}
