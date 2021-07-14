@@ -17,7 +17,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "m_bidding_eval_result_line")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MBiddingEvalResultLine implements Serializable {
+public class MBiddingEvalResultLine extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,6 +31,14 @@ public class MBiddingEvalResultLine implements Serializable {
 
     @Column(name = "score")
     private Integer score;
+
+    @Size(max = 10)
+    @Column(name = "document_action", length = 10)
+    private String documentAction;
+
+    @Size(max = 12)
+    @Column(name = "document_status", length = 12)
+    private String documentStatus;
 
     @Column(name = "uid")
     private UUID uid;
@@ -86,6 +94,32 @@ public class MBiddingEvalResultLine implements Serializable {
 
     public void setScore(Integer score) {
         this.score = score;
+    }
+
+    public String getDocumentAction() {
+        return documentAction;
+    }
+
+    public MBiddingEvalResultLine documentAction(String documentAction) {
+        this.documentAction = documentAction;
+        return this;
+    }
+
+    public void setDocumentAction(String documentAction) {
+        this.documentAction = documentAction;
+    }
+
+    public String getDocumentStatus() {
+        return documentStatus;
+    }
+
+    public MBiddingEvalResultLine documentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
+        return this;
+    }
+
+    public void setDocumentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
     }
 
     public UUID getUid() {
@@ -170,12 +204,20 @@ public class MBiddingEvalResultLine implements Serializable {
         return 31;
     }
 
+    @PrePersist
+    public void prePersist() {
+        uid = UUID.randomUUID();
+    }
+
+
     @Override
     public String toString() {
         return "MBiddingEvalResultLine{" +
             "id=" + getId() +
             ", status='" + getStatus() + "'" +
             ", score=" + getScore() +
+            ", documentAction='" + getDocumentAction() + "'" +
+            ", documentStatus='" + getDocumentStatus() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

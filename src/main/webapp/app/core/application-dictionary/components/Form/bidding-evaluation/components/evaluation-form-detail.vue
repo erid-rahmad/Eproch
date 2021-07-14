@@ -150,14 +150,18 @@
                     <el-col :span="6">
                         <div class="grid-content bg-purple">-</div>
                     </el-col>
-                    <el-col :span="6">
-                        <div class="grid-content bg-purple-light">
-                            <el-button size="mini"
-                                       type="primary" @click="save()">
-                                Save
-                            </el-button>
-                        </div>
-                    </el-col>
+<!--                    <el-col :span="6">-->
+<!--                        <div class="grid-content bg-purple-light">-->
+<!--                            <el-button size="mini"-->
+<!--                                       type="primary" @click="save()">-->
+<!--                                Save-->
+<!--                            </el-button>-->
+<!--                            <el-button size="mini"-->
+<!--                                       type="primary" @click="saveSubmit()">-->
+<!--                                Submit-->
+<!--                            </el-button>-->
+<!--                        </div>-->
+<!--                    </el-col>-->
                     <el-col :span="6">
                         <div class="grid-content bg-purple">
                             <el-form-item  v-if="evaluationType" label="Average Score">

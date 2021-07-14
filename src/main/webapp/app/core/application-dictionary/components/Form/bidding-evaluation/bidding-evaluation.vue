@@ -11,8 +11,8 @@
             <div class="card">
             <el-form  ref="productCatalog" label-position="left" label-width="130px"
                      size="mini">
-                <el-row> 
-                    <el-col span="12">
+                <el-row>
+                    <el-col :span="12">
                         <el-form-item label="Bidding No">
                             {{ pickRow.documentNo }}
                         </el-form-item>
@@ -20,7 +20,7 @@
                             {{ pickRow.name }}
                         </el-form-item>
                     </el-col>
-                    <el-col span="12">
+                    <el-col :span="12">
                         <el-form-item label="Event Type">
                             {{ pickRow.eventTypeName }}
                         </el-form-item>

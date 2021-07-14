@@ -380,5 +380,6 @@
     <include file="config/liquibase/changelog/20210708042100_added_entity_constraints_MComplaint.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210712043900_added_entity_constraints_MBlacklist.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210712044000_added_entity_constraints_MBlacklistLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210527064900_added_entity_constraints_MBiddingEvalResultLine.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

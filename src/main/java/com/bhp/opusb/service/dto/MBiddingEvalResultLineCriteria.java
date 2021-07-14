@@ -31,6 +31,10 @@ public class MBiddingEvalResultLineCriteria implements Serializable, Criteria {
 
     private IntegerFilter score;
 
+    private StringFilter documentAction;
+
+    private StringFilter documentStatus;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -48,6 +52,8 @@ public class MBiddingEvalResultLineCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.status = other.status == null ? null : other.status.copy();
         this.score = other.score == null ? null : other.score.copy();
+        this.documentAction = other.documentAction == null ? null : other.documentAction.copy();
+        this.documentStatus = other.documentStatus == null ? null : other.documentStatus.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -82,6 +88,22 @@ public class MBiddingEvalResultLineCriteria implements Serializable, Criteria {
 
     public void setScore(IntegerFilter score) {
         this.score = score;
+    }
+
+    public StringFilter getDocumentAction() {
+        return documentAction;
+    }
+
+    public void setDocumentAction(StringFilter documentAction) {
+        this.documentAction = documentAction;
+    }
+
+    public StringFilter getDocumentStatus() {
+        return documentStatus;
+    }
+
+    public void setDocumentStatus(StringFilter documentStatus) {
+        this.documentStatus = documentStatus;
     }
 
     public UUIDFilter getUid() {
@@ -138,6 +160,8 @@ public class MBiddingEvalResultLineCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(status, that.status) &&
             Objects.equals(score, that.score) &&
+            Objects.equals(documentAction, that.documentAction) &&
+            Objects.equals(documentStatus, that.documentStatus) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
@@ -151,6 +175,8 @@ public class MBiddingEvalResultLineCriteria implements Serializable, Criteria {
         id,
         status,
         score,
+        documentAction,
+        documentStatus,
         uid,
         active,
         adOrganizationId,
@@ -165,6 +191,8 @@ public class MBiddingEvalResultLineCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (status != null ? "status=" + status + ", " : "") +
                 (score != null ? "score=" + score + ", " : "") +
+                (documentAction != null ? "documentAction=" + documentAction + ", " : "") +
+                (documentStatus != null ? "documentStatus=" + documentStatus + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

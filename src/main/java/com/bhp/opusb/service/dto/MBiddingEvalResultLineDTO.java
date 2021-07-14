@@ -9,13 +9,19 @@ import java.util.UUID;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MBiddingEvalResultLine} entity.
  */
-public class MBiddingEvalResultLineDTO implements Serializable {
+public class MBiddingEvalResultLineDTO extends AbstractAuditingDTO {
 
     private Long id;
 
     private String status;
 
     private Integer score;
+
+    @Size(max = 10)
+    private String documentAction;
+
+    @Size(max = 12)
+    private String documentStatus;
 
     private UUID uid;
 
@@ -68,6 +74,22 @@ public class MBiddingEvalResultLineDTO implements Serializable {
 
     public void setScore(Integer score) {
         this.score = score;
+    }
+
+    public String getDocumentAction() {
+        return documentAction;
+    }
+
+    public void setDocumentAction(String documentAction) {
+        this.documentAction = documentAction;
+    }
+
+    public String getDocumentStatus() {
+        return documentStatus;
+    }
+
+    public void setDocumentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
     }
 
     public UUID getUid() {
@@ -137,6 +159,8 @@ public class MBiddingEvalResultLineDTO implements Serializable {
             "id=" + getId() +
             ", status='" + getStatus() + "'" +
             ", score=" + getScore() +
+            ", documentAction='" + getDocumentAction() + "'" +
+            ", documentStatus='" + getDocumentStatus() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +

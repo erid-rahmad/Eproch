@@ -56,14 +56,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     else {return "Drafted"}
   }
 
-  // tableRowClassName({row, rowIndex}) {
-  //   console.log("row index",row)
-  //   if (row.winnerStatus === true) {
-  //     return 'success-row';
-  //   } else {
-  //     return 'warning-row';
-  //   }
-  // }
+
 
   retriveEvaluationResult(biddingId) {
     this.loading = true;

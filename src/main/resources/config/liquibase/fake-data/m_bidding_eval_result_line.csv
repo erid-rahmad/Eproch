@@ -1,11 +1,11 @@
-id;status;score;uid;active;ad_organization_id;evaluation_method_line_id;bidding_eval_result_id
-1;Buckinghamshire transmitting;96896;bdb25514-89aa-4798-bb34-5ab89cc508a2;true;1;1;1
-2;implementation;40857;b59bb205-8da9-470c-afff-6a0a6feefdd5;false;2;2;2
-3;RAM Auto Loan Account;65165;c5b738c9-e9ec-42f5-8d3c-191d9fa47a66;true;3;3;3
-4;Ports solid state Home Loan Account;14824;b827c4ee-ddda-4309-81a6-c9c1ec5df564;false;4;4;4
-5;AGP Handmade;38458;1525cd30-3f37-44cd-b844-ca2497b21f6c;false;5;5;5
-6;quantify panel;10101;6f9e8f15-c830-4aca-8e07-a220a729a563;true;6;6;6
-7;open-source scale;70167;624be9f8-dd5b-4fc1-9e02-727901095496;true;7;7;7
-8;pixel Personal Loan Account;9536;e9fac643-9067-455d-a02b-0c7255f6a1ab;true;8;8;8
-9;Intranet bypassing;26219;65a0386b-53e1-4e8c-ab86-cee40d9087bf;true;9;9;9
-10;Personal Loan Account bypass;55616;3af73abf-9cf1-424f-b8ed-d10b1261c6ec;false;10;10;10
+id;status;score;document_action;document_status;uid;active;ad_organization_id;evaluation_method_line_id;bidding_eval_result_id
+1;Buckinghamshire transmitting;96896;calculatin;Myanmar;aa798bb3-45ab-489c-8508-a2a1576b59bb;false;1;1;1
+2;intranet;87309;Investment;Markets depo;feefdd55-6d19-4dac-9b73-8c9e9ec2f58d;false;2;2;2
+3;Awesome Wooden Pizza Personal Loan Account withdrawal;45971;technologi;Investor Cam;27c4eedd-da30-4981-a6c9-c1ec5df5642a;true;3;3;3
+4;Handmade;38458;innovative;program;303f374c-d784-44ca-a497-b21f6c38b9b2;false;4;4;4
+5;Infrastructure Global;99651;engineer;red invoice;ace07a22-0a72-49a5-a3f8-d36bb624be9f;true;5;5;5
+6;copying matrix bypass;87323;Games Bedf;Small;95496c9b-99e1-4e9f-ac64-3906755de02b;false;6;6;6
+7;Bedfordshire frictionless Administrator;66171;payment;Viaduct Tenn;65a0386b-53e1-4e8c-ab86-cee40d9087bf;true;7;7;7
+8;Personal Loan Account bypass;55616;invoice;Public-key c;9cf124fb-8edd-410b-9261-c6ec5a1fbe2f;false;8;8;8
+9;Fish Cambridgeshire Massachusetts;13767;Fish;Investment A;af648f98-30e1-4bd3-8144-2ea87fb26824;true;9;9;9
+10;ability;90900;synthesize;PNG;79d3946b-65b2-491f-bce0-c8f56583b7c5;false;10;10;10

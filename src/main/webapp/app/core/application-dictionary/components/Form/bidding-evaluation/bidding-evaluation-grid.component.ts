@@ -63,13 +63,13 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
             .retrieve({
               criteriaQuery: this.updateCriteria([
                 `biddingId.equals=${item.id}`,
-                `formType.equals=E1`
+                `formType.equals=S1`
 
               ]),
               paginationQuery: {
                 page: 0,
                 size: 1,
-                sort: ['id']
+                sort: ['id,desc']
               }
             })
             .then(async res1 =>{
@@ -80,13 +80,12 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
               }
             });
 
-
-
           await this.commonService(baseApiBiddingSchedule)
             .retrieve({
               criteriaQuery: this.updateCriteria([
                 `biddingId.equals=${item.id}`,
-                `formType.equals=S3`
+                `formType.equals=S2`
+
               ]),
               paginationQuery: {
                 page: 0,
@@ -96,12 +95,13 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
             })
             .then(async res1 =>{
               const data1 = { ...res1.data[0]};
-
+              item.formType='S2';
               if (data1.actualStartDate){
-                item.formType='S3';
                 await data.push(item);
               }
             });
+
+
         });
 
         this.bidding = data;

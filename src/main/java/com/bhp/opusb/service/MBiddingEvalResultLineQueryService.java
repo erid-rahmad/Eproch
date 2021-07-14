@@ -97,6 +97,12 @@ public class MBiddingEvalResultLineQueryService extends QueryService<MBiddingEva
             if (criteria.getScore() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getScore(), MBiddingEvalResultLine_.score));
             }
+            if (criteria.getDocumentAction() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDocumentAction(), MBiddingEvalResultLine_.documentAction));
+            }
+            if (criteria.getDocumentStatus() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDocumentStatus(), MBiddingEvalResultLine_.documentStatus));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), MBiddingEvalResultLine_.uid));
             }

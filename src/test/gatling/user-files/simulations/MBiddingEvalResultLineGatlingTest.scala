@@ -74,6 +74,8 @@ class MBiddingEvalResultLineGatlingTest extends Simulation {
                 "id":null
                 , "status":"SAMPLE_TEXT"
                 , "score":"0"
+                , "documentAction":"SAMPLE_TEXT"
+                , "documentStatus":"SAMPLE_TEXT"
                 , "uid":null
                 , "active":null
                 }""")).asJson

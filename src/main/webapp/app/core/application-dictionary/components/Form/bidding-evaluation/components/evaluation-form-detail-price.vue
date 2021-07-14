@@ -135,21 +135,21 @@
                 </el-table-column>
             </el-table>
         </div>
-        <div style="margin-bottom: 20px;margin-top: 20px">
-            <el-row>
-                <el-col :span="6">
-                    <div class="grid-content bg-purple">-</div>
-                </el-col>
-                <el-col :span="6">
-                    <div class="grid-content bg-purple-light">
-                        <el-button size="mini"
-                                   type="primary" @click="save()">
-                            Save
-                        </el-button>
-                    </div>
-                </el-col>
-            </el-row>
-        </div>
+<!--        <div style="margin-bottom: 20px;margin-top: 20px">-->
+<!--            <el-row>-->
+<!--                <el-col :span="6">-->
+<!--                    <div class="grid-content bg-purple">-</div>-->
+<!--                </el-col>-->
+<!--                <el-col :span="6">-->
+<!--                    <div class="grid-content bg-purple-light">-->
+<!--                        <el-button size="mini"-->
+<!--                                   type="primary" @click="save()">-->
+<!--                            Save-->
+<!--                        </el-button>-->
+<!--                    </div>-->
+<!--                </el-col>-->
+<!--            </el-row>-->
+<!--        </div>-->
 
 
     </div>

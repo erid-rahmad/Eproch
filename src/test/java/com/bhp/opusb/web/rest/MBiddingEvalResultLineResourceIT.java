@@ -46,6 +46,12 @@ public class MBiddingEvalResultLineResourceIT {
     private static final Integer UPDATED_SCORE = 2;
     private static final Integer SMALLER_SCORE = 1 - 1;
 
+    private static final String DEFAULT_DOCUMENT_ACTION = "AAAAAAAAAA";
+    private static final String UPDATED_DOCUMENT_ACTION = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DOCUMENT_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_DOCUMENT_STATUS = "BBBBBBBBBB";
+
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
@@ -82,6 +88,8 @@ public class MBiddingEvalResultLineResourceIT {
         MBiddingEvalResultLine mBiddingEvalResultLine = new MBiddingEvalResultLine()
             .status(DEFAULT_STATUS)
             .score(DEFAULT_SCORE)
+            .documentAction(DEFAULT_DOCUMENT_ACTION)
+            .documentStatus(DEFAULT_DOCUMENT_STATUS)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -126,6 +134,8 @@ public class MBiddingEvalResultLineResourceIT {
         MBiddingEvalResultLine mBiddingEvalResultLine = new MBiddingEvalResultLine()
             .status(UPDATED_STATUS)
             .score(UPDATED_SCORE)
+            .documentAction(UPDATED_DOCUMENT_ACTION)
+            .documentStatus(UPDATED_DOCUMENT_STATUS)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -184,6 +194,8 @@ public class MBiddingEvalResultLineResourceIT {
         MBiddingEvalResultLine testMBiddingEvalResultLine = mBiddingEvalResultLineList.get(mBiddingEvalResultLineList.size() - 1);
         assertThat(testMBiddingEvalResultLine.getStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testMBiddingEvalResultLine.getScore()).isEqualTo(DEFAULT_SCORE);
+        assertThat(testMBiddingEvalResultLine.getDocumentAction()).isEqualTo(DEFAULT_DOCUMENT_ACTION);
+        assertThat(testMBiddingEvalResultLine.getDocumentStatus()).isEqualTo(DEFAULT_DOCUMENT_STATUS);
         assertThat(testMBiddingEvalResultLine.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testMBiddingEvalResultLine.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -222,6 +234,8 @@ public class MBiddingEvalResultLineResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(mBiddingEvalResultLine.getId().intValue())))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
             .andExpect(jsonPath("$.[*].score").value(hasItem(DEFAULT_SCORE)))
+            .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
+            .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -239,6 +253,8 @@ public class MBiddingEvalResultLineResourceIT {
             .andExpect(jsonPath("$.id").value(mBiddingEvalResultLine.getId().intValue()))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS))
             .andExpect(jsonPath("$.score").value(DEFAULT_SCORE))
+            .andExpect(jsonPath("$.documentAction").value(DEFAULT_DOCUMENT_ACTION))
+            .andExpect(jsonPath("$.documentStatus").value(DEFAULT_DOCUMENT_STATUS))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -448,6 +464,162 @@ public class MBiddingEvalResultLineResourceIT {
 
     @Test
     @Transactional
+    public void getAllMBiddingEvalResultLinesByDocumentActionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultLineRepository.saveAndFlush(mBiddingEvalResultLine);
+
+        // Get all the mBiddingEvalResultLineList where documentAction equals to DEFAULT_DOCUMENT_ACTION
+        defaultMBiddingEvalResultLineShouldBeFound("documentAction.equals=" + DEFAULT_DOCUMENT_ACTION);
+
+        // Get all the mBiddingEvalResultLineList where documentAction equals to UPDATED_DOCUMENT_ACTION
+        defaultMBiddingEvalResultLineShouldNotBeFound("documentAction.equals=" + UPDATED_DOCUMENT_ACTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingEvalResultLinesByDocumentActionIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultLineRepository.saveAndFlush(mBiddingEvalResultLine);
+
+        // Get all the mBiddingEvalResultLineList where documentAction not equals to DEFAULT_DOCUMENT_ACTION
+        defaultMBiddingEvalResultLineShouldNotBeFound("documentAction.notEquals=" + DEFAULT_DOCUMENT_ACTION);
+
+        // Get all the mBiddingEvalResultLineList where documentAction not equals to UPDATED_DOCUMENT_ACTION
+        defaultMBiddingEvalResultLineShouldBeFound("documentAction.notEquals=" + UPDATED_DOCUMENT_ACTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingEvalResultLinesByDocumentActionIsInShouldWork() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultLineRepository.saveAndFlush(mBiddingEvalResultLine);
+
+        // Get all the mBiddingEvalResultLineList where documentAction in DEFAULT_DOCUMENT_ACTION or UPDATED_DOCUMENT_ACTION
+        defaultMBiddingEvalResultLineShouldBeFound("documentAction.in=" + DEFAULT_DOCUMENT_ACTION + "," + UPDATED_DOCUMENT_ACTION);
+
+        // Get all the mBiddingEvalResultLineList where documentAction equals to UPDATED_DOCUMENT_ACTION
+        defaultMBiddingEvalResultLineShouldNotBeFound("documentAction.in=" + UPDATED_DOCUMENT_ACTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingEvalResultLinesByDocumentActionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultLineRepository.saveAndFlush(mBiddingEvalResultLine);
+
+        // Get all the mBiddingEvalResultLineList where documentAction is not null
+        defaultMBiddingEvalResultLineShouldBeFound("documentAction.specified=true");
+
+        // Get all the mBiddingEvalResultLineList where documentAction is null
+        defaultMBiddingEvalResultLineShouldNotBeFound("documentAction.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMBiddingEvalResultLinesByDocumentActionContainsSomething() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultLineRepository.saveAndFlush(mBiddingEvalResultLine);
+
+        // Get all the mBiddingEvalResultLineList where documentAction contains DEFAULT_DOCUMENT_ACTION
+        defaultMBiddingEvalResultLineShouldBeFound("documentAction.contains=" + DEFAULT_DOCUMENT_ACTION);
+
+        // Get all the mBiddingEvalResultLineList where documentAction contains UPDATED_DOCUMENT_ACTION
+        defaultMBiddingEvalResultLineShouldNotBeFound("documentAction.contains=" + UPDATED_DOCUMENT_ACTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingEvalResultLinesByDocumentActionNotContainsSomething() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultLineRepository.saveAndFlush(mBiddingEvalResultLine);
+
+        // Get all the mBiddingEvalResultLineList where documentAction does not contain DEFAULT_DOCUMENT_ACTION
+        defaultMBiddingEvalResultLineShouldNotBeFound("documentAction.doesNotContain=" + DEFAULT_DOCUMENT_ACTION);
+
+        // Get all the mBiddingEvalResultLineList where documentAction does not contain UPDATED_DOCUMENT_ACTION
+        defaultMBiddingEvalResultLineShouldBeFound("documentAction.doesNotContain=" + UPDATED_DOCUMENT_ACTION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMBiddingEvalResultLinesByDocumentStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultLineRepository.saveAndFlush(mBiddingEvalResultLine);
+
+        // Get all the mBiddingEvalResultLineList where documentStatus equals to DEFAULT_DOCUMENT_STATUS
+        defaultMBiddingEvalResultLineShouldBeFound("documentStatus.equals=" + DEFAULT_DOCUMENT_STATUS);
+
+        // Get all the mBiddingEvalResultLineList where documentStatus equals to UPDATED_DOCUMENT_STATUS
+        defaultMBiddingEvalResultLineShouldNotBeFound("documentStatus.equals=" + UPDATED_DOCUMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingEvalResultLinesByDocumentStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultLineRepository.saveAndFlush(mBiddingEvalResultLine);
+
+        // Get all the mBiddingEvalResultLineList where documentStatus not equals to DEFAULT_DOCUMENT_STATUS
+        defaultMBiddingEvalResultLineShouldNotBeFound("documentStatus.notEquals=" + DEFAULT_DOCUMENT_STATUS);
+
+        // Get all the mBiddingEvalResultLineList where documentStatus not equals to UPDATED_DOCUMENT_STATUS
+        defaultMBiddingEvalResultLineShouldBeFound("documentStatus.notEquals=" + UPDATED_DOCUMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingEvalResultLinesByDocumentStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultLineRepository.saveAndFlush(mBiddingEvalResultLine);
+
+        // Get all the mBiddingEvalResultLineList where documentStatus in DEFAULT_DOCUMENT_STATUS or UPDATED_DOCUMENT_STATUS
+        defaultMBiddingEvalResultLineShouldBeFound("documentStatus.in=" + DEFAULT_DOCUMENT_STATUS + "," + UPDATED_DOCUMENT_STATUS);
+
+        // Get all the mBiddingEvalResultLineList where documentStatus equals to UPDATED_DOCUMENT_STATUS
+        defaultMBiddingEvalResultLineShouldNotBeFound("documentStatus.in=" + UPDATED_DOCUMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingEvalResultLinesByDocumentStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultLineRepository.saveAndFlush(mBiddingEvalResultLine);
+
+        // Get all the mBiddingEvalResultLineList where documentStatus is not null
+        defaultMBiddingEvalResultLineShouldBeFound("documentStatus.specified=true");
+
+        // Get all the mBiddingEvalResultLineList where documentStatus is null
+        defaultMBiddingEvalResultLineShouldNotBeFound("documentStatus.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMBiddingEvalResultLinesByDocumentStatusContainsSomething() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultLineRepository.saveAndFlush(mBiddingEvalResultLine);
+
+        // Get all the mBiddingEvalResultLineList where documentStatus contains DEFAULT_DOCUMENT_STATUS
+        defaultMBiddingEvalResultLineShouldBeFound("documentStatus.contains=" + DEFAULT_DOCUMENT_STATUS);
+
+        // Get all the mBiddingEvalResultLineList where documentStatus contains UPDATED_DOCUMENT_STATUS
+        defaultMBiddingEvalResultLineShouldNotBeFound("documentStatus.contains=" + UPDATED_DOCUMENT_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingEvalResultLinesByDocumentStatusNotContainsSomething() throws Exception {
+        // Initialize the database
+        mBiddingEvalResultLineRepository.saveAndFlush(mBiddingEvalResultLine);
+
+        // Get all the mBiddingEvalResultLineList where documentStatus does not contain DEFAULT_DOCUMENT_STATUS
+        defaultMBiddingEvalResultLineShouldNotBeFound("documentStatus.doesNotContain=" + DEFAULT_DOCUMENT_STATUS);
+
+        // Get all the mBiddingEvalResultLineList where documentStatus does not contain UPDATED_DOCUMENT_STATUS
+        defaultMBiddingEvalResultLineShouldBeFound("documentStatus.doesNotContain=" + UPDATED_DOCUMENT_STATUS);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMBiddingEvalResultLinesByUidIsEqualToSomething() throws Exception {
         // Initialize the database
         mBiddingEvalResultLineRepository.saveAndFlush(mBiddingEvalResultLine);
@@ -607,6 +779,8 @@ public class MBiddingEvalResultLineResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(mBiddingEvalResultLine.getId().intValue())))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
             .andExpect(jsonPath("$.[*].score").value(hasItem(DEFAULT_SCORE)))
+            .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
+            .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -658,6 +832,8 @@ public class MBiddingEvalResultLineResourceIT {
         updatedMBiddingEvalResultLine
             .status(UPDATED_STATUS)
             .score(UPDATED_SCORE)
+            .documentAction(UPDATED_DOCUMENT_ACTION)
+            .documentStatus(UPDATED_DOCUMENT_STATUS)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         MBiddingEvalResultLineDTO mBiddingEvalResultLineDTO = mBiddingEvalResultLineMapper.toDto(updatedMBiddingEvalResultLine);
@@ -673,6 +849,8 @@ public class MBiddingEvalResultLineResourceIT {
         MBiddingEvalResultLine testMBiddingEvalResultLine = mBiddingEvalResultLineList.get(mBiddingEvalResultLineList.size() - 1);
         assertThat(testMBiddingEvalResultLine.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testMBiddingEvalResultLine.getScore()).isEqualTo(UPDATED_SCORE);
+        assertThat(testMBiddingEvalResultLine.getDocumentAction()).isEqualTo(UPDATED_DOCUMENT_ACTION);
+        assertThat(testMBiddingEvalResultLine.getDocumentStatus()).isEqualTo(UPDATED_DOCUMENT_STATUS);
         assertThat(testMBiddingEvalResultLine.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testMBiddingEvalResultLine.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

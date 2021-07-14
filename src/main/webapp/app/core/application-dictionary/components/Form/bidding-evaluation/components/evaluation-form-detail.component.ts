@@ -16,7 +16,7 @@ const baseApiProposalTechnicalFile = 'api/m-proposal-administration-files';
 const EvaluationFormDetailComponentProp = Vue.extend({
   props: {
     loading: Boolean,
-    readOnly: Boolean,
+
     title:String,
     evaluationFormProp: {
       type: Object,
@@ -62,6 +62,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
   private counting: Map<number, number> = new Map();
   private biddingSubCriteria: Map<number, string> = new Map();
   statusReadOnly:boolean=false;
+  readOnly: Boolean=false;
 
 
   private validationSchema = {
@@ -74,24 +75,50 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
 
   @Watch('SelectVendorScoringLine')
   loaddata() {
-    this.evaluationResultLine.score=0;
-   this.getEvaluationtype();
-    this.retrieveEvaluationMethodCriteria(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLineId,
-      this.evaluationFormProp.SelectVendorScoringLine.id);
-    if (this.evaluationFormProp.evaluationResultLine) {
-      this.evaluationResultLine = this.evaluationFormProp.evaluationResultLine;
-    };
+    this.evaluationResultLine=null;
+
+    this.readOnly=false;
+    this.getEvaluationtype();
+    this.retrieveEvaluationMethodCriteria(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLineId, this.evaluationFormProp.SelectVendorScoringLine.id);
+    this.retrieveEvalResultLine( this.evaluationFormProp.evaluationMethodLineId, this.evaluationFormProp.biddingEvalResultId)
+
   }
 
   created() {
-    this.evaluationResultLine.score=0;
-    this.getEvaluationtype();
-    this.retrieveEvaluationMethodCriteria(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLineId,
-      this.evaluationFormProp.SelectVendorScoringLine.id);
-    if (this.evaluationFormProp.evaluationResultLine) {
-      this.evaluationResultLine = this.evaluationFormProp.evaluationResultLine;
-    };
 
+    this.getEvaluationtype();
+    this.retrieveEvaluationMethodCriteria(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLineId, this.evaluationFormProp.SelectVendorScoringLine.id);
+    this.retrieveEvalResultLine( this.evaluationFormProp.evaluationMethodLineId, this.evaluationFormProp.biddingEvalResultId)
+  }
+
+  retrieveEvalResultLine(evaluationMethodLineId:number,biddingEvalResultId:number){
+    this.commonService(baseApiEvalResultLine)
+      .retrieve({
+        criteriaQuery: [
+          `evaluationMethodLineId.equals=${evaluationMethodLineId}`,
+          `biddingEvalResultId.equals=${biddingEvalResultId}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(async res => {
+        const data = res.data as any[];
+        let result:any={};
+        if (data.length) {
+          result = {...result, ...data[0]};
+          this.evaluationResultLine = result;
+
+            if (result.documentStatus === 'SMT') {
+              this.readOnly = true;
+              console.log("status lock")
+            }
+          }
+
+
+      });
   }
 
   getEvaluationtype(){
@@ -161,15 +188,31 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
   }
 
   updateEvalResultLine() {
+    const data={
+      biddingEvalResultId:this.evaluationFormProp.biddingEvalResultId,
+      evaluationMethodLineId:this.evaluationFormProp.evaluationMethodLineId,
+      adOrganizationId:1,
+      active:true,
+      id:this.evaluationResultLine.id,
+      score:this.evaluationResultLine.score,
+      status:this.evaluationResultLine.status,
+      documentStatus:this.evaluationResultLine.documentStatus,
+    }
 
     this.commonService(baseApiEvalResultLine)
-      .create(this.evaluationResultLine)
+      .create(data)
       .then(res => {
         this.evaluationFormProp.SelectVendorScoringLine = res.data;
         // this.$message.success('create ResultLine ');
       })
       .catch(_err => this.$message.error('fail create record'));
 
+  }
+
+  saveSubmit(){
+   this.evaluationResultLine.documentStatus='SMT';
+   this.save();
+   this.readOnly=true;
   }
 
   private retrieveEvaluationMethodCriteria(evaluationMethodLineId: number, vendorScoringLineId: number) {
@@ -402,7 +445,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
       s++;
     })
     this.evaluationResultLine.score =x;
-    if(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLinePassingGrade>=0){
+    if(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLinePassingGrade>0){
       this.statusReadOnly=true;
       if (x>this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLinePassingGrade){
         this.evaluationResultLine.status="Pass";

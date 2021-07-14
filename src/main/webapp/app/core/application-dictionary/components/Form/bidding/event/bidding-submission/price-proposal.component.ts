@@ -218,8 +218,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
   }
 
   get isVendor() {
-   
-    return AccountStoreModule.isVendor;
+       return AccountStoreModule.isVendor;
   }
 
   get timeRemaining() {

@@ -9,12 +9,19 @@
                            @click="close">
                     Close
                 </el-button>
-                <el-button v-if="button===0"
+                <el-button
                            size="mini"
                            style="margin-left: 10px"
                            type="primary"
                            @click="dialogSubmitEvaluation=true">
                     Submit
+                </el-button>
+                <el-button
+                    size="mini"
+                    style="margin-left: 10px"
+                    type="primary"
+                    @click="save">
+                    Save
                 </el-button>
                 <el-dialog
                     :visible.sync="dialogSubmitEvaluation"
@@ -94,7 +101,7 @@
             <el-form v-if="FormMenu===0 || FormMenu===2|| FormMenu===3" ref="productCatalog" label-position="left"
                      label-width="130px"
                      size="mini" >
-                <el-col span="12">
+                <el-col :span="12">
                     <el-form-item label="Bidding No">
                         {{ evaluation.biddingNo }}
                     </el-form-item>
@@ -105,7 +112,7 @@
                         {{ evaluation.vendorName }}
                     </el-form-item>
                 </el-col>
-                <el-col span="12" v-bind:style="{'padding-bottom': FormMenu===0?'0%':'5.5%'}">
+                <el-col :span="12" v-bind:style="{'padding-bottom': FormMenu===0?'0%':'5.5%'}">
                     <el-form-item label="Event Type">
                         {{ evaluation.eventTypeName }}
                     </el-form-item>
@@ -115,14 +122,15 @@
                 </el-col>
             </el-form>
             <div v-if="FormMenu===1">
-                <EvaluationTeamDetailPrice ref="evaluationFormDetail" :evaluationFormProp="evaluationFormProp"
+                <EvaluationTeamDetailPrice ref="evaluationFormDetail"  :evaluationFormProp="evaluationFormProp"
                                            :readOnly="readOnly" ></EvaluationTeamDetailPrice>
             </div>
             <div v-if="FormMenu===2">
                 <h4 align="center">Evaluation</h4>
-                <EvaluationFormDetail :SelectVendorScoringLine="SelectVendorScoringLine" :evaluationFormProp="evaluationFormProp"
+                <EvaluationFormDetail  ref="evaluationFormDetail" :SelectVendorScoringLine="SelectVendorScoringLine" :evaluationFormProp="evaluationFormProp"
                                       :readOnly="readOnly" :title="title" ></EvaluationFormDetail>
             </div>
+
 
         </div>
     </div>

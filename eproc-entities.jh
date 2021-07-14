@@ -1491,6 +1491,8 @@ entity MBiddingEvalResult {
 entity MBiddingEvalResultLine {
 	status String
 	score Integer
+	documentAction String  maxlength(10)
+    documentStatus String  maxlength(12)
 	uid UUID
 	active Boolean
 }

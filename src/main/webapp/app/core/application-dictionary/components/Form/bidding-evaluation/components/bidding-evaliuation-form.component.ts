@@ -66,20 +66,29 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     this.evaluationResult=this.data.evaluationResult;
     this.evaluationFormProp.biddingSubmission=this.data.pickrow;
     this.evaluation=this.data.pickrow;
-    console.log("this data pickrow",this.data)
+    // console.log("this data pickrow",this.data)
     this.handleButton();
     this.retrieveVendorScoring(this.evaluation.biddingId);
 
   }
 
-  setEvaluation(data :any){
-    this.title=data.evaluation;
-    this.SelectVendorScoringLine=data;
-    this.vendorId=this.evaluation.vendorId;
-    this.evaluationFormProp.vendorId=this.evaluation.vendorId;
-    this.evaluationFormProp.SelectVendorScoringLine=this.SelectVendorScoringLine;
-    this.retrieveEvalResultLine(this.SelectVendorScoringLine.evaluationMethodLineId,this.evaluationResult.id);
-    this.retrieveAllEvalResultLine(this.evaluationResult.id);
+  async setEvaluation(data: any) {
+    this.title = data.evaluation;
+    this.SelectVendorScoringLine = data;
+    this.vendorId = this.evaluation.vendorId;
+    this.evaluationFormProp.vendorId = this.evaluation.vendorId;
+    this.evaluationFormProp.SelectVendorScoringLine = this.SelectVendorScoringLine;
+    this.evaluationFormProp.evaluationMethodLineId = this.SelectVendorScoringLine.evaluationMethodLineId;
+    this.evaluationFormProp.biddingEvalResultId = this.evaluationResult.id;
+    if (this.SelectVendorScoringLine.evaluationMethodLineEvaluation ==="P"){
+              this.FormMenu=1;
+            }
+            else {
+              this.FormMenu=2;
+            }
+
+    // await this.retrieveEvalResultLine(this.SelectVendorScoringLine.evaluationMethodLineId, this.evaluationResult.id);
+
 
   }
 
@@ -127,18 +136,21 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       })
       .then(res => {
         let AllEvalResultLine =res.data;
-        let average=0,loop=0,status;
+        let average=0,loop=0,status,evaluationStatus;
         AllEvalResultLine.forEach(data=>{
-          // console.log("this data",data)
             average=average+data.score*data.evaluationMethodLineWeight/100;
             ++loop;
           if(data.status==="Fail"){
             status="Fail";
           }{status="Pass"}
+          if(data.documentStatus===null){
+            evaluationStatus="DRF";
+          }{evaluationStatus="SMT"}
         })
 
         this.evaluationResult.status=status;
         this.evaluationResult.score=average;
+        this.evaluationResult.evaluationStatus=evaluationStatus;
         this.updateEvalResult();
         });
   }
@@ -149,20 +161,19 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       .then(res => {
         let evaluationResult = res.data;
       })
-      .catch(_err => this.$message.error('fail create record'));
+      .catch(_err => {
+
+      });
   }
 
   submitEvaluation(){
-    this.evaluationResult.evaluationStatus="SMT";
-    this.commonService(baseApiEvalResults)
-      .create( this.evaluationResult)
-      .then(res => {
-        let evaluationResult = res.data;
-        this.button=1;
-        this.dialogSubmitEvaluation=false;
-      })
-      .catch(_err => this.$message.error('fail create record'))
-      .finally(()=>{ });
+    (<any>this.$refs.evaluationFormDetail).saveSubmit();
+    this.dialogSubmitEvaluation=false;
+  }
+
+  async save() {
+    await (<any>this.$refs.evaluationFormDetail).save();
+    await this.retrieveAllEvalResultLine(this.evaluationResult.id);
   }
 
   approveEvaluation(){
@@ -194,57 +205,31 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       .finally(()=>{});
   }
 
-  retrieveEvalResultLine(evaluationMethodLineId:number,biddingEvalResultId:number){
-    this.commonService(baseApiEvalResultLine)
-      .retrieve({
-        criteriaQuery: [
-          `evaluationMethodLineId.equals=${evaluationMethodLineId}`,
-          `biddingEvalResultId.equals=${biddingEvalResultId}`
-        ],
-        paginationQuery: {
-          page: 0,
-          size: 10000,
-          sort: ['id']
-        }
-      })
-      .then(res => {
-        const data = res.data as any[];
-        let result:any={};
-        if (data.length) {
-          result = {...result, ...data[0]};
-          this.evaluationFormProp.evaluationResultLine=result;
-          // console.log("result",result)
-          // this.$message.success('open ResultLine ');
-        }
-        else {
-          this.createTableEvalResultLine();
-        }
 
-        if (this.SelectVendorScoringLine.evaluationMethodLineEvaluation ==="P"){
-          this.FormMenu=1;
-        }
-        else {
-          this.FormMenu=2;
-        }
 
-      });
-  }
-
-  createTableEvalResultLine(){
-    const data={
-      biddingEvalResultId:this.evaluationResult.id,
-      evaluationMethodLineId:this.SelectVendorScoringLine.evaluationMethodLineId,
-      adOrganizationId:1,
-      active:true,
-    }
-    this.commonService(baseApiEvalResultLine)
-      .create(data)
-      .then(res => {
-        this.evaluationFormProp.evaluationResultLine = res;
-        // this.$message.success('create ResultLine ');
-      })
-      .catch(_err => this.$message.error('fail create record'));
-  }
+  // createTableEvalResultLine(){
+  //   const data={
+  //     biddingEvalResultId:this.evaluationResult.id,
+  //     evaluationMethodLineId:this.SelectVendorScoringLine.evaluationMethodLineId,
+  //     adOrganizationId:1,
+  //     active:true,
+  //   }
+  //   this.commonService(baseApiEvalResultLine)
+  //     .create(data)
+  //     .then(res => {
+  //       this.evaluationFormProp.evaluationResultLine = res;
+  //
+  //       if (this.SelectVendorScoringLine.evaluationMethodLineEvaluation ==="P"){
+  //         this.FormMenu=1;
+  //       }
+  //       else {
+  //         this.FormMenu=2;
+  //       }
+  //
+  //       // this.$message.success('create ResultLine ');
+  //     })
+  //     .catch(_err => this.$message.error('fail create record'));
+  // }
 
   private retrieveVendorScoring(biddingId: number) {
     this.commonService(baseApiVendorScoring)
