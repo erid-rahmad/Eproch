@@ -7,6 +7,8 @@ import buildCriteriaQueryString from '@/shared/filter/filters';
 import { AccountStoreModule as accountStore } from "@/shared/config/store/account-store";
 import { WindowStoreModule as windowStore } from "@/shared/config/store/window-store";
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
+import Accordion from './accordion.vue';
+
 const baseApiVendor ='api/c-vendors';
 const baseApiBidding ='api/m-biddings';
 const baseApiVendorConfirmation ='api/pa-dashboards/vendorConfirmation';
@@ -17,6 +19,7 @@ enum DisplayType {
 
 const WatchListProps = Vue.extend({
   props: {
+    id: Number,
     name: String,
     title: String
   }
@@ -24,7 +27,8 @@ const WatchListProps = Vue.extend({
 
 @Component({
   components: {
-    'count-to': VueCountTo
+    'count-to': VueCountTo,
+    Accordion
   }
 })
 export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) {
@@ -35,9 +39,20 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
   private data:any={};
   dasbordItem:any={};
 
-  isVendor:boolean;
+  //isVendor:boolean;
 
   items: IAdWatchListItem[] = [];
+  listColor=
+  [
+    //yellow
+    {staticColor: '#ecec04', gradientColor: 'linear-gradient(315deg, #fbb034 0%, #ffdd00 74%);'}, 
+    //red
+    {staticColor: '#f5365c', gradientColor: 'linear-gradient(45deg, rgb(255, 83, 112), rgb(255, 134, 154));'}, 
+    //green
+    {staticColor: '#2dce89', gradientColor: 'linear-gradient(87deg, rgb(45, 206, 137) 0px, rgb(45, 206, 204) 100%);'}, 
+    // blue
+    {staticColor: '#11cdef', gradientColor: 'linear-gradient(87deg, rgb(17, 205, 239) 0px, rgb(17, 113, 239) 100%);'}
+  ]
 
   get isCard() {
     return this.type === DisplayType.Card;
@@ -51,31 +66,33 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
     return /*this.items.length > 4 ? DisplayType.List : */DisplayType.Card;
   }
 
+  /*mounted(){
+    setInterval(() => {this.updateCountWatchList()}, 15000);
+  }*/
+
   @Watch('items', {deep: true})
   async onItemsChanged(items: IAdWatchListItem[]) {
     await items.forEach((item, index) => {
       this.retrieveWatchListCounter(item, index);
     });
-    await items.forEach(item=>{
+    /*await items.forEach(item=>{
       this.$set(this.data,item.code, item.count);
       this.$set(this.data,item.code+"data", item);
-    })
-
-
+    })*/
   }
 
   async created() {
 
     console.log("this vendor", accountStore.userDetails.vendor)
 
-    this.retrieveVendor();
+    /*this.retrieveVendor();
     this.retrieveVendorConfirmation();
-    this.retrieveBidding();
+    this.retrieveBidding();*/
     this.retrieveWatchListItems(this.name);
   }
 
   async onCardClicked(card: IAdWatchListItem) {
-      card.actionUrl = await this.commonService('/api/ad-menus/full-path').find(card.adMenu.id);
+    card.actionUrl = await this.commonService('/api/ad-menus/full-path').find(card.adMenu.id);
     if (card.actionUrl) {
       const timestamp = Date.now();
       windowStore.setWatchlistQuery(card.filterQuery)
@@ -94,7 +111,12 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
     this.onItemsChanged(this.items);
   }
 
-  private retrieveWatchListItems(name: string) {
+  private getRandomColor(){
+    var randomNumber = Math.floor(Math.random() * 4);
+    return this.listColor[randomNumber];
+  }
+
+  retrieveWatchListItems(name: string) {
     this.commonService('/api/ad-watch-lists')
       .retrieve({
         criteriaQuery: [
@@ -108,9 +130,12 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
         }
       })
       .then(res => {
-        if (res.data.length) {
+        if (res.data.length > 0) {
           const watchList: IAdWatchList = res.data[0];
           this.items = watchList.adWatchListItems;
+          this.items.forEach((x) => {
+            if(!x.accentColor) x.accentColor = this.getRandomColor().gradientColor;
+          });
         }
       })
       .catch(err => {
@@ -122,7 +147,7 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
       });
   }
 
-  retrieveVendor(){
+  /*retrieveVendor(){
     this.commonService(baseApiVendor)
       .retrieve({
         criteriaQuery: this.updateCriteria([
@@ -192,12 +217,12 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
         this.dasbordItem.vendorConfirmation=res.data.vendorConfirmation;
       })
       .finally();
-  }
+  }*/
 
   private retrieveWatchListCounter(item: IAdWatchListItem, index?: number) {
     this.commonService(item.restApiEndpoint)
       .count([
-        item.filterQuery || null,
+        item.filterQuery.split('&'),
         accountStore.userDetails.vendor ? `vendorId.equals=${accountStore.userDetails.cVendorId}` : null
       ])
       .then(count => {

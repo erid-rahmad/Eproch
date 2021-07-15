@@ -6,12 +6,17 @@ import {Component, Inject, Mixins, Vue} from 'vue-property-decorator';
 import DashboardService from './dashboard.service';
 import { debounce } from 'lodash';
 
+import { GridLayout, GridItem } from 'vue-grid-layout';
 import circularColorBar from './componentsChart/circularColorBar.vue';
 import liveData from './componentsChart/liveData.vue';
 import lineexample from './componentsChart/simpleLine.vue';
 import lineupdate from './componentsChart/methodUpdate.vue';
 import echart from './componentsChart/echart-bar.vue';
 import echartpie from './componentsChart/echart-pie.vue';
+import LineChart from './componentsChart/lineChart.vue';
+import BarChart from './componentsChart/barChart.vue';
+import PieChart from './componentsChart/pieChart.vue';
+import Accordion from './components/accordion.vue';
 import kpiAdmin from './components/kpi-admin.vue';
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 
@@ -22,7 +27,8 @@ const baseApiEvaluation ='api/m-vendor-evaluations';
 
 @Component({
   components: {
-    WatchList,circularColorBar,liveData,lineexample,lineupdate,echart,echartpie,kpiAdmin
+    WatchList,circularColorBar,liveData,lineexample,lineupdate,echart,echartpie,kpiAdmin,
+    GridLayout, GridItem, Accordion, LineChart, BarChart, PieChart 
   }
 })
 export default class DashBoard extends  Mixins(AccessLevelMixin) {
@@ -37,7 +43,7 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
   private dataEvaluasi:any=[];
 
   dashboardItems: IPaDashboardPreference[] = [];
-
+  
   get dashboards() {
     const list = [];
     for (const [key] of accountStore.grantedDashboards) {
@@ -96,9 +102,14 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
         name: 'Tom',
         address: 'No. 189, Grove St, Los Angeles'
       }],
+      layout: [
+        {"x":0,"y":0,"w":12,"h":1,"i":"0"},
+        {"x":0,"y":1,"w":6,"h":1,"i":"1"},
+        {"x":6,"y":1,"w":6,"h":1,"i":"2"}
+      ]
     }
   }
-
+  
   mounted() {
     this.dashboardService.connect();
     this.dashboardService.subscribe();
@@ -141,7 +152,6 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
         })
         .then(res => {
           this.dashboardItems = res.data;
-
         })
         .catch(err => {
           console.log('Dashboard error', err);
@@ -228,3 +238,4 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
     });
   }
 }
+

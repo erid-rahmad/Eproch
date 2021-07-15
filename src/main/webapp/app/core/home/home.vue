@@ -97,8 +97,10 @@
 
 <style lang="scss" scoped>
 .main-dashboard {
+  min-height: 90vh;
   padding: 24px;
   background: #f0f2f5;
+  overflow-x: hidden;
 }
 
 .wscn-http-container {
