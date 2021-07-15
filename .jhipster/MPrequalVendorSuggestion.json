@@ -1,0 +1,59 @@
+{
+    "name": "MPrequalVendorSuggestion",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mPrequalificationInformation",
+            "otherEntityRelationshipName": "mPrequalVendorSuggestion",
+            "relationshipValidateRules": "required",
+            "relationshipName": "prequalification",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mPrequalVendorSuggestion",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cBusinessCategory",
+            "otherEntityRelationshipName": "mPrequalVendorSuggestion",
+            "relationshipValidateRules": "required",
+            "relationshipName": "businessSubCategory",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "mPrequalVendorSuggestion",
+            "relationshipValidateRules": "required",
+            "relationshipName": "vendor",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210715054300",
+    "entityTableName": "m_prequal_vendor_suggestion",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

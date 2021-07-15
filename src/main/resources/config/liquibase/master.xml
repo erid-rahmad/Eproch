@@ -205,6 +205,8 @@
     <include file="config/liquibase/changelog/20210714045000_added_entity_CPrequalMethodCriteria.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210714072200_added_entity_CPrequalMethodSubCriteria.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210714100800_added_entity_MPrequalificationInformation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210715054200_added_entity_MPrequalificationInvitation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210715054300_added_entity_MPrequalVendorSuggestion.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
@@ -390,5 +392,7 @@
     <include file="config/liquibase/changelog/20210714045000_added_entity_constraints_CPrequalMethodCriteria.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210714072200_added_entity_constraints_CPrequalMethodSubCriteria.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210714100800_added_entity_constraints_MPrequalificationInformation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210715054200_added_entity_constraints_MPrequalificationInvitation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210715054300_added_entity_constraints_MPrequalVendorSuggestion.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

@@ -1,0 +1,11 @@
+id;uid;active;prequalification_id;ad_organization_id;business_sub_category_id;vendor_id
+1;03e0f17a-f82a-4080-b72c-3157982ab048;true;1;1;1;1
+2;9d204bfc-2296-4781-8f8e-cfc12d519d5b;true;2;2;2;2
+3;32889dc2-4a30-4521-bf7e-30d7a9f1e311;true;3;3;3;3
+4;c3ac4c27-6c17-480e-8b85-196fa33476ba;false;4;4;4;4
+5;39b60d88-9813-41b4-bbe5-663f551de0cc;false;5;5;5;5
+6;bc499478-d9c6-4e30-8bdb-521166d65888;true;6;6;6;6
+7;6c04afd4-f75e-4f2d-9af0-bb4c82977f2c;true;7;7;7;7
+8;23ffb011-b151-4170-a46b-4abe4c1194b3;true;8;8;8;8
+9;b15545ae-2158-40b4-a069-d3dc43deef1a;false;9;9;9;9
+10;44163bb7-cd5f-4000-8a91-7ae840926d4a;true;10;10;10;10

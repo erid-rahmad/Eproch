@@ -3,8 +3,10 @@ package com.bhp.opusb.service;
 import com.bhp.opusb.domain.MPrequalificationInformation;
 import com.bhp.opusb.domain.enumeration.MPrequalificationProcess;
 import com.bhp.opusb.repository.MPrequalificationInformationRepository;
+import com.bhp.opusb.service.dto.MPrequalVendorSuggestionDTO;
 import com.bhp.opusb.service.dto.MPrequalificationFormDTO;
 import com.bhp.opusb.service.dto.MPrequalificationInformationDTO;
+import com.bhp.opusb.service.dto.MPrequalificationInvitationDTO;
 import com.bhp.opusb.service.mapper.MPrequalificationFormMapper;
 import com.bhp.opusb.service.mapper.MPrequalificationInformationMapper;
 import com.bhp.opusb.util.DocumentUtil;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -33,9 +36,15 @@ public class MPrequalificationInformationService {
     private final MPrequalificationInformationMapper mPrequalificationInformationMapper;
     private final MPrequalificationFormMapper mPrequalificationFormMapper;
 
+    private final MPrequalificationInvitationService mPrequalificationInvitationService;
+    private final MPrequalVendorSuggestionService mPrequalVendorSuggestionService;
+
     public MPrequalificationInformationService(MPrequalificationInformationRepository mPrequalificationInformationRepository, 
+        MPrequalificationInvitationService mPrequalificationInvitationService, MPrequalVendorSuggestionService mPrequalVendorSuggestionService,
         MPrequalificationInformationMapper mPrequalificationInformationMapper, MPrequalificationFormMapper mPrequalificationFormMapper) {
         this.mPrequalificationInformationRepository = mPrequalificationInformationRepository;
+        this.mPrequalificationInvitationService = mPrequalificationInvitationService;
+        this.mPrequalVendorSuggestionService = mPrequalVendorSuggestionService;
         this.mPrequalificationInformationMapper = mPrequalificationInformationMapper;
         this.mPrequalificationFormMapper = mPrequalificationFormMapper;
     }
@@ -110,9 +119,36 @@ public class MPrequalificationInformationService {
  
              preqInfo = mPrequalificationInformationRepository.save(preqInfo);
              mPrequalificationInformationDTO = mPrequalificationFormMapper.toDto(preqInfo);
+        } else if (MPrequalificationProcess.INVITATION.equals(step)) {
+            final List<MPrequalificationInvitationDTO> vendorInvitations = mPrequalificationInformationDTO.getVendorInvitations();
+            final List<MPrequalificationInvitationDTO> removedVendorInvitations = mPrequalificationInformationDTO.getRemovedVendorInvitations();
+            final List<MPrequalVendorSuggestionDTO> vendorSuggestions = mPrequalificationInformationDTO.getVendorSuggestions();
+            final List<MPrequalVendorSuggestionDTO> removedVendorSuggestions = mPrequalificationInformationDTO.getRemovedVendorSuggestions();
+            saveInvitation(mPrequalificationInformationDTO, vendorInvitations, vendorSuggestions, removedVendorInvitations, removedVendorSuggestions);
         }
 
         return mPrequalificationInformationDTO;
+    }
+
+    /**
+     * Save vendor invitation and suggestions in the second step.
+     * @param mBiddingDTO
+     * @param vendorInvitations
+     * @param vendorSuggestions
+     * @param removedVendorInvitations
+     * @param removedVendorSuggestions
+     * @return
+     */
+    private MPrequalificationInformationDTO saveInvitation(MPrequalificationInformationDTO mBiddingDTO, 
+            List<MPrequalificationInvitationDTO> vendorInvitations, List<MPrequalVendorSuggestionDTO> vendorSuggestions, 
+            List<MPrequalificationInvitationDTO> removedVendorInvitations, List<MPrequalVendorSuggestionDTO> removedVendorSuggestions) {
+        mPrequalificationInvitationService.saveAll(vendorInvitations, mBiddingDTO);
+        mPrequalificationInvitationService.deleteAll(removedVendorInvitations);
+        mPrequalVendorSuggestionService.saveAll(vendorSuggestions, mBiddingDTO);
+        mPrequalVendorSuggestionService.deleteAll(removedVendorSuggestions);
+        removedVendorInvitations.clear();
+        removedVendorSuggestions.clear();
+        return mBiddingDTO;
     }
 
     @Transactional(readOnly = true)

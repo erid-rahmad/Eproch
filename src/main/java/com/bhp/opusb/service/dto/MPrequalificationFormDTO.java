@@ -1,13 +1,9 @@
 package com.bhp.opusb.service.dto;
 
-import java.time.ZonedDateTime;
-import javax.validation.constraints.*;
-
 import com.bhp.opusb.domain.enumeration.MPrequalificationProcess;
 
-import java.util.Objects;
-import java.util.UUID;
-import javax.persistence.Lob;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MPrequalificationInformation} entity.
@@ -15,9 +11,39 @@ import javax.persistence.Lob;
 public class MPrequalificationFormDTO extends MPrequalificationInformationDTO {
     private static final long serialVersionUID = 1L;
     private MPrequalificationProcess step;
+
+    // Vendor Invitation Step.
+    private List<MPrequalificationInvitationDTO> vendorInvitations = new ArrayList<>();
+    private List<MPrequalificationInvitationDTO> removedVendorInvitations = new ArrayList<>();
+    private List<MPrequalVendorSuggestionDTO> vendorSuggestions = new ArrayList<>();
+    private List<MPrequalVendorSuggestionDTO> removedVendorSuggestions = new ArrayList<>();
     
     public MPrequalificationProcess getStep() {
         return step;
+    }
+    public List<MPrequalVendorSuggestionDTO> getRemovedVendorSuggestions() {
+        return removedVendorSuggestions;
+    }
+    public void setRemovedVendorSuggestions(List<MPrequalVendorSuggestionDTO> removedVendorSuggestions) {
+        this.removedVendorSuggestions = removedVendorSuggestions;
+    }
+    public List<MPrequalVendorSuggestionDTO> getVendorSuggestions() {
+        return vendorSuggestions;
+    }
+    public void setVendorSuggestions(List<MPrequalVendorSuggestionDTO> vendorSuggestions) {
+        this.vendorSuggestions = vendorSuggestions;
+    }
+    public List<MPrequalificationInvitationDTO> getRemovedVendorInvitations() {
+        return removedVendorInvitations;
+    }
+    public void setRemovedVendorInvitations(List<MPrequalificationInvitationDTO> removedVendorInvitations) {
+        this.removedVendorInvitations = removedVendorInvitations;
+    }
+    public List<MPrequalificationInvitationDTO> getVendorInvitations() {
+        return vendorInvitations;
+    }
+    public void setVendorInvitations(List<MPrequalificationInvitationDTO> vendorInvitations) {
+        this.vendorInvitations = vendorInvitations;
     }
     public void setStep(MPrequalificationProcess step) {
         this.step = step;

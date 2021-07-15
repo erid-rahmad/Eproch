@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import PrequalificationInformation from './components/prequalification-information.vue';
-//import PrequalificationInvitation from './components/bidding-schedule.vue';
+import PrequalificationInvitation from './components/prequalification-invitation.vue';
 //import PrequalificationEvent from './components/vendor-invitation.vue';
 import { Watch } from 'vue-property-decorator';
 
@@ -27,7 +27,7 @@ export enum BiddingStep {
 @Component({
   components: {
     PrequalificationInformation,
-    //PrequalificationInvitation,
+    PrequalificationInvitation,
     //PrequalificationEvent
   }
 })
@@ -98,7 +98,7 @@ export default class StepsForm extends StepsFormProps {
       active = this.direction > 0 ? this.active++ : this.active--;
     }
 
-    if (active <= 3) {
+    if (active <= 2) {
       this.preq = data;
     }
   }
@@ -129,7 +129,7 @@ export default class StepsForm extends StepsFormProps {
   }
 
   next() {
-    if (this.active === 3) {
+    if (this.active === 2) {
       return;
     }
 

@@ -23,19 +23,18 @@
         @error="onStepError"
         @saved="onStepSaved"
       ></prequalification-information>
-      <!--
-      <bidding-schedule
-        v-if="active === 1"
+      <prequalification-invitation
         ref="step-1"
         class="step-panel"
+        v-if="active === 1"
         :edit-mode="editMode"
         :data="preq"
         @change="onStepChanged"
         @error="onStepError"
         @saved="onStepSaved"
-      ></bidding-schedule>
-
-      <vendor-invitation
+      ></prequalification-invitation>
+      <!--
+      <bidding-schedule
         ref="step-2"
         class="step-panel"
         v-if="active === 2"
@@ -44,7 +43,7 @@
         @change="onStepChanged"
         @error="onStepError"
         @saved="onStepSaved"
-      ></vendor-invitation>
+      ></bidding-schedule>
       -->
     </el-scrollbar>
 

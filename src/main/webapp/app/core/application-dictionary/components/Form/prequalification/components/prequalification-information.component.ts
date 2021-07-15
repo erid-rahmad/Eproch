@@ -85,7 +85,7 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Prequal
     return this.preq.biddingStatus === 'P';
   }
 
-  @Watch('bidding', { deep: true })
+  @Watch('preq', { deep: true })
   onBiddingChanged(_bidding: Record<string, any>) {
     if (this.editMode && this.recordsLoaded && ! this.updated) {
       this.updated = true;

@@ -1151,6 +1151,16 @@ entity MPrequalificationInformation {
 	rejectedReason String
 }
 
+entity MPrequalificationInvitation {
+	uid UUID
+	active Boolean
+}
+
+entity MPrequalVendorSuggestion {
+	uid UUID
+	active Boolean
+}
+
 entity MAuction {
 	name String required maxlength(30)
 	description String
@@ -2285,6 +2295,16 @@ relationship ManyToOne {
 	CVendorEvaluationLine{cVendorEvaluation required} to CVendorEvaluation
 
 	MPrequalificationInformation{adOrganization required} to ADOrganization
+
+	MPrequalificationInvitation{prequalification required} to MPrequalificationInformation
+	MPrequalificationInvitation{adOrganization required} to ADOrganization
+	MPrequalificationInvitation{businessCategory required} to CBusinessCategory
+	MPrequalificationInvitation{businessSubCategory required} to CBusinessCategory
+
+	MPrequalVendorSuggestion{prequalification required} to MPrequalificationInformation
+	MPrequalVendorSuggestion{adOrganization required} to ADOrganization
+	MPrequalVendorSuggestion{businessSubCategory required} to CBusinessCategory
+	MPrequalVendorSuggestion{vendor required} to CVendor
 
 	MAuction{adOrganization required} to ADOrganization
 	MAuction{currency required} to CCurrency
