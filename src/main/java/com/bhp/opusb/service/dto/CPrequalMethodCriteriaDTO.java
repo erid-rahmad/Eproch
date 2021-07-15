@@ -20,6 +20,7 @@ public class CPrequalMethodCriteriaDTO extends AbstractAuditingDTO implements Se
 
 
     private Long biddingCriteriaId;
+    private String biddingCriteriaName;
 
     private Long adOrganizationId;
 
@@ -27,6 +28,14 @@ public class CPrequalMethodCriteriaDTO extends AbstractAuditingDTO implements Se
     
     public Long getId() {
         return id;
+    }
+
+    public String getBiddingCriteriaName() {
+        return biddingCriteriaName;
+    }
+
+    public void setBiddingCriteriaName(String biddingCriteriaName) {
+        this.biddingCriteriaName = biddingCriteriaName;
     }
 
     public void setId(Long id) {

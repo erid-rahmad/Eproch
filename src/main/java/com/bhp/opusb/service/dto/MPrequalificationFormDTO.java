@@ -17,9 +17,18 @@ public class MPrequalificationFormDTO extends MPrequalificationInformationDTO {
     private List<MPrequalificationInvitationDTO> removedVendorInvitations = new ArrayList<>();
     private List<MPrequalVendorSuggestionDTO> vendorSuggestions = new ArrayList<>();
     private List<MPrequalVendorSuggestionDTO> removedVendorSuggestions = new ArrayList<>();
+
+    // Vendor Event Step.
+    private MPrequalificationEventDTO event = new MPrequalificationEventDTO();
     
     public MPrequalificationProcess getStep() {
         return step;
+    }
+    public MPrequalificationEventDTO getEvent() {
+        return event;
+    }
+    public void setEvent(MPrequalificationEventDTO event) {
+        this.event = event;
     }
     public List<MPrequalVendorSuggestionDTO> getRemovedVendorSuggestions() {
         return removedVendorSuggestions;

@@ -3,6 +3,7 @@ package com.bhp.opusb.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -89,9 +90,53 @@ public class MPrequalificationInformation extends AbstractAuditingEntity impleme
     @JsonIgnoreProperties("mPrequalificationInformations")
     private ADOrganization adOrganization;
 
+    @Formula("(select mpe.event_id from m_prequalification_event mpe where mpe.prequalification_id = id)")
+    private Long preqEventId;
+
+    @Formula("(select cpe.name from c_prequalification_event cpe where cpe.id = (select mpe.event_id from m_prequalification_event mpe where mpe.prequalification_id = id))")
+    private String preqEventName;
+
+    @Formula("(select mpe.method_id from m_prequalification_event mpe where mpe.prequalification_id = id)")
+    private Long preqMethodId;
+
+    @Formula("(select cpm.name from c_prequalification_method cpm where cpm.id = (select mpe.method_id from m_prequalification_event mpe where mpe.prequalification_id = id))")
+    private String preqMethodName;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
+    }
+
+    public String getPreqMethodName() {
+        return preqMethodName;
+    }
+
+    public void setPreqMethodName(String preqMethodName) {
+        this.preqMethodName = preqMethodName;
+    }
+
+    public Long getPreqMethodId() {
+        return preqMethodId;
+    }
+
+    public void setPreqMethodId(Long preqMethodId) {
+        this.preqMethodId = preqMethodId;
+    }
+
+    public String getPreqEventName() {
+        return preqEventName;
+    }
+
+    public void setPreqEventName(String preqEventName) {
+        this.preqEventName = preqEventName;
+    }
+
+    public Long getPreqEventId() {
+        return preqEventId;
+    }
+
+    public void setPreqEventId(Long preqEventId) {
+        this.preqEventId = preqEventId;
     }
 
     public void setId(Long id) {

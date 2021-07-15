@@ -33,8 +33,7 @@
         @error="onStepError"
         @saved="onStepSaved"
       ></prequalification-invitation>
-      <!--
-      <bidding-schedule
+      <prequalification-event
         ref="step-2"
         class="step-panel"
         v-if="active === 2"
@@ -43,8 +42,7 @@
         @change="onStepChanged"
         @error="onStepError"
         @saved="onStepSaved"
-      ></bidding-schedule>
-      -->
+      ></prequalification-event>
     </el-scrollbar>
 
     <div class="steps-control-btn-group">

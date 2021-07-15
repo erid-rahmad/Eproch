@@ -24,11 +24,20 @@ public class CPrequalMethodSubCriteriaDTO extends AbstractAuditingDTO implements
     private Long biddingCriteriaId;
 
     private Long biddingSubCriteriaId;
+    private String biddingSubCriteriaName;
 
     private Long prequalMethodCriteriaId;
     
     public Long getId() {
         return id;
+    }
+
+    public String getBiddingSubCriteriaName() {
+        return biddingSubCriteriaName;
+    }
+
+    public void setBiddingSubCriteriaName(String biddingSubCriteriaName) {
+        this.biddingSubCriteriaName = biddingSubCriteriaName;
     }
 
     public void setId(Long id) {

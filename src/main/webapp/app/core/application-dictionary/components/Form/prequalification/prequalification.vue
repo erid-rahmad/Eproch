@@ -48,10 +48,10 @@
                 <el-table-column label="Title" min-width="140" prop="name" show-overflow-tooltip
                                  sortable></el-table-column>
 
-                <el-table-column label="Prequalification Event" min-width="130" prop="event" show-overflow-tooltip
+                <el-table-column label="Prequalification Event" min-width="130" prop="preqEventName" show-overflow-tooltip
                                  sortable></el-table-column>
 
-                <el-table-column label="Prequalification Method" min-width="130" prop="method" show-overflow-tooltip
+                <el-table-column label="Prequalification Method" min-width="130" prop="preqMethodName" show-overflow-tooltip
                                  sortable></el-table-column>
             </el-table>
             <el-pagination

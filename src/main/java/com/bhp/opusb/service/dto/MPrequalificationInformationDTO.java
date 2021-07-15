@@ -56,8 +56,44 @@ public class MPrequalificationInformationDTO extends AbstractAuditingDTO impleme
 
     private Long adOrganizationId;
     
+    //for display
+    private String preqMethodName, preqEventName;
+    private Long preqMethodId, preqEventId;
+
     public Long getId() {
         return id;
+    }
+
+    public Long getPreqEventId() {
+        return preqEventId;
+    }
+
+    public void setPreqEventId(Long preqEventId) {
+        this.preqEventId = preqEventId;
+    }
+
+    public Long getPreqMethodId() {
+        return preqMethodId;
+    }
+
+    public void setPreqMethodId(Long preqMethodId) {
+        this.preqMethodId = preqMethodId;
+    }
+
+    public String getPreqEventName() {
+        return preqEventName;
+    }
+
+    public void setPreqEventName(String preqEventName) {
+        this.preqEventName = preqEventName;
+    }
+
+    public String getPreqMethodName() {
+        return preqMethodName;
+    }
+
+    public void setPreqMethodName(String preqMethodName) {
+        this.preqMethodName = preqMethodName;
     }
 
     public String getDownloadUrl() {

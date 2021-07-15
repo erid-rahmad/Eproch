@@ -217,10 +217,10 @@ export default class PrequalificationProcess extends mixins(AccessLevelMixin) {
     this.stepIndex = stepIndex;
     this.editMode = true;
     this.selectedRow = row;
+    this.selectedRow.event = {};
     this.index = false;
   }
 
- 
   onApprove(){
     if(this.selectedRow.documentAction == 'RJC'){
       this.selectedRow.documentAction = 'APV'
@@ -257,7 +257,7 @@ export default class PrequalificationProcess extends mixins(AccessLevelMixin) {
 
   processDoc(approve: boolean){
     this.commonService(baseWorkflowUrl+'/start').update(JSON.parse(`{
-      "tableName":"m_bidding",
+      "tableName":"m_prequalification_information",
       "id":"${this.selectedRow.id}"
     }`)).then((res)=>{
       this.$message.success((approve?"Approved":"Rejected")+" bidding.");

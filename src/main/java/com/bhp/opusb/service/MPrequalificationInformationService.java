@@ -38,15 +38,18 @@ public class MPrequalificationInformationService {
 
     private final MPrequalificationInvitationService mPrequalificationInvitationService;
     private final MPrequalVendorSuggestionService mPrequalVendorSuggestionService;
+    private final MPrequalificationEventService mPrequalificationEventService;
 
     public MPrequalificationInformationService(MPrequalificationInformationRepository mPrequalificationInformationRepository, 
         MPrequalificationInvitationService mPrequalificationInvitationService, MPrequalVendorSuggestionService mPrequalVendorSuggestionService,
-        MPrequalificationInformationMapper mPrequalificationInformationMapper, MPrequalificationFormMapper mPrequalificationFormMapper) {
+        MPrequalificationInformationMapper mPrequalificationInformationMapper, MPrequalificationFormMapper mPrequalificationFormMapper,
+        MPrequalificationEventService mPrequalificationEventService) {
         this.mPrequalificationInformationRepository = mPrequalificationInformationRepository;
         this.mPrequalificationInvitationService = mPrequalificationInvitationService;
         this.mPrequalVendorSuggestionService = mPrequalVendorSuggestionService;
         this.mPrequalificationInformationMapper = mPrequalificationInformationMapper;
         this.mPrequalificationFormMapper = mPrequalificationFormMapper;
+        this.mPrequalificationEventService = mPrequalificationEventService;
     }
 
     /**
@@ -125,6 +128,11 @@ public class MPrequalificationInformationService {
             final List<MPrequalVendorSuggestionDTO> vendorSuggestions = mPrequalificationInformationDTO.getVendorSuggestions();
             final List<MPrequalVendorSuggestionDTO> removedVendorSuggestions = mPrequalificationInformationDTO.getRemovedVendorSuggestions();
             saveInvitation(mPrequalificationInformationDTO, vendorInvitations, vendorSuggestions, removedVendorInvitations, removedVendorSuggestions);
+        } else if (MPrequalificationProcess.EVENT.equals(step)) {
+            mPrequalificationInformationDTO.getEvent().setPrequalificationId(mPrequalificationInformationDTO.getId());
+            mPrequalificationInformationDTO.getEvent().setAdOrganizationId(mPrequalificationInformationDTO.getAdOrganizationId());
+
+            mPrequalificationEventService.save(mPrequalificationInformationDTO.getEvent());
         }
 
         return mPrequalificationInformationDTO;

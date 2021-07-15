@@ -15,6 +15,7 @@ public interface CPrequalMethodSubCriteriaMapper extends EntityMapper<CPrequalMe
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "biddingCriteria.id", target = "biddingCriteriaId")
     @Mapping(source = "biddingSubCriteria.id", target = "biddingSubCriteriaId")
+    @Mapping(source = "biddingSubCriteria.name", target = "biddingSubCriteriaName")
     @Mapping(source = "prequalMethodCriteria.id", target = "prequalMethodCriteriaId")
     CPrequalMethodSubCriteriaDTO toDto(CPrequalMethodSubCriteria cPrequalMethodSubCriteria);
 

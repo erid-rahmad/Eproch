@@ -128,11 +128,11 @@ export default class PreqInvitation extends Mixins(AccessLevelMixin, PreqInvitat
   private retrieveVendorInvitations(biddingId: number): Promise<boolean> {
     return new Promise((resolve, reject) => {
       this.loadingCategories = true;
-      this.commonService('/api/m-vendor-invitations')
+      this.commonService('/api/m-prequalification-invitations')
       .retrieve({
         criteriaQuery: this.updateCriteria([
           'active.equals=true',
-          `biddingId.equals=${biddingId}`
+          `prequalificationId.equals=${biddingId}`
         ]),
         paginationQuery: {
           page: 0,
@@ -159,11 +159,11 @@ export default class PreqInvitation extends Mixins(AccessLevelMixin, PreqInvitat
   private retrieveVendorSuggestions(biddingId: number): Promise<boolean> {
     return new Promise((resolve, reject) => {
       this.loadingSuggestions = true;
-      this.commonService('/api/m-vendor-suggestions')
+      this.commonService('/api/m-prequal-vendor-suggestions')
       .retrieve({
         criteriaQuery: this.updateCriteria([
           'active.equals=true',
-          `biddingId.equals=${biddingId}`
+          `prequalification.equals=${biddingId}`
         ]),
         paginationQuery: {
           page: 0,

@@ -26,11 +26,20 @@ public class CPrequalificationEventLineDTO extends AbstractAuditingDTO {
     private Long prequalificationEventId;
 
     private Long prequalificationStepId;
+    private String prequalificationStepName;
 
     private Long adOrganizationId;
 
     public Long getId() {
         return id;
+    }
+
+    public String getPrequalificationStepName() {
+        return prequalificationStepName;
+    }
+
+    public void setPrequalificationStepName(String prequalificationStepName) {
+        this.prequalificationStepName = prequalificationStepName;
     }
 
     public void setId(Long id) {

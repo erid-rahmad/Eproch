@@ -14,6 +14,7 @@ public interface CPrequalificationEventLineMapper extends EntityMapper<CPrequali
 
     @Mapping(source = "prequalificationEvent.id", target = "prequalificationEventId")
     @Mapping(source = "prequalificationStep.id", target = "prequalificationStepId")
+    @Mapping(source = "prequalificationStep.name", target = "prequalificationStepName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     CPrequalificationEventLineDTO toDto(CPrequalificationEventLine cPrequalificationEventLine);
 

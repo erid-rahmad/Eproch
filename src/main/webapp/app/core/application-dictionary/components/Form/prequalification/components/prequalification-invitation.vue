@@ -63,13 +63,13 @@
               {{ row.$index+1 }}
             </template>
           </el-table-column>
-
+          <!--
           <el-table-column
             label="Business Classification"
             min-width="100"
             prop="businessClassificationName"
           ></el-table-column>
-
+          -->
           <el-table-column
             label="Category"
             min-width="100"
@@ -332,7 +332,7 @@
 <script lang="ts" src="./prequalification-invitation.component.ts"></script>
 
 <style lang="scss">
-.compact .vendor-invitation {
+.compact .prequalification-invitation {
   .el-table--mini {
     td, th {
       height: 35px;

@@ -24,7 +24,6 @@
               filterable
               placeholder="Select Prequalification Type"
               style="width: 100%"
-              @change="onBiddingTypeChanged"
             >
               <el-option v-for="item in biddingTypeOptions" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
@@ -68,7 +67,7 @@
 <script lang="ts" src="./prequalification-information.component.ts"></script>
 
 <style lang="scss">
-.compact .bidding-information .el-table--mini {
+.compact .prequalification-information .el-table--mini {
   th,
   td {
     height: 35px;

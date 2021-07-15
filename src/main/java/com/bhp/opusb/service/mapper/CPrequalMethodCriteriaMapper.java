@@ -13,6 +13,7 @@ import org.mapstruct.*;
 public interface CPrequalMethodCriteriaMapper extends EntityMapper<CPrequalMethodCriteriaDTO, CPrequalMethodCriteria> {
 
     @Mapping(source = "biddingCriteria.id", target = "biddingCriteriaId")
+    @Mapping(source = "biddingCriteria.name", target = "biddingCriteriaName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "prequalMethodLine.id", target = "prequalMethodLineId")
     CPrequalMethodCriteriaDTO toDto(CPrequalMethodCriteria cPrequalMethodCriteria);

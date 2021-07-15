@@ -1,0 +1,238 @@
+<template>
+  <div class="prequalification-event">
+    <el-form label-position="left" label-width="150px" :model="preq" size="mini">
+      <el-row :gutter="24">
+        <el-col :xs="24" :sm="24" :lg="12" :xl="8">
+          <el-form-item label="Title" disabled prop="name" required>
+            <el-input v-model="preq.name" class="form-input"></el-input>
+          </el-form-item>
+          <el-form-item label="Prequistion No" disabled prop="documentNo">
+            <el-input v-model="preq.documentNo" class="form-input"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="24">
+        <el-col :xs="24" :sm="24" :lg="12" :xl="8">
+          <div>
+            <el-form-item label="Prequalification Event">
+              <el-select
+                v-model="preq.event.eventId"
+                class="form-input"
+                clearable
+                filterable
+                placeholder="Select"
+                @change="updatePrequalificationSteps()"
+              >
+                <el-option v-for="item in eventOptions" :key="item.key" :label="item.value" :value="item.key"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-button size="mini" type="primary"> Select PIC </el-button>
+          </div>
+        </el-col>
+        <el-col :xs="24" :sm="24" :lg="12" :xl="8">
+          <div>
+            <el-form-item label="Prequalification Method">
+              <el-select v-model="preq.event.methodId" class="form-input" clearable filterable placeholder="Select">
+                <el-option v-for="item in methodOptions" :key="item.key" :label="item.value" :value="item.key"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-button size="mini" type="primary" @click="loadDetail()"> Method Detail </el-button>
+          </div>
+        </el-col>
+      </el-row>
+    </el-form>
+    <el-row>
+      <el-col :span="24">
+        <el-divider content-position="left"><h4>Event Steps</h4></el-divider>
+        <el-table
+          v-loading="processing"
+          ref="eventSteps"
+          border
+          :data="eventSteps"
+          :default-sort="gridSchema.defaultSort"
+          :empty-text="gridSchema.emptyText"
+          highlight-current-row
+          size="mini"
+          stripe
+          style="width: 100%"
+        >
+          <el-table-column label="No" width="50">
+            <template slot-scope="row">
+              {{ row.$index + 1 }}
+            </template>
+          </el-table-column>
+
+          <el-table-column label="Step" min-width="200" prop="prequalificationStepName" show-overflow-tooltip></el-table-column>
+          <!--
+          <el-table-column label="Schedule">
+            <el-table-column
+              width="422"
+              prop="schedule"
+              label="Plan"
+            >
+              <template slot-scope="{ row }">
+                <el-date-picker
+                  v-model="row.schedule"
+                  :disabled="readOnly"
+                  :format="dateDisplayFormat"
+                  end-placeholder="End Datetime"
+                  range-separator="To"
+                  size="mini"
+                  start-placeholder="Start Datetime"
+                  type="datetimerange"
+                  @change="value => onScheduleChanged(row, value)"
+                ></el-date-picker>
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="422"
+              prop="actual"
+              label="Actual"
+            >
+              <template slot-scope="{ row }">
+                <el-date-picker
+                  v-model="row.actual"
+                  disabled
+                  :format="dateDisplayFormat"
+                  end-placeholder="End Datetime"
+                  range-separator="To"
+                  size="mini"
+                  start-placeholder="Start Datetime"
+                  type="datetimerange"
+                ></el-date-picker>
+              </template>
+            </el-table-column>
+          </el-table-column>
+          <el-table-column
+            label="Status"
+            min-width="150"
+          >
+            <template slot-scope="{ row }">
+              {{ printStatus(row.status) }}
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            fixed="right"
+            label="Action"
+            min-width="200"
+          >
+            <template slot-scope="{ row }">
+              <el-button
+                size="mini"
+                @click="editSchedule(row)"
+              >
+                <svg-icon name="icomoo/084-calendar"></svg-icon> Date
+              </el-button>
+
+              <el-button
+                v-if="row.status && row.status !== 'N'"
+                size="mini"
+                type="primary"
+                @click="viewEvent(row)"
+              >
+                <svg-icon name="link"></svg-icon> View
+              </el-button>
+            </template>
+          </el-table-column>
+        -->
+        </el-table>
+      </el-col>
+    </el-row>
+    <el-dialog :visible.sync="showDetail" title="Method Detail" width="50%">
+      <el-form label-position="left" label-width="128px">
+        <el-row
+          v-for="(line, index) in evaluationMethodCriteria"
+          :key="line.id"
+          :class="`line-${index}`"
+          class="criteria-section"
+        >
+          <el-row
+            v-for="(criteria, index) in line.criteria"
+            :key="criteria.id"
+            :class="`criteria2-${index}`"
+            class="criteria-section"
+          >
+            <el-col :span="24">
+              <el-form-item class="criteria-label" label="Criteria">
+                {{ criteria.biddingCriteriaName }}
+              </el-form-item>
+              <el-row
+                v-for="(subCriteria, subIndex) in criteria.subCriteria"
+                :key="subCriteria.id"
+                :class="`sub-${subIndex}`"
+                class="sub-criteria-section"
+              >
+                <el-col :span="24">
+                  <el-row>
+                    <el-col :span="12">
+                      <div class="grid-content bg-purple">
+                        <el-form-item label="Sub Criteria">
+                          {{ subCriteria.biddingSubCriteriaName }}
+                        </el-form-item>
+                      </div>
+                    </el-col>
+                  </el-row>
+                  <el-row
+                  >
+                    <el-table :data="subCriteria.questions" border class="question-list" highlight-current-row size="mini">
+                      <el-table-column label="No." width="50">
+                        <template slot-scope="{ $index }">
+                          {{ $index + 1 }}
+                        </template>
+                      </el-table-column>
+                      <el-table-column label="Question" min-width="320" prop="name" show-overflow-tooltip></el-table-column>
+                      <el-table-column label="Requirement" prop="requirement" width="150">
+                      </el-table-column>
+                    </el-table>
+                    <el-divider />
+                  </el-row>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+        </el-row>
+      </el-form>
+    </el-dialog>
+  </div>
+</template>
+
+<script lang="ts" src="./prequalification-event.component.ts"></script>
+
+<style lang="scss">
+.compact .prequalification-event .el-table--mini {
+  th,
+  td {
+    height: 35px;
+  }
+}
+
+.prequalification-event {
+  .attachment-form {
+    .el-upload {
+      width: 100%;
+
+      .el-upload-dragger {
+        width: 100%;
+      }
+    }
+  }
+
+  .el-upload-list__item-name {
+    font-weight: 400;
+  }
+}
+</style>
+
+<style lang="scss" scoped>
+.prequalification-event {
+  .el-tag {
+    border-radius: 12px;
+    margin: 4px 0;
+
+    .el-tag--success {
+      background: #80b600;
+    }
+  }
+}
+</style>

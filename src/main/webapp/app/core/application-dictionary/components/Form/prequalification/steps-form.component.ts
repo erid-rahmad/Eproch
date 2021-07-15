@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import PrequalificationInformation from './components/prequalification-information.vue';
 import PrequalificationInvitation from './components/prequalification-invitation.vue';
-//import PrequalificationEvent from './components/vendor-invitation.vue';
+import PrequalificationEvent from './components/prequalification-event.vue';
 import { Watch } from 'vue-property-decorator';
 
 const StepsFormProps = Vue.extend({
@@ -28,7 +28,7 @@ export enum BiddingStep {
   components: {
     PrequalificationInformation,
     PrequalificationInvitation,
-    //PrequalificationEvent
+    PrequalificationEvent
   }
 })
 export default class StepsForm extends StepsFormProps {
