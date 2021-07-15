@@ -1,0 +1,54 @@
+{
+    "name": "CPrequalMethodCriteria",
+    "fields": [
+        {
+            "fieldName": "weight",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cBiddingCriteria",
+            "otherEntityRelationshipName": "cPrequalMethodCriteria",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingCriteria",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cPrequalMethodCriteria",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cPrequalMethodLine",
+            "otherEntityRelationshipName": "cPrequalMethodCriteria",
+            "relationshipName": "prequalMethodLine",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210714045000",
+    "entityTableName": "c_prequal_method_criteria",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

@@ -27,6 +27,10 @@ public class CPrequalificationStep extends AbstractAuditingEntity {
     private Long id;
 
     @NotNull
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @NotNull
     @Column(name = "description", nullable = false)
     private String description;
 
@@ -51,6 +55,19 @@ public class CPrequalificationStep extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public CPrequalificationStep name(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -144,6 +161,7 @@ public class CPrequalificationStep extends AbstractAuditingEntity {
     public String toString() {
         return "CPrequalificationStep{" +
             "id=" + getId() +
+            ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", type='" + getType() + "'" +
             ", uid='" + getUid() + "'" +

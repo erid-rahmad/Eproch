@@ -1060,7 +1060,36 @@ entity CEvaluationCriteria {
 	active Boolean
 }
 
+entity CPrequalificationMethod{
+	name String required maxlength(60)
+	uid UUID
+	active Boolean
+}
+
+entity CPrequalMethodLine{
+	type String required maxlength(10)
+
+	weight BigDecimal max(100)
+	passingGrade BigDecimal
+	uid UUID
+	active Boolean
+}
+
+entity CPrequalMethodCriteria {
+    weight Integer
+	uid UUID
+	active Boolean
+}
+
+
+entity CPrequalMethodSubCriteria{
+	weight Integer
+	uid UUID
+	active Boolean
+}
+
 entity CPrequalificationStep {
+	name String required
 	description String required
 	type String
 	uid UUID
@@ -1074,6 +1103,8 @@ entity CPrequalificationEvent {
 }
 
 entity CPrequalificationEventLine {
+	description String
+	sequence Integer required min(0)
 	uid UUID
 	active Boolean
 }
@@ -1096,6 +1127,36 @@ entity CVendorEvaluationLine {
 	userWeight BigDecimal max(100)
 	procurementWeight BigDecimal max(100)
 	question String
+	uid UUID
+	active Boolean
+}
+
+entity MPrequalificationInformation {
+	uid UUID
+	active Boolean
+
+	name String
+	type String required maxlength(10)
+	announcementText TextBlob
+
+	// Common transactional fields.
+	dateTrx ZonedDateTime
+	documentNo String maxlength(30)
+	documentAction String required maxlength(10)
+	documentStatus String required maxlength(12)
+	approved Boolean
+	processed Boolean
+	dateApprove ZonedDateTime
+	dateReject ZonedDateTime
+	rejectedReason String
+}
+
+entity MPrequalificationInvitation {
+	uid UUID
+	active Boolean
+}
+
+entity MPrequalVendorSuggestion {
 	uid UUID
 	active Boolean
 }
@@ -1788,6 +1849,8 @@ relationship OneToOne {
 
 	MBidNegoPrice{attachment} to CAttachment
 	MBlacklist{attachment} to CAttachment
+
+	MPrequalificationInformation{attachment required} to CAttachment
 }
 
 /**
@@ -2212,13 +2275,25 @@ relationship ManyToOne {
 	CEvalMethodSubCriteria{biddingSubCriteria required} to CBiddingSubCriteria
 	CEvalMethodSubCriteria{evaluationMethodCriteria required} to CEvaluationMethodCriteria
 
-
-
 	CEvaluationCriteria{adOrganization required} to ADOrganization
 	CEvaluationCriteria{evaluationMethodLine required} to CEvaluationMethodLine
 	CEvaluationCriteria{biddingCriteria required} to CBiddingCriteria
 	CEvaluationCriteria{biddingSubCriteria required} to CBiddingSubCriteria
 	CEvaluationCriteria{pic required} to AdUser
+
+	CPrequalificationMethod{adOrganization required} to ADOrganization
+
+	CPrequalMethodLine{adOrganization required} to ADOrganization
+	CPrequalMethodLine{prequalMethod required} to CPrequalificationMethod
+
+	CPrequalMethodCriteria{biddingCriteria required} to CBiddingCriteria
+	CPrequalMethodCriteria{adOrganization required} to ADOrganization
+	CPrequalMethodCriteria{prequalMethodLine } to CPrequalMethodLine
+
+	CPrequalMethodSubCriteria{adOrganization required} to ADOrganization
+	CPrequalMethodSubCriteria{biddingCriteria required} to CBiddingCriteria
+	CPrequalMethodSubCriteria{biddingSubCriteria required} to CBiddingSubCriteria
+	CPrequalMethodSubCriteria{prequalMethodCriteria required} to CPrequalMethodCriteria
 
 	CPrequalificationStep{adOrganization required} to ADOrganization
 
@@ -2234,6 +2309,18 @@ relationship ManyToOne {
 	CVendorEvaluationLine{adOrganization required} to ADOrganization
 	CVendorEvaluationLine{cQuestionCategory required} to CQuestionCategory
 	CVendorEvaluationLine{cVendorEvaluation required} to CVendorEvaluation
+
+	MPrequalificationInformation{adOrganization required} to ADOrganization
+
+	MPrequalificationInvitation{prequalification required} to MPrequalificationInformation
+	MPrequalificationInvitation{adOrganization required} to ADOrganization
+	MPrequalificationInvitation{businessCategory required} to CBusinessCategory
+	MPrequalificationInvitation{businessSubCategory required} to CBusinessCategory
+
+	MPrequalVendorSuggestion{prequalification required} to MPrequalificationInformation
+	MPrequalVendorSuggestion{adOrganization required} to ADOrganization
+	MPrequalVendorSuggestion{businessSubCategory required} to CBusinessCategory
+	MPrequalVendorSuggestion{vendor required} to CVendor
 
 	MAuction{adOrganization required} to ADOrganization
 	MAuction{currency required} to CCurrency

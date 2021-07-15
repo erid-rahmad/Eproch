@@ -27,6 +27,8 @@ public class CPrequalificationStepCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
+    private StringFilter name;
+
     private StringFilter description;
 
     private StringFilter type;
@@ -42,6 +44,7 @@ public class CPrequalificationStepCriteria implements Serializable, Criteria {
 
     public CPrequalificationStepCriteria(CPrequalificationStepCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.name = other.name == null ? null : other.name.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.type = other.type == null ? null : other.type.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
@@ -60,6 +63,14 @@ public class CPrequalificationStepCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public StringFilter getName() {
+        return name;
+    }
+
+    public void setName(StringFilter name) {
+        this.name = name;
     }
 
     public StringFilter getDescription() {
@@ -114,6 +125,7 @@ public class CPrequalificationStepCriteria implements Serializable, Criteria {
         final CPrequalificationStepCriteria that = (CPrequalificationStepCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
             Objects.equals(type, that.type) &&
             Objects.equals(uid, that.uid) &&
@@ -125,6 +137,7 @@ public class CPrequalificationStepCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
+        name,
         description,
         type,
         uid,
@@ -137,6 +150,7 @@ public class CPrequalificationStepCriteria implements Serializable, Criteria {
     public String toString() {
         return "CPrequalificationStepCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (name != null ? "name=" + name + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (type != null ? "type=" + type + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +

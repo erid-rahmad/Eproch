@@ -91,6 +91,12 @@ public class CPrequalificationEventLineQueryService extends QueryService<CPrequa
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), CPrequalificationEventLine_.id));
             }
+            if (criteria.getDescription() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDescription(), CPrequalificationEventLine_.description));
+            }
+            if (criteria.getSequence() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getSequence(), CPrequalificationEventLine_.sequence));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), CPrequalificationEventLine_.uid));
             }

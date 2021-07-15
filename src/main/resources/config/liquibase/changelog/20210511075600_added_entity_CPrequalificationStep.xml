@@ -52,6 +52,13 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="2021051101430001-name" author="ricky-k">
+        <addColumn tableName="c_prequalification_step">
+            <column name="name" type="varchar(255)" defaultValue="-">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
     <!--

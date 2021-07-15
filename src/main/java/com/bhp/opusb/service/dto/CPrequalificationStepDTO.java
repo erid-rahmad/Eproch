@@ -13,6 +13,9 @@ public class CPrequalificationStepDTO extends AbstractAuditingDTO {
     private Long id;
 
     @NotNull
+    private String name;
+
+    @NotNull
     private String description;
 
     private String type;
@@ -30,6 +33,14 @@ public class CPrequalificationStepDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -97,6 +108,7 @@ public class CPrequalificationStepDTO extends AbstractAuditingDTO {
     public String toString() {
         return "CPrequalificationStepDTO{" +
             "id=" + getId() +
+            ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", type='" + getType() + "'" +
             ", uid='" + getUid() + "'" +

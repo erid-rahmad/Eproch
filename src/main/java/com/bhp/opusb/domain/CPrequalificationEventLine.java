@@ -26,6 +26,14 @@ public class CPrequalificationEventLine extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+    @Column(name = "description")
+    private String description;
+
+    @NotNull
+    @Min(value = 0)
+    @Column(name = "sequence", nullable = false)
+    private Integer sequence;
+
     @Column(name = "uid")
     private UUID uid;
 
@@ -54,6 +62,32 @@ public class CPrequalificationEventLine extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public CPrequalificationEventLine description(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getSequence() {
+        return sequence;
+    }
+
+    public CPrequalificationEventLine sequence(Integer sequence) {
+        this.sequence = sequence;
+        return this;
+    }
+
+    public void setSequence(Integer sequence) {
+        this.sequence = sequence;
     }
 
     public UUID getUid() {
@@ -147,6 +181,8 @@ public class CPrequalificationEventLine extends AbstractAuditingEntity {
     public String toString() {
         return "CPrequalificationEventLine{" +
             "id=" + getId() +
+            ", description='" + getDescription() + "'" +
+            ", sequence=" + getSequence() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

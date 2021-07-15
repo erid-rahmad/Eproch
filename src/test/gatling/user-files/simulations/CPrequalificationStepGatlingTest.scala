@@ -72,6 +72,7 @@ class CPrequalificationStepGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "name":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
                 , "type":"SAMPLE_TEXT"
                 , "uid":null

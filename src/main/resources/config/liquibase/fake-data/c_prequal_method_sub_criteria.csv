@@ -1,0 +1,11 @@
+id;weight;uid;active;ad_organization_id;bidding_criteria_id;bidding_sub_criteria_id;prequal_method_criteria_id
+1;59395;89bd8e76-5533-422e-b9e1-06a21aad5c90;true;1;1;1;1
+2;5989;368f5c83-4b01-467e-90a2-47194cf3003c;false;2;2;2;2
+3;12111;daf6452e-e908-43bd-a4cc-cc8895aa48e9;true;3;3;3;3
+4;17386;23a4e2f5-6ad2-4e52-a238-6e596c160e57;true;4;4;4;4
+5;43397;56212ac4-3e1c-4bab-ba1b-5b77f7027271;true;5;5;5;5
+6;24399;31605f0f-0c4a-430e-8f8e-f1805d1b5a83;false;6;6;6;6
+7;61633;0292069b-518f-4743-854c-609d8f2d713f;true;7;7;7;7
+8;73062;dc0253f8-dfe3-40c4-b266-a48bb14fec07;true;8;8;8;8
+9;50;21bd7e74-dcde-4b51-8d0f-630cba043ec8;false;9;9;9;9
+10;60018;e4ff0c7e-0d34-4f40-b827-c7457ae250c1;false;10;10;10;10

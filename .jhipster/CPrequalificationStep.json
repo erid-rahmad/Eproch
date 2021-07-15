@@ -2,6 +2,13 @@
     "name": "CPrequalificationStep",
     "fields": [
         {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "description",
             "fieldType": "String",
             "fieldValidateRules": [

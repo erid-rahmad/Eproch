@@ -37,6 +37,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class CPrequalificationStepResourceIT {
 
+    private static final String DEFAULT_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_NAME = "BBBBBBBBBB";
+
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
@@ -77,6 +80,7 @@ public class CPrequalificationStepResourceIT {
      */
     public static CPrequalificationStep createEntity(EntityManager em) {
         CPrequalificationStep cPrequalificationStep = new CPrequalificationStep()
+            .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
             .type(DEFAULT_TYPE)
             .uid(DEFAULT_UID)
@@ -101,6 +105,7 @@ public class CPrequalificationStepResourceIT {
      */
     public static CPrequalificationStep createUpdatedEntity(EntityManager em) {
         CPrequalificationStep cPrequalificationStep = new CPrequalificationStep()
+            .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .type(UPDATED_TYPE)
             .uid(UPDATED_UID)
@@ -139,6 +144,7 @@ public class CPrequalificationStepResourceIT {
         List<CPrequalificationStep> cPrequalificationStepList = cPrequalificationStepRepository.findAll();
         assertThat(cPrequalificationStepList).hasSize(databaseSizeBeforeCreate + 1);
         CPrequalificationStep testCPrequalificationStep = cPrequalificationStepList.get(cPrequalificationStepList.size() - 1);
+        assertThat(testCPrequalificationStep.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCPrequalificationStep.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testCPrequalificationStep.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testCPrequalificationStep.getUid()).isEqualTo(DEFAULT_UID);
@@ -165,6 +171,25 @@ public class CPrequalificationStepResourceIT {
         assertThat(cPrequalificationStepList).hasSize(databaseSizeBeforeCreate);
     }
 
+
+    @Test
+    @Transactional
+    public void checkNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = cPrequalificationStepRepository.findAll().size();
+        // set the field null
+        cPrequalificationStep.setName(null);
+
+        // Create the CPrequalificationStep, which fails.
+        CPrequalificationStepDTO cPrequalificationStepDTO = cPrequalificationStepMapper.toDto(cPrequalificationStep);
+
+        restCPrequalificationStepMockMvc.perform(post("/api/c-prequalification-steps")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(cPrequalificationStepDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<CPrequalificationStep> cPrequalificationStepList = cPrequalificationStepRepository.findAll();
+        assertThat(cPrequalificationStepList).hasSize(databaseSizeBeforeTest);
+    }
 
     @Test
     @Transactional
@@ -196,6 +221,7 @@ public class CPrequalificationStepResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cPrequalificationStep.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
@@ -213,6 +239,7 @@ public class CPrequalificationStepResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cPrequalificationStep.getId().intValue()))
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
@@ -236,6 +263,84 @@ public class CPrequalificationStepResourceIT {
 
         defaultCPrequalificationStepShouldBeFound("id.lessThanOrEqual=" + id);
         defaultCPrequalificationStepShouldNotBeFound("id.lessThan=" + id);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCPrequalificationStepsByNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cPrequalificationStepRepository.saveAndFlush(cPrequalificationStep);
+
+        // Get all the cPrequalificationStepList where name equals to DEFAULT_NAME
+        defaultCPrequalificationStepShouldBeFound("name.equals=" + DEFAULT_NAME);
+
+        // Get all the cPrequalificationStepList where name equals to UPDATED_NAME
+        defaultCPrequalificationStepShouldNotBeFound("name.equals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPrequalificationStepsByNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cPrequalificationStepRepository.saveAndFlush(cPrequalificationStep);
+
+        // Get all the cPrequalificationStepList where name not equals to DEFAULT_NAME
+        defaultCPrequalificationStepShouldNotBeFound("name.notEquals=" + DEFAULT_NAME);
+
+        // Get all the cPrequalificationStepList where name not equals to UPDATED_NAME
+        defaultCPrequalificationStepShouldBeFound("name.notEquals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPrequalificationStepsByNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        cPrequalificationStepRepository.saveAndFlush(cPrequalificationStep);
+
+        // Get all the cPrequalificationStepList where name in DEFAULT_NAME or UPDATED_NAME
+        defaultCPrequalificationStepShouldBeFound("name.in=" + DEFAULT_NAME + "," + UPDATED_NAME);
+
+        // Get all the cPrequalificationStepList where name equals to UPDATED_NAME
+        defaultCPrequalificationStepShouldNotBeFound("name.in=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPrequalificationStepsByNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cPrequalificationStepRepository.saveAndFlush(cPrequalificationStep);
+
+        // Get all the cPrequalificationStepList where name is not null
+        defaultCPrequalificationStepShouldBeFound("name.specified=true");
+
+        // Get all the cPrequalificationStepList where name is null
+        defaultCPrequalificationStepShouldNotBeFound("name.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCPrequalificationStepsByNameContainsSomething() throws Exception {
+        // Initialize the database
+        cPrequalificationStepRepository.saveAndFlush(cPrequalificationStep);
+
+        // Get all the cPrequalificationStepList where name contains DEFAULT_NAME
+        defaultCPrequalificationStepShouldBeFound("name.contains=" + DEFAULT_NAME);
+
+        // Get all the cPrequalificationStepList where name contains UPDATED_NAME
+        defaultCPrequalificationStepShouldNotBeFound("name.contains=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPrequalificationStepsByNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        cPrequalificationStepRepository.saveAndFlush(cPrequalificationStep);
+
+        // Get all the cPrequalificationStepList where name does not contain DEFAULT_NAME
+        defaultCPrequalificationStepShouldNotBeFound("name.doesNotContain=" + DEFAULT_NAME);
+
+        // Get all the cPrequalificationStepList where name does not contain UPDATED_NAME
+        defaultCPrequalificationStepShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
     }
 
 
@@ -522,6 +627,7 @@ public class CPrequalificationStepResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cPrequalificationStep.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
@@ -573,6 +679,7 @@ public class CPrequalificationStepResourceIT {
         // Disconnect from session so that the updates on updatedCPrequalificationStep are not directly saved in db
         em.detach(updatedCPrequalificationStep);
         updatedCPrequalificationStep
+            .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .type(UPDATED_TYPE)
             .uid(UPDATED_UID)
@@ -588,6 +695,7 @@ public class CPrequalificationStepResourceIT {
         List<CPrequalificationStep> cPrequalificationStepList = cPrequalificationStepRepository.findAll();
         assertThat(cPrequalificationStepList).hasSize(databaseSizeBeforeUpdate);
         CPrequalificationStep testCPrequalificationStep = cPrequalificationStepList.get(cPrequalificationStepList.size() - 1);
+        assertThat(testCPrequalificationStep.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCPrequalificationStep.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testCPrequalificationStep.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testCPrequalificationStep.getUid()).isEqualTo(UPDATED_UID);

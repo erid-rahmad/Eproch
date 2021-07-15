@@ -51,6 +51,17 @@
             <column name="last_modified_date" type="timestamp"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="2021051101440003-addsequence" author="ricky-k">
+        <addColumn tableName="c_prequalification_event_line">
+            <column name="description" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="sequence" type="integer">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
     <!--
@@ -67,6 +78,8 @@
                   separator=";"
                   tableName="c_prequalification_event_line">
             <column name="id" type="numeric"/>
+            <column name="description" type="string"/>
+            <column name="sequence" type="numeric"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="prequalification_event_id" type="numeric"/>

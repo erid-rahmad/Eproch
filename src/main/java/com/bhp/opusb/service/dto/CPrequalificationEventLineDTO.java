@@ -12,6 +12,12 @@ public class CPrequalificationEventLineDTO extends AbstractAuditingDTO {
 
     private Long id;
 
+    private String description;
+
+    @NotNull
+    @Min(value = 0)
+    private Integer sequence;
+
     private UUID uid;
 
     private Boolean active;
@@ -29,6 +35,22 @@ public class CPrequalificationEventLineDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(Integer sequence) {
+        this.sequence = sequence;
     }
 
     public UUID getUid() {
@@ -96,6 +118,8 @@ public class CPrequalificationEventLineDTO extends AbstractAuditingDTO {
     public String toString() {
         return "CPrequalificationEventLineDTO{" +
             "id=" + getId() +
+            ", description='" + getDescription() + "'" +
+            ", sequence=" + getSequence() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", prequalificationEventId=" + getPrequalificationEventId() +

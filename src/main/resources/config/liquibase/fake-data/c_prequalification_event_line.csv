@@ -1,11 +1,11 @@
-id;uid;active;prequalification_event_id;prequalification_step_id;ad_organization_id
-1;75f220fa-722c-4c7e-9107-d4cd2f290dc9;true;1;1;1
-2;b1f5f842-5288-4440-9259-aac179892ff6;false;2;2;2
-3;45df1717-37ff-4d72-84b5-383aed5a1422;false;3;3;3
-4;6c891d8a-9504-48c9-834d-0e883098ed92;false;4;4;4
-5;33b0bdc8-e327-4d00-9441-d1ead5e27dda;false;5;5;5
-6;afd702c6-b2f9-4ec6-9c89-1375bca49074;true;6;6;6
-7;48be5c29-a011-4ee6-b375-525964f845fa;true;7;7;7
-8;127ffd15-b0ae-4cf9-b18e-05c510ad918a;true;8;8;8
-9;9eccdc61-439b-4e42-98d2-56207a1fea15;false;9;9;9
-10;371c376c-57df-4c63-afb6-e937aeb1cb32;false;10;10;10
+id;description;sequence;uid;active;prequalification_event_id;prequalification_step_id;ad_organization_id
+1;holistic Wooden;3430;fa722cc7-ed10-47d4-8d2f-290dc99b1f5f;true;1;1;1
+2;Gloves;18512;88440d25-9aac-4179-892f-f6245df17173;false;2;2;2
+3;Facilitator Avon Egypt;69594;5383aed5-a142-4226-8891-d8a95048c983;false;3;3;3
+4;Outdoors Borders red;60045;8ed92733-b0bd-4c8e-b27d-009441d1ead5;true;4;4;4
+5;Stravenue;85596;a6afd702-c6b2-4f9e-869c-891375bca490;false;5;5;5
+6;Bedfordshire;50486;be5c29a0-11ee-46b3-b552-5964f845faf1;false;6;6;6
+7;Representative bypassing;33339;b0aecf97-18e0-45c5-90ad-918a89eccdc6;false;7;7;7
+8;Persistent;69320;e4298d25-6207-4a1f-aa15-4371c376c57d;true;8;8;8
+9;reinvent Principal interface;93567;937aeb1c-b325-472a-8233-3158fd80f487;false;9;9;9
+10;Cotton bluetooth;32940;e6902169-f7e7-4c7f-b622-3db057819aed;false;10;10;10

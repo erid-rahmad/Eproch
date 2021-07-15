@@ -91,6 +91,9 @@ public class CPrequalificationStepQueryService extends QueryService<CPrequalific
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), CPrequalificationStep_.id));
             }
+            if (criteria.getName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getName(), CPrequalificationStep_.name));
+            }
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), CPrequalificationStep_.description));
             }
