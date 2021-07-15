@@ -1,0 +1,169 @@
+<template>
+  <div class="bidding-form">
+
+    <el-steps
+      :active="active"
+      finish-status="success"
+      simple
+      :space="10"
+    >
+      <el-step title="Prequalification Information" />
+      <el-step title="Prequalification Invitation" />
+      <el-step title="Prequalification Event" />
+    </el-steps>
+
+    <el-scrollbar class="panel-wrapper">
+      <prequalification-information
+        v-if="active === 0"
+        ref="step-0"
+        class="step-panel"
+        :edit-mode="editMode"
+        :data="preq"
+        @change="onStepChanged"
+        @error="onStepError"
+        @saved="onStepSaved"
+      ></prequalification-information>
+      <!--
+      <bidding-schedule
+        v-if="active === 1"
+        ref="step-1"
+        class="step-panel"
+        :edit-mode="editMode"
+        :data="preq"
+        @change="onStepChanged"
+        @error="onStepError"
+        @saved="onStepSaved"
+      ></bidding-schedule>
+
+      <vendor-invitation
+        ref="step-2"
+        class="step-panel"
+        v-if="active === 2"
+        :edit-mode="editMode"
+        :data="preq"
+        @change="onStepChanged"
+        @error="onStepError"
+        @saved="onStepSaved"
+      ></vendor-invitation>
+      -->
+    </el-scrollbar>
+
+    <div class="steps-control-btn-group">
+
+      <el-button
+        :disabled="active === 0"
+        icon="el-icon-arrow-left"
+        size="small"
+        type="primary"
+        @click="previous"
+      >
+        Previous
+      </el-button>
+
+      <el-button
+        size="small"
+        type="primary"
+        @click="next"
+      >
+        {{ nextButton }} <em class="el-icon-arrow-right"></em>
+      </el-button>
+
+    </div>
+
+    <el-dialog
+      width="30%"
+      :visible.sync="showSaveDialog"
+      title="Confirm Save"
+    >
+      <span>Do you want to save the document?</span>
+      <div slot="footer">
+        <el-button
+          icon="el-icon-close"
+          size="mini"
+          style="margin-left: 0px;"
+          @click="onSkipSave"
+        >
+          No
+        </el-button>
+        <el-button
+          style="margin-left: 0px;"
+          size="mini"
+          icon="el-icon-check"
+          type="primary"
+          @click="saveStep(true)"
+        >
+          {{ $t('entity.action.save') }}
+        </el-button>
+      </div>
+    </el-dialog>
+  </div>
+</template>
+
+<script lang="ts" src="./steps-form.component.ts"></script>
+
+<style lang="scss">
+.bidding-form {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 48px auto 48px;
+  overflow: hidden;
+
+  .el-steps--simple {
+    background: #26c6da;
+
+    .el-step__head {
+      &.is-process {
+        border-color: #fff;
+        color: #fff;
+      }
+
+      &.is-success,
+      &.is-wait {
+        border-color: #f4f4f4;
+        color: #f4f4f4;
+      }
+    }
+
+    .el-step__title {
+      &.is-process {
+        color: #fff;
+      }
+
+      &.is-success,
+      &.is-wait {
+        color: #f4f4f4;
+      }
+    }
+
+    .el-step.is-simple {
+      .el-step__arrow::before,
+      .el-step__arrow::after {
+        background: #fff;
+      }
+
+      &:not(:last-of-type) .el-step__title {
+        max-width: 70%;
+      }
+    }
+  }
+
+  .panel-wrapper {
+    .el-scrollbar__wrap {
+      overflow-x: hidden;
+      padding: 15px;
+    }
+  }
+
+  .step-panel {
+    //padding: 24px;
+
+    &.hide {
+    display: none;
+    }
+  }
+
+  .steps-control-btn-group {
+    padding: 8px 16px;
+  }
+}
+</style>
