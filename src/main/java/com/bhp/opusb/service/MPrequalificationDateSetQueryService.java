@@ -114,6 +114,10 @@ public class MPrequalificationDateSetQueryService extends QueryService<MPrequali
                 specification = specification.and(buildSpecification(criteria.getBiddingScheduleId(),
                     root -> root.join(MPrequalificationDateSet_.biddingSchedule, JoinType.LEFT).get(MBiddingSchedule_.id)));
             }
+            if (criteria.getPrequalificationScheduleId() != null) {
+                specification = specification.and(buildSpecification(criteria.getPrequalificationScheduleId(),
+                    root -> root.join(MPrequalificationDateSet_.prequalificationSchedule, JoinType.LEFT).get(MPrequalificationSchedule_.id)));
+            }
         }
         return specification;
     }

@@ -29,11 +29,39 @@ public class MPrequalificationDateSetDTO extends AbstractAuditingDTO {
     private String biddingScheduleName;
     private Integer sequence;
 
+    private Long prequalificationScheduleId;
+    private String prequalificationScheduleName;
+    private Integer preqSequence;
+
     private Long adOrganizationId;
     private String adOrganizationName;
     
     public Long getId() {
         return id;
+    }
+
+    public Integer getPreqSequence() {
+        return preqSequence;
+    }
+
+    public void setPreqSequence(Integer preqSequence) {
+        this.preqSequence = preqSequence;
+    }
+
+    public String getPrequalificationScheduleName() {
+        return prequalificationScheduleName;
+    }
+
+    public void setPrequalificationScheduleName(String prequalificationScheduleName) {
+        this.prequalificationScheduleName = prequalificationScheduleName;
+    }
+
+    public Long getPrequalificationScheduleId() {
+        return prequalificationScheduleId;
+    }
+
+    public void setPrequalificationScheduleId(Long prequalificationScheduleId) {
+        this.prequalificationScheduleId = prequalificationScheduleId;
     }
 
     public void setId(Long id) {

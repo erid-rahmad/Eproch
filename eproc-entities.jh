@@ -1166,6 +1166,13 @@ entity MPrequalificationEvent {
 	active Boolean
 }
 
+entity MPrequalificationSchedule {
+	startDate ZonedDateTime
+	endDate ZonedDateTime
+	uid UUID
+	active Boolean
+}
+
 entity MAuction {
 	name String required maxlength(30)
 	description String
@@ -2331,6 +2338,10 @@ relationship ManyToOne {
 	MPrequalificationEvent{adOrganization required} to ADOrganization
 	MPrequalificationEvent{event required} to CPrequalificationEvent
 	MPrequalificationEvent{method required} to CPrequalificationMethod
+
+	MPrequalificationSchedule{prequalification required} to MPrequalificationInformation
+	MPrequalificationSchedule{adOrganization required} to ADOrganization
+	MPrequalificationSchedule{eventLine required} to CPrequalificationEventLine
 
 	MAuction{adOrganization required} to ADOrganization
 	MAuction{currency required} to CCurrency

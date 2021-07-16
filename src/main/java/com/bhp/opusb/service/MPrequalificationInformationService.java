@@ -7,6 +7,8 @@ import com.bhp.opusb.service.dto.MPrequalVendorSuggestionDTO;
 import com.bhp.opusb.service.dto.MPrequalificationFormDTO;
 import com.bhp.opusb.service.dto.MPrequalificationInformationDTO;
 import com.bhp.opusb.service.dto.MPrequalificationInvitationDTO;
+import com.bhp.opusb.service.dto.MPrequalificationScheduleDTO;
+import com.bhp.opusb.service.mapper.MPrequalificationEventMapper;
 import com.bhp.opusb.service.mapper.MPrequalificationFormMapper;
 import com.bhp.opusb.service.mapper.MPrequalificationInformationMapper;
 import com.bhp.opusb.util.DocumentUtil;
@@ -35,14 +37,17 @@ public class MPrequalificationInformationService {
 
     private final MPrequalificationInformationMapper mPrequalificationInformationMapper;
     private final MPrequalificationFormMapper mPrequalificationFormMapper;
+    private final MPrequalificationEventMapper mPrequalificationEventMapper;
 
     private final MPrequalificationInvitationService mPrequalificationInvitationService;
     private final MPrequalVendorSuggestionService mPrequalVendorSuggestionService;
     private final MPrequalificationEventService mPrequalificationEventService;
+    private final MPrequalificationScheduleService mPrequalificationScheduleService;
 
     public MPrequalificationInformationService(MPrequalificationInformationRepository mPrequalificationInformationRepository, 
         MPrequalificationInvitationService mPrequalificationInvitationService, MPrequalVendorSuggestionService mPrequalVendorSuggestionService,
         MPrequalificationInformationMapper mPrequalificationInformationMapper, MPrequalificationFormMapper mPrequalificationFormMapper,
+        MPrequalificationEventMapper mPrequalificationEventMapper, MPrequalificationScheduleService mPrequalificationScheduleService,
         MPrequalificationEventService mPrequalificationEventService) {
         this.mPrequalificationInformationRepository = mPrequalificationInformationRepository;
         this.mPrequalificationInvitationService = mPrequalificationInvitationService;
@@ -50,6 +55,8 @@ public class MPrequalificationInformationService {
         this.mPrequalificationInformationMapper = mPrequalificationInformationMapper;
         this.mPrequalificationFormMapper = mPrequalificationFormMapper;
         this.mPrequalificationEventService = mPrequalificationEventService;
+        this.mPrequalificationEventMapper = mPrequalificationEventMapper;
+        this.mPrequalificationScheduleService = mPrequalificationScheduleService;
     }
 
     /**
@@ -132,9 +139,19 @@ public class MPrequalificationInformationService {
             mPrequalificationInformationDTO.getEvent().setPrequalificationId(mPrequalificationInformationDTO.getId());
             mPrequalificationInformationDTO.getEvent().setAdOrganizationId(mPrequalificationInformationDTO.getAdOrganizationId());
 
-            mPrequalificationEventService.save(mPrequalificationInformationDTO.getEvent());
-        }
+            mPrequalificationInformationDTO.setEvent(mPrequalificationEventService.save(mPrequalificationInformationDTO.getEvent()));
+            mPrequalificationScheduleService.initSchedules(mPrequalificationEventMapper.toEntity(mPrequalificationInformationDTO.getEvent()));
+        } else {
+            final List<MPrequalificationScheduleDTO> schedules = mPrequalificationInformationDTO.getPreqSchedules();
+            saveSchedule(mPrequalificationInformationDTO, schedules);
+        } 
 
+        return mPrequalificationInformationDTO;
+    }
+
+    private MPrequalificationInformationDTO saveSchedule(MPrequalificationInformationDTO mPrequalificationInformationDTO, 
+        List<MPrequalificationScheduleDTO> schedules) {
+        mPrequalificationScheduleService.saveAll(schedules);
         return mPrequalificationInformationDTO;
     }
 

@@ -11,4 +11,7 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface MPrequalificationInformationRepository extends GenericDocumentRepository<MPrequalificationInformation, Long>, JpaSpecificationExecutor<MPrequalificationInformation> {
+
+    @Query("SELECT mpi FROM MPrequalificationSchedule mps INNER JOIN mps.prequalification AS mpi WHERE mps.id = ?1")
+    MPrequalificationInformation findFirstByPrequalificationScheduleId(Long biddingScheduleId);
 }

@@ -10,7 +10,8 @@ const DateSettingFormProps = Vue.extend({
     editMode: Boolean,
     scheduleId: Number,
     title: String,
-    visible: Boolean
+    visible: Boolean,
+    prequalificationMode: Boolean
   }
 });
 
@@ -106,7 +107,7 @@ export default class DateSettingForm extends Mixins(AccessLevelMixin, DateSettin
       .retrieve({
         criteriaQuery: this.updateCriteria([
           'active.equals=true',
-          `biddingScheduleId.equals=${scheduleId}`
+          this.prequalificationMode?`prequalificationScheduleId.equals=${scheduleId}`:`biddingScheduleId.equals=${scheduleId}`
         ]),
         paginationQuery: {
           page: 0,
@@ -115,6 +116,7 @@ export default class DateSettingForm extends Mixins(AccessLevelMixin, DateSettin
         }
       })
       .then(res => {
+        console.log(res.data);
         if (res.data.length) {
           const schedule = res.data[0];
 

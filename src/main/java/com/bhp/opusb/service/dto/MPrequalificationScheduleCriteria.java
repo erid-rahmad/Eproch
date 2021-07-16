@@ -2,25 +2,27 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.FloatFilter;
+import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 import io.github.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
- * Criteria class for the {@link com.bhp.opusb.domain.MPrequalificationDateSet} entity. This class is used
- * in {@link com.bhp.opusb.web.rest.MPrequalificationDateSetResource} to receive all the possible filtering options from
+ * Criteria class for the {@link com.bhp.opusb.domain.MPrequalificationSchedule} entity. This class is used
+ * in {@link com.bhp.opusb.web.rest.MPrequalificationScheduleResource} to receive all the possible filtering options from
  * the Http GET request parameters.
  * For example the following could be a valid request:
- * {@code /m-prequalification-date-sets?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
+ * {@code /m-prequalification-schedules?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
  * As Spring is unable to properly convert the types, unless specific {@link Filter} class are used, we need to use
  * fix type specific filters.
  */
-public class MPrequalificationDateSetCriteria implements Serializable, Criteria {
+public class MPrequalificationScheduleCriteria implements Serializable, Criteria {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,36 +32,33 @@ public class MPrequalificationDateSetCriteria implements Serializable, Criteria 
 
     private ZonedDateTimeFilter endDate;
 
-    private StringFilter status;
-
     private UUIDFilter uid;
 
     private BooleanFilter active;
 
+    private LongFilter prequalificationId;
+
     private LongFilter adOrganizationId;
 
-    private LongFilter biddingScheduleId;
+    private LongFilter eventLineId;
 
-    private LongFilter prequalificationScheduleId;
-
-    public MPrequalificationDateSetCriteria() {
+    public MPrequalificationScheduleCriteria() {
     }
 
-    public MPrequalificationDateSetCriteria(MPrequalificationDateSetCriteria other) {
+    public MPrequalificationScheduleCriteria(MPrequalificationScheduleCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.startDate = other.startDate == null ? null : other.startDate.copy();
         this.endDate = other.endDate == null ? null : other.endDate.copy();
-        this.status = other.status == null ? null : other.status.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.prequalificationId = other.prequalificationId == null ? null : other.prequalificationId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
-        this.biddingScheduleId = other.biddingScheduleId == null ? null : other.biddingScheduleId.copy();
-        this.prequalificationScheduleId = other.prequalificationScheduleId == null ? null : other.prequalificationScheduleId.copy();
+        this.eventLineId = other.eventLineId == null ? null : other.eventLineId.copy();
     }
 
     @Override
-    public MPrequalificationDateSetCriteria copy() {
-        return new MPrequalificationDateSetCriteria(this);
+    public MPrequalificationScheduleCriteria copy() {
+        return new MPrequalificationScheduleCriteria(this);
     }
 
     public LongFilter getId() {
@@ -86,14 +85,6 @@ public class MPrequalificationDateSetCriteria implements Serializable, Criteria 
         this.endDate = endDate;
     }
 
-    public StringFilter getStatus() {
-        return status;
-    }
-
-    public void setStatus(StringFilter status) {
-        this.status = status;
-    }
-
     public UUIDFilter getUid() {
         return uid;
     }
@@ -110,6 +101,14 @@ public class MPrequalificationDateSetCriteria implements Serializable, Criteria 
         this.active = active;
     }
 
+    public LongFilter getPrequalificationId() {
+        return prequalificationId;
+    }
+
+    public void setPrequalificationId(LongFilter prequalificationId) {
+        this.prequalificationId = prequalificationId;
+    }
+
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -118,20 +117,12 @@ public class MPrequalificationDateSetCriteria implements Serializable, Criteria 
         this.adOrganizationId = adOrganizationId;
     }
 
-    public LongFilter getBiddingScheduleId() {
-        return biddingScheduleId;
+    public LongFilter getEventLineId() {
+        return eventLineId;
     }
 
-    public void setBiddingScheduleId(LongFilter biddingScheduleId) {
-        this.biddingScheduleId = biddingScheduleId;
-    }
-
-    public LongFilter getPrequalificationScheduleId() {
-        return prequalificationScheduleId;
-    }
-
-    public void setPrequalificationScheduleId(LongFilter prequalificationScheduleId) {
-        this.prequalificationScheduleId = prequalificationScheduleId;
+    public void setEventLineId(LongFilter eventLineId) {
+        this.eventLineId = eventLineId;
     }
 
 
@@ -143,17 +134,16 @@ public class MPrequalificationDateSetCriteria implements Serializable, Criteria 
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final MPrequalificationDateSetCriteria that = (MPrequalificationDateSetCriteria) o;
+        final MPrequalificationScheduleCriteria that = (MPrequalificationScheduleCriteria) o;
         return
             Objects.equals(id, that.id) &&
             Objects.equals(startDate, that.startDate) &&
             Objects.equals(endDate, that.endDate) &&
-            Objects.equals(status, that.status) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
+            Objects.equals(prequalificationId, that.prequalificationId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(biddingScheduleId, that.biddingScheduleId) &&
-            Objects.equals(prequalificationScheduleId, that.prequalificationScheduleId);
+            Objects.equals(eventLineId, that.eventLineId);
     }
 
     @Override
@@ -162,27 +152,25 @@ public class MPrequalificationDateSetCriteria implements Serializable, Criteria 
         id,
         startDate,
         endDate,
-        status,
         uid,
         active,
+        prequalificationId,
         adOrganizationId,
-        biddingScheduleId,
-        prequalificationScheduleId
+        eventLineId
         );
     }
 
     @Override
     public String toString() {
-        return "MPrequalificationDateSetCriteria{" +
+        return "MPrequalificationScheduleCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (startDate != null ? "startDate=" + startDate + ", " : "") +
                 (endDate != null ? "endDate=" + endDate + ", " : "") +
-                (status != null ? "status=" + status + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (prequalificationId != null ? "prequalificationId=" + prequalificationId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
-                (biddingScheduleId != null ? "biddingScheduleId=" + biddingScheduleId + ", " : "") +
-                (prequalificationScheduleId != null ? "prequalificationScheduleId=" + prequalificationScheduleId + ", " : "") +
+                (eventLineId != null ? "eventLineId=" + eventLineId + ", " : "") +
             "}";
     }
 

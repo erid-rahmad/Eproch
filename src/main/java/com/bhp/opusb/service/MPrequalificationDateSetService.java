@@ -66,39 +66,40 @@ public class MPrequalificationDateSetService {
 
         final String status = mPrequalificationDateSetDTO.getStatus();
         MBidding mBidding = mBiddingRepository.findFirstByBiddingScheduleId(mPrequalificationDateSetDTO.getBiddingScheduleId());
-        MinMaxView sequences = cEventTypelineRepository.findMinMaxSequence(mBidding.getEventType().getId());
-        Integer currentSequence = mPrequalificationDateSetDTO.getSequence();
-        String biddingStatus = null;
+        if(mBidding!=null){
+            MinMaxView sequences = cEventTypelineRepository.findMinMaxSequence(mBidding.getEventType().getId());
+            Integer currentSequence = mPrequalificationDateSetDTO.getSequence();
+            String biddingStatus = null;
 
-        if (currentSequence == null) {
-            //for new dates?
-            Optional<MBiddingSchedule> mBiddingSchedule = mBiddingScheduleRepository.findById(mPrequalificationDateSetDTO.getBiddingScheduleId());
-            if (mBiddingSchedule.isPresent()) {
-                MBiddingSchedule schedule = mBiddingSchedule.get();
-                currentSequence = schedule.getEventTypeLine().getSequence();
+            if (currentSequence == null) {
+                //for new dates?
+                Optional<MBiddingSchedule> mBiddingSchedule = mBiddingScheduleRepository.findById(mPrequalificationDateSetDTO.getBiddingScheduleId());
+                if (mBiddingSchedule.isPresent()) {
+                    MBiddingSchedule schedule = mBiddingSchedule.get();
+                    currentSequence = schedule.getEventTypeLine().getSequence();
 
-                if(schedule.getEventTypeLine().getCEvent().getName().toLowerCase().contains("meeting")){
-                    MPreBidMeetingDTO pbm = new MPreBidMeetingDTO();
-                    pbm.setBiddingScheduleId(schedule.getId());
-                    pbm.setAdOrganizationId(schedule.getAdOrganization().getId());
-                    pbm.setActive(true);
-                    mPreBidMeetingService.save(pbm);
+                    if(schedule.getEventTypeLine().getCEvent().getName().toLowerCase().contains("meeting")){
+                        MPreBidMeetingDTO pbm = new MPreBidMeetingDTO();
+                        pbm.setBiddingScheduleId(schedule.getId());
+                        pbm.setAdOrganizationId(schedule.getAdOrganization().getId());
+                        pbm.setActive(true);
+                        mPreBidMeetingService.save(pbm);
+                    }
                 }
             }
+            
+            log.debug("status: {}, current sequence: {}, min: {}, max: {}", status, currentSequence, sequences.getMinSequence(), sequences.getMaxSequence());
+            if (Objects.equals(currentSequence, sequences.getMinSequence())) {
+                biddingStatus = status.equals("N") ? status : "P";
+            } else if (Objects.equals(currentSequence, sequences.getMaxSequence())) {
+                biddingStatus = status.equals("F") ? status : "P";
+            }
+            
+            log.debug("bidding status: {}", biddingStatus);
+            if (biddingStatus != null) {
+                mBidding.setBiddingStatus(biddingStatus);
+            }
         }
-        
-        log.debug("status: {}, current sequence: {}, min: {}, max: {}", status, currentSequence, sequences.getMinSequence(), sequences.getMaxSequence());
-        if (Objects.equals(currentSequence, sequences.getMinSequence())) {
-            biddingStatus = status.equals("N") ? status : "P";
-        } else if (Objects.equals(currentSequence, sequences.getMaxSequence())) {
-            biddingStatus = status.equals("F") ? status : "P";
-        }
-        
-        log.debug("bidding status: {}", biddingStatus);
-        if (biddingStatus != null) {
-            mBidding.setBiddingStatus(biddingStatus);
-        }
-
         return mPrequalificationDateSetMapper.toDto(mPrequalificationDateSet);
     }
 
