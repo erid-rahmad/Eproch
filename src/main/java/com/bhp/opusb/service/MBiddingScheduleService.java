@@ -94,6 +94,24 @@ public class MBiddingScheduleService {
                 .collect(Collectors.toList());
 
             mBiddingScheduleRepository.deleteByEventTypeLineIdNotIn(lineIds, mBidding.getId());
+
+            // post deletion: fetch remaining existing schedules
+            List<MBiddingScheduleDTO> getCurrentList = mBiddingScheduleQueryService.findByCriteria(scheduleCriteria);
+            List<Long> currentListLines = getCurrentList.stream().map(MBiddingScheduleDTO::getEventTypeLineId).collect(Collectors.toList());
+
+            // filter the missing event lines, create and save them
+            List<CEventTypelineDTO> nonExistant = cEventTypelineDTOs.stream()
+                .filter(elem -> !currentListLines.contains(elem.getId())).collect(Collectors.toList());
+
+            List<MBiddingSchedule> nonExistantSchedules = nonExistant.stream()
+                .map(line -> new MBiddingSchedule()
+                    .active(true)
+                    .adOrganization(mBidding.getAdOrganization())
+                    .bidding(mBidding)
+                    .eventTypeLine(cEventTypelineMapper.toEntity(line)))
+                .collect(Collectors.toList());
+
+            mBiddingScheduleRepository.saveAll(nonExistantSchedules);
         }
     }
 
