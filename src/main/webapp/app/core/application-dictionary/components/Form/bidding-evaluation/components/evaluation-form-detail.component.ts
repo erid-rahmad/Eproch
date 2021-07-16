@@ -75,17 +75,14 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
 
   @Watch('SelectVendorScoringLine')
   loaddata() {
-    this.evaluationResultLine=null;
-
+    this.evaluationResultLine.score=0;
     this.readOnly=false;
     this.getEvaluationtype();
     this.retrieveEvaluationMethodCriteria(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLineId, this.evaluationFormProp.SelectVendorScoringLine.id);
     this.retrieveEvalResultLine( this.evaluationFormProp.evaluationMethodLineId, this.evaluationFormProp.biddingEvalResultId)
-
   }
 
   created() {
-
     this.getEvaluationtype();
     this.retrieveEvaluationMethodCriteria(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLineId, this.evaluationFormProp.SelectVendorScoringLine.id);
     this.retrieveEvalResultLine( this.evaluationFormProp.evaluationMethodLineId, this.evaluationFormProp.biddingEvalResultId)
@@ -110,7 +107,6 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
         if (data.length) {
           result = {...result, ...data[0]};
           this.evaluationResultLine = result;
-
             if (result.documentStatus === 'SMT') {
               this.readOnly = true;
               console.log("status lock")
