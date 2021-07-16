@@ -67,11 +67,12 @@
             show-overflow-tooltip
           ></el-table-column>
 
-          <el-table-column label="Schedule">
+          <el-table-column label="Schedule" align="center">
             <el-table-column
               width="422"
               prop="schedule"
               label="Plan"
+              align="center"
             >
               <template slot-scope="{ row }">
                 <el-date-picker
@@ -91,6 +92,7 @@
               width="422"
               prop="actual"
               label="Actual"
+              align="center"
             >
               <template slot-scope="{ row }">
                 <el-date-picker
@@ -110,6 +112,7 @@
           <el-table-column
             label="Status"
             min-width="150"
+            align="center"
           >
             <template slot-scope="{ row }">
               {{ printStatus(row.status) }}

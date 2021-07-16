@@ -73,7 +73,7 @@ export default class PreqInvitation extends Mixins(AccessLevelMixin, PreqInvitat
   vendorSelection: string;
 
   get readOnly() {
-    return this.preq.biddingStatus === 'P';
+    return this.preq.status === 'P';
   }
 
   @Watch('preq', { deep: true })

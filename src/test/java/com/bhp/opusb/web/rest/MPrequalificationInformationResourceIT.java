@@ -59,6 +59,9 @@ public class MPrequalificationInformationResourceIT {
     private static final String DEFAULT_ANNOUNCEMENT_TEXT = "AAAAAAAAAA";
     private static final String UPDATED_ANNOUNCEMENT_TEXT = "BBBBBBBBBB";
 
+    private static final String DEFAULT_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_STATUS = "BBBBBBBBBB";
+
     private static final ZonedDateTime DEFAULT_DATE_TRX = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_DATE_TRX = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
     private static final ZonedDateTime SMALLER_DATE_TRX = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
@@ -122,6 +125,7 @@ public class MPrequalificationInformationResourceIT {
             .name(DEFAULT_NAME)
             .type(DEFAULT_TYPE)
             .announcementText(DEFAULT_ANNOUNCEMENT_TEXT)
+            .status(DEFAULT_STATUS)
             .dateTrx(DEFAULT_DATE_TRX)
             .documentNo(DEFAULT_DOCUMENT_NO)
             .documentAction(DEFAULT_DOCUMENT_ACTION)
@@ -166,6 +170,7 @@ public class MPrequalificationInformationResourceIT {
             .name(UPDATED_NAME)
             .type(UPDATED_TYPE)
             .announcementText(UPDATED_ANNOUNCEMENT_TEXT)
+            .status(UPDATED_STATUS)
             .dateTrx(UPDATED_DATE_TRX)
             .documentNo(UPDATED_DOCUMENT_NO)
             .documentAction(UPDATED_DOCUMENT_ACTION)
@@ -224,6 +229,7 @@ public class MPrequalificationInformationResourceIT {
         assertThat(testMPrequalificationInformation.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testMPrequalificationInformation.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testMPrequalificationInformation.getAnnouncementText()).isEqualTo(DEFAULT_ANNOUNCEMENT_TEXT);
+        assertThat(testMPrequalificationInformation.getStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testMPrequalificationInformation.getDateTrx()).isEqualTo(DEFAULT_DATE_TRX);
         assertThat(testMPrequalificationInformation.getDocumentNo()).isEqualTo(DEFAULT_DOCUMENT_NO);
         assertThat(testMPrequalificationInformation.getDocumentAction()).isEqualTo(DEFAULT_DOCUMENT_ACTION);
@@ -262,6 +268,25 @@ public class MPrequalificationInformationResourceIT {
         int databaseSizeBeforeTest = mPrequalificationInformationRepository.findAll().size();
         // set the field null
         mPrequalificationInformation.setType(null);
+
+        // Create the MPrequalificationInformation, which fails.
+        MPrequalificationInformationDTO mPrequalificationInformationDTO = mPrequalificationInformationMapper.toDto(mPrequalificationInformation);
+
+        restMPrequalificationInformationMockMvc.perform(post("/api/m-prequalification-informations")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(mPrequalificationInformationDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<MPrequalificationInformation> mPrequalificationInformationList = mPrequalificationInformationRepository.findAll();
+        assertThat(mPrequalificationInformationList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkStatusIsRequired() throws Exception {
+        int databaseSizeBeforeTest = mPrequalificationInformationRepository.findAll().size();
+        // set the field null
+        mPrequalificationInformation.setStatus(null);
 
         // Create the MPrequalificationInformation, which fails.
         MPrequalificationInformationDTO mPrequalificationInformationDTO = mPrequalificationInformationMapper.toDto(mPrequalificationInformation);
@@ -329,6 +354,7 @@ public class MPrequalificationInformationResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].announcementText").value(hasItem(DEFAULT_ANNOUNCEMENT_TEXT.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
             .andExpect(jsonPath("$.[*].dateTrx").value(hasItem(sameInstant(DEFAULT_DATE_TRX))))
             .andExpect(jsonPath("$.[*].documentNo").value(hasItem(DEFAULT_DOCUMENT_NO)))
             .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
@@ -356,6 +382,7 @@ public class MPrequalificationInformationResourceIT {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
             .andExpect(jsonPath("$.announcementText").value(DEFAULT_ANNOUNCEMENT_TEXT.toString()))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS))
             .andExpect(jsonPath("$.dateTrx").value(sameInstant(DEFAULT_DATE_TRX)))
             .andExpect(jsonPath("$.documentNo").value(DEFAULT_DOCUMENT_NO))
             .andExpect(jsonPath("$.documentAction").value(DEFAULT_DOCUMENT_ACTION))
@@ -644,6 +671,84 @@ public class MPrequalificationInformationResourceIT {
 
         // Get all the mPrequalificationInformationList where type does not contain UPDATED_TYPE
         defaultMPrequalificationInformationShouldBeFound("type.doesNotContain=" + UPDATED_TYPE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMPrequalificationInformationsByStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mPrequalificationInformationRepository.saveAndFlush(mPrequalificationInformation);
+
+        // Get all the mPrequalificationInformationList where status equals to DEFAULT_STATUS
+        defaultMPrequalificationInformationShouldBeFound("status.equals=" + DEFAULT_STATUS);
+
+        // Get all the mPrequalificationInformationList where status equals to UPDATED_STATUS
+        defaultMPrequalificationInformationShouldNotBeFound("status.equals=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPrequalificationInformationsByStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mPrequalificationInformationRepository.saveAndFlush(mPrequalificationInformation);
+
+        // Get all the mPrequalificationInformationList where status not equals to DEFAULT_STATUS
+        defaultMPrequalificationInformationShouldNotBeFound("status.notEquals=" + DEFAULT_STATUS);
+
+        // Get all the mPrequalificationInformationList where status not equals to UPDATED_STATUS
+        defaultMPrequalificationInformationShouldBeFound("status.notEquals=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPrequalificationInformationsByStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        mPrequalificationInformationRepository.saveAndFlush(mPrequalificationInformation);
+
+        // Get all the mPrequalificationInformationList where status in DEFAULT_STATUS or UPDATED_STATUS
+        defaultMPrequalificationInformationShouldBeFound("status.in=" + DEFAULT_STATUS + "," + UPDATED_STATUS);
+
+        // Get all the mPrequalificationInformationList where status equals to UPDATED_STATUS
+        defaultMPrequalificationInformationShouldNotBeFound("status.in=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPrequalificationInformationsByStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mPrequalificationInformationRepository.saveAndFlush(mPrequalificationInformation);
+
+        // Get all the mPrequalificationInformationList where status is not null
+        defaultMPrequalificationInformationShouldBeFound("status.specified=true");
+
+        // Get all the mPrequalificationInformationList where status is null
+        defaultMPrequalificationInformationShouldNotBeFound("status.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMPrequalificationInformationsByStatusContainsSomething() throws Exception {
+        // Initialize the database
+        mPrequalificationInformationRepository.saveAndFlush(mPrequalificationInformation);
+
+        // Get all the mPrequalificationInformationList where status contains DEFAULT_STATUS
+        defaultMPrequalificationInformationShouldBeFound("status.contains=" + DEFAULT_STATUS);
+
+        // Get all the mPrequalificationInformationList where status contains UPDATED_STATUS
+        defaultMPrequalificationInformationShouldNotBeFound("status.contains=" + UPDATED_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPrequalificationInformationsByStatusNotContainsSomething() throws Exception {
+        // Initialize the database
+        mPrequalificationInformationRepository.saveAndFlush(mPrequalificationInformation);
+
+        // Get all the mPrequalificationInformationList where status does not contain DEFAULT_STATUS
+        defaultMPrequalificationInformationShouldNotBeFound("status.doesNotContain=" + DEFAULT_STATUS);
+
+        // Get all the mPrequalificationInformationList where status does not contain UPDATED_STATUS
+        defaultMPrequalificationInformationShouldBeFound("status.doesNotContain=" + UPDATED_STATUS);
     }
 
 
@@ -1422,6 +1527,7 @@ public class MPrequalificationInformationResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].announcementText").value(hasItem(DEFAULT_ANNOUNCEMENT_TEXT.toString())))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
             .andExpect(jsonPath("$.[*].dateTrx").value(hasItem(sameInstant(DEFAULT_DATE_TRX))))
             .andExpect(jsonPath("$.[*].documentNo").value(hasItem(DEFAULT_DOCUMENT_NO)))
             .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
@@ -1483,6 +1589,7 @@ public class MPrequalificationInformationResourceIT {
             .name(UPDATED_NAME)
             .type(UPDATED_TYPE)
             .announcementText(UPDATED_ANNOUNCEMENT_TEXT)
+            .status(UPDATED_STATUS)
             .dateTrx(UPDATED_DATE_TRX)
             .documentNo(UPDATED_DOCUMENT_NO)
             .documentAction(UPDATED_DOCUMENT_ACTION)
@@ -1508,6 +1615,7 @@ public class MPrequalificationInformationResourceIT {
         assertThat(testMPrequalificationInformation.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testMPrequalificationInformation.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testMPrequalificationInformation.getAnnouncementText()).isEqualTo(UPDATED_ANNOUNCEMENT_TEXT);
+        assertThat(testMPrequalificationInformation.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testMPrequalificationInformation.getDateTrx()).isEqualTo(UPDATED_DATE_TRX);
         assertThat(testMPrequalificationInformation.getDocumentNo()).isEqualTo(UPDATED_DOCUMENT_NO);
         assertThat(testMPrequalificationInformation.getDocumentAction()).isEqualTo(UPDATED_DOCUMENT_ACTION);

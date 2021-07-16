@@ -24,6 +24,10 @@ public class MPrequalificationInformationDTO extends AbstractAuditingDTO impleme
     @Size(max = 10)
     private String type;
 
+    @NotNull
+    @Size(max = 10)
+    private String status;
+
     @Lob
     private String announcementText;
 
@@ -62,6 +66,14 @@ public class MPrequalificationInformationDTO extends AbstractAuditingDTO impleme
 
     public Long getId() {
         return id;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Long getPreqEventId() {

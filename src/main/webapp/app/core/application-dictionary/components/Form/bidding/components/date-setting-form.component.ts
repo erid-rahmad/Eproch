@@ -161,6 +161,7 @@ export default class DateSettingForm extends Mixins(AccessLevelMixin, DateSettin
       if (passed) {
         this.processing = true;
         const { dateRange, ...record } = this.formData;
+        console.log(record);
         const service = this.commonService('api/m-prequalification-date-sets');
         let promise: Promise<any> = service[this.formData.id ? 'update' : 'create'](record);
 

@@ -36,6 +36,8 @@ public class MPrequalificationInformationCriteria implements Serializable, Crite
 
     private StringFilter type;
 
+    private StringFilter status;
+
     private ZonedDateTimeFilter dateTrx;
 
     private StringFilter documentNo;
@@ -67,6 +69,7 @@ public class MPrequalificationInformationCriteria implements Serializable, Crite
         this.active = other.active == null ? null : other.active.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.type = other.type == null ? null : other.type.copy();
+        this.status = other.status == null ? null : other.status.copy();
         this.dateTrx = other.dateTrx == null ? null : other.dateTrx.copy();
         this.documentNo = other.documentNo == null ? null : other.documentNo.copy();
         this.documentAction = other.documentAction == null ? null : other.documentAction.copy();
@@ -123,6 +126,14 @@ public class MPrequalificationInformationCriteria implements Serializable, Crite
 
     public void setType(StringFilter type) {
         this.type = type;
+    }
+
+    public StringFilter getStatus() {
+        return status;
+    }
+
+    public void setStatus(StringFilter status) {
+        this.status = status;
     }
 
     public ZonedDateTimeFilter getDateTrx() {
@@ -229,6 +240,7 @@ public class MPrequalificationInformationCriteria implements Serializable, Crite
             Objects.equals(active, that.active) &&
             Objects.equals(name, that.name) &&
             Objects.equals(type, that.type) &&
+            Objects.equals(status, that.status) &&
             Objects.equals(dateTrx, that.dateTrx) &&
             Objects.equals(documentNo, that.documentNo) &&
             Objects.equals(documentAction, that.documentAction) &&
@@ -250,6 +262,7 @@ public class MPrequalificationInformationCriteria implements Serializable, Crite
         active,
         name,
         type,
+        status,
         dateTrx,
         documentNo,
         documentAction,
@@ -272,6 +285,7 @@ public class MPrequalificationInformationCriteria implements Serializable, Crite
                 (active != null ? "active=" + active + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (type != null ? "type=" + type + ", " : "") +
+                (status != null ? "status=" + status + ", " : "") +
                 (dateTrx != null ? "dateTrx=" + dateTrx + ", " : "") +
                 (documentNo != null ? "documentNo=" + documentNo + ", " : "") +
                 (documentAction != null ? "documentAction=" + documentAction + ", " : "") +

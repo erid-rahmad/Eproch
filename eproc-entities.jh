@@ -1138,6 +1138,7 @@ entity MPrequalificationInformation {
 	name String
 	type String required maxlength(10)
 	announcementText TextBlob
+	status String required maxlength(10)
 
 	// Common transactional fields.
 	dateTrx ZonedDateTime

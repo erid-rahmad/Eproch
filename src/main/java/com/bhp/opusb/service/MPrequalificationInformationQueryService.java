@@ -103,6 +103,9 @@ public class MPrequalificationInformationQueryService extends QueryService<MPreq
             if (criteria.getType() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getType(), MPrequalificationInformation_.type));
             }
+            if (criteria.getStatus() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getStatus(), MPrequalificationInformation_.status));
+            }
             if (criteria.getDateTrx() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDateTrx(), MPrequalificationInformation_.dateTrx));
             }

@@ -86,6 +86,14 @@
             <column name="last_modified_date" type="timestamp"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="20210714100800-status" author="ricky-k">
+        <addColumn tableName="m_prequalification_information">
+            <column name="status" type="varchar(10)" defaultValue="N">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
     <!--

@@ -28,6 +28,15 @@
             "fieldTypeBlobContent": "text"
         },
         {
+            "fieldName": "status",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
             "fieldName": "dateTrx",
             "fieldType": "ZonedDateTime"
         },

@@ -67,10 +67,11 @@
             show-overflow-tooltip
           ></el-table-column>
 
-          <el-table-column label="Schedule">
+          <el-table-column label="Schedule" align="center">
             <el-table-column
               width="422"
               prop="schedule"
+              align="center"
               label="Plan"
             >
               <template slot-scope="{ row }">
@@ -90,6 +91,7 @@
             <el-table-column
               width="422"
               prop="actual"
+              align="center"
               label="Actual"
             >
               <template slot-scope="{ row }">
@@ -110,6 +112,7 @@
           <el-table-column
             label="Status"
             min-width="150"
+            align="center"
           >
             <template slot-scope="{ row }">
               {{ printStatus(row.status) }}
@@ -119,6 +122,7 @@
           <el-table-column
             fixed="right"
             label="Action"
+            align="center"
             min-width="200"
           >
             <template slot-scope="{ row }">

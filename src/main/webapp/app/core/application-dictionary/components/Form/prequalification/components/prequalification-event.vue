@@ -3,11 +3,11 @@
     <el-form label-position="left" label-width="150px" :model="preq" size="mini">
       <el-row :gutter="24">
         <el-col :xs="24" :sm="24" :lg="12" :xl="8">
-          <el-form-item label="Title" disabled prop="name" required>
-            <el-input v-model="preq.name" class="form-input"></el-input>
+          <el-form-item label="Title" prop="name" required>
+            <el-input v-model="preq.name" disabled class="form-input"></el-input>
           </el-form-item>
-          <el-form-item label="Prequistion No" disabled prop="documentNo">
-            <el-input v-model="preq.documentNo" class="form-input"></el-input>
+          <el-form-item label="Prequistion No" prop="documentNo">
+            <el-input v-model="preq.documentNo" disabled class="form-input"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -16,6 +16,7 @@
           <div>
             <el-form-item label="Prequalification Event">
               <el-select
+                :disabled="readOnly"
                 v-model="preq.event.eventId"
                 class="form-input"
                 clearable
@@ -32,7 +33,7 @@
         <el-col :xs="24" :sm="24" :lg="12" :xl="8">
           <div>
             <el-form-item label="Prequalification Method">
-              <el-select v-model="preq.event.methodId" class="form-input" clearable filterable placeholder="Select">
+              <el-select :disabled="readOnly" v-model="preq.event.methodId" class="form-input" clearable filterable placeholder="Select">
                 <el-option v-for="item in methodOptions" :key="item.key" :label="item.value" :value="item.key"></el-option>
               </el-select>
             </el-form-item>
@@ -63,79 +64,6 @@
           </el-table-column>
 
           <el-table-column label="Step" min-width="200" prop="prequalificationStepName" show-overflow-tooltip></el-table-column>
-          <!--
-          <el-table-column label="Schedule">
-            <el-table-column
-              width="422"
-              prop="schedule"
-              label="Plan"
-            >
-              <template slot-scope="{ row }">
-                <el-date-picker
-                  v-model="row.schedule"
-                  :disabled="readOnly"
-                  :format="dateDisplayFormat"
-                  end-placeholder="End Datetime"
-                  range-separator="To"
-                  size="mini"
-                  start-placeholder="Start Datetime"
-                  type="datetimerange"
-                  @change="value => onScheduleChanged(row, value)"
-                ></el-date-picker>
-              </template>
-            </el-table-column>
-            <el-table-column
-              width="422"
-              prop="actual"
-              label="Actual"
-            >
-              <template slot-scope="{ row }">
-                <el-date-picker
-                  v-model="row.actual"
-                  disabled
-                  :format="dateDisplayFormat"
-                  end-placeholder="End Datetime"
-                  range-separator="To"
-                  size="mini"
-                  start-placeholder="Start Datetime"
-                  type="datetimerange"
-                ></el-date-picker>
-              </template>
-            </el-table-column>
-          </el-table-column>
-          <el-table-column
-            label="Status"
-            min-width="150"
-          >
-            <template slot-scope="{ row }">
-              {{ printStatus(row.status) }}
-            </template>
-          </el-table-column>
-
-          <el-table-column
-            fixed="right"
-            label="Action"
-            min-width="200"
-          >
-            <template slot-scope="{ row }">
-              <el-button
-                size="mini"
-                @click="editSchedule(row)"
-              >
-                <svg-icon name="icomoo/084-calendar"></svg-icon> Date
-              </el-button>
-
-              <el-button
-                v-if="row.status && row.status !== 'N'"
-                size="mini"
-                type="primary"
-                @click="viewEvent(row)"
-              >
-                <svg-icon name="link"></svg-icon> View
-              </el-button>
-            </template>
-          </el-table-column>
-        -->
         </el-table>
       </el-col>
     </el-row>

@@ -43,6 +43,11 @@ public class MPrequalificationInformation extends AbstractAuditingEntity impleme
     @Column(name = "type", length = 10, nullable = false)
     private String type;
 
+    @NotNull
+    @Size(max = 10)
+    @Column(name = "status", length = 10)
+    private String status;
+
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "announcement_text")
@@ -105,6 +110,19 @@ public class MPrequalificationInformation extends AbstractAuditingEntity impleme
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public MPrequalificationInformation status(String status) {
+        this.status = status;
+        return this;
     }
 
     public String getPreqMethodName() {

@@ -59,7 +59,7 @@ export default class PrequalificationSchedule extends Mixins(AccessLevelMixin, P
   }
 
   get readOnly() {
-    return this.preq.biddingStatus === 'P';
+    return this.preq.status === 'P';
   }
 
   @Watch('bidding', { deep: true })
