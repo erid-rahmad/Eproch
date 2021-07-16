@@ -433,7 +433,8 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
           this.retrieveProposedLines(this.mainForm.id);
         }
 
-        if (this.mainForm.documentStatus=='SMT'){
+
+        if (res.data[0].documentStatus==="SMT"){
           this.disabled=true;
         }
       });
