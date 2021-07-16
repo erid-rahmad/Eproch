@@ -8,6 +8,7 @@ import { AccountStoreModule as accountStore } from "@/shared/config/store/accoun
 import { WindowStoreModule as windowStore } from "@/shared/config/store/window-store";
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 import Accordion from './accordion.vue';
+import { defaults } from 'lodash';
 
 const baseApiVendor ='api/c-vendors';
 const baseApiBidding ='api/m-biddings';
@@ -40,7 +41,7 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
   dasbordItem:any={};
 
   //isVendor:boolean;
-
+  screenWidth: Number = window.outerWidth;
   items: IAdWatchListItem[] = [];
   listColor=
   [
@@ -66,9 +67,30 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
     return /*this.items.length > 4 ? DisplayType.List : */DisplayType.Card;
   }
 
-  /*mounted(){
-    setInterval(() => {this.updateCountWatchList()}, 15000);
-  }*/
+  getMarginStyle(index){
+    index += 1;
+    let maxColumn = 6;
+    let defaultStyle = 'margin: 5px auto;'
+
+    //if(this.screenWidth < 600) maxColumn = 1; // x-small
+    if(this.screenWidth <= 976) maxColumn = 2; // small
+    else if(this.screenWidth <= 1296) maxColumn = 4; // medium
+    else maxColumn = 6; // large
+
+    if(index > maxColumn){
+      defaultStyle = 'margin: 5px 0px;';
+    }
+
+    return defaultStyle;
+  }
+
+  mounted(){
+    window.addEventListener('resize', () => {
+      this.screenWidth = window.outerWidth;
+    });
+  
+    //setInterval(() => {this.updateCountWatchList()}, 15000);
+  }
 
   @Watch('items', {deep: true})
   async onItemsChanged(items: IAdWatchListItem[]) {
@@ -93,6 +115,7 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
 
   async onCardClicked(card: IAdWatchListItem) {
     card.actionUrl = await this.commonService('/api/ad-menus/full-path').find(card.adMenu.id);
+    console.log(card.actionUrl + ' \n ' + JSON.stringify(card.adMenu));
     if (card.actionUrl) {
       const timestamp = Date.now();
       windowStore.setWatchlistQuery(card.filterQuery)
