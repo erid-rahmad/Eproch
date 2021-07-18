@@ -152,6 +152,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
         this.evaluationResult.score=average;
         this.evaluationResult.evaluationStatus=evaluationStatus;
         this.updateEvalResult();
+        console.log("bidding evaluation")
         });
   }
 
@@ -166,9 +167,9 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       });
   }
 
-  submitEvaluation(){
+  async submitEvaluation() {
     (<any>this.$refs.evaluationFormDetail).saveSubmit();
-    this.dialogSubmitEvaluation=false;
+    this.dialogSubmitEvaluation = false;
   }
 
   async save() {

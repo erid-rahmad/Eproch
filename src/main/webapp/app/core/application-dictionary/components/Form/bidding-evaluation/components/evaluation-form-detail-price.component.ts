@@ -71,16 +71,11 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
         let result:any={};
         if (data.length) {
           result = {...result, ...data[0]};
-
-
             this.evaluationResultLine = result;
             if (this.evaluationResultLine.documentStatus === 'SMT') {
               this.readOnly = true;
-
             }
           }
-
-
       });
   }
 
@@ -142,8 +137,10 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
       this.commonService(baseApiEvalResultLine)
         .create(data)
         .then(res => {
-          this.evaluationFormProp.SelectVendorScoringLine = res.data;
+          // this.evaluationFormProp.SelectVendorScoringLine = res.data;
           this.$message.success('create ResultLine ');
+          this.retrieveEvalResultLine( this.evaluationFormProp.evaluationMethodLineId, this.evaluationFormProp.biddingEvalResultId);
+
         })
         .catch(_err => this.$message.error('fail create record'));
     }

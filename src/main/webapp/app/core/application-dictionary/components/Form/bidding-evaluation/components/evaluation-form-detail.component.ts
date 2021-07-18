@@ -175,10 +175,12 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
       .then(_res => {
         this.$message.success(`Requirements has been saved successfully`);
         this.updateEvalResultLine();
+
       })
       .catch(err => {
         console.error('Failed to save the criteria. %O', err);
         this.$message.error(`Failed to save vendor scoring criteria`);
+
       })
       .finally(() => this.$emit('update:loading', false));
   }
@@ -199,6 +201,8 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
       .create(data)
       .then(res => {
         this.evaluationFormProp.SelectVendorScoringLine = res.data;
+        console.log("save line")
+
         // this.$message.success('create ResultLine ');
       })
       .catch(_err => this.$message.error('fail create record'));
