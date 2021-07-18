@@ -1,6 +1,6 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import settings from '@/settings';
-import { Component, Mixins, Vue, Inject } from 'vue-property-decorator';
+import { Component, Mixins, Vue, Inject, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
 
 const EvaluationTeamDetailProp = Vue.extend({
@@ -40,30 +40,12 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
   };
 
   positions: any[] = [
-    'Evaluator Administrasi',
-    'Reviewer',
-    'Approver'
+    {name:'Evaluator Administrasi', id:'E'},
+    {name:'Reviewer', id:'R'},
+    {name:'Approver', id:'A'}
   ];
 
   users: any[] = [
-    {
-      id: 1,
-      name: 'Admin Tender',
-      position: 'Staff Marketing',
-      email: 'admintender@mail.co.id'
-    },
-    {
-      id: 2,
-      name: 'Admin Review',
-      position: 'Kabag Marketing',
-      email: 'adminreview@mail.co.id'
-    },
-    {
-      id: 3,
-      name: 'Admin Approve',
-      position: 'Kadiv Marketing',
-      email: 'adminapprove@mail.co.id'
-    }
   ];
 
   userOptions: any[] = [];
@@ -76,6 +58,11 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
 
   get dateValueFormat() {
     return settings.dateValueFormat;
+  }
+
+  @Watch('data')
+  onDataChanged(data: any) {
+    this.mainForm = data;
   }
 
   onCurrentRowChanged(row: any) {
@@ -104,10 +91,25 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
     console.log('retrieve users. query:', query);
     if (query !== '') {
       setTimeout(() => {
-        this.userOptions = this.users.filter(item => {
-          return item.name.toLowerCase()
-            .indexOf(query.toLowerCase()) > -1;
-        });
+        this.commonService("/api/ad-users").retrieve({
+          criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `userName.contains=${query}`]),
+          paginationQuery: {
+            page: 0,
+            size: 100,
+            sort: ['id']
+          }
+        }).then((res)=>{
+          this.userOptions = res.data.map((item)=>{
+            return {
+              id: item.id,
+              name: `${item.firstName?item.firstName:''} ${item.lastName?item.lastName:''}`,
+              position: item.position,
+              email: item.email
+            }
+          })
+        })
       }, 200);
     } else {
       this.userOptions = this.users;

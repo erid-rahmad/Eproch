@@ -1545,6 +1545,12 @@ entity MBiddingEvaluation {
 	active Boolean
 }
 
+entity MBiddingEvaluationTeam {
+	status String
+	uid UUID
+	active Boolean
+}
+
 entity MBiddingEvaluationLine {
 	status String
 	evaluationStatus String
@@ -2442,6 +2448,9 @@ relationship ManyToOne {
 	MBiddingEvaluation{biddingSchedule required} to MBiddingSchedule
 	MBiddingEvaluation{adOrganization required} to ADOrganization
 
+	MBiddingEvaluationTeam{adOrganization required} to ADOrganization
+	MBiddingEvaluationTeam{bidding} to MBidding
+	MBiddingEvaluationTeam{prequalification} to MPrequalificationInformation
 
 	MBiddingEvaluationLine{adOrganization required} to ADOrganization
 	MBiddingEvaluationLine{biddingEvaluation required} to MBiddingEvaluation

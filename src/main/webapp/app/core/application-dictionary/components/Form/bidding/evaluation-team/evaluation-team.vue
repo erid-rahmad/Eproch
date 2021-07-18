@@ -12,9 +12,10 @@
       </el-button>
     </div>
     <div class="card">
+      <div v-if="isMainPage">
       <el-table
-        v-if="isMainPage"
         ref="mainGrid"
+        v-loading="loading"
         border
         :data="evaluationTeams"
         highlight-current-row
@@ -34,7 +35,6 @@
         <el-table-column
           :label="quickSearchActive ? null : 'Bidding No.'"
           min-width="150"
-          prop="biddingNo"
           :sortable="!quickSearchActive"
         >
           <template slot="header">
@@ -45,11 +45,13 @@
               placeholder="Bidding No."
             ></el-input>
           </template>
+          <template slot-scope="{ row }">
+            {{row.biddingNo || row.prequalificationNo}}
+          </template>
         </el-table-column>
         <el-table-column
           :label="quickSearchActive ? null : 'Title'"
           min-width="150"
-          prop="biddingTitle"
           show-overflow-tooltip
           :sortable="!quickSearchActive"
         >
@@ -61,11 +63,13 @@
               placeholder="Title"
             ></el-input>
           </template>
+          <template slot-scope="{ row }">
+            {{row.biddingName || row.prequalificationName}}
+          </template>
         </el-table-column>
         <el-table-column
           :label="quickSearchActive ? null : 'Bidding Type'"
           min-width="150"
-          prop="biddingTypeName"
           :sortable="!quickSearchActive"
         >
           <template slot="header">
@@ -76,11 +80,13 @@
               placeholder="Bidding Type"
             ></el-input>
           </template>
+          <template slot-scope="{ row }">
+            {{row.biddingType || "Prequalification"}}
+          </template>
         </el-table-column>
         <el-table-column
           :label="quickSearchActive ? null : 'Event Type'"
           min-width="150"
-          prop="eventTypeName"
           :sortable="!quickSearchActive"
         >
           <template slot="header">
@@ -90,6 +96,9 @@
               size="mini"
               placeholder="Event Type"
             ></el-input>
+          </template>
+          <template slot-scope="{ row }">
+            {{row.biddingEventType || row.prequalificationEventType}}
           </template>
         </el-table-column>
         <el-table-column
@@ -174,25 +183,39 @@
             >
               <svg-icon name="link"></svg-icon>
             </el-button>
-            <el-button
-              size="mini"
-              title="View Contract Requisition"
-              type="primary"
-              @click="viewContractRfq(row)"
-            >
-              <svg-icon name="icomoo/039-file-text2"></svg-icon>
-            </el-button>
-            <el-button
-              size="mini"
-              title="View Contract Document"
-              type="primary"
-              @click="viewContractDocument(row)"
-            >
-              <svg-icon name="skill"></svg-icon>
-            </el-button>
+            <div v-if="row.biddingId!=null">
+              <el-button
+                size="mini"
+                title="View Contract Requisition"
+                type="primary"
+                @click="viewContractRfq(row)"
+              >
+                <svg-icon name="icomoo/039-file-text2"></svg-icon>
+              </el-button>
+              <el-button
+                size="mini"
+                title="View Contract Document"
+                type="primary"
+                @click="viewContractDocument(row)"
+              >
+                <svg-icon name="skill"></svg-icon>
+              </el-button>
+            </div>
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        ref="pagination"
+        :current-page.sync="gridPage"
+        :page-size="itemsPerPage"
+        :page-sizes="[10, 20, 50, 100]"
+        :total="queryCount"
+        background
+        layout="sizes, prev, pager, next"
+        small
+        @size-change="changePageSize"
+      ></el-pagination>
+      </div>
 
       <evaluation-team-detail
         v-else-if="isDetailPage"

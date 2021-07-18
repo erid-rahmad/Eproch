@@ -3,6 +3,8 @@ package com.bhp.opusb.service;
 import com.bhp.opusb.domain.MPrequalificationInformation;
 import com.bhp.opusb.domain.enumeration.MPrequalificationProcess;
 import com.bhp.opusb.repository.MPrequalificationInformationRepository;
+import com.bhp.opusb.service.dto.MBiddingEvaluationTeamCriteria;
+import com.bhp.opusb.service.dto.MBiddingEvaluationTeamDTO;
 import com.bhp.opusb.service.dto.MPrequalVendorSuggestionDTO;
 import com.bhp.opusb.service.dto.MPrequalificationFormDTO;
 import com.bhp.opusb.service.dto.MPrequalificationInformationDTO;
@@ -20,6 +22,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import io.github.jhipster.service.filter.LongFilter;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,11 +48,13 @@ public class MPrequalificationInformationService {
     private final MPrequalificationEventService mPrequalificationEventService;
     private final MPrequalificationScheduleService mPrequalificationScheduleService;
 
+    private final MBiddingEvaluationTeamService mBiddingEvaluationTeamService;
+
     public MPrequalificationInformationService(MPrequalificationInformationRepository mPrequalificationInformationRepository, 
         MPrequalificationInvitationService mPrequalificationInvitationService, MPrequalVendorSuggestionService mPrequalVendorSuggestionService,
         MPrequalificationInformationMapper mPrequalificationInformationMapper, MPrequalificationFormMapper mPrequalificationFormMapper,
         MPrequalificationEventMapper mPrequalificationEventMapper, MPrequalificationScheduleService mPrequalificationScheduleService,
-        MPrequalificationEventService mPrequalificationEventService) {
+        MPrequalificationEventService mPrequalificationEventService, MBiddingEvaluationTeamService mBiddingEvaluationTeamService) {
         this.mPrequalificationInformationRepository = mPrequalificationInformationRepository;
         this.mPrequalificationInvitationService = mPrequalificationInvitationService;
         this.mPrequalVendorSuggestionService = mPrequalVendorSuggestionService;
@@ -57,6 +63,7 @@ public class MPrequalificationInformationService {
         this.mPrequalificationEventService = mPrequalificationEventService;
         this.mPrequalificationEventMapper = mPrequalificationEventMapper;
         this.mPrequalificationScheduleService = mPrequalificationScheduleService;
+        this.mBiddingEvaluationTeamService = mBiddingEvaluationTeamService;
     }
 
     /**
@@ -146,6 +153,16 @@ public class MPrequalificationInformationService {
             saveSchedule(mPrequalificationInformationDTO, schedules);
         } 
 
+        MBiddingEvaluationTeamDTO dto = mBiddingEvaluationTeamService.findByPrequalificationId(preqInfo.getId());
+        if(dto==null){
+            dto = new MBiddingEvaluationTeamDTO();
+            dto.setAdOrganizationId(preqInfo.getAdOrganization().getId());
+            dto.setPrequalificationId(preqInfo.getId());
+            dto.setStatus("U");
+
+            mBiddingEvaluationTeamService.save(dto);
+        }
+        
         return mPrequalificationInformationDTO;
     }
 

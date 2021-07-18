@@ -45,6 +45,8 @@ public class AdUserCriteria implements Serializable, Criteria {
     private LongFilter userId;
     private StringFilter userLogin;
 
+    private StringFilter userName;
+
     private LongFilter cVendorId;
 
     private LongFilter adOrganizationId;
@@ -66,6 +68,7 @@ public class AdUserCriteria implements Serializable, Criteria {
         this.userLogin = other.userLogin == null ? null : other.userLogin.copy();
         this.cVendorId = other.cVendorId == null ? null : other.cVendorId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.userName = other.userName == null ? null : other.userName.copy();
     }
 
     @Override
@@ -161,6 +164,14 @@ public class AdUserCriteria implements Serializable, Criteria {
         this.userLogin = userLogin;
     }
 
+    public StringFilter getUserName() {
+        return userName;
+    }
+
+    public void setUserName(StringFilter userName) {
+        this.userName = userName;
+    }
+
     public LongFilter getCVendorId() {
         return cVendorId;
     }
@@ -200,7 +211,8 @@ public class AdUserCriteria implements Serializable, Criteria {
             Objects.equals(userId, that.userId) &&
             Objects.equals(userLogin, that.userLogin) &&
             Objects.equals(cVendorId, that.cVendorId) &&
-            Objects.equals(adOrganizationId, that.adOrganizationId);
+            Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(userName, that.userName);
     }
 
     @Override
@@ -218,7 +230,8 @@ public class AdUserCriteria implements Serializable, Criteria {
         userId,
         userLogin,
         cVendorId,
-        adOrganizationId
+        adOrganizationId,
+        userName
         );
     }
 
@@ -238,6 +251,7 @@ public class AdUserCriteria implements Serializable, Criteria {
                 (userLogin != null ? "userLogin=" + userLogin + ", " : "") +
                 (cVendorId != null ? "cVendorId=" + cVendorId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (userName != null ? "userName=" + userName + ", " : "") +
             "}";
     }
 
