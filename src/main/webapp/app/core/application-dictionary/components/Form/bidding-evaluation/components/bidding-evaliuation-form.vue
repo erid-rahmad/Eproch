@@ -13,18 +13,22 @@
                            size="mini"
                            style="margin-left: 10px"
                            type="primary"
+                           :disabled="readOnly"
+                           v-if="SelectVendorScoringLine.evaluationMethodLineEvaluation"
                            @click="dialogSubmitEvaluation=true">
                     Submit
                 </el-button>
                 <el-button
                     size="mini"
                     style="margin-left: 10px"
+                    v-if="SelectVendorScoringLine.evaluationMethodLineEvaluation"
                     type="primary"
                     @click="save">
                     Save
                 </el-button>
                 <el-dialog
                     :visible.sync="dialogSubmitEvaluation"
+
                     title="Tips"
                     width="30%">
                     <span>Submit Evaluation ?</span>
@@ -122,12 +126,12 @@
                 </el-col>
             </el-form>
             <div v-if="FormMenu===1">
-                <EvaluationTeamDetailPrice ref="evaluationFormDetail"  :evaluationFormProp="evaluationFormProp"
+                <EvaluationTeamDetailPrice ref="evaluationFormDetail" @event="handler"  :evaluationFormProp="evaluationFormProp"
                                            :readOnly="readOnly" ></EvaluationTeamDetailPrice>
             </div>
             <div v-if="FormMenu===2">
                 <h4 align="center">Evaluation</h4>
-                <EvaluationFormDetail  ref="evaluationFormDetail" :SelectVendorScoringLine="SelectVendorScoringLine" :evaluationFormProp="evaluationFormProp"
+                <EvaluationFormDetail  ref="evaluationFormDetail" @event="handler" :SelectVendorScoringLine="SelectVendorScoringLine" :evaluationFormProp="evaluationFormProp"
                                       :readOnly="readOnly" :title="title" ></EvaluationFormDetail>
             </div>
 

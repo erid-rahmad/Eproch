@@ -74,6 +74,7 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
             this.evaluationResultLine = result;
             if (this.evaluationResultLine.documentStatus === 'SMT') {
               this.readOnly = true;
+              this.$emit('event', true);
             }
           }
       });
@@ -122,8 +123,11 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
     this.$emit("close");
   }
 
+  something() { this.$emit('event', 10);}
+
 
   save(){
+
     const data={
       biddingEvalResultId:this.evaluationFormProp.biddingEvalResultId,
       evaluationMethodLineId:this.evaluationFormProp.evaluationMethodLineId,

@@ -108,18 +108,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   }
 
   handleButton(){
-    if (this.evaluationResult.evaluationStatus==="SMT"){
-      this.readOnly=true;
-      this.button=1;
-    }
-    if (this.evaluationResult.evaluationStatus==="RJC" ){
-      this.readOnly=true;
-      this.button=2;
-    }
-    if (this.evaluationResult.evaluationStatus==="APP"){
-      this.readOnly=true;
-      this.button=3;
-    }
+
   }
 
   retrieveAllEvalResultLine(biddingEvalResultId:number){
@@ -175,6 +164,11 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   async save() {
     await (<any>this.$refs.evaluationFormDetail).save();
     await this.retrieveAllEvalResultLine(this.evaluationResult.id);
+  }
+
+  handler(params) {
+    console.log("masuk")
+    this.readOnly=params
   }
 
   approveEvaluation(){

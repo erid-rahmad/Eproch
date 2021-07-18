@@ -75,6 +75,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
 
   @Watch('SelectVendorScoringLine')
   loaddata() {
+    this.$emit('event', false);
     this.evaluationResultLine.score=0;
     this.readOnly=false;
     this.getEvaluationtype();
@@ -109,7 +110,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
           this.evaluationResultLine = result;
             if (result.documentStatus === 'SMT') {
               this.readOnly = true;
-              console.log("status lock")
+              this.$emit('event', true);
             }
           }
 
