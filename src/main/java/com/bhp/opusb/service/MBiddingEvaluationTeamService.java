@@ -1,8 +1,11 @@
 package com.bhp.opusb.service;
 
+import com.bhp.opusb.domain.MBiddingEvalTeamLine;
 import com.bhp.opusb.domain.MBiddingEvaluationTeam;
+import com.bhp.opusb.repository.MBiddingEvalTeamLineRepository;
 import com.bhp.opusb.repository.MBiddingEvaluationTeamRepository;
 import com.bhp.opusb.service.dto.MBiddingEvaluationTeamDTO;
+import com.bhp.opusb.service.mapper.MBiddingEvalTeamLineMapper;
 import com.bhp.opusb.service.mapper.MBiddingEvaluationTeamMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -24,12 +28,18 @@ public class MBiddingEvaluationTeamService {
     private final Logger log = LoggerFactory.getLogger(MBiddingEvaluationTeamService.class);
 
     private final MBiddingEvaluationTeamRepository mBiddingEvaluationTeamRepository;
+    private final MBiddingEvalTeamLineRepository mBiddingEvalTeamLineRepository;
 
     private final MBiddingEvaluationTeamMapper mBiddingEvaluationTeamMapper;
+    private final MBiddingEvalTeamLineMapper mBiddingEvalTeamLineMapper;
 
-    public MBiddingEvaluationTeamService(MBiddingEvaluationTeamRepository mBiddingEvaluationTeamRepository, MBiddingEvaluationTeamMapper mBiddingEvaluationTeamMapper) {
+    public MBiddingEvaluationTeamService(
+        MBiddingEvaluationTeamRepository mBiddingEvaluationTeamRepository, MBiddingEvaluationTeamMapper mBiddingEvaluationTeamMapper,
+        MBiddingEvalTeamLineRepository mBiddingEvalTeamLineRepository, MBiddingEvalTeamLineMapper mBiddingEvalTeamLineMapper) {
         this.mBiddingEvaluationTeamRepository = mBiddingEvaluationTeamRepository;
         this.mBiddingEvaluationTeamMapper = mBiddingEvaluationTeamMapper;
+        this.mBiddingEvalTeamLineRepository = mBiddingEvalTeamLineRepository;
+        this.mBiddingEvalTeamLineMapper = mBiddingEvalTeamLineMapper;
     }
 
     /**
@@ -41,7 +51,19 @@ public class MBiddingEvaluationTeamService {
     public MBiddingEvaluationTeamDTO save(MBiddingEvaluationTeamDTO mBiddingEvaluationTeamDTO) {
         log.debug("Request to save MBiddingEvaluationTeam : {}", mBiddingEvaluationTeamDTO);
         MBiddingEvaluationTeam mBiddingEvaluationTeam = mBiddingEvaluationTeamMapper.toEntity(mBiddingEvaluationTeamDTO);
+        mBiddingEvaluationTeam.setStatus(mBiddingEvaluationTeamDTO.getMembers().size()>0?"A":"U");
         mBiddingEvaluationTeam = mBiddingEvaluationTeamRepository.save(mBiddingEvaluationTeam);
+
+        List<MBiddingEvalTeamLine> lines = mBiddingEvalTeamLineMapper.toEntity(mBiddingEvaluationTeamDTO.getMembers());
+
+        for(MBiddingEvalTeamLine mbetl: lines){
+            mbetl.setAdOrganization(mBiddingEvaluationTeam.getAdOrganization());
+            mbetl.setEvaluationTeam(mBiddingEvaluationTeam);
+        }
+
+        mBiddingEvalTeamLineRepository.saveAll(lines);
+        mBiddingEvalTeamLineRepository.deleteAll(mBiddingEvalTeamLineMapper.toEntity(mBiddingEvaluationTeamDTO.getDeletedLines()));
+
         return mBiddingEvaluationTeamMapper.toDto(mBiddingEvaluationTeam);
     }
 
@@ -83,6 +105,12 @@ public class MBiddingEvaluationTeamService {
 
     public MBiddingEvaluationTeamDTO findByPrequalificationId(Long id) {
         MBiddingEvaluationTeam mbet = mBiddingEvaluationTeamRepository.findByPrequalification_Id(id);
+        if(mbet==null) return null;
+        return mBiddingEvaluationTeamMapper.toDto(mbet);
+    }
+
+    public MBiddingEvaluationTeamDTO findByBiddingId(Long id) {
+        MBiddingEvaluationTeam mbet = mBiddingEvaluationTeamRepository.findByBidding_Id(id);
         if(mbet==null) return null;
         return mBiddingEvaluationTeamMapper.toDto(mbet);
     }

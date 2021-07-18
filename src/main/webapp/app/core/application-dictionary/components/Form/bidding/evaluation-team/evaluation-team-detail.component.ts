@@ -27,10 +27,9 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
   mainForm = {
     biddingNo: 'BN-00001',
     biddingTitle: 'Pengadaan Kendaraan Operasional',
-    members: []
+    members: [],
+    deletedLines: []
   }
-
-  members = [];
 
   gridSchema = {
     defaultSort: {},
@@ -73,7 +72,9 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
 
   onUserChanged(row: any, value?: number) {
     if (value) {
-      const user = this.users.find(u => u.id === value);
+      const user = this.userOptions.find(u => u.id === value);
+      console.log(user);
+
       row.adUserName = user.name;
       row.adUserPosition = user.position;
     } else {
@@ -85,6 +86,22 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
   created() {
     this.mainForm = this.data;
     this.userOptions = this.users;
+
+    this.commonService("/api/m-bidding-eval-team-lines").retrieve({
+      criteriaQuery: this.updateCriteria([
+      'active.equals=true',
+      `evaluationTeamId.equals=${this.data.id}`]),
+      paginationQuery: {
+        page: 0,
+        size: 100,
+        sort: ['id']
+      }
+    }).then((res)=>{
+      this.mainForm.members = res.data.map((item)=>{
+        item.adUserName = `${item.adUserName?item.adUserName:""} ${item.adUserLastName?item.adUserLastName:""}`
+        return item;
+      });;
+    })
   }
 
   retrieveUsers(query?: string) {
@@ -118,7 +135,7 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
 
   addMember() {
     this.editMode = true;
-    this.members.push({
+    this.mainForm.members.push({
       position: null,
       adUserId: null,
       adUserName: null,
@@ -129,17 +146,19 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
 
   cancelEdit(index: number) {
     if (this.tmpRow) {
-      this.members.splice(index, 1, { ...this.tmpRow });
+      this.mainForm.members.splice(index, 1, { ...this.tmpRow });
       this.tmpRow = null
     } else {
-      this.members.splice(index, 1);
+      this.mainForm.members.splice(index, 1);
     }
 
     this.editMode = false;
   }
 
   deleteMember(index: number) {
-    this.members.splice(index, 1);
+    if(this.mainForm.members[index].id)
+      this.mainForm.deletedLines.push(this.mainForm.members[index]);
+    this.mainForm.members.splice(index, 1);
   }
 
   editMember(row: any) {
@@ -151,5 +170,9 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
     this.tmpRow = null;
     row.editMode = false;
     this.editMode = false;
+  }
+
+  formatPosition(val){
+    return this.positions.find(status => status.id === val)?.name;
   }
 }

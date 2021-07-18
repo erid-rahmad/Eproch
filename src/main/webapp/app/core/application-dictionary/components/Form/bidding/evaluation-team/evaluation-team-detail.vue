@@ -31,7 +31,7 @@
           ref="memberTable"
           border
           class="member-table"
-          :data="members"
+          :data="mainForm.members"
           highlight-current-row
           :max-height="gridSchema.maxHeight"
           size="mini"
@@ -60,7 +60,7 @@
                 ></el-option>
               </el-select>
               <template v-else>
-                {{ row.position }}
+                {{ formatPosition(row.position) }}
               </template>
             </template>
           </el-table-column>

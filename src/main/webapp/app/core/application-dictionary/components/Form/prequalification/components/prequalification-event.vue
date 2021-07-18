@@ -27,7 +27,7 @@
                 <el-option v-for="item in eventOptions" :key="item.key" :label="item.value" :value="item.key"></el-option>
               </el-select>
             </el-form-item>
-            <el-button size="mini" type="primary"> Select PIC </el-button>
+            <el-button size="mini" type="primary" @click="loadPic()"> Select PIC </el-button>
           </div>
         </el-col>
         <el-col :xs="24" :sm="24" :lg="12" :xl="8">
@@ -67,6 +67,23 @@
         </el-table>
       </el-col>
     </el-row>
+    <el-dialog :visible.sync="showPic" title="PIC Detail" width="50%">
+      <el-table :data="members" border class="member-list" highlight-current-row size="mini">
+        <el-table-column label="No." width="50">
+          <template slot-scope="{ $index }">
+            {{ $index + 1 }}
+          </template>
+        </el-table-column>
+      <el-table-column label="PIC Name" min-width="320" prop="adUserName" show-overflow-tooltip/>
+      <el-table-column label="Department" prop="adUserPosition" width="150"/>
+      <el-table-column label="Task" width="150">
+        <template slot-scope="{ row }">
+            {{ formatPosition(row.position) }}
+          </template>
+      </el-table-column>
+      <el-table-column label="Email" prop="adUserEmail" width="150"/>
+    </el-table>
+    </el-dialog>
     <el-dialog :visible.sync="showDetail" title="Method Detail" width="50%">
       <el-form label-position="left" label-width="128px">
         <el-row

@@ -203,4 +203,15 @@ export default class EvaluationTeam extends mixins(AccessLevelMixin, EvaluationT
     this.selectedRow = row;
     this.page = EvaluationTeamPage.CONTRACT_DETAIL;
   }
+
+  onSaveClicked(){
+    console.log(this.selectedRow);
+    this.commonService('/api/m-bidding-evaluation-teams')[this.selectedRow.id?'update':'create'](this.selectedRow).
+      then((res)=>{
+        this.$message.success(`Evaluation Team ${this.selectedRow.id?'updated':'created'}.`)
+        this.selectedRow.id = res.id;
+      }).catch((res)=>{
+        this.$message.error(`Error during ${this.selectedRow.id?'updating':'creating'} evaluation team`)
+      });
+  }
 }

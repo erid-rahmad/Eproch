@@ -12,4 +12,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MBiddingEvaluationTeamRepository extends JpaRepository<MBiddingEvaluationTeam, Long>, JpaSpecificationExecutor<MBiddingEvaluationTeam> {
     public MBiddingEvaluationTeam findByPrequalification_Id(Long id);
+    public MBiddingEvaluationTeam findByBidding_Id(Long id);
 }

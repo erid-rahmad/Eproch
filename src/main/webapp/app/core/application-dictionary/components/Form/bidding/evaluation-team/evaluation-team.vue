@@ -10,6 +10,16 @@
       >
         Close
       </el-button>
+      <el-button
+        v-if="!isMainPage"
+        icon="el-icon-check"
+        size="mini"
+        style="margin-left: 1px"
+        type="primary"
+        @click="onSaveClicked"
+      >
+        Save
+      </el-button>
     </div>
     <div class="card">
       <div v-if="isMainPage">

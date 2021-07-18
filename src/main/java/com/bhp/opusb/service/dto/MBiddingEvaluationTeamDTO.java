@@ -3,6 +3,8 @@ package com.bhp.opusb.service.dto;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.UUID;
 
 /**
@@ -26,6 +28,8 @@ public class MBiddingEvaluationTeamDTO extends AbstractAuditingDTO {
 
     private Long prequalificationId;
     private String prequalificationNo, prequalificationName, prequalificationEventType;
+
+    private List<MBiddingEvalTeamLineDTO> members = new ArrayList<>(), deletedLines = new ArrayList<>();
     
     public Long getId() {
         return id;
@@ -145,6 +149,22 @@ public class MBiddingEvaluationTeamDTO extends AbstractAuditingDTO {
 
     public void setPrequalificationId(Long mPrequalificationInformationId) {
         this.prequalificationId = mPrequalificationInformationId;
+    }
+
+    public List<MBiddingEvalTeamLineDTO> getMembers(){
+        return members;
+    }
+
+    public void setMembers(List<MBiddingEvalTeamLineDTO> members){
+        this.members = members;
+    }
+
+    public List<MBiddingEvalTeamLineDTO> getDeletedLines(){
+        return deletedLines;
+    }
+
+    public void setDeletedLines(List<MBiddingEvalTeamLineDTO> deletedLines){
+        this.deletedLines = deletedLines;
     }
 
     @Override
