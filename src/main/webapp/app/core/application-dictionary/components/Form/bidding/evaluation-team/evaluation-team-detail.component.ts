@@ -1,6 +1,6 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import settings from '@/settings';
-import { Component, Mixins, Vue, Inject } from 'vue-property-decorator';
+import { Component, Mixins, Vue, Inject, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
 
 const EvaluationTeamDetailProp = Vue.extend({
@@ -27,10 +27,9 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
   mainForm = {
     biddingNo: 'BN-00001',
     biddingTitle: 'Pengadaan Kendaraan Operasional',
-    members: []
+    members: [],
+    deletedLines: []
   }
-
-  members = [];
 
   gridSchema = {
     defaultSort: {},
@@ -40,30 +39,12 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
   };
 
   positions: any[] = [
-    'Evaluator Administrasi',
-    'Reviewer',
-    'Approver'
+    {name:'Evaluator Administrasi', id:'E'},
+    {name:'Reviewer', id:'R'},
+    {name:'Approver', id:'A'}
   ];
 
   users: any[] = [
-    {
-      id: 1,
-      name: 'Admin Tender',
-      position: 'Staff Marketing',
-      email: 'admintender@mail.co.id'
-    },
-    {
-      id: 2,
-      name: 'Admin Review',
-      position: 'Kabag Marketing',
-      email: 'adminreview@mail.co.id'
-    },
-    {
-      id: 3,
-      name: 'Admin Approve',
-      position: 'Kadiv Marketing',
-      email: 'adminapprove@mail.co.id'
-    }
   ];
 
   userOptions: any[] = [];
@@ -78,6 +59,11 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
     return settings.dateValueFormat;
   }
 
+  @Watch('data')
+  onDataChanged(data: any) {
+    this.mainForm = data;
+  }
+
   onCurrentRowChanged(row: any) {
     if (!this.editMode) {
       this.currentRow = row;
@@ -86,7 +72,9 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
 
   onUserChanged(row: any, value?: number) {
     if (value) {
-      const user = this.users.find(u => u.id === value);
+      const user = this.userOptions.find(u => u.id === value);
+      console.log(user);
+
       row.adUserName = user.name;
       row.adUserPosition = user.position;
     } else {
@@ -98,16 +86,47 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
   created() {
     this.mainForm = this.data;
     this.userOptions = this.users;
+
+    this.commonService("/api/m-bidding-eval-team-lines").retrieve({
+      criteriaQuery: this.updateCriteria([
+      'active.equals=true',
+      `evaluationTeamId.equals=${this.data.id}`]),
+      paginationQuery: {
+        page: 0,
+        size: 100,
+        sort: ['id']
+      }
+    }).then((res)=>{
+      this.mainForm.members = res.data.map((item)=>{
+        item.adUserName = `${item.adUserName?item.adUserName:""} ${item.adUserLastName?item.adUserLastName:""}`
+        return item;
+      });;
+    })
   }
 
   retrieveUsers(query?: string) {
     console.log('retrieve users. query:', query);
     if (query !== '') {
       setTimeout(() => {
-        this.userOptions = this.users.filter(item => {
-          return item.name.toLowerCase()
-            .indexOf(query.toLowerCase()) > -1;
-        });
+        this.commonService("/api/ad-users").retrieve({
+          criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `userName.contains=${query}`]),
+          paginationQuery: {
+            page: 0,
+            size: 100,
+            sort: ['id']
+          }
+        }).then((res)=>{
+          this.userOptions = res.data.map((item)=>{
+            return {
+              id: item.id,
+              name: `${item.firstName?item.firstName:''} ${item.lastName?item.lastName:''}`,
+              position: item.position,
+              email: item.email
+            }
+          })
+        })
       }, 200);
     } else {
       this.userOptions = this.users;
@@ -116,7 +135,7 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
 
   addMember() {
     this.editMode = true;
-    this.members.push({
+    this.mainForm.members.push({
       position: null,
       adUserId: null,
       adUserName: null,
@@ -127,17 +146,19 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
 
   cancelEdit(index: number) {
     if (this.tmpRow) {
-      this.members.splice(index, 1, { ...this.tmpRow });
+      this.mainForm.members.splice(index, 1, { ...this.tmpRow });
       this.tmpRow = null
     } else {
-      this.members.splice(index, 1);
+      this.mainForm.members.splice(index, 1);
     }
 
     this.editMode = false;
   }
 
   deleteMember(index: number) {
-    this.members.splice(index, 1);
+    if(this.mainForm.members[index].id)
+      this.mainForm.deletedLines.push(this.mainForm.members[index]);
+    this.mainForm.members.splice(index, 1);
   }
 
   editMember(row: any) {
@@ -149,5 +170,9 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
     this.tmpRow = null;
     row.editMode = false;
     this.editMode = false;
+  }
+
+  formatPosition(val){
+    return this.positions.find(status => status.id === val)?.name;
   }
 }

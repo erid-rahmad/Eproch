@@ -10,11 +10,14 @@
     >
       <el-row :gutter="24">
         <el-col :span="8">
-          <el-form-item label="Bidding No.">
+          <el-form-item v-if="mainForm.biddingNo!=null" label="Bidding No.">
             {{ mainForm.biddingNo }}
           </el-form-item>
+          <el-form-item v-else label="Prequalification No.">
+            {{ mainForm.prequalificationNo }}
+          </el-form-item>
           <el-form-item label="Title">
-            {{ mainForm.biddingTitle }}
+            {{ mainForm.biddingName || mainForm.prequalificationName}}
           </el-form-item>
         </el-col>
       </el-row>
@@ -28,7 +31,7 @@
           ref="memberTable"
           border
           class="member-table"
-          :data="members"
+          :data="mainForm.members"
           highlight-current-row
           :max-height="gridSchema.maxHeight"
           size="mini"
@@ -37,7 +40,7 @@
         >
 
           <el-table-column
-            label="Bidding Position"
+            label="Position"
             width="200"
             show-overflow-tooltip
           >
@@ -51,13 +54,13 @@
               >
                 <el-option
                   v-for="position in positions"
-                  :key="position"
-                  :label="position"
-                  :value="position"
+                  :key="position.id"
+                  :label="position.name"
+                  :value="position.id"
                 ></el-option>
               </el-select>
               <template v-else>
-                {{ row.position }}
+                {{ formatPosition(row.position) }}
               </template>
             </template>
           </el-table-column>

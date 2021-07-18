@@ -1,5 +1,6 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import settings from '@/settings';
+import { reject } from 'lodash';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Inject, Mixins, Watch } from 'vue-property-decorator';
@@ -42,6 +43,7 @@ export default class PreqEvent extends Mixins(AccessLevelMixin, PreqEventProp) {
   loadingSchedules = false;
   processing = false;
   showDetail = false;
+  showPic = false;
 
   preq: Record<string, any> = {};
   selectedEvent: any = {};
@@ -52,6 +54,13 @@ export default class PreqEvent extends Mixins(AccessLevelMixin, PreqEventProp) {
   eventSteps: any[] = [];
 
   evaluationMethodCriteria: any[] = [];
+  members: any[] = [];
+
+  positions: any[] = [
+    {name:'Evaluator Administrasi', id:'E'},
+    {name:'Reviewer', id:'R'},
+    {name:'Approver', id:'A'}
+  ];
 
   get dateDisplayFormat() {
     return settings.dateTimeDisplayFormat;
@@ -62,7 +71,7 @@ export default class PreqEvent extends Mixins(AccessLevelMixin, PreqEventProp) {
   }
 
   get readOnly() {
-    return this.preq.biddingStatus === 'P';
+    return this.preq.status === 'P';
   }
 
   @Watch('preq', { deep: true })
@@ -303,5 +312,61 @@ export default class PreqEvent extends Mixins(AccessLevelMixin, PreqEventProp) {
         console.log(this.evaluationMethodCriteria)
       });
     })
+  }
+
+  loadPic(){
+    Promise.allSettled([
+      new Promise<boolean>((resolve,reject)=>{this.commonService("/api/m-bidding-evaluation-teams").retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          `prequalificationId.equals=${this.preq.id}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 1000,
+          sort:['id']
+        }
+      }).then((res)=>{
+        if(res.data.length){
+          Promise.allSettled([
+            new Promise<boolean>((resolve,reject)=>{
+              this.commonService("/api/m-bidding-eval-team-lines").retrieve({
+                criteriaQuery: [
+                  'active.equals=true',
+                  `evaluationTeamId.equals=${res.data[0].id}`
+                ],
+                paginationQuery: {
+                  page: 0,
+                  size: 1000,
+                  sort:['id']
+                }
+              }).then((res)=>{
+                this.members = res.data.map((item)=>{
+                  item.adUserName = `${item.adUserName?item.adUserName:""} ${item.adUserLastName?item.adUserLastName:""}`
+                  return item;
+                });
+                resolve(true);
+              }).catch((err)=>{
+                console.log(err);
+                reject(false);
+              });
+            })
+          ]).then((res)=>{
+            resolve(true);
+          })
+        } else reject(false);
+      }).catch((err)=>{
+        console.log(err);
+        reject(false);
+      });
+    })
+    ]).then((res)=>{
+      this.showPic = true;
+      console.log(this.members);
+    })
+  }
+
+  formatPosition(val){
+    return this.positions.find(status => status.id === val)?.name;
   }
 }

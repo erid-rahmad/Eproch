@@ -3,7 +3,7 @@ import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMi
 import { ElTable } from 'element-ui/types/table';
 import Vue from 'vue';
 import Component, { mixins } from 'vue-class-component';
-import { Inject } from 'vue-property-decorator';
+import { Inject, Watch } from 'vue-property-decorator';
 import ContractForm from './contract-form.vue';
 import ContractRequisition from './contract-requisition.vue';
 import EvaluationTeamDetail from './evaluation-team-detail.vue';
@@ -43,7 +43,18 @@ export default class EvaluationTeam extends mixins(AccessLevelMixin, EvaluationT
     status: null
   };
 
+  loading = false;
+
+  // for paging
+  public itemsPerPage = 10;
+  public queryCount: number = null;
+  public gridPage = 1;
+  public previousPage = 1;
+  public reverse = false;
+  public totalItems = 0;  
+
   evaluationTeams = [
+    /*
     {
       biddingNo: 'BN 00001',
       biddingTitle: 'Pengadaan Kendaraan Operasional',
@@ -74,7 +85,63 @@ export default class EvaluationTeam extends mixins(AccessLevelMixin, EvaluationT
       status: 'Un-arranged',
       members: []
     }
+    */
   ];
+
+  created() {
+    this.refreshHeader();
+  }
+
+  refreshHeader(){
+    this.loading = true;
+
+    this.commonService("/api/m-bidding-evaluation-teams")
+    .retrieve(
+      {
+        criteriaQuery: this.updateCriteria([
+        'active.equals=true']),
+        paginationQuery: {
+          page: this.page-1,
+          size: this.itemsPerPage,
+          sort: ['id']
+        }
+      }).then((res)=>{
+        this.evaluationTeams = res.data;
+
+        this.totalItems = Number(res.headers['x-total-count']);
+        this.queryCount = this.totalItems;
+      }
+    ).finally(()=>{this.loading=false})
+  }
+
+  public changePageSize(size: number) {
+    this.itemsPerPage = size;
+    if(this.page!=1){
+      this.page = 0;
+    }
+    this.refreshHeader();
+  }
+
+  public loadPage(page: number): void {
+    if (page !== this.previousPage) {
+      this.previousPage = page;
+      this.refreshHeader();
+    }
+  }
+
+  public transition(): void {
+    this.refreshHeader();
+  }
+
+  public clear(): void {
+    this.page = 1;
+    this.refreshHeader();
+  }
+
+  @Watch('gridPage')
+  onPageChange(page: number) {
+    this.loadPage(page);
+  }
 
   get isMainPage() {
     return this.page === EvaluationTeamPage.INDEX;
@@ -135,5 +202,16 @@ export default class EvaluationTeam extends mixins(AccessLevelMixin, EvaluationT
   viewContractDocument(row: any) {
     this.selectedRow = row;
     this.page = EvaluationTeamPage.CONTRACT_DETAIL;
+  }
+
+  onSaveClicked(){
+    console.log(this.selectedRow);
+    this.commonService('/api/m-bidding-evaluation-teams')[this.selectedRow.id?'update':'create'](this.selectedRow).
+      then((res)=>{
+        this.$message.success(`Evaluation Team ${this.selectedRow.id?'updated':'created'}.`)
+        this.selectedRow.id = res.id;
+      }).catch((res)=>{
+        this.$message.error(`Error during ${this.selectedRow.id?'updating':'creating'} evaluation team`)
+      });
   }
 }

@@ -62,9 +62,21 @@ public class MPrequalificationDateSet extends AbstractAuditingEntity {
     @JsonIgnore
     private MBiddingSchedule biddingSchedule;
 
+    @OneToOne(mappedBy = "dateSet")
+    @JsonIgnore
+    private MPrequalificationSchedule prequalificationSchedule;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
+    }
+
+    public MPrequalificationSchedule getPrequalificationSchedule() {
+        return prequalificationSchedule;
+    }
+
+    public void setPrequalificationSchedule(MPrequalificationSchedule prequalificationSchedule) {
+        this.prequalificationSchedule = prequalificationSchedule;
     }
 
     public void setId(Long id) {

@@ -1,7 +1,7 @@
 
 <template>
-    <accordion id="Accordion-WatchList" :title="name" v-bind:expanded="true" animation="bottomToTop">
-        <div style="padding: 10px 20px;">
+    <accordion :id="'Accordion-' + name.replaceAll(' ', '-')" :title="name" v-bind:expanded="true" animation="bottomToTop" style="margin-bottom: 20px;">
+        <div style="padding: 5px 15px 10px;">
             <!-- LIST 
             <div class="md-layout md-gutter" style="margin: 0px 1px;">
                 <div class="md-layout-item"
@@ -24,22 +24,23 @@
 
             <!-- CARD NO BG COLOR -->
             <div class=" md-layout md-gutter" style="margin: 10px 1px;">
-                <div class="md-layout-item"  
-                    v-for="item in items"
+                <div class="md-layout-item md-large-size-16 md-medium-size-25 md-small-size-50"  
+                    v-for="(item, index) in items"
                         :key="item.id"
+                    :style="getMarginStyle(index)"
                     @click="onCardClicked(item);"
                 >
-                    <md-card md-with-hover class="bg-pattern" style="border-radius: 6px; padding: 10px 12px;">
+                    <md-card md-with-hover class="bg-pattern" style="width: 100%; border-radius: 6px; padding: 10px 12px;">
                         <md-card-header style="padding: 0; margin: 0;">
                             <md-card-header-text align="left">
                                 <div class="wl-caption">{{ item.name }}</div>
                                 <div class="wl-title">{{ item.count ? item.count : '0' }}</div>
                             </md-card-header-text>
-                            <md-card-media style="height: auto; flex: 0.2">
+                            <!--<md-card-media style="height: auto; flex: 0.2">
                                 <div class="wl-icon-wrapper" :style="'background:'+ item.accentColor +' !important;'">
                                     <svg-icon :name="item.icon" class="wl-icons"></svg-icon>
                                 </div>
-                            </md-card-media> 
+                            </md-card-media>  -->
                         </md-card-header>
                     </md-card>
                 </div>
@@ -311,14 +312,14 @@
     .wl-caption {
         margin: 0;
         color: #8898aa;
-        font-weight: 500;
+        font-weight: 600;
         font-size: 14px;
         text-transform: uppercase;
         margin-bottom: 4px;
     }
 
     .wl-title {
-        font-weight: 600;
+        font-weight: bold;
         font-size: 16px;
     }
 </style>

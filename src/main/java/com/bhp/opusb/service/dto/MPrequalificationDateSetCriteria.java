@@ -40,6 +40,8 @@ public class MPrequalificationDateSetCriteria implements Serializable, Criteria 
 
     private LongFilter biddingScheduleId;
 
+    private LongFilter prequalificationScheduleId;
+
     public MPrequalificationDateSetCriteria() {
     }
 
@@ -52,6 +54,7 @@ public class MPrequalificationDateSetCriteria implements Serializable, Criteria 
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.biddingScheduleId = other.biddingScheduleId == null ? null : other.biddingScheduleId.copy();
+        this.prequalificationScheduleId = other.prequalificationScheduleId == null ? null : other.prequalificationScheduleId.copy();
     }
 
     @Override
@@ -123,6 +126,14 @@ public class MPrequalificationDateSetCriteria implements Serializable, Criteria 
         this.biddingScheduleId = biddingScheduleId;
     }
 
+    public LongFilter getPrequalificationScheduleId() {
+        return prequalificationScheduleId;
+    }
+
+    public void setPrequalificationScheduleId(LongFilter prequalificationScheduleId) {
+        this.prequalificationScheduleId = prequalificationScheduleId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -141,7 +152,8 @@ public class MPrequalificationDateSetCriteria implements Serializable, Criteria 
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(biddingScheduleId, that.biddingScheduleId);
+            Objects.equals(biddingScheduleId, that.biddingScheduleId) &&
+            Objects.equals(prequalificationScheduleId, that.prequalificationScheduleId);
     }
 
     @Override
@@ -154,7 +166,8 @@ public class MPrequalificationDateSetCriteria implements Serializable, Criteria 
         uid,
         active,
         adOrganizationId,
-        biddingScheduleId
+        biddingScheduleId,
+        prequalificationScheduleId
         );
     }
 
@@ -169,6 +182,7 @@ public class MPrequalificationDateSetCriteria implements Serializable, Criteria 
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (biddingScheduleId != null ? "biddingScheduleId=" + biddingScheduleId + ", " : "") +
+                (prequalificationScheduleId != null ? "prequalificationScheduleId=" + prequalificationScheduleId + ", " : "") +
             "}";
     }
 

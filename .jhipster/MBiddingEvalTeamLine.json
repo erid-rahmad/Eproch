@@ -1,0 +1,60 @@
+{
+    "name": "MBiddingEvalTeamLine",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "position",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mBiddingEvalTeamLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBiddingEvaluationTeam",
+            "otherEntityRelationshipName": "mBiddingEvalTeamLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "evaluationTeam",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adUser",
+            "otherEntityRelationshipName": "mBiddingEvalTeamLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adUser",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210718064200",
+    "entityTableName": "m_bidding_eval_team_line",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

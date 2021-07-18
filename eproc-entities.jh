@@ -1138,6 +1138,7 @@ entity MPrequalificationInformation {
 	name String
 	type String required maxlength(10)
 	announcementText TextBlob
+	status String required maxlength(10)
 
 	// Common transactional fields.
 	dateTrx ZonedDateTime
@@ -1162,6 +1163,13 @@ entity MPrequalVendorSuggestion {
 }
 
 entity MPrequalificationEvent {
+	uid UUID
+	active Boolean
+}
+
+entity MPrequalificationSchedule {
+	startDate ZonedDateTime
+	endDate ZonedDateTime
 	uid UUID
 	active Boolean
 }
@@ -1535,6 +1543,18 @@ entity MBiddingEvaluation {
 	evaluationStatus String
 	uid UUID
 	active Boolean
+}
+
+entity MBiddingEvaluationTeam {
+	status String
+	uid UUID
+	active Boolean
+}
+
+entity MBiddingEvalTeamLine {
+	uid UUID
+	active Boolean
+	position String required maxlength(10)
 }
 
 entity MBiddingEvaluationLine {
@@ -2332,6 +2352,10 @@ relationship ManyToOne {
 	MPrequalificationEvent{event required} to CPrequalificationEvent
 	MPrequalificationEvent{method required} to CPrequalificationMethod
 
+	MPrequalificationSchedule{prequalification required} to MPrequalificationInformation
+	MPrequalificationSchedule{adOrganization required} to ADOrganization
+	MPrequalificationSchedule{eventLine required} to CPrequalificationEventLine
+
 	MAuction{adOrganization required} to ADOrganization
 	MAuction{currency required} to CCurrency
 	MAuction{costCenter required} to CCostCenter
@@ -2430,6 +2454,13 @@ relationship ManyToOne {
 	MBiddingEvaluation{biddingSchedule required} to MBiddingSchedule
 	MBiddingEvaluation{adOrganization required} to ADOrganization
 
+	MBiddingEvaluationTeam{adOrganization required} to ADOrganization
+	MBiddingEvaluationTeam{bidding} to MBidding
+	MBiddingEvaluationTeam{prequalification} to MPrequalificationInformation
+
+	MBiddingEvalTeamLine{adOrganization required} to ADOrganization
+	MBiddingEvalTeamLine{evaluationTeam required} to MBiddingEvaluationTeam
+	MBiddingEvalTeamLine{adUser required} to AdUser
 
 	MBiddingEvaluationLine{adOrganization required} to ADOrganization
 	MBiddingEvaluationLine{biddingEvaluation required} to MBiddingEvaluation

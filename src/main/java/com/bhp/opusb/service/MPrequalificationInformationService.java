@@ -3,10 +3,14 @@ package com.bhp.opusb.service;
 import com.bhp.opusb.domain.MPrequalificationInformation;
 import com.bhp.opusb.domain.enumeration.MPrequalificationProcess;
 import com.bhp.opusb.repository.MPrequalificationInformationRepository;
+import com.bhp.opusb.service.dto.MBiddingEvaluationTeamCriteria;
+import com.bhp.opusb.service.dto.MBiddingEvaluationTeamDTO;
 import com.bhp.opusb.service.dto.MPrequalVendorSuggestionDTO;
 import com.bhp.opusb.service.dto.MPrequalificationFormDTO;
 import com.bhp.opusb.service.dto.MPrequalificationInformationDTO;
 import com.bhp.opusb.service.dto.MPrequalificationInvitationDTO;
+import com.bhp.opusb.service.dto.MPrequalificationScheduleDTO;
+import com.bhp.opusb.service.mapper.MPrequalificationEventMapper;
 import com.bhp.opusb.service.mapper.MPrequalificationFormMapper;
 import com.bhp.opusb.service.mapper.MPrequalificationInformationMapper;
 import com.bhp.opusb.util.DocumentUtil;
@@ -18,6 +22,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import io.github.jhipster.service.filter.LongFilter;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,21 +41,29 @@ public class MPrequalificationInformationService {
 
     private final MPrequalificationInformationMapper mPrequalificationInformationMapper;
     private final MPrequalificationFormMapper mPrequalificationFormMapper;
+    private final MPrequalificationEventMapper mPrequalificationEventMapper;
 
     private final MPrequalificationInvitationService mPrequalificationInvitationService;
     private final MPrequalVendorSuggestionService mPrequalVendorSuggestionService;
     private final MPrequalificationEventService mPrequalificationEventService;
+    private final MPrequalificationScheduleService mPrequalificationScheduleService;
+
+    private final MBiddingEvaluationTeamService mBiddingEvaluationTeamService;
 
     public MPrequalificationInformationService(MPrequalificationInformationRepository mPrequalificationInformationRepository, 
         MPrequalificationInvitationService mPrequalificationInvitationService, MPrequalVendorSuggestionService mPrequalVendorSuggestionService,
         MPrequalificationInformationMapper mPrequalificationInformationMapper, MPrequalificationFormMapper mPrequalificationFormMapper,
-        MPrequalificationEventService mPrequalificationEventService) {
+        MPrequalificationEventMapper mPrequalificationEventMapper, MPrequalificationScheduleService mPrequalificationScheduleService,
+        MPrequalificationEventService mPrequalificationEventService, MBiddingEvaluationTeamService mBiddingEvaluationTeamService) {
         this.mPrequalificationInformationRepository = mPrequalificationInformationRepository;
         this.mPrequalificationInvitationService = mPrequalificationInvitationService;
         this.mPrequalVendorSuggestionService = mPrequalVendorSuggestionService;
         this.mPrequalificationInformationMapper = mPrequalificationInformationMapper;
         this.mPrequalificationFormMapper = mPrequalificationFormMapper;
         this.mPrequalificationEventService = mPrequalificationEventService;
+        this.mPrequalificationEventMapper = mPrequalificationEventMapper;
+        this.mPrequalificationScheduleService = mPrequalificationScheduleService;
+        this.mBiddingEvaluationTeamService = mBiddingEvaluationTeamService;
     }
 
     /**
@@ -132,9 +146,29 @@ public class MPrequalificationInformationService {
             mPrequalificationInformationDTO.getEvent().setPrequalificationId(mPrequalificationInformationDTO.getId());
             mPrequalificationInformationDTO.getEvent().setAdOrganizationId(mPrequalificationInformationDTO.getAdOrganizationId());
 
-            mPrequalificationEventService.save(mPrequalificationInformationDTO.getEvent());
-        }
+            mPrequalificationInformationDTO.setEvent(mPrequalificationEventService.save(mPrequalificationInformationDTO.getEvent()));
+            mPrequalificationScheduleService.initSchedules(mPrequalificationEventMapper.toEntity(mPrequalificationInformationDTO.getEvent()));
+        } else {
+            final List<MPrequalificationScheduleDTO> schedules = mPrequalificationInformationDTO.getPreqSchedules();
+            saveSchedule(mPrequalificationInformationDTO, schedules);
+        } 
 
+        MBiddingEvaluationTeamDTO dto = mBiddingEvaluationTeamService.findByPrequalificationId(preqInfo.getId());
+        if(dto==null){
+            dto = new MBiddingEvaluationTeamDTO();
+            dto.setAdOrganizationId(preqInfo.getAdOrganization().getId());
+            dto.setPrequalificationId(preqInfo.getId());
+            dto.setStatus("U");
+
+            mBiddingEvaluationTeamService.save(dto);
+        }
+        
+        return mPrequalificationInformationDTO;
+    }
+
+    private MPrequalificationInformationDTO saveSchedule(MPrequalificationInformationDTO mPrequalificationInformationDTO, 
+        List<MPrequalificationScheduleDTO> schedules) {
+        mPrequalificationScheduleService.saveAll(schedules);
         return mPrequalificationInformationDTO;
     }
 

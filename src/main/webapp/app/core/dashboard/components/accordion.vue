@@ -62,7 +62,7 @@ export default {
 <style lang="scss">
     .accordion-title {
         color: #FFF;
-        font-size: 16px;
+        font-size: 15px;
         font-weight: bold;
     }
 
@@ -78,7 +78,7 @@ export default {
     .accordion-expander {
         &__trigger {
             overflow: hidden;
-            padding: 10px 18px;
+            padding: 6px 15px;
             cursor: pointer;
             //border-bottom: 1px solid #efefef;
             /*-moz-animation-direction: ;&.active{

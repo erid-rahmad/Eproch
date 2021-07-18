@@ -131,6 +131,16 @@ public class AdUserQueryService extends QueryService<AdUser> {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(AdUser_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
+            if (criteria.getUserName() != null) {
+                Specification<AdUser> fn = buildSpecification(criteria.getUserName(),
+                    root -> root.join(AdUser_.user, JoinType.INNER).get(User_.firstName));
+                Specification<AdUser> ln = buildSpecification(criteria.getUserName(),
+                    root -> root.join(AdUser_.user, JoinType.INNER).get(User_.lastName));
+
+                fn.or(ln);
+
+                specification = specification.and(fn);
+            }
         }
         return specification;
     }

@@ -82,7 +82,10 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Prequal
   }
 
   get readOnly() {
-    return this.preq.biddingStatus === 'P';
+    console.log(this.preq);
+    console.log(this.preq.status);
+    console.log(this.preq.status === 'P');
+    return this.preq.status === 'P';
   }
 
   @Watch('preq', { deep: true })

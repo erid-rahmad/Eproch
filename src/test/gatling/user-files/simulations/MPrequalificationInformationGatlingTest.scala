@@ -77,6 +77,7 @@ class MPrequalificationInformationGatlingTest extends Simulation {
                 , "name":"SAMPLE_TEXT"
                 , "type":"SAMPLE_TEXT"
                 , "announcementText":null
+                , "status":"SAMPLE_TEXT"
                 , "dateTrx":"2020-01-01T00:00:00.000Z"
                 , "documentNo":"SAMPLE_TEXT"
                 , "documentAction":"SAMPLE_TEXT"
