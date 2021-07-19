@@ -212,6 +212,8 @@
     <include file="config/liquibase/changelog/20210718030600_added_entity_MBiddingEvaluationTeam.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210718064200_added_entity_MBiddingEvalTeamLine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210719050600_added_entity_MPrequalAnnouncement.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210719092900_added_entity_MPrequalRegistration.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210719142100_added_entity_MPreqRegistDocument.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
@@ -400,5 +402,7 @@
     <include file="config/liquibase/changelog/20210718030600_added_entity_constraints_MBiddingEvaluationTeam.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210718064200_added_entity_constraints_MBiddingEvalTeamLine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210719050600_added_entity_constraints_MPrequalAnnouncement.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210719092900_added_entity_constraints_MPrequalRegistration.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210719142100_added_entity_constraints_MPreqRegistDocument.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

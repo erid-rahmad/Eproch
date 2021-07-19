@@ -84,7 +84,8 @@
                             <el-button
                                 size="mini"
                                 type="primary"
-                            ><!--@click="moreInfo(row)"-->
+                                @click="moreInfo(row)"
+                            >
                                 <svg-icon name="icomoo/269-info"></svg-icon> Invitation
                             </el-button>
                         </template>
@@ -102,12 +103,10 @@
                     @size-change="changePageSize"
                 />
             </div>
-            <!--
             <bidding-invitation-response
                 v-if="page === 2"
                 :moreinfo="moreinfo"
             ></bidding-invitation-response>
-            -->
             <announcement-form
                 v-else-if="page === 3"
                 ref="announcementForm"

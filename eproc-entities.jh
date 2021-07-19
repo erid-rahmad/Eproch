@@ -1181,6 +1181,19 @@ entity MPrequalAnnouncement{
 	active Boolean
 }
 
+entity MPrequalRegistration {
+	registrationStatus String
+	reason String
+	answerDate ZonedDateTime
+	uid UUID
+	active Boolean
+}
+
+entity MPreqRegistDocument {
+	uid UUID
+	active Boolean
+}
+
 entity MAuction {
 	name String required maxlength(30)
 	description String
@@ -2367,6 +2380,16 @@ relationship ManyToOne {
 	MPrequalAnnouncement{prequalification required} to MPrequalificationInformation
 	MPrequalAnnouncement{prequalificationSchedule required} to MPrequalificationSchedule
 	MPrequalAnnouncement{attachment} to CAttachment
+
+	MPrequalRegistration{adOrganization required} to ADOrganization
+	MPrequalRegistration{announcement required} to MPrequalAnnouncement
+	MPrequalRegistration{prequalification required} to MPrequalificationInformation
+	MPrequalRegistration{vendor required} to CVendor
+
+	MPreqRegistDocument{adOrganization required} to ADOrganization
+	MPreqRegistDocument{registration required} to MPrequalRegistration
+	MPreqRegistDocument{siupDocument required} to CAttachment
+	MPreqRegistDocument{spdaDocument required} to CAttachment
 
 	MAuction{adOrganization required} to ADOrganization
 	MAuction{currency required} to CCurrency

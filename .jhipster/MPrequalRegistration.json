@@ -1,0 +1,71 @@
+{
+    "name": "MPrequalRegistration",
+    "fields": [
+        {
+            "fieldName": "registrationStatus",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "reason",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "answerDate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mPrequalRegistration",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mPrequalAnnouncement",
+            "otherEntityRelationshipName": "mPrequalRegistration",
+            "relationshipValidateRules": "required",
+            "relationshipName": "announcement",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mPrequalificationInformation",
+            "otherEntityRelationshipName": "mPrequalRegistration",
+            "relationshipValidateRules": "required",
+            "relationshipName": "prequalification",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "mPrequalRegistration",
+            "relationshipValidateRules": "required",
+            "relationshipName": "vendor",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210719092900",
+    "entityTableName": "m_prequal_registration",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

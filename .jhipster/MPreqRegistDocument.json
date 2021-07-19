@@ -1,0 +1,59 @@
+{
+    "name": "MPreqRegistDocument",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mPreqRegistDocument",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mPrequalRegistration",
+            "otherEntityRelationshipName": "mPreqRegistDocument",
+            "relationshipValidateRules": "required",
+            "relationshipName": "registration",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cAttachment",
+            "otherEntityRelationshipName": "mPreqRegistDocument",
+            "relationshipValidateRules": "required",
+            "relationshipName": "siupDocument",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cAttachment",
+            "otherEntityRelationshipName": "mPreqRegistDocument",
+            "relationshipValidateRules": "required",
+            "relationshipName": "spdaDocument",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210719142100",
+    "entityTableName": "m_preq_regist_document",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

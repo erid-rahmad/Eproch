@@ -1,13 +1,17 @@
 package com.bhp.opusb.service;
 
 import com.bhp.opusb.config.ApplicationProperties;
+import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.domain.MPrequalAnnouncement;
+import com.bhp.opusb.domain.MPrequalRegistration;
 import com.bhp.opusb.domain.MPrequalificationInformation;
 import com.bhp.opusb.repository.MPrequalAnnouncementRepository;
+import com.bhp.opusb.repository.MPrequalRegistrationRepository;
 import com.bhp.opusb.service.dto.AdUserDTO;
 import com.bhp.opusb.service.dto.MPrequalAnnouncementDTO;
 import com.bhp.opusb.service.dto.MPrequalAnnouncementPublishDTO;
 import com.bhp.opusb.service.dto.MPrequalificationInformationDTO;
+import com.bhp.opusb.service.mapper.AdUserMapper;
 import com.bhp.opusb.service.mapper.MPrequalAnnouncementMapper;
 import com.bhp.opusb.service.mapper.MPrequalificationInformationMapper;
 
@@ -35,23 +39,28 @@ public class MPrequalAnnouncementService {
     private final Logger log = LoggerFactory.getLogger(MPrequalAnnouncementService.class);
 
     private final MPrequalAnnouncementRepository mPrequalAnnouncementRepository;
+    private final MPrequalRegistrationRepository mPrequalRegistrationRepository;
 
     private final MPrequalAnnouncementMapper mPrequalAnnouncementMapper;
     private final MPrequalificationInformationMapper mPrequalificationInformationMapper;
+    private final AdUserMapper adUserMapper;
     
     private final ApplicationProperties properties;
     
     private final MailService mailService;
 
     public MPrequalAnnouncementService(MPrequalAnnouncementRepository mPrequalAnnouncementRepository, 
-        MPrequalAnnouncementMapper mPrequalAnnouncementMapper, 
+        MPrequalAnnouncementMapper mPrequalAnnouncementMapper, AdUserMapper adUserMapper,
         MPrequalificationInformationMapper mPrequalificationInformationMapper,
-        ApplicationProperties properties, MailService mailService) {
+        ApplicationProperties properties, MailService mailService,
+        MPrequalRegistrationRepository mPrequalRegistrationRepository) {
         this.mPrequalAnnouncementRepository = mPrequalAnnouncementRepository;
         this.mPrequalAnnouncementMapper = mPrequalAnnouncementMapper;
         this.mPrequalificationInformationMapper = mPrequalificationInformationMapper;
         this.properties = properties;
         this.mailService = mailService;
+        this.adUserMapper = adUserMapper;
+        this.mPrequalRegistrationRepository = mPrequalRegistrationRepository;
     }
 
     /**
@@ -106,21 +115,20 @@ public class MPrequalAnnouncementService {
             final Long vendorId = user.getcVendorId();
 
             // Create the invitation record per CVendor.
-            /*
+            
             if ( ! vendorIds.contains(vendorId)) {
                 final AdUser adUser = adUserMapper.toEntity(user);
-                MBiddingInvitation mBiddingInvitation = new MBiddingInvitation()
+                MPrequalRegistration mPreqReg = new MPrequalRegistration()
                     .active(true)
-                    .adOrganization(cAnnouncement.getAdOrganization())
-                    .bidding(mBidding)
+                    .adOrganization(mPrequalAnnouncement.getAdOrganization())
+                    .prequalification(mPreqInfo)
                     .vendor(adUser.getCVendor())
-                    .invitationStatus("U")
-                    .announcement(cAnnouncement);
+                    .registrationStatus("U")
+                    .announcement(mPrequalAnnouncement);
 
-                mBiddingInvitationRepository.save(mBiddingInvitation);
+                mPrequalRegistrationRepository.save(mPreqReg);
                 vendorIds.add(vendorId);
             }
-            */
 
             // Send the email.
             // TODO Don't send to user that has been already invited.

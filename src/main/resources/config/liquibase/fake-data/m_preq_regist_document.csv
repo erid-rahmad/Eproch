@@ -1,0 +1,11 @@
+id;uid;active;ad_organization_id;registration_id;siup_document_id;spda_document_id
+1;37fc1189-f152-488e-9ae8-52d57f97b3f8;true;1;1;1;1
+2;fa19b645-69d9-476e-8244-ef73595a4bc3;true;2;2;2;2
+3;e58942ef-1b12-4a1f-b291-a7a5ba1ac052;false;3;3;3;3
+4;a805bf6e-c621-49a5-9e53-08cab8f28ed9;false;4;4;4;4
+5;5975abeb-5ebf-4207-b2d6-557eb9fa3dfe;true;5;5;5;5
+6;ccc43bfb-c988-4987-911a-fac4b016dbf1;false;6;6;6;6
+7;a0c2f972-6241-4f2f-b0da-cd328ebbbf48;true;7;7;7;7
+8;bc8d4c45-d1cd-4b9b-bba6-dd37c0444261;false;8;8;8;8
+9;00a18515-5e2b-40cc-8d3d-16615349aa60;true;9;9;9;9
+10;fed18ca1-ae36-42f9-b44e-5c381f1f910b;false;10;10;10;10

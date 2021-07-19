@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity MPreqRegistDocument.
+    -->
+    <changeSet id="20210719142100-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="m_preq_regist_document"
+                                 constraintName="fk_m_preq_regist_document_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="registration_id"
+                                 baseTableName="m_preq_regist_document"
+                                 constraintName="fk_m_preq_regist_document_registration_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_prequal_registration"/>
+
+        <addForeignKeyConstraint baseColumnNames="siup_document_id"
+                                 baseTableName="m_preq_regist_document"
+                                 constraintName="fk_m_preq_regist_document_siup_document_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_attachment"/>
+
+        <addForeignKeyConstraint baseColumnNames="spda_document_id"
+                                 baseTableName="m_preq_regist_document"
+                                 constraintName="fk_m_preq_regist_document_spda_document_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_attachment"/>
+
+    </changeSet>
+</databaseChangeLog>
