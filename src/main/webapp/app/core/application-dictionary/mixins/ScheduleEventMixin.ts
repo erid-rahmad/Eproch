@@ -3,10 +3,12 @@ import DynamicWindowService from '../components/DynamicWindow/dynamic-window.ser
 import AccessLevelMixin from './AccessLevelMixin';
 
 const baseApiSchedule = 'api/m-bidding-schedules';
+const baseApiPrequalificationSchedule = 'api/m-prequalification-schedules';
 
 const ScheduleEventMixinProps = Vue.extend({
   props: {
-    scheduleId: Number
+    scheduleId: Number,
+    isPrequalification: Boolean
   }
 })
 
@@ -49,23 +51,44 @@ export default class ScheduleEventMixin extends Mixins(AccessLevelMixin, Schedul
 
   private retrieveBiddingSchedule(id: number) {
     this.loading = true;
-    this.commonService(baseApiSchedule)
-    .find(id)
-    .then(res => {
-      this.mainForm = res;
-      this.$emit('data-loaded', {...this.mainForm});
-      this.onMainFormUpdated(this.mainForm);
-      this.onMainFormUpdatedtes(this.mainForm);
-      this.onMainFormUpdatedevaluation(this.mainForm)
-      this.onMainFormUpdateInEvaluation(this.mainForm)
+    if(this.isPrequalification){
+      this.commonService(baseApiPrequalificationSchedule)
+      .find(id)
+      .then(res => {
+        this.mainForm = res;
+        this.$emit('data-loaded', {...this.mainForm});
+        this.onMainFormUpdated(this.mainForm);
+        this.onMainFormUpdatedtes(this.mainForm);
+        this.onMainFormUpdatedevaluation(this.mainForm)
+        this.onMainFormUpdateInEvaluation(this.mainForm)
 
-    })
-    .catch(err => {
-      console.error('Failed to get bidding schedule. %O', err);
-      this.$message.error('Failed to get schedule details');
-    })
-    .finally(() => {
-      this.loading = false;
-    });
+      })
+      .catch(err => {
+        console.error('Failed to get prequalification schedule. %O', err);
+        this.$message.error('Failed to get schedule details');
+      })
+      .finally(() => {
+        this.loading = false;
+      });
+    } else {
+      this.commonService(baseApiSchedule)
+      .find(id)
+      .then(res => {
+        this.mainForm = res;
+        this.$emit('data-loaded', {...this.mainForm});
+        this.onMainFormUpdated(this.mainForm);
+        this.onMainFormUpdatedtes(this.mainForm);
+        this.onMainFormUpdatedevaluation(this.mainForm)
+        this.onMainFormUpdateInEvaluation(this.mainForm)
+
+      })
+      .catch(err => {
+        console.error('Failed to get bidding schedule. %O', err);
+        this.$message.error('Failed to get schedule details');
+      })
+      .finally(() => {
+        this.loading = false;
+      });
+    }
   }
 }
