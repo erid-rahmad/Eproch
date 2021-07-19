@@ -41,10 +41,11 @@ export default class BiddingEvaluationts extends mixins(Vue2Filters.mixin,Schedu
 
   created() {
     this.getbiddingSubmission(this.pickRow.id);
+    this.data.fromGrid=this.pickRow;
   }
 
   onMainFormUpdateInEvaluation(mainForm: any){
-    console.log("this main form",mainForm);
+
     this.getbiddingSubmission(mainForm.biddingId);
     this.data.formType=mainForm.formType;
 
@@ -122,8 +123,8 @@ export default class BiddingEvaluationts extends mixins(Vue2Filters.mixin,Schedu
       .catch(_err => this.$message.error('Error retrieve Evaluation Table'))
       .finally(()=>{
         this.index=1;
-        this.data.pickrow=row;
 
+        this.data.pickrow=row;
         this.data.biddingSubmission=this.biddingSubmission;
         this.data.evaluationResult=this.evaluationResult;
       })

@@ -2,8 +2,14 @@ package com.bhp.opusb.service;
 
 import com.bhp.opusb.domain.MBiddingEvalResult;
 import com.bhp.opusb.repository.MBiddingEvalResultRepository;
+import com.bhp.opusb.repository.MBiddingRepository;
+import com.bhp.opusb.repository.MBiddingScheduleRepository;
+import com.bhp.opusb.service.dto.MBiddingDTO;
 import com.bhp.opusb.service.dto.MBiddingEvalResultDTO;
+import com.bhp.opusb.service.dto.MBiddingScheduleDTO;
 import com.bhp.opusb.service.mapper.MBiddingEvalResultMapper;
+import com.bhp.opusb.service.mapper.MBiddingMapper;
+import com.bhp.opusb.service.mapper.MBiddingScheduleMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -26,10 +34,19 @@ public class MBiddingEvalResultService {
     private final MBiddingEvalResultRepository mBiddingEvalResultRepository;
 
     private final MBiddingEvalResultMapper mBiddingEvalResultMapper;
+    private final MBiddingRepository mBiddingRepository;
+    private final MBiddingMapper mBiddingMapper;
+    private final MBiddingScheduleRepository mBiddingScheduleRepository;
+    private final MBiddingScheduleMapper mBiddingScheduleMapper;
 
-    public MBiddingEvalResultService(MBiddingEvalResultRepository mBiddingEvalResultRepository, MBiddingEvalResultMapper mBiddingEvalResultMapper) {
+
+    public MBiddingEvalResultService(MBiddingEvalResultRepository mBiddingEvalResultRepository, MBiddingEvalResultMapper mBiddingEvalResultMapper, MBiddingRepository mBiddingRepository, MBiddingMapper mBiddingMapper, MBiddingScheduleRepository mBiddingScheduleRepository, MBiddingScheduleMapper mBiddingScheduleMapper) {
         this.mBiddingEvalResultRepository = mBiddingEvalResultRepository;
         this.mBiddingEvalResultMapper = mBiddingEvalResultMapper;
+        this.mBiddingRepository = mBiddingRepository;
+        this.mBiddingMapper = mBiddingMapper;
+        this.mBiddingScheduleRepository = mBiddingScheduleRepository;
+        this.mBiddingScheduleMapper = mBiddingScheduleMapper;
     }
 
     /**
@@ -43,6 +60,48 @@ public class MBiddingEvalResultService {
         MBiddingEvalResult mBiddingEvalResult = mBiddingEvalResultMapper.toEntity(mBiddingEvalResultDTO);
         mBiddingEvalResult = mBiddingEvalResultRepository.save(mBiddingEvalResult);
         return mBiddingEvalResultMapper.toDto(mBiddingEvalResult);
+    }
+
+    public  List<MBiddingDTO> getGrid(){
+        List<MBiddingDTO> mBiddingDTOS = mBiddingMapper.toDto(mBiddingRepository.findAll());
+        List<MBiddingDTO> mBiddingDTOS_=new ArrayList<>();
+        mBiddingDTOS.forEach(mBiddingDTO -> {
+            List<MBiddingScheduleDTO> mBiddingScheduleDTOS = mBiddingScheduleMapper.
+                toDto(mBiddingScheduleRepository.findByBiddingId(mBiddingDTO.getId()));
+            log.info("this mBiddingScheduleDTOS {}",mBiddingScheduleDTOS);
+            int x=0;
+            for (MBiddingScheduleDTO mBiddingScheduleDTO:mBiddingScheduleDTOS) {
+                try {
+                    log.info("mBiddingScheduleDTO.getFormType() {}",mBiddingScheduleDTO.getFormType());
+                    if (mBiddingScheduleDTO.getFormType().contains("S1") && mBiddingScheduleDTO.getActualStartDate()!=null){
+                        x=x+1;
+                    }
+                    if (mBiddingScheduleDTO.getFormType().contains("S2") && mBiddingScheduleDTO.getActualStartDate()!=null){
+                        x=x+2;
+                    }
+                    if (mBiddingScheduleDTO.getFormType().contains("S3") && mBiddingScheduleDTO.getActualStartDate()!=null){
+                        x=x+3;
+                    }
+                    log.info("mBiddingScheduleDTO.getFormType() total {}",x);
+                }catch (Exception e){}
+            }
+            if (x == 2){
+                mBiddingDTO.setFormType("S1");
+                mBiddingDTOS_.add(mBiddingDTO);
+            }
+
+            else if (x == 4){
+                mBiddingDTO.setFormType("S2");
+                mBiddingDTOS_.add(mBiddingDTO);
+            }
+
+            else if (x == 10){
+                mBiddingDTO.setFormType("S3");
+                mBiddingDTOS_.add(mBiddingDTO);
+            }
+            else {}
+        });
+        return mBiddingDTOS_;
     }
 
     /**

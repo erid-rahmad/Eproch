@@ -3,6 +3,7 @@ import {Component, Inject, Mixins, Vue, Watch} from "vue-property-decorator";
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import Schema from 'async-validator';
 import {numeric} from "vuelidate/lib/validators";
+import methodUpdate from "@/core/dashboard/componentsChart/methodUpdate.vue";
 
 const baseApiEvalMethodCriteria = 'api/c-evaluation-method-criteria';
 const baseApiVendorScoringCriteria = 'api/m-vendor-scoring-criteria';
@@ -76,14 +77,20 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
   @Watch('SelectVendorScoringLine')
   loaddata() {
     this.$emit('event', false);
-    this.evaluationResultLine.score=0;
+    this.$emit('approve', false);
+    this.evaluationResultLine.id=null;
     this.readOnly=false;
+    this.statusReadOnly=false;
+    this.evaluationResultLine.score=0;
     this.getEvaluationtype();
     this.retrieveEvaluationMethodCriteria(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLineId, this.evaluationFormProp.SelectVendorScoringLine.id);
     this.retrieveEvalResultLine( this.evaluationFormProp.evaluationMethodLineId, this.evaluationFormProp.biddingEvalResultId)
   }
 
   created() {
+
+    this.$emit('event', false);
+    this.$emit('approve', false);
     this.getEvaluationtype();
     this.retrieveEvaluationMethodCriteria(this.evaluationFormProp.SelectVendorScoringLine.evaluationMethodLineId, this.evaluationFormProp.SelectVendorScoringLine.id);
     this.retrieveEvalResultLine( this.evaluationFormProp.evaluationMethodLineId, this.evaluationFormProp.biddingEvalResultId)
@@ -103,6 +110,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
         }
       })
       .then(async res => {
+
         const data = res.data as any[];
         let result:any={};
         if (data.length) {
@@ -112,6 +120,11 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
               this.readOnly = true;
               this.$emit('event', true);
             }
+          else if (result.documentStatus === 'APV' || result.documentStatus === 'RJC') {
+              this.readOnly = true;
+            this.$emit('approve', true);
+              this.$emit('event', true);
+          }
           }
 
 
@@ -175,7 +188,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
       .create(data)
       .then(_res => {
         this.$message.success(`Requirements has been saved successfully`);
-        this.updateEvalResultLine();
+        this.updateEvalResultLine(null);
 
       })
       .catch(err => {
@@ -186,7 +199,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
       .finally(() => this.$emit('update:loading', false));
   }
 
-  updateEvalResultLine() {
+  updateEvalResultLine(status) {
     const data={
       biddingEvalResultId:this.evaluationFormProp.biddingEvalResultId,
       evaluationMethodLineId:this.evaluationFormProp.evaluationMethodLineId,
@@ -195,25 +208,34 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
       id:this.evaluationResultLine.id,
       score:this.evaluationResultLine.score,
       status:this.evaluationResultLine.status,
-      documentStatus:this.evaluationResultLine.documentStatus,
+      documentStatus:status,
     }
 
     this.commonService(baseApiEvalResultLine)
       .create(data)
       .then(res => {
-        this.evaluationFormProp.SelectVendorScoringLine = res.data;
-        console.log("save line")
-
-        // this.$message.success('create ResultLine ');
+        this.evaluationResultLine=res;
       })
       .catch(_err => this.$message.error('fail create record'));
-
   }
 
   saveSubmit(){
-   this.evaluationResultLine.documentStatus='SMT';
-   this.save();
+    this.updateEvalResultLine('SMT');
    this.readOnly=true;
+    this.$emit('event', true);
+
+  }
+
+  approveEvaluation(){
+    this.updateEvalResultLine('APV');
+    this.$emit('approve', true);
+    this.$emit('event', true);
+  }
+
+  rejectEvaluation(){
+    this.updateEvalResultLine('RJC');
+    this.$emit('approve', true);
+    this.$emit('event', true);
   }
 
   private retrieveEvaluationMethodCriteria(evaluationMethodLineId: number, vendorScoringLineId: number) {
@@ -437,6 +459,7 @@ export default class EvaluationFormDetailComponent extends Mixins(AccessLevelMix
   }
 
   average(){
+
     let x=0;
     let s=0;
     this.questions.forEach(question_=>{

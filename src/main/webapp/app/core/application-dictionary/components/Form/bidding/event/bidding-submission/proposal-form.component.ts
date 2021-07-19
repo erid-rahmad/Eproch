@@ -45,7 +45,8 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
   private file: any = {};
   private subCriteria:any={};
   loading:boolean=false
-  disabled:boolean=true
+  disabled:boolean=false;
+  readOnlyCheklist:boolean=false;
 
   answers: Map<number, any> = new Map();
   attachmentFormVisible = false;
@@ -54,7 +55,6 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
   validationSchemaAttachment: any = {};
 
   get isVendor() {
-    console.log("is vendor")
     this.disabled=false;
     return AccountStoreModule.isVendor;
   }
@@ -70,6 +70,8 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
   @Watch('data')
   onDataChanged(data: any) {
     this.disabled=false;
+    this.readOnlyCheklist=false;
+    this.$emit('setReadOnly',false);
     this.answers.clear();
     this.requirements.clear();
     this.retrieveVendorScoringCriteria(data.id, data.evaluationMethodLineId);
@@ -77,7 +79,6 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
   }
 
   created() {
-    this.disabled=false;
        if (this.isVendor) {
       this.validationSchema = {
         answer: {
@@ -191,7 +192,11 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
         for (const proposal of res.data) {
           if(proposal.documentStatus==='SMT'){
             this.disabled=true;
-            console.log("this submit in line")
+            this.isVendor ?this.$emit('setReadOnly',true):null;
+          }
+          if(proposal.documentAction==='SMT'){
+            this.readOnlyCheklist=true;
+            !this.isVendor ? this.$emit('setReadOnly',true):null;
           }
           try {
             const item = this.answers.get(proposal.biddingSubCriteriaLineId);
@@ -354,8 +359,10 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
         ...proposal
       } = answer;
       proposal.id=answer.answerId;
-      if(status) {
+      if(status==='SMT') {
         proposal.documentStatus = status;
+      }else if(status==='SMT2'){
+        proposal.documentAction = 'SMT';
       }
       proposal.biddingSubmissionId = this.submissionId;
       proposal.biddingSubCriteriaLineId = answer.id;
@@ -383,7 +390,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
     // let validA = true;
 
     for (const proposal of this.attachmentHandler.values()) {
-      console.log("this proposal",proposal);
+
       validatorA.validate(proposal, (errors: any) => {
         if (errors) {
           valid = false;

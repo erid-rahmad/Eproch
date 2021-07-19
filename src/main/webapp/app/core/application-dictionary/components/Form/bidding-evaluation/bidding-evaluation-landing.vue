@@ -1,6 +1,6 @@
 <template>
     <div class="app-container card-view bidding-process">
-       <product-information></product-information>
+       <bidding-evaluation></bidding-evaluation>
     </div>
 </template>
 

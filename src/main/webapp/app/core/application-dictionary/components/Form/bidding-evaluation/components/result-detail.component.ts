@@ -31,8 +31,20 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   private loading:boolean=false;
 
   created(){
-    console.log("this eval resupt",this.evaluationResultProp)
     this.retrieveEvalResultLine(this.evaluationResultProp.id)
+  }
+
+  getStatus(status){
+    if (status==="SMT"){
+      return "Submitted"
+    }
+    else if (status==="APV"){
+      return "Approved"
+    }
+    else if (status==="RJC"){
+      return "Rejected"
+    }
+    else {return "Drafted"}
   }
 
 
@@ -52,7 +64,6 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       })
       .then(res => {
         this.evaluationResultLine=res.data;
-        console.log(this.evaluationResultLine);
       })
       .finally(()=>this.loading=false);
   }

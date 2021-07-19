@@ -20,6 +20,7 @@ public class MBiddingDTO extends AbstractAuditingDTO {
 
     @NotNull
     private String name;
+    private String formType;
 
     private String vendorSelection;
 
@@ -93,6 +94,14 @@ public class MBiddingDTO extends AbstractAuditingDTO {
     private List<MBiddingLineDTO> biddingLineList;
 
     private List<MProjectInformationDTO> projectInformationList;
+
+    public String getFormType() {
+        return formType;
+    }
+
+    public void setFormType(String formType) {
+        this.formType = formType;
+    }
 
     public Long getId() {
         return id;
@@ -438,34 +447,47 @@ public class MBiddingDTO extends AbstractAuditingDTO {
     @Override
     public String toString() {
         return "MBiddingDTO{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", vendorSelection='" + getVendorSelection() + "'" +
-            ", ceilingPrice=" + getCeilingPrice() +
-            ", estimatedPrice=" + getEstimatedPrice() +
-            ", biddingStatus='" + getBiddingStatus() + "'" +
-            ", joinedVendorCount=" + getJoinedVendorCount() +
-            ", dateTrx='" + getDateTrx() + "'" +
-            ", documentNo='" + getDocumentNo() + "'" +
-            ", documentAction='" + getDocumentAction() + "'" +
-            ", documentStatus='" + getDocumentStatus() + "'" +
-            ", approved='" + isApproved() + "'" +
-            ", processed='" + isProcessed() + "'" +
-            ", dateApprove='" + getDateApprove() + "'" +
-            ", dateReject='" + getDateReject() + "'" +
-            ", rejectedReason='" + getRejectedReason() + "'" +
-            ", uid='" + getUid() + "'" +
-            ", active='" + isActive() + "'" +
-            ", adOrganizationId=" + getAdOrganizationId() +
-            ", costCenterId=" + getCostCenterId() +
-            ", currencyId=" + getCurrencyId() +
-            ", documentTypeId=" + getDocumentTypeId() +
-            ", requisitionId=" + getRequisitionId() +
-            ", quotationId=" + getQuotationId() +
-            ", referenceTypeId=" + getReferenceTypeId() +
-            ", biddingTypeId=" + getBiddingTypeId() +
-            ", eventTypeId=" + getEventTypeId() +
-            ", adUserUserId=" + getAdUserUserId() +
-            "}";
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", formType='" + formType + '\'' +
+            ", vendorSelection='" + vendorSelection + '\'' +
+            ", ceilingPrice=" + ceilingPrice +
+            ", estimatedPrice=" + estimatedPrice +
+            ", biddingStatus='" + biddingStatus + '\'' +
+            ", joinedVendorCount=" + joinedVendorCount +
+            ", dateTrx=" + dateTrx +
+            ", documentNo='" + documentNo + '\'' +
+            ", documentAction='" + documentAction + '\'' +
+            ", documentStatus='" + documentStatus + '\'' +
+            ", approved=" + approved +
+            ", processed=" + processed +
+            ", dateApprove=" + dateApprove +
+            ", dateReject=" + dateReject +
+            ", rejectedReason='" + rejectedReason + '\'' +
+            ", uid=" + uid +
+            ", active=" + active +
+            ", adOrganizationId=" + adOrganizationId +
+            ", adOrganizationName='" + adOrganizationName + '\'' +
+            ", costCenterId=" + costCenterId +
+            ", costCenterName='" + costCenterName + '\'' +
+            ", currencyId=" + currencyId +
+            ", currencyName='" + currencyName + '\'' +
+            ", documentTypeId=" + documentTypeId +
+            ", documentTypeName='" + documentTypeName + '\'' +
+            ", requisitionId=" + requisitionId +
+            ", requisitionName='" + requisitionName + '\'' +
+            ", quotationId=" + quotationId +
+            ", quotationName='" + quotationName + '\'' +
+            ", referenceTypeId=" + referenceTypeId +
+            ", referenceTypeName='" + referenceTypeName + '\'' +
+            ", biddingTypeId=" + biddingTypeId +
+            ", biddingTypeName='" + biddingTypeName + '\'' +
+            ", eventTypeId=" + eventTypeId +
+            ", eventTypeName='" + eventTypeName + '\'' +
+            ", adUserUserId=" + adUserUserId +
+            ", adUserUserName='" + adUserUserName + '\'' +
+            ", biddingLineList=" + biddingLineList +
+            ", projectInformationList=" + projectInformationList +
+            '}';
     }
 }

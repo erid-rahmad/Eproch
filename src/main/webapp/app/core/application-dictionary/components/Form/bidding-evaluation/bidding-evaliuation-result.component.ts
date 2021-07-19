@@ -100,7 +100,6 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
   updateWinnerStatus(){
     this.selectedWiner.forEach(item=>{
-      console.log("this item");
       item.winnerStatus=true;
       this.commonService(baseApiEvalResults)
         .create(item)

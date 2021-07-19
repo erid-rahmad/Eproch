@@ -28,20 +28,22 @@
                 size="mini"
                 type="primary"
                 @click="saveProposal"
+                :disabled="readonly"
             >
                 <svg-icon name="icomoo/273-checkmark"></svg-icon>
-                Save
+                Save .
             </el-button>
 
             <el-button
                 v-if="!submissionPage "
                 :loading="loading"
                 size="mini"
+                :disabled="readonly"
                 type="primary"
                 @click="submitSaveProposal"
             >
                 <svg-icon name="guide"></svg-icon>
-                Submit
+                Submit .
             </el-button>
 
             <el-divider
@@ -57,7 +59,7 @@
                 type="primary"
                 @click="openProposalForm(proposal)"
             >
-                {{ printEvaluation(proposal.evaluationMethodLineEvaluation) }} Proposal tes
+                {{ printEvaluation(proposal.evaluationMethodLineEvaluation) }} Proposal
             </el-button>
 
         </div>
@@ -69,9 +71,11 @@
                 :submission.sync="submission"
                 :scheduleFromGrid="scheduleFromGrid"
                 @data-loaded="onSubmissionFormLoaded"
+                @setReadOnly="setReadOnly"
             ></submission-form>
 
             <component
+                @setReadOnly="setReadOnly"
                 :is="proposalComponent"
                 v-else
                 ref="proposalForm"

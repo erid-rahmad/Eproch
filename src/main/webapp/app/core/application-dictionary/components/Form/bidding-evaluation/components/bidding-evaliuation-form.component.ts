@@ -9,6 +9,10 @@ import DynamicWindowService from "@/core/application-dictionary/components/Dynam
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 import EvaluationFormDetail from './evaluation-form-detail.vue';
 import EvaluationTeamDetailPrice from './evaluation-form-detail-price.vue'
+import {ifError} from "assert";
+import buildCriteriaQueryString from "@/shared/filter/filters";
+import {AccountStoreModule as accountStore} from "@/shared/config/store/account-store";
+import {log} from "util";
 
 
 const baseApiVendorScoring = 'api/m-vendor-scorings';
@@ -52,6 +56,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   private vendorId:number;
   private evaluationResult:any={};
   private evaluationFormProp:any={};
+  private baseQuery: string = '';
   dialogSubmitEvaluation:boolean=false;
   dialogApproveEvaluation:boolean=false;
   dialogRejectEvaluation:boolean=false;
@@ -60,13 +65,14 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
   mainForm: any = {};
   private readOnly:boolean=false;
+  private readOnlyApp:boolean=false;
   button =0;
 
   created(){
+    console.log("read only",this.readOnly)
     this.evaluationResult=this.data.evaluationResult;
     this.evaluationFormProp.biddingSubmission=this.data.pickrow;
     this.evaluation=this.data.pickrow;
-    // console.log("this data pickrow",this.data)
     this.handleButton();
     this.retrieveVendorScoring(this.evaluation.biddingId);
 
@@ -86,29 +92,33 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
             else {
               this.FormMenu=2;
             }
-
-    // await this.retrieveEvalResultLine(this.SelectVendorScoringLine.evaluationMethodLineId, this.evaluationResult.id);
-
-
   }
 
   changeCode(code :String){
     if(code==="T"){
-      // this.title="Technic";
       return "Technic"
     }
     if(code==="A"){
-      // this.title="Administrasi";
       return "Administrasi"
     }
     if(code==="P"){
-      // this.title="Price";
       return "Price"
     }
   }
 
   handleButton(){
-
+    if (this.evaluationResult.evaluationStatus==="SMT"){
+      this.readOnly=true;
+      this.button=1;
+    }
+    if (this.evaluationResult.evaluationStatus==="RJC" ){
+      this.readOnly=true;
+      this.button=2;
+    }
+    if (this.evaluationResult.evaluationStatus==="APP"){
+      this.readOnly=true;
+      this.button=3;
+    }
   }
 
   retrieveAllEvalResultLine(biddingEvalResultId:number){
@@ -146,7 +156,9 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   }
 
   updateEvalResult(){
+    console.log("this evalresult",this.evaluationResult)
     this.commonService(baseApiEvalResults)
+
       .create( this.evaluationResult)
       .then(res => {
         let evaluationResult = res.data;
@@ -156,8 +168,10 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       });
   }
 
-  async submitEvaluation() {
-    (<any>this.$refs.evaluationFormDetail).saveSubmit();
+   submitEvaluation() {
+     (<any>this.$refs.evaluationFormDetail).saveSubmit();
+     this.retrieveAllEvalResultLine(this.evaluationResult.id);
+
     this.dialogSubmitEvaluation = false;
   }
 
@@ -167,64 +181,26 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   }
 
   handler(params) {
-    console.log("masuk")
-    this.readOnly=params
+    this.readOnly=params;
   }
 
-  approveEvaluation(){
-    this.evaluationResult.evaluationStatus="APP";
-    this.commonService(baseApiEvalResults)
-      .create( this.evaluationResult)
-      .then(res => {
-        let evaluationResult = res.data;
-        this.button=3;
-        this.dialogApproveEvaluation=false;
-        // this.createTableNegotiation();
-      })
-      .catch(_err => this.$message.error('fail create records evalResult'))
-      .finally(()=>{});
+  approve(x){
+    this.readOnlyApp=x;
   }
 
+   approveEvaluation() {
+     (<any>this.$refs.evaluationFormDetail).approveEvaluation();
+     this.retrieveAllEvalResultLine(this.evaluationResult.id);
+    this.dialogSubmitEvaluation = false;
 
-
-  rejectEvaluation(){
-    this.evaluationResult.evaluationStatus="RJC";
-    this.commonService(baseApiEvalResults)
-      .create( this.evaluationResult)
-      .then(res => {
-        let evaluationResult = res.data;
-        this.button=2;
-        this.dialogRejectEvaluation=false;
-      })
-      .catch(_err => this.$message.error('fail create record'))
-      .finally(()=>{});
   }
 
+   rejectEvaluation() {
+     (<any>this.$refs.evaluationFormDetail).rejectEvaluation();
+     this.retrieveAllEvalResultLine(this.evaluationResult.id);
+    this.dialogSubmitEvaluation = false;
 
-
-  // createTableEvalResultLine(){
-  //   const data={
-  //     biddingEvalResultId:this.evaluationResult.id,
-  //     evaluationMethodLineId:this.SelectVendorScoringLine.evaluationMethodLineId,
-  //     adOrganizationId:1,
-  //     active:true,
-  //   }
-  //   this.commonService(baseApiEvalResultLine)
-  //     .create(data)
-  //     .then(res => {
-  //       this.evaluationFormProp.evaluationResultLine = res;
-  //
-  //       if (this.SelectVendorScoringLine.evaluationMethodLineEvaluation ==="P"){
-  //         this.FormMenu=1;
-  //       }
-  //       else {
-  //         this.FormMenu=2;
-  //       }
-  //
-  //       // this.$message.success('create ResultLine ');
-  //     })
-  //     .catch(_err => this.$message.error('fail create record'));
-  // }
+  }
 
   private retrieveVendorScoring(biddingId: number) {
     this.commonService(baseApiVendorScoring)
@@ -269,13 +245,23 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   }
 
   private retrieveVendorScoringLine(vendorScoringId: number) {
+    let filterQuery = [];
+    filterQuery.push( 'active.equals=true');
+    filterQuery.push( `vendorScoringId.equals=${vendorScoringId}`);
+    if (this.data.formType) {
+      filterQuery.push( `formType.equals=${this.data.formType}`);
+    }
+    if (this.data.fromGrid.formType=='S2'){
+      filterQuery.push( `formType.equals=S2`);
+    }
+    if (this.data.fromGrid.formType=='S3'){
+      filterQuery.push( `formType.equals=S3`);
+    }
+    this.baseQuery = buildCriteriaQueryString(filterQuery);
+
     this.commonService(baseApiVendorScoringLine)
       .retrieve({
-        criteriaQuery: [
-          'active.equals=true',
-          `vendorScoringId.equals=${vendorScoringId}`,
-          `formType.equals=${this.data.formType}`
-        ],
+        criteriaQuery: this.baseQuery,
         paginationQuery: {
           page: 0,
           size: 100,

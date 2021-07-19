@@ -110,9 +110,11 @@
                                         v-if="!isVendor"
                                         label="Document"
                                         width="100"
+
                                     >
                                         <template slot-scope="{ row }">
                                             <el-checkbox
+                                                :disabled="readOnlyCheklist"
                                                 v-model="row.documentEvaluation"
                                                 size="mini"
                                             ></el-checkbox>

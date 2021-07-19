@@ -20,6 +20,8 @@
                 </el-button>
                 <el-button
                     size="mini"
+                    :disabled="readOnly"
+
                     style="margin-left: 10px"
                     v-if="SelectVendorScoringLine.evaluationMethodLineEvaluation"
                     type="primary"
@@ -37,8 +39,9 @@
                     <el-button type="primary" @click="submitEvaluation">Confirm</el-button>
                 </span>
                 </el-dialog>
-                <el-button v-if="button===1"
+                <el-button v-if="readOnly && SelectVendorScoringLine.evaluationMethodLineEvaluation "
                            size="mini"
+                           :disabled="readOnlyApp"
                            style="margin-left: 10px"
                            type="primary"
                            @click="dialogApproveEvaluation=true">
@@ -54,7 +57,8 @@
                     <el-button type="primary" @click="approveEvaluation">Confirm</el-button>
                 </span>
                 </el-dialog>
-                <el-button v-if="button===1"
+                <el-button v-if="readOnly && SelectVendorScoringLine.evaluationMethodLineEvaluation"
+                           :disabled="readOnlyApp"
                            size="mini"
                            style="margin-left: 10px"
                            type="primary"
@@ -73,23 +77,6 @@
                 </span>
                     </el-dialog>
                 </template>
-
-                <el-button v-if="button===2"
-                           disabled="true"
-                           size="mini"
-                           style="margin-left: 10px"
-                           type="danger"
-                >
-                    Rejected
-                </el-button>
-                <el-button v-if="button===3"
-                           disabled="true"
-                           size="mini"
-                           style="margin-left: 10px"
-                           type="primary"
-                >
-                    Approved
-                </el-button>
                 <el-button v-for="MethodLine in VendorScoringLine"
                            size="mini" style="margin-left: 10px" :key="MethodLine.id"
                            type="primary"
@@ -127,11 +114,12 @@
             </el-form>
             <div v-if="FormMenu===1">
                 <EvaluationTeamDetailPrice ref="evaluationFormDetail" @event="handler"  :evaluationFormProp="evaluationFormProp"
-                                           :readOnly="readOnly" ></EvaluationTeamDetailPrice>
+                                           @approve="approve" :readOnly="readOnly" ></EvaluationTeamDetailPrice>
             </div>
             <div v-if="FormMenu===2">
                 <h4 align="center">Evaluation</h4>
-                <EvaluationFormDetail  ref="evaluationFormDetail" @event="handler" :SelectVendorScoringLine="SelectVendorScoringLine" :evaluationFormProp="evaluationFormProp"
+                <EvaluationFormDetail  ref="evaluationFormDetail" @event="handler"
+                                       @approve="approve" :SelectVendorScoringLine="SelectVendorScoringLine" :evaluationFormProp="evaluationFormProp"
                                       :readOnly="readOnly" :title="title" ></EvaluationFormDetail>
             </div>
 

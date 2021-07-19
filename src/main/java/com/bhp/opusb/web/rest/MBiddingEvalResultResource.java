@@ -1,6 +1,7 @@
 package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.service.MBiddingEvalResultService;
+import com.bhp.opusb.service.dto.MBiddingDTO;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
 import com.bhp.opusb.service.dto.MBiddingEvalResultDTO;
 import com.bhp.opusb.service.dto.MBiddingEvalResultCriteria;
@@ -102,6 +103,11 @@ public class MBiddingEvalResultResource {
         Page<MBiddingEvalResultDTO> page = mBiddingEvalResultQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/m-bidding-eval-results/grid")
+    public ResponseEntity<List<MBiddingDTO>> grid() {
+        return ResponseEntity.ok().body(mBiddingEvalResultService.getGrid());
     }
 
     /**

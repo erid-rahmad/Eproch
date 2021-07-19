@@ -55,7 +55,7 @@
         </el-row>
         <el-row v-if="index===1" ref="tableWrapper" class="main">
             <el-col :span="24" class="tab-container">
-                <product-information :pickRow="pickRow" @close="close"/>
+                <bidding-evaluation :pickRow="pickRow" @close="close"/>
             </el-col>
         </el-row>
         <el-row v-if="index===2">

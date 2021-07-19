@@ -9,12 +9,12 @@ import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../ContextVariableAccessor";
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 import DynamicWindowService from "@/core/application-dictionary/components/DynamicWindow/dynamic-window.service";
-import ProductInformation from "@/core/application-dictionary/components/Form/bidding-evaluation/bidding-evaluation.vue";
+import biddingEvaluation from "@/core/application-dictionary/components/Form/bidding-evaluation/bidding-evaluation.vue";
 
 
 @Component({
   components: {
-    ProductInformation,
+    biddingEvaluation,
 
   }
 })

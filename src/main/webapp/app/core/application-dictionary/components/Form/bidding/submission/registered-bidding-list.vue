@@ -21,19 +21,20 @@
         Back
       </el-button>
 
-      <el-button
-        v-if="submissionPage && isVendor"
-        :disabled="submitted"
-        size="mini"
-        type="primary"
-        @click="submitProposals"
-      >
-        <svg-icon name="guide"></svg-icon> Submit
-      </el-button>
+<!--      <el-button-->
+<!--        v-if="submissionPage && isVendor"-->
+<!--        :disabled="readonly"-->
+<!--        size="mini"-->
+<!--        type="primary"-->
+<!--        @click="submitProposals"-->
+<!--      >-->
+<!--        <svg-icon name="guide"></svg-icon> Submit-->
+<!--      </el-button>-->
 
       <el-button
         v-if="!mainPage && !submissionPage "
         :loading="loading"
+        :disabled="readonly"
         size="mini"
         type="primary"
         @click="saveProposal"
@@ -45,6 +46,7 @@
             v-if="!mainPage && !submissionPage "
             :loading="loading"
             size="mini"
+            :disabled="readonly"
             type="primary"
             @click="SubmmitProposal"
         >
@@ -218,6 +220,8 @@
       ></submission-form>
 
       <component
+
+          @setReadOnly="setReadOnly"
         v-else
         ref="proposalForm"
         :is="proposalComponent"

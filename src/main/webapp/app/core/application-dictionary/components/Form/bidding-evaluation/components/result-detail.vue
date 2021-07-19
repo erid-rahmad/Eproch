@@ -21,6 +21,7 @@
                         <el-form-item label="Total Score">
                             {{ evaluationResultProp.score }}
                         </el-form-item>
+
                     </el-col>
                     <el-col span="12">
                         <el-form-item label="Bidding Type">
@@ -56,8 +57,14 @@
                 </el-table-column>
                 <el-table-column label="Evaluation" prop="status" sortable min-width="180">
                 </el-table-column>
+                <el-table-column label="Status" prop="documentStatus" sortable min-width="180">
+                    <template slot-scope="{row}">
+                        {{ getStatus(row.documentStatus)}}
+                    </template>
+                </el-table-column>
                 <el-table-column label="Total Score" prop="score" sortable min-width="180">
                 </el-table-column>
+
             </el-table>
         </div>
     </div>

@@ -36,6 +36,8 @@ export default class BiddingSubmissionEvent extends SubmissionProps {
   section: SubmissionPage = SubmissionPage.SUBMISSION;
   formType: string = null;
   loading: boolean = false;
+  readonly :boolean=false;
+
 
 
   schedule: any = {};
@@ -44,6 +46,11 @@ export default class BiddingSubmissionEvent extends SubmissionProps {
   proposalName: string = null;
   selectedProposal: number = null;
   submission: any = {};
+
+  setReadOnly (param){
+    console.log("readonly",param)
+    this.readonly=param;
+  }
 
   get isVendor() {
     return AccountStoreModule.isVendor;
@@ -148,7 +155,7 @@ export default class BiddingSubmissionEvent extends SubmissionProps {
   }
 
   submitSaveProposal() {
-    (<any>this.$refs.proposalForm).save('SMT');
+    (<any>this.$refs.proposalForm).save('SMT2');
   }
 
   submitProposals() {

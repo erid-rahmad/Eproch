@@ -130,7 +130,7 @@
                 <el-table-column label="Remark" min-width="50" prop="biddingLineRemark"/>
                 <el-table-column label="Document" min-width="50" prop="doc">
                     <template scope="{row}">
-                        <el-checkbox disabled="true" v-model="row.document">Checked</el-checkbox>
+                        <el-checkbox :disabled="true" v-model="row.document">Checked</el-checkbox>
                     </template>
                 </el-table-column>
             </el-table>

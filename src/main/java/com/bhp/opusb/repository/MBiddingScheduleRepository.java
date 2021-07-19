@@ -1,9 +1,12 @@
 package com.bhp.opusb.repository;
 
 import java.util.Collection;
+import java.util.List;
 
 import com.bhp.opusb.domain.MBiddingSchedule;
 
+import com.bhp.opusb.domain.MBiddingSubmission;
+import com.bhp.opusb.domain.MProposalPrice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -20,4 +23,8 @@ public interface MBiddingScheduleRepository extends JpaRepository<MBiddingSchedu
   @Modifying
   @Query("DELETE FROM MBiddingSchedule s WHERE s.eventTypeLine.id NOT IN (:lineIds) AND s.bidding.id = :biddingId")
   int deleteByEventTypeLineIdNotIn(@Param("lineIds") Collection<Long> eventTypeLineIds, @Param("biddingId") Long biddingId);
+
+  @Query(value = "SELECT a FROM MBiddingSchedule a WHERE a.bidding.id=?1" )
+  List<MBiddingSchedule> findByBiddingId (long a);
+
 }

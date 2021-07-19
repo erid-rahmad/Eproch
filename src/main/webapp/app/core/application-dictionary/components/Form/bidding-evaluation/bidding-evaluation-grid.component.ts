@@ -8,7 +8,7 @@ import {
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../ContextVariableAccessor";
 
-import ProductInformation from './bidding-evaluation.vue';
+import biddingEvaluation from './bidding-evaluation.vue';
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 import EvaluationResult from './bidding-evaliuation-result.vue';
 import DynamicWindowService from "@/core/application-dictionary/components/DynamicWindow/dynamic-window.service";
@@ -17,7 +17,7 @@ const baseApiBiddingSchedule = 'api/m-bidding-schedules'
 
 @Component({
   components: {
-    ProductInformation,
+    biddingEvaluation,
     EvaluationResult
 
   }
@@ -47,69 +47,32 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
 
   private moreInformationData() {
     this.loading=true;
-    this.dynamicWindowService("/api/m-biddings")
+    this.dynamicWindowService("/api/m-bidding-eval-results/grid")
       .retrieve({
         paginationQuery: {
           page: 0,
           size: 10000,
-          sort: ['id,desc']
+          sort: ['id']
         }
       })
-      .then(res => {
-
-        const data:any=[]
-        res.data.forEach(async item=>{
-          await this.commonService(baseApiBiddingSchedule)
-            .retrieve({
-              criteriaQuery: this.updateCriteria([
-                `biddingId.equals=${item.id}`,
-                `formType.equals=S1`
-
-              ]),
-              paginationQuery: {
-                page: 0,
-                size: 1,
-                sort: ['id,desc']
-              }
-            })
-            .then(async res1 =>{
-              const data1 = { ...res1.data[0]};
-              item.formType='S1';
-              if (data1.actualStartDate){
-                await data.push(item);
-              }
-            });
-
-          await this.commonService(baseApiBiddingSchedule)
-            .retrieve({
-              criteriaQuery: this.updateCriteria([
-                `biddingId.equals=${item.id}`,
-                `formType.equals=S2`
-
-              ]),
-              paginationQuery: {
-                page: 0,
-                size: 1,
-                sort: ['id']
-              }
-            })
-            .then(async res1 =>{
-              const data1 = { ...res1.data[0]};
-              item.formType='S2';
-              if (data1.actualStartDate){
-                await data.push(item);
-              }
-            });
-
-
-        });
-
-        this.bidding = data;
-        // this.bidding = res.data;
+      .then(async res => {
+        function compare(a, b) {
+          // Use toUpperCase() to ignore character casing
+          const bandA = a.id;
+          const bandB = b.id;
+          let comparison = 0;
+          if (bandA < bandB) {
+            comparison = 1;
+          } else if (bandA > bandB) {
+            comparison = -1;
+          }
+          return comparison;
+        }
+        await res.data.sort(compare);
+        this.bidding = res.data
       })
       .finally(()=> this.loading=false);
   }
-
   evaluate(row){
     this.index=1;
     this.pickRow=row;

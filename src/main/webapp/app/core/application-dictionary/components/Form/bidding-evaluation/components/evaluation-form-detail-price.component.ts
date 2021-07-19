@@ -45,7 +45,8 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
   private evaluationResultLine:any={};
   private biddingSubmission:any={};
   created(){
-
+    this.$emit('event', false);
+    this.$emit('approve', false);
     this.retrieveProposal(this.evaluationFormProp.biddingSubmission.id);
     this.retrieveEvalResultLine( this.evaluationFormProp.evaluationMethodLineId, this.evaluationFormProp.biddingEvalResultId)
     this.biddingSubmission=this.evaluationFormProp.biddingSubmission;
@@ -74,6 +75,11 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
             this.evaluationResultLine = result;
             if (this.evaluationResultLine.documentStatus === 'SMT') {
               this.readOnly = true;
+              this.$emit('event', true);
+            }
+            else if (this.evaluationResultLine.documentStatus === 'APV' || this.evaluationResultLine.documentStatus === 'RJC') {
+              this.readOnly = true;
+              this.$emit('approve', true);
               this.$emit('event', true);
             }
           }
@@ -153,5 +159,21 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
     this.evaluationResultLine.documentStatus='SMT';
     this.save();
     this.readOnly=true;
+    this.$emit('approve', false);
+    this.$emit('event', true);
+  }
+
+  approveEvaluation(){
+    this.evaluationResultLine.documentStatus='APV';
+    this.save();
+    this.$emit('approve', true);
+    this.$emit('event', true);
+  }
+
+  rejectEvaluation(){
+    this.evaluationResultLine.documentStatus='RJC';
+    this.save();
+    this.$emit('approve', true);
+    this.$emit('event', true);
   }
 }

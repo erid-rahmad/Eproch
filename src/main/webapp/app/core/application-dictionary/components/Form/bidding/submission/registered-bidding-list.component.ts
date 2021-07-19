@@ -37,6 +37,7 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
   biddingScheduleVisible: boolean = false;
   loading: boolean = false;
   formType: string = null;
+  readonly:boolean=false;
 
   gridData: any[] = [];
 
@@ -75,6 +76,11 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
 
     return this.proposals
       .filter(proposal => proposal.evaluationMethodLineName !== this.proposalName);
+  }
+
+  setReadOnly (param){
+    console.log("readonly",param)
+    this.readonly=param;
   }
 
   get isVendor() {

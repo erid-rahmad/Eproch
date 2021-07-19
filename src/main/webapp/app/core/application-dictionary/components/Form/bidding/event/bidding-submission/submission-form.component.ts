@@ -148,7 +148,9 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
       })
   }
 
+
   submit(confirm: boolean) {
+    console.log("masuk")
     if (confirm) {
       this.submission.documentAction='SMT';
       this.commonService(baseApiBiddingSubmission)
