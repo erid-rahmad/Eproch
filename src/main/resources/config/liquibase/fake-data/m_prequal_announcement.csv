@@ -1,0 +1,11 @@
+id;description;publish_date;uid;active;ad_organization_id;prequalification_id;prequalification_schedule_id
+1;../fake-data/blob/hipster.txt;2021-07-19T00:32:42;14a10dd8-fb32-426d-a0dc-4e9016a023c6;false;1;1;1
+2;../fake-data/blob/hipster.txt;2021-07-18T08:15:22;169086c1-2056-4a7c-9091-e9c00ac2b4c7;true;2;2;2
+3;../fake-data/blob/hipster.txt;2021-07-19T05:04:26;e9184912-3d0f-44ff-a917-01383739544c;true;3;3;3
+4;../fake-data/blob/hipster.txt;2021-07-19T00:46:44;9d743347-6d35-49fa-bb39-e29db3b2e6a6;false;4;4;4
+5;../fake-data/blob/hipster.txt;2021-07-19T01:26:01;9003139d-8167-44a2-83de-3c4c614fcd75;false;5;5;5
+6;../fake-data/blob/hipster.txt;2021-07-19T02:29:01;e8cdcdf0-f3a3-47b3-9665-97159be2b9fa;true;6;6;6
+7;../fake-data/blob/hipster.txt;2021-07-19T02:22:49;68646b00-5524-4562-8498-63cf14a0271f;false;7;7;7
+8;../fake-data/blob/hipster.txt;2021-07-18T12:58:18;77878487-bd65-47ca-ad44-f2bdf3496ebe;true;8;8;8
+9;../fake-data/blob/hipster.txt;2021-07-19T01:01:10;c74aed90-2e53-4cdc-8720-a17515bbc58e;true;9;9;9
+10;../fake-data/blob/hipster.txt;2021-07-18T18:11:01;74483e8b-39f0-45ce-b192-c579c4ee6ff8;true;10;10;10

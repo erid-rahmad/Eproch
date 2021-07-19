@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity MPrequalAnnouncement.
+    -->
+    <changeSet id="20210719050600-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="m_prequal_announcement"
+                                 constraintName="fk_m_prequal_announcement_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="prequalification_id"
+                                 baseTableName="m_prequal_announcement"
+                                 constraintName="fk_m_prequal_announcement_prequalification_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_prequalification_information"/>
+
+        <addForeignKeyConstraint baseColumnNames="prequalification_schedule_id"
+                                 baseTableName="m_prequal_announcement"
+                                 constraintName="fk_m_prequal_announcement_prequalification_schedule_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_prequalification_schedule"/>
+
+        <addForeignKeyConstraint baseColumnNames="attachment_id"
+                                 baseTableName="m_prequal_announcement"
+                                 constraintName="fk_m_prequal_announcement_attachment_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_attachment"/>
+
+    </changeSet>
+</databaseChangeLog>
