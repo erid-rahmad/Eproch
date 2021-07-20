@@ -107,9 +107,31 @@ public class MPrequalificationInformation extends AbstractAuditingEntity impleme
     @Formula("(select cpm.name from c_prequalification_method cpm where cpm.id = (select mpe.method_id from m_prequalification_event mpe where mpe.prequalification_id = id))")
     private String preqMethodName;
 
+    @Formula("(select count(mpr.id) from m_prequal_registration mpr where mpr.prequalification_id = id and mpr.registration_status = 'R')")
+    private Integer joinedVendor;
+
+    @Formula("(select mpa.publish_date from m_prequal_announcement mpa where mpa.prequalification_id = id)")
+    private ZonedDateTime announcementPublishDate;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
+    }
+
+    public ZonedDateTime getAnnouncementPublishDate() {
+        return announcementPublishDate;
+    }
+
+    public void setAnnouncementPublishDate(ZonedDateTime announcementPublishDate) {
+        this.announcementPublishDate = announcementPublishDate;
+    }
+
+    public Integer getJoinedVendor() {
+        return joinedVendor;
+    }
+
+    public void setJoinedVendor(Integer joinedVendor) {
+        this.joinedVendor = joinedVendor;
     }
 
     public String getStatus() {

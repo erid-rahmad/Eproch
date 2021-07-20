@@ -19,6 +19,7 @@ public interface MPrequalRegistrationMapper extends EntityMapper<MPrequalRegistr
     @Mapping(source = "announcement.prequalificationSchedule.endDate", target = "announcementEndDate")
     @Mapping(source = "prequalification.id", target = "prequalificationId")
     @Mapping(source = "prequalification.name", target = "prequalificationName")
+    @Mapping(source = "prequalification.type", target = "prequalificationType")
     @Mapping(source = "vendor.id", target = "vendorId")
     @Mapping(source = "vendor.code", target = "vendorCode")
     @Mapping(source = "vendor.name", target = "vendorName")

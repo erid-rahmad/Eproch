@@ -23,11 +23,45 @@ public class MPreqRegistDocumentDTO extends AbstractAuditingDTO {
     private Long registrationId;
 
     private Long siupDocumentId;
+    private String siupFileName, siupDownloadUrl;
 
     private Long spdaDocumentId;
+    private String spdaFileName, spdaDownloadUrl;
     
     public Long getId() {
         return id;
+    }
+
+    public String getSpdaDownloadUrl() {
+        return spdaDownloadUrl;
+    }
+
+    public void setSpdaDownloadUrl(String spdaDownloadUrl) {
+        this.spdaDownloadUrl = spdaDownloadUrl;
+    }
+
+    public String getSpdaFileName() {
+        return spdaFileName;
+    }
+
+    public void setSpdaFileName(String spdaFileName) {
+        this.spdaFileName = spdaFileName;
+    }
+
+    public String getSiupDownloadUrl() {
+        return siupDownloadUrl;
+    }
+
+    public void setSiupDownloadUrl(String siupDownloadUrl) {
+        this.siupDownloadUrl = siupDownloadUrl;
+    }
+
+    public String getSiupFileName() {
+        return siupFileName;
+    }
+
+    public void setSiupFileName(String siupFileName) {
+        this.siupFileName = siupFileName;
     }
 
     public void setId(Long id) {

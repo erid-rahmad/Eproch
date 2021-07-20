@@ -10,13 +10,15 @@ import axios from 'axios';
 import {AccountStoreModule as accountStore} from '@/shared/config/store/account-store';
 import ContextVariableAccessor from "../../../ContextVariableAccessor";
 import RegistDetail from "./regist-detail.vue";
+import RegistDetailBuyer from "./regist-detail-buyer.vue";
 
-const prequalificationRegistrationAPI ="api/m-prequal-registrations"
-const ProjectInformationsAPI ="api/m-project-informations"
+const prequalificationRegistrationAPI= "api/m-prequal-registrations"
+const prequalificationInformationAPI = "api/m-prequalification-informations"
 
 @Component({
   components:{
-    RegistDetail
+    RegistDetail,
+    RegistDetailBuyer
   }
 })
 export default class PrequalificationRegistration extends mixins(Vue2Filters.mixin, AccessLevelMixin, AlertMixin, ContextVariableAccessor) {
@@ -147,15 +149,32 @@ export default class PrequalificationRegistration extends mixins(Vue2Filters.mix
     else if(row.registrationStatus==="N"){
       return "Not Interested"
     }
+    return "";
   }
 
   private biddingInvitations() {
     this.loading=true;
-    this.commonService(prequalificationRegistrationAPI)
+    if(this.isVendor){
+      this.commonService(prequalificationRegistrationAPI)
+        .retrieve({
+          criteriaQuery: this.updateCriteria([
+            `vendorId.equals=${this.vendorId}`
+          ]),
+          paginationQuery: {
+            page: 0,
+            size: 10000,
+            sort: ['id,desc']
+          }
+        })
+        .then(res => {
+          this.preqRegistGridData = res.data;
+        })
+        .finally(()=>this.loading=false);
+    } else {
+      this.commonService(prequalificationInformationAPI)
       .retrieve({
         criteriaQuery: this.updateCriteria([
-          // 'active.equals=true',
-          `vendorId.equals=${this.vendorId}`
+          `active.equals=true`
         ]),
         paginationQuery: {
           page: 0,
@@ -165,9 +184,9 @@ export default class PrequalificationRegistration extends mixins(Vue2Filters.mix
       })
       .then(res => {
         this.preqRegistGridData = res.data;
-//         console.log("preqRegistGridData",this.preqRegistGridData)
       })
       .finally(()=>this.loading=false);
+    }
   }
 
   private UpdatebiddingInvitation() {

@@ -15,7 +15,11 @@ public interface MPreqRegistDocumentMapper extends EntityMapper<MPreqRegistDocum
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "registration.id", target = "registrationId")
     @Mapping(source = "siupDocument.id", target = "siupDocumentId")
+    @Mapping(source = "siupDocument.fileName", target = "siupFileName")
+    @Mapping(source = "siupDocument.downloadUrl", target = "siupDownloadUrl")
     @Mapping(source = "spdaDocument.id", target = "spdaDocumentId")
+    @Mapping(source = "spdaDocument.fileName", target = "spdaFileName")
+    @Mapping(source = "spdaDocument.downloadUrl", target = "spdaDownloadUrl")
     MPreqRegistDocumentDTO toDto(MPreqRegistDocument mPreqRegistDocument);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")

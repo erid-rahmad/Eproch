@@ -1,6 +1,6 @@
 <template>
   <div class="regist-detail">
-    <el-form label-position="left" label-width="150px" :model="mainForm" size="mini">
+    <el-form label-position="left" label-width="250px" :model="mainForm" size="mini">
       <el-row :gutter="24">
         <el-col :xs="24" :sm="24" :lg="12" :xl="8">
           <el-form-item label="Title" prop="prequalificationName" required>
@@ -42,7 +42,7 @@
             </template>
           </el-table-column>
           <el-table-column label="Document Name" min-width="180" prop="name"> </el-table-column>
-          <el-table-column label="Document Name" min-width="180">
+          <el-table-column label="File" min-width="180">
             <template slot-scope="{ row }">
               <el-form-item>
                 <el-upload

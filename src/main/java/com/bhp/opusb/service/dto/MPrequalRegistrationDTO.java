@@ -33,6 +33,7 @@ public class MPrequalRegistrationDTO extends AbstractAuditingDTO {
 
     private Long prequalificationId;
     private String prequalificationName;
+    private String prequalificationType;
 
     private Long vendorId;
     private String vendorCode;
@@ -41,6 +42,14 @@ public class MPrequalRegistrationDTO extends AbstractAuditingDTO {
     
     public Long getId() {
         return id;
+    }
+
+    public String getPrequalificationType() {
+        return prequalificationType;
+    }
+
+    public void setPrequalificationType(String prequalificationType) {
+        this.prequalificationType = prequalificationType;
     }
 
     public String getVendorType() {

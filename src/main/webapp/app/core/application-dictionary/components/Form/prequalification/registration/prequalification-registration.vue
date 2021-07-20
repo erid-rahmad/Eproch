@@ -32,31 +32,48 @@
                                             <span>{{ row.announcementPublishDate | formatDate }}</span>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column label="Prequalification Name" align="center" prop="prequalificationName" min-width="210"
-                                                    sortable></el-table-column>
-                                    <el-table-column label="End Date" min-width="180"  sortable>
+                                    <el-table-column label="Prequalification Name" align="center" min-width="210"
+                                            sortable>
+                                        <template slot-scope="{ row }">
+                                            <span>{{ row.name || row.prequalificationName }}</span>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column label="Type" min-width="180" align="center" sortable>
+                                        <template slot-scope="{ row }">
+                                            <span>{{ row.prequalificationType||row.type == 'O' ? 'Announcement' : 'Invitation' }}</span>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column label="End Date" min-width="180" align="center" v-if="isVendor" sortable>
                                         <template slot-scope="{ row }">
                                             <span>{{ row.announcementEndDate | formatDate }}</span>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column label="Status" align="center" min-width="100"  sortable>
+                                    <el-table-column label="Status" align="center" min-width="100" sortable v-if="isVendor">
                                         <template slot-scope="{ row }">
                                             <span>{{ getStatus(row) }}</span>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column label="Detail" align="center"  sortable width="80">
+                                    <el-table-column label="Joined Vendor" align="center" min-width="100" 
+                                        sortable v-if="!isVendor" prop="joinedVendor"/>
+                                    <el-table-column label="Detail" v-if="isVendor" align="center"  sortable width="80">
                                         <template slot-scope="{ row }">
                                             <el-button class="btn-attachment" icon="el-icon-search" size="mini"
                                                     type="primary" @click="viewemail(row)"></el-button>
                                         </template>
                                     </el-table-column>
                                     <el-table-column  label="Action" align="center" sortable width="130">
-                                        <template v-if="answerbutton" slot-scope="{ row }">
+                                        <template v-if="isVendor" slot-scope="{ row }">
                                             <el-button class="btn-attachment" icon="el-icon-circle-check" size="mini"
                                                     type="primary" @click="detail(row)">
                                             </el-button>
                                             <el-button class="btn-attachment" icon="el-icon-circle-close" size="mini"
                                                     type="primary" @click="tidakminat(row)">
+                                            </el-button>
+                                        </template>
+                                        <template v-if="!isVendor" slot-scope="{ row }">
+                                            <el-button class="btn-attachment" icon="el-icon-circle-check" size="mini"
+                                                    type="primary" @click="detail(row)">
+                                                    Evaluate
                                             </el-button>
                                         </template>
                                     </el-table-column>
@@ -66,7 +83,8 @@
                     </el-tabs>
                 </el-col>
             </el-row>
-            <regist-detail v-if="acceptPA" :data="selecrow" />
+            <regist-detail v-if="acceptPA && isVendor" :data="selecrow" />
+            <regist-detail-buyer v-if="acceptPA && !isVendor" :data="selecrow" />
         </div>
         <el-dialog :visible.sync="reasonPA" center title="" width="80%">
             <span>Reason For Not Interested </span>

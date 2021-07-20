@@ -64,8 +64,28 @@ public class MPrequalificationInformationDTO extends AbstractAuditingDTO impleme
     private String preqMethodName, preqEventName;
     private Long preqMethodId, preqEventId;
 
+    private Integer joinedVendor;
+
+    private ZonedDateTime announcementPublishDate;
+
     public Long getId() {
         return id;
+    }
+
+    public ZonedDateTime getAnnouncementPublishDate() {
+        return announcementPublishDate;
+    }
+
+    public void setAnnouncementPublishDate(ZonedDateTime announcementPublishDate) {
+        this.announcementPublishDate = announcementPublishDate;
+    }
+
+    public Integer getJoinedVendor() {
+        return joinedVendor;
+    }
+
+    public void setJoinedVendor(Integer joinedVendor) {
+        this.joinedVendor = joinedVendor;
     }
 
     public String getStatus() {
