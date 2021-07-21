@@ -40,7 +40,7 @@
         </el-table-column>
       </el-table>
     </el-form>
-    <el-button class="btn-attachment" size="mini" type="primary"> Submit </el-button>
+    <el-button class="btn-attachment" size="mini" type="primary" :disabled="submit" @click="process()"> Submit </el-button>
 
     <el-dialog :visible.sync="showDialog" title="Document Registration" width="40%">
       <el-table :data="uploadModels" size="mini" style="width: 100%" border>
