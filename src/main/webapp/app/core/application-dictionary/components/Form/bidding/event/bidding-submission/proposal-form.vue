@@ -1,12 +1,18 @@
 <template>
     <div class="proposal-form">
+
         <h3 style="margin-top: 0">{{changeCode(data.evaluation)}} Proposal</h3>
+
+
         <el-form
             ref="mainForm"
             label-position="left"
             label-width="200px"
             size="mini"
         >
+            <el-form-item class="criteria-label" label="Status">
+                {{proposalStatus}}
+            </el-form-item>
             <el-row
                 v-for="(criteria, index) in evaluationMethodCriteria"
                 :key="criteria.id"

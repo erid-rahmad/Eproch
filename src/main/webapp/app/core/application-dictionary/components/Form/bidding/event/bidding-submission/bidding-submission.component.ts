@@ -155,7 +155,7 @@ export default class BiddingSubmissionEvent extends SubmissionProps {
   }
 
   submitSaveProposal() {
-    (<any>this.$refs.proposalForm).save('SMT2');
+    this.isVendor ? (<any>this.$refs.proposalForm).save('SMT'):(<any>this.$refs.proposalForm).save('SMT2');
   }
 
   submitProposals() {

@@ -45,6 +45,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
   private file: any = {};
   private subCriteria:any={};
   loading:boolean=false
+  proposalStatus='';
   disabled:boolean=false;
   readOnlyCheklist:boolean=false;
 
@@ -70,6 +71,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
   @Watch('data')
   onDataChanged(data: any) {
     this.disabled=false;
+    this.proposalStatus='Draft';
     this.readOnlyCheklist=false;
     this.$emit('setReadOnly',false);
     this.answers.clear();
@@ -79,6 +81,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
   }
 
   created() {
+    this.proposalStatus='Draft';
        if (this.isVendor) {
       this.validationSchema = {
         answer: {
@@ -192,16 +195,26 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
         for (const proposal of res.data) {
           if(proposal.documentStatus==='SMT'){
             this.disabled=true;
+            this.proposalStatus='Vendor Submitted';
             this.isVendor ?this.$emit('setReadOnly',true):null;
           }
           if(proposal.documentAction==='SMT'){
             this.readOnlyCheklist=true;
+            this.proposalStatus='Buyer Submitted';
             !this.isVendor ? this.$emit('setReadOnly',true):null;
+          }
+          if(proposal.documentStatus!=='SMT'){
+            this.readOnlyCheklist=true;
+            this.proposalStatus='waiting for a vendor’s response';
+            !this.isVendor ? this.$emit('setReadOnly',true):null;
+
           }
           try {
             const item = this.answers.get(proposal.biddingSubCriteriaLineId);
             item.answer = proposal.answer;
-            item.answerId=proposal.id
+            item.documentStatus=proposal.documentStatus;
+            item.documentAction=proposal.documentAction;
+            item.answerId=proposal.id;
             item.documentEvaluation = proposal.documentEvaluation;
           }catch (e) {}
         };
@@ -359,11 +372,18 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
         ...proposal
       } = answer;
       proposal.id=answer.answerId;
-      if(status==='SMT') {
-        proposal.documentStatus = status;
-      }else if(status==='SMT2'){
-        proposal.documentAction = 'SMT';
+      if(status) {
+        if (status === 'SMT') {
+          proposal.documentStatus = status;
+        } else if (status === 'SMT2') {
+          proposal.documentAction = 'SMT';
+        }
       }
+      else {
+        proposal.documentStatus=answer.documentStatus;
+        proposal.documentAction=answer.documentAction;
+      }
+
       proposal.biddingSubmissionId = this.submissionId;
       proposal.biddingSubCriteriaLineId = answer.id;
       data.push(proposal);
