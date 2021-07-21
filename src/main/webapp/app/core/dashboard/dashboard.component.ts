@@ -19,6 +19,7 @@ import PieChart from './componentsChart/pieChart.vue';
 import Accordion from './components/accordion.vue';
 import kpiAdmin from './components/kpi-admin.vue';
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
+import draggable from 'vuedraggable';
 
 const baseApiVendor ='api/c-vendors';
 const baseApiTopVendor ='api/pa-dashboards/topVendorPurchase';
@@ -28,10 +29,11 @@ const baseApiEvaluation ='api/m-vendor-evaluations';
 @Component({
   components: {
     WatchList,circularColorBar,liveData,lineexample,lineupdate,echart,echartpie,kpiAdmin,
-    GridLayout, GridItem, Accordion, LineChart, BarChart, PieChart 
+    GridLayout, GridItem, Accordion, LineChart, BarChart, PieChart, draggable
   }
 })
 export default class DashBoard extends  Mixins(AccessLevelMixin) {
+  
 
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
@@ -59,7 +61,6 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
   }
 
   created() {
-
     this.retrievePO();
     this.dashboardService = new DashboardService(this);
     this.debouncedRefresh = debounce(this.refresh, 5000);
@@ -70,9 +71,14 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
     }
   }
 
-
   data() {
     return {
+      dragOptions:{
+        animation: 200,
+        group: "description",
+        disabled: false,
+        ghostClass: 'ghost'
+      },
       tableData: [{
         date: '2016-05-03',
         name: 'Tom',

@@ -1,5 +1,5 @@
 <template>
-    <canvas id="line-chart"></canvas>
+    <canvas :id="id"></canvas>
 </template>
 
 <script>
@@ -7,6 +7,10 @@ import Chart from 'chart.js';
 
 export default {
   name: 'LineChart',
+  props: {
+    id: String,
+    title: String
+  },
   data(){
     return {
       chartData: {
@@ -61,7 +65,7 @@ export default {
           },
           title: {
             display: true,
-            text: 'Total Product Purchase',
+            text: this.title,
             fontSize: 20,
             padding: 15
           },
@@ -95,7 +99,7 @@ export default {
     }
   },
   mounted(){
-    const ctx = document.getElementById('line-chart');
+    const ctx = document.getElementById(this.id);
     new Chart(ctx, this.chartData);
   }
 }
