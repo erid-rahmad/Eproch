@@ -1194,6 +1194,12 @@ entity MPreqRegistDocument {
 	active Boolean
 }
 
+entity MPreqRegistEvaluation {
+	uid UUID
+	active Boolean
+	evaluation String
+}
+
 entity MAuction {
 	name String required maxlength(30)
 	description String
@@ -2390,6 +2396,10 @@ relationship ManyToOne {
 	MPreqRegistDocument{registration required} to MPrequalRegistration
 	MPreqRegistDocument{siupDocument required} to CAttachment
 	MPreqRegistDocument{spdaDocument required} to CAttachment
+
+	MPreqRegistEvaluation{adOrganization required} to ADOrganization
+	MPreqRegistEvaluation{vendor required} to CVendor
+	MPreqRegistEvaluation{prequalification required} to MPrequalificationInformation
 
 	MAuction{adOrganization required} to ADOrganization
 	MAuction{currency required} to CCurrency

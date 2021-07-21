@@ -26,16 +26,18 @@ export default class RegistDetailBuyer extends mixins(Vue2Filters.mixin, AccessL
   private currentDate = new Date();
   showDialog: boolean = false;
 
+  submit: boolean = false;
+
   private action: string = "/api/c-attachments/upload";
   private accept: string = ".jpg, .jpeg, .png, .pdf";
 
   private registeredVendors: any = [];
 
   passfail = [{
-    value: true,
+    value: 'pass',
     label: 'Pass'
   }, {
-    value: false,
+    value: 'fail',
     label: 'Fail'
   }, ];
 
@@ -64,7 +66,7 @@ export default class RegistDetailBuyer extends mixins(Vue2Filters.mixin, AccessL
       })
       .then(res => {
         this.registeredVendors= res.data.map((item)=>{
-          item.pass = true;
+          item.pass = '';
           return item;
         });
       });
@@ -115,5 +117,35 @@ export default class RegistDetailBuyer extends mixins(Vue2Filters.mixin, AccessL
 
   downloadFile(row){
     window.open(row.file.downloadUrl, '_blank');
+  }
+
+  process(){
+    let valid = true;
+    this.registeredVendors.forEach((item)=>{
+      valid = valid && !!item.pass
+    })
+    if(!valid){
+      this.$message.warning("Evaluasikan seluruh vendor sebelum submit.");
+    } else {
+      this.submit = true;
+      let data = [];
+      
+      this.registeredVendors.forEach((item)=>{
+        data.push({
+          adOrganizationId: item.adOrganizationId,
+          evaluation: item.pass,
+          vendorId: item.vendorId,
+          prequalificationId: this.mainForm.id
+        });
+      })
+
+      this.commonService('/api/m-preq-regist-evaluations/submit').create(data).then((res)=>{
+        this.$message.success("Registration evaluation processed successfully.");
+      }).catch((err)=>{
+        this.$message.error("Error while processing registration evaluation.");
+      }).finally(()=>{
+        this.submit = false;
+      })
+    }
   }
 }
