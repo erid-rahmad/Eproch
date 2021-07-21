@@ -1,42 +1,5 @@
 <template>
     <div>
-         <!-- LAYOUT DRAG & DROP -- RAYMOND 
-             <grid-layout :layout.sync="layout"
-            :col-num="12"
-            :row-height="30"
-            :is-draggable="isDraggable"
-            :is-resizable="false"
-            :responsive="false"
-            :vertical-compact="true"
-            :use-css-transforms="true"
-        >
-            <grid-item v-for="itemLayout in layout"
-                        :key="itemLayout.i"
-                        :static="itemLayout.static"
-                        :x="itemLayout.x"
-                        :y="itemLayout.y"
-                        :w="itemLayout.w"
-                        :h="itemLayout.h"
-                        :i="itemLayout.i"
-            >
-                <div
-                    v-for="item in dashboardItems"
-                    :key="item.id"
-                    @drag="test(true)"
-                    @drop="test(false)"
-                    v-resize="onResizeLayout"
-                >
-                    <watch-list
-                        v-if="item.paDashboardItem.type === 'WATCHLIST' && item.paDashboardItemName == 'Financial Watchlist'"
-                        ref="widget"
-                        :id="item.paDashboardItem.adWatchListId + '-' + itemLayout.i"
-                        :name="item.paDashboardItem.adWatchListName"
-                    >
-                    </watch-list>
-                </div>
-            </grid-item>
-        </grid-layout> -->
-
         <draggable v-model="dashboardItems" 
             group="dashboard" 
             v-bind='dragOptions'
@@ -57,7 +20,6 @@
             </transition-group>
         </draggable>
 
-        
         <!--
         <div class="md-layout md-gutter">
             <div class="md-layout-item">

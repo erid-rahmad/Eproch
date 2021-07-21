@@ -5,8 +5,8 @@ import { IPaDashboardPreference } from '@/shared/model/pa-dashboard-preference.m
 import {Component, Inject, Mixins, Vue} from 'vue-property-decorator';
 import DashboardService from './dashboard.service';
 import { debounce } from 'lodash';
+import draggable from 'vuedraggable';
 
-import { GridLayout, GridItem } from 'vue-grid-layout';
 import circularColorBar from './componentsChart/circularColorBar.vue';
 import liveData from './componentsChart/liveData.vue';
 import lineexample from './componentsChart/simpleLine.vue';
@@ -19,7 +19,6 @@ import PieChart from './componentsChart/pieChart.vue';
 import Accordion from './components/accordion.vue';
 import kpiAdmin from './components/kpi-admin.vue';
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
-import draggable from 'vuedraggable';
 
 const baseApiVendor ='api/c-vendors';
 const baseApiTopVendor ='api/pa-dashboards/topVendorPurchase';
@@ -29,7 +28,7 @@ const baseApiEvaluation ='api/m-vendor-evaluations';
 @Component({
   components: {
     WatchList,circularColorBar,liveData,lineexample,lineupdate,echart,echartpie,kpiAdmin,
-    GridLayout, GridItem, Accordion, LineChart, BarChart, PieChart, draggable
+    Accordion, LineChart, BarChart, PieChart, draggable
   }
 })
 export default class DashBoard extends  Mixins(AccessLevelMixin) {
@@ -107,12 +106,7 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
         date: '2016-05-07',
         name: 'Tom',
         address: 'No. 189, Grove St, Los Angeles'
-      }],
-      layout: [
-        {"x":0,"y":0,"w":12,"h":1,"i":"0"},
-        {"x":0,"y":1,"w":6,"h":1,"i":"1"},
-        {"x":6,"y":1,"w":6,"h":1,"i":"2"}
-      ]
+      }]
     }
   }
   
