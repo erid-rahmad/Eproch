@@ -24,6 +24,9 @@
                             disabled
                         ></el-input>
                     </el-form-item>
+                    <el-form-item label="Status">
+                       {{proposalStatus}}
+                    </el-form-item>
                     <el-form-item label="Bidding No">
                         <el-input
                             v-model="mainForm.biddingNo"
@@ -316,7 +319,7 @@
                 v-if="!isVendor"
                 >
                 <template scope="{row}">
-                    <el-checkbox v-model="row.document">Checked</el-checkbox>
+                    <el-checkbox :disabled="readOnlyCheklist" v-model="row.document">Checked</el-checkbox>
                 </template>
             </el-table-column>
         </el-table>

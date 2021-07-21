@@ -1,6 +1,8 @@
 package com.bhp.opusb.web.rest;
 
+import com.bhp.opusb.service.MBiddingEvalResultService;
 import com.bhp.opusb.service.MBiddingSubmissionService;
+import com.bhp.opusb.service.dto.MBiddingDTO;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
 import com.bhp.opusb.service.dto.MBiddingSubmissionDTO;
 import com.bhp.opusb.service.dto.MBiddingSubmissionCriteria;
@@ -43,10 +45,12 @@ public class MBiddingSubmissionResource {
     private final MBiddingSubmissionService mBiddingSubmissionService;
 
     private final MBiddingSubmissionQueryService mBiddingSubmissionQueryService;
+    private final MBiddingEvalResultService mBiddingEvalResultService;
 
-    public MBiddingSubmissionResource(MBiddingSubmissionService mBiddingSubmissionService, MBiddingSubmissionQueryService mBiddingSubmissionQueryService) {
+    public MBiddingSubmissionResource(MBiddingSubmissionService mBiddingSubmissionService, MBiddingSubmissionQueryService mBiddingSubmissionQueryService, MBiddingEvalResultService mBiddingEvalResultService) {
         this.mBiddingSubmissionService = mBiddingSubmissionService;
         this.mBiddingSubmissionQueryService = mBiddingSubmissionQueryService;
+        this.mBiddingEvalResultService = mBiddingEvalResultService;
     }
 
     /**
@@ -121,6 +125,11 @@ public class MBiddingSubmissionResource {
         Page<MBiddingSubmissionDTO> page = mBiddingSubmissionQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/m-bidding-submissions/grid")
+    public ResponseEntity<List<MBiddingDTO>> grid() {
+        return ResponseEntity.ok().body(mBiddingEvalResultService.getGrid("SUBMISSION"));
     }
 
     /**

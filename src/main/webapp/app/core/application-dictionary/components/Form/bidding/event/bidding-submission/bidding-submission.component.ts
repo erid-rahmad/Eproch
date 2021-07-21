@@ -48,7 +48,6 @@ export default class BiddingSubmissionEvent extends SubmissionProps {
   submission: any = {};
 
   setReadOnly (param){
-    console.log("readonly",param)
     this.readonly=param;
   }
 
@@ -91,17 +90,14 @@ export default class BiddingSubmissionEvent extends SubmissionProps {
 
     this.formType = data.formType;
     this.schedule = data;
-
     // Get the proposal buttons based on the submission's form type.
     this.retrieveVendorScoringLines(data.biddingId, data.formType);
   }
 
   created() {
-    console.log("this schedule",this.scheduleFromGrid)
     if (this.scheduleFromGrid){
-      this.retrieveVendorScoringLines(this.scheduleFromGrid.biddingId,"S1");
+      this.retrieveVendorScoringLines(this.scheduleFromGrid.biddingId,this.scheduleFromGrid.formType);
     }
-
     const submissionId = (this.$route.query.submissionId as string);
     if (submissionId) {
 
@@ -135,7 +131,6 @@ export default class BiddingSubmissionEvent extends SubmissionProps {
   }
 
   private retrieveVendorScoringLines(biddingId: number, formType: string) {
-    console.log("biddingId formType ",biddingId,formType)
     this.commonService(baseApiVendorScoringLine)
       .retrieve({
         criteriaQuery: [
@@ -146,7 +141,6 @@ export default class BiddingSubmissionEvent extends SubmissionProps {
       })
       .then(res => {
         this.proposals = res.data;
-        console.log("res.data proposal ",res.data)
       })
   }
 

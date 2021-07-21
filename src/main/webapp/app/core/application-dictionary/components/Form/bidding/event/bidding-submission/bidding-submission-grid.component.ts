@@ -48,9 +48,6 @@ export default class BiddingSubmissionGridComponent extends mixins( AlertMixin,A
   }
 
   view(row){
-
-    console.log("this row",row)
-
     this.commonService(baseApiSchedule)
       .retrieve({
         criteriaQuery: this.updateCriteria([
@@ -60,7 +57,7 @@ export default class BiddingSubmissionGridComponent extends mixins( AlertMixin,A
       })
       .then(res => {
         res.data.forEach(item=>{
-          if(item.formType==="S1"){
+          if(item.formType===row.formType){
             this.scheduleFromGrid = item;
           }
         })
@@ -81,48 +78,30 @@ export default class BiddingSubmissionGridComponent extends mixins( AlertMixin,A
 
   public retrieveAllRecords(): void {
     this.processing = true;
-    this.commonService(baseApiUrl)
+
+    this.commonService("/api/m-bidding-submissions/grid")
       .retrieve({
-        criteriaQuery: [
-          'active.equals=true'
-        ],
         paginationQuery: {
           page: 0,
-          size: 100,
-          sort: ['id,desc']
+          size: 10000,
+          sort: ['id']
         }
       })
-      .then(res => {
-        const data:any=[]
-        res.data.forEach(item=>{
-          this.commonService(baseApiBiddingSchedule)
-            .retrieve({
-              criteriaQuery: this.updateCriteria([
-                `biddingId.equals=${item.id}`,
-                `formType.equals=S1`
-
-              ]),
-              paginationQuery: {
-                page: 0,
-                size: 1,
-                sort: ['id']
-              }
-            })
-            .then(res1 =>{
-              const data1 = { ...res1.data[0]};
-              if (data1.actualStartDate){
-                data.push(item);
-              }
-            });
-        });
-        this.gridData=data;
-      })
-      .catch(err => {
-        console.error('Failed getting the record. %O', err);
-        this.$message({
-          type: 'error',
-          message: err.detail || err.message
-        });
+      .then(async res => {
+        function compare(a, b) {
+          // Use toUpperCase() to ignore character casing
+          const bandA = a.id;
+          const bandB = b.id;
+          let comparison = 0;
+          if (bandA < bandB) {
+            comparison = 1;
+          } else if (bandA > bandB) {
+            comparison = -1;
+          }
+          return comparison;
+        }
+        await res.data.sort(compare);
+        this.gridData = res.data
       })
       .finally(() => {
         this.processing = false;

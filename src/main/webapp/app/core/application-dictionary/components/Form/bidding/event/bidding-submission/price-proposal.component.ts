@@ -53,6 +53,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
   private accountService: () => AccountService;
 
   private timerId;
+  proposalStatus='';
   private intervalId;
   private currentDate = new Date();
 
@@ -62,6 +63,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
   private formData:any={};
   private file: any = {};
   disabled:boolean=true;
+  readOnlyCheklist:boolean=false;
   attachmentFormVisible = false;
 
   private lineCache: Map<number, any> = new Map();
@@ -432,10 +434,25 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
 
           this.retrieveProposedLines(this.mainForm.id);
         }
+        // if (res.data[0].documentStatus==="SMT"){
+        //   this.disabled=true;
+        // }
 
-
-        if (res.data[0].documentStatus==="SMT"){
+        if(res.data[0].documentStatus==='SMT'){
           this.disabled=true;
+          this.proposalStatus='Vendor Submitted';
+          this.isVendor ?this.$emit('setReadOnly',true):null;
+        }
+        if(res.data[0].documentAction==='SMT'){
+          this.readOnlyCheklist=true;
+          this.proposalStatus='Buyer Submitted';
+          !this.isVendor ? this.$emit('setReadOnly',true):null;
+        }
+        if(res.data[0].documentStatus!=='SMT'){
+          this.readOnlyCheklist=true;
+          this.proposalStatus='waiting for a vendor’s response';
+          !this.isVendor ? this.$emit('setReadOnly',true):null;
+
         }
       });
   }
@@ -469,9 +486,17 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
   }
   // attachmentId=this.formData.attachmentId,
   save(status) {
-    if(status){
-      this.mainForm.documentStatus=status;
-
+    console.log("this status",status)
+    if(status) {
+      if (status === 'SMT') {
+        this.mainForm.documentStatus=status;
+      } else if (status === 'SMT2') {
+        this.mainForm.documentAction = 'SMT';
+      }
+    }
+    else {
+      this.mainForm.documentStatus=this.mainForm.documentStatus;
+      this.mainForm.documentAction=this.mainForm.documentAction;
     }
     this.$emit('update:loading', true);
     let valid = true;
@@ -481,6 +506,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
       ceilingPrice,
       proposedPrice,
                      documentStatus,
+                     documentAction,
       proposalPriceLines
     }) => ({
       id,
@@ -490,7 +516,8 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
       ceilingPrice,
       proposedPrice,
       proposalPriceLines,
-      documentStatus
+      documentStatus,
+      documentAction
     }))(this.mainForm);
 
     // Validate the header.

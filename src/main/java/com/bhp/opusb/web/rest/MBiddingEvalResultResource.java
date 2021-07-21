@@ -107,7 +107,7 @@ public class MBiddingEvalResultResource {
 
     @GetMapping("/m-bidding-eval-results/grid")
     public ResponseEntity<List<MBiddingDTO>> grid() {
-        return ResponseEntity.ok().body(mBiddingEvalResultService.getGrid());
+        return ResponseEntity.ok().body(mBiddingEvalResultService.getGrid("EVALUASI"));
     }
 
     /**

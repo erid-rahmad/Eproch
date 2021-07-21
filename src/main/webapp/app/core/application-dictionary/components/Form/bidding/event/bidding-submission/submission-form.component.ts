@@ -66,7 +66,6 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
   }
 
   onVendorChanged(vendorId: number) {
-    console.log("vendor change",vendorId)
     if (vendorId) {
       this.retrieveSubmission(vendorId);
     } else {
@@ -75,9 +74,9 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
   }
 
   created() {
-    console.log("submissionform",this.mainForm);
     if(this.scheduleFromGrid){
       this.mainForm=this.scheduleFromGrid;
+      console.log("this.main",this.mainForm)
     }
     this.timerId = setTimeout(() => {
       this.intervalId = setInterval(this.updateCurrentDate, 60000);
@@ -89,11 +88,11 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
       }
     }, (60 - this.currentDate.getSeconds()) * 1000);
 
-    // if (!this.isVendor) {
-    //   if (this.biddingScheduleId) {
-    //     this.retrieveJoinedVendors(this.biddingScheduleId);
-    //   }else { this.retrieveJoinedVendors(this.scheduleFromGrid.id)}
-    // }
+    if (!this.isVendor) {
+      if (this.scheduleFromGrid.id) {
+        this.retrieveJoinedVendors(this.scheduleFromGrid.biddingId)
+      }
+    }
   }
 
   beforeDestroy() {
@@ -150,7 +149,7 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
 
 
   submit(confirm: boolean) {
-    console.log("masuk")
+
     if (confirm) {
       this.submission.documentAction='SMT';
       this.commonService(baseApiBiddingSubmission)

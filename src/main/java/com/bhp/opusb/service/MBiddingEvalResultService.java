@@ -62,7 +62,7 @@ public class MBiddingEvalResultService {
         return mBiddingEvalResultMapper.toDto(mBiddingEvalResult);
     }
 
-    public  List<MBiddingDTO> getGrid(){
+    public  List<MBiddingDTO> getGrid(String menu){
         List<MBiddingDTO> mBiddingDTOS = mBiddingMapper.toDto(mBiddingRepository.findAll());
         List<MBiddingDTO> mBiddingDTOS_=new ArrayList<>();
         mBiddingDTOS.forEach(mBiddingDTO -> {
@@ -77,29 +77,51 @@ public class MBiddingEvalResultService {
                         x=x+1;
                     }
                     if (mBiddingScheduleDTO.getFormType().contains("S2") && mBiddingScheduleDTO.getActualStartDate()!=null){
-                        x=x+2;
+                        x=x+3;
                     }
                     if (mBiddingScheduleDTO.getFormType().contains("S3") && mBiddingScheduleDTO.getActualStartDate()!=null){
-                        x=x+3;
+                        x=x+5;
                     }
                     log.info("mBiddingScheduleDTO.getFormType() total {}",x);
                 }catch (Exception e){}
             }
-            if (x == 2){
-                mBiddingDTO.setFormType("S1");
-                mBiddingDTOS_.add(mBiddingDTO);
-            }
 
-            else if (x == 4){
-                mBiddingDTO.setFormType("S2");
-                mBiddingDTOS_.add(mBiddingDTO);
+            if (menu.contains("EVALUASI")) {
+                if (x == 2) {
+                    mBiddingDTO.setFormType("S1");
+                    mBiddingDTOS_.add(mBiddingDTO);
+                }  else if (x == 6) {
+                    mBiddingDTO.setFormType("S2");
+                    mBiddingDTOS_.add(mBiddingDTO);
+                }else if (x == 11) {
+                    mBiddingDTO.setFormType("S2");
+                    mBiddingDTOS_.add(mBiddingDTO);
+                } else if (x == 16) {
+                    mBiddingDTO.setFormType("S3");
+                    mBiddingDTOS_.add(mBiddingDTO);
+                } else {
+                }
+            }else if(menu.contains("SUBMISSION")){
+                if (x == 1) {
+                    mBiddingDTO.setFormType("S1");
+                    mBiddingDTOS_.add(mBiddingDTO);
+                } else if (x == 2) {
+                    mBiddingDTO.setFormType("S1");
+                    mBiddingDTOS_.add(mBiddingDTO);
+                }else if (x == 3) {
+                    mBiddingDTO.setFormType("S2");
+                    mBiddingDTOS_.add(mBiddingDTO);
+                }else if (x == 6) {
+                    mBiddingDTO.setFormType("S2");
+                    mBiddingDTOS_.add(mBiddingDTO);
+                } else if (x == 11) {
+                    mBiddingDTO.setFormType("S3");
+                    mBiddingDTOS_.add(mBiddingDTO);
+                } else if (x == 16) {
+                    mBiddingDTO.setFormType("S3");
+                    mBiddingDTOS_.add(mBiddingDTO);
+                }  else { }
             }
-
-            else if (x == 10){
-                mBiddingDTO.setFormType("S3");
-                mBiddingDTOS_.add(mBiddingDTO);
-            }
-            else {}
         });
         return mBiddingDTOS_;
     }
