@@ -268,6 +268,9 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
   }
 
   created() {
+
+    this.proposalStatus='';
+   this.$emit('setReadOnly',false);
     if (this.isVendor){
       this.disabled=false;
     }
