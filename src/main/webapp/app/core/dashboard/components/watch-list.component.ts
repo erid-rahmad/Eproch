@@ -41,7 +41,7 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
   dasbordItem:any={};
 
   //isVendor:boolean;
-  screenWidth: Number = window.outerWidth;
+  screenWidth: number = window.outerWidth;
   items: IAdWatchListItem[] = [];
   listColor=
   [
@@ -67,7 +67,7 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
     return /*this.items.length > 4 ? DisplayType.List : */DisplayType.Card;
   }
 
-  getMarginStyle(index, id){
+  getMarginStyle(index: number, id: string){
     index += 1;
     let maxColumn = 6;
     let defaultStyle = 'margin: 5px auto;';
@@ -85,7 +85,7 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
     return defaultStyle;
   }
 
-  getWidthClass(id){
+  getWidthClass(id: string){
     let defaultClass = 'md-large-size-16 md-medium-size-25 md-small-size-50';
     let width = document.getElementById(id).offsetWidth;
 

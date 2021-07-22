@@ -237,5 +237,9 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
       widget.refresh();
     });
   }
+
+  checkMove(e) {
+    window.console.log(e.draggedContext);
+  }
 }
 
