@@ -1,0 +1,11 @@
+id;joined;date_trx;document_no;document_action;document_status;approved;processed;date_approve;date_reject;rejected_reason;date_submit;uid;active;ad_organization_id;prequalification_id;vendor_id
+1;false;2021-07-20T23:19:50;Som;Berkshire;Tactics;false;true;2021-07-20T19:56:36;2021-07-20T19:41:25;applications Outdoors;2021-07-20T17:39:55;ee8b44ff-d472-47c1-967c-23380a956bad;false;1;1;1
+2;true;2021-07-20T11:55:43;harness Savings Account deposi;deposit Ag;Bedfordshire;false;false;2021-07-20T05:54:37;2021-07-20T08:37:21;Generic Soft Gloves;2021-07-20T20:25:02;22c738d4-16cf-41cc-a081-7f6a0bde1adf;true;2;2;2
+3;true;2021-07-21T02:00:06;Awesome payment;optical;Checking Acc;false;false;2021-07-20T18:53:21;2021-07-20T07:29:45;bus;2021-07-20T07:11:52;ed102c6c-a77e-45e9-b330-d9adc45b3327;true;3;3;3
+4;false;2021-07-20T14:41:30;Tasty Auto Loan Account;District;RSS Buckingh;false;true;2021-07-21T01:40:05;2021-07-21T01:58:43;bus Cross-platform Personal Loan Account;2021-07-20T12:12:59;2ac907ba-e2d4-4489-a467-aefe8c86d78c;false;4;4;4
+5;false;2021-07-20T21:36:28;Sausages Oregon Home Loan Acco;olive;Wooden Stree;true;false;2021-07-20T18:38:32;2021-07-21T01:03:51;Steel Accounts Technician;2021-07-20T11:28:49;f5ef3a99-4451-4c1f-92c3-4767d5bdb131;true;5;5;5
+6;false;2021-07-20T12:11:41;Synergistic;Liaison bl;Personal Loa;false;false;2021-07-20T14:43:40;2021-07-20T19:35:08;Producer Towels;2021-07-21T01:34:31;42b1a9b8-3a60-48c4-91a4-f8b84985eaea;true;6;6;6
+7;false;2021-07-20T08:39:18;Buckinghamshire Credit Card Ac;system-wor;Virtual Norw;true;false;2021-07-20T10:54:45;2021-07-20T17:36:36;Generic;2021-07-21T05:02:46;aeb6529d-6c5f-424e-a64f-d209f88dfab2;false;7;7;7
+8;true;2021-07-20T14:38:48;Guinea Franc;Buckingham;South Caroli;true;true;2021-07-20T06:47:33;2021-07-20T07:33:27;Assurance Dynamic;2021-07-21T03:32:43;63432946-03fa-4756-a43f-7586a4daf078;true;8;8;8
+9;true;2021-07-21T03:27:11;TCP;redundant ;Director Kid;true;true;2021-07-20T07:51:29;2021-07-20T13:21:52;primary Beauty recontextualize;2021-07-20T11:38:10;d1563a39-8d3f-4131-9496-2e249a857800;false;9;9;9
+10;false;2021-07-20T23:40:45;haptic Devolved Handmade Plast;monitoring;Chief Config;false;true;2021-07-20T18:01:52;2021-07-20T20:31:03;Savings Account Digitized Cambridgeshire;2021-07-20T20:15:14;2dfeda64-23f2-4228-8dc1-ee266715d017;true;10;10;10

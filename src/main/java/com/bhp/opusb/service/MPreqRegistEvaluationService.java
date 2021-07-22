@@ -1,9 +1,19 @@
 package com.bhp.opusb.service;
 
+import com.bhp.opusb.config.ApplicationProperties;
+import com.bhp.opusb.config.ApplicationProperties.Document;
+import com.bhp.opusb.domain.CDocumentType;
 import com.bhp.opusb.domain.MPreqRegistEvaluation;
+import com.bhp.opusb.domain.MPrequalificationSubmission;
+import com.bhp.opusb.repository.CDocumentTypeRepository;
 import com.bhp.opusb.repository.MPreqRegistEvaluationRepository;
+import com.bhp.opusb.repository.MPrequalificationSubmissionRepository;
 import com.bhp.opusb.service.dto.MPreqRegistEvaluationDTO;
+import com.bhp.opusb.service.dto.MPrequalificationSubmissionDTO;
 import com.bhp.opusb.service.mapper.MPreqRegistEvaluationMapper;
+import com.bhp.opusb.service.mapper.MPrequalificationSubmissionMapper;
+import com.bhp.opusb.util.DocumentUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,12 +37,24 @@ public class MPreqRegistEvaluationService {
     private final Logger log = LoggerFactory.getLogger(MPreqRegistEvaluationService.class);
 
     private final MPreqRegistEvaluationRepository mPreqRegistEvaluationRepository;
+    private final MPrequalificationSubmissionRepository mPrequalificationSubmissionRepository;
 
     private final MPreqRegistEvaluationMapper mPreqRegistEvaluationMapper;
+    private final MPrequalificationSubmissionMapper mPrequalificationSubmissionMapper;
 
-    public MPreqRegistEvaluationService(MPreqRegistEvaluationRepository mPreqRegistEvaluationRepository, MPreqRegistEvaluationMapper mPreqRegistEvaluationMapper) {
+    private final Document document;
+    private final CDocumentTypeRepository cDocumentTypeRepository;
+
+    public MPreqRegistEvaluationService(MPreqRegistEvaluationRepository mPreqRegistEvaluationRepository, ApplicationProperties applicationProperties,
+        MPreqRegistEvaluationMapper mPreqRegistEvaluationMapper, MPrequalificationSubmissionRepository mPrequalificationSubmissionRepository,
+        MPrequalificationSubmissionMapper mPrequalificationSubmissionMapper, CDocumentTypeRepository cDocumentTypeRepository) {
         this.mPreqRegistEvaluationRepository = mPreqRegistEvaluationRepository;
         this.mPreqRegistEvaluationMapper = mPreqRegistEvaluationMapper;
+        this.mPrequalificationSubmissionRepository = mPrequalificationSubmissionRepository;
+        this.mPrequalificationSubmissionMapper = mPrequalificationSubmissionMapper;
+
+        this.cDocumentTypeRepository = cDocumentTypeRepository;
+        document = applicationProperties.getDocuments().get("prequalificationSubmission");
     }
 
     /**
@@ -87,12 +109,33 @@ public class MPreqRegistEvaluationService {
     public List<MPreqRegistEvaluationDTO> processAll(@Valid List<MPreqRegistEvaluationDTO> dtos) {
         log.debug("Request to save MPreqRegistEvaluations : {}", dtos);
         for(MPreqRegistEvaluationDTO dto: dtos){
-            Optional<MPreqRegistEvaluation> existingId = mPreqRegistEvaluationRepository.findExistingId(dto.getVendorId(), dto.getPrequalificationId());
-            if(existingId.isPresent()) {
-                MPreqRegistEvaluation eval = existingId.get();
+            Optional<MPreqRegistEvaluation> existing = mPreqRegistEvaluationRepository.findExisting(dto.getVendorId(), dto.getPrequalificationId());
+            if(existing.isPresent()) {
+                MPreqRegistEvaluation eval = existing.get();
                 dto.setId(eval.getId());
                 dto.setUid(eval.getUid());
                 dto.setActive(eval.isActive());
+            }
+
+            if(dto.getEvaluation().toLowerCase().contentEquals("pass")){
+                Optional<MPrequalificationSubmission> existingSubmission =
+                    mPrequalificationSubmissionRepository.findExisting(dto.getVendorId(), dto.getPrequalificationId());
+                if(!existingSubmission.isPresent()){
+                    MPrequalificationSubmissionDTO submission = new MPrequalificationSubmissionDTO();
+
+                    String documentNo = DocumentUtil.buildDocumentNumber(document.getDocumentNumberPrefix(), mPrequalificationSubmissionRepository);
+                    if (submission.getDocumentTypeId() == null) {
+                        Optional<CDocumentType> docType = cDocumentTypeRepository.findFirstByName(document.getDocumentType());
+                        if(docType.isPresent()) submission.setDocumentTypeId(docType.get().getId());
+                    }
+                    submission.setDocumentNo(documentNo);
+                    submission.setAdOrganizationId(dto.getAdOrganizationId());
+                    submission.setVendorId(dto.getVendorId());
+                    submission.setPrequalificationId(dto.getPrequalificationId());
+
+                    MPrequalificationSubmission entity = mPrequalificationSubmissionMapper.toEntity(submission);
+                    mPrequalificationSubmissionRepository.save(entity);
+                }
             }
         }
         List<MPreqRegistEvaluation> entities = mPreqRegistEvaluationMapper.toEntity(dtos);

@@ -2,6 +2,7 @@ package com.bhp.opusb.service.dto;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -23,11 +24,29 @@ public class CPrequalMethodCriteriaDTO extends AbstractAuditingDTO implements Se
     private String biddingCriteriaName;
 
     private Long adOrganizationId;
+    private String adOrganizationName;
 
     private Long prequalMethodLineId;
+    private List<CPrequalMethodSubCriteriaDTO> prequalMethodSubCriteriaDTOs ;
     
     public Long getId() {
         return id;
+    }
+
+    public List<CPrequalMethodSubCriteriaDTO> getPrequalMethodSubCriteriaDTOs() {
+        return prequalMethodSubCriteriaDTOs;
+    }
+
+    public void setPrequalMethodSubCriteriaDTOs(List<CPrequalMethodSubCriteriaDTO> prequalMethodSubCriteriaDTOs) {
+        this.prequalMethodSubCriteriaDTOs = prequalMethodSubCriteriaDTOs;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
     }
 
     public String getBiddingCriteriaName() {

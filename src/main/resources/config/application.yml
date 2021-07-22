@@ -245,3 +245,6 @@ application:
     vendorEvaluation:
       documentType: 'Vendor Evaluation'
       documentNumberPrefix: 'VE-'
+    prequalificationSubmission:
+      documentType: 'Prequalification Submission'
+      documentNumberPrefix: 'PS-'

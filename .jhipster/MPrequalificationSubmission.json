@@ -1,0 +1,116 @@
+{
+    "name": "MPrequalificationSubmission",
+    "fields": [
+        {
+            "fieldName": "joined",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "dateTrx",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "documentNo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "30"
+        },
+        {
+            "fieldName": "documentAction",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "documentStatus",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "12"
+        },
+        {
+            "fieldName": "approved",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "processed",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "dateApprove",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "dateReject",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "rejectedReason",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "dateSubmit",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mPrequalificationSubmission",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mPrequalificationInformation",
+            "otherEntityRelationshipName": "mPrequalificationSubmission",
+            "relationshipValidateRules": "required",
+            "relationshipName": "prequalification",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cDocumentType",
+            "otherEntityRelationshipName": "mPrequalificationSubmission",
+            "relationshipName": "documentType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "mPrequalificationSubmission",
+            "relationshipValidateRules": "required",
+            "relationshipName": "vendor",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210721050800",
+    "entityTableName": "m_prequalification_submission",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}
