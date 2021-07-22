@@ -81,7 +81,10 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
   }
 
   created() {
+    this.disabled=false;
     this.proposalStatus='Draft';
+    this.readOnlyCheklist=false;
+    this.$emit('setReadOnly',false);
        if (this.isVendor) {
       this.validationSchema = {
         answer: {

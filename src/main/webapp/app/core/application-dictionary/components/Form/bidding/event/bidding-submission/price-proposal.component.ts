@@ -268,7 +268,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
 
   created() {
     this.proposalStatus='';
-   this.$emit('setReadOnly',false);
+    this.$emit('setReadOnly',false);
     if (this.isVendor){
       this.disabled=false;
     }
@@ -492,7 +492,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
       }
     }
     else {
-      console.log("masuk sana")
+
       this.mainForm.documentStatus=this.mainForm.documentStatus;
       this.mainForm.documentAction=this.mainForm.documentAction;
     }
