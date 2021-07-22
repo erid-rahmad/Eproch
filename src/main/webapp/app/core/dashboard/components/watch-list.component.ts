@@ -67,26 +67,8 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
     return /*this.items.length > 4 ? DisplayType.List : */DisplayType.Card;
   }
 
-  getMarginStyle(index: number, id: string){
-    index += 1;
-    let maxColumn = 6;
-    let defaultStyle = 'margin: 5px auto;';
-    let width = document.getElementById(id).offsetWidth;
-
-    if(width < 600) maxColumn = 1; // x-small
-    else if(width <= 976) maxColumn = 2; // small
-    else if(width <= 1296) maxColumn = 4; // medium
-    else maxColumn = 6; // large
-
-    if(index > maxColumn){
-      defaultStyle = 'margin: 5px 0px;';
-    }
-
-    return defaultStyle;
-  }
-
   getWidthClass(id: string){
-    let defaultClass = 'md-large-size-16 md-medium-size-25 md-small-size-50';
+    let defaultClass = 'md-large-size-20 md-medium-size-25 md-small-size-50';
     let width = document.getElementById(id).offsetWidth;
 
     if((this.screenWidth / 2) > width){
@@ -127,7 +109,7 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
 
   async onCardClicked(card: IAdWatchListItem) {
     card.actionUrl = await this.commonService('/api/ad-menus/full-path').find(card.adMenu.id);
-    console.log(card.actionUrl + ' \n ' + JSON.stringify(card.adMenu));
+    console.log(card.actionUrl);
     if (card.actionUrl) {
       const timestamp = Date.now();
       windowStore.setWatchlistQuery(card.filterQuery)
@@ -257,11 +239,24 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
   private retrieveWatchListCounter(item: IAdWatchListItem, index?: number) {
     this.commonService(item.restApiEndpoint)
       .count([
-        item.filterQuery.split('&'),
+        item.filterQuery,
         accountStore.userDetails.vendor ? `vendorId.equals=${accountStore.userDetails.cVendorId}` : null
       ])
       .then(count => {
         this.$set(this.items[index], 'count', count);
       });
+      
+
+      /* KONDISI BARU
+      .retrieve({
+        criteriaQuery: [
+          item.filterQuery,
+          accountStore.userDetails.vendor ? `vendorId.equals=${accountStore.userDetails.cVendorId}` : null
+        ],
+      })
+      .then(res => {
+        this.$set(this.items[index], 'count', res.data.length);
+      });
+    */
   }
 }

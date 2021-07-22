@@ -27,20 +27,22 @@
                 <div :id="'LayoutItem-' + id + '-' + index" :class="'md-layout-item ' + getWidthClass('Accordion-' + id)"  
                     v-for="(item, index) in items"
                         :key="item.id"
-                    :style="getMarginStyle(index, 'Accordion-' + id)"
+                    style="margin: 5px 0 !important;"
                     @click="onCardClicked(item);"
                 >
                     <md-card md-with-hover class="bg-pattern" style="width: 100%; border-radius: 6px; padding: 10px 12px;">
                         <md-card-header style="padding: 0; margin: 0;">
                             <md-card-header-text align="left">
                                 <div class="wl-caption">{{ item.name }}</div>
-                                <div class="wl-title">{{ item.count ? item.count : '0' }}</div>
+                                <div class="wl-icon-wrapper" :style="'background:'+ item.accentColor +' !important;'">
+                                    <div class="wl-title" style="font-size: 14px !important; text-align: center; color: #FFF;">{{ item.count ? item.count : '0' }}</div>
+                                </div>
                             </md-card-header-text>
-                            <!--<md-card-media style="height: auto; flex: 0.2">
+                            <!-- <md-card-media style="height: auto; flex: 0.2; margin-left: 5px !important;">
                                 <div class="wl-icon-wrapper" :style="'background:'+ item.accentColor +' !important;'">
                                     <svg-icon :name="item.icon" class="wl-icons"></svg-icon>
                                 </div>
-                            </md-card-media>  -->
+                            </md-card-media> -->
                         </md-card-header>
                     </md-card>
                 </div>
@@ -252,7 +254,6 @@
         color: #FFF;
     }
 
-
     .wl-icon-wrapper {
         padding: 6px;
         width: 32px;
@@ -314,7 +315,7 @@
         color: #8898aa;
         font-weight: 600;
         font-size: 14px;
-        text-transform: uppercase;
+        /*text-transform: uppercase;*/
         margin-bottom: 4px;
     }
 
