@@ -1,6 +1,6 @@
 
 <template>
-    <accordion :id="'Accordion-' + name.replaceAll(' ', '-')" :title="name" v-bind:expanded="true" animation="bottomToTop" style="margin-bottom: 20px;">
+    <accordion :id="'Accordion-' + id" :title="name" v-bind:expanded="true" animation="bottomToTop" style="margin-bottom: 20px;">
         <div style="padding: 5px 15px 10px;">
             <!-- LIST 
             <div class="md-layout md-gutter" style="margin: 0px 1px;">
@@ -24,10 +24,10 @@
 
             <!-- CARD NO BG COLOR -->
             <div class=" md-layout md-gutter" style="margin: 10px 1px;">
-                <div class="md-layout-item md-large-size-16 md-medium-size-25 md-small-size-50"  
+                <div :id="'LayoutItem-' + id + '-' + index" :class="'md-layout-item ' + getWidthClass('Accordion-' + id)"  
                     v-for="(item, index) in items"
                         :key="item.id"
-                    :style="getMarginStyle(index)"
+                    :style="getMarginStyle(index, 'Accordion-' + id)"
                     @click="onCardClicked(item);"
                 >
                     <md-card md-with-hover class="bg-pattern" style="width: 100%; border-radius: 6px; padding: 10px 12px;">

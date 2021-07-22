@@ -14,5 +14,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MPreqRegistEvaluationRepository extends JpaRepository<MPreqRegistEvaluation, Long>, JpaSpecificationExecutor<MPreqRegistEvaluation> {
     @Query("select mpre from MPreqRegistEvaluation mpre where mpre.vendor.id = ?1 and mpre.prequalification.id = ?2")
-    Optional<MPreqRegistEvaluation> findExistingId(Long vendorId, Long prequalificationId);
+    Optional<MPreqRegistEvaluation> findExisting(Long vendorId, Long prequalificationId);
 }

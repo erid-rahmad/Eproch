@@ -20,7 +20,7 @@ enum DisplayType {
 
 const WatchListProps = Vue.extend({
   props: {
-    id: Number,
+    id: String,
     name: String,
     title: String
   }
@@ -67,14 +67,15 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
     return /*this.items.length > 4 ? DisplayType.List : */DisplayType.Card;
   }
 
-  getMarginStyle(index){
+  getMarginStyle(index, id){
     index += 1;
     let maxColumn = 6;
-    let defaultStyle = 'margin: 5px auto;'
+    let defaultStyle = 'margin: 5px auto;';
+    let width = document.getElementById(id).offsetWidth;
 
-    //if(this.screenWidth < 600) maxColumn = 1; // x-small
-    if(this.screenWidth <= 976) maxColumn = 2; // small
-    else if(this.screenWidth <= 1296) maxColumn = 4; // medium
+    if(width < 600) maxColumn = 1; // x-small
+    else if(width <= 976) maxColumn = 2; // small
+    else if(width <= 1296) maxColumn = 4; // medium
     else maxColumn = 6; // large
 
     if(index > maxColumn){
@@ -82,6 +83,17 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
     }
 
     return defaultStyle;
+  }
+
+  getWidthClass(id){
+    let defaultClass = 'md-large-size-16 md-medium-size-25 md-small-size-50';
+    let width = document.getElementById(id).offsetWidth;
+
+    if((this.screenWidth / 2) > width){
+      defaultClass = 'md-large-size-33 md-medium-size-50 md-small-size-100';
+    }
+
+    return defaultClass;
   }
 
   mounted(){
@@ -105,7 +117,7 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
 
   async created() {
 
-    console.log("this vendor", accountStore.userDetails.vendor)
+    console.log("this vendor", accountStore.userDetails.isVendor)
 
     /*this.retrieveVendor();
     this.retrieveVendorConfirmation();

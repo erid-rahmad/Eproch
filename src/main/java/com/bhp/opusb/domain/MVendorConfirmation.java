@@ -58,21 +58,21 @@ public class MVendorConfirmation extends AbstractAuditingEntity implements Seria
     @JsonIgnoreProperties("mVendorConfirmations")
     private AdUser pic;
 
-    @Formula("(select mvcl.status from m_vendor_confirmation_line mvcl where mvcl.vendor_confirmation_id = id)")
+    @Formula("(select mvcl.status from m_vendor_confirmation_line mvcl where mvcl.vendor_confirmation_id = id  limit 1)")
     private String status;
 
     @Formula("(select coalesce(max(mvcc.id),0) from m_vendor_confirmation_contract mvcc where "
     + "mvcc.publish_date is not null and "
-    + "mvcc.vendor_confirmation_line_id = (select mvcl.id from m_vendor_confirmation_line mvcl where mvcl.vendor_confirmation_id = id))")
+    + "mvcc.vendor_confirmation_line_id in (select mvcl.id from m_vendor_confirmation_line mvcl where mvcl.vendor_confirmation_id = id))")
     private Long latestContractId;
 
     @Formula("(select count(mvcl.id) from m_vendor_confirmation_line mvcl where mvcl.vendor_confirmation_id = id)")
     private Integer selectedWinners;
 
     @Formula("(select sum(mbnp.negotiation_price) from m_bid_nego_price mbnp where mbnp.negotiation_line_id in ("
-    +"select mbnc.negotiation_line_id from m_bidding_negotiation_chat mbnc where mbnc.bidding_id = ("
-    +"select mbs.bidding_id from m_bidding_submission mbs where mbs.id = ("
-    +"select mber.bidding_submission_id from m_bidding_eval_result mber where mber.id = ("
+    +"select mbnc.negotiation_line_id from m_bidding_negotiation_chat mbnc where mbnc.bidding_id in ("
+    +"select mbs.bidding_id from m_bidding_submission mbs where mbs.id in ("
+    +"select mber.bidding_submission_id from m_bidding_eval_result mber where mber.id in ("
     +"select mvcl.bidding_eval_result_id from m_vendor_confirmation_line mvcl where mvcl.vendor_confirmation_id = id)) and mbnc.vendor_id in ("
     +"select mvcl.vendor_id from m_vendor_confirmation_line mvcl where mvcl.vendor_confirmation_id = id))))")
     private BigDecimal negoAmount;

@@ -1,5 +1,5 @@
 <template>
-    <canvas id="bar-chart"></canvas>
+    <canvas :id="id"></canvas>
 </template>
 
 <script>
@@ -7,6 +7,10 @@ import Chart from 'chart.js';
 
 export default {
   name: 'BarChart',
+  props: {
+    id: String,
+    title: String
+  },
   data(){
     return {
       chartData: {
@@ -61,7 +65,7 @@ export default {
           },
           title: {
             display: true,
-            text: 'Total Product Purchase',
+            text: this.title,
             fontSize: 20,
             padding: 5
           },
@@ -96,7 +100,7 @@ export default {
     }
   },
   mounted(){
-    const ctx = document.getElementById('bar-chart');
+    const ctx = document.getElementById(this.id);
     new Chart(ctx, this.chartData);
   }
 }

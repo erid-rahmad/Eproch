@@ -5,8 +5,8 @@ import { IPaDashboardPreference } from '@/shared/model/pa-dashboard-preference.m
 import {Component, Inject, Mixins, Vue} from 'vue-property-decorator';
 import DashboardService from './dashboard.service';
 import { debounce } from 'lodash';
+import draggable from 'vuedraggable';
 
-import { GridLayout, GridItem } from 'vue-grid-layout';
 import circularColorBar from './componentsChart/circularColorBar.vue';
 import liveData from './componentsChart/liveData.vue';
 import lineexample from './componentsChart/simpleLine.vue';
@@ -28,10 +28,11 @@ const baseApiEvaluation ='api/m-vendor-evaluations';
 @Component({
   components: {
     WatchList,circularColorBar,liveData,lineexample,lineupdate,echart,echartpie,kpiAdmin,
-    GridLayout, GridItem, Accordion, LineChart, BarChart, PieChart 
+    Accordion, LineChart, BarChart, PieChart, draggable
   }
 })
 export default class DashBoard extends  Mixins(AccessLevelMixin) {
+  
 
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
@@ -59,7 +60,6 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
   }
 
   created() {
-
     this.retrievePO();
     this.dashboardService = new DashboardService(this);
     this.debouncedRefresh = debounce(this.refresh, 5000);
@@ -70,9 +70,14 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
     }
   }
 
-
   data() {
     return {
+      dragOptions:{
+        animation: 200,
+        group: "description",
+        disabled: false,
+        ghostClass: 'ghost'
+      },
       tableData: [{
         date: '2016-05-03',
         name: 'Tom',
@@ -101,12 +106,7 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
         date: '2016-05-07',
         name: 'Tom',
         address: 'No. 189, Grove St, Los Angeles'
-      }],
-      layout: [
-        {"x":0,"y":0,"w":12,"h":1,"i":"0"},
-        {"x":0,"y":1,"w":6,"h":1,"i":"1"},
-        {"x":6,"y":1,"w":6,"h":1,"i":"2"}
-      ]
+      }]
     }
   }
   
