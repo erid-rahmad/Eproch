@@ -138,16 +138,16 @@
             </template>
           </el-table-column>
 
-          <el-table-column
-            v-if="isVendor"
-            label="Submission Status"
-            min-width="170"
-            sortable
-          >
-            <template slot-scope="{ row }">
-              {{ printSubmissionStatus(row.documentStatus) }}
-            </template>
-          </el-table-column>
+<!--          <el-table-column-->
+<!--            v-if="isVendor"-->
+<!--            label="Submission Status"-->
+<!--            min-width="170"-->
+<!--            sortable-->
+<!--          >-->
+<!--            <template slot-scope="{ row }">-->
+<!--              {{ printSubmissionStatus(row.documentStatus) }}-->
+<!--            </template>-->
+<!--          </el-table-column>-->
 
           <el-table-column
             v-if="!isVendor"

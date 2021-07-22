@@ -260,7 +260,6 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
     const line = {...this.mainForm.proposalPriceLines[itemIndex]};
     line.proposedPrice = subItem.totalAmount;
     line.subItem = subItem;
-
     this.$set(this.mainForm.proposalPriceLines, itemIndex, line);
     this.onProposedPriceChange(line, itemIndex, line.proposedPrice);
     this.savingSubitem = false;
@@ -268,7 +267,6 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
   }
 
   created() {
-
     this.proposalStatus='';
    this.$emit('setReadOnly',false);
     if (this.isVendor){
@@ -296,7 +294,6 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
       });
 
     Promise.allSettled([
-
       this.retrieveSubmission(this.submissionId),
       this.retrieveBiddingLines(this.schedule.biddingId)
     ])
@@ -432,14 +429,11 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
         ]
       })
       .then(res => {
+        console.log("this res",res.data)
         if (res.data.length) {
           this.mainForm = { ...this.mainForm, ...res.data[0] };
-
-          this.retrieveProposedLines(this.mainForm.id);
+          this.retrieveProposedLines(res.data[0].id);
         }
-        // if (res.data[0].documentStatus==="SMT"){
-        //   this.disabled=true;
-        // }
 
         if(res.data[0].documentStatus==='SMT'){
           this.disabled=true;
@@ -455,7 +449,6 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
           this.readOnlyCheklist=true;
           this.proposalStatus='waiting for a vendor’s response';
           !this.isVendor ? this.$emit('setReadOnly',true):null;
-
         }
       });
   }
@@ -474,9 +467,8 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
       })
       .then(res => {
 
-
         (res.data as any[]).forEach(line => {
-
+          console.log("res.data",res.data)
           const item = this.lineCache.get(line.biddingLineId);
           item.document=line.document;
           item.id=line.id;
@@ -491,13 +483,16 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
   save(status) {
     console.log("this status",status)
     if(status) {
+      console.log("masuk sini")
       if (status === 'SMT') {
         this.mainForm.documentStatus=status;
-      } else if (status === 'SMT2') {
+      }
+      if (status === 'SMT2') {
         this.mainForm.documentAction = 'SMT';
       }
     }
     else {
+      console.log("masuk sana")
       this.mainForm.documentStatus=this.mainForm.documentStatus;
       this.mainForm.documentAction=this.mainForm.documentAction;
     }
@@ -531,12 +526,13 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
       }
 
       if (valid) {
-
+        console.log("this data",data)
         this.commonService(`${baseApiProposal}/form`)
           .create(data)
           .then(_res => {
             this.$message.success('Price proposal has been saved successfully');
             this.retrieveProposal(this.submissionId);
+
           })
           .catch(err => {
             console.error('Failed to save the proposal. %O', err);

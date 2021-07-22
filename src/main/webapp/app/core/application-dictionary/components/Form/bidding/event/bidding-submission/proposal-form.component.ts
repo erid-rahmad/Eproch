@@ -192,6 +192,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
         }
       })
       .then(res => {
+
         for (const proposal of res.data) {
           if(proposal.documentStatus==='SMT'){
             this.disabled=true;

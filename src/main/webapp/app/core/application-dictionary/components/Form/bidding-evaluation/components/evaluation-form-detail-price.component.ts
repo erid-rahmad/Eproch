@@ -25,9 +25,6 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
 
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService
-
-
-
   menuPrice:boolean=false;
   isLoading:boolean=false;
   readOnly: Boolean=false;
@@ -133,7 +130,6 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
 
 
   save(){
-
     const data={
       biddingEvalResultId:this.evaluationFormProp.biddingEvalResultId,
       evaluationMethodLineId:this.evaluationFormProp.evaluationMethodLineId,
