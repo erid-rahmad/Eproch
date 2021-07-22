@@ -36,25 +36,21 @@
             label="Bidding No."
             min-width="100"
             prop="biddingNo"
-            sortable
           ></el-table-column>
           <el-table-column
             label="Title"
             min-width="200"
             prop="biddingTitle"
-            sortable
           ></el-table-column>
           <el-table-column
             label="Bidding Type"
             min-width="100"
             prop="biddingType"
-            sortable
           ></el-table-column>
           <el-table-column
             label="Event Type"
             min-width="100"
             prop="eventType"
-            sortable
           ></el-table-column>
           <el-table-column
             label="Bidding Schedule"
@@ -74,14 +70,12 @@
           <el-table-column
             label="Bidding Status"
             min-width="100"
-            sortable
           >
             <template slot-scope="{ row }">{{formatBiddingStatus(row.biddingStatus)}}</template>
           </el-table-column>
           <el-table-column
             label="Evaluation Status"
             min-width="100"
-            sortable
           >
             <template slot-scope="{ row }">{{formatEvalStatus(row.evaluationStatus)}}</template>
           </el-table-column>
