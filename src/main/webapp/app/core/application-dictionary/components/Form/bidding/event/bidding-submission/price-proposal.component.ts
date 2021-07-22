@@ -436,16 +436,19 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
         }
 
         if(res.data[0].documentStatus==='SMT'){
+
           this.disabled=true;
           this.proposalStatus='Vendor Submitted';
           this.isVendor ?this.$emit('setReadOnly',true):null;
         }
         if(res.data[0].documentAction==='SMT'){
+
           this.readOnlyCheklist=true;
           this.proposalStatus='Buyer Submitted';
           !this.isVendor ? this.$emit('setReadOnly',true):null;
         }
         if(res.data[0].documentStatus!=='SMT'){
+
           this.readOnlyCheklist=true;
           this.proposalStatus='waiting for a vendor’s response';
           !this.isVendor ? this.$emit('setReadOnly',true):null;
@@ -479,22 +482,15 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
         })
       })
   }
-  // attachmentId=this.formData.attachmentId,
   save(status) {
-    console.log("this status",status)
     if(status) {
-      console.log("masuk sini")
       if (status === 'SMT') {
-        this.mainForm.documentStatus=status;
+        this.isVendor ? this.mainForm.documentStatus="SMT":null;
+        this.isVendor ? this.mainForm.documentAction="DRF":null;
       }
       if (status === 'SMT2') {
-        this.mainForm.documentAction = 'SMT';
+        !this.isVendor ? this.mainForm.documentAction = 'SMT':null;
       }
-    }
-    else {
-
-      this.mainForm.documentStatus=this.mainForm.documentStatus;
-      this.mainForm.documentAction=this.mainForm.documentAction;
     }
     this.$emit('update:loading', true);
     let valid = true;
@@ -503,9 +499,9 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
       adOrganizationId,
       ceilingPrice,
       proposedPrice,
-                     documentStatus,
-                     documentAction,
-      proposalPriceLines
+      proposalPriceLines,
+      documentStatus,
+      documentAction,
     }) => ({
       id,
       adOrganizationId,
@@ -514,8 +510,8 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
       ceilingPrice,
       proposedPrice,
       proposalPriceLines,
-      documentStatus,
-      documentAction
+      documentStatus:this.mainForm.documentStatus,
+      documentAction:this.mainForm.documentAction,
     }))(this.mainForm);
 
     // Validate the header.
@@ -526,7 +522,6 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
       }
 
       if (valid) {
-        console.log("this data",data)
         this.commonService(`${baseApiProposal}/form`)
           .create(data)
           .then(_res => {

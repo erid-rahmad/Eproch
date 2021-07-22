@@ -12,11 +12,12 @@
     >
         <el-row :gutter="gutterSize">
             <el-col
-                :lg="12"
+                :lg="8"
                 :md="16"
                 :sm="20"
                 :xl="8"
                 :xs="24"
+
             >
                 <el-form-item label="Contract No.">
                     <el-input
@@ -70,16 +71,94 @@
                         table-name="c_cost_center"
                     ></ad-input-lookup>
                 </el-form-item>
+                <el-form-item
+                    label="Document Status"
+                >
+
+                    {{ printStatus(contract.documentStatus) }}
+                </el-form-item>
 
             </el-col>
             <el-col
-                :lg="12"
+                :lg="8"
                 :md="16"
                 :sm="20"
                 :xl="8"
                 :xs="24">
                 <el-form-item
                     label="Vendor Name"
+                    prop="vendorId"
+                >
+                    <ad-input-lookup
+                        v-model="contract.vendorId"
+                        lookup-by-field="name"
+                        placeholder="Select Vendor"
+                        table-name="c_vendor"
+                    ></ad-input-lookup>
+                </el-form-item>
+                <el-form-item
+                    label="Contract Date"
+                    prop="startDate"
+                >
+                    <el-date-picker
+                        v-model="contract.startDate"
+                        :format="dateDisplayFormat"
+                        :value-format="dateValueFormat"
+                        clearable
+                        type="date"
+                    ></el-date-picker>
+                </el-form-item>
+                <el-form-item label="Hierarchical Type">
+
+                </el-form-item>
+                <el-form-item label="Contract Amount">
+                    <el-input
+                        v-model="contract.price"
+                        v-inputmask="{ alias: 'currency' }"
+                        clearable
+                        disabled
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="Proposed Contract Amount">
+                    <el-input
+                        v-model="contract.price"
+                        v-inputmask="{ alias: 'currency' }"
+                        clearable
+                        disabled
+                    ></el-input>
+                </el-form-item>
+
+                <!--                <el-form-item label="Evaluation Type">-->
+                <!--                    <ad-input-lookup-->
+                <!--                        v-model="contract.vendorEvaluationId"-->
+                <!--                        placeholder="Select Evaluation Type"-->
+                <!--                        table-name="c_vendor_evaluation"-->
+                <!--                    ></ad-input-lookup>-->
+                <!--                </el-form-item>-->
+                <!--                <el-form-item label="Evaluation Period">-->
+                <!--                    <ad-input-list-->
+                <!--                        v-model="contract.evaluationPeriod"-->
+                <!--                        placeholder="Select Evaluation Period"-->
+                <!--                        reference-key="vendorEvaluationPeriod"-->
+                <!--                    ></ad-input-list>-->
+                <!--                </el-form-item>-->
+
+                <el-form-item
+                    label="Proses Status"
+                >
+
+                    {{ printStatus(contract.documentStatus) }}
+                </el-form-item>
+
+            </el-col>
+            <el-col
+                :lg="8"
+                :md="16"
+                :sm="20"
+                :xl="8"
+                :xs="24">
+                <el-form-item
+                    label="Term Type"
                     prop="vendorId"
                 >
                     <ad-input-lookup
@@ -110,37 +189,62 @@
                         type="date"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="Evaluation Type">
-                    <ad-input-lookup
-                        v-model="contract.vendorEvaluationId"
-                        placeholder="Select Evaluation Type"
-                        table-name="c_vendor_evaluation"
-                    ></ad-input-lookup>
-                </el-form-item>
-                <el-form-item label="Evaluation Period">
-                    <ad-input-list
-                        v-model="contract.evaluationPeriod"
-                        placeholder="Select Evaluation Period"
-                        reference-key="vendorEvaluationPeriod"
-                    ></ad-input-list>
-                </el-form-item>
-                <el-form-item label="Total Price">
+                <el-form-item label="Email Notification">
                     <el-input
-                        v-model="contract.price"
+                        v-model="contract.email"
                         clearable
-                        disabled
-                        v-inputmask="{ alias: 'currency' }"
+                        placeholder="first Send"
+                    ></el-input>
+                    <el-input
+                        v-model="contract.email"
+                        clearable
+                        placeholder="Remained Send Every"
                     ></el-input>
                 </el-form-item>
-                <el-form-item
-                    label="Document Status"
-                >
+                <el-form-item label="Expired Email Recipient">
+                    <el-input
+                        v-model="contract.email"
+                        clearable
 
-                    {{printStatus(contract.documentStatus)}}
+                    ></el-input>
                 </el-form-item>
+                <el-form-item label="Notice Period in days">
+                    <el-input
+                        v-model="contract.email"
+                        clearable
+
+                    ></el-input>
+                </el-form-item>
+<!--                <el-form-item label="Evaluation Type">-->
+<!--                    <ad-input-lookup-->
+<!--                        v-model="contract.vendorEvaluationId"-->
+<!--                        placeholder="Select Evaluation Type"-->
+<!--                        table-name="c_vendor_evaluation"-->
+<!--                    ></ad-input-lookup>-->
+<!--                </el-form-item>-->
+<!--                <el-form-item label="Evaluation Period">-->
+<!--                    <ad-input-list-->
+<!--                        v-model="contract.evaluationPeriod"-->
+<!--                        placeholder="Select Evaluation Period"-->
+<!--                        reference-key="vendorEvaluationPeriod"-->
+<!--                    ></ad-input-list>-->
+<!--                </el-form-item>-->
+<!--                <el-form-item label="Total Price">-->
+<!--                    <el-input-->
+<!--                        v-model="contract.price"-->
+<!--                        v-inputmask="{ alias: 'currency' }"-->
+<!--                        clearable-->
+<!--                        disabled-->
+<!--                    ></el-input>-->
+<!--                </el-form-item>-->
+<!--                <el-form-item-->
+<!--                    label="Document Status"-->
+<!--                >-->
+
+<!--                    {{ printStatus(contract.documentStatus) }}-->
+<!--                </el-form-item>-->
             </el-col>
-            <el-col
-            >
+            <el-col>
                 <el-divider content-position="left">
                     <h4>Requirement</h4>
                 </el-divider>
@@ -168,10 +272,10 @@
                                 ></ad-input-lookup>
                             </template>
                         </el-table-column>
-<!--                        <el-table-column label="Sub Product" min-width="80" size="mini">-->
-<!--                            <template slot-scope="{row}">-->
-<!--                            </template>-->
-<!--                        </el-table-column>-->
+                        <!--                        <el-table-column label="Sub Product" min-width="80" size="mini">-->
+                        <!--                            <template slot-scope="{row}">-->
+                        <!--                            </template>-->
+                        <!--                        </el-table-column>-->
                         <el-table-column label="Quantity" min-width="80" size="mini">
                             <template slot-scope="{row}">
                                 <template>
@@ -218,10 +322,10 @@
                         <el-table-column label="Total Ceiling Price" min-width="120" size="mini">
                             <template slot-scope="{row}">
                                 <el-input
-                                    disabled
                                     v-model="row.totalCeilingPrice"
                                     v-inputmask="{ alias: 'currency' }"
                                     clearable
+                                    disabled
                                     size="mini"
                                 ></el-input>
                             </template>

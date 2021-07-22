@@ -48,6 +48,7 @@ export default class BiddingSubmissionEvent extends SubmissionProps {
   submission: any = {};
 
   setReadOnly (param){
+    console.log("this param",param)
     this.readonly=param;
   }
 
@@ -145,7 +146,7 @@ export default class BiddingSubmissionEvent extends SubmissionProps {
   }
 
   saveProposal() {
-    (<any>this.$refs.proposalForm).save();
+    (<any>this.$refs.proposalForm).save(null);
   }
 
   submitSaveProposal() {

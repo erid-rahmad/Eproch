@@ -14,10 +14,10 @@ public class MProposalPriceDTO extends AbstractAuditingDTO {
     private Long id;
 
     @Size(max = 10)
-    private String documentAction;
+    private String documentAction="DRF";
 
     @Size(max = 12)
-    private String documentStatus;
+    private String documentStatus="DRF";
 
     @NotNull
     private BigDecimal proposedPrice;

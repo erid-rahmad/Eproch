@@ -54,6 +54,25 @@ export default class ContractDetail extends Mixins(AccessLevelMixin, ContractDet
       id: 3,
       name: 'Vendor Evaluations',
       value: 'EVA',
+    },{
+      id: 4,
+      name: 'Task',
+      value: 'TSK',
+    },
+    {
+      id: 5,
+      name: 'Team',
+      value: 'TEM',
+    },
+    {
+      id: 6,
+      name: 'Message Board',
+      value: 'MSB',
+    },
+    {
+      id: 7,
+      name: 'History',
+      value: 'HRY',
     }
   ];
 
