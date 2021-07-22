@@ -1,10 +1,14 @@
 <template>
     <div>
         <draggable v-model="dashboardItems" 
+            style="cursor: move;"
             group="dashboard" 
-            v-bind='dragOptions'
-            @start="drag=true" 
-            @end="drag=false">
+            ghost-class="ghost"
+            :move="checkMove"
+            v-bind="dragOptions"
+            @start="drag=true"
+            @end="drag=false"
+        >
             <transition-group type="transition">
                 <div
                 v-for="item in dashboardItems"
