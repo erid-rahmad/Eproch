@@ -1,0 +1,60 @@
+{
+    "name": "MPrequalificationEvalFile",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "cAttachment",
+            "otherEntityRelationshipName": "mPrequalificationEvalFile",
+            "relationshipValidateRules": "required",
+            "relationshipName": "attachment",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mPrequalificationEvalFile",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mPrequalificationSubmission",
+            "otherEntityRelationshipName": "mPrequalificationEvalFile",
+            "relationshipValidateRules": "required",
+            "relationshipName": "prequalificationSubmission",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cBiddingSubCriteria",
+            "otherEntityRelationshipName": "mPrequalificationEvalFile",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingSubCriteria",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210722120700",
+    "entityTableName": "m_prequalification_eval_file",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

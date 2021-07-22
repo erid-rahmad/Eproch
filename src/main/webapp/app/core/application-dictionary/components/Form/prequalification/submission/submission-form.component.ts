@@ -30,6 +30,7 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
   private fileList :any =[];
   disabled:boolean=false;
   proposalStatus='';
+  readOnlyChecklist:boolean=false;
 
   private formData:any={};
   loading = false;
@@ -38,7 +39,7 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
   validationSchemaAttachment: any = {};
 
   answers: Map<number, any> = new Map();
-  attachmentHandler: Map<number, string> = new Map();
+  attachmentHandler: Map<number, any> = new Map();
 
   // selected rows
   subCriteria: any;
@@ -59,7 +60,6 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
   }
 
   created() {
-    this.proposalStatus='Draft';
     if (this.isVendor) {
       this.validationSchema = {
         answer: {
@@ -162,7 +162,6 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
           })
         })
       ).then((res)=>{
-        this.loading = false;
         console.log(this.evaluationMethodCriteria);
         this.evaluationMethodCriteria.forEach((method)=>{
           method.criteria.forEach((criteria) => {
@@ -170,7 +169,7 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
               subCriteria.attachmentId=null;
               subCriteria.attachmentName=null;
               subCriteria.attachmentUrl=null;
-              this.attachmentHandler.set(subCriteria.id,subCriteria);
+              this.attachmentHandler.set(subCriteria.biddingSubCriteriaId,subCriteria);
 
               subCriteria.questions.forEach((question) => {
                 //question.requirement = this.requirements.get(subCriteriaLine.id)
@@ -183,8 +182,86 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
             });
           });
         });
+        console.log(this.attachmentHandler);
+        this.retrieveProposalData(this.data.id);
       });
     })
+  }
+
+  private retrieveProposalData(submissionId: number) {
+    const baseApiUrl = "/api/m-prequalification-evals";
+    this.commonService(baseApiUrl)
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          `prequalificationSubmissionId.equals=${submissionId}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        for (const proposal of res.data) {
+          if(proposal.documentStatus==='SMT'){
+            this.disabled=true;
+            this.proposalStatus='Vendor Submitted';
+            this.isVendor ?this.$emit('setReadOnly',true):null;
+          }
+          if(proposal.documentAction==='SMT'){
+            this.readOnlyChecklist=true;
+            this.proposalStatus='Buyer Submitted';
+            !this.isVendor ? this.$emit('setReadOnly',true):null;
+          }
+          if(proposal.documentStatus!=='SMT'){
+            this.readOnlyChecklist=true;
+            this.proposalStatus=this.isVendor?'Drafted':'Waiting for Vendor’s response';
+            !this.isVendor ? this.$emit('setReadOnly',true):null;
+
+          }
+          try {
+            const item = this.answers.get(proposal.biddingSubCriteriaLineId);
+            item.answer = proposal.answer;
+            item.documentStatus=proposal.documentStatus;
+            item.documentAction=proposal.documentAction;
+            item.answerId=proposal.id;
+            item.documentEvaluation = proposal.documentEvaluation;
+          }catch (e) {}
+        };
+        this.retrieveAttachment(this.data.id);
+      })
+  }
+
+  retrieveAttachment(submissionId){
+    this.commonService("/api/m-prequalification-eval-files")
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          `prequalificationSubmissionId.equals=${submissionId}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        for (const proposal of res.data) {
+          try {
+            const item = this.attachmentHandler.get(proposal.biddingSubCriteriaId);
+            item.attachmentId = proposal.attachmentId;
+            item.attachmentName = proposal.attachmentName;
+            item.attachmentUrl = proposal.attachmentUrl;
+            item.technicalfileId=proposal.id;
+          }catch (e) {}
+        }
+      })
+      .catch(err => {
+        console.error('Failed',err);
+        this.$message.error(`Failed reload attachment `);
+      })
+      .finally(()=>this.loading=false);
   }
 
   openAttachmentForm(subCriteria: any) {
@@ -234,20 +311,24 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
   }
 
   cancelAttachment(biddingSubCriteria: any) {
+    this.loading = true;
 
+    const att = this.attachmentHandler.get(biddingSubCriteria.biddingSubCriteriaId);
+    att.attachmentId = null;
+    att.attachmentName = null;
+    att.attachmentUrl = null;
+
+    this.loading = false;
   }
 
   saveAttachment(){
-    const input = this.attachmentHandler.get(this.subCriteria.id);
+    const input = this.attachmentHandler.get(this.subCriteria.biddingSubCriteriaId);
 
-    // @ts-ignore
     input.attachmentId = this.formData.attachment.id;
-    // @ts-ignore
     input.attachmentName = this.formData.attachment.fileName;
-    // @ts-ignore
     input.attachmentUrl = this.formData.attachment.downloadUrl;
 
-    //this.retrieveAttachment(this.submissionId); -- reload attachments...?
+    // this.retrieveAttachment(this.data.id);
     this.attachmentFormVisible = false;
   }
 
@@ -279,7 +360,7 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
     console.log('Failed uploading a file ', err);
   }
 
-  save(){
+  save(status?: string){
     console.log(this.evaluationMethodCriteria);
     console.log(this.answers, this.attachmentHandler);
 
@@ -291,7 +372,6 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
         adOrganizationName,
         biddingSubCriteriaId,
         biddingSubCriteriaName,
-        uid,
         ...proposal
       } = answer;
       proposal.id=answer.answerId;
@@ -303,8 +383,8 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
         }
       }
       else {
-        proposal.documentStatus=answer.documentStatus;
-        proposal.documentAction=answer.documentAction;
+        proposal.documentStatus=answer.documentStatus||'DRF';
+        proposal.documentAction=answer.documentAction||'SMT';
       }
 
       proposal.prequalificationSubmissionId = this.data.id;
@@ -351,27 +431,22 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
     if (!valid) {
       return;
     }
-    
-    this.PushProposalTechnicalFile();
 
-    /*
-    this.$emit('update:loading', true);
+    this.loading = true;
 
-    const baseApiUrl = this.isAdministration ? baseApiProposalAdministration : baseApiProposalTechnical
-    const evaluationName = proposalNameMap.get(this.data.evaluationMethodLineName);
+    const baseApiUrl = "/api/m-prequalification-evals"
+    const evaluationName = 'Prequalification'
     this.commonService(baseApiUrl + '/requirements')
       .create(data)
       .then(_res => {
         this.$message.success(`${evaluationName} proposal has been saved successfully`);
         this.PushProposalTechnicalFile();
-        this.retrieveProposalData(this.submissionId);
       })
       .catch(err => {
         console.error('Failed to save the proposal. %O', err);
         this.$message.error(`Failed to save the ${evaluationName} proposal`);
       })
       .finally(() => this.$emit('update:loading', false));
-    */
   }
 
   PushProposalTechnicalFile(){
@@ -379,29 +454,29 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
 
       const attachmentFile = {
         adOrganizationId:1,
-        prequalificationSubmission:this.data.id,
-        // @ts-ignore
-        preqMethodSubCriteriaId:attachment.id,
-        // @ts-ignore
-        cAttachmentId:attachment.attachmentId,
-        // @ts-ignore
+        prequalificationSubmissionId:this.data.id,
+        biddingSubCriteriaId:attachment.biddingSubCriteriaId,
+        attachmentId:attachment.attachmentId,
         id:attachment.technicalfileId,
-
+        active:true,
+        uid:attachment.uid
       }
       console.log("this attachmentFile",attachmentFile)
-      /*
       try {
-        this.commonService(baseApiProposalTechnicalFile)
-          .create(attachmentFile)
+        this.commonService("/api/m-prequalification-eval-files")
+          [attachmentFile.id?'update':'create'](attachmentFile)
           .then(_res =>{})
           .catch(err => {
             console.error('Failed',err);
             this.$message.error(`Failed upload Attachment `);
           })
-          .finally(() => this.$emit('update:loading', false));
+          .finally(() => {
+            this.loading = false;
+          });
       }catch (e) {
       }
-      */
     }
+    
+    this.retrieveProposalData(this.data.id);
   }
 }
