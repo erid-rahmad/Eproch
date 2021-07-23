@@ -23,7 +23,7 @@
               disabled
             ></el-input>
           </el-form-item>
-          <el-form-item label="" v-if="chatHistory.length">
+          <el-form-item label="" v-if="chatHistory.length && (line.negotiationStatus!='agreed'&&line.negotiationStatus!='disagreed')">
             <el-button
               size="mini"
               @click="viewNegoDetail"
@@ -41,7 +41,7 @@
           <el-form-item>
             &nbsp;
           </el-form-item>
-          <el-form-item label="">
+          <el-form-item label="" v-if="(line.negotiationStatus!='agreed'&&line.negotiationStatus!='disagreed')">
             <el-button
               size="mini"
               @click="openChatForm"

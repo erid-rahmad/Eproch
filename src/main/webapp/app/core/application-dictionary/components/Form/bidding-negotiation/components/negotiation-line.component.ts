@@ -103,7 +103,7 @@ export default class BiddingNegotiationLine extends mixins(AccessLevelMixin, Neg
       console.log(res.data);
       if(this.isVendor){
         this.inProgress = res.data.filter((line)=>{return line.vendorId == AccountStoreModule.vendorInfo.id && 
-        line.negotiationStatus === 'in progress'})
+        (line.negotiationStatus === 'in progress'||line.negotiationStatus === 'disagreed'||line.negotiationStatus === 'agreed')})
       } else {
         res.data.forEach(element => {
           switch(element.negotiationStatus){
