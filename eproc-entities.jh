@@ -1220,6 +1220,25 @@ entity MPrequalificationSubmission {
 	active Boolean
 }
 
+entity MPrequalificationEval {
+	answer String required
+	documentEvaluation Boolean
+	documentAction String  maxlength(10)
+    documentStatus String  maxlength(12)
+    notes String
+    evaluation String
+    averageScore Integer
+    passFail String
+
+	uid UUID
+	active Boolean
+}
+
+entity MPrequalificationEvalFile {
+	uid UUID
+	active Boolean
+}
+
 entity MAuction {
 	name String required maxlength(30)
 	description String
@@ -1930,6 +1949,7 @@ relationship OneToOne {
 	MBlacklist{attachment} to CAttachment
 
 	MPrequalificationInformation{attachment required} to CAttachment
+	MPrequalificationEvalFile{attachment required} to CAttachment
 }
 
 /**
@@ -2434,6 +2454,14 @@ relationship ManyToOne {
 	//MPrequalificationSubmission{prequalificationSchedule required} to MPrequalificationSchedule
 	MPrequalificationSubmission{documentType} to CDocumentType
 	MPrequalificationSubmission{vendor required} to CVendor
+
+	MPrequalificationEval{adOrganization required} to ADOrganization
+	MPrequalificationEval{prequalificationSubmission required} to MPrequalificationSubmission
+	MPrequalificationEval{biddingSubCriteriaLine required} to CBiddingSubCriteriaLine
+
+	MPrequalificationEvalFile{adOrganization required} to ADOrganization
+	MPrequalificationEvalFile{prequalificationSubmission required} to MPrequalificationSubmission
+	MPrequalificationEvalFile{biddingSubCriteria required} to CBiddingSubCriteria
 
 	MAuction{adOrganization required} to ADOrganization
 	MAuction{currency required} to CCurrency

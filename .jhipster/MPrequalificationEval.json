@@ -1,0 +1,94 @@
+{
+    "name": "MPrequalificationEval",
+    "fields": [
+        {
+            "fieldName": "answer",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "documentEvaluation",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "documentAction",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "documentStatus",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "12"
+        },
+        {
+            "fieldName": "notes",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "evaluation",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "averageScore",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "passFail",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mPrequalificationEval",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mPrequalificationSubmission",
+            "otherEntityRelationshipName": "mPrequalificationEval",
+            "relationshipValidateRules": "required",
+            "relationshipName": "prequalificationSubmission",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cBiddingSubCriteriaLine",
+            "otherEntityRelationshipName": "mPrequalificationEval",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingSubCriteriaLine",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210722120600",
+    "entityTableName": "m_prequalification_eval",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

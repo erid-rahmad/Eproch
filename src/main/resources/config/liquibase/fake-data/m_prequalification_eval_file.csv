@@ -1,0 +1,11 @@
+id;uid;active;attachment_id;ad_organization_id;prequalification_submission_id;bidding_sub_criteria_id
+1;11a8039c-b3f2-44dc-a5b4-74425cdabc6f;true;1;1;1;1
+2;b6606053-c023-472c-aa78-2c94c0d37f1d;false;2;2;2;2
+3;d56fce23-2c41-4733-8348-241dc74f9463;false;3;3;3;3
+4;a494f640-6e24-4098-af42-5f5e1e85dd85;false;4;4;4;4
+5;cc5fa62d-269a-4e6c-ab8f-1c7503e10261;true;5;5;5;5
+6;aae054f1-3ef7-4a71-b49c-bbdbdbd18395;false;6;6;6;6
+7;f9bc3b66-3ec5-4aea-a74b-36db7cecbfad;false;7;7;7;7
+8;ef2469ad-5ab0-4ca9-ade5-afd520fb4eff;false;8;8;8;8
+9;475617ad-ef5b-41da-af48-52bbac13398d;true;9;9;9;9
+10;8d9db150-9ba1-4ea2-bd62-96f0c68925bd;true;10;10;10;10
