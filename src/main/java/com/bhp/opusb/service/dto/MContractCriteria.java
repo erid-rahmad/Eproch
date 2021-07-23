@@ -68,6 +68,20 @@ public class MContractCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter price;
 
+    private BigDecimalFilter priceProposed;
+
+    private StringFilter expMailReceipt;
+
+    private StringFilter noticePeriod;
+
+    private IntegerFilter reminderSent;
+
+    private IntegerFilter emailNotification;
+
+    private StringFilter termType;
+
+    private StringFilter hierarchicalType;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -110,6 +124,13 @@ public class MContractCriteria implements Serializable, Criteria {
         this.dateReject = other.dateReject == null ? null : other.dateReject.copy();
         this.rejectedReason = other.rejectedReason == null ? null : other.rejectedReason.copy();
         this.price = other.price == null ? null : other.price.copy();
+        this.priceProposed = other.priceProposed == null ? null : other.priceProposed.copy();
+        this.expMailReceipt = other.expMailReceipt == null ? null : other.expMailReceipt.copy();
+        this.noticePeriod = other.noticePeriod == null ? null : other.noticePeriod.copy();
+        this.reminderSent = other.reminderSent == null ? null : other.reminderSent.copy();
+        this.emailNotification = other.emailNotification == null ? null : other.emailNotification.copy();
+        this.termType = other.termType == null ? null : other.termType.copy();
+        this.hierarchicalType = other.hierarchicalType == null ? null : other.hierarchicalType.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -286,6 +307,62 @@ public class MContractCriteria implements Serializable, Criteria {
         this.price = price;
     }
 
+    public BigDecimalFilter getPriceProposed() {
+        return priceProposed;
+    }
+
+    public void setPriceProposed(BigDecimalFilter priceProposed) {
+        this.priceProposed = priceProposed;
+    }
+
+    public StringFilter getExpMailReceipt() {
+        return expMailReceipt;
+    }
+
+    public void setExpMailReceipt(StringFilter expMailReceipt) {
+        this.expMailReceipt = expMailReceipt;
+    }
+
+    public StringFilter getNoticePeriod() {
+        return noticePeriod;
+    }
+
+    public void setNoticePeriod(StringFilter noticePeriod) {
+        this.noticePeriod = noticePeriod;
+    }
+
+    public IntegerFilter getReminderSent() {
+        return reminderSent;
+    }
+
+    public void setReminderSent(IntegerFilter reminderSent) {
+        this.reminderSent = reminderSent;
+    }
+
+    public IntegerFilter getEmailNotification() {
+        return emailNotification;
+    }
+
+    public void setEmailNotification(IntegerFilter emailNotification) {
+        this.emailNotification = emailNotification;
+    }
+
+    public StringFilter getTermType() {
+        return termType;
+    }
+
+    public void setTermType(StringFilter termType) {
+        this.termType = termType;
+    }
+
+    public StringFilter getHierarchicalType() {
+        return hierarchicalType;
+    }
+
+    public void setHierarchicalType(StringFilter hierarchicalType) {
+        this.hierarchicalType = hierarchicalType;
+    }
+
     public UUIDFilter getUid() {
         return uid;
     }
@@ -389,6 +466,13 @@ public class MContractCriteria implements Serializable, Criteria {
             Objects.equals(dateReject, that.dateReject) &&
             Objects.equals(rejectedReason, that.rejectedReason) &&
             Objects.equals(price, that.price) &&
+            Objects.equals(priceProposed, that.priceProposed) &&
+            Objects.equals(expMailReceipt, that.expMailReceipt) &&
+            Objects.equals(noticePeriod, that.noticePeriod) &&
+            Objects.equals(reminderSent, that.reminderSent) &&
+            Objects.equals(emailNotification, that.emailNotification) &&
+            Objects.equals(termType, that.termType) &&
+            Objects.equals(hierarchicalType, that.hierarchicalType) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
@@ -423,6 +507,13 @@ public class MContractCriteria implements Serializable, Criteria {
         dateReject,
         rejectedReason,
         price,
+        priceProposed,
+        expMailReceipt,
+        noticePeriod,
+        reminderSent,
+        emailNotification,
+        termType,
+        hierarchicalType,
         uid,
         active,
         adOrganizationId,
@@ -458,6 +549,13 @@ public class MContractCriteria implements Serializable, Criteria {
                 (dateReject != null ? "dateReject=" + dateReject + ", " : "") +
                 (rejectedReason != null ? "rejectedReason=" + rejectedReason + ", " : "") +
                 (price != null ? "price=" + price + ", " : "") +
+                (priceProposed != null ? "priceProposed=" + priceProposed + ", " : "") +
+                (expMailReceipt != null ? "expMailReceipt=" + expMailReceipt + ", " : "") +
+                (noticePeriod != null ? "noticePeriod=" + noticePeriod + ", " : "") +
+                (reminderSent != null ? "reminderSent=" + reminderSent + ", " : "") +
+                (emailNotification != null ? "emailNotification=" + emailNotification + ", " : "") +
+                (termType != null ? "termType=" + termType + ", " : "") +
+                (hierarchicalType != null ? "hierarchicalType=" + hierarchicalType + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

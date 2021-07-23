@@ -96,6 +96,27 @@ public class MContract extends AbstractAuditingEntity {
     @Column(name = "price", precision = 21, scale = 2)
     private BigDecimal price;
 
+    @Column(name = "price_proposed", precision = 21, scale = 2)
+    private BigDecimal priceProposed;
+
+    @Column(name = "exp_mail_receipt")
+    private String expMailReceipt;
+
+    @Column(name = "notice_period")
+    private String noticePeriod;
+
+    @Column(name = "reminder_sent")
+    private Integer reminderSent;
+
+    @Column(name = "email_notification")
+    private Integer emailNotification;
+
+    @Column(name = "term_type")
+    private String termType;
+
+    @Column(name = "hierarchical_type")
+    private String hierarchicalType;
+
     @Column(name = "uid")
     private UUID uid;
 
@@ -395,6 +416,97 @@ public class MContract extends AbstractAuditingEntity {
         this.price = price;
     }
 
+    public BigDecimal getPriceProposed() {
+        return priceProposed;
+    }
+
+    public MContract priceProposed(BigDecimal priceProposed) {
+        this.priceProposed = priceProposed;
+        return this;
+    }
+
+    public void setPriceProposed(BigDecimal priceProposed) {
+        this.priceProposed = priceProposed;
+    }
+
+    public String getExpMailReceipt() {
+        return expMailReceipt;
+    }
+
+    public MContract expMailReceipt(String expMailReceipt) {
+        this.expMailReceipt = expMailReceipt;
+        return this;
+    }
+
+    public void setExpMailReceipt(String expMailReceipt) {
+        this.expMailReceipt = expMailReceipt;
+    }
+
+    public String getNoticePeriod() {
+        return noticePeriod;
+    }
+
+    public MContract noticePeriod(String noticePeriod) {
+        this.noticePeriod = noticePeriod;
+        return this;
+    }
+
+    public void setNoticePeriod(String noticePeriod) {
+        this.noticePeriod = noticePeriod;
+    }
+
+    public Integer getReminderSent() {
+        return reminderSent;
+    }
+
+    public MContract reminderSent(Integer reminderSent) {
+        this.reminderSent = reminderSent;
+        return this;
+    }
+
+    public void setReminderSent(Integer reminderSent) {
+        this.reminderSent = reminderSent;
+    }
+
+    public Integer getEmailNotification() {
+        return emailNotification;
+    }
+
+    public MContract emailNotification(Integer emailNotification) {
+        this.emailNotification = emailNotification;
+        return this;
+    }
+
+    public void setEmailNotification(Integer emailNotification) {
+        this.emailNotification = emailNotification;
+    }
+
+    public String getTermType() {
+        return termType;
+    }
+
+    public MContract termType(String termType) {
+        this.termType = termType;
+        return this;
+    }
+
+    public void setTermType(String termType) {
+        this.termType = termType;
+    }
+
+    public String getHierarchicalType() {
+        return hierarchicalType;
+    }
+
+    public MContract hierarchicalType(String hierarchicalType) {
+        this.hierarchicalType = hierarchicalType;
+        return this;
+    }
+
+    public void setHierarchicalType(String hierarchicalType) {
+        this.hierarchicalType = hierarchicalType;
+    }
+
     public UUID getUid() {
         return uid;
     }
@@ -557,6 +669,13 @@ public class MContract extends AbstractAuditingEntity {
             ", dateReject='" + getDateReject() + "'" +
             ", rejectedReason='" + getRejectedReason() + "'" +
             ", price=" + getPrice() +
+            ", priceProposed=" + getPriceProposed() +
+            ", expMailReceipt='" + getExpMailReceipt() + "'" +
+            ", noticePeriod='" + getNoticePeriod() + "'" +
+            ", reminderSent=" + getReminderSent() +
+            ", emailNotification=" + getEmailNotification() +
+            ", termType='" + getTermType() + "'" +
+            ", hierarchicalType='" + getHierarchicalType() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

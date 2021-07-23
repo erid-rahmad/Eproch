@@ -1488,6 +1488,14 @@ entity MContract {
 	dateReject ZonedDateTime
 	rejectedReason String
 	Price BigDecimal
+	PriceProposed BigDecimal
+
+	ExpMailReceipt String
+	NoticePeriod String
+	ReminderSent Integer
+	EmailNotification Integer
+	TermType String
+	HierarchicalType String
 
 	uid UUID
 	active Boolean

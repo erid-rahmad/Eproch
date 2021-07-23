@@ -64,6 +64,7 @@
                 <el-form-item
                     label="Department"
                     prop="costCenterId"
+
                 >
                     <ad-input-lookup
                         v-model="contract.costCenterId"
@@ -108,8 +109,17 @@
                         type="date"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="Hierarchical Type">
-
+                <el-form-item label="Hierarchical Type" >
+                    <template>
+                        <el-select v-model="contract.hierarchicalType" placeholder="Select">
+                            <el-option
+                                v-for="item in hierarchicalType"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </template>
                 </el-form-item>
                 <el-form-item label="Contract Amount">
                     <el-input
@@ -121,10 +131,10 @@
                 </el-form-item>
                 <el-form-item label="Proposed Contract Amount">
                     <el-input
-                        v-model="contract.price"
+                        v-model="contract.priceProposed"
                         v-inputmask="{ alias: 'currency' }"
                         clearable
-                        disabled
+
                     ></el-input>
                 </el-form-item>
 
@@ -159,14 +169,18 @@
                 :xs="24">
                 <el-form-item
                     label="Term Type"
-                    prop="vendorId"
                 >
-                    <ad-input-lookup
-                        v-model="contract.vendorId"
-                        lookup-by-field="name"
-                        placeholder="Select Vendor"
-                        table-name="c_vendor"
-                    ></ad-input-lookup>
+                    <template>
+                        <el-select v-model="contract.termType" placeholder="Select">
+                            <el-option
+                                v-for="item in termType"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </template>
+
                 </el-form-item>
                 <el-form-item
                     label="Start Date"
@@ -190,27 +204,24 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item label="Email Notification">
-                    <el-input
-                        v-model="contract.email"
-                        clearable
-                        placeholder="first Send"
-                    ></el-input>
-                    <el-input
-                        v-model="contract.email"
-                        clearable
-                        placeholder="Remained Send Every"
-                    ></el-input>
+                    <el-tooltip class="item" effect="dark" content="firs Sent -- Days before Contract Expiration date" placement="top-start">
+                        <el-input-number size="mini" controls-position="right" v-model="contract.emailNotification"></el-input-number>
+                    </el-tooltip>
+                    <el-tooltip class="item" effect="dark" content="Remainder Sent Every -- Days" placement="top-start">
+                        <el-input-number size="mini" controls-position="right" v-model="contract.reminderSent"></el-input-number>
+                    </el-tooltip>
+
+
                 </el-form-item>
                 <el-form-item label="Expired Email Recipient">
                     <el-input
-                        v-model="contract.email"
+                        v-model="contract.expMailReceipt"
                         clearable
-
                     ></el-input>
                 </el-form-item>
                 <el-form-item label="Notice Period in days">
                     <el-input
-                        v-model="contract.email"
+                        v-model="contract.noticePeriod"
                         clearable
 
                     ></el-input>

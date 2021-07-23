@@ -197,22 +197,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
       .then(res => {
 
         for (const proposal of res.data) {
-          if(proposal.documentStatus==='SMT'){
-            this.disabled=true;
-            this.proposalStatus='Vendor Submitted';
-            this.isVendor ?this.$emit('setReadOnly',true):null;
-          }
-          if(proposal.documentAction==='SMT'){
-            this.readOnlyCheklist=true;
-            this.proposalStatus='Buyer Submitted';
-            !this.isVendor ? this.$emit('setReadOnly',true):null;
-          }
-          if(proposal.documentStatus!=='SMT'){
-            this.readOnlyCheklist=true;
-            this.proposalStatus='waiting for a vendor’s response';
-            !this.isVendor ? this.$emit('setReadOnly',true):null;
 
-          }
           try {
             const item = this.answers.get(proposal.biddingSubCriteriaLineId);
             item.answer = proposal.answer;
@@ -220,6 +205,27 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
             item.documentAction=proposal.documentAction;
             item.answerId=proposal.id;
             item.documentEvaluation = proposal.documentEvaluation;
+
+            if(item.documentStatus==='SMT'){
+              console.log("Doc Status SMT")
+              this.disabled=true;
+              this.proposalStatus='Vendor Submitted';
+              this.isVendor ? this.$emit('setReadOnly',true):null;
+              !this.isVendor ? this.$emit('setReadOnly',false):null;
+
+            }
+            if(item.documentAction==='SMT'){
+              console.log("documentAction submit")
+              this.readOnlyCheklist=true;
+              this.proposalStatus='Buyer Submitted';
+              !this.isVendor ? this.$emit('setReadOnly',true):null;
+            }
+            if(item.documentStatus!=='SMT'){
+              console.log("status not smt")
+              this.readOnlyCheklist=true;
+              this.proposalStatus='waiting for a vendor’s response';
+              !this.isVendor ? this.$emit('setReadOnly',true):null;
+            }
           }catch (e) {}
         };
         this.retrieveAttachment(this.submissionId);

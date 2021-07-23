@@ -73,6 +73,20 @@ public class MContractDTO extends AbstractAuditingDTO {
 
     private BigDecimal price;
 
+    private BigDecimal priceProposed;
+
+    private String expMailReceipt;
+
+    private String noticePeriod;
+
+    private Integer reminderSent;
+
+    private Integer emailNotification;
+
+    private String termType;
+
+    private String hierarchicalType;
+
     private UUID uid;
 
     private Boolean active = true;
@@ -289,6 +303,62 @@ public class MContractDTO extends AbstractAuditingDTO {
         this.price = price;
     }
 
+    public BigDecimal getPriceProposed() {
+        return priceProposed;
+    }
+
+    public void setPriceProposed(BigDecimal priceProposed) {
+        this.priceProposed = priceProposed;
+    }
+
+    public String getExpMailReceipt() {
+        return expMailReceipt;
+    }
+
+    public void setExpMailReceipt(String expMailReceipt) {
+        this.expMailReceipt = expMailReceipt;
+    }
+
+    public String getNoticePeriod() {
+        return noticePeriod;
+    }
+
+    public void setNoticePeriod(String noticePeriod) {
+        this.noticePeriod = noticePeriod;
+    }
+
+    public Integer getReminderSent() {
+        return reminderSent;
+    }
+
+    public void setReminderSent(Integer reminderSent) {
+        this.reminderSent = reminderSent;
+    }
+
+    public Integer getEmailNotification() {
+        return emailNotification;
+    }
+
+    public void setEmailNotification(Integer emailNotification) {
+        this.emailNotification = emailNotification;
+    }
+
+    public String getTermType() {
+        return termType;
+    }
+
+    public void setTermType(String termType) {
+        this.termType = termType;
+    }
+
+    public String getHierarchicalType() {
+        return hierarchicalType;
+    }
+
+    public void setHierarchicalType(String hierarchicalType) {
+        this.hierarchicalType = hierarchicalType;
+    }
+
     public UUID getUid() {
         return uid;
     }
@@ -477,6 +547,13 @@ public class MContractDTO extends AbstractAuditingDTO {
             ", dateReject=" + dateReject +
             ", rejectedReason='" + rejectedReason + '\'' +
             ", price=" + price +
+            ", priceProposed=" + priceProposed +
+            ", expMailReceipt='" + expMailReceipt + '\'' +
+            ", noticePeriod='" + noticePeriod + '\'' +
+            ", reminderSent=" + reminderSent +
+            ", emailNotification=" + emailNotification +
+            ", termType='" + termType + '\'' +
+            ", hierarchicalType='" + hierarchicalType + '\'' +
             ", uid=" + uid +
             ", active=" + active +
             ", adOrganizationId=" + adOrganizationId +
