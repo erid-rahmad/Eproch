@@ -114,8 +114,32 @@ export default class VendorContract extends Mixins(AccessLevelMixin) {
   }
 
   created() {
+    const query = this.$route.query;
     this.retrieveDocStatuses();
-    this.transition();
+
+    console.log(query);
+
+    if(query.id) {
+      this.commonService(baseApiContract)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `id.equals=${query.id}`
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        console.log(res);
+        this.selectedRow = res.data[0];
+        this.section = ContractPage.DETAIL;
+      })
+    } else { 
+      this.transition();
+    }
   }
 
   public changeOrder(propOrder): void {
