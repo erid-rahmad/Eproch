@@ -207,21 +207,20 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
             item.documentEvaluation = proposal.documentEvaluation;
 
             if(item.documentStatus==='SMT'){
-              console.log("Doc Status SMT")
               this.disabled=true;
               this.proposalStatus='Vendor Submitted';
               this.isVendor ? this.$emit('setReadOnly',true):null;
+
               !this.isVendor ? this.$emit('setReadOnly',false):null;
+              !this.isVendor ? this.readOnlyCheklist=false:null;
 
             }
             if(item.documentAction==='SMT'){
-              console.log("documentAction submit")
               this.readOnlyCheklist=true;
               this.proposalStatus='Buyer Submitted';
               !this.isVendor ? this.$emit('setReadOnly',true):null;
             }
             if(item.documentStatus!=='SMT'){
-              console.log("status not smt")
               this.readOnlyCheklist=true;
               this.proposalStatus='waiting for a vendor’s response';
               !this.isVendor ? this.$emit('setReadOnly',true):null;
