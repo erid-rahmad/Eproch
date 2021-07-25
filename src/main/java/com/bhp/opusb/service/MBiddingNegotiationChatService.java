@@ -133,7 +133,7 @@ public class MBiddingNegotiationChatService {
                 String emailBody = "The buyer has responded to the negotiation of bidding " +
                 mbn.getBiddingEvalResult().getBiddingSubmission().getBidding().getName() + ".<br/>"
                 +"The following is their response: <br/><br/>"
-                +mBiddingNegotiationChatDTO.getVendorText();
+                +mBiddingNegotiationChatDTO.getBuyerText();
 
                 List<AdUser> pics = adUserRepository.findBycVendor(mBiddingNegotiationChat.getVendor());
                 if(pics.size()==0) log.debug("No pics found for vendor {}", mBiddingNegotiationChat.getVendor());

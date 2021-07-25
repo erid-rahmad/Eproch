@@ -4,12 +4,14 @@ import ContractDocument from './contract-document.vue';
 import ContractEvaluation from './contract-evaluation.vue';
 import ContractInfo from './contract-info.vue';
 import ContractTeam from './contract-team.vue';
+import ContractMessageBoard from './contract-message-board.vue';
 
 const tabPaneComponent = new Map<string, string>([
   ['INF', 'contract-info'],
   ['DOC', 'contract-document'],
   ['EVA', 'contract-evaluation'],
   ['TEM', 'contract-team'],
+  ['MSB', 'contract-message-board'],
 ])
 
 const ContractDetailProps = Vue.extend({
@@ -35,7 +37,8 @@ const ContractDetailProps = Vue.extend({
     ContractInfo,
     ContractEvaluation,
     ContractDocument,
-    ContractTeam
+    ContractTeam,
+    ContractMessageBoard
   }
 })
 export default class ContractDetail extends Mixins(AccessLevelMixin, ContractDetailProps) {
