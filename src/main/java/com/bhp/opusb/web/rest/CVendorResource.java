@@ -182,7 +182,7 @@ public class CVendorResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
      */
     @GetMapping("/c-vendors/new-vendor/count")
-    public ResponseEntity<Long> countNewCVendors(@RequestParam(value = "documentStatus", required = false) String status) {
+    public ResponseEntity<Long> countNewCVendors(@RequestParam(value = "documentStatus.equals", required = false) String status) {
         log.debug("REST request to count new CVendors by status: {}", status);
         return ResponseEntity.ok().body(cVendorQueryService.getNewVendor(status));
     }
