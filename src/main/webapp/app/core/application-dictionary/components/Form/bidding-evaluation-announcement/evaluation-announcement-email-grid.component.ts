@@ -36,6 +36,7 @@ export default class EvaluationAnnouncement extends mixins(ScheduleEventMixin, E
   attachmentFormVisible = false;
   biddingEvalResultLoading:boolean=false;
   descriptionLoading:boolean=false;
+  mainForm:any={};
 
   private biddingEvalResult:any={};
   loading: boolean = false;
@@ -59,15 +60,18 @@ export default class EvaluationAnnouncement extends mixins(ScheduleEventMixin, E
       this.retrieveBiddingSchedules(this.pickRow.id);
       this.data.No=this.pickRow.documentNo;
       this.data.Name=this.pickRow.name;
+      this.mainForm.id=this.pickRow.id;
     }
   }
 
   onMainFormUpdatedevaluation(mainForm: any){
+    console.log("this mainForm",mainForm)
     this.retrieveBiddingEvalResult(mainForm.biddingId);
     this.retrieveapiAnnouncementResults(mainForm.biddingId);
     this.retrieveBiddingSchedules(mainForm.biddingId);
     this.data.No=mainForm.biddingNo;
     this.data.Name=mainForm.biddingName;
+    this.mainForm.id=mainForm.biddingId;
   }
 
 
@@ -94,6 +98,7 @@ export default class EvaluationAnnouncement extends mixins(ScheduleEventMixin, E
         this.biddingEvalResult = biddingEvent;
         console.log("biddingEvalResult",this.biddingEvalResult);
       })
+      .catch(err => this.$message.error('Failed to retrieveBiddingEvalResult'))
       .finally(()=>this.biddingEvalResultLoading=false);
   }
 
@@ -114,9 +119,11 @@ export default class EvaluationAnnouncement extends mixins(ScheduleEventMixin, E
         res.data.forEach(result => {
           if (result.formType==="RS"){
             this.schedule=result;
+
           }
         })
-          .catch(err => this.$message.error('Failed to get schedule'))
+          .catch(err => {this.$message.error('Failed to get schedule')
+            console.log("this err ",err)})
       });
   }
 
@@ -152,6 +159,7 @@ export default class EvaluationAnnouncement extends mixins(ScheduleEventMixin, E
         const data = res.data as any[];
         if (data.length) {
           this.formData = {...this.formData, ...data[0]};
+          console.log("this data retrieveapiAnnouncementResults ",this.formData)
         }
       })
       .catch(err => this.$message.error('Failed to get bidding announcement'))
@@ -259,7 +267,7 @@ export default class EvaluationAnnouncement extends mixins(ScheduleEventMixin, E
 
   saveDraft(){
     this.formData.adOrganizationId=this.schedule.adOrganizationId;
-    this.formData.biddingId=this.pickRow.id;
+    this.formData.biddingId=this.mainForm.id;
     this.formData.biddingScheduleId=this.schedule.id;
     this.loading = false
       this.commonService("api/c-announcement-results")
@@ -274,7 +282,7 @@ export default class EvaluationAnnouncement extends mixins(ScheduleEventMixin, E
 
   publish() {
     this.formData.adOrganizationId=this.schedule.adOrganizationId;
-    this.formData.biddingId=this.pickRow.id;
+    this.formData.biddingId=this.mainForm.id;
     this.formData.biddingScheduleId=this.schedule.id;
     this.loading = false
     this.commonService("api/c-announcement-results")
