@@ -1,10 +1,10 @@
 <template>
   <div class="contract-message-board">
     <el-form
-      ref="line"
+      ref="data"
       label-position="left"
       label-width="200px"
-      :model="line"
+      :model="data"
       size="mini"
     >
       <el-row
@@ -100,19 +100,6 @@
           :gutter="24"
           style="margin-top: 16px"
         >
-          <el-col
-            :xs="24"
-            :sm="12"
-            :lg="12"
-            :xl="8"
-          >
-            <el-form-item label="Bidding Title">
-              <el-input
-                v-model="line.biddingTitle"
-                disabled
-              ></el-input>
-            </el-form-item>
-          </el-col>
           <el-col
             :xs="24"
             :sm="12"
