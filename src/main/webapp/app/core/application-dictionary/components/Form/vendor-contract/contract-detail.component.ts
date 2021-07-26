@@ -3,11 +3,15 @@ import { Component, Mixins, Vue, Watch } from 'vue-property-decorator';
 import ContractDocument from './contract-document.vue';
 import ContractEvaluation from './contract-evaluation.vue';
 import ContractInfo from './contract-info.vue';
+import ContractTeam from './contract-team.vue';
+import ContractMessageBoard from './contract-message-board.vue';
 
 const tabPaneComponent = new Map<string, string>([
   ['INF', 'contract-info'],
   ['DOC', 'contract-document'],
   ['EVA', 'contract-evaluation'],
+  ['TEM', 'contract-team'],
+  ['MSB', 'contract-message-board'],
 ])
 
 const ContractDetailProps = Vue.extend({
@@ -32,7 +36,9 @@ const ContractDetailProps = Vue.extend({
   components: {
     ContractInfo,
     ContractEvaluation,
-    ContractDocument
+    ContractDocument,
+    ContractTeam,
+    ContractMessageBoard
   }
 })
 export default class ContractDetail extends Mixins(AccessLevelMixin, ContractDetailProps) {
@@ -111,6 +117,12 @@ export default class ContractDetail extends Mixins(AccessLevelMixin, ContractDet
     this.tabs.forEach((tab, index) => {
       tab.disabled = index > 0 && ! this.data.id ? true : false;
     })
+
+    const query = this.$route.query;
+    console.log(query);
+    if(query.page){
+      this.activeTab = this.tabs[+query.page].value;
+    }
   }
 
   save() {

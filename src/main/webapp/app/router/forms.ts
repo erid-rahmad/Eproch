@@ -74,6 +74,7 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['preBidMeetingGrid', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding/event/pre-bid-meeting/pre-bid-meeting-grid.vue')],
 
   ['contract', () => import(/* webpackChunkName: "contract" */'@/core/application-dictionary/components/Form/vendor-contract/vendor-contract.vue')],
+  ['contractTeam', () => import(/* webpackChunkName: "contract" */'@/core/application-dictionary/components/Form/vendor-contract/team-grid/contract-team-grid.vue')],
 
   // Prequalification
   ['prequalification', () => import(/* webpackChunkName: "prequalification" */'@/core/application-dictionary/components/Form/prequalification/prequalification.vue')],

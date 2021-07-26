@@ -1536,6 +1536,24 @@ entity MContractDocument {
 	active Boolean
 }
 
+entity MContractTeam {
+	status String
+	uid UUID
+	active Boolean
+}
+entity MContractTeamLine {
+	uid UUID
+	active Boolean
+	position String required maxlength(10)
+}
+
+entity MContractMessage {
+	uid UUID
+	active Boolean
+	vendorText TextBlob
+	buyerText TextBlob
+}
+
 entity MProposalAdministration {
 	answer String required
 	documentEvaluation Boolean
@@ -2144,6 +2162,18 @@ relationship ManyToOne {
 	MContractDocument{contract required} to MContract
 	MContractDocument{attachment required} to CAttachment
 
+	MContractTeam{adOrganization required} to ADOrganization
+	MContractTeam{contract required} to MContract
+
+	MContractTeamLine{adOrganization required} to ADOrganization
+	MContractTeamLine{contractTeam required} to MContractTeam
+	MContractTeamLine{adUser required} to AdUser
+
+	MContractMessage{adOrganization required} to ADOrganization
+	MContractMessage{contract required} to MContract
+	MContractMessage{vendor required} to CVendor
+	MContractMessage{attachment } to CAttachment
+	
 	MProductCatalog{adOrganization required} to ADOrganization
 	MProductCatalog{cDocumentType required} to CDocumentType
 	MProductCatalog{cCurrency required} to CCurrency
