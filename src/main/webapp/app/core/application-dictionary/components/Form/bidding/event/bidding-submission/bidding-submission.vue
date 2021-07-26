@@ -75,6 +75,7 @@
             ></submission-form>
 
             <component
+                @closeProposalPage="closeProposalPage"
                 @setReadOnly="setReadOnly"
                 :is="proposalComponent"
                 v-else

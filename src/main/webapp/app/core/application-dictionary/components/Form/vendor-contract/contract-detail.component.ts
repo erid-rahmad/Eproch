@@ -3,6 +3,7 @@ import { Component, Mixins, Vue, Watch } from 'vue-property-decorator';
 import ContractDocument from './contract-document.vue';
 import ContractEvaluation from './contract-evaluation.vue';
 import ContractInfo from './contract-info.vue';
+import Task from './task.vue';
 import ContractTeam from './contract-team.vue';
 import ContractMessageBoard from './contract-message-board.vue';
 
@@ -12,6 +13,7 @@ const tabPaneComponent = new Map<string, string>([
   ['EVA', 'contract-evaluation'],
   ['TEM', 'contract-team'],
   ['MSB', 'contract-message-board'],
+  ['TSK', 'Task'],
 ])
 
 const ContractDetailProps = Vue.extend({
@@ -36,6 +38,7 @@ const ContractDetailProps = Vue.extend({
   components: {
     ContractInfo,
     ContractEvaluation,
+    Task,
     ContractDocument,
     ContractTeam,
     ContractMessageBoard
