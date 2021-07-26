@@ -83,6 +83,7 @@ public class CVendorQueryService extends QueryService<CVendor> {
     
     @Transactional(readOnly = true)
     public Long getNewVendor(String status) {
+        if(status == null) status = "";
         log.debug("count by status : {}", status);
         return cVendorRepository.getNewVendor(status);
     }
