@@ -20,6 +20,7 @@ import com.bhp.opusb.service.dto.CVendorDTO;
 import com.bhp.opusb.service.dto.RegistrationDTO;
 import com.bhp.opusb.service.mapper.CVendorMapper;
 import com.bhp.opusb.service.mapper.RegistrationMapper;
+import com.bhp.opusb.workflow.CVendorApprovalProcessService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +52,7 @@ public class CVendorService {
     private final RegistrationMapper registrationMapper;
 
     private final UserService userService;
+    private final CVendorApprovalProcessService cVendorApprovalProcessService;
 
     public CVendorService(
         CDocumentTypeRepository cDocumentTypeRepository,
@@ -63,7 +65,9 @@ public class CVendorService {
         CFunctionaryService cFunctionaryService,
         CVendorBankAcctService cVendorBankAcctService,
         CVendorTaxService cVendorTaxService,
-        UserService userService
+        UserService userService,
+        CVendorApprovalProcessService cVendorApprovalProcessService
+        
     ) {
         this.cDocumentTypeRepository = cDocumentTypeRepository;
         this.cVendorRepository = cVendorRepository;
@@ -76,6 +80,7 @@ public class CVendorService {
         this.cVendorTaxService = cVendorTaxService;
         this.cVendorMapper = cVendorMapper;
         this.userService = userService;
+        this.cVendorApprovalProcessService= cVendorApprovalProcessService;
 
         organization = new ADOrganization();
         organization.setId(1L);
@@ -88,7 +93,8 @@ public class CVendorService {
         cDocumentTypeRepository.findFirstByName("Supplier Registration")
             .ifPresent(vendor::setDocumentType);
 
-        cVendorRepository.save(vendor);
+        vendor= cVendorRepository.save(vendor);
+        cVendorApprovalProcessService.startService(vendor.getId());
 
         CLocation location = registrationMapper.toLocation(registrationDTO.getCompanyProfile());
         CVendorLocation vendorLocation = pairVendorLocation(vendor, location, false, true, true, true);

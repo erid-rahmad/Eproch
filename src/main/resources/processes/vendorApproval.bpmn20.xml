@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="vendorApproval" name="vendorApproval" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <userTask id="approveVendor" name="Approve Vendor" activiti:assignee="${vendorId}"></userTask>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="approveVendor"></sequenceFlow>
+    <exclusiveGateway id="isVendorApproved" name="vendorApproved"></exclusiveGateway>
+    <sequenceFlow id="flow2" sourceRef="approveVendor" targetRef="isVendorApproved"></sequenceFlow>
+    <serviceTask id="updateVendorApproved" name="Update Vendor Approved" activiti:expression="${cvendorApprovalService.approved(execution)}" activiti:resultVariableName="documentStatus"></serviceTask>
+    <sequenceFlow id="flow3" name="Approve" sourceRef="isVendorApproved" targetRef="updateVendorApproved">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approve}]]></conditionExpression>
+    </sequenceFlow>
+    <serviceTask id="updateVendorRejected" name="Update Vendor Rejected" activiti:expression="${cvendorApprovalService.rejected(execution)}" activiti:resultVariableName="documentStatus"></serviceTask>
+    <sequenceFlow id="flow4" name="Rejected" sourceRef="isVendorApproved" targetRef="updateVendorRejected">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!approve}]]></conditionExpression>
+    </sequenceFlow>
+    <serviceTask id="updateDocumentStatus" name="Update Document Status" activiti:expression="${cvendorApprovalService.updateDocumentStatus(execution)}"></serviceTask>
+    <sequenceFlow id="flow5" sourceRef="updateVendorRejected" targetRef="updateDocumentStatus"></sequenceFlow>
+    <sequenceFlow id="flow6" sourceRef="updateVendorApproved" targetRef="updateDocumentStatus"></sequenceFlow>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <sequenceFlow id="flow7" sourceRef="updateDocumentStatus" targetRef="endevent1"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_vendorApproval">
+    <bpmndi:BPMNPlane bpmnElement="vendorApproval" id="BPMNPlane_vendorApproval">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="40.0" y="210.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="approveVendor" id="BPMNShape_approveVendor">
+        <omgdc:Bounds height="55.0" width="105.0" x="110.0" y="200.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="isVendorApproved" id="BPMNShape_isVendorApproved">
+        <omgdc:Bounds height="40.0" width="40.0" x="250.0" y="207.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="updateVendorApproved" id="BPMNShape_updateVendorApproved">
+        <omgdc:Bounds height="55.0" width="151.0" x="350.0" y="100.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="updateVendorRejected" id="BPMNShape_updateVendorRejected">
+        <omgdc:Bounds height="55.0" width="142.0" x="355.0" y="300.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="updateDocumentStatus" id="BPMNShape_updateDocumentStatus">
+        <omgdc:Bounds height="73.0" width="131.0" x="600.0" y="182.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="790.0" y="201.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="75.0" y="227.0"></omgdi:waypoint>
+        <omgdi:waypoint x="110.0" y="227.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="215.0" y="227.0"></omgdi:waypoint>
+        <omgdi:waypoint x="250.0" y="227.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="270.0" y="207.0"></omgdi:waypoint>
+        <omgdi:waypoint x="270.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="350.0" y="127.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="40.0" x="270.0" y="161.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="270.0" y="247.0"></omgdi:waypoint>
+        <omgdi:waypoint x="270.0" y="327.0"></omgdi:waypoint>
+        <omgdi:waypoint x="355.0" y="327.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="13.0" width="42.0" x="270.0" y="269.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="497.0" y="327.0"></omgdi:waypoint>
+        <omgdi:waypoint x="665.0" y="327.0"></omgdi:waypoint>
+        <omgdi:waypoint x="665.0" y="255.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="501.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="665.0" y="127.0"></omgdi:waypoint>
+        <omgdi:waypoint x="665.0" y="182.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="731.0" y="218.0"></omgdi:waypoint>
+        <omgdi:waypoint x="790.0" y="218.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
