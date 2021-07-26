@@ -1,6 +1,8 @@
 package com.bhp.opusb.repository;
 
 import java.util.Optional;
+import java.util.Collection;
+import java.util.List;
 
 import com.bhp.opusb.domain.CVendor;
 
@@ -25,4 +27,7 @@ public interface CVendorRepository extends JpaRepository<CVendor, Long>, JpaSpec
 
   Optional<CVendor> findFirstByName(String name);
 
+  @Query(value = "SELECT COUNT(1) FROM c_vendor vdr WHERE DATE_PART('day', NOW() - vdr.date_trx) < 31 AND active = true "
+      +" AND COALESCE(NULLIF(?1, ''), vdr.document_status) = vdr.document_status", nativeQuery = true)
+  Long getNewVendor(String status);
 }

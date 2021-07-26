@@ -80,7 +80,13 @@ public class CVendorQueryService extends QueryService<CVendor> {
 
         return cVendorRepository.count(specification);
     }
-
+    
+    @Transactional(readOnly = true)
+    public Long getNewVendor(String status) {
+        log.debug("count by status : {}", status);
+        return cVendorRepository.getNewVendor(status);
+    }
+    
     /**
      * Function to convert {@link CVendorCriteria} to a {@link Specification}
      * @param criteria The object which holds all the filters, which the entities should match.
