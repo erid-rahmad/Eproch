@@ -76,19 +76,22 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
         let x =1;
 
         res.data.forEach(data => {
-          if (data.biddingId === biddingId) {
+          if (data.score) {
+            if (data.biddingId === biddingId) {
 
-            data.rank=x;
-            if (data.winnerStatus===true){
-              this.disableSubmit=true;
+              data.rank = x;
+              if (data.winnerStatus === true) {
+                this.disableSubmit = true;
+              }
+              data_.push(data);
+              x++;
             }
-            data_.push(data);
-            x++;
           }
         })
         this.evaluationResult = data_;
         console.log("this ",this.evaluationResult)
         console.log("this ",this.evaluationResult.biddingId)
+
 
       })
       .finally(() => this.loading = false);
