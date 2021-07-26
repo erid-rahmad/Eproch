@@ -4,9 +4,12 @@ import { ElForm } from 'element-ui/types/form';
 import { Component, Inject, Mixins, Vue } from 'vue-property-decorator';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import settings from '@/settings';
+import AdInputLookup from '@/shared/components/AdInput/ad-input-lookup.vue';
+import AdInputList from "@/shared/components/AdInput/ad-input-list.vue";
 
-const baseApiAttachmentUpload = 'api/c-attachments/upload';
-const baseApiContractDocument = 'api/m-contract-documents';
+
+const baseApiClauseLine = 'api/c-clause-lines';
+const baseApiContractDocument = 'api/m-contract-clause-documents';
 
 const ContractDocumentProps = Vue.extend({
   props: {
@@ -19,8 +22,22 @@ const ContractDocumentProps = Vue.extend({
   }
 })
 
-@Component
+@Component({
+  components: {
+    AdInputLookup
+  }
+})
 export default class ContractDocument extends Mixins(AccessLevelMixin, ContractDocumentProps) {
+
+
+    list= [
+      { id: 1, name: "Abby", sport: "basket" },
+      { id: 2, name: "Brooke", sport: "foot" },
+      { id: 3, name: "Courtenay", sport: "volley" },
+      { id: 4, name: "David", sport: "rugby" }
+    ]
+
+
 
   @Inject('accountService')
   private accountService: () => AccountService;
@@ -30,48 +47,16 @@ export default class ContractDocument extends Mixins(AccessLevelMixin, ContractD
 
   loading: boolean = false;
   documentFormVisible: boolean = false;
-  contractText='';
   contractTextVisible:boolean=false;
 
+
+  contractText='';
+  x=0;
   documents: any[] = [];
+  clauses:any[]=[];
+  clausesOption:any[]=[];
+  Title='';
 
-   document: any = {
-    adOrganizationId: null,
-    name: null,
-    // attachment: null,
-    // attachmentId: null,
-    // attachmentName: null,
-    header:'',
-    body:'',
-    footer:'',
-  };
-
-  headerOption= [{
-    value: 'Youve got to expect mistakes from anyone whos starting for the the first time -- in any profession, for that matter," Knapp told reporters. "And I m seeing very minimal same mistakes twice. So he learns quickly from his mistakes and that s impressive to see from a young guy. He a big-time student of the game',
-    label: 'template 1'
-  }, {
-    value: 'Those of us who were so blessed to have known him, know that he would ve wanted even this moment to be a teachable one," Knapp s family said in a statement. "So this is it ... ve every day as if its your last, and love those around you like it wont last.',
-    label: 'template 2'
-  }, ]
-  bodyOption= [{
-    value: 'Knapp had been in the NFL since 1997 when he was hired by the San Francisco 49ers to be an offensive quality control coach. He was with the Niners through 2003 when he was offensive coordinator. He moved to the Atlanta Falcons to work with Michael Vick. He also worked with Matt Schaub in Houston as quarterbacks coach in 2010. He won Super Bowl 50 with the Denver Broncos in 2016.',
-    label: 'template 1'
-  }, {
-    value: 'In total, Knapp worked for seven different teams in his career, including four as offensive coordinator. Before being hired by the Jets he was quarterbacks coach with the Falcons -- his second stint with the team -- for two seasons.',
-    label: 'template 2'
-  }, ]
-  footerOption= [{
-    value: 'He was a tremendous football coach who achieved at the highest levels of our game, but more importantly he was a wonderful person who had the love, admiration and respect of those who were blessed to work with him," Falcons owner Arthur Blank said in a statement.',
-    label: 'template 1'
-  }, {
-    value: 'Knapp played football in college at Sacramento State and spent several years in the NFL as a practice squad and preseason player. He never played in a regular season game.',
-    label: 'template 2'
-  }, ]
-
-
-
-  limit: number = 1;
-  accept: string = ".jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .csv, .ppt, .pptx, .pdf";
 
   get formSettings() {
     return settings.form;
@@ -81,150 +66,149 @@ export default class ContractDocument extends Mixins(AccessLevelMixin, ContractD
     return this.data.documentStatus && this.data.documentStatus !== 'DRF';
   }
 
-  get uploadApi() {
-    return baseApiAttachmentUpload;
-  }
-
-  get uploadHeaders() {
-    if (this.accountService().hasToken) {
-      return {
-        'Authorization': `Bearer ${this.accountService().token}`
-      }
-    }
-
-    return {};
-  }
 
   created() {
-    this.retrieveDocuments(this.data.id);
+    this.retrieveDocument(this.data.id);
   }
 
-  private retrieveDocuments(contractId: number) {
-      this.loading = true;
-      this.commonService(baseApiContractDocument)
-        .retrieve({
-          criteriaQuery: this.updateCriteria([
-            'active.equals=true',
-            `contractId.equals=${contractId}`
-          ])
-        })
-        .then(res => {
-          this.documents = res.data;
-        })
-        .catch(err => {
-          console.log('Failed to get contract documents. %O', err);
-          this.$message.error('Failed to get contract documents');
-        })
-        .finally(() => this.loading = false);
-  }
-
-  handlePreview(file) {
-    window.open(file.response.downloadUri, '_blank');
-  }
-
-  downloadAttachment(row: any){
-    window.open(row.attachment.attachmentUrl, '_blank');
-  }
-
-  handleRemove(file, fileList) {
-    console.log(file, fileList);
-
-  }
-
-  onUploadError(err: any) {
-    console.log('Failed uploading a file ', err);
-  }
-
-  onUploadSuccess(response) {
-      this.document.attachment = response.attachment;
-      this.document.attachmentId = response.attachment.id;
-      this.document.attachmentName = response.attachment.fileName;
-      this.document.attachmentUrl = response.downloadUri;
-  }
-
-  handleExceed(files) {
-    if (files.length >= 1) {
-      this.$notify({
-        title: 'Warning',
-        message: "Up to 1 files are allowed",
-        type: 'warning',
-        duration: 3000
-      });
-      return false;
+  addClause(){
+    console.log("this x",this.x)
+   this.x+=1;
+    let clause={
+      title:'',
+      clause:'',
+      clauseLine:'',
+      no:this.x,
     }
+    this.clauses.push(clause);
   }
 
-  handleBeforeUpload(file: any) {
-    // File size limitation
-    const isLt5M = file.size / 1024 / 1024 < 5;
-    if (!isLt5M) {
-      this.$notify({
-          title: 'Warning',
-          message: "files with a size less than 5Mb",
-          type: 'warning',
-          duration: 3000
-      });
-      return isLt5M;
-    }
+  deleteClause(row) {
+    this.clauses.splice(row.$index,1)
+  }
+  retrieveClauseLine(row){
+    console.log("this row",row)
+    this.commonService(baseApiClauseLine)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `clauseId.equals=${row.clause}`,
+        ])
+      })
+      .then(res => {
+        return this.clausesOption=res.data;
+      })
+      .catch(err => {
+        console.log('Failed to retrieveClauseLine. %O', err);
+        this.$message.error('Failed to retrieveClauseLine');
+      })
+      .finally(() => this.loading = false);
 
-    // File type restriction
-    const name = file.name ? file.name : '';
-    const ext = name
-      ? name.substr(name.lastIndexOf('.') + 1, name.length)
-      : true;
-    const isExt = this.accept.indexOf(ext) < 0;
-    if (isExt) {
-      this.$notify({
-        title: 'Warning',
-        message: "Please upload the correct format type",
-        type: 'warning',
-        duration: 3000
-      });
-      return false;
-    }
   }
 
-  removeDocument(row) {
+  deleteRow(row) {
+    this.documents.splice(row.$index,1)
+    this.delleteDocContactLine(row.id);
+  }
+
+  delleteDocContactLine(Id){
+    this.loading = true;
     this.commonService(baseApiContractDocument)
-      .delete(row.id)
-      .then(() => {
-        this.$message.success('Document has been removed successfully');
-        this.retrieveDocuments(this.data.id);
-      });
+      .delete(Id)
+      .then(data=>{
+        this.retrieveDocument(this.data.id);
+      })
+      .catch(err => {
+        console.error('Failed getting the record. %O', err);
+        this.$message.error(err.detail || err.message);
+      })
+      .finally(() => this.loading = false);
+  }
+
+  retrieveDocument(contractId){
+    this.commonService(baseApiContractDocument)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `contractId.equals=${contractId}`,
+        ])
+      })
+      .then(res => {
+        this.documents=res.data
+      })
+      .catch(err => {
+        console.log('Failed to retrieveClauseLine. %O', err);
+        this.$message.error('Failed to retrieveClauseLine');
+      })
+      .finally(() => this.loading = false);
+
   }
 
   addNew(){
-    this.documentFormVisible = true
+    this.documentFormVisible = true,
+      this.Title=null;
+    this.clauses=[];
   }
 
   view(row){
-    console.log("this row",row)
-    this.contractText=
-      '<p>'+row.header+'</p>'+
-      '<p>'+row.body+'</p>'+
-      '<p>'+row.footer+'</p>';
+    console.log("this row",row.description)
+    this.contractText=row.description;
     this.contractTextVisible=true;
 
   }
 
-  saveDocument() {
-    // (this.$refs.documentForm as ElForm).validate(passed => {
-    //   if (passed) {
-    //     this.document.contractId = this.data.id;
-    //     this.document.adOrganizationId = this.data.adOrganizationId;
-    //
-    //     this.commonService(baseApiContractDocument)
-    //       .create(this.document)
-    //       .then(() => {
-    //         this.$message.success('Document has been created successfully');
-    //         this.retrieveDocuments(this.data.id);
-    //         this.documentFormVisible = false;
-    //       })
-    //       .catch(() => this.$message.error('Failed to create the document'));
-    //   }
-    // });
-    // console.log("this document",document)
-    this.documents.push(this.document);
+  async saveDocument() {
+    let text ='';
+
+    function compare(a, b) {
+      // Use toUpperCase() to ignore character casing
+      const bandA = a.no;
+      const bandB = b.no;
+      let comparison = 0;
+      if (bandA < bandB) {
+        comparison = 1;
+      } else if (bandA > bandB) {
+        comparison = -1;
+      }
+      return comparison;
+    }
+    await this.clauses.sort(compare);
+
+    await this.clauses.forEach(value => {
+      let paragraph='<p>'+value.clauseLine+'</p>';
+      text=paragraph+text+'<p>';
+    })
+
+     let document= {
+      name:this.Title,
+      description:text,
+       contractId:this.data.id,
+       adOrganizationId:this.data.adOrganizationId,
+       active:true
+
+    }
+
+    await this.documents.push(document);
     this.documentFormVisible = false;
   }
+
+  save(){
+    console.log("documentts",this.documents)
+    this.documents.forEach(value => {
+      this.commonService(baseApiContractDocument)
+        .create(value)
+        .then(res => {
+          console.log("this res.data",res.data)
+          this.retrieveDocument(this.data.id);
+        })
+        .catch(err => {
+          console.error('Failed to save the contract', err);
+          this.$message.error('Failed to save the contract');
+        })
+        .finally(() => this.loading = false);
+    })
+
+  }
+
+
 }

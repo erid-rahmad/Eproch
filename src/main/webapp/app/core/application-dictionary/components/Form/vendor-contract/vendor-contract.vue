@@ -27,7 +27,7 @@
                 Close
             </el-button>
             <el-button
-                v-if="detailPage && isDraft && (detailTabName === 'INF'|| detailTabName === 'TEM')"
+                v-if="detailPage && isDraft && (detailTabName === 'INF'|| detailTabName === 'TEM'|| detailTabName === 'DOC' )"
                 size="mini"
                 type="primary"
                 @click="onSaveClicked"
