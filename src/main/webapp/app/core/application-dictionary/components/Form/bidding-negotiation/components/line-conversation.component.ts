@@ -93,6 +93,7 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
     this.chatForm.text = "";
     this.chatForm.publishToEmail = false;
     this.showChatForm = false;
+    this.fileList = [];
   }
 
   onUploadChange(file: any) {
