@@ -8,6 +8,7 @@
             highlight-current-row
             size="mini"
             stripe
+            draggable="true"
         >
             <el-table-column
                 label="No" width="50">
@@ -23,21 +24,6 @@
                 show-overflow-tooltip
             ></el-table-column>
 
-            <!--      <el-table-column label="File" min-width="200">-->
-            <!--        <template v-slot="{ row }">-->
-            <!--          <el-button-->
-            <!--            class="btn-attachment"-->
-            <!--            icon="el-icon-download"-->
-            <!--            size="mini"-->
-            <!--            :title="row.attachmentName"-->
-            <!--            type="primary"-->
-            <!--            @click="downloadAttachment(row)"-->
-            <!--          >-->
-            <!--            {{ row.attachmentName }}-->
-            <!--          </el-button>-->
-            <!--        </template>-->
-            <!--      </el-table-column>-->
-
             <el-table-column align="center" fixed="right" width="100">
                 <template slot="header">
                     <el-button icon="el-icon-plus" size="mini" type="primary"
@@ -45,120 +31,85 @@
                 </template>
                 <template v-slot="{ row }">
                     <el-button v-if="!readOnly" icon="el-icon-delete" size="mini" type="danger"
-                               @click="removeDocument(row)"></el-button>
+                               @click="deleteRow(row)"></el-button>
                     <el-button v-if="!readOnly" size="mini" type="danger" @click="view(row)">View</el-button>
                 </template>
             </el-table-column>
         </el-table>
+
+
+
+
         <el-dialog
             :show-close="false"
             :visible.sync="documentFormVisible"
-            title="Upload Document"
+            title="Clause"
             width="60%"
         >
             <template>
-                <el-form
-                    ref="documentForm"
+                    <el-input v-model="Title" class="form-input" clearable placeholder="Title"></el-input>
+                <el-table
+                    v-loading="loading"
+                    :data="clauses"
+                    border
+                    highlight-current-row
+                    size="mini"
+                    stripe
+                    style="width: 100%"
                 >
-                    <el-form-item label="Title" prop="name">
-                        <el-input v-model="document.name" class="form-input" clearable placeholder="Title"></el-input>
-                    </el-form-item>
+                    <el-table-column
+                        label="No" width="50">
+                        <template v-slot="{ $index }">
+                            {{ $index + 1 }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="Clause" min-width="30" size="mini">
+                        <template slot-scope="{row}">
+                            <ad-input-lookup
+                                v-model="row.clause"
+                                :label-fields="['name']"
+                                :query="['active.equals=true']"
+                                placeholder="Select CC"
+                                size="mini"
+                                table-name="c_clause"
+                            ></ad-input-lookup>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="clause Description"  min-width="30" size="mini">
+                        <template slot-scope="{row}">
+                                <el-select v-model="row.clauseLine" @focus="retrieveClauseLine(row)" placeholder="Select">
+                                    <el-option
+                                        v-for="item in clausesOption"
+                                        :key="item.name"
+                                        :label="item.name"
+                                        :value="item.description"
+                                        size="mini">
+                                    </el-option>
+                                </el-select>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="clause Description"  min-width="180" size="mini">
+                        <template slot-scope="{row}">
+                            <el-input
+                                type="textarea"
+                                autosize
+                                placeholder="Please input"
+                                v-model="row.clauseLine">
+                            </el-input>
+                        </template>
+                    </el-table-column>
 
-                    <el-divider content-position="left">
-                        <h4>Header</h4>
-                    </el-divider>
-                    <el-row>
-                        <el-col :span="4">Introduction
-                            <div class="grid-content bg-purple"></div>
-                        </el-col>
-                        <el-col :span="4">
-                            <template>
-                                <el-select v-model="document.header" placeholder="Select">
-                                    <el-option
-                                        v-for="item in headerOption"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value"
-                                        size="mini">
-                                    </el-option>
-                                </el-select>
-                            </template>
-                            <div class="grid-content bg-purple-light"></div>
-                        </el-col>
-                        <el-col :span="16">
-                            <el-input
-                                v-model="document.header"
-                                :rows="2"
-                                placeholder="Please input"
-                                type="textarea">
-                            </el-input>
-                            <div class="grid-content bg-purple"></div>
-                        </el-col>
-                    </el-row>
-                    <el-divider content-position="left">
-                        <h4>Body</h4>
-                    </el-divider>
-                    <el-row>
-                        <el-col :span="4">Introduction
-                            <div class="grid-content bg-purple"></div>
-                        </el-col>
-                        <el-col :span="4">
-                            <template>
-                                <el-select v-model="document.body" placeholder="Select">
-                                    <el-option
-                                        v-for="item in bodyOption"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value"
-                                        size="mini">
-                                    </el-option>
-                                </el-select>
-                            </template>
-                            <div class="grid-content bg-purple-light"></div>
-                        </el-col>
-                        <el-col :span="16">
-                            <el-input
-                                v-model="document.body"
-                                :rows="2"
-                                placeholder="Please input"
-                                type="textarea">
-                            </el-input>
-                            <div class="grid-content bg-purple"></div>
-                        </el-col>
-                    </el-row>
-                    <el-divider content-position="left">
-                        <h4>Footer</h4>
-                    </el-divider>
-                    <el-row>
-                        <el-col :span="4">Introduction
-                            <div class="grid-content bg-purple"></div>
-                        </el-col>
-                        <el-col :span="4">
-                            <template>
-                                <el-select v-model="document.footer" placeholder="Select">
-                                    <el-option
-                                        v-for="item in footerOption"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value"
-                                        size="mini">
-                                    </el-option>
-                                </el-select>
-                            </template>
-                            <div class="grid-content bg-purple-light"></div>
-                        </el-col>
-                        <el-col :span="16">
-                            <el-input
-                                v-model="document.footer"
-                                :rows="2"
-                                placeholder="Please input"
-                                type="textarea">
-                            </el-input>
-                            <div class="grid-content bg-purple"></div>
-                        </el-col>
-                    </el-row>
-                </el-form>
-
+                    <el-table-column align="center" fixed="right" width="100">
+                        <template slot="header">
+                            <el-button icon="el-icon-plus" size="mini" type="primary"
+                                       @click="addClause"></el-button>
+                        </template>
+                        <template v-slot=" row ">
+                            <el-button  icon="el-icon-delete" size="mini" type="danger"
+                                       @click="deleteClause(row)"></el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
                 <div slot="footer">
                     <el-button icon="el-icon-close" size="mini" style="margin-left: 0px;"
                                @click="documentFormVisible = false">
