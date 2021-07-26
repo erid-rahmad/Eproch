@@ -1,6 +1,11 @@
 <template>
     <div class="contract-document">
+
+        <create-clause v-if="createClausa" @close="cancle" @save="addDocument"></create-clause>
+
+
         <el-table
+            v-if="!createClausa"
             ref="documents"
             v-loading="loading"
             :data="documents"
@@ -8,7 +13,6 @@
             highlight-current-row
             size="mini"
             stripe
-            draggable="true"
         >
             <el-table-column
                 label="No" width="50">
@@ -24,30 +28,28 @@
                 show-overflow-tooltip
             ></el-table-column>
 
-            <el-table-column align="center" fixed="right" width="100">
+            <el-table-column align="center" fixed="right" width="120">
                 <template slot="header">
                     <el-button icon="el-icon-plus" size="mini" type="primary"
-                               @click="addNew"></el-button>
+                               @click="createClausa=true"></el-button>
                 </template>
                 <template v-slot="{ row }">
                     <el-button v-if="!readOnly" icon="el-icon-delete" size="mini" type="danger"
                                @click="deleteRow(row)"></el-button>
-                    <el-button v-if="!readOnly" size="mini" type="danger" @click="view(row)">View</el-button>
+                    <el-button v-if="!readOnly" size="mini" type="primary" @click="view(row)">Download</el-button>
                 </template>
             </el-table-column>
         </el-table>
-
-
 
 
         <el-dialog
             :show-close="false"
             :visible.sync="documentFormVisible"
             title="Clause"
-            width="60%"
+            width="100%"
         >
             <template>
-                    <el-input v-model="Title" class="form-input" clearable placeholder="Title"></el-input>
+                <el-input v-model="Title" class="form-input" clearable placeholder="Title"></el-input>
                 <el-table
                     v-loading="loading"
                     :data="clauses"
@@ -75,37 +77,61 @@
                             ></ad-input-lookup>
                         </template>
                     </el-table-column>
-                    <el-table-column label="clause Description"  min-width="30" size="mini">
-                        <template slot-scope="{row}">
-                                <el-select v-model="row.clauseLine" @focus="retrieveClauseLine(row)" placeholder="Select">
-                                    <el-option
-                                        v-for="item in clausesOption"
-                                        :key="item.name"
-                                        :label="item.name"
-                                        :value="item.description"
-                                        size="mini">
-                                    </el-option>
-                                </el-select>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="clause Description"  min-width="180" size="mini">
-                        <template slot-scope="{row}">
-                            <el-input
-                                type="textarea"
-                                autosize
-                                placeholder="Please input"
-                                v-model="row.clauseLine">
-                            </el-input>
+                    <el-table-column  min-width="180" size="mini">
+                        <template slot-scope="{row}" template>
+                            <el-table
+                                :data="row.list"
+                                align="center"
+                                stripe>
+                                <el-table-column
+                                    label="clause name" min-width="100" size="mini"
+                                   >
+                                    <template slot-scope="{row}">
+                                        <el-select v-model="row.clauseLine" placeholder="Select"
+                                                   @focus="retrieveClauseLine(row)">-->
+                                            <el-option
+                                                v-for="item in clausesOption"
+                                                :key="item.name"
+                                                :label="item.name"
+                                                :value="item.description"
+                                                size="mini">
+                                            </el-option>
+                                        </el-select>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="clause Description" min-width="200" size="mini">
+                                    <template slot-scope="{row}">
+                                        <el-input
+                                            v-model="row.clauseLine"
+                                            autosize
+                                            placeholder="Please input"
+                                            type="textarea">
+                                        </el-input>
+                                    </template>
+                                </el-table-column>
+
+                                <el-table-column align="center" fixed="right" width="80">
+                                    <template slot="header">
+                                        <el-button icon="el-icon-plus" size="mini" type="primary"
+                                                   @click="addSubClause(row)"></el-button>
+                                    </template>
+                                    <template v-slot=" row ">
+                                        <el-button icon="el-icon-delete" size="mini" type="danger"
+                                                   @click="deleteClause(row)"></el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
                         </template>
                     </el-table-column>
 
-                    <el-table-column align="center" fixed="right" width="100">
+
+                    <el-table-column align="center" fixed="right" width="80">
                         <template slot="header">
                             <el-button icon="el-icon-plus" size="mini" type="primary"
                                        @click="addClause"></el-button>
                         </template>
                         <template v-slot=" row ">
-                            <el-button  icon="el-icon-delete" size="mini" type="danger"
+                            <el-button icon="el-icon-delete" size="mini" type="danger"
                                        @click="deleteClause(row)"></el-button>
                         </template>
                     </el-table-column>

@@ -5,7 +5,10 @@ import { Component, Inject, Mixins, Vue } from 'vue-property-decorator';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import settings from '@/settings';
 import AdInputLookup from '@/shared/components/AdInput/ad-input-lookup.vue';
-import AdInputList from "@/shared/components/AdInput/ad-input-list.vue";
+import createClause from './create-clause.vue'
+import draggable from "vuedraggable";
+import Sortable from "sortablejs";
+
 
 
 const baseApiClauseLine = 'api/c-clause-lines';
@@ -24,20 +27,11 @@ const ContractDocumentProps = Vue.extend({
 
 @Component({
   components: {
-    AdInputLookup
+    AdInputLookup,createClause,draggable,
+    Sortable
   }
 })
 export default class ContractDocument extends Mixins(AccessLevelMixin, ContractDocumentProps) {
-
-
-    list= [
-      { id: 1, name: "Abby", sport: "basket" },
-      { id: 2, name: "Brooke", sport: "foot" },
-      { id: 3, name: "Courtenay", sport: "volley" },
-      { id: 4, name: "David", sport: "rugby" }
-    ]
-
-
 
   @Inject('accountService')
   private accountService: () => AccountService;
@@ -48,6 +42,7 @@ export default class ContractDocument extends Mixins(AccessLevelMixin, ContractD
   loading: boolean = false;
   documentFormVisible: boolean = false;
   contractTextVisible:boolean=false;
+  createClausa:boolean=false;
 
 
   contractText='';
@@ -66,9 +61,41 @@ export default class ContractDocument extends Mixins(AccessLevelMixin, ContractD
     return this.data.documentStatus && this.data.documentStatus !== 'DRF';
   }
 
+  headers= [
+    { text: 'ID', value: 'id' },
+    { text: 'Subject', value: 'subject' },
+    { text: 'Assigned To', value: 'assignedTo' },
+    { text: 'Date', value: 'date' },
+    { text: 'Status', value: 'status' }
+  ]
+
 
   created() {
     this.retrieveDocument(this.data.id);
+    this.testing();
+  }
+
+  move(row){
+    console.log("this row",row)
+    function arraymove(arr, fromIndex, toIndex) {
+      var element = arr[fromIndex];
+      arr.splice(fromIndex, 1);
+      arr.splice(toIndex, 0, element);
+    }
+  }
+
+  async testing() {
+    console.log("this header", this.headers)
+
+    function arraymove(arr, fromIndex, toIndex) {
+      var element = arr[fromIndex];
+      arr.splice(fromIndex, 1);
+      arr.splice(toIndex, 0, element);
+    }
+
+    await arraymove(this.headers, 1, 3);
+    console.log("this header 2", this.headers)
+
   }
 
   addClause(){
@@ -79,8 +106,55 @@ export default class ContractDocument extends Mixins(AccessLevelMixin, ContractD
       clause:'',
       clauseLine:'',
       no:this.x,
+      list: [
+      ],
     }
     this.clauses.push(clause);
+  }
+  Export2Word(element, filename = ''){
+
+    var preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
+    var postHtml = "</body></html>";
+    var html = element;
+
+    var blob = new Blob(['\ufeff', html], {
+      type: 'application/msword'
+    });
+
+    // Specify link url
+    var url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
+
+    // Specify file name
+    filename = filename?filename+'.doc':'document.doc';
+
+    // Create download link element
+    var downloadLink = document.createElement("a");
+
+    document.body.appendChild(downloadLink);
+
+    if(navigator.msSaveOrOpenBlob ){
+      navigator.msSaveOrOpenBlob(blob, filename);
+    }else{
+      // Create a link to the file
+      downloadLink.href = url;
+
+      // Setting the file name
+      downloadLink.download = filename;
+
+      //triggering the function
+      downloadLink.click();
+    }
+    document.body.removeChild(downloadLink);
+  }
+
+
+
+  addSubClause(row){
+    this.x+=1;
+    console.log("this row",row);
+    let satu =
+      { no:this.x,clauseLine: "" }
+    row.list.push(satu)
   }
 
   deleteClause(row) {
@@ -92,7 +166,7 @@ export default class ContractDocument extends Mixins(AccessLevelMixin, ContractD
       .retrieve({
         criteriaQuery: this.updateCriteria([
           'active.equals=true',
-          `clauseId.equals=${row.clause}`,
+          // `clauseId.equals=${row.clause}`,
         ])
       })
       .then(res => {
@@ -108,7 +182,7 @@ export default class ContractDocument extends Mixins(AccessLevelMixin, ContractD
 
   deleteRow(row) {
     this.documents.splice(row.$index,1)
-    this.delleteDocContactLine(row.id);
+    row.id ? this.delleteDocContactLine(row.id):null;
   }
 
   delleteDocContactLine(Id){
@@ -153,30 +227,22 @@ export default class ContractDocument extends Mixins(AccessLevelMixin, ContractD
   view(row){
     console.log("this row",row.description)
     this.contractText=row.description;
-    this.contractTextVisible=true;
+    this.Export2Word(row.description,row.name)
+    // this.contractTextVisible=true;
 
   }
 
+
+
   async saveDocument() {
     let text ='';
-
-    function compare(a, b) {
-      // Use toUpperCase() to ignore character casing
-      const bandA = a.no;
-      const bandB = b.no;
-      let comparison = 0;
-      if (bandA < bandB) {
-        comparison = 1;
-      } else if (bandA > bandB) {
-        comparison = -1;
-      }
-      return comparison;
-    }
-    await this.clauses.sort(compare);
-
-    await this.clauses.forEach(value => {
-      let paragraph='<p>'+value.clauseLine+'</p>';
-      text=paragraph+text+'<p>';
+    const data= this.clauses.reverse();
+    data.forEach( value => {
+      const data=value.list.reverse();
+       data.forEach(data=>{
+        let paragraph = '\n' + data.clauseLine + '\n';
+        text = paragraph + text;
+      })
     })
 
      let document= {
@@ -185,12 +251,33 @@ export default class ContractDocument extends Mixins(AccessLevelMixin, ContractD
        contractId:this.data.id,
        adOrganizationId:this.data.adOrganizationId,
        active:true
-
     }
 
     await this.documents.push(document);
     this.documentFormVisible = false;
+    this.save();
   }
+
+  async addDocument(value) {
+    console.log("this valuse",value)
+    let document = {
+      name: value.title,
+      description: value.contract,
+      contractId: this.data.id,
+      adOrganizationId: this.data.adOrganizationId,
+      active: true
+    }
+
+    await this.documents.push(document);
+    this.save();
+    this.createClausa=false;
+  }
+
+  cancle(){
+    this.createClausa=false;
+  }
+
+
 
   save(){
     console.log("documentts",this.documents)

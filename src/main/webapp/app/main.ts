@@ -61,6 +61,7 @@ import 'vue-material/dist/theme/default.css'
 Vue.use(VueMaterial)
 
 
+
 Schema.warning = function() {};
 Vue.use(InputFacade);
 Vue.config.productionTip = false;

@@ -1,6 +1,6 @@
 <template>
     <div>
-    <div class="contract-document">
+    <div class="contract-document" v-if="indexs">
         <el-table
             ref="documents"
             v-loading="loading"
@@ -43,9 +43,11 @@
             ></el-table-column>
             <el-table-column
             >
-                <el-button size="mini" style="margin-left: 0px;"
+                <template slot-scope="{row}" >
+                <el-button size="mini" style="margin-left: 0px;" @click="view(row)"
                 >view
                 </el-button>
+                </template>
             </el-table-column>
 
         </el-table>
@@ -73,7 +75,7 @@
 
         </el-dialog>
     </div>
-    <div>
+    <div v-if="!indexs" >
         <el-form
             ref="contractInfoForm"
             v-loading="loading"

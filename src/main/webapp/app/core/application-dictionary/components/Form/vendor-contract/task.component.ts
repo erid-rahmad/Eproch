@@ -22,6 +22,7 @@ export default class TaskComponent extends Mixins(AccessLevelMixin, ContractInfo
 
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
+  indexs:boolean=true;
 
   loading:boolean;
   ContactTasks:any=[
@@ -62,6 +63,11 @@ export default class TaskComponent extends Mixins(AccessLevelMixin, ContractInfo
     DueDate:'',
     ContractTaskStatus:'',
     contractId:''
+  }
+
+  view(row){
+
+
   }
 
 
