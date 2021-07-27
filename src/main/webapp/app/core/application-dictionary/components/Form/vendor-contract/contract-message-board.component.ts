@@ -191,6 +191,6 @@ export default class ContractMessageBoard extends mixins(AccessLevelMixin, MsgBo
   }
 
   downloadAttachment(row){
-    window.open(row.downloadUrl, '_blank');
+    window.open(row.downloadUrl, '_self');
   }
 }

@@ -353,7 +353,7 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   }
 
   downloadAttachment(row){
-    window.open(row.downloadUrl, '_blank');
+    window.open(row.downloadUrl, '_self');
   }
 
   truncateDecimals = function (number, digits) {

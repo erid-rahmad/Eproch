@@ -34,8 +34,6 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="Vendor Name" prop="vendorName" show-overflow-tooltip sortable width="200"></el-table-column>
-
           <el-table-column label="Start Date" min-width="150" sortable>
             <template v-slot="{ row }">
               {{ row.startDate | formatDate(true) }}
@@ -47,14 +45,6 @@
               {{ row.expirationDate | formatDate(true) }}
             </template>
           </el-table-column>
-
-          <el-table-column label="Modified Date" min-width="150" sortable>
-            <template v-slot="{ row }">
-              {{ row.lastModifiedDate | formatDate }}
-            </template>
-          </el-table-column>
-
-          <el-table-column label="Modified by" min-width="150" prop="lastModifiedBy" sortable></el-table-column>
 
           <el-table-column fixed="right" label="Action" width="180">
             <template v-slot="{ row }">
