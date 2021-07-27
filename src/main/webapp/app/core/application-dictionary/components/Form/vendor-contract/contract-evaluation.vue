@@ -56,11 +56,12 @@
         </template>
       </el-table-column>
     </el-table>
-      <el-dialog
-          :visible.sync="vendorEvaluationDetail"
-
-          width="80%">
-      <el-form class="card"
+    <el-dialog
+      :visible.sync="vendorEvaluationDetail"
+      :before-close="refresh"
+      width="80%">
+        <!--
+        <el-form class="card"
                ref="form"
                label-width="180px"
                label-position="left"
@@ -97,7 +98,38 @@
               </el-col>
           </el-row>
       </el-form>
-      </el-dialog>
+      -->
+      <vendor-evaluation-detail
+        v-if="vendorEvaluationDetail"
+        ref="evaluationForm"
+        :data="selectRow"
+        :from-contract="true"
+      ></vendor-evaluation-detail>
+      <div slot="footer">
+        <el-button
+          v-if="isDraft"
+          icon="el-icon-check"
+          :loading="loading"
+          size="mini"
+          type="primary"
+          @click="onSaveClicked"
+        >
+          Save
+        </el-button>
+
+        <el-button
+          v-if="isDraft"
+          icon="el-icon-check"
+          :loading="loading"
+          size="mini"
+          type="primary"
+          @click="onSubmitClicked"
+        >
+          Submit
+        </el-button>
+      </div>
+    </el-dialog>
+    
   </div>
 </template>
 <script lang="ts" src="./contract-evaluation.component.ts"></script>
