@@ -217,7 +217,7 @@
           </el-col>
         </el-row>
       </el-form>
-      <el-table border :data="negoSummary" size="mini">
+      <el-table border :data="negoSummary" v-loading="loadingSummary" size="mini">
         <el-table-column width="60" label="No">
           <template slot-scope="row">
             {{ row.$index + 1 }}
@@ -229,6 +229,7 @@
             <el-checkbox
               v-if="row.negotiationStatus==='agreed'"
               v-model="row.checkmark"
+              :disabled="vcExist"
             >{{row.negotiationStatus}}</el-checkbox>
           </template>
         </el-table-column>
@@ -245,6 +246,7 @@
           icon="el-icon-check"
           size="mini"
           type="primary"
+          v-if="!vcExist && !loadingSummary"
           @click="createConfirmation"
         >
           Submit

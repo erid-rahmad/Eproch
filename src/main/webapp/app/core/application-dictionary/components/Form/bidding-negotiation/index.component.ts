@@ -20,7 +20,8 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
 
   index = true;
   displayTable = true;
-  loading=true;
+  loading = true;
+  loadingSummary = true;
 
   showSchedule=false;
   showSummary=false;
@@ -35,6 +36,7 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
   scheduleApi = '/api/m-bidding-schedules';
   negotiationLineApi = '/api/m-bidding-negotiation-lines';
   vendorConfirmationApi = '/api/m-vendor-confirmations';
+  vendorConfirmationLineApi = '/api/m-vendor-confirmation-lines';
 
   selectedRow: any = {};
 
@@ -47,6 +49,8 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
   public previousPage = 1;
   public reverse = false;
   public totalItems = 0;
+
+  vcExist = false;
 
   get isVendor() {
     return AccountStoreModule.isVendor;
@@ -114,6 +118,7 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
   viewSummary(row){
     this.selectedRow = row;
     this.showSummary = true;
+    this.loadingSummary = true;
     this.commonService(this.negotiationLineApi).retrieve({
       criteriaQuery: this.updateCriteria([
         'active.equals=true',
@@ -126,12 +131,51 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
       }
     }).then((res)=>{
       this.negoSummary = res.data;
+      this.commonService(this.vendorConfirmationApi).retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `biddingId.equals=${this.selectedRow.biddingId}`
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      }).then((res)=>{
+        if(res.data.length) {
+          this.vcExist = true;
+          this.commonService(this.vendorConfirmationLineApi).retrieve({
+            criteriaQuery: this.updateCriteria([
+              'active.equals=true',
+              `vendorConfirmationId.equals=${res.data[0].id}`
+            ]),
+            paginationQuery: {
+              page: 0,
+              size: 10000,
+              sort: ['id']
+            }
+          }).then((res)=>{
+            res.data.forEach(line => {
+              this.negoSummary.forEach((e)=>{
+                if(e.vendorId == line.vendorId){
+                  e.checkmark = true;
+                }
+              })
+            });
+          }).finally(()=>{
+            this.loadingSummary = false;
+          })
+        } else {
+          this.loadingSummary = false;
+        }
+      })
     })
   }
 
   clearSummary(){
     this.negoSummary = [];
     this.showSummary = false;
+    this.vcExist = false;
     this.refreshHeader();
   }
 
