@@ -190,7 +190,7 @@
     <include file="config/liquibase/changelog/20210615102600_added_entity_MAuctionSubmissionItem.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210617072500_added_entity_MRfq.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210617072600_added_entity_MRfqLine.xml" relativeToChangelogFile="false"/>
-    <!--<include file="config/liquibase/changelog/20210618092300_added_entity_MContract.xml" relativeToChangelogFile="false"/>-->
+    <include file="config/liquibase/changelog/20210618092300_added_entity_MContract.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210618092400_added_entity_MContractDocument.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210618095600_added_entity_MVendorEvaluation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210618095700_added_entity_MVendorEvaluationLine.xml" relativeToChangelogFile="false"/>
