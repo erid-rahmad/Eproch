@@ -2,7 +2,7 @@
     <div class="app-container card-view vendor-contract">
         <div class="toolbar">
             <el-button
-                v-if="mainPage"
+                v-if="mainPage || (detailTabName === 'EVA')"
                 icon="el-icon-plus"
                 size="mini"
                 type="primary"

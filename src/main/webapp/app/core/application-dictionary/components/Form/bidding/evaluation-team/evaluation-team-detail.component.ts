@@ -99,6 +99,7 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
     }).then((res)=>{
       this.mainForm.members = res.data.map((item)=>{
         item.adUserName = `${item.adUserName?item.adUserName:""} ${item.adUserLastName?item.adUserLastName:""}`
+        item.editMode = false
         return item;
       });;
     })
@@ -111,7 +112,8 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
         this.commonService("/api/ad-users").retrieve({
           criteriaQuery: this.updateCriteria([
           'active.equals=true',
-          `userName.contains=${query}`]),
+          `userName.contains=${query}`,
+          `employee.equals=true`]),
           paginationQuery: {
             page: 0,
             size: 100,
@@ -163,6 +165,7 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
 
   editMember(row: any) {
     this.tmpRow = { ...row };
+    this.editMode = true;
     row.editMode = true;
   }
 

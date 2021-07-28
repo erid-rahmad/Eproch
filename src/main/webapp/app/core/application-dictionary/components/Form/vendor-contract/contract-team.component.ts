@@ -147,6 +147,7 @@ export default class ContractTeam extends Mixins(AccessLevelMixin, ContractTeamP
     }).then((res)=>{
       this.mainForm.members = res.data.map((item)=>{
         item.adUserName = `${item.adUserName?item.adUserName:""} ${item.adUserLastName?item.adUserLastName:""}`
+        item.editMode = false
         return item;
       });
     }).catch((err)=>{
@@ -164,7 +165,7 @@ export default class ContractTeam extends Mixins(AccessLevelMixin, ContractTeamP
         criteriaQuery: this.updateCriteria([
         'active.equals=true',
         `userName.contains=${query}`,
-        `cVendorId.equals=${this.data.vendorId}`]),
+        `employee.equals=true`]),
         paginationQuery: {
           page: 0,
           size: 100,
@@ -213,6 +214,7 @@ export default class ContractTeam extends Mixins(AccessLevelMixin, ContractTeamP
 
   editMember(row: any) {
     this.tmpRow = { ...row };
+    this.editMode = true;
     row.editMode = true;
   }
 

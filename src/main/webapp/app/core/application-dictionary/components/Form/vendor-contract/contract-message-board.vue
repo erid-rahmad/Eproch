@@ -61,7 +61,7 @@
           <template>
             <div class="form-wrapper card-view app-container" v-if="chatHistory.length" style="background:#FFFFFF">
               <div class="card" v-for="(c,index) in chatHistory" :key="index" style="border: solid; border-width: thin;">
-                <h4>{{c.vendorText?line.vendorName:"Buyer"}}
+                <h4>{{c.vendorText?data.vendorName:"Buyer"}}
                   <el-button
                     class="btn-attachment"
                     icon="el-icon-download"

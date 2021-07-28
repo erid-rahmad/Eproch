@@ -85,6 +85,7 @@ export default class ContractMessageBoard extends mixins(AccessLevelMixin, MsgBo
     this.chatForm.text = "";
     this.chatForm.publishToEmail = false;
     this.showChatForm = false;
+    this.fileList = [];
   }
 
   onUploadChange(file: any) {
@@ -190,6 +191,6 @@ export default class ContractMessageBoard extends mixins(AccessLevelMixin, MsgBo
   }
 
   downloadAttachment(row){
-    window.open(row.downloadUrl, '_blank');
+    window.open(row.downloadUrl, '_self');
   }
 }

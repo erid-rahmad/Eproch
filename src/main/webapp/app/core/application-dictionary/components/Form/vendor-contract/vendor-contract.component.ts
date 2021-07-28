@@ -92,7 +92,7 @@ export default class VendorContract extends Mixins(AccessLevelMixin) {
 
   onSaveClicked() {
     (<any>this.$refs.detailPage).save();
-    }
+  }
 
   ApproveClicked(){
     (<any>this.$refs.detailPage).approve();
@@ -256,20 +256,24 @@ export default class VendorContract extends Mixins(AccessLevelMixin) {
   }
 
   viewDetails(row: any) {
-    if ( ! row) {
-      this.selectedRow = {
-        name: null,
-        description: null,
-        documentNo: null,
-        adOrganizationId: AccountStoreModule.organizationInfo.id,
-        currencyId: null,
-        costCenterId: null,
-        ownerUserId: null
-      };
-    } else {
-      this.selectedRow = row;
-    }
+    if(this.mainPage){
+      if ( ! row) {
+        this.selectedRow = {
+          name: null,
+          description: null,
+          documentNo: null,
+          adOrganizationId: AccountStoreModule.organizationInfo.id,
+          currencyId: null,
+          costCenterId: null,
+          ownerUserId: null
+        };
+      } else {
+        this.selectedRow = row;
+      }
 
-    this.section = ContractPage.DETAIL;
+      this.section = ContractPage.DETAIL;
+    } else {
+      (<any>(<any>this.$refs.detailPage).$refs.EVA[0]).viewDetails();
+    }
   }
 }

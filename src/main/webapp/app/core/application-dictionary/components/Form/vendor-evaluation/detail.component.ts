@@ -19,7 +19,10 @@ const VendorEvaluationDetailProp = Vue.extend({
         return {};
       }
     },
-
+    fromContract: {
+      type: Boolean,
+      default: ()=> {return false};
+    },
     loading: Boolean
   }
 });
@@ -123,6 +126,9 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
       if ( this.evaluation.documentStatus==='APV'){
         this.readOnly=true;
       }
+    } else if(this.fromContract) {
+      this.retriveContractFilter(this.evaluation.vendorId);
+      this.onContractIdChanged(this.evaluation.contractId);
     }
   }
 
