@@ -78,6 +78,12 @@ entity CClauseLine {
 	active Boolean
 }
 
+entity CTask {
+	name String required
+	uid UUID
+	active Boolean
+}
+
 entity CRegion {
 	name String required
 	description String
@@ -1561,6 +1567,28 @@ entity MContractClauseDocument {
 	active Boolean
 }
 
+entity MContractTask {
+	name String required
+	contractDocument TextBlob
+	dueDate LocalDate required
+	documentAction String required maxlength(10)
+    documentStatus String required maxlength(12)
+	uid UUID
+	active Boolean
+}
+
+entity MContractTaskNegotiation {
+	description String required
+	contractDocument TextBlob
+	uid UUID
+	active Boolean
+}
+
+entity MContractTaskReviewers{
+	uid UUID
+	active Boolean
+}
+
 entity MContractTeam {
 	status String
 	uid UUID
@@ -2072,6 +2100,7 @@ relationship ManyToOne {
 	CClauseLine{clause required} to CClause
 	CClauseLine{adOrganization required} to ADOrganization
 
+	CTask{adOrganization required} to ADOrganization
 
 	CRegion{adOrganization required} to ADOrganization
 	CCity{adOrganization required} to ADOrganization
@@ -2198,6 +2227,18 @@ relationship ManyToOne {
 
 	MContractTeam{adOrganization required} to ADOrganization
 	MContractTeam{contract required} to MContract
+
+	MContractTask{adOrganization required} to ADOrganization
+    MContractTask{contract required} to MContract
+    MContractTask{task required} to CTask
+
+    MContractTaskNegotiation{adOrganization required} to ADOrganization
+    MContractTaskNegotiation{contractTask required} to MContractTask
+    MContractTaskNegotiation{cAttachment} to CAttachment
+
+    MContractTaskReviewers{adOrganization required} to ADOrganization
+    MContractTaskReviewers{contractTask required} to MContractTask
+    MContractTaskReviewers{pic required} to AdUser
 
 	MContractTeamLine{adOrganization required} to ADOrganization
 	MContractTeamLine{contractTeam required} to MContractTeam

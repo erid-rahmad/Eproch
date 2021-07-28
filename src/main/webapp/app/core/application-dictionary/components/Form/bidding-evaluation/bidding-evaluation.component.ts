@@ -11,6 +11,7 @@ import ScheduleEventMixin from "@/core/application-dictionary/mixins/ScheduleEve
 
 const baseApiEvalResults ='api/m-bidding-eval-results';
 const baseApiBiddingSubmission='/api/m-bidding-submissions';
+const baseApiUrl = 'api/m-biddings';
 
 const BiddingEvaluationProp = Vue.extend({
   props: {
@@ -45,20 +46,25 @@ export default class BiddingEvaluationts extends mixins(Vue2Filters.mixin,Schedu
   }
 
   onMainFormUpdateInEvaluation(mainForm: any){
-
+    console.log("this main form",mainForm)
     this.getbiddingSubmission(mainForm.biddingId);
     this.data.formType=mainForm.formType;
 
+    this.commonService(baseApiUrl)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `id.equals=${mainForm.biddingId}`
+        ]),
+      })
+      .then(res => {
+        let value=res.data[0]
+        this.pickRow.documentNo=value.documentNo
+        this.pickRow.name=value.name
+        this.pickRow.biddingTypeName=value.biddingTypeName
+        this.pickRow.eventTypeName=value.eventTypeName
+      })
   }
-
-
-
-  // evaluate(row){
-  //   this.data.pickrow=row;
-  //   this.data.formType=this.pickRow;
-  //   this.data.biddingSubmission=this.biddingSubmission;
-  //   this.index=1;
-  // }
 
   private getbiddingSubmission(biddingId) {
     this.loading=true;

@@ -1,0 +1,51 @@
+{
+    "name": "MContractTaskReviewers",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mContractTaskReviewers",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mContractTask",
+            "otherEntityRelationshipName": "mContractTaskReviewers",
+            "relationshipValidateRules": "required",
+            "relationshipName": "contractTask",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adUser",
+            "otherEntityRelationshipName": "mContractTaskReviewers",
+            "relationshipValidateRules": "required",
+            "relationshipName": "pic",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210728103800",
+    "entityTableName": "m_contract_task_reviewers",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}
