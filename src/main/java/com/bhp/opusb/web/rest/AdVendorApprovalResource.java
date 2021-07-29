@@ -14,10 +14,9 @@ import com.bhp.opusb.service.dto.VendorApprovalDTO;
 import com.bhp.opusb.workflow.CVendorApprovalProcessService;
 import com.bhp.opusb.workflow.ProcessDefinitionDTO;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import org.flowable.task.api.Task;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value="api/c-vendors/approval")
@@ -32,7 +31,7 @@ public class AdVendorApprovalResource {
 	@GetMapping(value="/tasks")
 	public ResponseEntity<List<ProcessDefinitionDTO>> getVendorApprovalTask(@RequestParam Long vendorId){
 		
-		List<ProcessDefinitionDTO> response = cVendorApprovalProcessService.getProcessDefinitionDTO(String.valueOf(vendorId));
+		List<ProcessDefinitionDTO> response = cVendorApprovalProcessService.getTaskList(String.valueOf(vendorId));
 		
 //		return ResponseEntity.ok(response);
 		return new ResponseEntity<List<ProcessDefinitionDTO>>(response, HttpStatus.OK);
@@ -41,8 +40,10 @@ public class AdVendorApprovalResource {
 	
 	@PatchMapping(value="/")
 	public void resumeApproval(@RequestBody VendorApprovalDTO vendorApprovalDTO) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("approve", vendorApprovalDTO.getApprove());
 		cVendorApprovalProcessService
-			.resumeApproval(vendorApprovalDTO.getVendorId(), vendorApprovalDTO.getApprove());
+			.resumeApproval(vendorApprovalDTO.getVendorId(), params);
 	}
 	
 	@PostMapping(value="/delete-process")

@@ -1,11 +1,14 @@
 package com.bhp.opusb.workflow;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.flowable.engine.RuntimeService;
 import org.flowable.engine.TaskService;
 import org.flowable.task.api.Task;
+
+import com.google.common.base.Optional;
 
 public class WorkflowProcessService {
 
@@ -27,18 +30,37 @@ public class WorkflowProcessService {
 				.list();
 	}
 	
-	public List<ProcessDefinitionDTO> getProcessDefinitionDTO(String assignee){
-		return this.getAssigneTask(assignee)
-			.stream()
-			.map(t->this.mapTaskToProcessDefinitionDTO(t))
-			.collect(Collectors.toList());
+	
+	public List<Task> getAssigneTask(String assignee, String processKey){
+		return taskService.createTaskQuery()
+				.active()
+				.taskAssignee(assignee)
+				.processDefinitionKey(processKey)
+				.list();
 	}
 	
 	public void deleteProcessInstance(String processInstanceId) {
 		runtimeService.deleteProcessInstance(processInstanceId, "RESETTING");
 	}
 	
-	private ProcessDefinitionDTO mapTaskToProcessDefinitionDTO(Task task) {
+	public void resumeTask(String assigne, String taskId, Map<String, Object> additionalParams) throws Exception{
+
+		Optional<Task> oTask = Optional.fromNullable(this.getTaskById(taskId));
+		if(oTask.isPresent()) {
+			Task task = oTask.get();
+			taskService.claim(taskId, assigne);
+			taskService.complete(task.getId(), this.mergeMap(additionalParams, task.getProcessVariables()));
+		}else {
+			throw new Exception(String.format("task with task id %s is not exists" , taskId));
+		}
+		
+	}
+	
+	protected Task getTaskById(String taskId) {
+		return this.taskService.createTaskQuery().taskId(taskId).active().singleResult();
+	}
+	
+	protected ProcessDefinitionDTO mapTaskToProcessDefinitionDTO(Task task) {
 		ProcessDefinitionDTO processDefinitionDTO = new ProcessDefinitionDTO();
 		processDefinitionDTO.setId(task.getId());
 		processDefinitionDTO.setTenantId(task.getTenantId());
@@ -46,5 +68,13 @@ public class WorkflowProcessService {
 		processDefinitionDTO.setResourceName(task.getName());
 		processDefinitionDTO.setProcessInstanceId(task.getProcessInstanceId());
 		return processDefinitionDTO;
+	}
+	
+	protected Map<String, Object> mergeMap(Map<String, Object> source, Map<String, Object> destination){
+		source.entrySet().forEach(n-> {
+			destination.put(n.getKey(), n.getValue());
+		});
+		
+		return destination;
 	}
 }
