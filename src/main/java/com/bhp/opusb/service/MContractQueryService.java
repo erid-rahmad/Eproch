@@ -148,6 +148,27 @@ public class MContractQueryService extends QueryService<MContract> {
             if (criteria.getPrice() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getPrice(), MContract_.price));
             }
+            if (criteria.getPriceProposed() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getPriceProposed(), MContract_.priceProposed));
+            }
+            if (criteria.getExpMailReceipt() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getExpMailReceipt(), MContract_.expMailReceipt));
+            }
+            if (criteria.getNoticePeriod() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getNoticePeriod(), MContract_.noticePeriod));
+            }
+            if (criteria.getReminderSent() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getReminderSent(), MContract_.reminderSent));
+            }
+            if (criteria.getEmailNotification() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getEmailNotification(), MContract_.emailNotification));
+            }
+            if (criteria.getTermType() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getTermType(), MContract_.termType));
+            }
+            if (criteria.getHierarchicalType() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getHierarchicalType(), MContract_.hierarchicalType));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), MContract_.uid));
             }

@@ -1,0 +1,11 @@
+id;name;description;uid;active;clause_id;ad_organization_id
+1;redundant Sleek Wooden Keyboard;../fake-data/blob/hipster.txt;13620322-66a0-4e1f-8f79-69cb9805a1af;true;1;1
+2;secondary;../fake-data/blob/hipster.txt;4e5a5a10-67b2-4e7c-99e4-7da7c62a5bf4;true;2;2
+3;Refined Salad SMTP;../fake-data/blob/hipster.txt;7527d2f5-9eb9-43bd-9a13-007b019f9aac;true;3;3
+4;payment payment Sleek Frozen Chicken;../fake-data/blob/hipster.txt;e9658336-1610-457f-ad94-1726a54c9824;false;4;4
+5;Personal Loan Account e-markets Creative;../fake-data/blob/hipster.txt;cc6181a9-c418-40d8-9933-d513fb92fa0b;true;5;5
+6;matrices Keyboard;../fake-data/blob/hipster.txt;78894b96-41a6-4659-897f-728649448fb6;false;6;6
+7;Personal Loan Account;../fake-data/blob/hipster.txt;aacdfbc1-ee32-494e-b3a2-12a422dc071f;false;7;7
+8;Money Market Account Synchronised;../fake-data/blob/hipster.txt;444ba85d-b783-46dc-8490-14a91b6dc014;true;8;8
+9;Soft;../fake-data/blob/hipster.txt;47553546-30c0-44dd-b6dd-2a39bcd6fd76;false;9;9
+10;Port;../fake-data/blob/hipster.txt;9d6942b0-704b-4b8e-a820-cef7f5cec7ee;true;10;10

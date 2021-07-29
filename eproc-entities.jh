@@ -64,6 +64,20 @@ entity CCurrency {
 	uid UUID
 	active Boolean
 }
+
+entity CClause {
+	name String required
+	uid UUID
+	active Boolean
+}
+
+entity CClauseLine {
+	name String required
+    description TextBlob required
+	uid UUID
+	active Boolean
+}
+
 entity CRegion {
 	name String required
 	description String
@@ -1507,6 +1521,14 @@ entity MContract {
 	dateReject ZonedDateTime
 	rejectedReason String
 	Price BigDecimal
+	PriceProposed BigDecimal
+
+	ExpMailReceipt String
+	NoticePeriod String
+	ReminderSent Integer
+	EmailNotification Integer
+	TermType String
+	HierarchicalType String
 
 	uid UUID
 	active Boolean
@@ -1526,6 +1548,35 @@ entity MContractDocument {
 	name String required
 	uid UUID
 	active Boolean
+}
+
+entity MContractClauseDocument {
+	name String required
+    description TextBlob required
+	type String
+    comment String
+    documentAction String required maxlength(10)
+    documentStatus String required maxlength(12)
+	uid UUID
+	active Boolean
+}
+
+entity MContractTeam {
+	status String
+	uid UUID
+	active Boolean
+}
+entity MContractTeamLine {
+	uid UUID
+	active Boolean
+	position String required maxlength(10)
+}
+
+entity MContractMessage {
+	uid UUID
+	active Boolean
+	vendorText TextBlob
+	buyerText TextBlob
 }
 
 entity MProposalAdministration {
@@ -2016,6 +2067,12 @@ relationship ManyToOne {
 
 	CCountry{adOrganization required} to ADOrganization
 	CCurrency{adOrganization required} to ADOrganization
+
+	CClause{adOrganization required} to ADOrganization
+	CClauseLine{clause required} to CClause
+	CClauseLine{adOrganization required} to ADOrganization
+
+
 	CRegion{adOrganization required} to ADOrganization
 	CCity{adOrganization required} to ADOrganization
 	CLocation{adOrganization required} to ADOrganization
@@ -2135,6 +2192,21 @@ relationship ManyToOne {
 	MContractDocument{adOrganization required} to ADOrganization
 	MContractDocument{contract required} to MContract
 	MContractDocument{attachment required} to CAttachment
+
+	MContractClauseDocument{adOrganization required} to ADOrganization
+    MContractClauseDocument{contract required} to MContract
+
+	MContractTeam{adOrganization required} to ADOrganization
+	MContractTeam{contract required} to MContract
+
+	MContractTeamLine{adOrganization required} to ADOrganization
+	MContractTeamLine{contractTeam required} to MContractTeam
+	MContractTeamLine{adUser required} to AdUser
+
+	MContractMessage{adOrganization required} to ADOrganization
+	MContractMessage{contract required} to MContract
+	MContractMessage{vendor required} to CVendor
+	MContractMessage{attachment } to CAttachment
 
 	MProductCatalog{adOrganization required} to ADOrganization
 	MProductCatalog{cDocumentType required} to CDocumentType

@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.bhp.opusb.domain.CVendor;
+import com.bhp.opusb.repository.CVendorRepository;
 import com.bhp.opusb.service.CVendorQueryService;
 import com.bhp.opusb.service.CVendorService;
 import com.bhp.opusb.service.dto.CVendorCriteria;
@@ -30,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -170,6 +173,18 @@ public class CVendorResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         cVendorService.updateDocumentStatus(cVendorDTO);
+    }
+
+    /**
+     * {@code GET  /c-vendors/count} : count all the cVendors.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/c-vendors/new-vendor/count")
+    public ResponseEntity<Long> countNewCVendors(@RequestParam(value = "documentStatus.equals", required = false) String status) {
+        log.debug("REST request to count new CVendors by status: {}", status);
+        return ResponseEntity.ok().body(cVendorQueryService.getNewVendor(status));
     }
 
 }

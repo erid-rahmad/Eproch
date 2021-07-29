@@ -97,6 +97,22 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
     SMT: 'Submitted',
   }
 
+  hierarchicalType= [{
+    value: 'Stand Alone Agreement',
+    label: 'Stand Alone Agreement'
+  }, {
+    value: 'Master Agreement',
+    label: 'Master Agreement'
+  }, {
+    value: 'Sub Agreement',
+    label: 'Sub Agreement'
+  }]
+
+  termType= [{
+    value: 'Fixed',
+    label: 'Fixed'
+  },]
+
   printStatus(status: string) {
     return this.documentStatuses[status];
   }

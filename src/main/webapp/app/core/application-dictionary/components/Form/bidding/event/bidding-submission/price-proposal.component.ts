@@ -433,6 +433,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
         if (res.data.length) {
           this.mainForm = { ...this.mainForm, ...res.data[0] };
           this.retrieveProposedLines(res.data[0].id);
+          this.retrieveBiddingLines(this.schedule.biddingId)
         }
 
         if(res.data[0].documentStatus==='SMT'){
@@ -469,10 +470,9 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
         }
       })
       .then(res => {
-
         (res.data as any[]).forEach(line => {
-          console.log("res.data",res.data)
           const item = this.lineCache.get(line.biddingLineId);
+          console.log("res.data",item.id);
           item.document=line.document;
           item.id=line.id;
           item.deliveryDate = line.deliveryDate;
@@ -527,7 +527,8 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
           .then(_res => {
             this.$message.success('Price proposal has been saved successfully');
             this.retrieveProposal(this.submissionId);
-
+            this.$emit('update:loading', false);
+            // this.$emit('closeProposalPage');
           })
           .catch(err => {
             console.error('Failed to save the proposal. %O', err);

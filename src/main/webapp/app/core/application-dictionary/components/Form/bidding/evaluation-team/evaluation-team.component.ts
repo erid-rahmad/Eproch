@@ -181,6 +181,7 @@ export default class EvaluationTeam extends mixins(AccessLevelMixin, EvaluationT
 
   backToMainPage() {
     this.page = EvaluationTeamPage.INDEX;
+    this.refreshHeader();
   }
 
   private setRow(record: any) {

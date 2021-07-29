@@ -85,17 +85,24 @@
               {{ row.$index + 1 }}
             </template>
           </el-table-column>
-          <el-table-column property="vendorName" label="Vendor" min-width="400"></el-table-column>
-          <el-table-column label="Proposed Price" min-width="400">
+          <el-table-column property="vendorName" label="Vendor" min-width="300"></el-table-column>
+          <el-table-column label="Proposed Price" min-width="300">
             <template slot-scope="{row}">
               {{ row.proposedPrice | formatCurrency }}
             </template>
           </el-table-column>
-          <el-table-column label="Negotiation Price" min-width="400">
+          <el-table-column label="Negotiation Price" min-width="300">
             <template slot-scope="{row}">
               {{ row.negotiationPrice | formatCurrency }}
             </template>
           </el-table-column>
+          <el-table-column min-width="160" label="Action">
+          <template slot-scope="{ row }">
+            <el-button class="button" icon="el-icon-caret-right" size="mini" type="primary" @click="viewNegotiationWindow(row)">
+              Negotiate
+            </el-button>
+          </template>
+        </el-table-column>
         </el-table>
       </div>
       Negotiation in progress
@@ -117,14 +124,14 @@
           </template>
         </el-table-column>
         <el-table-column min-width="160" label="Action">
-            <template slot-scope="{ row }">
-              <div v-if="allowNegotiation">
-                <el-button class="button" icon="el-icon-caret-right" size="mini" type="primary" @click="viewNegotiationWindow(row)">
-                  Negotiate
-                </el-button>
-              </div>
-            </template>
-          </el-table-column>
+          <template slot-scope="{ row }">
+            <div v-if="allowNegotiation">
+              <el-button class="button" icon="el-icon-caret-right" size="mini" type="primary" @click="viewNegotiationWindow(row)">
+                Negotiate
+              </el-button>
+            </div>
+          </template>
+        </el-table-column>
       </el-table>
       <div v-if="!isVendor">
         Disagreed vendors

@@ -104,6 +104,34 @@
             "fieldType": "BigDecimal"
         },
         {
+            "fieldName": "priceProposed",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "expMailReceipt",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "noticePeriod",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "reminderSent",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "emailNotification",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "termType",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "hierarchicalType",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "uid",
             "fieldType": "UUID"
         },

@@ -113,6 +113,30 @@ public class MContractResourceIT {
     private static final BigDecimal UPDATED_PRICE = new BigDecimal(2);
     private static final BigDecimal SMALLER_PRICE = new BigDecimal(1 - 1);
 
+    private static final BigDecimal DEFAULT_PRICE_PROPOSED = new BigDecimal(1);
+    private static final BigDecimal UPDATED_PRICE_PROPOSED = new BigDecimal(2);
+    private static final BigDecimal SMALLER_PRICE_PROPOSED = new BigDecimal(1 - 1);
+
+    private static final String DEFAULT_EXP_MAIL_RECEIPT = "AAAAAAAAAA";
+    private static final String UPDATED_EXP_MAIL_RECEIPT = "BBBBBBBBBB";
+
+    private static final String DEFAULT_NOTICE_PERIOD = "AAAAAAAAAA";
+    private static final String UPDATED_NOTICE_PERIOD = "BBBBBBBBBB";
+
+    private static final Integer DEFAULT_REMINDER_SENT = 1;
+    private static final Integer UPDATED_REMINDER_SENT = 2;
+    private static final Integer SMALLER_REMINDER_SENT = 1 - 1;
+
+    private static final Integer DEFAULT_EMAIL_NOTIFICATION = 1;
+    private static final Integer UPDATED_EMAIL_NOTIFICATION = 2;
+    private static final Integer SMALLER_EMAIL_NOTIFICATION = 1 - 1;
+
+    private static final String DEFAULT_TERM_TYPE = "AAAAAAAAAA";
+    private static final String UPDATED_TERM_TYPE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_HIERARCHICAL_TYPE = "AAAAAAAAAA";
+    private static final String UPDATED_HIERARCHICAL_TYPE = "BBBBBBBBBB";
+
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
@@ -166,6 +190,13 @@ public class MContractResourceIT {
             .dateReject(DEFAULT_DATE_REJECT)
             .rejectedReason(DEFAULT_REJECTED_REASON)
             .price(DEFAULT_PRICE)
+            .priceProposed(DEFAULT_PRICE_PROPOSED)
+            .expMailReceipt(DEFAULT_EXP_MAIL_RECEIPT)
+            .noticePeriod(DEFAULT_NOTICE_PERIOD)
+            .reminderSent(DEFAULT_REMINDER_SENT)
+            .emailNotification(DEFAULT_EMAIL_NOTIFICATION)
+            .termType(DEFAULT_TERM_TYPE)
+            .hierarchicalType(DEFAULT_HIERARCHICAL_TYPE)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -257,6 +288,13 @@ public class MContractResourceIT {
             .dateReject(UPDATED_DATE_REJECT)
             .rejectedReason(UPDATED_REJECTED_REASON)
             .price(UPDATED_PRICE)
+            .priceProposed(UPDATED_PRICE_PROPOSED)
+            .expMailReceipt(UPDATED_EXP_MAIL_RECEIPT)
+            .noticePeriod(UPDATED_NOTICE_PERIOD)
+            .reminderSent(UPDATED_REMINDER_SENT)
+            .emailNotification(UPDATED_EMAIL_NOTIFICATION)
+            .termType(UPDATED_TERM_TYPE)
+            .hierarchicalType(UPDATED_HIERARCHICAL_TYPE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -362,6 +400,13 @@ public class MContractResourceIT {
         assertThat(testMContract.getDateReject()).isEqualTo(DEFAULT_DATE_REJECT);
         assertThat(testMContract.getRejectedReason()).isEqualTo(DEFAULT_REJECTED_REASON);
         assertThat(testMContract.getPrice()).isEqualTo(DEFAULT_PRICE);
+        assertThat(testMContract.getPriceProposed()).isEqualTo(DEFAULT_PRICE_PROPOSED);
+        assertThat(testMContract.getExpMailReceipt()).isEqualTo(DEFAULT_EXP_MAIL_RECEIPT);
+        assertThat(testMContract.getNoticePeriod()).isEqualTo(DEFAULT_NOTICE_PERIOD);
+        assertThat(testMContract.getReminderSent()).isEqualTo(DEFAULT_REMINDER_SENT);
+        assertThat(testMContract.getEmailNotification()).isEqualTo(DEFAULT_EMAIL_NOTIFICATION);
+        assertThat(testMContract.getTermType()).isEqualTo(DEFAULT_TERM_TYPE);
+        assertThat(testMContract.getHierarchicalType()).isEqualTo(DEFAULT_HIERARCHICAL_TYPE);
         assertThat(testMContract.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testMContract.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -512,6 +557,13 @@ public class MContractResourceIT {
             .andExpect(jsonPath("$.[*].dateReject").value(hasItem(sameInstant(DEFAULT_DATE_REJECT))))
             .andExpect(jsonPath("$.[*].rejectedReason").value(hasItem(DEFAULT_REJECTED_REASON)))
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.intValue())))
+            .andExpect(jsonPath("$.[*].priceProposed").value(hasItem(DEFAULT_PRICE_PROPOSED.intValue())))
+            .andExpect(jsonPath("$.[*].expMailReceipt").value(hasItem(DEFAULT_EXP_MAIL_RECEIPT)))
+            .andExpect(jsonPath("$.[*].noticePeriod").value(hasItem(DEFAULT_NOTICE_PERIOD)))
+            .andExpect(jsonPath("$.[*].reminderSent").value(hasItem(DEFAULT_REMINDER_SENT)))
+            .andExpect(jsonPath("$.[*].emailNotification").value(hasItem(DEFAULT_EMAIL_NOTIFICATION)))
+            .andExpect(jsonPath("$.[*].termType").value(hasItem(DEFAULT_TERM_TYPE)))
+            .andExpect(jsonPath("$.[*].hierarchicalType").value(hasItem(DEFAULT_HIERARCHICAL_TYPE)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -546,6 +598,13 @@ public class MContractResourceIT {
             .andExpect(jsonPath("$.dateReject").value(sameInstant(DEFAULT_DATE_REJECT)))
             .andExpect(jsonPath("$.rejectedReason").value(DEFAULT_REJECTED_REASON))
             .andExpect(jsonPath("$.price").value(DEFAULT_PRICE.intValue()))
+            .andExpect(jsonPath("$.priceProposed").value(DEFAULT_PRICE_PROPOSED.intValue()))
+            .andExpect(jsonPath("$.expMailReceipt").value(DEFAULT_EXP_MAIL_RECEIPT))
+            .andExpect(jsonPath("$.noticePeriod").value(DEFAULT_NOTICE_PERIOD))
+            .andExpect(jsonPath("$.reminderSent").value(DEFAULT_REMINDER_SENT))
+            .andExpect(jsonPath("$.emailNotification").value(DEFAULT_EMAIL_NOTIFICATION))
+            .andExpect(jsonPath("$.termType").value(DEFAULT_TERM_TYPE))
+            .andExpect(jsonPath("$.hierarchicalType").value(DEFAULT_HIERARCHICAL_TYPE))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -2112,6 +2171,633 @@ public class MContractResourceIT {
 
     @Test
     @Transactional
+    public void getAllMContractsByPriceProposedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where priceProposed equals to DEFAULT_PRICE_PROPOSED
+        defaultMContractShouldBeFound("priceProposed.equals=" + DEFAULT_PRICE_PROPOSED);
+
+        // Get all the mContractList where priceProposed equals to UPDATED_PRICE_PROPOSED
+        defaultMContractShouldNotBeFound("priceProposed.equals=" + UPDATED_PRICE_PROPOSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByPriceProposedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where priceProposed not equals to DEFAULT_PRICE_PROPOSED
+        defaultMContractShouldNotBeFound("priceProposed.notEquals=" + DEFAULT_PRICE_PROPOSED);
+
+        // Get all the mContractList where priceProposed not equals to UPDATED_PRICE_PROPOSED
+        defaultMContractShouldBeFound("priceProposed.notEquals=" + UPDATED_PRICE_PROPOSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByPriceProposedIsInShouldWork() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where priceProposed in DEFAULT_PRICE_PROPOSED or UPDATED_PRICE_PROPOSED
+        defaultMContractShouldBeFound("priceProposed.in=" + DEFAULT_PRICE_PROPOSED + "," + UPDATED_PRICE_PROPOSED);
+
+        // Get all the mContractList where priceProposed equals to UPDATED_PRICE_PROPOSED
+        defaultMContractShouldNotBeFound("priceProposed.in=" + UPDATED_PRICE_PROPOSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByPriceProposedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where priceProposed is not null
+        defaultMContractShouldBeFound("priceProposed.specified=true");
+
+        // Get all the mContractList where priceProposed is null
+        defaultMContractShouldNotBeFound("priceProposed.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByPriceProposedIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where priceProposed is greater than or equal to DEFAULT_PRICE_PROPOSED
+        defaultMContractShouldBeFound("priceProposed.greaterThanOrEqual=" + DEFAULT_PRICE_PROPOSED);
+
+        // Get all the mContractList where priceProposed is greater than or equal to UPDATED_PRICE_PROPOSED
+        defaultMContractShouldNotBeFound("priceProposed.greaterThanOrEqual=" + UPDATED_PRICE_PROPOSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByPriceProposedIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where priceProposed is less than or equal to DEFAULT_PRICE_PROPOSED
+        defaultMContractShouldBeFound("priceProposed.lessThanOrEqual=" + DEFAULT_PRICE_PROPOSED);
+
+        // Get all the mContractList where priceProposed is less than or equal to SMALLER_PRICE_PROPOSED
+        defaultMContractShouldNotBeFound("priceProposed.lessThanOrEqual=" + SMALLER_PRICE_PROPOSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByPriceProposedIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where priceProposed is less than DEFAULT_PRICE_PROPOSED
+        defaultMContractShouldNotBeFound("priceProposed.lessThan=" + DEFAULT_PRICE_PROPOSED);
+
+        // Get all the mContractList where priceProposed is less than UPDATED_PRICE_PROPOSED
+        defaultMContractShouldBeFound("priceProposed.lessThan=" + UPDATED_PRICE_PROPOSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByPriceProposedIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where priceProposed is greater than DEFAULT_PRICE_PROPOSED
+        defaultMContractShouldNotBeFound("priceProposed.greaterThan=" + DEFAULT_PRICE_PROPOSED);
+
+        // Get all the mContractList where priceProposed is greater than SMALLER_PRICE_PROPOSED
+        defaultMContractShouldBeFound("priceProposed.greaterThan=" + SMALLER_PRICE_PROPOSED);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMContractsByExpMailReceiptIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where expMailReceipt equals to DEFAULT_EXP_MAIL_RECEIPT
+        defaultMContractShouldBeFound("expMailReceipt.equals=" + DEFAULT_EXP_MAIL_RECEIPT);
+
+        // Get all the mContractList where expMailReceipt equals to UPDATED_EXP_MAIL_RECEIPT
+        defaultMContractShouldNotBeFound("expMailReceipt.equals=" + UPDATED_EXP_MAIL_RECEIPT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByExpMailReceiptIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where expMailReceipt not equals to DEFAULT_EXP_MAIL_RECEIPT
+        defaultMContractShouldNotBeFound("expMailReceipt.notEquals=" + DEFAULT_EXP_MAIL_RECEIPT);
+
+        // Get all the mContractList where expMailReceipt not equals to UPDATED_EXP_MAIL_RECEIPT
+        defaultMContractShouldBeFound("expMailReceipt.notEquals=" + UPDATED_EXP_MAIL_RECEIPT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByExpMailReceiptIsInShouldWork() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where expMailReceipt in DEFAULT_EXP_MAIL_RECEIPT or UPDATED_EXP_MAIL_RECEIPT
+        defaultMContractShouldBeFound("expMailReceipt.in=" + DEFAULT_EXP_MAIL_RECEIPT + "," + UPDATED_EXP_MAIL_RECEIPT);
+
+        // Get all the mContractList where expMailReceipt equals to UPDATED_EXP_MAIL_RECEIPT
+        defaultMContractShouldNotBeFound("expMailReceipt.in=" + UPDATED_EXP_MAIL_RECEIPT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByExpMailReceiptIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where expMailReceipt is not null
+        defaultMContractShouldBeFound("expMailReceipt.specified=true");
+
+        // Get all the mContractList where expMailReceipt is null
+        defaultMContractShouldNotBeFound("expMailReceipt.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMContractsByExpMailReceiptContainsSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where expMailReceipt contains DEFAULT_EXP_MAIL_RECEIPT
+        defaultMContractShouldBeFound("expMailReceipt.contains=" + DEFAULT_EXP_MAIL_RECEIPT);
+
+        // Get all the mContractList where expMailReceipt contains UPDATED_EXP_MAIL_RECEIPT
+        defaultMContractShouldNotBeFound("expMailReceipt.contains=" + UPDATED_EXP_MAIL_RECEIPT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByExpMailReceiptNotContainsSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where expMailReceipt does not contain DEFAULT_EXP_MAIL_RECEIPT
+        defaultMContractShouldNotBeFound("expMailReceipt.doesNotContain=" + DEFAULT_EXP_MAIL_RECEIPT);
+
+        // Get all the mContractList where expMailReceipt does not contain UPDATED_EXP_MAIL_RECEIPT
+        defaultMContractShouldBeFound("expMailReceipt.doesNotContain=" + UPDATED_EXP_MAIL_RECEIPT);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMContractsByNoticePeriodIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where noticePeriod equals to DEFAULT_NOTICE_PERIOD
+        defaultMContractShouldBeFound("noticePeriod.equals=" + DEFAULT_NOTICE_PERIOD);
+
+        // Get all the mContractList where noticePeriod equals to UPDATED_NOTICE_PERIOD
+        defaultMContractShouldNotBeFound("noticePeriod.equals=" + UPDATED_NOTICE_PERIOD);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByNoticePeriodIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where noticePeriod not equals to DEFAULT_NOTICE_PERIOD
+        defaultMContractShouldNotBeFound("noticePeriod.notEquals=" + DEFAULT_NOTICE_PERIOD);
+
+        // Get all the mContractList where noticePeriod not equals to UPDATED_NOTICE_PERIOD
+        defaultMContractShouldBeFound("noticePeriod.notEquals=" + UPDATED_NOTICE_PERIOD);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByNoticePeriodIsInShouldWork() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where noticePeriod in DEFAULT_NOTICE_PERIOD or UPDATED_NOTICE_PERIOD
+        defaultMContractShouldBeFound("noticePeriod.in=" + DEFAULT_NOTICE_PERIOD + "," + UPDATED_NOTICE_PERIOD);
+
+        // Get all the mContractList where noticePeriod equals to UPDATED_NOTICE_PERIOD
+        defaultMContractShouldNotBeFound("noticePeriod.in=" + UPDATED_NOTICE_PERIOD);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByNoticePeriodIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where noticePeriod is not null
+        defaultMContractShouldBeFound("noticePeriod.specified=true");
+
+        // Get all the mContractList where noticePeriod is null
+        defaultMContractShouldNotBeFound("noticePeriod.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMContractsByNoticePeriodContainsSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where noticePeriod contains DEFAULT_NOTICE_PERIOD
+        defaultMContractShouldBeFound("noticePeriod.contains=" + DEFAULT_NOTICE_PERIOD);
+
+        // Get all the mContractList where noticePeriod contains UPDATED_NOTICE_PERIOD
+        defaultMContractShouldNotBeFound("noticePeriod.contains=" + UPDATED_NOTICE_PERIOD);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByNoticePeriodNotContainsSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where noticePeriod does not contain DEFAULT_NOTICE_PERIOD
+        defaultMContractShouldNotBeFound("noticePeriod.doesNotContain=" + DEFAULT_NOTICE_PERIOD);
+
+        // Get all the mContractList where noticePeriod does not contain UPDATED_NOTICE_PERIOD
+        defaultMContractShouldBeFound("noticePeriod.doesNotContain=" + UPDATED_NOTICE_PERIOD);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMContractsByReminderSentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where reminderSent equals to DEFAULT_REMINDER_SENT
+        defaultMContractShouldBeFound("reminderSent.equals=" + DEFAULT_REMINDER_SENT);
+
+        // Get all the mContractList where reminderSent equals to UPDATED_REMINDER_SENT
+        defaultMContractShouldNotBeFound("reminderSent.equals=" + UPDATED_REMINDER_SENT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByReminderSentIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where reminderSent not equals to DEFAULT_REMINDER_SENT
+        defaultMContractShouldNotBeFound("reminderSent.notEquals=" + DEFAULT_REMINDER_SENT);
+
+        // Get all the mContractList where reminderSent not equals to UPDATED_REMINDER_SENT
+        defaultMContractShouldBeFound("reminderSent.notEquals=" + UPDATED_REMINDER_SENT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByReminderSentIsInShouldWork() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where reminderSent in DEFAULT_REMINDER_SENT or UPDATED_REMINDER_SENT
+        defaultMContractShouldBeFound("reminderSent.in=" + DEFAULT_REMINDER_SENT + "," + UPDATED_REMINDER_SENT);
+
+        // Get all the mContractList where reminderSent equals to UPDATED_REMINDER_SENT
+        defaultMContractShouldNotBeFound("reminderSent.in=" + UPDATED_REMINDER_SENT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByReminderSentIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where reminderSent is not null
+        defaultMContractShouldBeFound("reminderSent.specified=true");
+
+        // Get all the mContractList where reminderSent is null
+        defaultMContractShouldNotBeFound("reminderSent.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByReminderSentIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where reminderSent is greater than or equal to DEFAULT_REMINDER_SENT
+        defaultMContractShouldBeFound("reminderSent.greaterThanOrEqual=" + DEFAULT_REMINDER_SENT);
+
+        // Get all the mContractList where reminderSent is greater than or equal to UPDATED_REMINDER_SENT
+        defaultMContractShouldNotBeFound("reminderSent.greaterThanOrEqual=" + UPDATED_REMINDER_SENT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByReminderSentIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where reminderSent is less than or equal to DEFAULT_REMINDER_SENT
+        defaultMContractShouldBeFound("reminderSent.lessThanOrEqual=" + DEFAULT_REMINDER_SENT);
+
+        // Get all the mContractList where reminderSent is less than or equal to SMALLER_REMINDER_SENT
+        defaultMContractShouldNotBeFound("reminderSent.lessThanOrEqual=" + SMALLER_REMINDER_SENT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByReminderSentIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where reminderSent is less than DEFAULT_REMINDER_SENT
+        defaultMContractShouldNotBeFound("reminderSent.lessThan=" + DEFAULT_REMINDER_SENT);
+
+        // Get all the mContractList where reminderSent is less than UPDATED_REMINDER_SENT
+        defaultMContractShouldBeFound("reminderSent.lessThan=" + UPDATED_REMINDER_SENT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByReminderSentIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where reminderSent is greater than DEFAULT_REMINDER_SENT
+        defaultMContractShouldNotBeFound("reminderSent.greaterThan=" + DEFAULT_REMINDER_SENT);
+
+        // Get all the mContractList where reminderSent is greater than SMALLER_REMINDER_SENT
+        defaultMContractShouldBeFound("reminderSent.greaterThan=" + SMALLER_REMINDER_SENT);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMContractsByEmailNotificationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where emailNotification equals to DEFAULT_EMAIL_NOTIFICATION
+        defaultMContractShouldBeFound("emailNotification.equals=" + DEFAULT_EMAIL_NOTIFICATION);
+
+        // Get all the mContractList where emailNotification equals to UPDATED_EMAIL_NOTIFICATION
+        defaultMContractShouldNotBeFound("emailNotification.equals=" + UPDATED_EMAIL_NOTIFICATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByEmailNotificationIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where emailNotification not equals to DEFAULT_EMAIL_NOTIFICATION
+        defaultMContractShouldNotBeFound("emailNotification.notEquals=" + DEFAULT_EMAIL_NOTIFICATION);
+
+        // Get all the mContractList where emailNotification not equals to UPDATED_EMAIL_NOTIFICATION
+        defaultMContractShouldBeFound("emailNotification.notEquals=" + UPDATED_EMAIL_NOTIFICATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByEmailNotificationIsInShouldWork() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where emailNotification in DEFAULT_EMAIL_NOTIFICATION or UPDATED_EMAIL_NOTIFICATION
+        defaultMContractShouldBeFound("emailNotification.in=" + DEFAULT_EMAIL_NOTIFICATION + "," + UPDATED_EMAIL_NOTIFICATION);
+
+        // Get all the mContractList where emailNotification equals to UPDATED_EMAIL_NOTIFICATION
+        defaultMContractShouldNotBeFound("emailNotification.in=" + UPDATED_EMAIL_NOTIFICATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByEmailNotificationIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where emailNotification is not null
+        defaultMContractShouldBeFound("emailNotification.specified=true");
+
+        // Get all the mContractList where emailNotification is null
+        defaultMContractShouldNotBeFound("emailNotification.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByEmailNotificationIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where emailNotification is greater than or equal to DEFAULT_EMAIL_NOTIFICATION
+        defaultMContractShouldBeFound("emailNotification.greaterThanOrEqual=" + DEFAULT_EMAIL_NOTIFICATION);
+
+        // Get all the mContractList where emailNotification is greater than or equal to UPDATED_EMAIL_NOTIFICATION
+        defaultMContractShouldNotBeFound("emailNotification.greaterThanOrEqual=" + UPDATED_EMAIL_NOTIFICATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByEmailNotificationIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where emailNotification is less than or equal to DEFAULT_EMAIL_NOTIFICATION
+        defaultMContractShouldBeFound("emailNotification.lessThanOrEqual=" + DEFAULT_EMAIL_NOTIFICATION);
+
+        // Get all the mContractList where emailNotification is less than or equal to SMALLER_EMAIL_NOTIFICATION
+        defaultMContractShouldNotBeFound("emailNotification.lessThanOrEqual=" + SMALLER_EMAIL_NOTIFICATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByEmailNotificationIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where emailNotification is less than DEFAULT_EMAIL_NOTIFICATION
+        defaultMContractShouldNotBeFound("emailNotification.lessThan=" + DEFAULT_EMAIL_NOTIFICATION);
+
+        // Get all the mContractList where emailNotification is less than UPDATED_EMAIL_NOTIFICATION
+        defaultMContractShouldBeFound("emailNotification.lessThan=" + UPDATED_EMAIL_NOTIFICATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByEmailNotificationIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where emailNotification is greater than DEFAULT_EMAIL_NOTIFICATION
+        defaultMContractShouldNotBeFound("emailNotification.greaterThan=" + DEFAULT_EMAIL_NOTIFICATION);
+
+        // Get all the mContractList where emailNotification is greater than SMALLER_EMAIL_NOTIFICATION
+        defaultMContractShouldBeFound("emailNotification.greaterThan=" + SMALLER_EMAIL_NOTIFICATION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMContractsByTermTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where termType equals to DEFAULT_TERM_TYPE
+        defaultMContractShouldBeFound("termType.equals=" + DEFAULT_TERM_TYPE);
+
+        // Get all the mContractList where termType equals to UPDATED_TERM_TYPE
+        defaultMContractShouldNotBeFound("termType.equals=" + UPDATED_TERM_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByTermTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where termType not equals to DEFAULT_TERM_TYPE
+        defaultMContractShouldNotBeFound("termType.notEquals=" + DEFAULT_TERM_TYPE);
+
+        // Get all the mContractList where termType not equals to UPDATED_TERM_TYPE
+        defaultMContractShouldBeFound("termType.notEquals=" + UPDATED_TERM_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByTermTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where termType in DEFAULT_TERM_TYPE or UPDATED_TERM_TYPE
+        defaultMContractShouldBeFound("termType.in=" + DEFAULT_TERM_TYPE + "," + UPDATED_TERM_TYPE);
+
+        // Get all the mContractList where termType equals to UPDATED_TERM_TYPE
+        defaultMContractShouldNotBeFound("termType.in=" + UPDATED_TERM_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByTermTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where termType is not null
+        defaultMContractShouldBeFound("termType.specified=true");
+
+        // Get all the mContractList where termType is null
+        defaultMContractShouldNotBeFound("termType.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMContractsByTermTypeContainsSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where termType contains DEFAULT_TERM_TYPE
+        defaultMContractShouldBeFound("termType.contains=" + DEFAULT_TERM_TYPE);
+
+        // Get all the mContractList where termType contains UPDATED_TERM_TYPE
+        defaultMContractShouldNotBeFound("termType.contains=" + UPDATED_TERM_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByTermTypeNotContainsSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where termType does not contain DEFAULT_TERM_TYPE
+        defaultMContractShouldNotBeFound("termType.doesNotContain=" + DEFAULT_TERM_TYPE);
+
+        // Get all the mContractList where termType does not contain UPDATED_TERM_TYPE
+        defaultMContractShouldBeFound("termType.doesNotContain=" + UPDATED_TERM_TYPE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMContractsByHierarchicalTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where hierarchicalType equals to DEFAULT_HIERARCHICAL_TYPE
+        defaultMContractShouldBeFound("hierarchicalType.equals=" + DEFAULT_HIERARCHICAL_TYPE);
+
+        // Get all the mContractList where hierarchicalType equals to UPDATED_HIERARCHICAL_TYPE
+        defaultMContractShouldNotBeFound("hierarchicalType.equals=" + UPDATED_HIERARCHICAL_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByHierarchicalTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where hierarchicalType not equals to DEFAULT_HIERARCHICAL_TYPE
+        defaultMContractShouldNotBeFound("hierarchicalType.notEquals=" + DEFAULT_HIERARCHICAL_TYPE);
+
+        // Get all the mContractList where hierarchicalType not equals to UPDATED_HIERARCHICAL_TYPE
+        defaultMContractShouldBeFound("hierarchicalType.notEquals=" + UPDATED_HIERARCHICAL_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByHierarchicalTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where hierarchicalType in DEFAULT_HIERARCHICAL_TYPE or UPDATED_HIERARCHICAL_TYPE
+        defaultMContractShouldBeFound("hierarchicalType.in=" + DEFAULT_HIERARCHICAL_TYPE + "," + UPDATED_HIERARCHICAL_TYPE);
+
+        // Get all the mContractList where hierarchicalType equals to UPDATED_HIERARCHICAL_TYPE
+        defaultMContractShouldNotBeFound("hierarchicalType.in=" + UPDATED_HIERARCHICAL_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByHierarchicalTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where hierarchicalType is not null
+        defaultMContractShouldBeFound("hierarchicalType.specified=true");
+
+        // Get all the mContractList where hierarchicalType is null
+        defaultMContractShouldNotBeFound("hierarchicalType.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMContractsByHierarchicalTypeContainsSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where hierarchicalType contains DEFAULT_HIERARCHICAL_TYPE
+        defaultMContractShouldBeFound("hierarchicalType.contains=" + DEFAULT_HIERARCHICAL_TYPE);
+
+        // Get all the mContractList where hierarchicalType contains UPDATED_HIERARCHICAL_TYPE
+        defaultMContractShouldNotBeFound("hierarchicalType.contains=" + UPDATED_HIERARCHICAL_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractsByHierarchicalTypeNotContainsSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+
+        // Get all the mContractList where hierarchicalType does not contain DEFAULT_HIERARCHICAL_TYPE
+        defaultMContractShouldNotBeFound("hierarchicalType.doesNotContain=" + DEFAULT_HIERARCHICAL_TYPE);
+
+        // Get all the mContractList where hierarchicalType does not contain UPDATED_HIERARCHICAL_TYPE
+        defaultMContractShouldBeFound("hierarchicalType.doesNotContain=" + UPDATED_HIERARCHICAL_TYPE);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMContractsByUidIsEqualToSomething() throws Exception {
         // Initialize the database
         mContractRepository.saveAndFlush(mContract);
@@ -2356,6 +3042,13 @@ public class MContractResourceIT {
             .andExpect(jsonPath("$.[*].dateReject").value(hasItem(sameInstant(DEFAULT_DATE_REJECT))))
             .andExpect(jsonPath("$.[*].rejectedReason").value(hasItem(DEFAULT_REJECTED_REASON)))
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.intValue())))
+            .andExpect(jsonPath("$.[*].priceProposed").value(hasItem(DEFAULT_PRICE_PROPOSED.intValue())))
+            .andExpect(jsonPath("$.[*].expMailReceipt").value(hasItem(DEFAULT_EXP_MAIL_RECEIPT)))
+            .andExpect(jsonPath("$.[*].noticePeriod").value(hasItem(DEFAULT_NOTICE_PERIOD)))
+            .andExpect(jsonPath("$.[*].reminderSent").value(hasItem(DEFAULT_REMINDER_SENT)))
+            .andExpect(jsonPath("$.[*].emailNotification").value(hasItem(DEFAULT_EMAIL_NOTIFICATION)))
+            .andExpect(jsonPath("$.[*].termType").value(hasItem(DEFAULT_TERM_TYPE)))
+            .andExpect(jsonPath("$.[*].hierarchicalType").value(hasItem(DEFAULT_HIERARCHICAL_TYPE)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -2424,6 +3117,13 @@ public class MContractResourceIT {
             .dateReject(UPDATED_DATE_REJECT)
             .rejectedReason(UPDATED_REJECTED_REASON)
             .price(UPDATED_PRICE)
+            .priceProposed(UPDATED_PRICE_PROPOSED)
+            .expMailReceipt(UPDATED_EXP_MAIL_RECEIPT)
+            .noticePeriod(UPDATED_NOTICE_PERIOD)
+            .reminderSent(UPDATED_REMINDER_SENT)
+            .emailNotification(UPDATED_EMAIL_NOTIFICATION)
+            .termType(UPDATED_TERM_TYPE)
+            .hierarchicalType(UPDATED_HIERARCHICAL_TYPE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         MContractDTO mContractDTO = mContractMapper.toDto(updatedMContract);
@@ -2456,6 +3156,13 @@ public class MContractResourceIT {
         assertThat(testMContract.getDateReject()).isEqualTo(UPDATED_DATE_REJECT);
         assertThat(testMContract.getRejectedReason()).isEqualTo(UPDATED_REJECTED_REASON);
         assertThat(testMContract.getPrice()).isEqualTo(UPDATED_PRICE);
+        assertThat(testMContract.getPriceProposed()).isEqualTo(UPDATED_PRICE_PROPOSED);
+        assertThat(testMContract.getExpMailReceipt()).isEqualTo(UPDATED_EXP_MAIL_RECEIPT);
+        assertThat(testMContract.getNoticePeriod()).isEqualTo(UPDATED_NOTICE_PERIOD);
+        assertThat(testMContract.getReminderSent()).isEqualTo(UPDATED_REMINDER_SENT);
+        assertThat(testMContract.getEmailNotification()).isEqualTo(UPDATED_EMAIL_NOTIFICATION);
+        assertThat(testMContract.getTermType()).isEqualTo(UPDATED_TERM_TYPE);
+        assertThat(testMContract.getHierarchicalType()).isEqualTo(UPDATED_HIERARCHICAL_TYPE);
         assertThat(testMContract.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testMContract.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

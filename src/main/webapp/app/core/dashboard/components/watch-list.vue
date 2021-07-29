@@ -34,7 +34,7 @@
                         <md-card-header style="padding: 0; margin: 0;">
                             <md-card-header-text align="left">
                                 <div class="wl-caption">{{ item.name }}</div>
-                                <div class="wl-icon-wrapper" :style="'background:'+ item.accentColor +' !important;'">
+                                <div class="wl-count-wrapper" :style="'background:'+ item.accentColor +' !important;'">
                                     <div class="wl-title" style="font-size: 14px !important; text-align: center; color: #FFF;">{{ item.count ? item.count : '0' }}</div>
                                 </div>
                             </md-card-header-text>
@@ -262,6 +262,13 @@
         background-color: #8898aa;
     }
 
+    .wl-count-wrapper {
+        display: inline-block;
+        padding: 2px 15px;
+        border-radius: 10px; 
+        background-color: #8898aa;
+    }
+
     .bg-pattern {
         background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2z' fill='%23cccccc' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
         background-position: center center;
@@ -315,12 +322,12 @@
         color: #8898aa;
         font-weight: 600;
         font-size: 14px;
-        /*text-transform: uppercase;*/
+        text-transform: none;
         margin-bottom: 4px;
     }
 
     .wl-title {
-        font-weight: bold;
+        font-weight: 500;
         font-size: 16px;
     }
 </style>

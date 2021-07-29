@@ -151,6 +151,14 @@
             <column name="date_approve" type="datetime"/>
             <column name="date_reject" type="datetime"/>
             <column name="rejected_reason" type="string"/>
+            <column name="price" type="numeric"/>
+            <column name="price_proposed" type="numeric"/>
+            <column name="exp_mail_receipt" type="string"/>
+            <column name="notice_period" type="string"/>
+            <column name="reminder_sent" type="numeric"/>
+            <column name="email_notification" type="numeric"/>
+            <column name="term_type" type="string"/>
+            <column name="hierarchical_type" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
@@ -182,6 +190,31 @@
     <changeSet id="202106281153000" author="erid">
         <addColumn tableName="m_contract">
             <column name="price" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="202107230906" author="erid">
+        <addColumn tableName="m_contract">
+            <column name="price_proposed" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="exp_mail_receipt" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="notice_period" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="reminder_sent" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="email_notification" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="term_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="hierarchical_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
         </addColumn>

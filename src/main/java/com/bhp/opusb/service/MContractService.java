@@ -10,6 +10,7 @@ import com.bhp.opusb.domain.*;
 import com.bhp.opusb.repository.*;
 import com.bhp.opusb.service.dto.MContractDTO;
 import com.bhp.opusb.service.dto.MContractLineDTO;
+import com.bhp.opusb.service.dto.MContractTeamDTO;
 import com.bhp.opusb.service.mapper.MContractLineMapper;
 import com.bhp.opusb.service.mapper.MContractMapper;
 import com.bhp.opusb.util.DocumentUtil;
@@ -41,13 +42,16 @@ public class MContractService {
 
     private final Document document;
 
+    private final MContractTeamService mContractTeamService;
+
     public MContractService(ApplicationProperties properties, MContractDocumentService mContractDocumentService,
                             CDocumentTypeRepository cDocumentTypeRepository, MContractRepository mContractRepository,
-                            MContractMapper mContractMapper) {
+                            MContractMapper mContractMapper, MContractTeamService mContractTeamService) {
         this.mContractDocumentService = mContractDocumentService;
         this.cDocumentTypeRepository = cDocumentTypeRepository;
         this.mContractRepository = mContractRepository;
         this.mContractMapper = mContractMapper;
+        this.mContractTeamService = mContractTeamService;
         document = properties.getDocuments().get("contract");
     }
 
@@ -106,6 +110,16 @@ public class MContractService {
             });
         }
 
+        MContractTeamDTO dto = mContractTeamService.findByContractId(mContract.getId());
+        if(dto==null){
+            dto = new MContractTeamDTO();
+            dto.setAdOrganizationId(mContract.getAdOrganization().getId());
+            dto.setContractId(mContract.getId());
+            dto.setStatus("U");
+
+            mContractTeamService.save(dto);
+        }
+
         log.info("this mcontact {}", mContract);
 
         return mContractMapper.toDto(mContract);
@@ -141,6 +155,17 @@ public class MContractService {
             mContractLines.add(mContractLine);
         });
         mContractLineRepository.saveAll(mContractLines);
+
+        MContractTeamDTO dto = mContractTeamService.findByContractId(mContract.getId());
+        if(dto==null){
+            dto = new MContractTeamDTO();
+            dto.setAdOrganizationId(mContract.getAdOrganizationId());
+            dto.setContractId(mContract.getId());
+            dto.setStatus("U");
+
+            mContractTeamService.save(dto);
+        }
+
         return mContract;
     }
 
