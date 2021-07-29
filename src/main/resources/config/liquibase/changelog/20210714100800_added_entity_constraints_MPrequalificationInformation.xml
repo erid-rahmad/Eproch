@@ -21,4 +21,11 @@
                                  referencedTableName="ad_organization"/>
 
     </changeSet>
+    <changeSet id="20210714100800-2-quot" author="ricky-k">
+        <addForeignKeyConstraint baseColumnNames="quotation_id"
+                                 baseTableName="m_prequalification_information"
+                                 constraintName="fk_m_prequalification_information_quotation_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_rfq"/>
+    </changeSet>
 </databaseChangeLog>

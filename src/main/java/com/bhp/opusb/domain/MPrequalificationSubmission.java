@@ -65,6 +65,14 @@ public class MPrequalificationSubmission extends AbstractAuditingEntity {
     @Column(name = "date_submit")
     private ZonedDateTime dateSubmit;
 
+    @Size(max = 10)
+    @Column(name = "pass_fail", length = 10)
+    private String passFail;
+
+    @Size(max = 10)
+    @Column(name = "evaluation_status", length = 10)
+    private String evaluationStatus;
+
     @Column(name = "uid")
     private UUID uid;
 
@@ -242,6 +250,32 @@ public class MPrequalificationSubmission extends AbstractAuditingEntity {
         this.dateSubmit = dateSubmit;
     }
 
+    public String getPassFail() {
+        return passFail;
+    }
+
+    public MPrequalificationSubmission passFail(String passFail) {
+        this.passFail = passFail;
+        return this;
+    }
+
+    public void setPassFail(String passFail) {
+        this.passFail = passFail;
+    }
+
+    public String getEvaluationStatus() {
+        return evaluationStatus;
+    }
+
+    public MPrequalificationSubmission evaluationStatus(String evaluationStatus) {
+        this.evaluationStatus = evaluationStatus;
+        return this;
+    }
+
+    public void setEvaluationStatus(String evaluationStatus) {
+        this.evaluationStatus = evaluationStatus;
+    }
+
     public UUID getUid() {
         return uid;
     }
@@ -352,6 +386,8 @@ public class MPrequalificationSubmission extends AbstractAuditingEntity {
             ", dateReject='" + getDateReject() + "'" +
             ", rejectedReason='" + getRejectedReason() + "'" +
             ", dateSubmit='" + getDateSubmit() + "'" +
+            ", passFail='" + getPassFail() + "'" +
+            ", evaluationStatus='" + getEvaluationStatus() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

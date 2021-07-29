@@ -83,6 +83,8 @@ class MPrequalificationSubmissionGatlingTest extends Simulation {
                 , "dateReject":"2020-01-01T00:00:00.000Z"
                 , "rejectedReason":"SAMPLE_TEXT"
                 , "dateSubmit":"2020-01-01T00:00:00.000Z"
+                , "passFail":"SAMPLE_TEXT"
+                , "evaluationStatus":"SAMPLE_TEXT"
                 , "uid":null
                 , "active":null
                 }""")).asJson

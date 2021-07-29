@@ -90,6 +90,22 @@
             <column name="last_modified_date" type="timestamp"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="20210721050800-passfail" author="ricky-k">
+        <addColumn tableName="m_prequalification_submission">
+            <column name="pass_fail" type="varchar(10)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20210721050800-evalstatus" author="ricky-k">
+        <addColumn tableName="m_prequalification_submission">
+            <column name="evaluation_status" type="varchar(10)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
     <!--
@@ -117,6 +133,8 @@
             <column name="date_reject" type="datetime"/>
             <column name="rejected_reason" type="string"/>
             <column name="date_submit" type="datetime"/>
+            <column name="pass_fail" type="string"/>
+            <column name="evaluation_status" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>

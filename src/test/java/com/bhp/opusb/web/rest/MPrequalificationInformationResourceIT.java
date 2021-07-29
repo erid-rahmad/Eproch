@@ -4,6 +4,7 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MPrequalificationInformation;
 import com.bhp.opusb.domain.CAttachment;
 import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.MRfq;
 import com.bhp.opusb.repository.MPrequalificationInformationRepository;
 import com.bhp.opusb.service.MPrequalificationInformationService;
 import com.bhp.opusb.service.dto.MPrequalificationInformationDTO;
@@ -1512,6 +1513,26 @@ public class MPrequalificationInformationResourceIT {
 
         // Get all the mPrequalificationInformationList where adOrganization equals to adOrganizationId + 1
         defaultMPrequalificationInformationShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMPrequalificationInformationsByQuotationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mPrequalificationInformationRepository.saveAndFlush(mPrequalificationInformation);
+        MRfq quotation = MRfqResourceIT.createEntity(em);
+        em.persist(quotation);
+        em.flush();
+        mPrequalificationInformation.setQuotation(quotation);
+        mPrequalificationInformationRepository.saveAndFlush(mPrequalificationInformation);
+        Long quotationId = quotation.getId();
+
+        // Get all the mPrequalificationInformationList where quotation equals to quotationId
+        defaultMPrequalificationInformationShouldBeFound("quotationId.equals=" + quotationId);
+
+        // Get all the mPrequalificationInformationList where quotation equals to quotationId + 1
+        defaultMPrequalificationInformationShouldNotBeFound("quotationId.equals=" + (quotationId + 1));
     }
 
     /**

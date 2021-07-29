@@ -94,6 +94,14 @@
             </column>
         </addColumn>
     </changeSet>
+
+    <changeSet id="20210714100800-add-col-quotation" author="ricky-k">
+        <addColumn tableName="m_prequalification_information">
+            <column name="quotation_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
     <!--
@@ -115,6 +123,7 @@
             <column name="name" type="string"/>
             <column name="type" type="string"/>
             <column name="announcement_text" type="clob"/>
+            <column name="status" type="string"/>
             <column name="date_trx" type="datetime"/>
             <column name="document_no" type="string"/>
             <column name="document_action" type="string"/>

@@ -1,6 +1,6 @@
 <template>
   <div class="submission-form">
-    <h3 style="margin-top: 0">Technical Proposal</h3>
+    <h3 style="margin-top: 0">Prequalification Submission</h3>
     <el-form ref="mainForm" label-position="left" label-width="200px" size="mini" v-loading="loading">
       <el-row :gutter="24">
         <el-col :xs="24" :sm="24" :lg="12" :xl="8">

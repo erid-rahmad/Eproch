@@ -1235,6 +1235,8 @@ entity MPrequalificationSubmission {
 	rejectedReason String
 
 	dateSubmit ZonedDateTime
+    passFail String	maxlength(10)
+	evaluationStatus String maxlength(10)
 
 	uid UUID
 	active Boolean
@@ -2515,6 +2517,7 @@ relationship ManyToOne {
 	CVendorEvaluationLine{cVendorEvaluation required} to CVendorEvaluation
 
 	MPrequalificationInformation{adOrganization required} to ADOrganization
+	MPrequalificationInformation{quotation} to MRfq
 
 	MPrequalificationInvitation{prequalification required} to MPrequalificationInformation
 	MPrequalificationInvitation{adOrganization required} to ADOrganization

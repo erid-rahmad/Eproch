@@ -50,6 +50,10 @@ public class MPrequalificationSubmissionCriteria implements Serializable, Criter
 
     private ZonedDateTimeFilter dateSubmit;
 
+    private StringFilter passFail;
+
+    private StringFilter evaluationStatus;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -78,6 +82,8 @@ public class MPrequalificationSubmissionCriteria implements Serializable, Criter
         this.dateReject = other.dateReject == null ? null : other.dateReject.copy();
         this.rejectedReason = other.rejectedReason == null ? null : other.rejectedReason.copy();
         this.dateSubmit = other.dateSubmit == null ? null : other.dateSubmit.copy();
+        this.passFail = other.passFail == null ? null : other.passFail.copy();
+        this.evaluationStatus = other.evaluationStatus == null ? null : other.evaluationStatus.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -187,6 +193,22 @@ public class MPrequalificationSubmissionCriteria implements Serializable, Criter
         this.dateSubmit = dateSubmit;
     }
 
+    public StringFilter getPassFail() {
+        return passFail;
+    }
+
+    public void setPassFail(StringFilter passFail) {
+        this.passFail = passFail;
+    }
+
+    public StringFilter getEvaluationStatus() {
+        return evaluationStatus;
+    }
+
+    public void setEvaluationStatus(StringFilter evaluationStatus) {
+        this.evaluationStatus = evaluationStatus;
+    }
+
     public UUIDFilter getUid() {
         return uid;
     }
@@ -258,6 +280,8 @@ public class MPrequalificationSubmissionCriteria implements Serializable, Criter
             Objects.equals(dateReject, that.dateReject) &&
             Objects.equals(rejectedReason, that.rejectedReason) &&
             Objects.equals(dateSubmit, that.dateSubmit) &&
+            Objects.equals(passFail, that.passFail) &&
+            Objects.equals(evaluationStatus, that.evaluationStatus) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
@@ -281,6 +305,8 @@ public class MPrequalificationSubmissionCriteria implements Serializable, Criter
         dateReject,
         rejectedReason,
         dateSubmit,
+        passFail,
+        evaluationStatus,
         uid,
         active,
         adOrganizationId,
@@ -305,6 +331,8 @@ public class MPrequalificationSubmissionCriteria implements Serializable, Criter
                 (dateReject != null ? "dateReject=" + dateReject + ", " : "") +
                 (rejectedReason != null ? "rejectedReason=" + rejectedReason + ", " : "") +
                 (dateSubmit != null ? "dateSubmit=" + dateSubmit + ", " : "") +
+                (passFail != null ? "passFail=" + passFail + ", " : "") +
+                (evaluationStatus != null ? "evaluationStatus=" + evaluationStatus + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
