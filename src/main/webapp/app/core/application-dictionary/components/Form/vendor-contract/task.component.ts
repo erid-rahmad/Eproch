@@ -37,6 +37,7 @@ export default class TaskComponent extends Mixins(AccessLevelMixin, ContractInfo
   indexsNego: boolean = false;
   dialogVisibleView: boolean = false;
   dialogVisibleViewNego: boolean = false;
+  AccRole:boolean=false;
 
   // @ts-ignoreFview
   loading: boolean = false;
@@ -129,6 +130,11 @@ export default class TaskComponent extends Mixins(AccessLevelMixin, ContractInfo
   lastDocument() {
     const accept = this.mainForm.massage[this.mainForm.massage.length - 1];
     this.mainForm.massageLast=accept
+    return accept;
+  }
+
+  ViewContract(view){
+    this.mainForm.massageLast=view
   }
 
   addChat() {
@@ -142,6 +148,7 @@ export default class TaskComponent extends Mixins(AccessLevelMixin, ContractInfo
       cAttachmentId: '',
     }
     this.mainForm.massage.push(chat);
+    this.lastDocument()
   }
 
   deleteChat(row) {
@@ -160,6 +167,7 @@ export default class TaskComponent extends Mixins(AccessLevelMixin, ContractInfo
       cAttachmentId: '',
     }
     this.mainForm.massage.push(chat);
+    this.lastDocument()
   }
 
   addPic() {
@@ -273,8 +281,13 @@ export default class TaskComponent extends Mixins(AccessLevelMixin, ContractInfo
       })
       .then(res => {
         this.mainForm.massage = res.data;
-
-
+        const data =this.lastDocument()
+        if (this.isVendor) {
+          if (data.createdBy.toLowerCase() === this.vendorInfo.name.toLowerCase()) {
+            this.AccRole = true;
+          }
+        }
+        !this.isVendor && data.createdBy ==="admin" ? this.AccRole=true:null;
       })
       .catch(err => {
         console.log('Failed to retrieveContractTask. %O', err);
@@ -298,7 +311,6 @@ export default class TaskComponent extends Mixins(AccessLevelMixin, ContractInfo
       .finally(() => this.loading = false);
 
   }
-
   publish() {
   }
 

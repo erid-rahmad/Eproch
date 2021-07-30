@@ -76,7 +76,6 @@
                                   :item="item.clauseLine"
                     >
                     </SortableItem>
-
                 </SortableList>
             </div>
 
