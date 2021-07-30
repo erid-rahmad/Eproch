@@ -104,6 +104,13 @@
             "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mRfq",
+            "otherEntityRelationshipName": "mPrequalificationInformation",
+            "relationshipName": "quotation",
+            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20210714100800",

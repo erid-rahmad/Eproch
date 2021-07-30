@@ -24,12 +24,12 @@ public class MPrequalificationInformationDTO extends AbstractAuditingDTO impleme
     @Size(max = 10)
     private String type;
 
+    @Lob
+    private String announcementText;
+
     @NotNull
     @Size(max = 10)
     private String status;
-
-    @Lob
-    private String announcementText;
 
     private ZonedDateTime dateTrx;
 
@@ -60,6 +60,9 @@ public class MPrequalificationInformationDTO extends AbstractAuditingDTO impleme
 
     private Long adOrganizationId;
     
+    private Long quotationId;
+    private String referenceNo;
+    
     //for display
     private String preqMethodName, preqEventName;
     private Long preqMethodId, preqEventId;
@@ -70,6 +73,14 @@ public class MPrequalificationInformationDTO extends AbstractAuditingDTO impleme
 
     public Long getId() {
         return id;
+    }
+
+    public String getReferenceNo() {
+        return referenceNo;
+    }
+
+    public void setReferenceNo(String referenceNo) {
+        this.referenceNo = referenceNo;
     }
 
     public ZonedDateTime getAnnouncementPublishDate() {
@@ -86,14 +97,6 @@ public class MPrequalificationInformationDTO extends AbstractAuditingDTO impleme
 
     public void setJoinedVendor(Integer joinedVendor) {
         this.joinedVendor = joinedVendor;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public Long getPreqEventId() {
@@ -188,6 +191,14 @@ public class MPrequalificationInformationDTO extends AbstractAuditingDTO impleme
         this.announcementText = announcementText;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public ZonedDateTime getDateTrx() {
         return dateTrx;
     }
@@ -276,6 +287,14 @@ public class MPrequalificationInformationDTO extends AbstractAuditingDTO impleme
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public Long getQuotationId() {
+        return quotationId;
+    }
+
+    public void setQuotationId(Long mRfqId) {
+        this.quotationId = mRfqId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -306,6 +325,7 @@ public class MPrequalificationInformationDTO extends AbstractAuditingDTO impleme
             ", name='" + getName() + "'" +
             ", type='" + getType() + "'" +
             ", announcementText='" + getAnnouncementText() + "'" +
+            ", status='" + getStatus() + "'" +
             ", dateTrx='" + getDateTrx() + "'" +
             ", documentNo='" + getDocumentNo() + "'" +
             ", documentAction='" + getDocumentAction() + "'" +
@@ -317,6 +337,7 @@ public class MPrequalificationInformationDTO extends AbstractAuditingDTO impleme
             ", rejectedReason='" + getRejectedReason() + "'" +
             ", attachmentId=" + getAttachmentId() +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", quotationId=" + getQuotationId() +
             "}";
     }
 }

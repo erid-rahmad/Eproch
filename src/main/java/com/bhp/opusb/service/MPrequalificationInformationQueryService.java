@@ -141,6 +141,10 @@ public class MPrequalificationInformationQueryService extends QueryService<MPreq
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(MPrequalificationInformation_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
+            if (criteria.getQuotationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getQuotationId(),
+                    root -> root.join(MPrequalificationInformation_.quotation, JoinType.LEFT).get(MRfq_.id)));
+            }
         }
         return specification;
     }

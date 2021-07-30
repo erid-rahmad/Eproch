@@ -60,6 +60,8 @@ public class MPrequalificationInformationCriteria implements Serializable, Crite
 
     private LongFilter adOrganizationId;
 
+    private LongFilter quotationId;
+
     public MPrequalificationInformationCriteria() {
     }
 
@@ -81,6 +83,7 @@ public class MPrequalificationInformationCriteria implements Serializable, Crite
         this.rejectedReason = other.rejectedReason == null ? null : other.rejectedReason.copy();
         this.attachmentId = other.attachmentId == null ? null : other.attachmentId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.quotationId = other.quotationId == null ? null : other.quotationId.copy();
     }
 
     @Override
@@ -224,6 +227,14 @@ public class MPrequalificationInformationCriteria implements Serializable, Crite
         this.adOrganizationId = adOrganizationId;
     }
 
+    public LongFilter getQuotationId() {
+        return quotationId;
+    }
+
+    public void setQuotationId(LongFilter quotationId) {
+        this.quotationId = quotationId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -251,7 +262,8 @@ public class MPrequalificationInformationCriteria implements Serializable, Crite
             Objects.equals(dateReject, that.dateReject) &&
             Objects.equals(rejectedReason, that.rejectedReason) &&
             Objects.equals(attachmentId, that.attachmentId) &&
-            Objects.equals(adOrganizationId, that.adOrganizationId);
+            Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(quotationId, that.quotationId);
     }
 
     @Override
@@ -273,7 +285,8 @@ public class MPrequalificationInformationCriteria implements Serializable, Crite
         dateReject,
         rejectedReason,
         attachmentId,
-        adOrganizationId
+        adOrganizationId,
+        quotationId
         );
     }
 
@@ -297,6 +310,7 @@ public class MPrequalificationInformationCriteria implements Serializable, Crite
                 (rejectedReason != null ? "rejectedReason=" + rejectedReason + ", " : "") +
                 (attachmentId != null ? "attachmentId=" + attachmentId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (quotationId != null ? "quotationId=" + quotationId + ", " : "") +
             "}";
     }
 

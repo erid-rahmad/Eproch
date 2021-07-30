@@ -16,6 +16,27 @@
           <el-form-item label="Title" prop="name" required>
             <el-input v-model="preq.name" class="form-input" clearable :disabled="editMode"></el-input>
           </el-form-item>
+          <el-form-item label="Reference No" prop="referenceNo" required>
+            <el-input
+              ref="requisitionNo"
+              v-model="preq.referenceNo"
+              v-loading="loadingReferenceNo"
+              clearable
+              :disabled="editMode"
+              placeholder="Please Enter Reference No"
+              @change="retrieveReferencedData"
+            >
+              <el-button
+                v-if="!editMode"
+                :loading="loadingReferenceNo"
+                icon="el-icon-search"
+                slot="append"
+                @click="retrieveReferencedData(preq.referenceNo)"
+              >
+                Search
+              </el-button>
+            </el-input>
+          </el-form-item>
           <el-form-item label="Prequalification Type" prop="type" required>
             <el-select
               v-model="preq.type"
