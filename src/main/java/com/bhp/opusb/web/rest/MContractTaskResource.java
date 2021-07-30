@@ -1,6 +1,7 @@
 package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.service.MContractTaskService;
+import com.bhp.opusb.service.dto.MContractTaskSaveDTO;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
 import com.bhp.opusb.service.dto.MContractTaskDTO;
 import com.bhp.opusb.service.dto.MContractTaskCriteria;
@@ -66,6 +67,19 @@ public class MContractTaskResource {
         return ResponseEntity.created(new URI("/api/m-contract-tasks/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    /**
+     * {@code POST  /m-contract-tasks} : Create a new mContractTask.
+     *
+     * @param mContractTaskDTO the mContractTaskDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new mContractTaskDTO, or with status {@code 400 (Bad Request)} if the mContractTask has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/m-contract-tasks-save")
+    public ResponseEntity<?> createMContractSaveTask(@Valid @RequestBody MContractTaskSaveDTO mContractTaskDTO) throws URISyntaxException {
+        log.debug("REST request to save createMContractSaveTask : {}", mContractTaskDTO);
+        return ResponseEntity.ok(mContractTaskService.save(mContractTaskDTO));
     }
 
     /**

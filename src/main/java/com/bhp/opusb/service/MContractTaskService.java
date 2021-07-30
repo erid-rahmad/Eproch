@@ -3,6 +3,7 @@ package com.bhp.opusb.service;
 import com.bhp.opusb.domain.MContractTask;
 import com.bhp.opusb.repository.MContractTaskRepository;
 import com.bhp.opusb.service.dto.MContractTaskDTO;
+import com.bhp.opusb.service.dto.MContractTaskSaveDTO;
 import com.bhp.opusb.service.mapper.MContractTaskMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +27,14 @@ public class MContractTaskService {
     private final MContractTaskRepository mContractTaskRepository;
 
     private final MContractTaskMapper mContractTaskMapper;
+    private final MContractTaskReviewersService mContractTaskReviewersService;
+    private final MContractTaskNegotiationService mContractTaskNegotiationService;
 
-    public MContractTaskService(MContractTaskRepository mContractTaskRepository, MContractTaskMapper mContractTaskMapper) {
+    public MContractTaskService(MContractTaskRepository mContractTaskRepository, MContractTaskMapper mContractTaskMapper, MContractTaskReviewersService mContractTaskReviewersService, MContractTaskNegotiationService mContractTaskNegotiationService) {
         this.mContractTaskRepository = mContractTaskRepository;
         this.mContractTaskMapper = mContractTaskMapper;
+        this.mContractTaskReviewersService = mContractTaskReviewersService;
+        this.mContractTaskNegotiationService = mContractTaskNegotiationService;
     }
 
     /**
@@ -42,6 +47,25 @@ public class MContractTaskService {
         log.debug("Request to save MContractTask : {}", mContractTaskDTO);
         MContractTask mContractTask = mContractTaskMapper.toEntity(mContractTaskDTO);
         mContractTask = mContractTaskRepository.save(mContractTask);
+        return mContractTaskMapper.toDto(mContractTask);
+    }
+
+    /**
+     * Save a mContractTask.
+     *
+     * @return the persisted entity.
+     */
+    public MContractTaskDTO save(MContractTaskSaveDTO contractTaskSaveDTO) {
+        log.debug("Request to save MContractTaskSaveDTO : {}", contractTaskSaveDTO);
+        MContractTask mContractTask = mContractTaskRepository.save(mContractTaskMapper.toEntity(contractTaskSaveDTO.getContractTask()));
+        contractTaskSaveDTO.getReviewers().forEach(mContractTaskReviewersDTO -> {
+            mContractTaskReviewersDTO.setContractTaskId(mContractTask.getId());
+            mContractTaskReviewersService.save(mContractTaskReviewersDTO);
+        });
+        contractTaskSaveDTO.getMassage().forEach(mContractTaskNegotiationDTO -> {
+            mContractTaskNegotiationDTO.setContractTaskId(mContractTask.getId());
+            mContractTaskNegotiationService.save(mContractTaskNegotiationDTO);
+        });
         return mContractTaskMapper.toDto(mContractTask);
     }
 

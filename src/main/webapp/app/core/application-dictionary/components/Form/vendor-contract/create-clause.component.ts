@@ -46,8 +46,7 @@ const ContractInfoProps = Vue.extend({
 @Component({
   components: {
     draggable,
-    Sortable, AdInputLookup, SortableItem,
-    SortableList
+     AdInputLookup,
   }
 })
 export default class ContractDocument extends Mixins(AccessLevelMixin, ContractInfoProps) {

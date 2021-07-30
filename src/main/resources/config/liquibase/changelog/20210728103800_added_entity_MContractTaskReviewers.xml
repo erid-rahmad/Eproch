@@ -73,5 +73,19 @@
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>
+    <changeSet id="202108291231" author="erid">
+        <addColumn tableName="m_contract_task_reviewers">
+            <column name="pic_user_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="2021082912311" author="erid">
+       <dropColumn tableName="m_contract_task_reviewers">
+           <column name="pic_id" type="bigint">
+               <constraints nullable="false" />
+           </column>
+       </dropColumn>
+    </changeSet>
 
 </databaseChangeLog>

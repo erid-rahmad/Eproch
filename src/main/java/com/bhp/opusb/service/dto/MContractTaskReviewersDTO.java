@@ -16,7 +16,6 @@ public class MContractTaskReviewersDTO extends AbstractAuditingDTO {
 
     private Boolean active;
 
-
     private Long adOrganizationId;
 
     private Long contractTaskId;
