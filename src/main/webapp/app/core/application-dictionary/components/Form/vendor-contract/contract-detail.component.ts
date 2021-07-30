@@ -6,6 +6,7 @@ import ContractInfo from './contract-info.vue';
 import Task from './task.vue';
 import ContractTeam from './contract-team.vue';
 import ContractMessageBoard from './contract-message-board.vue';
+import {AccountStoreModule} from "@/shared/config/store/account-store";
 
 const tabPaneComponent = new Map<string, string>([
   ['INF', 'contract-info'],
@@ -47,6 +48,8 @@ const ContractDetailProps = Vue.extend({
 export default class ContractDetail extends Mixins(AccessLevelMixin, ContractDetailProps) {
 
   activeTab: string = 'INF';
+  saveBtn:boolean=false;
+  publishBtn:boolean=false;
 
   tabs: any[] = [
     {
@@ -90,11 +93,17 @@ export default class ContractDetail extends Mixins(AccessLevelMixin, ContractDet
   }
 
   get isTabDocument() {
-    return this.activeTab === 'DOC';
+    if (this.isVendor){
+      return this.activeTab === 'TSK'
+    }else {return this.activeTab === 'DOC';}
   }
 
   get isTabInfo() {
     return this.activeTab === 'INF';
+  }
+
+  get isVendor(){
+    return AccountStoreModule.isVendor;
   }
 
   @Watch('activeTab')
@@ -115,7 +124,21 @@ export default class ContractDetail extends Mixins(AccessLevelMixin, ContractDet
     }
   }
 
+  button(button){
+
+  }
+
   created() {
+    if (this.isVendor){
+      this.tabs = [
+     {
+          id: 4,
+          name: 'Task',
+          value: 'TSK',
+        }]
+
+    }
+
     this.activeTab = this.tab;
     this.tabs.forEach((tab, index) => {
       tab.disabled = index > 0 && ! this.data.id ? true : false;

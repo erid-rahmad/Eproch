@@ -1,131 +1,217 @@
 <template>
     <div>
-    <div class="contract-document" v-if="indexs">
-        <el-table
-            ref="documents"
-            v-loading="loading"
-            :data="ContactTasks"
-            border
-            highlight-current-row
-            size="mini"
-            stripe
-        >
-            <el-table-column
-                label="No" width="50">
-                <template v-slot="{ $index }">
-                    {{ $index + 1 }}
-                </template>
-            </el-table-column>
-
-            <el-table-column
-                label="Document Name"
-                min-width="200"
-                prop="name"
-                show-overflow-tooltip
-            ></el-table-column>
-            <el-table-column
-                label="Document Name"
-                min-width="200"
-                prop="name"
-                show-overflow-tooltip
-            ></el-table-column>
-            <el-table-column
-                label="Document Name"
-                min-width="200"
-                prop="name"
-                show-overflow-tooltip
-            ></el-table-column>
-            <el-table-column
-                label="Document Name"
-                min-width="200"
-                prop="name"
-                show-overflow-tooltip
-            ></el-table-column>
-            <el-table-column
+        <div class="contract-document">
+            <el-table
+                v-if="index===0"
+                ref="documents"
+                v-loading="loading"
+                :data="ContactTasks"
+                border
+                highlight-current-row
+                size="mini"
+                stripe
             >
-                <template slot-scope="{row}" >
-                <el-button size="mini" style="margin-left: 0px;" @click="view(row)"
-                >view
+                <el-table-column
+                    label="No" width="50">
+                    <template v-slot="{ $index }">
+                        {{ $index + 1 }}
+                    </template>
+                </el-table-column>
+
+                <el-table-column
+                    label="Task Name"
+                    min-width="200"
+                    prop="name"
+                    show-overflow-tooltip
+                ></el-table-column>
+                <el-table-column
+                >
+                    <template slot-scope="{row}">
+                        <el-button v-if="!isVendor" size="mini" style="margin-left: 0px;" @click="view(row)"
+                        >Edit
+                        </el-button>
+                        <el-button size="mini" style="margin-left: 0px;" @click="viewNego(row)"
+                        >Detail
+                        </el-button>
+                    </template>
+                </el-table-column>
+
+            </el-table>
+        </div>
+        <div v-if="index===1">
+            <el-form
+                ref="contractInfoForm"
+                v-loading="loading"
+                :label-position="formSettings.labelPosition"
+                :label-width="formSettings.labelWidth"
+                :size="formSettings.size"
+                class="contract-info"
+            >
+                <el-form-item label="Select Reviewers">
+                    <el-button size="mini" style="margin-left: 0px;"
+                               @click="addPic"> Add Reviewers
+                    </el-button>
+                    <template v-for="pic in mainForm.reviewers">
+                        <ad-input-lookup
+                            v-model="pic.picId"
+                            :label-fields="['userLogin']"
+                            :query="['employee.equals=true']"
+                            placeholder="Select PiC"
+                            table-name="ad_user"
+                        ></ad-input-lookup>
+                    </template>
+                </el-form-item>
+                <el-form-item label="Approval Rule Flow Type">
+                    <el-select v-model="mainForm.contractTask.documentAction" placeholder="Select">
+                        <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="Specify Due Date">
+                    <div class="block">
+                        <span class="demonstration"></span>
+                        <el-date-picker
+                            v-model="mainForm.contractTask.dueDate"
+                            placeholder="Pick a day"
+                            type="date">
+                        </el-date-picker>
+                    </div>
+                </el-form-item>
+                <el-form-item label="message  ">
+                    <el-button size="mini" style="margin-left: 0px;"
+                               @click="addChat"> Add Chat
+                    </el-button>
+                    <template v-for="chat in mainForm.massage">
+                        <el-row class="card" style="padding: 10px">
+                            <el-col :span="8">
+                                <div class="grid-content bg-purple">
+                                    <el-input
+                                        v-model="chat.description"
+                                        clearable
+                                        type="textarea">
+                                    </el-input>
+                                </div>
+                            </el-col>
+                            <el-col :span="8">
+                                <div class="grid-content bg-purple-light">
+                                    <el-select v-model="chat.contractDocument" placeholder="Select">
+                                        <el-option
+                                            v-for="item in ContractDoc"
+                                            :key="item.name"
+                                            :label="item.name"
+                                            :value="item.description"
+                                            size="mini">
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                            </el-col>
+                            <el-col :span="8">
+                                <div class="grid-content bg-purple">{{ chat.createdBy }}</div>
+                            </el-col>
+                        </el-row>
+
+
+                    </template>
+                </el-form-item>
+                <el-button
+                    size="mini"
+                    title="Save"
+                    type="primary"
+                    @click="save"
+                >Save
                 </el-button>
-                </template>
-            </el-table-column>
-
-        </el-table>
-        <el-dialog
-            :show-close="false"
-            :visible.sync="documentFormVisible"
-            title="Upload Document"
-            width="60%"
-        >
-
-        </el-dialog>
-        <el-dialog
-            :show-close="false"
-            :visible.sync="contractTextVisible"
-            title="Contract"
-            width="60%"
-        >
-            <td v-html="contractText"></td>
-            <div slot="footer">
-                <el-button icon="el-icon-close" size="mini" style="margin-left: 0px;"
-                           @click="contractTextVisible = false">
-                    {{ $t('entity.action.cancel') }}
+                <el-button
+                    size="mini"
+                    title="publish"
+                    type="primary"
+                    @click="publish"
+                >publish
                 </el-button>
-            </div>
-
-        </el-dialog>
-    </div>
-    <div v-if="!indexs" >
-        <el-form
-            ref="contractInfoForm"
-            v-loading="loading"
-
-            class="contract-info"
-        >
-
-            <!--            :disabled="readOnly"-->
-            <!--            :label-position="formSettings.labelPosition"-->
-            <!--            :label-width="formSettings.labelWidth"-->
-            <!--            :model="contract"-->
-            <!--            :rules="validationSchema"-->
-            <!--            :size="formSettings.size"-->
-
-            <el-form-item label="Select Review">
-                <el-input
-                    ref="documentNo"
-                    v-model="ContactTask.documentNo"
-
-                    clearable
-                ></el-input>
-            </el-form-item>
-            <el-form-item label="Approval Rule Flow Type">
-                <el-input
-                    ref="documentNo"
-                    v-model="ContactTask.documentNo"
-
-                    clearable
-                ></el-input>
-            </el-form-item>
-            <el-form-item label="Specify Due Date">
-                <el-input
-                    ref="documentNo"
-                    v-model="ContactTask.documentNo"
-
-                    clearable
-                ></el-input>
-            </el-form-item>
-            <el-form-item label="Provide an innitial message and click submit or mark cancelled ">
-                <el-input
-                    ref="documentNo"
-                    v-model="ContactTask.documentNo"
-
-                    clearable
-                ></el-input>
-            </el-form-item>
-
-
-        </el-form>
-    </div>
+                <el-button
+                    size="mini"
+                    title="publish"
+                    type="primary"
+                    @click="index=0"
+                >Close
+                </el-button>
+            </el-form>
+        </div>
+        <div v-if="index===2">
+            <el-form
+                ref="contractInfoForm"
+                v-loading="loading"
+                :label-position="formSettings.labelPosition"
+                :label-width="formSettings.labelWidth"
+                :size="formSettings.size"
+                class="contract-info"
+            >
+                <el-form-item label="">
+                    <template v-for="chat in mainForm.massage">
+                        <el-row class="card" style="padding: 10px">
+                            <el-col :span="8">
+                                <div class="grid-content bg-purple">
+                                    <el-input
+                                        v-model="chat.description"
+                                        :disabled="chat.id"
+                                        clearable
+                                    >
+                                    </el-input>
+                                </div>
+                            </el-col>
+                            <el-col :span="8">
+                                <div class="grid-content bg-purple-light">
+                                    <el-select v-if="!isVendor" v-model="chat.contractDocument" :disabled="chat.id"
+                                               placeholder="Select"
+                                    >
+                                        <el-option
+                                            v-for="item in ContractDoc"
+                                            :key="item.name"
+                                            :label="item.name"
+                                            :value="item.description"
+                                            size="mini">
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                            </el-col>
+                            <el-col :span="8">
+                                <div class="grid-content bg-purple">{{ chat.createdBy }}
+                                    <el-button size="mini" style="margin-left: 0px;"
+                                               @click="EditContract(chat)">Edit
+                                    </el-button>
+                                </div>
+                            </el-col>
+                            <html-editor v-model="chat.contractDocument" :disabled="getdisable(chat.id)"
+                                         size="mini"></html-editor>
+                        </el-row>
+                    </template>
+                </el-form-item>
+                <el-button
+                    v-if="!mainForm.contractTask.contractDocument"
+                    size="mini"
+                    title="Save"
+                    type="primary"
+                    @click="save"
+                >Sent
+                </el-button>
+                <el-button v-if="!mainForm.contractTask.contractDocument" size="mini" style="margin-left: 0px;"
+                           @click="addChat"> Add New
+                </el-button>
+                <el-button v-if="!mainForm.contractTask.contractDocument" size="mini" style="margin-left: 0px;"
+                           @click="Accept"> Accept
+                </el-button>
+                <el-button size="mini" style="margin-left: 0px;"
+                           @click="index=0"> Close
+                </el-button>
+            </el-form>
+        </div>
     </div>
 </template>
 <script lang="ts" src="./task.component.ts"></script>
+<style lang="scss">
+
+
+</style>
