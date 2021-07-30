@@ -4,6 +4,7 @@ import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMi
 import {Inject} from "vue-property-decorator";
 import DynamicWindowService from "@/core/application-dictionary/components/DynamicWindow/dynamic-window.service";
 import PreqEvaluation from"./preq-evaluation.vue";
+import EvaluationResult from"./evaluation-result.vue";
 const baseApiUrl = 'api/m-biddings';
 const baseApiSchedule = 'api/m-bidding-schedules';
 const baseApiBiddingSchedule = 'api/m-bidding-schedules'
@@ -11,11 +12,12 @@ const baseApiInvitation = 'api/m-bidding-invitations';
 
 @Component({
   components: {
-    PreqEvaluation
+    PreqEvaluation,
+    EvaluationResult
   }
 })
 export default class PrequalificationSubmissionGridComponent extends mixins( AlertMixin,AccessLevelMixin) {
-  index: boolean = true;
+  index: number = 0;
   gridData: any[] = [];
   processing = false;
   public totalItems = 0;
@@ -44,11 +46,16 @@ export default class PrequalificationSubmissionGridComponent extends mixins( Ale
 
   view(row){
     this.selectedRow = row;
-    this.index=false;
+    this.index=1;
+  }
+
+  result(row){
+    this.selectedRow = row;
+    this.index=2;
   }
 
   close(){
-    this.index=true;
+    this.index=0;
   }
 
   public retrieveAllRecords(): void {

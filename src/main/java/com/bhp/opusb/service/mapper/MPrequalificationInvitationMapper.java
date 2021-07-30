@@ -16,6 +16,7 @@ public interface MPrequalificationInvitationMapper extends EntityMapper<MPrequal
     @Mapping(source = "prequalification.name", target = "prequalificationName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
+    @Mapping(source = "businessCategory.id", target = "businessCategoryId")
     @Mapping(source = "businessCategory.name", target = "businessCategoryName")
     @Mapping(source = "businessSubCategory.id", target = "businessSubCategoryId")
     @Mapping(source = "businessSubCategory.name", target = "businessSubCategoryName")

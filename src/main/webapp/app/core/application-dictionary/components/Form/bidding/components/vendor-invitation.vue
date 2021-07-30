@@ -93,6 +93,7 @@
                 icon="el-icon-plus"
                 type="primary"
                 @click="addBusinessCategory"
+                v-if="vendorSelection !== 'DRC'"
               ></el-button>
             </template>
             <template slot-scope="row">
@@ -100,6 +101,7 @@
                 size="mini"
                 icon="el-icon-delete"
                 type="danger"
+                v-if="vendorSelection !== 'DRC'"
                 @click="removeBusinessCategory(row.$index)"
               ></el-button>
             </template>
@@ -109,6 +111,7 @@
       </el-col>
     </el-row>
 
+    <div v-if="canAddVendor">
     <el-divider content-position="left"><h4>Vendor Suggestion</h4></el-divider>
 
     <el-row :gutter="24">
@@ -173,8 +176,8 @@
                 size="mini"
                 icon="el-icon-plus"
                 type="primary"
-                :disabled="!canAddVendor"
                 @click="addVendorSuggestion"
+                v-if="vendorSelection !== 'DRC'"
               ></el-button>
             </template>
             <template slot-scope="row">
@@ -182,6 +185,7 @@
                 size="mini"
                 icon="el-icon-delete"
                 type="danger"
+                v-if="vendorSelection !== 'DRC'"
                 @click="removeVendorSuggestion(row.$index)"
               ></el-button>
             </template>
@@ -190,7 +194,7 @@
         </el-table>
       </el-col>
     </el-row>
-
+    </div>
 
     <el-dialog
       title="Add Vendor Business Category"

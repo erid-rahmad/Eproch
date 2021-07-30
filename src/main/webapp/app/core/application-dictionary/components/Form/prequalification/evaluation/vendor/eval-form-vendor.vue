@@ -1,5 +1,5 @@
 <template>
-  <div class="submission-form">
+  <div class="evaluation-form">
     <h3 style="margin-top: 0">Prequalification Submission</h3>
     <el-form ref="mainForm" label-position="left" label-width="200px" size="mini" v-loading="loading">
       <el-row :gutter="24">
@@ -39,17 +39,8 @@
                 </el-row>
                 <el-row>
                   <el-col style="text-align: right;padding-right: 40px;padding-bottom: 5px">
-                    <el-button v-if="!subCriteria.attachmentName && isVendor" :disabled="disabled" size="mini" type="primary"
-                      @click="openAttachmentForm(subCriteria)">
-                        <svg-icon name="icomoo/206-attachment">
-                        </svg-icon>
-                        Attachment
-                    </el-button>
                     <el-button v-if="subCriteria.attachmentName" icon="el-icon-view" size="mini" type="primary"
                       @click="handleDownload(subCriteria.attachmentUrl)">{{ subCriteria.attachmentName }}
-                    </el-button>
-                    <el-button v-if="subCriteria.attachmentName && isVendor" :disabled="disabled" icon="el-icon-close" size="mini" type="primary"
-                      @click="cancelAttachment(subCriteria)">
                     </el-button>
                   </el-col>
                   <el-table :data="subCriteria.questions" border class="question-list" highlight-current-row size="mini">
@@ -62,12 +53,14 @@
                     <el-table-column label="Requirement" prop="requirement" width="150"> </el-table-column>
                     <el-table-column label="Answer" width="320">
                       <template slot-scope="{ row }">
-                        <el-input v-model="row.answer" :disabled="disabled" :readonly="!isVendor" size="mini"></el-input>
+                        <el-input v-model="row.answer" disabled size="mini"></el-input>
                       </template>
                     </el-table-column>
-                    <el-table-column v-if="!isVendor" label="Document" width="100">
+                    <el-table-column label="Evaluate" min-width="150">
                       <template slot-scope="{ row }">
-                        <el-checkbox :disabled="readOnlyChecklist" v-model="row.documentEvaluation" size="mini"></el-checkbox>
+                        <el-select v-model="row.passFail" placeholder="Pass Fail" disabled>
+                          <el-option v-for="item in passfail" :key="item.value" :label="item.label" :value="item.value"/>
+                        </el-select>
                       </template>
                     </el-table-column>
                   </el-table>
@@ -78,40 +71,21 @@
           </el-col>
         </el-row>
       </el-row>
+      <el-row :gutter="24">
+        <el-col :xs="24" :sm="24" :lg="12" :xl="8">
+          <el-form-item label="Verdict" required>
+            <el-select v-model="data.passFail" placeholder="Pass Fail" disabled>
+              <el-option v-for="item in passfail" :key="item.value" :label="item.label" :value="item.value"/>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
-    <el-dialog :show-close="false" :visible.sync="attachmentFormVisible" title="Add Attachment">
-      <el-upload
-        ref="docUpload"
-        :accept="accept"
-        :action="action"
-        :before-upload="handleBeforeUpload"
-        :headers="uploadHeaders"
-        :on-error="onUploadError"
-        :on-exceed="handleExceed"
-        :on-preview="handlePreview"
-        :on-remove="handleRemove"
-        :on-success="onUploadSuccess"
-        :file-list="fileList"
-        auto-upload
-      >
-        <el-button slot="trigger" icon="el-icon-search" type="primary"> Select File </el-button>
-        <span slot="tip" class="el-upload__tip" style="margin-left: 10px"> Files with a size less than 5Mb </span>
-      </el-upload>
-
-      <div slot="footer">
-        <el-button icon="el-icon-close" size="mini" style="margin-left: 0px" @click="attachmentFormVisible = false">
-          {{ $t('entity.action.cancel') }}
-        </el-button>
-        <el-button icon="el-icon-check" size="mini" style="margin-left: 0px" type="primary" @click="saveAttachment">
-          {{ $t('entity.action.save') }}
-        </el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
-<script lang="ts" src="./submission-form.component.ts"></script>
+<script lang="ts" src="./eval-form-vendor.component.ts"></script>
 <style lang="scss">
-.submission-form {
+.evaluation-form {
   .criteria-label {
     font-weight: 700;
   }
@@ -123,7 +97,7 @@
   }
 }
 
-.compact .submission-form {
+.compact .evaluation-form {
   .el-table--mini {
     td,
     th {
@@ -133,7 +107,7 @@
 }
 </style>
 <style lang="scss" scoped>
-.submission-form {
+.evaluation-form {
   .criteria-section {
     &:not(.criteria-0),
     > .el-col > .sub-criteria-section:not(.sub-0) {

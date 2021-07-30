@@ -32,6 +32,7 @@ export default class RegistDetail extends mixins(Vue2Filters.mixin, AccessLevelM
 
   created() {
     this.mainForm = this.data;
+    this.accButton = this.data.registrationStatus !== "R"
   }
 
   uploadModels=[

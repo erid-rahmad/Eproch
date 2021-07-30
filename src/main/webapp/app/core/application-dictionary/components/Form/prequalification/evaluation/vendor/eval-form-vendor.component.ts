@@ -13,7 +13,7 @@ const Props = Vue.extend({
 });
 
 @Component
-export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
+export default class EvaluationForm extends Mixins(AccessLevelMixin, Props) {
 
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
@@ -43,6 +43,14 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
 
   // selected rows
   subCriteria: any;
+
+  passfail = [{
+    value: 'pass',
+    label: 'Pass'
+  }, {
+    value: 'fail',
+    label: 'Fail'
+  },];
 
   get isVendor() {
     this.disabled=false;
@@ -223,6 +231,7 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
           try {
             const item = this.answers.get(proposal.biddingSubCriteriaLineId);
             item.answer = proposal.answer;
+            item.passFail = proposal.passFail;
             item.documentStatus=proposal.documentStatus;
             item.documentAction=proposal.documentAction;
             item.answerId=proposal.id;
