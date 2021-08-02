@@ -14,7 +14,7 @@ public interface MPrequalificationEvalFileMapper extends EntityMapper<MPrequalif
 
     @Mapping(source = "attachment.id", target = "attachmentId")
     @Mapping(source = "attachment.fileName", target = "attachmentName")
-    @Mapping(source = "attachment.downloadUrl", target = "downloadUrl")
+    @Mapping(source = "attachment.downloadUrl", target = "attachmentUrl")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "prequalificationSubmission.id", target = "prequalificationSubmissionId")
     @Mapping(source = "biddingSubCriteria.id", target = "biddingSubCriteriaId")

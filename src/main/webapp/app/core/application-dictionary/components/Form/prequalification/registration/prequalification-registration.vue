@@ -70,7 +70,7 @@
                                                     type="primary" @click="tidakminat(row)">
                                             </el-button>
                                         </template>
-                                        <template v-if="!isVendor" slot-scope="{ row }">
+                                        <template v-else slot-scope="{ row }">
                                             <el-button class="btn-attachment" icon="el-icon-circle-check" size="mini"
                                                     type="primary" @click="detail(row)">
                                                     Evaluate

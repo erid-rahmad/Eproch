@@ -10,7 +10,7 @@
       <el-step title="Bidding Information" />
       <el-step title="Bidding Schedule" />
       <el-step title="Vendor Invitation" />
-      <el-step title="Vendor Scoring" />
+      <el-step title="Vendor Scoring" v-if="bidding.vendorSelection!=='DRC'"/>
     </el-steps>
 
     <el-scrollbar class="panel-wrapper">

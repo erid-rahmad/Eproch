@@ -18,7 +18,7 @@ public class MPrequalificationEvalFileDTO extends AbstractAuditingDTO {
 
 
     private Long attachmentId;
-    private String attachmentName, downloadUrl;
+    private String attachmentName, attachmentUrl;
 
     private Long adOrganizationId;
 
@@ -30,12 +30,12 @@ public class MPrequalificationEvalFileDTO extends AbstractAuditingDTO {
         return id;
     }
 
-    public String getDownloadUrl() {
-        return downloadUrl;
+    public String getAttachmentUrl() {
+        return attachmentUrl;
     }
 
-    public void setDownloadUrl(String downloadUrl) {
-        this.downloadUrl = downloadUrl;
+    public void setAttachmentUrl(String attachmentUrl) {
+        this.attachmentUrl = attachmentUrl;
     }
 
     public String getAttachmentName() {

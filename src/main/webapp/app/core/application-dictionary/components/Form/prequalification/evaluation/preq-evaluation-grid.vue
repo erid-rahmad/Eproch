@@ -11,7 +11,7 @@
             </el-button>
         </div>
         -->
-        <div v-if="index" class="card">
+        <div v-if="index==0" class="card">
             <el-table
                 ref="mainGrid"
                 v-loading="processing"
@@ -21,11 +21,15 @@
                 size="mini"
                 stripe
             >
-                <el-table-column align="center" fixed="right" width="100">
+                <el-table-column align="center" fixed="right" width="200" label="Actions">
                     <template slot-scope="{ row }">
                         <el-button :underline="false" icon="el-icon-search" size="mini" title="View" type="primary"
                                    @click="view(row)"
-                        >View
+                        >Evaluate
+                        </el-button>
+                        <el-button :underline="false" icon="el-icon-search" size="mini" title="View" type="primary"
+                                   @click="result(row)"
+                        >Result
                         </el-button>
                     </template>
                 </el-table-column>
@@ -53,8 +57,11 @@
                 <el-table-column label="Joined Vendor" align="center" min-width="100" prop="joinedVendor"/>
             </el-table>
         </div>
-        <div v-if="!index">
+        <div v-if="index==1">
             <preq-evaluation :pickRow="selectedRow" @close="close"></preq-evaluation>
+        </div>
+        <div v-if="index==2">
+            <evaluation-result @close="close" :pickRow="selectedRow"></evaluation-result>
         </div>
     </div>
 </template>

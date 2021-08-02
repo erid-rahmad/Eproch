@@ -19,20 +19,15 @@
                         <el-form-item label="Prequalification Name">
                             {{ pickRow.name }}
                         </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
                         <el-form-item label="Prequalification Type">
                             {{ pickRow.type=='O'?'Announcement':pickRow.type=='C'?'Invitation':pickRow.type }}
                         </el-form-item>
-                        <el-form-item label="Evaluation Deadline">
-                            -
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Summary Notes">
+                            <el-input type="textarea" :rows="4" v-model="summary"></el-input>
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row>
-                    <el-divider content-position="left">
-                        <h4>Joined Vendor(s)</h4>
-                    </el-divider>
                 </el-row>
             </el-form>
             <el-table :data="biddingSubmission"
@@ -50,13 +45,18 @@
                         {{ row.dateSubmit | formatDate }}
                     </template>
                 </el-table-column>
-                <el-table-column label="Evaluation Status" min-width="180" prop="passFail" sortable>
+                <el-table-column label="Status" min-width="180" prop="passFail" sortable>
+                </el-table-column>
+                <el-table-column label="Evaluation Status" min-width="180" sortable>
+                    <template slot-scope="{row}">
+                        {{ formatEvalStatus(row.evaluationStatus) }}
+                    </template>
                 </el-table-column>
                 <el-table-column label="Summary" min-width="120" sortable>
                     <template slot-scope="{ row }">
                         <el-button class="button" icon="el el-download-alt" size="mini" type="primary"
                                    @click="retrieveEvaluateTable(row)">
-                            Evaluate
+                            Details
                         </el-button>
                     </template>
                 </el-table-column>
@@ -69,7 +69,7 @@
     </div>
 </template>
 
-<script lang="ts" src="./preq-evaluation.component.ts"></script>
+<script lang="ts" src="./evaluation-result.component.ts"></script>
 
 <style lang="scss">
 .compact .prequalification-process {

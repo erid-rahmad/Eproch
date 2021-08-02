@@ -140,6 +140,7 @@ export default class StepsForm extends StepsFormProps {
     if (this.active === 3) {
       return;
     }
+    if(this.active==2 && this.bidding.vendorSelection==='DRC') return;
 
     this.direction = 1;
     if (this.editMode) {
