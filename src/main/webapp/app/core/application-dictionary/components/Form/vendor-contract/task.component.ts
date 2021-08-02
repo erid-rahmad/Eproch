@@ -130,6 +130,7 @@ export default class TaskComponent extends Mixins(AccessLevelMixin, ContractInfo
     const accept = this.mainForm.massage[this.mainForm.massage.length - 1]
     console.log("this accept", accept);
     this.mainForm.contractTask.contractDocument = accept.contractDocument;
+    this.mainForm.contractTask.documentStatus="Complete"
     this.save()
   }
 
@@ -201,7 +202,8 @@ export default class TaskComponent extends Mixins(AccessLevelMixin, ContractInfo
           try {
             let grid = this.gridData.get(data.id)
             data.status=grid.documentStatus;
-           
+            data.dueDate=grid.dueDate;
+
           }catch (e) {
 
           }
@@ -324,11 +326,16 @@ export default class TaskComponent extends Mixins(AccessLevelMixin, ContractInfo
         this.mainForm.massage = res.data;
         const data =this.lastDocument()
         if (this.isVendor) {
-          if (data.createdBy.toLowerCase() === this.vendorInfo.name.toLowerCase()) {
-            this.AccRole = true;
-          }
+          try {
+            if (data.createdBy.toLowerCase() === this.vendorInfo.name.toLowerCase()) {
+              this.AccRole = true;
+            }
+          }catch (e) {}
         }
-        !this.isVendor && data.createdBy ==="admin" ? this.AccRole=true:null;
+        try {
+          !this.isVendor && data.createdBy ==="admin" ? this.AccRole=true:null;
+        }catch (e) { }
+
       })
       .catch(err => {
         console.log('Failed to retrieveContractTask. %O', err);

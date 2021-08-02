@@ -212,21 +212,22 @@ public class MContractService {
         mContractRepository.deleteById(id);
     }
 
-    @Scheduled(cron = "0 0 0 * * *",zone = "Indian/Maldives")
-    public void cron() {
-        log.info("this scheduler");
-        List<MContract> mContractTaskDTOS =mContractRepository.findAll();
-        mContractTaskDTOS.forEach(mContract -> {
-            LocalDate lt = LocalDate.now();
-            LocalDate lt_=mContract.getExpirationDate();
-            long daysBetween = ChronoUnit.DAYS.between(lt, lt_);
-            if (daysBetween <= mContract.getEmailNotification() && daysBetween >=0){
-                List<AdUser> adUsers= adUserRepository.findBycVendor(mContract.getVendor());
-                adUsers.forEach(adUser -> {
-                    mailService.sendEmail(adUser.getUser().getEmail(),
-                        "REMAINING", "REMAINING ABOUT CONTRACT ", false, true);
-                });
-            }
-        });
-    }
+//    @Scheduled(cron = "0 0 0 * * *",zone = "Indian/Maldives")
+//    public void cron() {
+//        log.info("this scheduler");
+//        List<MContract> mContractTaskDTOS =mContractRepository.findAll();
+//        mContractTaskDTOS.forEach(mContract -> {
+//            LocalDate lt = LocalDate.now();
+//            LocalDate lt_=mContract.getExpirationDate();
+//            long daysBetween = ChronoUnit.DAYS.between(lt, lt_);
+//            int x= (int) (daysBetween%mContract.getReminderSent());
+//            if (daysBetween <= mContract.getEmailNotification() && daysBetween >=0 && x==0 ){
+//                List<AdUser> adUsers= adUserRepository.findBycVendor(mContract.getVendor());
+//                adUsers.forEach(adUser -> {
+//                    mailService.sendEmail(adUser.getUser().getEmail(),
+//                        "REMAINING", "REMAINING ABOUT CONTRACT ", false, true);
+//                });
+//            }
+//        });
+//    }
 }
