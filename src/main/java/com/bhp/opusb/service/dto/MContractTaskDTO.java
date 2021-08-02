@@ -29,7 +29,7 @@ public class MContractTaskDTO extends AbstractAuditingDTO {
 
     @NotNull
     @Size(max = 12)
-    private String documentStatus="DRF";
+    private String documentStatus="Not Started";
 
     private UUID uid;
 

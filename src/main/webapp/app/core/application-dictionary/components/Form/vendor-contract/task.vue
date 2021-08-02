@@ -25,6 +25,12 @@
                     show-overflow-tooltip
                 ></el-table-column>
                 <el-table-column
+                    label="Status"
+                    min-width="200"
+                    prop="status"
+                    show-overflow-tooltip
+                ></el-table-column>
+                <el-table-column
                 >
                     <template slot-scope="{row}">
                         <el-button v-if="!isVendor" size="mini" style="margin-left: 0px;" @click="view(row)"
@@ -246,9 +252,6 @@
                         </div>
                     </el-col>
                 </el-row>
-
-
-
             </el-form>
         </div>
     </div>

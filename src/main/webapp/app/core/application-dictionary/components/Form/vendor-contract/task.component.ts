@@ -38,6 +38,12 @@ export default class TaskComponent extends Mixins(AccessLevelMixin, ContractInfo
   dialogVisibleView: boolean = false;
   dialogVisibleViewNego: boolean = false;
   AccRole:boolean=false;
+   gridData_:any={
+    id:'',
+    name:'',
+    status:''
+  }
+  private gridData: Map<number, any> = new Map();
 
   // @ts-ignoreFview
   loading: boolean = false;
@@ -116,7 +122,8 @@ export default class TaskComponent extends Mixins(AccessLevelMixin, ContractInfo
   }
 
   created() {
-    this.retrieveTask();
+    this.retrieveContractTaskGrid(this.data.id)
+
   }
 
   Accept() {
@@ -190,7 +197,18 @@ export default class TaskComponent extends Mixins(AccessLevelMixin, ContractInfo
         ])
       })
       .then(res => {
+        res.data.forEach(data=>{
+          try {
+            let grid = this.gridData.get(data.id)
+            data.status=grid.documentStatus;
+           
+          }catch (e) {
+
+          }
+        })
         this.ContactTasks = res.data;
+        console.log("this contract tasl",this.ContactTasks)
+
       })
       .catch(err => {
         console.log('Failed to get vendor evaluations. %O', err);
@@ -198,6 +216,29 @@ export default class TaskComponent extends Mixins(AccessLevelMixin, ContractInfo
       })
       .finally(() => {
         this.loading = false
+      });
+  }
+
+  retrieveContractTaskGrid(contractId) {
+    this.commonService(baseApiContractTaskR)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `contractId.equals=${contractId}`,
+        ])
+      })
+      .then(res => {
+        res.data.forEach((data:any)=>{
+          this.gridData.set(data.taskId,data)
+        })
+        this.retrieveTask()
+      })
+      .catch(err => {
+        console.log('Failed to retrieveContractTask. %O', err);
+        this.$message.error('Failed to retrieveContractTask');
+
+      })
+      .finally(() => {
       });
   }
 
@@ -312,6 +353,8 @@ export default class TaskComponent extends Mixins(AccessLevelMixin, ContractInfo
 
   }
   publish() {
+    this.mainForm.contractTask.documentStatus="In Progres"
+    this.save()
   }
 
 

@@ -127,7 +127,6 @@ export default class AuctionInvitation extends Mixins(AccessLevelMixin) {
 
   onSelectItems() {
     this.loading = true;
-
     const submission = {
       adOrganizationId: this.selectedRow.adOrganizationId,
       auctionId: this.selectedRow.auctionId,
