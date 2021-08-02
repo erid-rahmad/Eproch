@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.bhp.opusb.domain.CVendor;
+import com.bhp.opusb.domain.enumeration.VendorDocumentType;
 import com.bhp.opusb.repository.CVendorRepository;
 
 @Service
@@ -15,38 +16,43 @@ public class CvendorApprovalService {
 	
 	
 	private final CVendorRepository cVendorRepository;
+	private final UserService userService;
 	
 	private final Logger log = LoggerFactory.getLogger(CvendorApprovalService.class);
 	
-	private final String DOCUMENT_STATUS_AVP="ABP";
-	private final String DOCUMENT_STATUS_SMP="SMT";
-	
-	public CvendorApprovalService(CVendorRepository cVendorRepository) {
+	public CvendorApprovalService(CVendorRepository cVendorRepository, UserService userService) {
 		this.cVendorRepository= cVendorRepository;
+		this.userService= userService;
 	}
 	
 	public String approved(DelegateExecution execution) throws Exception{
-		log.debug("approval process " + DOCUMENT_STATUS_AVP);
-		CVendor vendor = this.getById(this.getVendorIdFromExecution(execution));
+		log.debug("approval process " + VendorDocumentType.APPROVED_VENDOR.getValue());
+		CVendor vendor = getVendor(execution);
 		vendor.setApproved(true);
 		cVendorRepository.save(vendor);
-		return DOCUMENT_STATUS_AVP;
+		return VendorDocumentType.APPROVED_VENDOR.getValue();
 	}
 	
 	public String rejected(DelegateExecution execution) throws Exception{
-		log.debug("rejected process " + DOCUMENT_STATUS_SMP);
-		CVendor vendor = this.getById(this.getVendorIdFromExecution(execution));
+		log.debug("rejected process " + VendorDocumentType.REJECTED.getValue());
+		CVendor vendor = getVendor(execution);
 		vendor.setApproved(false);
 		cVendorRepository.save(vendor);
-		return DOCUMENT_STATUS_SMP;
+		return VendorDocumentType.REJECTED.getValue();
 	}
 	
 	public void updateDocumentStatus(DelegateExecution execution) throws Exception {
 		log.debug("update document status");
-		CVendor vendor = this.getById(this.getVendorIdFromExecution(execution));
+		CVendor vendor = getVendor(execution);
 		vendor.setDocumentStatus(this.getDocumentStatusFromExecution(execution));
 		
 		cVendorRepository.save(vendor);
+	}
+	
+	public void sendEmail(DelegateExecution execution) throws Exception{
+		log.debug("sending emails");
+		CVendor vendor = getVendor(execution);
+		userService.sendActivationEmail(vendor);
 	}
 	
 	private Long getVendorIdFromExecution(DelegateExecution execution) {
@@ -55,6 +61,10 @@ public class CvendorApprovalService {
 	
 	private String getDocumentStatusFromExecution(DelegateExecution execution) {
 		return (String) execution.getVariable("documentStatus");
+	}
+	
+	private CVendor getVendor(DelegateExecution execution) throws Exception{
+		return this.getById(this.getVendorIdFromExecution(execution));
 	}
 	
 	private CVendor getById(Long id) throws Exception{
