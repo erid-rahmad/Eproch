@@ -52,8 +52,23 @@ public class MContractTaskRemaining implements ProcessTrigger {
               if (daysBetween <= mContract.getEmailNotification() && daysBetween >=0 && x==0 ){
                   List<AdUser> adUsers= adUserRepository.findBycVendor(mContract.getVendor());
                   adUsers.forEach(adUser -> {
+                      String template =
+                          " <br> Dear #vendorName\n" +
+                          " <p> As you are aware, the #contractName between #vendorName and #vendorName1  has been in effect since #ContractDate.\n" +
+                          "  We would like to renew the agreement for another #startDate to #expiredDate.\n" +
+                          "   Please contact us to confirm the renewal</p>" +
+                          "    <br>Thank you.\n" +
+                          "    <br>Regards,\n" +
+                          "    <br>Berca.co.id";
+                      template=template.replace("#vendorName",adUser.getCVendor().getName());
+                      template=template.replace("#contractName",mContract.getName());
+                      template=template.replace("#vendorName1","Berca");
+                      LocalDate localDate = mContract.getDateTrx().toLocalDate();
+                      template=template.replace("#ContractDate",localDate.toString());
+                      template=template.replace("#startDate",mContract.getStartDate().toString());
+                      template=template.replace("#expiredDate",mContract.getExpirationDate().toString());
                       mailService.sendEmail(adUser.getUser().getEmail(),
-                          "REMAINING", "REMAINING ABOUT CONTRACT ", false, true);
+                          "Contract Remaining", template, false, true);
                   });
               }
           }catch (Exception e){}
