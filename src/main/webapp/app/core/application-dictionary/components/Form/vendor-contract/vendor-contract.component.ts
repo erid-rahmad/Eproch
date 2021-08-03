@@ -94,6 +94,10 @@ export default class VendorContract extends Mixins(AccessLevelMixin) {
     (<any>this.$refs.detailPage).save();
   }
 
+  generatePO() {
+    (<any>this.$refs.detailPage).generatePO();
+  }
+
   ApproveClicked(){
     (<any>this.$refs.detailPage).approve();
     this.ApprovePA=false;

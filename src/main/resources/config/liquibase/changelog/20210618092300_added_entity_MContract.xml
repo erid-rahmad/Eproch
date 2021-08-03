@@ -219,5 +219,12 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet id="202106081212" author="erid">
+        <addColumn tableName="m_contract">
+            <column name="currency_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>

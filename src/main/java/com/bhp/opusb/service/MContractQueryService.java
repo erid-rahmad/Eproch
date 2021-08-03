@@ -187,6 +187,10 @@ public class MContractQueryService extends QueryService<MContract> {
                 specification = specification.and(buildSpecification(criteria.getCostCenterId(),
                     root -> root.join(MContract_.costCenter, JoinType.LEFT).get(CCostCenter_.id)));
             }
+            if (criteria.getCurrencyId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCurrencyId(),
+                    root -> root.join(MContract_.currency, JoinType.LEFT).get(CCurrency_.id)));
+            }
             if (criteria.getDocumentTypeId() != null) {
                 specification = specification.and(buildSpecification(criteria.getDocumentTypeId(),
                     root -> root.join(MContract_.documentType, JoinType.LEFT).get(CDocumentType_.id)));

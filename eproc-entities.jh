@@ -2207,6 +2207,7 @@ relationship ManyToOne {
 	MContract{adOrganization required} to ADOrganization
 	MContract{bidding required} to MBidding
 	MContract{costCenter required} to CCostCenter
+	MContract{currency} to CCurrency
 
 	MContractLine{contract required} to MContract
 	MContractLine{adOrganization required} to ADOrganization

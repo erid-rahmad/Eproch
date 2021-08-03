@@ -167,6 +167,13 @@
         },
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "cCurrency",
+            "otherEntityRelationshipName": "mContract",
+            "relationshipName": "currency",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "cDocumentType",
             "otherEntityRelationshipName": "mContract",
             "relationshipValidateRules": "required",

@@ -103,6 +103,9 @@ public class MContractDTO extends AbstractAuditingDTO {
     private String costCenterName;
 
 
+    private Long currencyId;
+    private Long warehouseId;
+    private Long paymentTermId;
 
     private List<MContractLineDTO> lineDTOList;
 
@@ -112,6 +115,22 @@ public class MContractDTO extends AbstractAuditingDTO {
 
     public void setLineDTOList(List<MContractLineDTO> lineDTOList) {
         this.lineDTOList = lineDTOList;
+    }
+
+    public Long getWarehouseId() {
+        return warehouseId;
+    }
+
+    public void setWarehouseId(Long warehouseId) {
+        this.warehouseId = warehouseId;
+    }
+
+    public Long getPaymentTermId() {
+        return paymentTermId;
+    }
+
+    public void setPaymentTermId(Long paymentTermId) {
+        this.paymentTermId = paymentTermId;
     }
 
     /**
@@ -423,8 +442,15 @@ public class MContractDTO extends AbstractAuditingDTO {
         this.costCenterId = cCostCenterId;
     }
 
+    public Long getCurrencyId() {
+        return currencyId;
+    }
     public String getCostCenterName() {
         return costCenterName;
+    }
+
+    public void setCurrencyId(Long cCurrencyId) {
+        this.currencyId = cCurrencyId;
     }
 
     public void setCostCenterName(String costCenterName) {
@@ -563,6 +589,7 @@ public class MContractDTO extends AbstractAuditingDTO {
             ", biddingNo='" + biddingNo + '\'' +
             ", costCenterId=" + costCenterId +
             ", costCenterName='" + costCenterName + '\'' +
+            ", currencyId=" + currencyId +
             ", lineDTOList=" + lineDTOList +
             ", documentTypeId=" + documentTypeId +
             ", documentTypeName='" + documentTypeName + '\'' +

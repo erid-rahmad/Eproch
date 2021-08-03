@@ -1,7 +1,5 @@
 package com.bhp.opusb.service;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,8 +8,7 @@ import com.bhp.opusb.config.ApplicationProperties;
 import com.bhp.opusb.config.ApplicationProperties.Document;
 import com.bhp.opusb.domain.*;
 import com.bhp.opusb.repository.*;
-import com.bhp.opusb.service.dto.MContractDTO;
-import com.bhp.opusb.service.dto.MContractTeamDTO;
+import com.bhp.opusb.service.dto.*;
 import com.bhp.opusb.service.mapper.MContractLineMapper;
 import com.bhp.opusb.service.mapper.MContractMapper;
 import com.bhp.opusb.util.DocumentUtil;
@@ -21,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,16 +38,22 @@ public class MContractService {
 
     private final MContractMapper mContractMapper;
 
+
+
     private final Document document;
     private final MailService mailService;
 
     private final AdUserRepository adUserRepository;
 
     private final MContractTeamService mContractTeamService;
+    private final MPurchaseOrderRepository mPurchaseOrderRepository;
+    private final MPurchaseOrderService mPurchaseOrderService;
+    private final MPurchaseOrderLineRepository mPurchaseOrderLineRepository;
+    private final MPurchaseOrderLineService mPurchaseOrderLineService;
 
     public MContractService(ApplicationProperties properties, MContractDocumentService mContractDocumentService,
                             CDocumentTypeRepository cDocumentTypeRepository, MContractRepository mContractRepository,
-                            MContractMapper mContractMapper, MailService mailService, AdUserRepository adUserRepository, MContractTeamService mContractTeamService) {
+                            MContractMapper mContractMapper, MailService mailService, AdUserRepository adUserRepository, MContractTeamService mContractTeamService, MPurchaseOrderRepository mPurchaseOrderRepository, MPurchaseOrderService mPurchaseOrderService, MPurchaseOrderLineRepository mPurchaseOrderLineRepository, MPurchaseOrderLineService mPurchaseOrderLineService) {
         this.mContractDocumentService = mContractDocumentService;
         this.cDocumentTypeRepository = cDocumentTypeRepository;
         this.mContractRepository = mContractRepository;
@@ -60,6 +62,10 @@ public class MContractService {
         this.adUserRepository = adUserRepository;
         this.mContractTeamService = mContractTeamService;
         document = properties.getDocuments().get("contract");
+        this.mPurchaseOrderRepository = mPurchaseOrderRepository;
+        this.mPurchaseOrderService = mPurchaseOrderService;
+        this.mPurchaseOrderLineRepository = mPurchaseOrderLineRepository;
+        this.mPurchaseOrderLineService = mPurchaseOrderLineService;
     }
 
     @Autowired
@@ -132,6 +138,41 @@ public class MContractService {
         return mContractMapper.toDto(mContract);
     }
 
+    public void generateToPo(MContractToPoDTO mContractToPoDTO){
+        MPurchaseOrderDTO mPurchaseOrderDTO =new MPurchaseOrderDTO();
+        MPurchaseOrderDTO mPurchaseOrderDTO_ =new MPurchaseOrderDTO();
+
+        mPurchaseOrderDTO.setAdOrganizationId(mContractToPoDTO.getmContractDTO().getAdOrganizationId());
+        mPurchaseOrderDTO.setDocumentTypeId(mContractToPoDTO.getmContractDTO().getDocumentTypeId());
+        mPurchaseOrderDTO.setVendorId(mContractToPoDTO.getmContractDTO().getVendorId());
+        mPurchaseOrderDTO.setCurrencyId(mContractToPoDTO.getmContractDTO().getCurrencyId());
+        mPurchaseOrderDTO.setWarehouseId(mContractToPoDTO.getmContractDTO().getWarehouseId());
+        mPurchaseOrderDTO.setCostCenterId(mContractToPoDTO.getmContractDTO().getCostCenterId());
+        mPurchaseOrderDTO.setPaymentTermId(mContractToPoDTO.getmContractDTO().getPaymentTermId());
+
+        mPurchaseOrderDTO.setGrandTotal(mContractToPoDTO.getmContractDTO().getPrice());
+
+        mPurchaseOrderDTO_ = mPurchaseOrderService.save(mPurchaseOrderDTO);
+
+        MPurchaseOrderDTO finalMPurchaseOrderDTO_ = mPurchaseOrderDTO_;
+        mContractToPoDTO.getmContractLineDTOS().forEach(mContractLineDTO -> {
+            MPurchaseOrderLineDTO mPurchaseOrderLineDTO = new MPurchaseOrderLineDTO();
+
+            mPurchaseOrderLineDTO.setOrderAmount(mContractLineDTO.getCeilingPrice());
+            mPurchaseOrderLineDTO.setQuantity(mContractLineDTO.getQuantity());
+            mPurchaseOrderLineDTO.setUnitPrice(mContractLineDTO.getCeilingPrice());
+
+            mPurchaseOrderLineDTO.setPurchaseOrderId(finalMPurchaseOrderDTO_.getId());
+            mPurchaseOrderLineDTO.setVendorId(finalMPurchaseOrderDTO_.getVendorId());
+            mPurchaseOrderLineDTO.setCostCenterId(mContractLineDTO.getCostCenterId());
+            mPurchaseOrderLineDTO.setAdOrganizationId(mContractLineDTO.getAdOrganizationId());
+            mPurchaseOrderLineDTO.setProductId(mContractLineDTO.getProductId());
+            mPurchaseOrderLineDTO.setUomId(mContractLineDTO.getUomId());
+
+            mPurchaseOrderLineService.save(mPurchaseOrderLineDTO);
+        });
+    }
+
     /**
      * Create a mContract from MVendorConfirmation.
      *
@@ -175,6 +216,7 @@ public class MContractService {
 
         return mContract;
     }
+
 
     /**
      * Get all the mContracts.

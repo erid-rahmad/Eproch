@@ -1,6 +1,7 @@
 package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.service.MContractService;
+import com.bhp.opusb.service.dto.MContractToPoDTO;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
 import com.bhp.opusb.service.dto.MContractDTO;
 import com.bhp.opusb.service.dto.MContractCriteria;
@@ -82,6 +83,13 @@ public class MContractResource {
         return ResponseEntity.created(new URI("/api/m-contracts/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    @PostMapping("/m-contracts-generatePO")
+    public ResponseEntity<String> generate(@Valid @RequestBody MContractToPoDTO mContractToPoDTO) throws URISyntaxException {
+        log.info("generate PO {}",mContractToPoDTO);
+       mContractService.generateToPo(mContractToPoDTO);
+       return ResponseEntity.ok("Ok");
     }
 
     /**

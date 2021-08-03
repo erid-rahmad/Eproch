@@ -87,6 +87,17 @@
                 :xl="8"
                 :xs="24">
                 <el-form-item
+                    label="Currency"
+                    prop="currencyId"
+                >
+                    <ad-input-lookup
+                        v-model="contract.currencyId"
+                        lookup-by-field="code"
+                        placeholder="Select currency"
+                        table-name="c_currency"
+                    ></ad-input-lookup>
+                </el-form-item>
+                <el-form-item
                     label="Vendor Name"
                     prop="vendorId"
                 >
@@ -109,7 +120,7 @@
                         type="date"
                     ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="Hierarchical Type" >
+                <el-form-item label="Hierarchical Type">
                     <template>
                         <el-select v-model="contract.hierarchicalType" placeholder="Select">
                             <el-option
@@ -204,11 +215,14 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item label="Email Notification">
-                    <el-tooltip class="item" effect="dark" content="firs Sent -- Days before Contract Expiration date" placement="top-start">
-                        <el-input-number size="mini" controls-position="right" v-model="contract.emailNotification"></el-input-number>
+                    <el-tooltip class="item" content="firs Sent -- Days before Contract Expiration date" effect="dark"
+                                placement="top-start">
+                        <el-input-number v-model="contract.emailNotification" controls-position="right"
+                                         size="mini"></el-input-number>
                     </el-tooltip>
-                    <el-tooltip class="item" effect="dark" content="Remainder Sent Every -- Days" placement="top-start">
-                        <el-input-number size="mini" controls-position="right" v-model="contract.reminderSent"></el-input-number>
+                    <el-tooltip class="item" content="Remainder Sent Every -- Days" effect="dark" placement="top-start">
+                        <el-input-number v-model="contract.reminderSent" controls-position="right"
+                                         size="mini"></el-input-number>
                     </el-tooltip>
 
 
@@ -226,40 +240,39 @@
 
                     ></el-input>
                 </el-form-item>
-<!--                <el-form-item label="Evaluation Type">-->
-<!--                    <ad-input-lookup-->
-<!--                        v-model="contract.vendorEvaluationId"-->
-<!--                        placeholder="Select Evaluation Type"-->
-<!--                        table-name="c_vendor_evaluation"-->
-<!--                    ></ad-input-lookup>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="Evaluation Period">-->
-<!--                    <ad-input-list-->
-<!--                        v-model="contract.evaluationPeriod"-->
-<!--                        placeholder="Select Evaluation Period"-->
-<!--                        reference-key="vendorEvaluationPeriod"-->
-<!--                    ></ad-input-list>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="Total Price">-->
-<!--                    <el-input-->
-<!--                        v-model="contract.price"-->
-<!--                        v-inputmask="{ alias: 'currency' }"-->
-<!--                        clearable-->
-<!--                        disabled-->
-<!--                    ></el-input>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item-->
-<!--                    label="Document Status"-->
-<!--                >-->
+                <!--                <el-form-item label="Evaluation Type">-->
+                <!--                    <ad-input-lookup-->
+                <!--                        v-model="contract.vendorEvaluationId"-->
+                <!--                        placeholder="Select Evaluation Type"-->
+                <!--                        table-name="c_vendor_evaluation"-->
+                <!--                    ></ad-input-lookup>-->
+                <!--                </el-form-item>-->
+                <!--                <el-form-item label="Evaluation Period">-->
+                <!--                    <ad-input-list-->
+                <!--                        v-model="contract.evaluationPeriod"-->
+                <!--                        placeholder="Select Evaluation Period"-->
+                <!--                        reference-key="vendorEvaluationPeriod"-->
+                <!--                    ></ad-input-list>-->
+                <!--                </el-form-item>-->
+                <!--                <el-form-item label="Total Price">-->
+                <!--                    <el-input-->
+                <!--                        v-model="contract.price"-->
+                <!--                        v-inputmask="{ alias: 'currency' }"-->
+                <!--                        clearable-->
+                <!--                        disabled-->
+                <!--                    ></el-input>-->
+                <!--                </el-form-item>-->
+                <!--                <el-form-item-->
+                <!--                    label="Document Status"-->
+                <!--                >-->
 
-<!--                    {{ printStatus(contract.documentStatus) }}-->
-<!--                </el-form-item>-->
+                <!--                    {{ printStatus(contract.documentStatus) }}-->
+                <!--                </el-form-item>-->
             </el-col>
             <el-col>
                 <el-divider content-position="left">
                     <h4>Requirement</h4>
                 </el-divider>
-
                 <template>
                     <el-table
                         v-loading="loading"
@@ -380,6 +393,49 @@
                     </el-table>
                 </template>
             </el-col>
+            <el-dialog
+                :visible.sync="generatePA"
+                title="Tips"
+                width="30%">
+                <el-form-item
+                    label="paymentTermId"
+                    prop="paymentTermId"
+                >
+                    <ad-input-lookup
+                        v-model="contract.paymentTermId"
+                        lookup-by-field="code"
+                        placeholder="Select payment"
+                        table-name="c_payment_term"
+                    ></ad-input-lookup>
+                </el-form-item>
+                <el-form-item
+                    label="warehouseId"
+                    prop="warehouseId"
+                >
+                    <ad-input-lookup
+                        v-model="contract.warehouseId"
+                        lookup-by-field="name"
+                        placeholder="Select currency"
+                        table-name="c_warehouse"
+                    ></ad-input-lookup>
+                </el-form-item>
+                <el-form-item
+                    label="documentTypeId"
+                    prop="documentTypeId"
+                >
+                    <ad-input-lookup
+                        v-model="contract.documentTypeId"
+                        lookup-by-field="name"
+                        placeholder="Select document"
+                        table-name="c_document_type"
+                    ></ad-input-lookup>
+                </el-form-item>
+                <span slot="footer" class="dialog-footer">
+                <el-button @click="generatePA = false">Cancel</el-button>
+                <el-button type="primary" @click="generatePo">Confirm</el-button>
+                </span>
+            </el-dialog>
+
         </el-row>
     </el-form>
 </template>

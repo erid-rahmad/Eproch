@@ -54,7 +54,7 @@ public class MContractTaskRemaining implements ProcessTrigger {
                   adUsers.forEach(adUser -> {
                       String template =
                           " <br> Dear #vendorName\n" +
-                          " <p> As you are aware, the #contractName between #vendorName and #vendorName1  has been in effect since #ContractDate.\n" +
+                          " <p> As you are aware, the #contractName between #AdminName and #vendorName  has been in effect since #ContractDate.\n" +
                           "  We would like to renew the agreement for another #startDate to #expiredDate.\n" +
                           "   Please contact us to confirm the renewal</p>" +
                           "    <br>Thank you.\n" +
@@ -62,7 +62,7 @@ public class MContractTaskRemaining implements ProcessTrigger {
                           "    <br>Berca.co.id";
                       template=template.replace("#vendorName",adUser.getCVendor().getName());
                       template=template.replace("#contractName",mContract.getName());
-                      template=template.replace("#vendorName1","Berca");
+                      template=template.replace("#AdminName",mContract.getAdOrganization().getName());
                       LocalDate localDate = mContract.getDateTrx().toLocalDate();
                       template=template.replace("#ContractDate",localDate.toString());
                       template=template.replace("#startDate",mContract.getStartDate().toString());

@@ -138,6 +138,10 @@ public class MContract extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mContracts")
     private CCostCenter costCenter;
 
+    @ManyToOne
+    @JsonIgnoreProperties("mContracts")
+    private CCurrency currency;
+
     /**
      * documentType can be New Contract or Contract Renewal.
      */
@@ -570,6 +574,19 @@ public class MContract extends AbstractAuditingEntity {
 
     public void setCostCenter(CCostCenter cCostCenter) {
         this.costCenter = cCostCenter;
+    }
+
+    public CCurrency getCurrency() {
+        return currency;
+    }
+
+    public MContract currency(CCurrency cCurrency) {
+        this.currency = cCurrency;
+        return this;
+    }
+
+    public void setCurrency(CCurrency cCurrency) {
+        this.currency = cCurrency;
     }
 
     public CDocumentType getDocumentType() {

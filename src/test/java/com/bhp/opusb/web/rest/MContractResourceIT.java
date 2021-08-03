@@ -5,6 +5,7 @@ import com.bhp.opusb.domain.MContract;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.MBidding;
 import com.bhp.opusb.domain.CCostCenter;
+import com.bhp.opusb.domain.CCurrency;
 import com.bhp.opusb.domain.CDocumentType;
 import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.domain.CVendor;
@@ -2945,6 +2946,26 @@ public class MContractResourceIT {
 
         // Get all the mContractList where costCenter equals to costCenterId + 1
         defaultMContractShouldNotBeFound("costCenterId.equals=" + (costCenterId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMContractsByCurrencyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+        CCurrency currency = CCurrencyResourceIT.createEntity(em);
+        em.persist(currency);
+        em.flush();
+        mContract.setCurrency(currency);
+        mContractRepository.saveAndFlush(mContract);
+        Long currencyId = currency.getId();
+
+        // Get all the mContractList where currency equals to currencyId
+        defaultMContractShouldBeFound("currencyId.equals=" + currencyId);
+
+        // Get all the mContractList where currency equals to currencyId + 1
+        defaultMContractShouldNotBeFound("currencyId.equals=" + (currencyId + 1));
     }
 
 

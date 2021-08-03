@@ -9,6 +9,7 @@ import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 
 const baseApiContract = 'api/m-contracts';
 const baseApiContractAll = 'api/m-contracts-All';
+const baseApiContractGeneratePo = 'api/m-contracts-generatePO';
 const baseApiContractLine = 'api/m-contract-lines';
 
 const ContractInfoProps = Vue.extend({
@@ -34,6 +35,7 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
   loading: boolean = false;
+  generatePA: boolean = false;
 
   contract: any = {};
   contractLine:any=[];
@@ -204,6 +206,9 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
     this.save()
   }
 
+  generatePoAction(){
+    this.generatePA=true;
+  }
 
   public save() {
     (<ElForm>this.$refs.contractInfoForm).validate(passed => {
@@ -216,6 +221,29 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
           .then(res => {
             this.contract = {...this.contract, ...res}
             this.$message.success(`Contract has been ${newRecord ? 'created' : 'updated'} successfully`)
+            this.$emit('saved', res)
+          })
+          .catch(err => {
+            console.error('Failed to save the contract', err);
+            this.$message.error('Failed to save the contract');
+          })
+          .finally(() => this.loading = false);
+      }
+    })
+  }
+
+  public generatePo() {
+    (<ElForm>this.$refs.contractInfoForm).validate(passed => {
+      if (passed) {
+        let data={
+          mContractDTO:this.contract,
+          mContractLineDTOS:this.contractLine
+        }
+        this.loading = true
+        this.commonService(baseApiContractGeneratePo)
+          .create(data)
+          .then(res => {
+            this.contract = {...this.contract, ...res}
             this.$emit('saved', res)
           })
           .catch(err => {

@@ -155,6 +155,10 @@ export default class ContractDetail extends Mixins(AccessLevelMixin, ContractDet
     (<any>this.$refs[this.activeTab][0]).save();
   }
 
+  generatePO() {
+    (<any>this.$refs[this.activeTab][0]).generatePoAction();
+  }
+
   submit() {
     (<any>this.$refs[this.activeTab][0]).submit();
   }
