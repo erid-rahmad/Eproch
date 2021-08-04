@@ -25,6 +25,7 @@ const ContractDocumentProps = Vue.extend({
   }
 })
 
+// @ts-ignore
 @Component({
   components: {
     AdInputLookup,createClause,draggable,

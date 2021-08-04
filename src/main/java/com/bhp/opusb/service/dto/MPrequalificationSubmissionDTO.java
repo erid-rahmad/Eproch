@@ -40,6 +40,12 @@ public class MPrequalificationSubmissionDTO extends AbstractAuditingDTO {
 
     private ZonedDateTime dateSubmit;
 
+    @Size(max = 10)
+    private String passFail;
+
+    @Size(max = 10)
+    private String evaluationStatus;
+
     private UUID uid;
 
     private Boolean active;
@@ -230,6 +236,22 @@ public class MPrequalificationSubmissionDTO extends AbstractAuditingDTO {
         this.dateSubmit = dateSubmit;
     }
 
+    public String getPassFail() {
+        return passFail;
+    }
+
+    public void setPassFail(String passFail) {
+        this.passFail = passFail;
+    }
+
+    public String getEvaluationStatus() {
+        return evaluationStatus;
+    }
+
+    public void setEvaluationStatus(String evaluationStatus) {
+        this.evaluationStatus = evaluationStatus;
+    }
+
     public UUID getUid() {
         return uid;
     }
@@ -314,6 +336,8 @@ public class MPrequalificationSubmissionDTO extends AbstractAuditingDTO {
             ", dateReject='" + getDateReject() + "'" +
             ", rejectedReason='" + getRejectedReason() + "'" +
             ", dateSubmit='" + getDateSubmit() + "'" +
+            ", passFail='" + getPassFail() + "'" +
+            ", evaluationStatus='" + getEvaluationStatus() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +

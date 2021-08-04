@@ -32,7 +32,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-button type="primary" @click="minatAction">Accept Invitation</el-button>
+    <el-button type="primary" v-if="accButton"  @click="minatAction">Accept Invitation</el-button>
     <el-dialog :visible.sync="showDialog" title="Upload Document Registration" width="40%">
       <el-form>
         <el-table :data="uploadModels" size="mini" style="width: 100%" border>
@@ -70,7 +70,7 @@
         </el-table>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button v-if="accButton" @click="register" type="primary">Register</el-button>
+        <el-button @click="register" type="primary">Register</el-button>
       </span>
     </el-dialog>
   </div>

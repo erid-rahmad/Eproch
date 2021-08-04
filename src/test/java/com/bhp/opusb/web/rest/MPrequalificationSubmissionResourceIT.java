@@ -82,6 +82,12 @@ public class MPrequalificationSubmissionResourceIT {
     private static final ZonedDateTime UPDATED_DATE_SUBMIT = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
     private static final ZonedDateTime SMALLER_DATE_SUBMIT = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
 
+    private static final String DEFAULT_PASS_FAIL = "AAAAAAAAAA";
+    private static final String UPDATED_PASS_FAIL = "BBBBBBBBBB";
+
+    private static final String DEFAULT_EVALUATION_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_EVALUATION_STATUS = "BBBBBBBBBB";
+
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
@@ -127,6 +133,8 @@ public class MPrequalificationSubmissionResourceIT {
             .dateReject(DEFAULT_DATE_REJECT)
             .rejectedReason(DEFAULT_REJECTED_REASON)
             .dateSubmit(DEFAULT_DATE_SUBMIT)
+            .passFail(DEFAULT_PASS_FAIL)
+            .evaluationStatus(DEFAULT_EVALUATION_STATUS)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -180,6 +188,8 @@ public class MPrequalificationSubmissionResourceIT {
             .dateReject(UPDATED_DATE_REJECT)
             .rejectedReason(UPDATED_REJECTED_REASON)
             .dateSubmit(UPDATED_DATE_SUBMIT)
+            .passFail(UPDATED_PASS_FAIL)
+            .evaluationStatus(UPDATED_EVALUATION_STATUS)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -247,6 +257,8 @@ public class MPrequalificationSubmissionResourceIT {
         assertThat(testMPrequalificationSubmission.getDateReject()).isEqualTo(DEFAULT_DATE_REJECT);
         assertThat(testMPrequalificationSubmission.getRejectedReason()).isEqualTo(DEFAULT_REJECTED_REASON);
         assertThat(testMPrequalificationSubmission.getDateSubmit()).isEqualTo(DEFAULT_DATE_SUBMIT);
+        assertThat(testMPrequalificationSubmission.getPassFail()).isEqualTo(DEFAULT_PASS_FAIL);
+        assertThat(testMPrequalificationSubmission.getEvaluationStatus()).isEqualTo(DEFAULT_EVALUATION_STATUS);
         assertThat(testMPrequalificationSubmission.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testMPrequalificationSubmission.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -332,6 +344,8 @@ public class MPrequalificationSubmissionResourceIT {
             .andExpect(jsonPath("$.[*].dateReject").value(hasItem(sameInstant(DEFAULT_DATE_REJECT))))
             .andExpect(jsonPath("$.[*].rejectedReason").value(hasItem(DEFAULT_REJECTED_REASON)))
             .andExpect(jsonPath("$.[*].dateSubmit").value(hasItem(sameInstant(DEFAULT_DATE_SUBMIT))))
+            .andExpect(jsonPath("$.[*].passFail").value(hasItem(DEFAULT_PASS_FAIL)))
+            .andExpect(jsonPath("$.[*].evaluationStatus").value(hasItem(DEFAULT_EVALUATION_STATUS)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -358,6 +372,8 @@ public class MPrequalificationSubmissionResourceIT {
             .andExpect(jsonPath("$.dateReject").value(sameInstant(DEFAULT_DATE_REJECT)))
             .andExpect(jsonPath("$.rejectedReason").value(DEFAULT_REJECTED_REASON))
             .andExpect(jsonPath("$.dateSubmit").value(sameInstant(DEFAULT_DATE_SUBMIT)))
+            .andExpect(jsonPath("$.passFail").value(DEFAULT_PASS_FAIL))
+            .andExpect(jsonPath("$.evaluationStatus").value(DEFAULT_EVALUATION_STATUS))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -1272,6 +1288,162 @@ public class MPrequalificationSubmissionResourceIT {
 
     @Test
     @Transactional
+    public void getAllMPrequalificationSubmissionsByPassFailIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mPrequalificationSubmissionRepository.saveAndFlush(mPrequalificationSubmission);
+
+        // Get all the mPrequalificationSubmissionList where passFail equals to DEFAULT_PASS_FAIL
+        defaultMPrequalificationSubmissionShouldBeFound("passFail.equals=" + DEFAULT_PASS_FAIL);
+
+        // Get all the mPrequalificationSubmissionList where passFail equals to UPDATED_PASS_FAIL
+        defaultMPrequalificationSubmissionShouldNotBeFound("passFail.equals=" + UPDATED_PASS_FAIL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPrequalificationSubmissionsByPassFailIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mPrequalificationSubmissionRepository.saveAndFlush(mPrequalificationSubmission);
+
+        // Get all the mPrequalificationSubmissionList where passFail not equals to DEFAULT_PASS_FAIL
+        defaultMPrequalificationSubmissionShouldNotBeFound("passFail.notEquals=" + DEFAULT_PASS_FAIL);
+
+        // Get all the mPrequalificationSubmissionList where passFail not equals to UPDATED_PASS_FAIL
+        defaultMPrequalificationSubmissionShouldBeFound("passFail.notEquals=" + UPDATED_PASS_FAIL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPrequalificationSubmissionsByPassFailIsInShouldWork() throws Exception {
+        // Initialize the database
+        mPrequalificationSubmissionRepository.saveAndFlush(mPrequalificationSubmission);
+
+        // Get all the mPrequalificationSubmissionList where passFail in DEFAULT_PASS_FAIL or UPDATED_PASS_FAIL
+        defaultMPrequalificationSubmissionShouldBeFound("passFail.in=" + DEFAULT_PASS_FAIL + "," + UPDATED_PASS_FAIL);
+
+        // Get all the mPrequalificationSubmissionList where passFail equals to UPDATED_PASS_FAIL
+        defaultMPrequalificationSubmissionShouldNotBeFound("passFail.in=" + UPDATED_PASS_FAIL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPrequalificationSubmissionsByPassFailIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mPrequalificationSubmissionRepository.saveAndFlush(mPrequalificationSubmission);
+
+        // Get all the mPrequalificationSubmissionList where passFail is not null
+        defaultMPrequalificationSubmissionShouldBeFound("passFail.specified=true");
+
+        // Get all the mPrequalificationSubmissionList where passFail is null
+        defaultMPrequalificationSubmissionShouldNotBeFound("passFail.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMPrequalificationSubmissionsByPassFailContainsSomething() throws Exception {
+        // Initialize the database
+        mPrequalificationSubmissionRepository.saveAndFlush(mPrequalificationSubmission);
+
+        // Get all the mPrequalificationSubmissionList where passFail contains DEFAULT_PASS_FAIL
+        defaultMPrequalificationSubmissionShouldBeFound("passFail.contains=" + DEFAULT_PASS_FAIL);
+
+        // Get all the mPrequalificationSubmissionList where passFail contains UPDATED_PASS_FAIL
+        defaultMPrequalificationSubmissionShouldNotBeFound("passFail.contains=" + UPDATED_PASS_FAIL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPrequalificationSubmissionsByPassFailNotContainsSomething() throws Exception {
+        // Initialize the database
+        mPrequalificationSubmissionRepository.saveAndFlush(mPrequalificationSubmission);
+
+        // Get all the mPrequalificationSubmissionList where passFail does not contain DEFAULT_PASS_FAIL
+        defaultMPrequalificationSubmissionShouldNotBeFound("passFail.doesNotContain=" + DEFAULT_PASS_FAIL);
+
+        // Get all the mPrequalificationSubmissionList where passFail does not contain UPDATED_PASS_FAIL
+        defaultMPrequalificationSubmissionShouldBeFound("passFail.doesNotContain=" + UPDATED_PASS_FAIL);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMPrequalificationSubmissionsByEvaluationStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mPrequalificationSubmissionRepository.saveAndFlush(mPrequalificationSubmission);
+
+        // Get all the mPrequalificationSubmissionList where evaluationStatus equals to DEFAULT_EVALUATION_STATUS
+        defaultMPrequalificationSubmissionShouldBeFound("evaluationStatus.equals=" + DEFAULT_EVALUATION_STATUS);
+
+        // Get all the mPrequalificationSubmissionList where evaluationStatus equals to UPDATED_EVALUATION_STATUS
+        defaultMPrequalificationSubmissionShouldNotBeFound("evaluationStatus.equals=" + UPDATED_EVALUATION_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPrequalificationSubmissionsByEvaluationStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mPrequalificationSubmissionRepository.saveAndFlush(mPrequalificationSubmission);
+
+        // Get all the mPrequalificationSubmissionList where evaluationStatus not equals to DEFAULT_EVALUATION_STATUS
+        defaultMPrequalificationSubmissionShouldNotBeFound("evaluationStatus.notEquals=" + DEFAULT_EVALUATION_STATUS);
+
+        // Get all the mPrequalificationSubmissionList where evaluationStatus not equals to UPDATED_EVALUATION_STATUS
+        defaultMPrequalificationSubmissionShouldBeFound("evaluationStatus.notEquals=" + UPDATED_EVALUATION_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPrequalificationSubmissionsByEvaluationStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        mPrequalificationSubmissionRepository.saveAndFlush(mPrequalificationSubmission);
+
+        // Get all the mPrequalificationSubmissionList where evaluationStatus in DEFAULT_EVALUATION_STATUS or UPDATED_EVALUATION_STATUS
+        defaultMPrequalificationSubmissionShouldBeFound("evaluationStatus.in=" + DEFAULT_EVALUATION_STATUS + "," + UPDATED_EVALUATION_STATUS);
+
+        // Get all the mPrequalificationSubmissionList where evaluationStatus equals to UPDATED_EVALUATION_STATUS
+        defaultMPrequalificationSubmissionShouldNotBeFound("evaluationStatus.in=" + UPDATED_EVALUATION_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPrequalificationSubmissionsByEvaluationStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mPrequalificationSubmissionRepository.saveAndFlush(mPrequalificationSubmission);
+
+        // Get all the mPrequalificationSubmissionList where evaluationStatus is not null
+        defaultMPrequalificationSubmissionShouldBeFound("evaluationStatus.specified=true");
+
+        // Get all the mPrequalificationSubmissionList where evaluationStatus is null
+        defaultMPrequalificationSubmissionShouldNotBeFound("evaluationStatus.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMPrequalificationSubmissionsByEvaluationStatusContainsSomething() throws Exception {
+        // Initialize the database
+        mPrequalificationSubmissionRepository.saveAndFlush(mPrequalificationSubmission);
+
+        // Get all the mPrequalificationSubmissionList where evaluationStatus contains DEFAULT_EVALUATION_STATUS
+        defaultMPrequalificationSubmissionShouldBeFound("evaluationStatus.contains=" + DEFAULT_EVALUATION_STATUS);
+
+        // Get all the mPrequalificationSubmissionList where evaluationStatus contains UPDATED_EVALUATION_STATUS
+        defaultMPrequalificationSubmissionShouldNotBeFound("evaluationStatus.contains=" + UPDATED_EVALUATION_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPrequalificationSubmissionsByEvaluationStatusNotContainsSomething() throws Exception {
+        // Initialize the database
+        mPrequalificationSubmissionRepository.saveAndFlush(mPrequalificationSubmission);
+
+        // Get all the mPrequalificationSubmissionList where evaluationStatus does not contain DEFAULT_EVALUATION_STATUS
+        defaultMPrequalificationSubmissionShouldNotBeFound("evaluationStatus.doesNotContain=" + DEFAULT_EVALUATION_STATUS);
+
+        // Get all the mPrequalificationSubmissionList where evaluationStatus does not contain UPDATED_EVALUATION_STATUS
+        defaultMPrequalificationSubmissionShouldBeFound("evaluationStatus.doesNotContain=" + UPDATED_EVALUATION_STATUS);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMPrequalificationSubmissionsByUidIsEqualToSomething() throws Exception {
         // Initialize the database
         mPrequalificationSubmissionRepository.saveAndFlush(mPrequalificationSubmission);
@@ -1460,6 +1632,8 @@ public class MPrequalificationSubmissionResourceIT {
             .andExpect(jsonPath("$.[*].dateReject").value(hasItem(sameInstant(DEFAULT_DATE_REJECT))))
             .andExpect(jsonPath("$.[*].rejectedReason").value(hasItem(DEFAULT_REJECTED_REASON)))
             .andExpect(jsonPath("$.[*].dateSubmit").value(hasItem(sameInstant(DEFAULT_DATE_SUBMIT))))
+            .andExpect(jsonPath("$.[*].passFail").value(hasItem(DEFAULT_PASS_FAIL)))
+            .andExpect(jsonPath("$.[*].evaluationStatus").value(hasItem(DEFAULT_EVALUATION_STATUS)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -1520,6 +1694,8 @@ public class MPrequalificationSubmissionResourceIT {
             .dateReject(UPDATED_DATE_REJECT)
             .rejectedReason(UPDATED_REJECTED_REASON)
             .dateSubmit(UPDATED_DATE_SUBMIT)
+            .passFail(UPDATED_PASS_FAIL)
+            .evaluationStatus(UPDATED_EVALUATION_STATUS)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         MPrequalificationSubmissionDTO mPrequalificationSubmissionDTO = mPrequalificationSubmissionMapper.toDto(updatedMPrequalificationSubmission);
@@ -1544,6 +1720,8 @@ public class MPrequalificationSubmissionResourceIT {
         assertThat(testMPrequalificationSubmission.getDateReject()).isEqualTo(UPDATED_DATE_REJECT);
         assertThat(testMPrequalificationSubmission.getRejectedReason()).isEqualTo(UPDATED_REJECTED_REASON);
         assertThat(testMPrequalificationSubmission.getDateSubmit()).isEqualTo(UPDATED_DATE_SUBMIT);
+        assertThat(testMPrequalificationSubmission.getPassFail()).isEqualTo(UPDATED_PASS_FAIL);
+        assertThat(testMPrequalificationSubmission.getEvaluationStatus()).isEqualTo(UPDATED_EVALUATION_STATUS);
         assertThat(testMPrequalificationSubmission.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testMPrequalificationSubmission.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

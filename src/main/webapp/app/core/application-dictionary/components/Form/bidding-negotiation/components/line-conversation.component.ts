@@ -1,5 +1,6 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import { AccountStoreModule } from '@/shared/config/store/account-store';
+import axios from 'axios';
 import { ElForm } from 'element-ui/types/form';
 import { ElTable } from 'element-ui/types/table';
 import Vue from 'vue';
@@ -353,7 +354,19 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   }
 
   downloadAttachment(row){
-    window.open(row.downloadUrl, '_self');
+    axios.get(row.downloadUrl,{
+      responseType: 'arraybuffer'
+    }).then((res)=>{
+      let filename = (<string>res.headers['content-disposition']).substring(
+        (<string>res.headers['content-disposition']).indexOf("\"")+1,(<string>res.headers['content-disposition']).lastIndexOf("\""))
+
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', filename); //or any other extension
+      document.body.appendChild(link);
+      link.click();
+    })
   }
 
   truncateDecimals = function (number, digits) {

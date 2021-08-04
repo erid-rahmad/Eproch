@@ -1,0 +1,11 @@
+id;description;contract_document;uid;active;ad_organization_id;contract_task_id
+1;Fantastic Granite Chair;../fake-data/blob/hipster.txt;cd43d00e-7589-4b22-8c14-384946547736;true;1;1
+2;Quetzal Soap Ergonomic Cotton Towels;../fake-data/blob/hipster.txt;93383de2-2ee9-4611-af38-a3d8a1c221bb;false;2;2
+3;hack;../fake-data/blob/hipster.txt;c053dc86-2fc2-45f4-973e-10d5f81d71a0;false;3;3
+4;Table transform;../fake-data/blob/hipster.txt;6954fcc0-790a-42ca-80cb-675313c82fc6;true;4;4
+5;Metal collaboration;../fake-data/blob/hipster.txt;25228f3d-9e98-4bc6-84e1-5e3c0a3b998d;true;5;5
+6;AGP;../fake-data/blob/hipster.txt;69af8f65-ea3e-411f-8433-2138be37ccfd;true;6;6
+7;JSON metrics human-resource;../fake-data/blob/hipster.txt;a0aee828-718a-4b87-b666-8cfcf816f386;false;7;7
+8;applications back-end;../fake-data/blob/hipster.txt;85608cdd-33a6-4ea3-8633-437663261d0a;true;8;8
+9;Towels SQL;../fake-data/blob/hipster.txt;df75180d-1f82-40a5-beb2-b0d5448b514f;true;9;9
+10;Ergonomic;../fake-data/blob/hipster.txt;a35fd5b1-d8ab-48ec-8f60-90d546adfb43;true;10;10

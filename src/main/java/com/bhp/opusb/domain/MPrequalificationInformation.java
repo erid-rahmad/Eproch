@@ -43,15 +43,15 @@ public class MPrequalificationInformation extends AbstractAuditingEntity impleme
     @Column(name = "type", length = 10, nullable = false)
     private String type;
 
-    @NotNull
-    @Size(max = 10)
-    @Column(name = "status", length = 10)
-    private String status;
-
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "announcement_text")
     private String announcementText;
+
+    @NotNull
+    @Size(max = 10)
+    @Column(name = "status", length = 10, nullable = false)
+    private String status;
 
     @Column(name = "date_trx")
     private ZonedDateTime dateTrx;
@@ -95,6 +95,10 @@ public class MPrequalificationInformation extends AbstractAuditingEntity impleme
     @JsonIgnoreProperties("mPrequalificationInformations")
     private ADOrganization adOrganization;
 
+    @ManyToOne
+    @JsonIgnoreProperties("mPrequalificationInformations")
+    private MRfq quotation;
+
     @Formula("(select mpe.event_id from m_prequalification_event mpe where mpe.prequalification_id = id)")
     private Long preqEventId;
 
@@ -132,19 +136,6 @@ public class MPrequalificationInformation extends AbstractAuditingEntity impleme
 
     public void setJoinedVendor(Integer joinedVendor) {
         this.joinedVendor = joinedVendor;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public MPrequalificationInformation status(String status) {
-        this.status = status;
-        return this;
     }
 
     public String getPreqMethodName() {
@@ -246,6 +237,19 @@ public class MPrequalificationInformation extends AbstractAuditingEntity impleme
 
     public void setAnnouncementText(String announcementText) {
         this.announcementText = announcementText;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public MPrequalificationInformation status(String status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public ZonedDateTime getDateTrx() {
@@ -390,6 +394,19 @@ public class MPrequalificationInformation extends AbstractAuditingEntity impleme
     public void setAdOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
     }
+
+    public MRfq getQuotation() {
+        return quotation;
+    }
+
+    public MPrequalificationInformation quotation(MRfq mRfq) {
+        this.quotation = mRfq;
+        return this;
+    }
+
+    public void setQuotation(MRfq mRfq) {
+        this.quotation = mRfq;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -417,6 +434,7 @@ public class MPrequalificationInformation extends AbstractAuditingEntity impleme
             ", name='" + getName() + "'" +
             ", type='" + getType() + "'" +
             ", announcementText='" + getAnnouncementText() + "'" +
+            ", status='" + getStatus() + "'" +
             ", dateTrx='" + getDateTrx() + "'" +
             ", documentNo='" + getDocumentNo() + "'" +
             ", documentAction='" + getDocumentAction() + "'" +

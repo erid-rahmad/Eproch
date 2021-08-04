@@ -24,6 +24,11 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
   private updated = false;
   private recordsLoaded = true;
 
+  private prequalificationUrl = '/api/m-prequalification-informations';
+  private prequalificationSuggestionUrl = '/api/m-prequal-vendor-suggestions';
+  private vendorBusinessCategoryUrl = '/api/c-vendor-business-cats';
+  private prequalificationSubmissionUrl = '/api/m-prequalification-submissions';
+
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
 
@@ -72,6 +77,8 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
   bidding: Record<string, any> = {};
   vendorSelection: string;
 
+  passedSubmissionVendorIds: number[] = [];
+
   get readOnly() {
     return this.bidding.biddingStatus === 'P';
   }
@@ -104,6 +111,40 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
       this.retrieveVendorSuggestions(this.bidding.id)
     ])
     .then(_results => {
+      if(this.vendorSelection === 'DRC'){
+        if(!this.bidding.vendorSuggestions.length || !this.bidding.vendorInvitations.length){
+          console.log('suggestions / invitations empty, fetching from prequalifications...')
+          // if empty, presumably because suggestions are not set up yet
+          Promise.allSettled([
+            new Promise((resolve, reject)=>{
+              this.commonService(this.prequalificationUrl)
+              .retrieve({
+                criteriaQuery: this.updateCriteria([
+                  'active.equals=true',
+                  `quotationId.equals=${this.data.quotationId}`,
+                  'documentStatus.notEquals=TRM'
+                ]),
+                paginationQuery: {
+                  page: 0,
+                  size: 100,
+                  sort: ['id']
+                }
+              }).then((res)=>{
+                if (res.data.length) {
+                  Promise.allSettled([
+                    this.retrieveSuggestionsFromPrequalification(res.data[0].id)
+                  ]).then(_results=>resolve(true))
+                } else reject(false);
+              }).catch((err)=>{
+                console.log(err);
+                reject(false);
+              })
+            })
+          ]).then((_res)=>{
+            
+          })
+        }
+      }
       this.recordsLoaded = true;
     });
 
@@ -113,7 +154,7 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
     if (this.vendorSelection === 'OPN') {
       this.canAddVendor = false;
     } else if (this.vendorSelection === 'IVT') {
-      this.canAddVendor = false;
+      this.canAddVendor = true;
     } else if (this.vendorSelection === 'DRC') {
       this.canAddVendor = true;
     }
@@ -125,6 +166,140 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
 
   addVendorSuggestion() {
     this.dialogConfirmationVisibleVendorSuggestion = true;
+  }
+
+  private retrieveSuggestionsFromPrequalification(preqId: number): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.loadingCategories = true;
+      this.commonService(this.prequalificationSuggestionUrl)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `prequalificationId.equals=${preqId}`
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        let suggestions: any[] = [];
+        suggestions = res.data.map((elem)=>{
+          return {
+            biddingId: this.bidding.id,
+            adOrganizationId: elem.adOrganizationId,
+            businessSubCategoryId: elem.businessSubCategoryId,
+            businessSubCategoryName: elem.businessSubCategoryName,
+            vendorId: elem.vendorId,
+            vendorName: elem.vendorName
+          }
+        });
+
+        Promise.allSettled([this.retrievePassedPreqVendors(preqId)]).then(_res=>{
+          console.log(this.passedSubmissionVendorIds);
+          suggestions = suggestions.filter((elem)=>{
+            return this.passedSubmissionVendorIds.findIndex((id)=>id==elem.vendorId)!=-1;
+          });
+          this.$set(this.bidding, 'vendorSuggestions', suggestions);
+          this.$set(this.bidding, 'removedVendorSuggestions', []);
+
+          Promise.allSettled([this.retrieveInvitationsFromPassedVendors(this.passedSubmissionVendorIds)]).then(_res=>{
+            resolve(true);
+          }).catch(_err=> reject(false));
+        }).catch(_err=> reject(false));
+      })
+      .catch(err => {
+        console.error('Failed to get vendor suggestions. %O', err);
+        this.$message.error('Failed to get vendor suggestions');
+        reject(false);
+      })
+      .finally(() => {
+        this.loadingSuggestions = false;
+      });
+    });
+  }
+
+  private retrieveInvitationsFromPassedVendors(vendorIds: number[]): Promise<boolean> {
+    let additionalCriteria = [];
+    vendorIds.forEach((a)=>{
+      additionalCriteria.push(`vendorId.in=${a}`)
+    })
+    return new Promise((resolve, reject) => {
+      this.loadingCategories = true;
+      this.commonService(this.vendorBusinessCategoryUrl)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          ...additionalCriteria
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        let invitations: any[] = [];
+        let subcats: number[] = [];
+        let i = 0;
+
+        for(i=0; i<res.data.length; i++) {
+          if( subcats.length==0 || subcats.findIndex((id)=>{res.data[i].subBusinessCategoryId==id})!=-1 ){
+            subcats.push(res.data[i].subBusinessCategoryId);
+            invitations.push({
+              biddingId: this.bidding.id,
+              adOrganizationId: this.bidding.adOrganizationId,
+              businessClassificationId: res.data[i].businessClassificationId,
+              businessClassificationName: res.data[i].businessClassificationName,
+              businessCategoryId: res.data[i].businessCategoryId,
+              businessCategoryName: res.data[i].businessCategoryName,
+              businessSubCategoryId: res.data[i].subBusinessCategoryId,
+              businessSubCategoryName: res.data[i].subBusinessCategoryName,
+            })
+          }
+        }
+
+        console.log(invitations);
+
+        this.$set(this.bidding, 'vendorInvitations', invitations);
+        this.$set(this.bidding, 'removedVendorInvitations', []);
+        resolve(true);
+      })
+      .catch(err => {
+        console.error('Failed to get vendor invitations. %O', err);
+        this.$message.error('Failed to get vendor invitations');
+        reject(false);
+      })
+      .finally(() => {
+        this.loadingCategories = false;
+      });
+    });
+  }
+
+  private retrievePassedPreqVendors(preqId: number): Promise<boolean> {
+    return new Promise((resolve,reject)=>{
+      this.commonService(this.prequalificationSubmissionUrl)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `prequalificationId.equals=${preqId}`,
+          'passFail.equals=pass'
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id']
+        }
+      }).then((res)=>{
+        this.passedSubmissionVendorIds = res.data.map((res)=>{return res.vendorId});
+        console.log(this.passedSubmissionVendorIds);
+        resolve(true);
+      }).catch(err => {
+        console.log(err);
+        reject(false);
+      })
+    })
   }
 
   private retrieveVendorInvitations(biddingId: number): Promise<boolean> {
@@ -231,8 +406,10 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
       }
     });
 
-    this.bidding = {...this.bidding, ...{ vendorInvitations }};
-    this.onVendorInvitationChanged(Array.from(vendorSuggestionCriteria));
+    if (this.vendorSelection !== 'DRC') {
+      this.bidding = {...this.bidding, ...{ vendorInvitations }};
+      this.onVendorInvitationChanged(Array.from(vendorSuggestionCriteria));
+    }
     this.vendorInvitationFormVisible = false;
   }
 

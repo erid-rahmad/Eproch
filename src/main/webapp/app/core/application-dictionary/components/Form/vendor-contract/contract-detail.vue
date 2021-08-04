@@ -19,6 +19,7 @@
         :key="item.id"
         :data="data"
         @saved="onTabSaved"
+        @button="button"
       ></component>
     </el-tab-pane>
   </el-tabs>

@@ -60,6 +60,22 @@
             "fieldType": "ZonedDateTime"
         },
         {
+            "fieldName": "passFail",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "evaluationStatus",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
             "fieldName": "uid",
             "fieldType": "UUID"
         },

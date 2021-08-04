@@ -71,7 +71,7 @@ export default class PreqEvent extends Mixins(AccessLevelMixin, PreqEventProp) {
   }
 
   get readOnly() {
-    return this.preq.status === 'P';
+    return this.preq.status !== 'N';
   }
 
   @Watch('preq', { deep: true })

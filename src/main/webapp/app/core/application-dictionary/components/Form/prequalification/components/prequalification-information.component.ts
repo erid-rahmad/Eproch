@@ -37,6 +37,7 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Prequal
 
   private updated = false;
   private recordsLoaded = true;
+  private loadingReferenceNo = false;
 
   gridSchema = {
     defaultSort: {},
@@ -216,5 +217,45 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Prequal
         this.$emit('error', errors);
       }
     });
+  }
+
+  retrieveReferencedData(referenceNo?: string) {
+    if (referenceNo) {
+      this.loadingReferenceNo = true;
+
+      this.commonService('/api/m-rfqs')
+        .retrieve({
+          criteriaQuery: this.updateCriteria([
+            'active.equals=true',
+            'processed.equals=true',
+            'approved.equals=true',
+            `documentNo.equals=${referenceNo}`
+          ]),
+          paginationQuery: {
+            page: 0,
+            size: 1,
+            sort: ['id']
+          }
+        })
+        .then(res => {
+          const data = res.data as any[];
+
+          if (data.length) {
+            const document = data[0];
+            this.$set(this.preq, 'adOrganizationId', document.adOrganizationId);
+            this.$set(this.preq, 'adOrganizationName', document.adOrganizationName);
+            this.$set(this.preq, 'quotationId', document.id);
+          } else {
+            this.$message.warning('No document found for the given reference no.');
+          }
+        })
+        .catch(err => {
+          console.error('Failed to get reference. %O', err);
+          this.$message.error(err.detail || err.message);
+        })
+        .finally(() => {
+          this.loadingReferenceNo = false;
+        });
+    }
   }
 }

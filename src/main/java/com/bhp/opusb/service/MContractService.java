@@ -1,5 +1,7 @@
 package com.bhp.opusb.service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -9,7 +11,6 @@ import com.bhp.opusb.config.ApplicationProperties.Document;
 import com.bhp.opusb.domain.*;
 import com.bhp.opusb.repository.*;
 import com.bhp.opusb.service.dto.MContractDTO;
-import com.bhp.opusb.service.dto.MContractLineDTO;
 import com.bhp.opusb.service.dto.MContractTeamDTO;
 import com.bhp.opusb.service.mapper.MContractLineMapper;
 import com.bhp.opusb.service.mapper.MContractMapper;
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,16 +43,21 @@ public class MContractService {
     private final MContractMapper mContractMapper;
 
     private final Document document;
+    private final MailService mailService;
+
+    private final AdUserRepository adUserRepository;
 
     private final MContractTeamService mContractTeamService;
 
     public MContractService(ApplicationProperties properties, MContractDocumentService mContractDocumentService,
                             CDocumentTypeRepository cDocumentTypeRepository, MContractRepository mContractRepository,
-                            MContractMapper mContractMapper, MContractTeamService mContractTeamService) {
+                            MContractMapper mContractMapper, MailService mailService, AdUserRepository adUserRepository, MContractTeamService mContractTeamService) {
         this.mContractDocumentService = mContractDocumentService;
         this.cDocumentTypeRepository = cDocumentTypeRepository;
         this.mContractRepository = mContractRepository;
         this.mContractMapper = mContractMapper;
+        this.mailService = mailService;
+        this.adUserRepository = adUserRepository;
         this.mContractTeamService = mContractTeamService;
         document = properties.getDocuments().get("contract");
     }
@@ -204,4 +211,23 @@ public class MContractService {
         log.debug("Request to delete MContract : {}", id);
         mContractRepository.deleteById(id);
     }
+
+//    @Scheduled(cron = "0 0 0 * * *",zone = "Indian/Maldives")
+//    public void cron() {
+//        log.info("this scheduler");
+//        List<MContract> mContractTaskDTOS =mContractRepository.findAll();
+//        mContractTaskDTOS.forEach(mContract -> {
+//            LocalDate lt = LocalDate.now();
+//            LocalDate lt_=mContract.getExpirationDate();
+//            long daysBetween = ChronoUnit.DAYS.between(lt, lt_);
+//            int x= (int) (daysBetween%mContract.getReminderSent());
+//            if (daysBetween <= mContract.getEmailNotification() && daysBetween >=0 && x==0 ){
+//                List<AdUser> adUsers= adUserRepository.findBycVendor(mContract.getVendor());
+//                adUsers.forEach(adUser -> {
+//                    mailService.sendEmail(adUser.getUser().getEmail(),
+//                        "REMAINING", "REMAINING ABOUT CONTRACT ", false, true);
+//                });
+//            }
+//        });
+//    }
 }

@@ -6,11 +6,11 @@ import AccountService from '@/account/account.service';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import settings from '@/settings';
 import AdInputLookup from "@/shared/components/AdInput/ad-input-lookup.vue";
-// @ts-ignore
 import {ContainerMixin, ElementMixin} from 'vue-slicksort';
 
 const baseApiClauseLine = 'api/c-clause-lines';
 const baseApiContractDocument = 'api/m-contract-clause-documents';
+
 
 
 const SortableList = {
@@ -42,16 +42,21 @@ const ContractInfoProps = Vue.extend({
   }
 })
 
-
 @Component({
+  // @ts-ignore
   components: {
     draggable,
-    Sortable, AdInputLookup, SortableItem,
-    SortableList
+     AdInputLookup, SortableItem,
+    SortableList,
   }
 })
+
 export default class ContractDocument extends Mixins(AccessLevelMixin, ContractInfoProps) {
 
+  components= {
+    SortableItem,
+    SortableList,
+  }
 
   clauses: any[] = [{
     title: '',

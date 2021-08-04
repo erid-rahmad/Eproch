@@ -124,6 +124,12 @@ public class MPrequalificationSubmissionQueryService extends QueryService<MPrequ
             if (criteria.getDateSubmit() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDateSubmit(), MPrequalificationSubmission_.dateSubmit));
             }
+            if (criteria.getPassFail() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getPassFail(), MPrequalificationSubmission_.passFail));
+            }
+            if (criteria.getEvaluationStatus() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getEvaluationStatus(), MPrequalificationSubmission_.evaluationStatus));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), MPrequalificationSubmission_.uid));
             }

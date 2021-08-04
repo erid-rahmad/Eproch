@@ -4,7 +4,7 @@ import { ElTable } from 'element-ui/types/table';
 import { Component, Inject, Mixins, Watch } from "vue-property-decorator";
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import ContractDetail from './contract-detail.vue';
-import {log} from "util";
+
 
 const enum ContractPage {
   MAIN = 'main',
@@ -114,10 +114,31 @@ export default class VendorContract extends Mixins(AccessLevelMixin) {
   }
 
   created() {
+
+    this.commonService(baseApiContract)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        console.log("res data adad",res.data)
+      })
+      .catch(err => {
+
+      })
+      .finally(() => this.loading = false);
+
+
     const query = this.$route.query;
     this.retrieveDocStatuses();
 
-    console.log(query);
+    console.log("this query",query);
 
     if(query.id) {
       this.commonService(baseApiContract)
@@ -133,11 +154,11 @@ export default class VendorContract extends Mixins(AccessLevelMixin) {
         }
       })
       .then(res => {
-        console.log(res);
+        console.log("res,res"),res;
         this.selectedRow = res.data[0];
         this.section = ContractPage.DETAIL;
       })
-    } else { 
+    } else {
       this.transition();
     }
   }
@@ -237,9 +258,9 @@ export default class VendorContract extends Mixins(AccessLevelMixin) {
       })
       .then(res => {
         this.gridData = res.data;
+        console.log("res data",res.data)
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
-
         if (this.gridData.length) {
           this.setRow(this.gridData[0]);
         }
@@ -270,7 +291,6 @@ export default class VendorContract extends Mixins(AccessLevelMixin) {
       } else {
         this.selectedRow = row;
       }
-
       this.section = ContractPage.DETAIL;
     } else {
       (<any>(<any>this.$refs.detailPage).$refs.EVA[0]).viewDetails();

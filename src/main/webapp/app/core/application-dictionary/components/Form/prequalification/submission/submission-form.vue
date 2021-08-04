@@ -1,13 +1,13 @@
 <template>
   <div class="submission-form">
-    <h3 style="margin-top: 0">Technical Proposal</h3>
+    <h3 style="margin-top: 0">Prequalification Submission</h3>
     <el-form ref="mainForm" label-position="left" label-width="200px" size="mini" v-loading="loading">
       <el-row :gutter="24">
         <el-col :xs="24" :sm="24" :lg="12" :xl="8">
           <el-form-item label="Title" prop="name" required>
             <el-input v-model="data.prequalificationName" disabled class="form-input"></el-input>
           </el-form-item>
-          <el-form-item label="Prequistion No" prop="documentNo">
+          <el-form-item label="Prequalification No" prop="documentNo">
             <el-input v-model="data.prequalificationNo" disabled class="form-input"></el-input>
           </el-form-item>
         </el-col>

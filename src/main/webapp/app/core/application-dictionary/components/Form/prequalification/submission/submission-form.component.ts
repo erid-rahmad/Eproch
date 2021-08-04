@@ -378,6 +378,16 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
       if(status) {
         if (status === 'SMT') {
           proposal.documentStatus = status;
+          this.data.documentStatus = status;
+          this.data.dateSubmit = new Date();
+
+          this.commonService("/api/m-prequalification-submissions")
+          .update(this.data)
+          .then((res)=>{})
+          .catch(err => {
+            console.error('Failed',err);
+            this.$message.error(`Failed updating header submit date.`);
+          });
         } else if (status === 'SMT2') {
           proposal.documentAction = 'SMT';
         }
