@@ -24,6 +24,16 @@
                         >
                         </el-table-column>
                         <el-table-column
+                            label="Age"
+                            min-width="70"
+                            prop="createdDate"
+                            :formatter="getVerificationAge"
+                        >
+                            <!-- <template slot-scope="{ row }">
+                                <span :html="getVerificationAge(row)"></span>
+                            </template> -->
+                        </el-table-column>
+                        <el-table-column
                             label="Name"
                             min-width="120"
                             prop="name"

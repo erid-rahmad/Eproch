@@ -1,10 +1,12 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
+import AccountService from '@/account/account.service';
 import { ElTable } from 'element-ui/types/table';
 import { Component, Inject, Mixins } from 'vue-property-decorator';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
-import ConvertPdfService from './service/convert-pdf-service';
 import { WindowStoreModule as windowStore } from "@/shared/config/store/window-store";
 import lodash from 'lodash';
+import moment from 'moment';
+import axios from 'axios';
 
 const getApproveVendor= "api/c-vendors";
 const approveVendor= "api/c-vendors/approval/";
@@ -12,6 +14,9 @@ const approveVendor= "api/c-vendors/approval/";
 
 @Component
 export default class VendorApproval extends Mixins(AccessLevelMixin){
+    @Inject('accountService')
+    private accountService: () => AccountService;
+
     @Inject('dynamicWindowService')
     private commonService: (baseApiUrl: string) => DynamicWindowService;
 
@@ -71,6 +76,15 @@ export default class VendorApproval extends Mixins(AccessLevelMixin){
         this.loadApproveVendor();
     }
 
+    getVerificationAge(row: any, column): string{
+
+        let diff= moment.duration(moment().diff(moment(row.createdDate)));
+        let diffDays= diff.asDays();
+        let diffHour= diff.asHours();
+
+        return `${Math.round(diffDays)} Days and ${Math.round(diffHour%24)} Hour`;``
+    }
+
     loadApproveVendor(){
         this.loading = true;
         const paginationQuery = {
@@ -87,7 +101,11 @@ export default class VendorApproval extends Mixins(AccessLevelMixin){
             paginationQuery
         })
         .then(res => {
-            this.vendors = res.data;
+            // this.vendors = res.data.map((d: any) => {
+            //     d.age= this.getVerificationAge(d);
+            //     return d;
+            // });
+            this.vendors= res.data;
             this.totalItems = Number(res.headers['x-total-count']);
             this.queryCount = this.totalItems;
 
@@ -197,22 +215,33 @@ export default class VendorApproval extends Mixins(AccessLevelMixin){
     }
 
     printDocument(){
-        let cPdf = new ConvertPdfService();
-        let headers= ["property", "value"];
-        let data: {[key: string] : string}[]= new Array();
-        
-        Object.entries(this.vendor).forEach((k, v)=> {
 
-            let f= lodash.find(this.printedProperty, ["prop", String(k[0])]);
-            if(!lodash.isEmpty(f)){
-                data.push(
-                    { 
-                        "property" : f['label'], 
-                        "value" : String(k[1]) 
-                    }
-                );
+        let viewDocumentResource: string= "api/c-vendors/pdf/" + this.vendor.id;
+        
+        let config: object= {
+            method: "get",
+            url: viewDocumentResource,
+            responseType: 'blob',
+            headers : {
+                'Authorization': `Bearer ${this.accountService().token}`
             }
-        })
-        cPdf.printPdf(headers, data, this.vendor.name);
+        }
+
+        axios(config)
+            .then(res=> {
+                // console.log("Response data : " ,res.data);
+
+                // this.pdfResource= res.data;
+
+                let uri= window.URL.createObjectURL(new Blob([res.data], { type : 'application/pdf'}));
+                window.open(uri, "_blank");
+                setTimeout(() => window.URL.revokeObjectURL(uri), 100);
+            })
+            .catch(e=> {
+                console.log(e);
+            })
+            .finally(() => {
+                console.log("request done");
+            });
     }
 }
