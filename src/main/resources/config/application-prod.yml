@@ -164,3 +164,6 @@ application:
   integration:
     endpoint:
       invoice-verification-url: http://localhost:20001/api/invoice-verification
+      vendor-integration-url: http://localhost:20002/api/vendor-integration
+      vendor-integration-contact-url: http://localhost:20003/api/vendor-integration-contact
+      vendor-integration-detail-url: http://localhost:20004/api/vendor-integration-detail

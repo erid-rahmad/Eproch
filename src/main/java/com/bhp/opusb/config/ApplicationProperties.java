@@ -165,9 +165,36 @@ public class ApplicationProperties {
 
   public static final class Endpoint {
     private String invoiceVerificationUrl;
+    private String vendorIntegrationUrl;
+    private String vendorIntegrationContactUrl;
+    private String vendorIntegrationDetailUrl;
 
     public String getInvoiceVerificationUrl() {
       return invoiceVerificationUrl;
+    }
+
+    public String getVendorIntegrationDetailUrl() {
+      return vendorIntegrationDetailUrl;
+    }
+
+    public void setVendorIntegrationDetailUrl(String vendorIntegrationDetailUrl) {
+      this.vendorIntegrationDetailUrl = vendorIntegrationDetailUrl;
+    }
+
+    public String getVendorIntegrationContactUrl() {
+      return vendorIntegrationContactUrl;
+    }
+
+    public void setVendorIntegrationContactUrl(String vendorIntegrationContactUrl) {
+      this.vendorIntegrationContactUrl = vendorIntegrationContactUrl;
+    }
+
+    public String getVendorIntegrationUrl() {
+      return vendorIntegrationUrl;
+    }
+
+    public void setVendorIntegrationUrl(String vendorIntegrationUrl) {
+      this.vendorIntegrationUrl = vendorIntegrationUrl;
     }
 
     public void setInvoiceVerificationUrl(String invoiceVerificationUrl) {

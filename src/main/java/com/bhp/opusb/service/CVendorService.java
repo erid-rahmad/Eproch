@@ -2,6 +2,7 @@ package com.bhp.opusb.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,6 +21,7 @@ import com.bhp.opusb.service.dto.CVendorDTO;
 import com.bhp.opusb.service.dto.RegistrationDTO;
 import com.bhp.opusb.service.mapper.CVendorMapper;
 import com.bhp.opusb.service.mapper.RegistrationMapper;
+import com.bhp.opusb.service.trigger.process.integration.CVendorMessageDispatcher;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +52,8 @@ public class CVendorService {
     private final CVendorMapper cVendorMapper;
     private final RegistrationMapper registrationMapper;
 
+    private final AiMessageDispatcher messageDispatcher;
+
     private final UserService userService;
 
     public CVendorService(
@@ -63,7 +67,8 @@ public class CVendorService {
         CFunctionaryService cFunctionaryService,
         CVendorBankAcctService cVendorBankAcctService,
         CVendorTaxService cVendorTaxService,
-        UserService userService
+        UserService userService,
+        AiMessageDispatcher messageDispatcher
     ) {
         this.cDocumentTypeRepository = cDocumentTypeRepository;
         this.cVendorRepository = cVendorRepository;
@@ -76,6 +81,7 @@ public class CVendorService {
         this.cVendorTaxService = cVendorTaxService;
         this.cVendorMapper = cVendorMapper;
         this.userService = userService;
+        this.messageDispatcher = messageDispatcher;
 
         organization = new ADOrganization();
         organization.setId(1L);
@@ -157,6 +163,11 @@ public class CVendorService {
 
         cVendorRepository.updateDocumentStatus(cVendor.getId(), action, action);
         userService.sendActivationEmail(cVendor);
+        if("APV".contentEquals(action)){
+            final Map<String, Object> headerPayload = new HashMap<>(1);
+            headerPayload.put(CVendorMessageDispatcher.KEY_PAYLOAD, cVendorDTO);
+            messageDispatcher.dispatch(CVendorMessageDispatcher.BEAN_NAME, headerPayload);
+        }
     }
 
     /**
