@@ -34,7 +34,6 @@ export default class VendorApproval extends Mixins(AccessLevelMixin){
         height: 500
     };
 
-
     itemsPerPage = 10;
     queryCount: number = null;
     page = 1;
@@ -44,34 +43,16 @@ export default class VendorApproval extends Mixins(AccessLevelMixin){
     totalItems = 0;
     summary: string="";
 
-    //printedProperty: string[]= ["adOrganizationName", "name", "paymentCategory", "taxIdName", "location"];
-    printedProperty: object[] = [
-        {
-            "prop" : "adOrganizationName",
-            "label" : "Organization Name"
-        },
-        {
-            "prop" : "name",
-            "label" : "Name"
-        },
-        {
-            "prop" : "paymentCategory",
-            "label" : "Payment Category"
-        },
-        {
-            "prop" : "taxIdName",
-            "label" : "Tax Name"
-        },
-        {
-            "prop" : "location",
-            "label" : "Location"
-        }
-    ]
+    showSummary: boolean= false;
+    formattedDate: string="";
+
+    // summaryParams: any= [
+    //     {
+    //         "prop" : ""
+    //     }
+    // ]
 
 
-    // get getSummary(){
-    //     return this.model.summary;
-    // }
     created(){
         this.loadApproveVendor();
     }
@@ -83,6 +64,16 @@ export default class VendorApproval extends Mixins(AccessLevelMixin){
         let diffHour= diff.asHours();
 
         return `${Math.round(diffDays)} Days and ${Math.round(diffHour%24)} Hour`;``
+    }
+
+    getVendorSummary(row: any, column): string{
+        return this.generateVendorSummary(row);
+    }
+
+    getFormattedDate(){
+        let formattedDate= moment(new Date()).format("MMMM DD, YYYY hh:mm:ss A");
+        // console.log("FORMATTED DATE ", formattedDate);
+        return  `${formattedDate} WIB (Approval Process)`;
     }
 
     loadApproveVendor(){
@@ -101,10 +92,7 @@ export default class VendorApproval extends Mixins(AccessLevelMixin){
             paginationQuery
         })
         .then(res => {
-            // this.vendors = res.data.map((d: any) => {
-            //     d.age= this.getVerificationAge(d);
-            //     return d;
-            // });
+
             this.vendors= res.data;
             this.totalItems = Number(res.headers['x-total-count']);
             this.queryCount = this.totalItems;
@@ -125,6 +113,22 @@ export default class VendorApproval extends Mixins(AccessLevelMixin){
         });
     }
 
+    private generateVendorSummary(model: any): string{
+        let s: string[]= [];
+        
+        if(lodash.isEmpty(model)) return;
+
+        if(!lodash.isEmpty(model.name)) s.push(model.name);
+        if(!lodash.isEmpty(model.address)) s.push(model.address);
+        if(!lodash.isEmpty(model.user)) s.push(`User : ${model.user}`);
+        if(!lodash.isEmpty(model.userEmail)) s.push(`Email : ${model.userEmail}`);
+        if(!lodash.isEmpty(model.businessClassification)) 
+            s.push(`Business Classification : ${model.businessClassification}`);
+        if(!lodash.isEmpty(model.type)) s.push(`Supplier Type : ${model.type}`);
+
+        return s.join("; ");
+    }
+
     sort(): Array<any> {
         const result = [this.propOrder + ',' + (this.reverse ? 'asc' : 'desc')];
         if (this.propOrder !== 'id') {
@@ -134,9 +138,89 @@ export default class VendorApproval extends Mixins(AccessLevelMixin){
     }
 
     selectVendor(vendor: any){
+        if(lodash.isEmpty(vendor)) return ;
         this.vendor= vendor;
-        let convertedVendor= (this.convertVendor());
-        this.summary= JSON.stringify(convertedVendor);
+        this.showSummary= false;
+        this.formattedDate= this.getFormattedDate();
+
+        this.retrieveVendorDetail(vendor)
+        .then( e => {
+            this.summary= this.generateVendorSummary(e);
+        })
+        .finally(()=> this.showSummary= true);
+    }
+
+    async retrieveVendorDetail(vendor: any): Promise<any>{
+
+        return new Promise<any>(async (resolve, reject) => {
+
+            const paginationQuery = {
+                page: this.page - 1,
+                size: this.itemsPerPage,
+                sort: this.sort()
+            };
+
+            let vendorLocation= await this.commonService("api/c-vendor-locations")
+                .retrieve({
+                    criteriaQuery : this.updateCriteria([ 'cVendorId.equals=' + vendor.id ])
+                    , paginationQuery})
+                .then(res => {
+                    if(res.data.length > 0){
+                        let invoiceAddress= res.data.filter(a => a.invoiceAddress);
+                        if(invoiceAddress.length == 0) invoiceAddress= res.data;
+                        return {
+                            address : invoiceAddress[0].locationName
+                        }
+                    }else {
+                        return {}
+                    }
+                })
+
+            let vendorUser= await this.commonService("api/ad-users")
+                .retrieve({ 
+                    criteriaQuery : this.updateCriteria([ 'cVendorId.equals=' + vendor.id ])
+                    , paginationQuery })
+                .then(res=> {
+                    return {
+                        user : res.data[0].name,
+                        userEmail : res.data[0].email
+                    }
+                }).catch(e => {
+                    reject(e);
+                    console.log(e);
+                    return {};
+                }).finally(()=> {});
+
+            let vendorBusinessClassification= await this.commonService('api/c-vendor-business-cats')
+                .retrieve({ 
+                    criteriaQuery : this.updateCriteria([ 'vendorId.equals='+ vendor.id ])
+                    , paginationQuery})
+                .then(res=> {
+                    return {
+                        businessClassification : JSON.stringify(res.data.map((r: any)=> {
+                            return {
+                                "Classification" : r.businessClassificationName,
+                                "Business Category" : r.businessCategoryName,
+                            }
+                        }))
+                    }
+                }).catch(e => {
+                    console.log(e);
+                    reject(e);
+                    return {}
+                }).finally(()=>{});
+
+            
+
+            resolve({
+                ...vendorLocation,
+                ...vendor,
+                ...vendorUser,
+                ...vendorBusinessClassification
+            });
+        });
+        
+
     }
 
     approve(approve: boolean){
@@ -150,19 +234,6 @@ export default class VendorApproval extends Mixins(AccessLevelMixin){
         })
     }
 
-    private convertVendor(): any[]{
-        let res: any[]= new Array() ;
-
-        let prop: string[]= this.printedProperty.map(p => String(p["prop"]));
-        Object.entries(this.vendor).forEach((k, v) => {
-            let f: object= lodash.find(this.printedProperty, [ "prop", String(k[0])]);
-            if(!lodash.isEmpty(f)){
-                res.push(k);
-            }
-        })
-
-        return res;
-    }
 
     private doApproval(approve: boolean): void{
        
@@ -197,9 +268,21 @@ export default class VendorApproval extends Mixins(AccessLevelMixin){
         (<ElTable>this.$refs.mainGrid).setCurrentRow(record);
     }
 
-    viewDocument(){
+    async viewDocument(){
 
-        let targetUrl: string= '/supplier-management/suppliers';
+        //let targetUrl: string= '/supplier-management/suppliers';
+
+        let menuId= await this.commonService("api/ad-menus")
+            .retrieve({ criteriaQuery : this.updateCriteria([ 'path.equals=suppliers' ])})
+            .then(res => {
+                if(res.data.length > 0) return res.data[0].id ;
+                return null;
+            }).catch(e => {
+                console.log(e);
+            })
+        
+        let targetUrl: string= await this.commonService('/api/ad-menus/full-path').find(menuId);
+        
         let filterQuery: string= 'id.equals=' + this.vendor.id;
 
         const timestamp = Date.now();
@@ -229,9 +312,6 @@ export default class VendorApproval extends Mixins(AccessLevelMixin){
 
         axios(config)
             .then(res=> {
-                // console.log("Response data : " ,res.data);
-
-                // this.pdfResource= res.data;
 
                 let uri= window.URL.createObjectURL(new Blob([res.data], { type : 'application/pdf'}));
                 window.open(uri, "_blank");

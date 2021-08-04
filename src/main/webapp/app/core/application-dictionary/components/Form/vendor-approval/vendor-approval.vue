@@ -18,9 +18,9 @@
                         style="width:100%;"
                     >
                         <el-table-column
-                            label="Organization Name"
+                            label="Name"
                             min-width="120"
-                            prop="adOrganizationName"
+                            prop="name"
                         >
                         </el-table-column>
                         <el-table-column
@@ -29,10 +29,18 @@
                             prop="createdDate"
                             :formatter="getVerificationAge"
                         >
+                        </el-table-column>
+                        <el-table-column
+                            label="Summary"
+                            min-width="250"
+                            prop="name"
+                            :formatter="getVendorSummary"
+                            >
+                        </el-table-column>
                             <!-- <template slot-scope="{ row }">
                                 <span :html="getVerificationAge(row)"></span>
                             </template> -->
-                        </el-table-column>
+                        <!-- </el-table-column>
                         <el-table-column
                             label="Name"
                             min-width="120"
@@ -43,7 +51,7 @@
                             label="Document Status"
                             min-width="80"
                             prop="documentStatus"
-                        >
+                        > -->
                         </el-table-column>
                     </el-table>
                 </el-col>
@@ -56,13 +64,19 @@
                 label-width="200px"
             >
                 <el-form-item label="Summary Records">
-                    <el-input   
+                    <!-- <el-input   
                         :value="summary"
                         type="textarea"
                          disabled
                          rows="10"
                     >
                     </el-input>
+                    <br/> -->
+                    <div v-if="showSummary">
+                        <span v-html="formattedDate"></span>
+                        <p v-html="summary"></p>
+                    </div>
+                    
                 </el-form-item>
                 <el-form-item label="Lookup Document">
                     <el-col :span="6">
