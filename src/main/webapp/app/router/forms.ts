@@ -65,6 +65,7 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['vendorConfirmation', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/vendor-confirmation/index.vue')],
   ['biddingNegotiation', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-negotiation/index.vue')],
   ['eventAnnouncement', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/event-announcement/event-announcement.vue')],
+  ['vendorApproval', () => import(/* webpackChunkName: "vendorApproval" */'@/core/application-dictionary/components/Form/vendor-approval/vendor-approval.vue')],
 
   ['biddingRegistration', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/event-announcement/bidding-registration.vue')],
 
