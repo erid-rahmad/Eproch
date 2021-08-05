@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+    <head>
+        <title>Vendor Rejection Notification Email</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
+    </head>
+    <body>
+        <h5 th:text="${#dates.format(#dates.createNow(), 'MMMM dd, YYYY')}"></h5>
+        <br/>
+        <h4><span>Dear</span>&nbsp;<span th:text="${vendor.name}"></span></h4>
+        <br/>
+        <p style="margin-top: 100px; text-align: left;">
+            Thank you for your interest in becoming a partner in the procurement of goods or services to 
+            <span th:text="${vendor.adOrganization.name}"></span>. We appreciate you for submitting vendor registration request.
+            Although the information you provided was helpful, we have determined to reject your registration requirements not fullfiled
+        </p>
+        <br/>
+        <p style="text-align:left">
+            Again, thank you for your interest in working with <span th:text="${vendor.adOrganization.name}"></span>.
+            I will keep your contact information and file. You may hear from me in the future if other needs arise that
+            fall within your company's scope.
+        </p>
+        <br/>
+        <p style="text-align: left;">Best wishes for continued success</p>
+        <br/>
+        <br/>
+        <p style="text-align:left;">Regards</p>
+        <p style="text-align:left;margin-top: 100px;">E-Procurement Team</p>
+    </body>
+</html>

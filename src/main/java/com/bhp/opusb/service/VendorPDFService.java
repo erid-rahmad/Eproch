@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -166,16 +167,18 @@ public class VendorPDFService {
 		filter.setEquals(vendorId);
 		criteria.setVendorId(filter);
 		
-		List<CVendorLocationDTO> location= this.cVendorLocationQueryService.findByCriteria(criteria);
+		final Integer columnCount= 4;
 		
+		List<CVendorLocationDTO> location= cVendorLocationQueryService.findByCriteria(criteria);
 		addParagraph(document, "Address Information");
-		
-		PdfPTable table = new PdfPTable(4);
+		PdfPTable table = new PdfPTable(columnCount);
 		
 		Stream.of("Organization", "Address", "City", "Country")
 			.forEach(s->{
 				table.addCell(createHeaderCell(s));
 			});
+		
+		if(CollectionUtils.isEmpty(location)) table.addCell(createNoValueCell(columnCount));
 		location.stream().forEach(loc-> {
 			Stream.of(getString(loc.getAdOrganizationName()), getString(loc.getLocationName()), 
 					getString(loc.getCityName()), getString(loc.getCountryName()))
@@ -194,13 +197,17 @@ public class VendorPDFService {
 		filter.setEquals(vendorId);
 		criteria.setVendorId(filter);
 		
+		final Integer columnCount= 4;
+		
 		List<CVendorBusinessCatDTO> businessCategory= cVendorBusinessCatQueryService.findByCriteria(criteria);
 		
 		addParagraph(document, "Business Criteria");
-		PdfPTable table= new PdfPTable(4);
+		PdfPTable table= new PdfPTable(columnCount);
 		
 		Stream.of("Organization", "Business Classification", "Business Category", "Sub Business Category")
 			.forEach(s -> table.addCell(createHeaderCell(s)));
+		
+		if(CollectionUtils.isEmpty(businessCategory)) table.addCell(createNoValueCell(columnCount));
 		
 		businessCategory.stream().forEach(b-> {
 			log.debug(b.toString());
@@ -220,13 +227,17 @@ public class VendorPDFService {
 		filter.setEquals(vendorId);
 		criteria.setVendorId(filter);
 		
+		final Integer columnCount= 3;
+		
 		List<CRegistrationDocumentDTO> doc= cRegistractionDocumentQueryService.findByCriteria(criteria);
 		
 		addParagraph(document, "Supporting Documents");
-		PdfPTable table= new PdfPTable(3);
+		PdfPTable table= new PdfPTable(columnCount);
 		
 		Stream.of("Document Type", "Document No", "Expiration Date")
 			.forEach(s->table.addCell(createHeaderCell(s)));
+		
+		if(CollectionUtils.isEmpty(doc)) table.addCell(createNoValueCell(columnCount));
 		doc.stream().forEach(d -> {
 			log.info(d.toString());
 			Stream.of(getString(d.getTypeName()), getString(d.getDocumentNo()), 
@@ -244,13 +255,16 @@ public class VendorPDFService {
 		filter.setEquals(vendorId);
 		criteria.setCVendorId(filter);
 		
+		final Integer columnCount= 5;
+		
 		List<AdUserDTO> userPic= adUserQueryService.findByCriteria(criteria);
 		addParagraph(document, "PIC");
-		PdfPTable table= new PdfPTable(5);
+		PdfPTable table= new PdfPTable(columnCount);
 		
 		Stream.of("First Name", "Last Name", "Position", "Phone", "Email")
 			.forEach(h -> table.addCell(createHeaderCell(h)));
 		
+		if(CollectionUtils.isEmpty(userPic)) table.addCell(createNoValueCell(columnCount));
 		userPic.stream().forEach(u -> {
 			Stream.of(getString(u.getFirstName()), getString(u.getLastName()), getString(u.getPhone()),
 					getString(u.getPosition()), getString(u.getEmail()))
@@ -266,13 +280,16 @@ public class VendorPDFService {
 		LongFilter filter= new LongFilter();
 		filter.setEquals(vendorId);
 		criteria.setVendorId(filter);
+		final Integer columnCount= 4;
 		
 		List<CFunctionaryDTO> functionary= cFunctionaryQueryService.findByCriteria(criteria);
 		addParagraph(document, "Functionary");
-		PdfPTable table= new PdfPTable(4);
+		PdfPTable table= new PdfPTable(columnCount);
 		
 		Stream.of("Name", "Position", "Phone", "Email")
 			.forEach(h -> table.addCell(createHeaderCell(h)));
+		
+		if(CollectionUtils.isEmpty(functionary)) table.addCell(createNoValueCell(columnCount));
 		
 		functionary.stream().forEach(f -> {
 			Stream.of(getString(f.getName()), getString(f.getPosition()), 
@@ -289,16 +306,18 @@ public class VendorPDFService {
 		LongFilter filter= new LongFilter();
 		filter.setEquals(vendorId);
 		criteria.setVendorId(filter);
+		final Integer columnCount= 5;
 		
 		List<CVendorBankAcctDTO> bank= cVendorBankAcctQueryService.findByCriteria(criteria);
 		addParagraph(document, "Payment Information");
-		PdfPTable table= new PdfPTable(5);
+		PdfPTable table= new PdfPTable(columnCount);
 		
 		Stream.of("Bank", "Branch", "Currency", "Account No", "Account Name")
 			.forEach(h -> table.addCell(createHeaderCell(h)));
 		
+		if(CollectionUtils.isEmpty(bank)) table.addCell(createNoValueCell(columnCount));
+		
 		bank.stream().forEach(bk-> {
-			
 			Stream.of(getString(bk.getBankName()), getString(bk.getBranch()), getString(bk.getCurrencyName()),
 					getString(bk.getAccountNo()), getString(bk.getAccountName()))
 				.forEach(bs-> table.addCell(createCell(bs, null)));
@@ -312,16 +331,18 @@ public class VendorPDFService {
 		CVendorTaxCriteria criteria= new CVendorTaxCriteria();
 		LongFilter filter= new LongFilter();
 		filter.setEquals(vendorId);
-		
 		criteria.setVendorId(filter);
+		
+		final Integer columnCount= 3;
 		
 		List<CVendorTaxDTO> tax= cVendorTaxQueryService.findByCriteria(criteria);
 		addParagraph(document, "Tax Information");
-		PdfPTable table= new PdfPTable(3);
+		PdfPTable table= new PdfPTable(columnCount);
 		
 		Stream.of("Tax Category", "Is Faktur", "Is PKP")
 			.forEach(h -> table.addCell(createHeaderCell(h)));
 		
+		if(CollectionUtils.isEmpty(tax)) table.addCell(createNoValueCell(columnCount));
 		tax.stream().forEach(tx -> {
 			Stream.of(getString(tx.getTaxCategoryName()), getString(tx.isEInvoice() ? "Yes" : "No"),
 					getString(tx.isTaxableEmployers() ? "Yes" : "No"))
@@ -342,7 +363,7 @@ public class VendorPDFService {
 	}
 	
 	private PdfPCell createCell(String text, Integer border) {
-		PdfPCell cell= createCell(new Phrase(text), border);
+		PdfPCell cell= createCell(new Phrase(text, FontFactory.getFont(FontFactory.HELVETICA)), border);
 		return cell;
 	}
 	
@@ -355,21 +376,29 @@ public class VendorPDFService {
 		return cell;
 	}
 	
+	private PdfPCell createNoValueCell(Integer l) {
+		PdfPCell cell= new PdfPCell(new Phrase("No Records"));
+		cell.setColspan(l);
+		cell.setVerticalAlignment(Element.ALIGN_CENTER);
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		return cell;
+	}
+	
 	private PdfPCell createHeaderCell(String text) {
 		
 		Font headerFont= FontFactory.getFont(FontFactory.HELVETICA_BOLD);
 		PdfPCell cell = this.createCell(new Phrase(text, headerFont), null);
-		cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+		cell.setBackgroundColor(new BaseColor(145, 255, 255));
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		
 		return cell;
 	}
 	
 	
-	private String formatDate(Date date) {
-		SimpleDateFormat format= new SimpleDateFormat("dd-MM-YYYY");
-		return format.format(date);
-	}
+//	private String formatDate(Date date) {
+//		SimpleDateFormat format= new SimpleDateFormat("dd-MM-YYYY");
+//		return format.format(date);
+//	}
 	
 	private void addParagraph(Document document, String text) throws Exception{
 		
