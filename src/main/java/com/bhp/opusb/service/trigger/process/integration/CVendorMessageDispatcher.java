@@ -76,16 +76,16 @@ public class CVendorMessageDispatcher implements ProcessTrigger {
         System.out.println(supplierContractDto.size());
         for(Object[] x : supplierContractDto){
           VendorSupplierContact vsc = new VendorSupplierContact();
-          vsc.setVendorCode((String)x[0]);
-          vsc.setVendorSiteCode((String)x[1]);
-          vsc.setFirstName((String)x[2]);
-          vsc.setMiddleName((String)x[3]);
-          vsc.setLastName((String)x[4]);
-          vsc.setTitle((String)x[5]);
-          vsc.setEmailAddress((String)x[6]);
-          vsc.setAreaCode((String)x[7]);
-          vsc.setPhone((String)x[8]);
-          vsc.setCreationDate(((java.sql.Date)x[9]).toLocalDate());
+          vsc.setVendorCode((String)(x[0]==null?"":x[0]));
+          vsc.setVendorSiteCode("JKT");//(String)x[1]);
+          vsc.setFirstName((String)(x[2]==null?"":x[2]));
+          vsc.setMiddleName("-");//(String)x[3]);
+          vsc.setLastName((String)(x[4]==null?"":x[4]));
+          vsc.setTitle("Mr.");//(String)x[5]);
+          vsc.setEmailAddress((String)(x[6]==null?"":x[6]));
+          vsc.setAreaCode("021");//(String)x[7]);
+          vsc.setPhone((String)(x[8]==null?"":x[8]));
+          vsc.setCreationDate(((java.sql.Date)x[9])==null?LocalDate.now():((java.sql.Date)x[9]).toLocalDate());
           vsc.setStatus("NEW");
 
           dispatchMessageContact(objectMapper.writeValueAsString(vsc));
@@ -96,16 +96,16 @@ public class CVendorMessageDispatcher implements ProcessTrigger {
         for(Object[] x : supplierDetailDto){
           VendorSupplierDetail vsd = new VendorSupplierDetail();
           vsd.setVendorCode((String)x[0]);
-          vsd.setVendorSiteCode((String)x[1]);
-          vsd.setAddress1((String)x[2]);
-          vsd.setAddress2((String)x[3]);
-          vsd.setAddress3((String)x[4]);
-          vsd.setAddress4((String)x[5]);
-          vsd.setCountry((String)x[6]);
-          vsd.setZip((String)x[7]);
-          vsd.setPhone((String)x[8]);
-          vsd.setAreaCode((String)x[9]);
-          vsd.setEmail((String)x[10]);
+          vsd.setVendorSiteCode("JKT");//(String)x[1]);
+          vsd.setAddress1((String)(x[2]==null?"-":x[2]));
+          vsd.setAddress2((String)(x[3]==null?"-":x[3]));
+          vsd.setAddress3((String)(x[4]==null?"-":x[4]));
+          vsd.setAddress4((String)(x[5]==null?"-":x[5]));
+          vsd.setCountry((String)(x[6]==null?"ID":x[6]));
+          vsd.setZip((String)(x[7]==null?"-":x[7]));
+          vsd.setPhone((String)(x[8]==null?"-":x[8]));
+          vsd.setAreaCode("021");//(String)x[9]);
+          vsd.setEmail((String)(x[10]==null?"-":x[10]));
           vsd.setOrganizationId(((BigInteger)x[11]).longValueExact());
           vsd.setStatus("NEW");
           vsd.setPaySiteFlag("Y");

@@ -13,27 +13,34 @@ import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.domain.enumeration.VendorDocumentType;
 import com.bhp.opusb.repository.AdUserRepository;
 import com.bhp.opusb.repository.CVendorRepository;
+import com.bhp.opusb.service.dto.CVendorDTO;
+import com.bhp.opusb.service.mapper.CVendorMapper;
+import com.bhp.opusb.service.trigger.process.integration.CVendorMessageDispatcher;
 
 @Service
 public class CvendorApprovalService {
 	
 	
 	private final CVendorRepository cVendorRepository;
+	private final CVendorMapper cVendorMapper;
 	private final AdUserRepository adUserRepository;
 	private final UserService userService;
 	private final MailService mailService;
+	private final AiMessageDispatcher messageDispatcher;
 	
 	private final Logger log = LoggerFactory.getLogger(CvendorApprovalService.class);
 	
 	public CvendorApprovalService(
-		CVendorRepository cVendorRepository, 
-		UserService userService,
+		CVendorRepository cVendorRepository, CVendorMapper cVendorMapper,
+		UserService userService, AiMessageDispatcher messageDispatcher,
 		MailService mailService,
 		AdUserRepository adUserRepository) {
 		this.cVendorRepository= cVendorRepository;
 		this.userService= userService;
 		this.mailService= mailService;
 		this.adUserRepository= adUserRepository;
+		this.cVendorMapper = cVendorMapper;
+		this.messageDispatcher = messageDispatcher;
 	}
 	
 	public String approved(DelegateExecution execution) throws Exception{
@@ -41,6 +48,13 @@ public class CvendorApprovalService {
 		CVendor vendor = getVendor(execution);
 		vendor.setApproved(true);
 		cVendorRepository.save(vendor);
+
+		final Map<String, Object> headerPayload = new HashMap<>(1);
+		CVendorDTO cVendorDTO = cVendorMapper.toDto(vendor);
+
+        headerPayload.put(CVendorMessageDispatcher.KEY_PAYLOAD, cVendorDTO);
+        messageDispatcher.dispatch(CVendorMessageDispatcher.BEAN_NAME, headerPayload);
+
 		return VendorDocumentType.APPROVED_VENDOR.getValue();
 	}
 	

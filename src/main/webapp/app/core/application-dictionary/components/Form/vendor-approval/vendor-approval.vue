@@ -51,8 +51,8 @@
                             label="Document Status"
                             min-width="80"
                             prop="documentStatus"
-                        > -->
-                        </el-table-column>
+                        > 
+                        </el-table-column> -->
                     </el-table>
                 </el-col>
             </el-row>
