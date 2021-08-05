@@ -35,7 +35,7 @@ import org.springframework.web.client.RestTemplate;
 @Service("cVendorMessageDispatcher")
 public class CVendorMessageDispatcher implements ProcessTrigger {
 
-  private final Logger logger = LoggerFactory.getLogger(MVerificationMessageDispatcher.class);
+  private final Logger logger = LoggerFactory.getLogger(CVendorMessageDispatcher.class);
 
   public static final String BEAN_NAME = "cVendorMessageDispatcher";
   public static final String KEY_PAYLOAD = "payload";
@@ -115,7 +115,7 @@ public class CVendorMessageDispatcher implements ProcessTrigger {
           dispatchMessageDetail(objectMapper.writeValueAsString(vsd));
         }
       } catch (JsonProcessingException | RestClientException e) {
-        logger.warn("Failed dispatching invoice vendor. {}. {}", e.getLocalizedMessage(), payload);
+        logger.warn("Failed dispatching supplier data. {}. {}", e.getLocalizedMessage(), payload);
 
         aiExchangeOutRepository.save(new AiExchangeOut()
           .entityType(CVendor.class.getName())
