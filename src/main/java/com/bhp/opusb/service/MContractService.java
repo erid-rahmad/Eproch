@@ -1,7 +1,9 @@
 package com.bhp.opusb.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.bhp.opusb.config.ApplicationProperties;
@@ -11,6 +13,7 @@ import com.bhp.opusb.repository.*;
 import com.bhp.opusb.service.dto.*;
 import com.bhp.opusb.service.mapper.MContractLineMapper;
 import com.bhp.opusb.service.mapper.MContractMapper;
+import com.bhp.opusb.service.trigger.process.integration.MPurchaseOrderMessageDispatcher;
 import com.bhp.opusb.util.DocumentUtil;
 
 import org.slf4j.Logger;
@@ -51,9 +54,12 @@ public class MContractService {
     private final MPurchaseOrderLineRepository mPurchaseOrderLineRepository;
     private final MPurchaseOrderLineService mPurchaseOrderLineService;
 
+    private final AiMessageDispatcher messageDispatcher;
+
     public MContractService(ApplicationProperties properties, MContractDocumentService mContractDocumentService,
                             CDocumentTypeRepository cDocumentTypeRepository, MContractRepository mContractRepository,
-                            MContractMapper mContractMapper, MailService mailService, AdUserRepository adUserRepository, MContractTeamService mContractTeamService, MPurchaseOrderRepository mPurchaseOrderRepository, MPurchaseOrderService mPurchaseOrderService, MPurchaseOrderLineRepository mPurchaseOrderLineRepository, MPurchaseOrderLineService mPurchaseOrderLineService) {
+                            MContractMapper mContractMapper, MailService mailService, AdUserRepository adUserRepository, MContractTeamService mContractTeamService, MPurchaseOrderRepository mPurchaseOrderRepository, MPurchaseOrderService mPurchaseOrderService, MPurchaseOrderLineRepository mPurchaseOrderLineRepository, MPurchaseOrderLineService mPurchaseOrderLineService,
+                            AiMessageDispatcher messageDispatcher) {
         this.mContractDocumentService = mContractDocumentService;
         this.cDocumentTypeRepository = cDocumentTypeRepository;
         this.mContractRepository = mContractRepository;
@@ -66,6 +72,7 @@ public class MContractService {
         this.mPurchaseOrderService = mPurchaseOrderService;
         this.mPurchaseOrderLineRepository = mPurchaseOrderLineRepository;
         this.mPurchaseOrderLineService = mPurchaseOrderLineService;
+        this.messageDispatcher = messageDispatcher;
     }
 
     @Autowired
@@ -137,6 +144,7 @@ public class MContractService {
     }
 
     public void generateToPo(MContractToPoDTO mContractToPoDTO){
+        Long poId = 0L;
         MPurchaseOrderDTO mPurchaseOrderDTO =new MPurchaseOrderDTO();
         MPurchaseOrderDTO mPurchaseOrderDTO_ =new MPurchaseOrderDTO();
 
@@ -151,6 +159,7 @@ public class MContractService {
         mPurchaseOrderDTO.setGrandTotal(mContractToPoDTO.getmContractDTO().getPrice());
 
         mPurchaseOrderDTO_ = mPurchaseOrderService.save(mPurchaseOrderDTO);
+        poId = mPurchaseOrderDTO_.getId();
 
         MPurchaseOrderDTO finalMPurchaseOrderDTO_ = mPurchaseOrderDTO_;
         mContractToPoDTO.getmContractLineDTOS().forEach(mContractLineDTO -> {
@@ -169,6 +178,10 @@ public class MContractService {
 
             mPurchaseOrderLineService.save(mPurchaseOrderLineDTO);
         });
+
+        Map<String, Object> payload = new HashMap<>(1);
+        payload.put(MPurchaseOrderMessageDispatcher.KEY_ID, poId);
+        messageDispatcher.dispatch(MPurchaseOrderMessageDispatcher.BEAN_NAME, payload);
     }
 
     /**

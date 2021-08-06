@@ -49,6 +49,8 @@ public class CTaxCriteria implements Serializable, Criteria {
 
     private StringFilter name;
 
+    private StringFilter code;
+
     private StringFilter description;
 
     private BigDecimalFilter rate;
@@ -71,6 +73,7 @@ public class CTaxCriteria implements Serializable, Criteria {
     public CTaxCriteria(CTaxCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.name = other.name == null ? null : other.name.copy();
+        this.code = other.code == null ? null : other.code.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.rate = other.rate == null ? null : other.rate.copy();
         this.validFrom = other.validFrom == null ? null : other.validFrom.copy();
@@ -100,6 +103,14 @@ public class CTaxCriteria implements Serializable, Criteria {
 
     public void setName(StringFilter name) {
         this.name = name;
+    }
+
+    public StringFilter getCode() {
+        return code;
+    }
+
+    public void setCode(StringFilter code) {
+        this.code = code;
     }
 
     public StringFilter getDescription() {
@@ -179,6 +190,7 @@ public class CTaxCriteria implements Serializable, Criteria {
         return
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
+            Objects.equals(code, that.code) &&
             Objects.equals(description, that.description) &&
             Objects.equals(rate, that.rate) &&
             Objects.equals(validFrom, that.validFrom) &&
@@ -194,6 +206,7 @@ public class CTaxCriteria implements Serializable, Criteria {
         return Objects.hash(
         id,
         name,
+        code,
         description,
         rate,
         validFrom,
@@ -210,6 +223,7 @@ public class CTaxCriteria implements Serializable, Criteria {
         return "CTaxCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
+                (code != null ? "code=" + code + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (rate != null ? "rate=" + rate + ", " : "") +
                 (validFrom != null ? "validFrom=" + validFrom + ", " : "") +

@@ -225,6 +225,7 @@ entity CTaxCategory {
 
 entity CTax {
 	name String required
+	code String maxlength(30)
 	description String
 	rate BigDecimal
 	validFrom LocalDate

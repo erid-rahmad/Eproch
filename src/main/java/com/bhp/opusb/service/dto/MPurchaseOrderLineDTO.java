@@ -39,15 +39,16 @@ public class MPurchaseOrderLineDTO extends AbstractAuditingDTO {
     private Long purchaseOrderId;
 
     private Long requisitionId;
+    private String requisitionNo;
 
     private Long taxId;
-    private String taxName;
+    private String taxName, taxCode;
 
     private Long adOrganizationId;
     private String adOrganizationName;
 
     private Long productId;
-    private String productName;
+    private String productName, productCode;
 
     private Long warehouseId;
     private String warehouseName;
@@ -63,6 +64,30 @@ public class MPurchaseOrderLineDTO extends AbstractAuditingDTO {
     
     public Long getId() {
         return id;
+    }
+
+    public String getTaxCode() {
+        return taxCode;
+    }
+
+    public void setTaxCode(String taxCode) {
+        this.taxCode = taxCode;
+    }
+
+    public String getRequisitionNo() {
+        return requisitionNo;
+    }
+
+    public void setRequisitionNo(String requisitionNo) {
+        this.requisitionNo = requisitionNo;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
     }
 
     public void setId(Long id) {

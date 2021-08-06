@@ -16,6 +16,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.bhp.opusb.domain.enumeration.CTransactionType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -41,6 +42,10 @@ public class CTax extends AbstractAuditingEntity {
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Size(max = 30)
+    @Column(name = "code", length = 30)
+    private String code;
 
     @Column(name = "description")
     private String description;
@@ -92,6 +97,19 @@ public class CTax extends AbstractAuditingEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public CTax code(String code) {
+        this.code = code;
+        return this;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getDescription() {
@@ -225,6 +243,7 @@ public class CTax extends AbstractAuditingEntity {
         return "CTax{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
+            ", code='" + getCode() + "'" +
             ", description='" + getDescription() + "'" +
             ", rate=" + getRate() +
             ", validFrom='" + getValidFrom() + "'" +
