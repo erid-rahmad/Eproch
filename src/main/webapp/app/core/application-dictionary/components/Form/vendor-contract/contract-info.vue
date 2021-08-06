@@ -1,4 +1,5 @@
 <template>
+    <div>
     <el-form
         ref="contractInfoForm"
         v-loading="loading"
@@ -393,50 +394,63 @@
                     </el-table>
                 </template>
             </el-col>
-            <el-dialog
-                :visible.sync="generatePA"
-                title="Tips"
-                width="30%">
-                <el-form-item
-                    label="paymentTermId"
-                    prop="paymentTermId"
-                >
-                    <ad-input-lookup
-                        v-model="contract.paymentTermId"
-                        lookup-by-field="code"
-                        placeholder="Select payment"
-                        table-name="c_payment_term"
-                    ></ad-input-lookup>
-                </el-form-item>
-                <el-form-item
-                    label="warehouseId"
-                    prop="warehouseId"
-                >
-                    <ad-input-lookup
-                        v-model="contract.warehouseId"
-                        lookup-by-field="name"
-                        placeholder="Select currency"
-                        table-name="c_warehouse"
-                    ></ad-input-lookup>
-                </el-form-item>
-                <el-form-item
-                    label="documentTypeId"
-                    prop="documentTypeId"
-                >
-                    <ad-input-lookup
-                        v-model="contract.documentTypeId"
-                        lookup-by-field="name"
-                        placeholder="Select document"
-                        table-name="c_document_type"
-                    ></ad-input-lookup>
-                </el-form-item>
-                <span slot="footer" class="dialog-footer">
-                <el-button @click="generatePA = false">Cancel</el-button>
-                <el-button type="primary" @click="generatePo">Confirm</el-button>
-                </span>
-            </el-dialog>
 
         </el-row>
     </el-form>
+        <el-dialog
+            :visible.sync="generatePA"
+            title="Tips"
+            width="30%">
+            <el-form
+                v-loading="loading"
+                :label-position="formSettings.labelPosition"
+                :label-width="formSettings.labelWidth"
+                :rules="validationSchema"
+                :size="formSettings.size"
+            >
+            <el-form-item
+                label="payment Term"
+                prop="paymentTermId"
+
+            >
+                <ad-input-lookup
+                    v-model="contract.paymentTermId"
+                    lookup-by-field="name"
+                    :label-fields="['code']"
+                    placeholder="Select paymentTerm"
+                    table-name="c_payment_term"
+                ></ad-input-lookup>
+            </el-form-item>
+            <el-form-item
+                label="warehouse"
+                prop="warehouseId"
+            >
+                <ad-input-lookup
+                    v-model="contract.warehouseId"
+                    lookup-by-field="name"
+                    :label-fields="['name']"
+                    placeholder="Select warehouse"
+                    table-name="c_warehouse"
+                ></ad-input-lookup>
+            </el-form-item>
+            <el-form-item
+                label="document Type"
+                prop="documentTypeId"
+            >
+                <ad-input-lookup
+                    v-model="contract.documentTypeId"
+                    lookup-by-field="name"
+                    :label-fields="['name']"
+                    placeholder="Select document Type"
+                    table-name="c_document_type"
+                ></ad-input-lookup>
+            </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="generatePA = false">Cancel</el-button>
+                <el-button type="primary" @click="generatePo">Confirm</el-button>
+                </span>
+        </el-dialog>
+    </div>
 </template>
 <script lang="ts" src="./contract-info.component.ts"></script>

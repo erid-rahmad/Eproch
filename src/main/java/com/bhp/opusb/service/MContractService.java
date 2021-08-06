@@ -133,8 +133,6 @@ public class MContractService {
             mContractTeamService.save(dto);
         }
 
-        log.info("this mcontact {}", mContract);
-
         return mContractMapper.toDto(mContract);
     }
 
