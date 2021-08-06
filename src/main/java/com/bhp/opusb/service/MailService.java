@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -98,7 +99,7 @@ public class MailService {
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setFrom("admin@yahoo.com");
+            helper.setFrom(jHipsterProperties.getMail().getFrom());
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(content, true);
@@ -107,10 +108,11 @@ public class MailService {
                 FileSystemResource file = new FileSystemResource(fileToAttach);
                 helper.addAttachment(file.getFilename(), file);
             }
+            
+            javaMailSender.send(message);
         } catch (MessagingException e) {
             throw new MailParseException(e);
         }
-        javaMailSender.send(message);
     }
 
     @Async
@@ -185,6 +187,23 @@ public class MailService {
         String content = templateEngine.process(templateName, context);
         String subject = messageSource.getMessage(titleKey, null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
+    }
+    
+    @Async
+    public void sendEmailFromTemplate(User user, String template, String titleKey, Map<String, Object> contextVariables, String attachmentFile) {
+    	if(Objects.isNull(user.getEmail())) {
+    		log.warn("Email doesn't exist for user '{}'", user.getLogin());
+            return;
+    	}
+    	
+    	Locale locale= Locale.forLanguageTag(user.getLangKey());
+    	Context context= new Context(locale);
+    	contextVariables.entrySet().stream().forEach(m -> {
+    		context.setVariable(m.getKey(), m.getValue());
+    	});
+    	String content= templateEngine.process(template, context);
+    	String subject= messageSource.getMessage(titleKey, null, locale);
+    	sendMailWithAttachment(user.getEmail(), subject, content, false, true, attachmentFile);
     }
 
     @Async
