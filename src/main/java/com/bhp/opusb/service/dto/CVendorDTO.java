@@ -66,6 +66,7 @@ public class CVendorDTO extends AbstractAuditingDTO {
 
     @NotNull
     private LocalDate dateTrx;
+    private String oracleDateTrx;
 
     @Size(max = 30)
     private String documentNo;
@@ -101,6 +102,14 @@ public class CVendorDTO extends AbstractAuditingDTO {
     
     public Long getId() {
         return id;
+    }
+
+    public String getOracleDateTrx() {
+        return oracleDateTrx;
+    }
+
+    public void setOracleDateTrx(String oracleDateTrx) {
+        this.oracleDateTrx = oracleDateTrx;
     }
 
     public void setId(Long id) {
