@@ -1188,6 +1188,12 @@ entity MPrequalificationEvent {
 	active Boolean
 }
 
+entity MPrequalificationCriteria {
+	requirement String required
+	uid UUID
+	active Boolean
+}
+
 entity MPrequalificationSchedule {
 	startDate ZonedDateTime
 	endDate ZonedDateTime
@@ -2535,6 +2541,12 @@ relationship ManyToOne {
 	MPrequalificationEvent{adOrganization required} to ADOrganization
 	MPrequalificationEvent{event required} to CPrequalificationEvent
 	MPrequalificationEvent{method required} to CPrequalificationMethod
+
+	MPrequalificationCriteria{adOrganization required} to ADOrganization
+	MPrequalificationCriteria{prequalification required} to MPrequalificationInformation
+	MPrequalificationCriteria{prequalMethodCriteria } to CPrequalMethodCriteria
+	MPrequalificationCriteria{prequalMethodSubCriteria } to CPrequalMethodSubCriteria
+	MPrequalificationCriteria{biddingSubCriteriaLine } to CBiddingSubCriteriaLine
 
 	MPrequalificationSchedule{prequalification required} to MPrequalificationInformation
 	MPrequalificationSchedule{adOrganization required} to ADOrganization
