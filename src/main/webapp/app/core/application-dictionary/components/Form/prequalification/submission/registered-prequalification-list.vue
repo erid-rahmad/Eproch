@@ -201,6 +201,7 @@
         v-else-if="submissionPage"
         ref="submissionForm"
         :data="selectedRow"
+        @setReadOnly="setReadOnly"
       ></submission-form>
       <!--
       <component

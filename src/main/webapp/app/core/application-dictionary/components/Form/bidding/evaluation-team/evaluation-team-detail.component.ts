@@ -86,6 +86,7 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
   created() {
     this.mainForm = this.data;
     this.userOptions = this.users;
+    this.retrieveUsers("")
 
     this.commonService("/api/m-bidding-eval-team-lines").retrieve({
       criteriaQuery: this.updateCriteria([
@@ -107,32 +108,28 @@ export default class EvaluationTeamDetail extends Mixins(AccessLevelMixin, Evalu
 
   retrieveUsers(query?: string) {
     console.log('retrieve users. query:', query);
-    if (query !== '') {
-      setTimeout(() => {
-        this.commonService("/api/ad-users").retrieve({
-          criteriaQuery: this.updateCriteria([
-          'active.equals=true',
-          `userName.contains=${query}`,
-          `employee.equals=true`]),
-          paginationQuery: {
-            page: 0,
-            size: 100,
-            sort: ['id']
+    setTimeout(() => {
+      this.commonService("/api/ad-users").retrieve({
+        criteriaQuery: this.updateCriteria([
+        'active.equals=true',
+        `userName.contains=${query}`,
+        `employee.equals=true`]),
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id']
+        }
+      }).then((res)=>{
+        this.userOptions = res.data.map((item)=>{
+          return {
+            id: item.id,
+            name: `${item.firstName?item.firstName:''} ${item.lastName?item.lastName:''}`,
+            position: item.position,
+            email: item.email
           }
-        }).then((res)=>{
-          this.userOptions = res.data.map((item)=>{
-            return {
-              id: item.id,
-              name: `${item.firstName?item.firstName:''} ${item.lastName?item.lastName:''}`,
-              position: item.position,
-              email: item.email
-            }
-          })
         })
-      }, 200);
-    } else {
-      this.userOptions = this.users;
-    }
+      })
+    }, 200);
   }
 
   addMember() {
