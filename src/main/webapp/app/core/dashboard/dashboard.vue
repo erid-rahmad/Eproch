@@ -1,6 +1,30 @@
 <template>
     <div>
-        <draggable v-model="dashboardItems" 
+        <div class="md-layout md-gutter" style="padding: 0 10px;"
+            v-for="row in totalRows"
+            :key="row"
+        >
+            <div class="md-layout-item dashboard-item"
+                v-for="item in filterColumn(dashboardItems, row)"
+                :key="item.id"
+            >
+                <accordion :id="'Accordion-' + item.paDashboardItem.adWatchListId" 
+                            :title="item.paDashboardItemName" 
+                            v-bind:expanded="true" 
+                            animation="bottomToTop">
+                    <div style="padding: 5px 10px 10px;">
+                        <watch-list
+                            v-if="item.paDashboardItem.type === 'WATCHLIST'"
+                            ref="widget"
+                            :id="item.paDashboardItem.adWatchListId + ''"
+                            :name="item.paDashboardItem.adWatchListName"
+                        />
+                    </div>
+                </accordion>
+            </div>
+        </div>
+
+        <!--<draggable v-model="dashboardItems" 
             style="cursor: move;"
             group="dashboard" 
             ghost-class="ghost"
@@ -24,7 +48,6 @@
             </transition-group>
         </draggable>
 
-        <!--
         <div class="md-layout md-gutter">
             <div class="md-layout-item">
                 <accordion id="Accordion-ChartStyle1" title="CHART 1" v-bind:expanded="false" animation="leftToRight">
@@ -66,9 +89,9 @@
                     </div>
                 </accordion>
             </div>
-        </div>
+        </div>-->
         
-        <kpi-admin></kpi-admin> -->
+        <!-- <kpi-admin></kpi-admin> -->
     </div>
 </template>
 
@@ -94,8 +117,12 @@
 }
 
 .md-layout {
-    margin-top: 20px;
+    //margin-top: 20px;
     margin-bottom: 20px;
+}
+
+.dashboard-item {
+    padding: 0 10px !important;
 }
 
 .icon-media {

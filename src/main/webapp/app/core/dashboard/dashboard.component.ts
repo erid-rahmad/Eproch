@@ -44,6 +44,7 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
   private dataEvaluasi:any=[];
 
   dashboardItems: IPaDashboardPreference[] = [];
+  totalRows: Number[] = [];
   
   get dashboards() {
     const list = [];
@@ -63,7 +64,6 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
     this.retrievePO();
     this.dashboardService = new DashboardService(this);
     this.debouncedRefresh = debounce(this.refresh, 5000);
-
 
     if (this.dashboards.length) {
       this.switchDashboard(this.dashboards[0].key);
@@ -133,6 +133,11 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
     this.dashboardService.unsubscribe();
   }
 
+  filterColumn(arr: IPaDashboardPreference[], row: number)
+  {
+    return arr.filter(x => { return x.rowNo == row});
+  }
+
   switchDashboard(key: string) {
     if (accountStore.grantedDashboards.has(key)) {
       const items = [...accountStore.grantedDashboards.get(key)];
@@ -152,6 +157,7 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
         })
         .then(res => {
           this.dashboardItems = res.data;
+          this.totalRows = this.dashboardItems.map(item => item.rowNo).filter((value, index, self) => self.indexOf(value) === index);
         })
         .catch(err => {
           console.log('Dashboard error', err);
@@ -228,8 +234,6 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
       .finally();
   }
 
-
-
   public refresh() {
     const widgets: any[] = <any[]>this.$refs.widget;
     widgets?.forEach((widget, index) => {
@@ -240,6 +244,18 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
 
   checkMove(e) {
     window.console.log(e.draggedContext);
+  }
+
+  groupBy(array, key){
+    const result = {};
+    array.forEach(item => {
+      if (!result[item[key]]){
+        result[item[key]] = [];
+      }
+      result[item[key]].push(item);
+    })
+
+    return result;
   }
 }
 

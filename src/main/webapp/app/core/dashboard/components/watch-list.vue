@@ -1,7 +1,7 @@
 
 <template>
-    <accordion :id="'Accordion-' + id" :title="name" v-bind:expanded="true" animation="bottomToTop" style="margin-bottom: 20px;">
-        <div style="padding: 5px 15px 10px;">
+    <!--<accordion :id="'Accordion-' + id" :title="name" v-bind:expanded="true" animation="bottomToTop" style="margin-bottom: 20px;">
+        <div style="padding: 5px 15px 10px;"> -->
             <!-- LIST 
             <div class="md-layout md-gutter" style="margin: 0px 1px;">
                 <div class="md-layout-item"
@@ -208,8 +208,8 @@
                 </template>
             </el-table-column>
         </el-table> -->
-        </div>
-    </accordion>
+       <!-- </div>
+    </accordion> -->
 </template>
 
 <script lang="ts" src="./watch-list.component.ts"></script>
