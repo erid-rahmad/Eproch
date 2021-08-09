@@ -19,6 +19,7 @@ import PieChart from './componentsChart/pieChart.vue';
 import Accordion from './components/accordion.vue';
 import kpiAdmin from './components/kpi-admin.vue';
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
+import { PaDashboardItem } from '@/shared/model/pa-dashboard-item.model';
 
 const baseApiVendor ='api/c-vendors';
 const baseApiTopVendor ='api/pa-dashboards/topVendorPurchase';
@@ -44,7 +45,6 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
   private dataEvaluasi:any=[];
 
   dashboardItems: IPaDashboardPreference[] = [];
-  totalRows: Number[] = [];
   
   get dashboards() {
     const list = [];
@@ -133,9 +133,12 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
     this.dashboardService.unsubscribe();
   }
 
-  filterColumn(arr: IPaDashboardPreference[], row: number)
-  {
-    return arr.filter(x => { return x.rowNo == row});
+  getLayoutWidth(item: PaDashboardItem){
+    let defaultClass = 'md-layout-item dashboard-item ';
+    let totalItemRow = this.dashboardItems.filter(x => x.rowNo == item.rowNo);
+    
+    defaultClass += 'md-size-' + Math.round(100 / totalItemRow.length);
+    return defaultClass;
   }
 
   switchDashboard(key: string) {
@@ -156,8 +159,7 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
           }
         })
         .then(res => {
-          this.dashboardItems = res.data;
-          this.totalRows = this.dashboardItems.map(item => item.rowNo).filter((value, index, self) => self.indexOf(value) === index);
+          this.dashboardItems = res.data.sort((a,b) => { return a.rowNo - b.rowNo || a.columnNo - b.columnNo });
         })
         .catch(err => {
           console.log('Dashboard error', err);
@@ -244,18 +246,6 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
 
   checkMove(e) {
     window.console.log(e.draggedContext);
-  }
-
-  groupBy(array, key){
-    const result = {};
-    array.forEach(item => {
-      if (!result[item[key]]){
-        result[item[key]] = [];
-      }
-      result[item[key]].push(item);
-    })
-
-    return result;
   }
 }
 

@@ -1,17 +1,23 @@
 <template>
     <div>
-        <div class="md-layout md-gutter" style="padding: 0 10px;"
-            v-for="row in totalRows"
-            :key="row"
+        <draggable v-model="dashboardItems" 
+            class="md-layout md-gutter" 
+            style="padding: 0 10px;"
+            ghost-class="ghost"
+            :move="checkMove"
+            v-bind="dragOptions"
+            @start="drag=true"
+            @end="drag=false"
         >
-            <div class="md-layout-item dashboard-item"
-                v-for="item in filterColumn(dashboardItems, row)"
+            <div :class="getLayoutWidth(item)"
+                style="cursor: move !important;"
+                v-for="item in dashboardItems"
                 :key="item.id"
             >
                 <accordion :id="'Accordion-' + item.paDashboardItem.adWatchListId" 
-                            :title="item.paDashboardItemName" 
-                            v-bind:expanded="true" 
-                            animation="bottomToTop">
+                    :title="item.paDashboardItemName" 
+                    v-bind:expanded="true" 
+                    animation="bottomToTop">
                     <div style="padding: 5px 10px 10px;">
                         <watch-list
                             v-if="item.paDashboardItem.type === 'WATCHLIST'"
@@ -22,33 +28,9 @@
                     </div>
                 </accordion>
             </div>
-        </div>
-
-        <!--<draggable v-model="dashboardItems" 
-            style="cursor: move;"
-            group="dashboard" 
-            ghost-class="ghost"
-            :move="checkMove"
-            v-bind="dragOptions"
-            @start="drag=true"
-            @end="drag=false"
-        >
-            <transition-group type="transition">
-                <div
-                v-for="item in dashboardItems"
-                :key="item.id"
-                >
-                    <watch-list
-                        v-if="item.paDashboardItem.type === 'WATCHLIST'"
-                        ref="widget"
-                        :id="item.paDashboardItem.adWatchListId + ''"
-                        :name="item.paDashboardItem.adWatchListName"
-                    />
-                </div>
-            </transition-group>
         </draggable>
 
-        <div class="md-layout md-gutter">
+       <!-- <div class="md-layout md-gutter">
             <div class="md-layout-item">
                 <accordion id="Accordion-ChartStyle1" title="CHART 1" v-bind:expanded="false" animation="leftToRight">
                     <div style="padding: 0px 20px">
@@ -123,6 +105,7 @@
 
 .dashboard-item {
     padding: 0 10px !important;
+    margin-bottom: 20px;
 }
 
 .icon-media {
