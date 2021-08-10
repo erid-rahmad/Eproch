@@ -15,6 +15,6 @@ import org.springframework.stereotype.Repository;
 public interface MPrequalificationScheduleRepository extends JpaRepository<MPrequalificationSchedule, Long>, JpaSpecificationExecutor<MPrequalificationSchedule> {
 
     @Modifying
-    @Query("DELETE FROM MPrequalificationSchedule s WHERE s.eventLine.id NOT IN (:lineIds) AND s.prequalification.id = :id")
+    @Query("DELETE FROM MPrequalificationSchedule s WHERE s.eventLine.id NOT IN (?1) AND s.prequalification.id = ?2")
     void deleteByEventTypeLineIdNotIn(List<Long> lineIds, Long id);
 }

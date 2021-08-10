@@ -22,7 +22,7 @@ public interface MBiddingScheduleRepository extends JpaRepository<MBiddingSchedu
 
   @Modifying
   @Query("DELETE FROM MBiddingSchedule s WHERE s.eventTypeLine.id NOT IN (:lineIds) AND s.bidding.id = :biddingId")
-  int deleteByEventTypeLineIdNotIn(@Param("lineIds") Collection<Long> eventTypeLineIds, @Param("biddingId") Long biddingId);
+  void deleteByEventTypeLineIdNotIn(@Param("lineIds") Collection<Long> eventTypeLineIds, @Param("biddingId") Long biddingId);
 
   @Query(value = "SELECT a FROM MBiddingSchedule a WHERE a.bidding.id=?1" )
   List<MBiddingSchedule> findByBiddingId (long a);

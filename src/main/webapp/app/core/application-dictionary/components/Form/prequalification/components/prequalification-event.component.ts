@@ -103,7 +103,8 @@ export default class PreqEvent extends Mixins(AccessLevelMixin, PreqEventProp) {
     return new Promise((resolve,reject)=>{
       this.commonService("/api/m-prequalification-events").retrieve({
         criteriaQuery: [
-          'active.equals=true'
+          'active.equals=true',
+          `prequalificationId.equals=${preqId}`
         ],
         paginationQuery: {
           page: 0,
