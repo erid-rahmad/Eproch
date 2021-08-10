@@ -413,7 +413,7 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
       }
       else {
         proposal.documentStatus=answer.documentStatus||'DRF';
-        proposal.documentAction=answer.documentAction||'SMT';
+        proposal.documentAction=answer.documentAction||'DRF';
       }
 
       proposal.prequalificationSubmissionId = this.data.id;
@@ -507,5 +507,9 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
     }
     
     this.retrieveProposalData(this.data.id);
+  }
+
+  back(){
+    this.$emit("close");
   }
 }
