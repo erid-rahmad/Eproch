@@ -2510,6 +2510,7 @@ relationship ManyToOne {
 	CPrequalMethodSubCriteria{prequalMethodCriteria required} to CPrequalMethodCriteria
 
 	CPrequalificationStep{adOrganization required} to ADOrganization
+	CPrequalificationStep{adForm} to AdForm
 
 	CPrequalificationEvent{adOrganization required} to ADOrganization
 

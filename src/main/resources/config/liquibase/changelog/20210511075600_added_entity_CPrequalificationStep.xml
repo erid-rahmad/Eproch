@@ -59,6 +59,14 @@
             </column>
         </addColumn>
     </changeSet>
+
+    <changeSet id="20210810071400-addform" author="ricky-k">
+        <addColumn tableName="c_prequalification_step">
+            <column name="ad_form_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
     <!--
@@ -75,6 +83,7 @@
                   separator=";"
                   tableName="c_prequalification_step">
             <column name="id" type="numeric"/>
+            <column name="name" type="string"/>
             <column name="description" type="string"/>
             <column name="type" type="string"/>
             <column name="uid" type="${uuidType}"/>

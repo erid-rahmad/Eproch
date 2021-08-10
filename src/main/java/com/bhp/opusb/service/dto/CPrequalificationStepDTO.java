@@ -26,9 +26,29 @@ public class CPrequalificationStepDTO extends AbstractAuditingDTO {
 
 
     private Long adOrganizationId;
+    private String adOrganizationName;
+
+    private Long adFormId;
+    private String adFormName;
 
     public Long getId() {
         return id;
+    }
+
+    public String getAdFormName() {
+        return adFormName;
+    }
+
+    public void setAdFormName(String adFormName) {
+        this.adFormName = adFormName;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
     }
 
     public void setId(Long id) {
@@ -83,6 +103,14 @@ public class CPrequalificationStepDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public Long getAdFormId() {
+        return adFormId;
+    }
+
+    public void setAdFormId(Long adFormId) {
+        this.adFormId = adFormId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -114,6 +142,7 @@ public class CPrequalificationStepDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", adFormId=" + getAdFormId() +
             "}";
     }
 }
