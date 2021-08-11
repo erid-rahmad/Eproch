@@ -92,9 +92,9 @@ export default class RegistDetailBuyer extends mixins(Vue2Filters.mixin, AccessL
                 }
               })
             });
-
-            this.registeredVendors = regis;
           }
+        }).finally(()=>{
+          this.registeredVendors = regis;
         });
       });
   }

@@ -290,7 +290,5 @@ public class MPrequalificationEval extends AbstractAuditingEntity {
     public void prePersist(){
         this.uid = UUID.randomUUID();
         this.active = true;
-        this.documentStatus = "DRF";
-        this.documentAction = "SMT";
     }
 }
