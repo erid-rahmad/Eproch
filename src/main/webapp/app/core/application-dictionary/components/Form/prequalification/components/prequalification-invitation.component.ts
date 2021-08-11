@@ -331,7 +331,7 @@ export default class PreqInvitation extends Mixins(AccessLevelMixin, PreqInvitat
         }
       })
       .then(res => {
-        this.preq.vendorSuggestions = (res.data as any[]).map(location => {
+        let sugs = (res.data as any[]).map(location => {
           let subCategory = {
             subCategoryId: null,
             subCategoryName: null
@@ -341,15 +341,27 @@ export default class PreqInvitation extends Mixins(AccessLevelMixin, PreqInvitat
             subCategory = subCategoryMap.get(location.vendorId);
           }
 
-          return {
-            vendorId: location.vendorId,
-            vendorName: location.vendorRegisteredName,
-            businessSubCategoryId: subCategory.subCategoryId,
-            businessSubCategoryName: subCategory.subCategoryName,
-            locationId: location.locationId,
-            address: location.locationName + ', ' + location.cityName
-          };
+          try{
+            return {
+              vendorId: location.vendorId,
+              vendorName: location.vendorRegisteredName,
+              businessSubCategoryId: subCategory.subCategoryId,
+              businessSubCategoryName: subCategory.subCategoryName,
+              locationId: location.locationId,
+              address: location.locationName + ', ' + location.cityName
+            };
+          } catch(e){
+            console.log(e);
+            return {};
+          }
         });
+        if(sugs.length>0){
+          sugs.forEach((elem)=>{
+            if(this.preq.vendorSuggestions.length==0 || this.preq.vendorSuggestions.findIndex(e=>{elem.vendorId==e.vendorId})==-1){
+              this.preq.vendorSuggestions.push(elem);
+            }
+          })
+        }
       })
       .catch(err => {
         console.log('Failed to get vendor suggestions. %O', err);
