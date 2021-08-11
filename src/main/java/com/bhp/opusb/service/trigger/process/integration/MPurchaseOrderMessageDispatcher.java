@@ -76,10 +76,10 @@ public class MPurchaseOrderMessageDispatcher implements ProcessTrigger {
           poidto.setAdOrganizationCode(dto.getAdOrganizationCode());
           poidto.setCostCenterCode(dto.getCostCenterCode());
           poidto.setCurrencyCode(dto.getCurrencyName());
-          poidto.setDateDelivered(dto.getDateDelivered());
-          poidto.setDatePromised(dto.getDatePromised());
-          poidto.setDateShipped(dto.getDateShipped());
-          poidto.setDateTrx(LocalDate.now());
+          if(dto.getDateDelivered()!=null) poidto.setDateDelivered(dtf.format(dto.getDateDelivered()));
+          if(dto.getDatePromised()!=null) poidto.setDatePromised(dtf.format(dto.getDatePromised()));
+          if(dto.getDateShipped()!=null) poidto.setDateShipped(dtf.format(dto.getDateShipped()));
+          poidto.setDateTrx(dtf.format(dto.getDateTrx()!=null?dto.getDateTrx():LocalDate.now()));
           poidto.setDescription(dto.getDescription());
           poidto.setDocumentNo(dto.getDocumentNo());
           poidto.setOrderAmount(poldto.getOrderAmount());
@@ -140,12 +140,12 @@ public class MPurchaseOrderMessageDispatcher implements ProcessTrigger {
     @JsonProperty("CURRENCY_CODE")
     private String currencyCode;
     @JsonProperty("CREATION_DATE")
-    private LocalDate dateTrx;
+    private String dateTrx;
     @JsonProperty("PROMISED_DATE")
-    private LocalDate datePromised;
+    private String datePromised;
 
-    private LocalDate dateDelivered;
-    private LocalDate dateShipped;
+    private String dateDelivered;
+    private String dateShipped;
     private String description;
 
     @JsonProperty("SEGMENT1")
@@ -273,28 +273,28 @@ public class MPurchaseOrderMessageDispatcher implements ProcessTrigger {
     public void setDescription(String description) {
       this.description = description;
     }
-    public LocalDate getDateShipped() {
+    public String getDateShipped() {
       return dateShipped;
     }
-    public void setDateShipped(LocalDate dateShipped) {
+    public void setDateShipped(String dateShipped) {
       this.dateShipped = dateShipped;
     }
-    public LocalDate getDateDelivered() {
+    public String getDateDelivered() {
       return dateDelivered;
     }
-    public void setDateDelivered(LocalDate dateDelivered) {
+    public void setDateDelivered(String dateDelivered) {
       this.dateDelivered = dateDelivered;
     }
-    public LocalDate getDatePromised() {
+    public String getDatePromised() {
       return datePromised;
     }
-    public void setDatePromised(LocalDate datePromised) {
+    public void setDatePromised(String datePromised) {
       this.datePromised = datePromised;
     }
-    public LocalDate getDateTrx() {
+    public String getDateTrx() {
       return dateTrx;
     }
-    public void setDateTrx(LocalDate dateTrx) {
+    public void setDateTrx(String dateTrx) {
       this.dateTrx = dateTrx;
     }
     public String getCurrencyCode() {

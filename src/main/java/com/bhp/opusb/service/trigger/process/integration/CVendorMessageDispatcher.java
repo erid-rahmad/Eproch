@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,8 +36,6 @@ import org.springframework.web.client.RestTemplate;
 
 @Service("cVendorMessageDispatcher")
 public class CVendorMessageDispatcher implements ProcessTrigger {
-  private final DateTimeFormatter dtf;
-  private final String ORACLE_DATE_FORMAT = "dd-MMM-yy";
   private final Logger logger = LoggerFactory.getLogger(CVendorMessageDispatcher.class);
 
   public static final String BEAN_NAME = "cVendorMessageDispatcher";
@@ -59,7 +58,6 @@ public class CVendorMessageDispatcher implements ProcessTrigger {
     //this.cVendorLocationRepository = cVendorLocationRepository;
     this.aiExchangeOutRepository = aiExchangeOutRepository;
     //this.cVendorLocationMapper = cVendorLocationMapper;
-    this.dtf = DateTimeFormatter.ofPattern(ORACLE_DATE_FORMAT);
   }
 
   @Override
@@ -73,9 +71,16 @@ public class CVendorMessageDispatcher implements ProcessTrigger {
       String message = null;
 
       try {
+        /*
         message = objectMapper.writeValueAsString(payload);
         response = dispatchMessage(message);
+        */
 
+        Map<String, String> exec = new HashMap<>();
+        exec.put("vendorCode",payload.getCode());
+        exec.put("status","NEW");
+
+        /*
         List<Object[]> supplierContractDto = cVendorRepository.getSupplierContact(payload.getId());
         System.out.println(supplierContractDto.size());
         for(Object[] x : supplierContractDto){
@@ -119,6 +124,9 @@ public class CVendorMessageDispatcher implements ProcessTrigger {
 
           dispatchMessageDetail(objectMapper.writeValueAsString(vsd));
         }
+        */
+        System.out.println(objectMapper.writeValueAsString(exec));
+        dispatchMessageExec(objectMapper.writeValueAsString(exec));
       } catch (JsonProcessingException | RestClientException e) {
         logger.warn("Failed dispatching supplier data. {}. {}", e.getLocalizedMessage(), payload);
 
@@ -171,6 +179,20 @@ public class CVendorMessageDispatcher implements ProcessTrigger {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.set("ai-exchange-out", VendorSupplierDetail.class.getSimpleName());
+
+    logger.debug("Dispatching message to external system. body: {}", message);
+    HttpEntity<String> request = new HttpEntity<>(message, headers);
+    final ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+
+    logger.debug("Message dispatched. statusCode: {} - {}", response.getStatusCodeValue(), response.getStatusCode());
+    return response.getBody();
+  }
+
+  private String dispatchMessageExec(String message) throws RestClientException {
+    final String url = properties.getIntegration().getEndpoint().getVendorIntegrationExecUrl();
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    headers.set("ai-exchange-out", CVendor.class.getSimpleName());
 
     logger.debug("Dispatching message to external system. body: {}", message);
     HttpEntity<String> request = new HttpEntity<>(message, headers);
