@@ -1017,7 +1017,18 @@ export default class GridView extends Mixins(CalloutMixin, ContextVariableAccess
       return '96';
     }
 
-    return '256';
+    const rullerCanvas= document.createElement('canvas');
+    const context= rullerCanvas.getContext("2d");
+    context.font= "16px times new roman";
+
+    let labelText= field.name;
+    let extendWidth= 80;
+    if(labelText.toLowerCase().split(" ").includes("name")) extendWidth= 150;
+
+    let columnWith: number= Math.ceil(context.measureText(labelText).width) + extendWidth;
+
+    rullerCanvas.remove();
+    return `${columnWith}`;
   }
 
   public getMinLength(field: IADField) {

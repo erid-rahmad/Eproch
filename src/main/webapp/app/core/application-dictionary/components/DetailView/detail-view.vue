@@ -141,7 +141,7 @@
 <script lang="ts" src="./detail-view.component.ts"></script>
 <style lang="scss">
 .detail-view {
-  padding: 8px 24px;
+  padding: 24px 0px 0px 8px;
 }
 .el-form-item--mini.el-form-item{
   margin-bottom: 0px;
