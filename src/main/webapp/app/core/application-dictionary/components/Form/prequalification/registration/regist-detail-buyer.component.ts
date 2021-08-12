@@ -143,19 +143,11 @@ export default class RegistDetailBuyer extends mixins(Vue2Filters.mixin, AccessL
   }
 
   downloadFile(row){
-    axios.get(row.file.downloadUrl,{
-      responseType: 'arraybuffer'
-    }).then((res)=>{
-      let filename = (<string>res.headers['content-disposition']).substring(
-        (<string>res.headers['content-disposition']).indexOf("\"")+1,(<string>res.headers['content-disposition']).lastIndexOf("\""))
-
-      const url = window.URL.createObjectURL(new Blob([res.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', filename); //or any other extension
-      document.body.appendChild(link);
-      link.click();
-    })
+    let downloadUrl:string = row.file.downloadUrl;
+    if(!downloadUrl.startsWith('https')){
+      downloadUrl = downloadUrl.replace('http','https');
+    }
+    window.open(downloadUrl, '_blank');
   }
 
   process(){

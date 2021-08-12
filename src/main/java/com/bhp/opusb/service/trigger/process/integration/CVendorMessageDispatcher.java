@@ -71,16 +71,13 @@ public class CVendorMessageDispatcher implements ProcessTrigger {
       String message = null;
 
       try {
-        /*
         message = objectMapper.writeValueAsString(payload);
         response = dispatchMessage(message);
-        */
 
         Map<String, String> exec = new HashMap<>();
         exec.put("vendorCode",payload.getCode());
         exec.put("status","NEW");
 
-        /*
         List<Object[]> supplierContractDto = cVendorRepository.getSupplierContact(payload.getId());
         System.out.println(supplierContractDto.size());
         for(Object[] x : supplierContractDto){
@@ -124,7 +121,7 @@ public class CVendorMessageDispatcher implements ProcessTrigger {
 
           dispatchMessageDetail(objectMapper.writeValueAsString(vsd));
         }
-        */
+
         System.out.println(objectMapper.writeValueAsString(exec));
         dispatchMessageExec(objectMapper.writeValueAsString(exec));
       } catch (JsonProcessingException | RestClientException e) {
