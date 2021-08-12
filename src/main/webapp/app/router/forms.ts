@@ -75,6 +75,7 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['preBidMeetingGrid', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding/event/pre-bid-meeting/pre-bid-meeting-grid.vue')],
 
   ['contract', () => import(/* webpackChunkName: "contract" */'@/core/application-dictionary/components/Form/vendor-contract/vendor-contract.vue')],
+  ['poGenerateFromContract', () => import(/* webpackChunkName: "contract" */'@/core/application-dictionary/components/Form/vendor-contract/genereate-contract/vendor-contract.vue')],
   ['contractTeam', () => import(/* webpackChunkName: "contract" */'@/core/application-dictionary/components/Form/vendor-contract/team-grid/contract-team-grid.vue')],
   ['contractMsgBoard', () => import(/* webpackChunkName: "contract" */'@/core/application-dictionary/components/Form/vendor-contract/msg-board-grid/msg-board-grid.vue')],
 
@@ -86,7 +87,7 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['prequalificationSubmission', () => import(/* webpackChunkName: "prequalification" */'@/core/application-dictionary/components/Form/prequalification/submission/registered-prequalification-list.vue')],
   ['prequalificationEvaluation', () => import(/* webpackChunkName: "prequalification" */'@/core/application-dictionary/components/Form/prequalification/evaluation/preq-evaluation-grid.vue')],
   ['preqEvalVendor', () => import(/* webpackChunkName: "prequalification" */'@/core/application-dictionary/components/Form/prequalification/evaluation/vendor/eval-vendor.vue')],
-  
+
 ]);
 
 export const blankForm = () => import(/* webpackChunckName: "blankForm" */'@/core/application-dictionary/components/Form/index.vue');
