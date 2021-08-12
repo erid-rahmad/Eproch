@@ -537,7 +537,7 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
         if(sugs.length>0){
           sugs.forEach((elem)=>{
             if(this.bidding.vendorSuggestions.length==0 || 
-              this.bidding.vendorSuggestions.findIndex(e=>{elem.vendorId==e.vendorId})==-1){
+              this.bidding.vendorSuggestions.findIndex(e=>elem.vendorId==e.vendorId)==-1){
               this.bidding.vendorSuggestions.push(elem);
             }
           })
