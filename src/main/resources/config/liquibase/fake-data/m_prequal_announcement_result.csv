@@ -1,0 +1,11 @@
+id;description_pass;description_fail;publish_date;document_no;uid;active;ad_organization_id;prequalification_id;prequalification_schedule_id
+1;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2021-08-11T15:10:40;bandwidth Brunei Darussalam;82e3828e-df6e-4683-bb32-0ced55672c1b;true;1;1;1
+2;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2021-08-11T21:39:36;Practical Metal;3829a89b-7dbf-45cd-9519-d9e06ed8e84c;true;2;2;2
+3;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2021-08-11T22:57:30;Sleek Rustic;0b262143-615b-4dfc-8624-9d2eb04ed333;true;3;3;3
+4;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2021-08-11T21:22:02;Illinois;a1026fe4-332e-4104-b769-63f968e519b2;false;4;4;4
+5;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2021-08-12T05:55:50;National;a18ec991-9edb-4ce8-956a-45e04f9a925b;true;5;5;5
+6;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2021-08-12T00:19:49;revolutionize back-end;dc87b417-2aad-4f9c-847a-cd93a356c0d2;true;6;6;6
+7;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2021-08-12T02:36:14;Home extend application;480b9b6b-10e8-4223-812e-f86ed97e9ab7;false;7;7;7
+8;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2021-08-11T22:45:29;Central Incredible Metal Sausages deposit;b3618984-0854-46c7-bb57-6e42aa64a4e1;true;8;8;8
+9;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2021-08-11T16:48:35;real-time pixel Secured;616b9f8a-6b29-4b85-ba1e-5695923c2392;false;9;9;9
+10;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;2021-08-11T23:42:20;South Carolina;20cdb67b-9950-44e8-9875-bcc7d4f9d39f;false;10;10;10

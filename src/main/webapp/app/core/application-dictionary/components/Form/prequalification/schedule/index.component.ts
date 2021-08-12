@@ -84,6 +84,26 @@ export default class PrequalificationProcess extends mixins(AccessLevelMixin) {
 
   created() {
     this.transition();
+    
+    const query = this.$route.query;
+    if(query.prequalificationId){
+      this.commonService(baseApiUrl)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `id.equals=${query.prequalificationId}`
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 1,
+          sort: ['id']
+        }
+      }).then((res)=>{
+        if(res.data.length){
+          this.viewPreq(res.data[0]);
+        }
+      })
+    }
   }
 
   public changeOrder(propOrder): void {

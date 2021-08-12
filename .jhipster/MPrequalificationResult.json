@@ -1,0 +1,67 @@
+{
+    "name": "MPrequalificationResult",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mPrequalificationResult",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mPrequalAnnouncementResult",
+            "otherEntityRelationshipName": "mPrequalificationResult",
+            "relationshipValidateRules": "required",
+            "relationshipName": "announcementResult",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mPrequalificationInformation",
+            "otherEntityRelationshipName": "mPrequalificationResult",
+            "relationshipValidateRules": "required",
+            "relationshipName": "prequalification",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "mPrequalificationResult",
+            "relationshipValidateRules": "required",
+            "relationshipName": "vendor",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mPrequalificationSubmission",
+            "otherEntityRelationshipName": "mPrequalificationResult",
+            "relationshipValidateRules": "required",
+            "relationshipName": "submission",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210812162900",
+    "entityTableName": "m_prequalification_result",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}
