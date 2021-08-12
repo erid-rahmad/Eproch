@@ -1,6 +1,7 @@
 import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
-import {Component, Inject, Mixins} from 'vue-property-decorator';
+import { Component, Inject, Vue, Mixins, Watch } from 'vue-property-decorator';
 
+import { IAdWatchListItem } from '@/shared/model/ad-watch-list-item.model';
 import circularColorBar from '../componentsChart/circularColorBar.vue';
 import liveData from '../componentsChart/liveData.vue';
 import lineexample from '../componentsChart/simpleLine.vue';
@@ -8,58 +9,111 @@ import lineupdate from '../componentsChart/methodUpdate.vue';
 import echart from '../componentsChart/echart-bar.vue';
 import echartpie from '../componentsChart/echart-pie.vue';
 import rateOfContract from '../componentsChart/rateOfContract.vue';
+import LineChart from '../componentsChart/lineChart.vue';
+import BarChart from '../componentsChart/barChart.vue';
+import PieChart from '../componentsChart/pieChart.vue';
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 
 const baseApiTopVendor ='api/pa-dashboards/topVendorPurchase';
 const baseApiDocument ='api/pa-dashboards/mydocument';
 
-@Component({
-  components: {
-    WatchList,circularColorBar,liveData,lineexample,lineupdate,echart,echartpie,rateOfContract
+const KPIDashboardProps = Vue.extend({
+  props: {
+    id: String,
+    name: String,
+    title: String
   }
 })
-export default class WatchList extends  Mixins(AccessLevelMixin) {
+
+@Component({
+  components: {
+    circularColorBar,liveData,lineexample,lineupdate,echart,echartpie,rateOfContract,
+    LineChart, BarChart, PieChart
+  }
+})
+export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboardProps) {
 
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
 
   private dataPO:any=[];
   private dataMyDocument:any=[];
+  items: IAdWatchListItem[] = [];
 
-  score=[
-    {
-      vendorName:'Sisteck',
-      Ordered:'21.000',
-      Returned:0,
-      Availability:'91%',
-      Defect:0,
-      score:1.30
-    },
-    {
-      vendorName:'Supplier1',
-      Ordered:'21.000',
-      Returned:0,
-      Availability:'88%',
-      Defect:0,
-      score:1.30
-    },
-    {
-      vendorName:'Supplier2',
-      Ordered:'21.000',
-      Returned:0,
-      Availability:'77%',
-      Defect:0,
-      score:1.30
-    }
+  listColor=
+  [
+    //yellow
+    {staticColor: '#ecec04', gradientColor: 'linear-gradient(315deg, #fbb034 0%, #ffdd00 74%);'}, 
+    //red
+    {staticColor: '#f5365c', gradientColor: 'linear-gradient(45deg, rgb(255, 83, 112), rgb(255, 134, 154));'}, 
+    //green
+    {staticColor: '#2dce89', gradientColor: 'linear-gradient(87deg, rgb(45, 206, 137) 0px, rgb(45, 206, 204) 100%);'}, 
+    // blue
+    {staticColor: '#11cdef', gradientColor: 'linear-gradient(87deg, rgb(17, 205, 239) 0px, rgb(17, 113, 239) 100%);'}
   ]
-
-  created() {
-   this.retrievePO();
-   this.retrieveMyDocument();
+  
+  //@Watch('items', {deep: true})
+  async onItemsChanged(items: IAdWatchListItem[]) {
+    await items.forEach((item, index) => {
+      this.retrieveChartData(item, index);
+    });
+    /*await items.forEach(item=>{
+      this.$set(this.data,item.code, item.count);
+      this.$set(this.data,item.code+"data", item);
+    })*/
   }
 
 
-  documentStatuses = {
+  created() {
+    this.retrieveChartItems(this.name);
+
+   //this.retrievePO();
+   //this.retrieveMyDocument();
+  }
+
+  public refresh() {
+    this.onItemsChanged(this.items);
+
+    setInterval(() => {
+      this.onItemsChanged(this.items);
+    }, 300000);
+  }
+
+  retrieveChartItems(name: string) {
+    this.commonService('/api/ad-watch-lists')
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          `name.equals=${name}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 1,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.items = res.data[0].adWatchListItems;
+      })
+      .catch(err => {
+        console.log('Failed to get the watch list.', err);
+        this.$message({
+          message: 'Failed to get the watch list',
+          type: 'warning'
+        });
+      });
+  }
+
+  
+  private retrieveChartData(item: IAdWatchListItem, index?: number) {
+    this.commonService(item.restApiEndpoint)
+      .retrieve()
+      .then(res => {
+        this.$set(this.items[index], 'chartData', res.data);
+      });
+  }
+
+  /*documentStatuses = {
     APV: 'Approved',
     DRF: 'Draft',
     RJC: 'Rejected',
@@ -69,7 +123,6 @@ export default class WatchList extends  Mixins(AccessLevelMixin) {
   printStatus(status: string) {
     return this.documentStatuses[status];
   }
-
 
   retrievePO(){
     this.commonService(baseApiTopVendor)
@@ -134,6 +187,6 @@ export default class WatchList extends  Mixins(AccessLevelMixin) {
         this.dataMyDocument=myDocument;
       })
       .finally();
-  }
+  }*/
 
 }

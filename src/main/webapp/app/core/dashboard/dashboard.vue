@@ -25,12 +25,18 @@
                             :id="item.paDashboardItem.adWatchListId + ''"
                             :name="item.paDashboardItem.adWatchListName"
                         />
+                        <kpi-admin
+                             v-if="item.paDashboardItem.type === 'CHART'"
+                            ref="widget"
+                            :id="item.paDashboardItem.adWatchListId + ''"
+                            :name="item.paDashboardItem.adWatchListName"
+                        />
                     </div>
                 </accordion>
             </div>
         </draggable>
 
-       <!-- <div class="md-layout md-gutter">
+       <!--<div class="md-layout md-gutter">
             <div class="md-layout-item">
                 <accordion id="Accordion-ChartStyle1" title="CHART 1" v-bind:expanded="false" animation="leftToRight">
                     <div style="padding: 0px 20px">
@@ -71,9 +77,9 @@
                     </div>
                 </accordion>
             </div>
-        </div>-->
+        </div>
         
-        <!-- <kpi-admin></kpi-admin> -->
+        <kpi-admin></kpi-admin> -->
     </div>
 </template>
 

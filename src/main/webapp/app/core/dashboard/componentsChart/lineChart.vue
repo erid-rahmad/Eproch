@@ -9,7 +9,27 @@ export default {
   name: 'LineChart',
   props: {
     id: String,
-    title: String
+    title: String,
+    position: String,
+    value: {type: Array, default: (() => []) },
+    colors: {type: Array, default: (() => []) }
+  },
+  methods: {
+      groupBy(array, key){
+        const result = {};
+        array.forEach(item => {
+          if (!result[item[key]]){
+            result[item[key]] = [];
+          }
+          result[item[key]].push(item);
+        })
+
+        return result;
+    },
+    popRandom (array) {
+      let i = (Math.random() * array.length) | 0
+      return array.splice(i, 1)[0];
+    }
   },
   data(){
     return {
@@ -58,30 +78,35 @@ export default {
           layout: {
             padding: {
               top: 0,
-              right: 10,
+              right: 0,
               bottom: 10,
-              left: 10
+              left: 0
             }
           },
           title: {
-            display: true,
+            display: ( this.title != null && this.title != ""),
             text: this.title,
             fontSize: 20,
-            padding: 15
+            padding: 5
           },
           legend: {
-            position: 'right',
+            position: this.position,
             labels:{
               boxWidth: 15,
+              fontSize: 13,
               fontStyle: 'bold'
             }
+          },
+          tooltips: {
+            mode: 'label',
+            bodySpacing: 10,
+            titleMarginBottom: 10,
           },
           scales: {
             yAxes: [
               {
                 ticks: {
                   beginAtZero: true,
-                  padding: 25,
                   fontStyle: 'bold'
                 }
               }
@@ -99,6 +124,27 @@ export default {
     }
   },
   mounted(){
+    let listColor = this.colors;
+    let labels = this.groupBy(this.value, 'xAxisLabel');
+    this.chartData.data.labels = Object.keys(labels);
+
+    let dataset = [];
+    let legends = this.groupBy(this.value, 'legendLabel');
+    Object.keys(legends).forEach((x, index) => {
+      let color = this.popRandom(listColor);
+      let data = {
+        label: x,
+        fill: false,
+        data: Object.values(legends)[index].map(y => parseFloat(y.dataValue)), //.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') ),
+        backgroundColor: color,
+        borderColor: color,
+        borderWidth: 2
+      }
+
+      dataset.push(data);
+    });
+
+    this.chartData.data.datasets = dataset;
     const ctx = document.getElementById(this.id);
     new Chart(ctx, this.chartData);
   }
