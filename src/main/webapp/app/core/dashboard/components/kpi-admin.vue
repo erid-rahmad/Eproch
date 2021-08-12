@@ -1,5 +1,29 @@
 <template>
-  <div >
+    <div class=" md-layout md-gutter" style="margin: 10px 1px;">
+        <div :id="'LayoutItem-' + id + '-' + index" class="md-layout-item"
+            v-for="(item, index) in items"
+                :key="item.id"
+            style="padding: 0 10px !important;"
+        >
+            <line-chart :id="'LineChart-' + item.id" 
+                v-if="item.serviceName == 'line'"
+                :title="item.name" 
+                :value="JSON.parse(JSON.stringify(item.chartData))" 
+                :position="item.icon"
+                :colors="listColor.map((x) => { return x.staticColor; })"
+            />
+            <bar-chart :id="'BarChart-' + item.id" 
+                v-if="item.serviceName == 'bar' || item.serviceName == 'horizontalBar'"
+                :title="item.name" 
+                :chartType="item.serviceName"
+                :value="JSON.parse(JSON.stringify(item.chartData))" 
+                :position="item.icon"
+                :colors="listColor.map((x) => { return x.staticColor; })"
+            />
+        </div>
+    </div>
+
+  <!-- <div>
 
       <div class="md-layout md-gutter">
           <div class="md-layout-item">
@@ -56,8 +80,8 @@
                     position: relative;
                     box-shadow: 0px 12px 20px -10px;"
               >
-                  <!--                    <circular-color-bar style="padding: 1px"></circular-color-bar>-->
-                  <echartpie style="padding: 1px"></echartpie>
+                                 <circular-color-bar style="padding: 1px"></circular-color-bar>-->
+                  <!--<echartpie style="padding: 1px"></echartpie>
               </md-card>
               <md-card md-with-hover style="
                     top: 1%;
@@ -91,7 +115,7 @@
                   </div>
               </md-card>
           </div>
-      </div>
+      </div>-->
 
 <!--      <div class="md-layout md-gutter">-->
 <!--          <div class="md-layout-item">-->
@@ -219,7 +243,7 @@
 <!--          </div>-->
 <!--      </div>-->
 
-      <div class=" md-layout md-gutter" style="padding-top: 25px">
+      <!--<div class=" md-layout md-gutter" style="padding-top: 25px">
           <div class="md-layout-item">
               <md-card md-with-hover style="
                     background: #26c6da;
@@ -282,7 +306,7 @@
                                   width="280px"
                               >
                                   <template slot-scope="{row}">
-                                      {{ row.grandTotal | formatCurre  }}
+                                     {{ row.grandTotal | formatCurre  }} 
                                   </template>
                               </el-table-column>
 
@@ -397,7 +421,7 @@
                   </div>
               </md-card>
           </div>
-      </div>
+      </div>-->
 
 <!--      <div class=" md-layout md-gutter" style="padding-top: 25px">-->
 <!--          <div class="md-layout-item">-->
@@ -500,7 +524,7 @@
 
 <!--      </div>-->
 
-  </div>
+ <!-- </div> -->
 </template>
 
 <script lang="ts" src="./kpi-admin.component.ts"></script>

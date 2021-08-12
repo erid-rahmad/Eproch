@@ -55,18 +55,6 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
     {staticColor: '#11cdef', gradientColor: 'linear-gradient(87deg, rgb(17, 205, 239) 0px, rgb(17, 113, 239) 100%);'}
   ]
 
-  get isCard() {
-    return this.type === DisplayType.Card;
-  }
-
-  get isList() {
-    return this.type === DisplayType.List;
-  }
-
-  get type() {
-    return /*this.items.length > 4 ? DisplayType.List : */DisplayType.Card;
-  }
-
   getWidthClass(id: string){
     let defaultClass = 'md-large-size-20 md-medium-size-25 md-small-size-50';
     let width = document.getElementById(id).offsetWidth;
@@ -164,7 +152,20 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
       });
   }
 
-  /*retrieveVendor(){
+  /*
+  get isCard() {
+    return this.type === DisplayType.Card;
+  }
+
+  get isList() {
+    return this.type === DisplayType.List;
+  }
+
+  get type() {
+    return his.items.length > 4 ? DisplayType.List : DisplayType.Card;
+  }
+
+  retrieveVendor(){
     this.commonService(baseApiVendor)
       .retrieve({
         criteriaQuery: this.updateCriteria([
@@ -245,18 +246,5 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
       .then(count => {
         this.$set(this.items[index], 'count', count);
       });
-      
-
-      /* KONDISI BARU
-      .retrieve({
-        criteriaQuery: [
-          item.filterQuery,
-          accountStore.userDetails.vendor ? `vendorId.equals=${accountStore.userDetails.cVendorId}` : null
-        ],
-      })
-      .then(res => {
-        this.$set(this.items[index], 'count', res.data.length);
-      });
-    */
   }
 }

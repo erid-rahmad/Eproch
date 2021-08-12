@@ -61,7 +61,7 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
   }
 
   created() {
-    this.retrievePO();
+    //this.retrievePO();
     this.dashboardService = new DashboardService(this);
     this.debouncedRefresh = debounce(this.refresh, 5000);
 
@@ -118,17 +118,6 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
     });
   }
 
-  documentStatuses = {
-    APV: 'Approved',
-    DRF: 'Draft',
-    RJC: 'Rejected',
-    RVS: 'Revised',
-    SMT: 'Submitted',
-  }
-  printStatus(status: string) {
-    return this.documentStatuses[status];
-  }
-
   beforeDestroy() {
     this.dashboardService.unsubscribe();
   }
@@ -139,6 +128,18 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
     
     defaultClass += 'md-size-' + Math.round(100 / totalItemRow.length);
     return defaultClass;
+  }
+
+  public refresh() {
+    const widgets: any[] = <any[]>this.$refs.widget;
+    widgets?.forEach((widget, index) => {
+      console.log('Attempt to refresh widget#%d', index);
+      widget.refresh();
+    });
+  }
+
+  checkMove(e) {
+    window.console.log(e.draggedContext);
   }
 
   switchDashboard(key: string) {
@@ -169,6 +170,18 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
           });
         });
     }
+  }
+
+  /*
+  documentStatuses = {
+    APV: 'Approved',
+    DRF: 'Draft',
+    RJC: 'Rejected',
+    RVS: 'Revised',
+    SMT: 'Submitted',
+  }
+  printStatus(status: string) {
+    return this.documentStatuses[status];
   }
 
   retrievePO(){
@@ -235,17 +248,6 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
       })
       .finally();
   }
-
-  public refresh() {
-    const widgets: any[] = <any[]>this.$refs.widget;
-    widgets?.forEach((widget, index) => {
-      console.log('Attempt to refresh widget#%d', index);
-      widget.refresh();
-    });
-  }
-
-  checkMove(e) {
-    window.console.log(e.draggedContext);
-  }
+  */
 }
 
