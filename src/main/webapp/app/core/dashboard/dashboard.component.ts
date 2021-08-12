@@ -19,6 +19,7 @@ import PieChart from './componentsChart/pieChart.vue';
 import Accordion from './components/accordion.vue';
 import kpiAdmin from './components/kpi-admin.vue';
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
+import { PaDashboardItem } from '@/shared/model/pa-dashboard-item.model';
 
 const baseApiVendor ='api/c-vendors';
 const baseApiTopVendor ='api/pa-dashboards/topVendorPurchase';
@@ -63,7 +64,6 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
     this.retrievePO();
     this.dashboardService = new DashboardService(this);
     this.debouncedRefresh = debounce(this.refresh, 5000);
-
 
     if (this.dashboards.length) {
       this.switchDashboard(this.dashboards[0].key);
@@ -133,6 +133,14 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
     this.dashboardService.unsubscribe();
   }
 
+  getLayoutWidth(item: PaDashboardItem){
+    let defaultClass = 'md-layout-item dashboard-item ';
+    let totalItemRow = this.dashboardItems.filter(x => x.rowNo == item.rowNo);
+    
+    defaultClass += 'md-size-' + Math.round(100 / totalItemRow.length);
+    return defaultClass;
+  }
+
   switchDashboard(key: string) {
     if (accountStore.grantedDashboards.has(key)) {
       const items = [...accountStore.grantedDashboards.get(key)];
@@ -151,7 +159,7 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
           }
         })
         .then(res => {
-          this.dashboardItems = res.data;
+          this.dashboardItems = res.data.sort((a,b) => { return a.rowNo - b.rowNo || a.columnNo - b.columnNo });
         })
         .catch(err => {
           console.log('Dashboard error', err);
@@ -227,8 +235,6 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
       })
       .finally();
   }
-
-
 
   public refresh() {
     const widgets: any[] = <any[]>this.$refs.widget;

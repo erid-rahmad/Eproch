@@ -33,14 +33,14 @@
         </el-table-column>
         <el-table-column label="Evaluate" min-width="150">
           <template slot-scope="{ row }">
-            <el-select v-model="row.pass" placeholder="Pass Fail">
+            <el-select v-model="row.pass" :disabled="readOnly" placeholder="Pass Fail">
               <el-option v-for="item in passfail" :key="item.value" :label="item.label" :value="item.value"/>
             </el-select>
           </template>
         </el-table-column>
       </el-table>
     </el-form>
-    <el-button class="btn-attachment" size="mini" type="primary" :disabled="submit" @click="process()"> Submit </el-button>
+    <el-button class="btn-attachment" size="mini" type="primary" :disabled="submit || readOnly" @click="process()"> Submit </el-button>
 
     <el-dialog :visible.sync="showDialog" title="Document Registration" width="40%">
       <el-table :data="uploadModels" size="mini" style="width: 100%" border>

@@ -15,4 +15,11 @@
                                  referencedTableName="ad_organization"/>
 
     </changeSet>
+    <changeSet id="20210810071400-2" author="jhipster">
+        <addForeignKeyConstraint baseColumnNames="ad_form_id"
+                                 baseTableName="c_prequalification_step"
+                                 constraintName="fk_c_prequalification_step_ad_form_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_form"/>
+    </changeSet>
 </databaseChangeLog>

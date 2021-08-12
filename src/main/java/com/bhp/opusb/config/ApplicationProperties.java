@@ -168,9 +168,18 @@ public class ApplicationProperties {
     private String vendorIntegrationUrl;
     private String vendorIntegrationContactUrl;
     private String vendorIntegrationDetailUrl;
+    private String vendorIntegrationExecUrl;
 
     public String getInvoiceVerificationUrl() {
       return invoiceVerificationUrl;
+    }
+
+    public String getVendorIntegrationExecUrl() {
+      return vendorIntegrationExecUrl;
+    }
+
+    public void setVendorIntegrationExecUrl(String vendorIntegrationExecUrl) {
+      this.vendorIntegrationExecUrl = vendorIntegrationExecUrl;
     }
 
     public String getVendorIntegrationDetailUrl() {

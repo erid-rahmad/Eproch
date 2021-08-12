@@ -1,11 +1,11 @@
-id;name;description;rate;valid_from;transaction_type;uid;active;ad_organization_id;tax_category_id
-1;grid-enabled invoice;Senior Nauru Ergonomic;36393;2020-08-16;BOTH;f2254539-f30d-4e21-9132-e1499db7982d;false;1;1
-2;interface Borders card;Chair Brazil;13413;2020-08-17;PURCHASE;dc4b513a-b328-4345-9d52-50f7f4954f36;false;2;2
-3;Zambian Kwacha incentivize relationships;Mongolia Rustic Concrete Bike;21169;2020-08-16;SALES;4443f2ba-dcb7-4547-8ba7-9bdeceb2ad34;false;3;3
-4;initiatives Avon Awesome Fresh Mouse;Frozen;3685;2020-08-17;PURCHASE;6c6673ac-e424-4c75-9043-5771a7663f92;true;4;4
-5;Montserrat generating;Configuration;13345;2020-08-17;SALES;c71ac5c3-3e86-459b-8ee1-d44847127749;true;5;5
-6;hardware Self-enabling;models Sri Lanka Rupee;77425;2020-08-17;PURCHASE;65831e5a-9de5-4778-a002-660100544239;true;6;6
-7;Dynamic Florida green;Soft USB;84966;2020-08-16;SALES;16f41a89-d47e-4820-abab-d1c8db4a0c1d;true;7;7
-8;Bedfordshire synthesizing Planner;withdrawal Cotton;86703;2020-08-17;SALES;dacfb80f-140b-4d9b-b384-635bed5f764f;true;8;8
-9;Car;blue Identity capacity;24408;2020-08-17;BOTH;24ec6641-b506-4736-873f-37e8afc24d9e;true;9;9
-10;California;efficient Cambridgeshire online;8993;2020-08-17;BOTH;5baee1cd-8819-4af5-83c3-66fa15a28d5a;false;10;10
+id;name;code;description;rate;valid_from;transaction_type;uid;active;ad_organization_id;tax_category_id
+1;grid-enabled invoice;Senior Nauru Ergonomic;Creative matrix;5064;2020-08-17;BOTH;2254539f-30de-4211-932e-1499db7982d4;true;1;1
+2;Liechtenstein;card Drive;Brazil;13413;2020-08-17;PURCHASE;dc4b513a-b328-4345-9d52-50f7f4954f36;false;2;2
+3;Zambian Kwacha incentivize relationships;Mongolia Rustic Concrete Bike;indexing;64279;2020-08-17;SALES;443f2bad-cb75-4474-ba79-bdeceb2ad343;true;3;3
+4;Hat Ergonomic;hacking Customizable;Baby Louisiana 24/7;53521;2020-08-17;SALES;ace424c7-5504-4357-b1a7-663f929889d9;false;4;4
+5;RAM Canadian Dollar Avon;redundant;invoice;33091;2020-08-17;PURCHASE;659b0ee1-d448-4471-a774-9c9563ca6ba7;true;5;5
+6;Throughway Practical;Italy;Cuba;12384;2020-08-16;BOTH;e5778600-2660-4100-9442-39afe3923092;true;6;6
+7;bus cross-platform web-readiness;dedicated Practical Response;Home Loan Account;57177;2020-08-16;PURCHASE;206babd1-c8db-44a0-81df-c84dcf96a726;true;7;7
+8;service-desk;systemic Pa'anga Mobility;Tasty Steel Gloves Handmade Fresh Soap;70364;2020-08-16;PURCHASE;35bed5f7-64fd-4320-a31f-5523996938f2;false;8;8
+9;redundant empower Handmade;Practical Granite Mouse utiliz;lavender turquoise;87665;2020-08-17;BOTH;e491c587-ec71-4ac6-9511-3a5baee1cd88;false;9;9
+10;invoice efficient;override;matrix deposit;32972;2020-08-17;PURCHASE;a5f4fbc3-1d7f-4671-8de4-19531c00935a;false;10;10

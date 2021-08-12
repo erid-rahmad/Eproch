@@ -80,15 +80,20 @@ public class MPrequalificationDateSetService {
         mPrequalificationDateSet = mPrequalificationDateSetRepository.save(mPrequalificationDateSet);
 
         final String status = mPrequalificationDateSetDTO.getStatus();
-        if(mPrequalificationDateSetDTO.getBiddingScheduleId()!=null){
-            MBidding mBidding = mBiddingRepository.findFirstByBiddingScheduleId(mPrequalificationDateSetDTO.getBiddingScheduleId());
+        Long scheduleId = mPrequalificationDateSetDTO.getBiddingScheduleId();
+        if (scheduleId == null) scheduleId = mPrequalificationDateSetDTO.getPrequalificationScheduleId();
+
+        MBidding mBidding = mBiddingRepository.findFirstByBiddingScheduleId(scheduleId);
+        MPrequalificationInformation info = mPrequalificationInformationRepository.findFirstByPrequalificationScheduleId(scheduleId);    
+
+        if(mBidding!=null){
             MinMaxView sequences = cEventTypelineRepository.findMinMaxSequence(mBidding.getEventType().getId());
             Integer currentSequence = mPrequalificationDateSetDTO.getSequence();
             String biddingStatus = null;
 
             if (currentSequence == null) {
                 //for new dates?
-                Optional<MBiddingSchedule> mBiddingSchedule = mBiddingScheduleRepository.findById(mPrequalificationDateSetDTO.getBiddingScheduleId());
+                Optional<MBiddingSchedule> mBiddingSchedule = mBiddingScheduleRepository.findById(scheduleId);
                 if (mBiddingSchedule.isPresent()) {
                     MBiddingSchedule schedule = mBiddingSchedule.get();
                     currentSequence = schedule.getEventTypeLine().getSequence();
@@ -115,8 +120,6 @@ public class MPrequalificationDateSetService {
                 mBidding.setBiddingStatus(biddingStatus);
             }
         } else {
-            MPrequalificationInformation info = mPrequalificationInformationRepository.findFirstByPrequalificationScheduleId(mPrequalificationDateSetDTO.getPrequalificationScheduleId());
-            
             MinMaxView sequences = cPrequalificationEventLineRepository.findMinMaxSequence(info.getPreqEventId());
             Integer currentSequence = mPrequalificationDateSetDTO.getSequence();
             String biddingStatus = null;
@@ -124,7 +127,7 @@ public class MPrequalificationDateSetService {
             if (currentSequence == null) {
                 //for new dates?
                 Optional<MPrequalificationSchedule> mPreqSchedule = 
-                    mPrequalificationScheduleRepository.findById(mPrequalificationDateSetDTO.getPrequalificationScheduleId());
+                    mPrequalificationScheduleRepository.findById(scheduleId);
                 if (mPreqSchedule.isPresent()) {
                     MPrequalificationSchedule schedule = mPreqSchedule.get();
                     currentSequence = schedule.getEventLine().getSequence();

@@ -12,7 +12,7 @@
           v-if="item.redirect === 'noredirect' || index === breadcrumbs.length-1"
           class="no-redirect"
         >{{ printTitle(item.meta.title) }}</span>
-        <a
+        <a class="no-decoration"
           v-else
           @click.prevent="handleLink(item)"
         >{{ printTitle(item.meta.title) }}</a>
@@ -103,5 +103,11 @@ export default class extends Vue {
     color: #97a8be;
     cursor: text;
   }
+  .no-decoration {
+    text-decoration:none;
+    color: #97a8be !important;
+  }
 }
+
+
 </style>

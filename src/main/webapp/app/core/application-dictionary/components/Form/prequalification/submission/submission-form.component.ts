@@ -190,6 +190,25 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
 
   private retrieveProposalData(submissionId: number) {
     const baseApiUrl = "/api/m-prequalification-evals";
+    this.commonService("/api/m-prequalification-criteria").retrieve({
+      criteriaQuery: [
+        'active.equals=true',
+        `prequalificationId.equals=${this.data.prequalificationId}`
+      ],
+      paginationQuery: {
+        page: 0,
+        size: 1000,
+        sort:['id']
+      }
+    }).then((res)=>{
+      console.log(res.data);
+      res.data.forEach(element => {
+        let q = this.answers.get(element.biddingSubCriteriaLineId)
+        if(q) {
+          q.requirement = element.requirement;
+        }
+      });
+    })
     this.commonService(baseApiUrl)
       .retrieve({
         criteriaQuery: [
@@ -394,7 +413,7 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
       }
       else {
         proposal.documentStatus=answer.documentStatus||'DRF';
-        proposal.documentAction=answer.documentAction||'SMT';
+        proposal.documentAction=answer.documentAction||'DRF';
       }
 
       proposal.prequalificationSubmissionId = this.data.id;
@@ -488,5 +507,9 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
     }
     
     this.retrieveProposalData(this.data.id);
+  }
+
+  back(){
+    this.$emit("close");
   }
 }

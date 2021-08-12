@@ -1,31 +1,36 @@
 <template>
     <div>
         <draggable v-model="dashboardItems" 
-            style="cursor: move;"
-            group="dashboard" 
+            class="md-layout md-gutter" 
+            style="padding: 0 10px;"
             ghost-class="ghost"
             :move="checkMove"
             v-bind="dragOptions"
             @start="drag=true"
             @end="drag=false"
         >
-            <transition-group type="transition">
-                <div
+            <div :class="getLayoutWidth(item)"
+                style="cursor: move !important;"
                 v-for="item in dashboardItems"
                 :key="item.id"
-                >
-                    <watch-list
-                        v-if="item.paDashboardItem.type === 'WATCHLIST'"
-                        ref="widget"
-                        :id="item.paDashboardItem.adWatchListId + ''"
-                        :name="item.paDashboardItem.adWatchListName"
-                    />
-                </div>
-            </transition-group>
+            >
+                <accordion :id="'Accordion-' + item.paDashboardItem.adWatchListId" 
+                    :title="item.paDashboardItemName" 
+                    v-bind:expanded="true" 
+                    animation="bottomToTop">
+                    <div style="padding: 5px 10px 10px;">
+                        <watch-list
+                            v-if="item.paDashboardItem.type === 'WATCHLIST'"
+                            ref="widget"
+                            :id="item.paDashboardItem.adWatchListId + ''"
+                            :name="item.paDashboardItem.adWatchListName"
+                        />
+                    </div>
+                </accordion>
+            </div>
         </draggable>
 
-        <!--
-        <div class="md-layout md-gutter">
+       <!-- <div class="md-layout md-gutter">
             <div class="md-layout-item">
                 <accordion id="Accordion-ChartStyle1" title="CHART 1" v-bind:expanded="false" animation="leftToRight">
                     <div style="padding: 0px 20px">
@@ -66,9 +71,9 @@
                     </div>
                 </accordion>
             </div>
-        </div>
+        </div>-->
         
-        <kpi-admin></kpi-admin> -->
+        <!-- <kpi-admin></kpi-admin> -->
     </div>
 </template>
 
@@ -94,7 +99,12 @@
 }
 
 .md-layout {
-    margin-top: 20px;
+    //margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.dashboard-item {
+    padding: 0 10px !important;
     margin-bottom: 20px;
 }
 

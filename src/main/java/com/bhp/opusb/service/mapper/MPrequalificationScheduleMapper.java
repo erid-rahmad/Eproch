@@ -20,6 +20,8 @@ public interface MPrequalificationScheduleMapper extends EntityMapper<MPrequalif
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "eventLine.id", target = "eventLineId")
     @Mapping(source = "eventLine.prequalificationStep.name", target = "eventLineName")
+    @Mapping(source = "eventLine.prequalificationStep.adForm.id", target = "adFormId")
+    @Mapping(source = "eventLine.prequalificationStep.adForm.name", target = "adFormName")
     MPrequalificationScheduleDTO toDto(MPrequalificationSchedule mPrequalificationSchedule);
 
     @Mapping(source = "prequalificationId", target = "prequalification")

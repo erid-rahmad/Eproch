@@ -2,7 +2,7 @@
   <div class="app-container card-view registered-prequalification-list">
     <div class="toolbar">
       <el-button
-        v-if="isVendor && submissionPage"
+        v-if="(submissionPage || submissionList) && display"
         icon="el-icon-close"
         size="mini"
         type="danger"
@@ -12,7 +12,17 @@
       </el-button>
 
       <el-button
-        v-if="!mainPage && submissionPage "
+        v-if="(submissionPage || submissionList) && !display"
+        icon="el-icon-close"
+        size="mini"
+        type="danger"
+        @click="closeInner"
+      >
+        Back
+      </el-button>
+
+      <el-button
+        v-if="(!mainPage && submissionPage) || !display "
         :loading="loading"
         :disabled="readonly"
         size="mini"
@@ -23,7 +33,7 @@
       </el-button>
 
       <el-button
-          v-if="!mainPage && submissionPage "
+          v-if="(!mainPage && submissionPage) || !display "
           :loading="loading"
           size="mini"
           :disabled="readonly"
@@ -71,29 +81,40 @@
             </template>
           </el-table-column>
 
+          <el-table-column label="Registration Date" v-if="!isVendor" min-width="120" sortable>
+            <template slot-scope="{ row }">
+              {{ row.announcementPublishDate | formatDate }}
+            </template>
+          </el-table-column>
+
           <el-table-column
             label="Prequalification No"
             min-width="120"
-            prop="prequalificationNo"
             sortable
-          ></el-table-column>
+          >
+            <template slot-scope="{row}">
+              {{ row.prequalificationNo || row.documentNo }}
+            </template>
+          </el-table-column>
 
           <el-table-column
             label="Title"
-            min-width="200"
-            prop="prequalificationName"
+            min-width="100"
             show-overflow-tooltip
             sortable
-          ></el-table-column>
+          >
+            <template slot-scope="{row}">
+              {{ row.prequalificationName || row.name }}
+            </template>
+          </el-table-column>
 
           <el-table-column
             label="Prequalification Type"
             min-width="150"
-            prop="prequalificationType"
             sortable
           >
             <template slot-scope="{ row }">
-              {{row.prequalificationType == 'O'? 'Announcement' : row.prequalificationType == 'C' ? 'Invitation' : row.prequalificationType}}
+              {{(row.prequalificationType||row.type) == 'O'? 'Announcement' : (row.prequalificationType||row.type) == 'C' ? 'Invitation' : (row.prequalificationType||row.type)}}
             </template>
           </el-table-column>
 
@@ -121,7 +142,7 @@
             sortable
           >
             <template slot-scope="{ row }">
-              {{ printBiddingStatus(row.prequalificationStatus) }}
+              {{ printBiddingStatus(row.prequalificationStatus||row.status) }}
             </template>
           </el-table-column>
 
@@ -135,7 +156,7 @@
               {{ printSubmissionStatus(row.documentStatus) }}
             </template>
           </el-table-column>
-
+          <!--
           <el-table-column
             v-if="!isVendor"
             label="Submission Start Date"
@@ -157,12 +178,12 @@
               {{ row.endDate | formatDate(false) }}
             </template>
           </el-table-column>
-
+          -->
           <el-table-column
             v-if="!isVendor"
-            label="Vendors"
-            min-width="170"
-            prop="numOfParticipants"
+            label="Joined Vendors"
+            min-width="120"
+            prop="joinedVendor"
             sortable
           ></el-table-column>
 
@@ -197,10 +218,18 @@
           @size-change="changePageSize"
         ></el-pagination>
       </template>
+      <submission-list
+        v-else-if="submissionList"
+        ref="submissionList"
+        :pickRow="selectedRow"
+        @setReadOnly="setReadOnly"
+        @toggleDisplay="toggleDisplay"
+      ></submission-list>
       <submission-form
         v-else-if="submissionPage"
         ref="submissionForm"
         :data="selectedRow"
+        @setReadOnly="setReadOnly"
       ></submission-form>
       <!--
       <component

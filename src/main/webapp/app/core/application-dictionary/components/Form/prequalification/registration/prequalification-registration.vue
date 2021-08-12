@@ -1,6 +1,6 @@
 <template>
     <div class="app-container card-view">
-        <div class="toolbar" v-if="acceptPA">
+        <div class="toolbar" v-if="acceptPA || moreInfoState">
             <el-button
                 icon="el-icon-close"
                 size="mini"
@@ -11,7 +11,7 @@
             </el-button>
         </div>
         <div class="card">
-            <el-row ref="tableWrapper" v-if="!acceptPA">
+            <el-row ref="tableWrapper" v-if="!acceptPA && !moreInfoState">
                 <el-col :span="24">
                     <el-tabs >
                         <keep-alive>
@@ -53,8 +53,14 @@
                                             <span>{{ getStatus(row) }}</span>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column label="Joined Vendor" align="center" min-width="100" 
-                                        sortable v-if="!isVendor" prop="joinedVendor"/>
+                                    <el-table-column label="Joined Vendor" align="center" min-width="100" sortable v-if="!isVendor">
+                                        <template slot-scope="{ row }">
+                                            <el-button class="button" size="mini" style="width: 100%" @click="moreInfo(row)">
+                                                <svg-icon name="icomoo/115-users"></svg-icon>
+                                                {{ row.joinedVendor }}
+                                            </el-button>
+                                        </template>
+                                    </el-table-column>
                                     <el-table-column label="Detail" v-if="isVendor" align="center"  sortable width="80">
                                         <template slot-scope="{ row }">
                                             <el-button class="btn-attachment" icon="el-icon-search" size="mini"
@@ -62,19 +68,21 @@
                                         </template>
                                     </el-table-column>
                                     <el-table-column  label="Action" align="center" sortable width="130">
-                                        <template v-if="isVendor" slot-scope="{ row }">
-                                            <el-button class="btn-attachment" icon="el-icon-circle-check" size="mini"
-                                                    type="primary" @click="detail(row)">
-                                            </el-button>
-                                            <el-button class="btn-attachment" icon="el-icon-circle-close" size="mini"
-                                                    type="primary" @click="tidakminat(row)">
-                                            </el-button>
-                                        </template>
-                                        <template v-else slot-scope="{ row }">
-                                            <el-button class="btn-attachment" icon="el-icon-circle-check" size="mini"
+                                        <template slot-scope="{ row }">
+                                            <div v-if="isVendor">
+                                                <el-button class="btn-attachment" icon="el-icon-circle-check" size="mini"
+                                                        type="primary" @click="detail(row)">
+                                                </el-button>
+                                                <el-button class="btn-attachment" icon="el-icon-circle-close" size="mini"
+                                                        type="primary" @click="tidakminat(row)">
+                                                </el-button>
+                                            </div>
+                                            <div v-else>
+                                                <el-button class="btn-attachment" icon="el-icon-circle-check" size="mini"
                                                     type="primary" @click="detail(row)">
                                                     Evaluate
-                                            </el-button>
+                                                </el-button>
+                                            </div>
                                         </template>
                                     </el-table-column>
                                 </el-table>
@@ -85,6 +93,10 @@
             </el-row>
             <regist-detail v-if="acceptPA && isVendor" :data="selecrow" />
             <regist-detail-buyer v-if="acceptPA && !isVendor" :data="selecrow" />
+            <bidding-invitation-response
+                v-if="moreInfoState"
+                :moreinfo="selecrow"
+            ></bidding-invitation-response>
         </div>
         <el-dialog :visible.sync="reasonPA" center title="" width="80%">
             <span>Reason For Not Interested </span>

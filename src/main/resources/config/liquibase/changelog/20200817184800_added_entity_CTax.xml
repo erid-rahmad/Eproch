@@ -63,6 +63,14 @@
             <column name="last_modified_date" type="timestamp"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="20210806135800-tax-code" author="ricky-k">
+        <addColumn tableName="c_tax">
+            <column name="code" type="varchar(30)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
     <!--
@@ -80,6 +88,7 @@
                   tableName="c_tax">
             <column name="id" type="numeric"/>
             <column name="name" type="string"/>
+            <column name="code" type="string"/>
             <column name="description" type="string"/>
             <column name="rate" type="numeric"/>
             <column name="valid_from" type="date"/>

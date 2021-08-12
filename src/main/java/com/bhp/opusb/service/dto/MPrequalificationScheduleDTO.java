@@ -32,9 +32,27 @@ public class MPrequalificationScheduleDTO extends AbstractAuditingDTO {
 
     private Long eventLineId;
     private String eventLineName;
+    private Long adFormId;
+    private String adFormName;
     
     public Long getId() {
         return id;
+    }
+
+    public String getAdFormName() {
+        return adFormName;
+    }
+
+    public void setAdFormName(String adFormName) {
+        this.adFormName = adFormName;
+    }
+
+    public Long getAdFormId() {
+        return adFormId;
+    }
+
+    public void setAdFormId(Long adFormId) {
+        this.adFormId = adFormId;
     }
 
     public String getStatus() {

@@ -167,3 +167,4 @@ application:
       vendor-integration-url: http://localhost:20002/api/vendor-integration
       vendor-integration-contact-url: http://localhost:20003/api/vendor-integration-contact
       vendor-integration-detail-url: http://localhost:20004/api/vendor-integration-detail
+      vendor-integration-exec-url: http://localhost:20020/api/vendor-integration-exec

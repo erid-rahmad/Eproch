@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +36,6 @@ import org.springframework.web.client.RestTemplate;
 
 @Service("cVendorMessageDispatcher")
 public class CVendorMessageDispatcher implements ProcessTrigger {
-
   private final Logger logger = LoggerFactory.getLogger(CVendorMessageDispatcher.class);
 
   public static final String BEAN_NAME = "cVendorMessageDispatcher";
@@ -66,26 +67,35 @@ public class CVendorMessageDispatcher implements ProcessTrigger {
     String response = null;
 
     if (payload != null) {
+      payload.setOracleDateTrx(dtf.format(payload.getDateTrx()));
       String message = null;
 
       try {
+        /*
         message = objectMapper.writeValueAsString(payload);
         response = dispatchMessage(message);
+        */
 
+        Map<String, String> exec = new HashMap<>();
+        exec.put("vendorCode",payload.getCode());
+        exec.put("status","NEW");
+
+        /*
         List<Object[]> supplierContractDto = cVendorRepository.getSupplierContact(payload.getId());
         System.out.println(supplierContractDto.size());
         for(Object[] x : supplierContractDto){
           VendorSupplierContact vsc = new VendorSupplierContact();
-          vsc.setVendorCode((String)(x[0]==null?"":x[0]));
+          vsc.setVendorCode((String)(x[0]==null?"-":x[0]));
           vsc.setVendorSiteCode("JKT");//(String)x[1]);
-          vsc.setFirstName((String)(x[2]==null?"":x[2]));
+          vsc.setFirstName((String)(x[2]==null?"-":x[2]));
           vsc.setMiddleName("-");//(String)x[3]);
-          vsc.setLastName((String)(x[4]==null?"":x[4]));
+          vsc.setLastName((String)(x[4]==null?"-":x[4]));
           vsc.setTitle("Mr.");//(String)x[5]);
-          vsc.setEmailAddress((String)(x[6]==null?"":x[6]));
+          vsc.setEmailAddress((String)(x[6]==null?"-":x[6]));
           vsc.setAreaCode("021");//(String)x[7]);
-          vsc.setPhone((String)(x[8]==null?"":x[8]));
-          vsc.setCreationDate(((java.sql.Date)x[9])==null?LocalDate.now():((java.sql.Date)x[9]).toLocalDate());
+          vsc.setPhone((String)(x[8]==null?"-":x[8]));
+          vsc.setCreationDate(((java.sql.Date)x[9])==null?
+            dtf.format(LocalDate.now()) : dtf.format(((java.sql.Date)x[9]).toLocalDate()) );
           vsc.setStatus("NEW");
 
           dispatchMessageContact(objectMapper.writeValueAsString(vsc));
@@ -114,6 +124,9 @@ public class CVendorMessageDispatcher implements ProcessTrigger {
 
           dispatchMessageDetail(objectMapper.writeValueAsString(vsd));
         }
+        */
+        System.out.println(objectMapper.writeValueAsString(exec));
+        dispatchMessageExec(objectMapper.writeValueAsString(exec));
       } catch (JsonProcessingException | RestClientException e) {
         logger.warn("Failed dispatching supplier data. {}. {}", e.getLocalizedMessage(), payload);
 
@@ -175,6 +188,20 @@ public class CVendorMessageDispatcher implements ProcessTrigger {
     return response.getBody();
   }
 
+  private String dispatchMessageExec(String message) throws RestClientException {
+    final String url = properties.getIntegration().getEndpoint().getVendorIntegrationExecUrl();
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    headers.set("ai-exchange-out", CVendor.class.getSimpleName());
+
+    logger.debug("Dispatching message to external system. body: {}", message);
+    HttpEntity<String> request = new HttpEntity<>(message, headers);
+    final ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+
+    logger.debug("Message dispatched. statusCode: {} - {}", response.getStatusCodeValue(), response.getStatusCode());
+    return response.getBody();
+  }
+
   // DTO for integration
   public static class VendorSupplierContact {
     @JsonProperty("VENDOR_CODE")
@@ -196,7 +223,7 @@ public class CVendorMessageDispatcher implements ProcessTrigger {
     @JsonProperty("PHONE")
     private String phone;
     @JsonProperty("CREATION_DATE")
-    private LocalDate creationDate;
+    private String creationDate;
     @JsonProperty("STATUS")
     private String status;
 
@@ -209,10 +236,10 @@ public class CVendorMessageDispatcher implements ProcessTrigger {
     public void setStatus(String status) {
       this.status = status;
     }
-    public LocalDate getCreationDate() {
+    public String getCreationDate() {
       return creationDate;
     }
-    public void setCreationDate(LocalDate creationDate) {
+    public void setCreationDate(String creationDate) {
       this.creationDate = creationDate;
     }
     public String getPhone() {

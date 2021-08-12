@@ -2,8 +2,8 @@
   <div class="bidding-invitation-response">
     <h3 style="margin-top: 0">Prequalification Invitation Details</h3>
     <div class="header">
-      <h2>{{ moreinfo.preqDocumentNo }}</h2>
-      <p>{{ moreinfo.prequalificationName }}</p>
+      <h2>{{ moreinfo.documentNo }}</h2>
+      <p>{{ moreinfo.name }}</p>
     </div>
     <el-row>
       <el-col

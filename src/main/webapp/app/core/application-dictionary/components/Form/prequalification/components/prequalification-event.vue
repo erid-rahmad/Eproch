@@ -85,7 +85,7 @@
     </el-table>
     </el-dialog>
     <el-dialog :visible.sync="showDetail" title="Method Detail" width="50%">
-      <el-form label-position="left" label-width="128px">
+      <el-form label-position="left" label-width="128px" :loading="loadingDetails">
         <el-row
           v-for="(line, index) in evaluationMethodCriteria"
           :key="line.id"
@@ -128,6 +128,15 @@
                       </el-table-column>
                       <el-table-column label="Question" min-width="320" prop="name" show-overflow-tooltip></el-table-column>
                       <el-table-column label="Requirement" prop="requirement" width="150">
+                        <template slot-scope="{ row }">
+                          <el-input
+                            v-model="row.requirement"
+                            :disabled="readOnly"
+                            class="form-input"
+                            clearable
+                            size="mini"
+                          ></el-input>
+                        </template>
                       </el-table-column>
                     </el-table>
                     <el-divider />
@@ -138,6 +147,16 @@
           </el-row>
         </el-row>
       </el-form>
+      <div slot="footer">
+        <el-button
+          style="margin-left: 0px;"
+          size="mini"
+          type="primary"
+          @click="saveRequirements"
+        >
+          <svg-icon name="icomoo/273-checkmark"></svg-icon> Save
+        </el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
