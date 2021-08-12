@@ -220,10 +220,11 @@
             </el-col>
 
         </el-row>
+
     </el-form>
         <el-dialog
             :visible.sync="generatePA"
-            title="Tips"
+            title="Generate Po"
             width="30%">
             <el-form
                 v-loading="loading"

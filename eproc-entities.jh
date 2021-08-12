@@ -1552,6 +1552,7 @@ entity MContract {
 entity MContractLine{
     lineNo Integer
 	quantity BigDecimal required
+	quantityBalance BigDecimal
 	ceilingPrice BigDecimal required
 	totalCeilingPrice BigDecimal
 	deliveryDate LocalDate required
