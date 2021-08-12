@@ -357,7 +357,7 @@ export default class PreqInvitation extends Mixins(AccessLevelMixin, PreqInvitat
         });
         if(sugs.length>0){
           sugs.forEach((elem)=>{
-            if(this.preq.vendorSuggestions.length==0 || this.preq.vendorSuggestions.findIndex(e=>{elem.vendorId==e.vendorId})==-1){
+            if(this.preq.vendorSuggestions.length==0 || this.preq.vendorSuggestions.findIndex(e=>elem.vendorId==e.vendorId)==-1){
               this.preq.vendorSuggestions.push(elem);
             }
           })
