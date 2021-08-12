@@ -97,6 +97,9 @@ public class MContractLineQueryService extends QueryService<MContractLine> {
             if (criteria.getQuantity() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getQuantity(), MContractLine_.quantity));
             }
+            if (criteria.getQuantityBalance() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getQuantityBalance(), MContractLine_.quantityBalance));
+            }
             if (criteria.getCeilingPrice() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getCeilingPrice(), MContractLine_.ceilingPrice));
             }
@@ -119,6 +122,15 @@ public class MContractLineQueryService extends QueryService<MContractLine> {
                 specification = specification.and(buildSpecification(criteria.getContractId(),
                     root -> root.join(MContractLine_.contract, JoinType.LEFT).get(MContract_.id)));
             }
+            if (criteria.getContractNo() != null) {
+                specification = specification.and(buildSpecification(criteria.getContractNo(),
+                    root -> root.join(MContractLine_.contract, JoinType.LEFT).get(MContract_.documentNo)));
+            }
+            if (criteria.getContractStatus() != null) {
+                specification = specification.and(buildSpecification(criteria.getContractStatus(),
+                    root -> root.join(MContractLine_.contract, JoinType.LEFT).get(MContract_.documentStatus)));
+            }
+
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(MContractLine_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));

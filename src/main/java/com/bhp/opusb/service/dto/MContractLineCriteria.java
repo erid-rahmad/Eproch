@@ -33,6 +33,8 @@ public class MContractLineCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter quantity;
 
+    private BigDecimalFilter quantityBalance;
+
     private BigDecimalFilter ceilingPrice;
 
     private BigDecimalFilter totalCeilingPrice;
@@ -41,11 +43,16 @@ public class MContractLineCriteria implements Serializable, Criteria {
 
     private StringFilter remark;
 
+
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
 
     private LongFilter contractId;
+    private StringFilter contractNo;
+    private StringFilter contractStatus;
+//    private LongFilter vendorId;
 
     private LongFilter adOrganizationId;
 
@@ -62,6 +69,7 @@ public class MContractLineCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.lineNo = other.lineNo == null ? null : other.lineNo.copy();
         this.quantity = other.quantity == null ? null : other.quantity.copy();
+        this.quantityBalance = other.quantityBalance == null ? null : other.quantityBalance.copy();
         this.ceilingPrice = other.ceilingPrice == null ? null : other.ceilingPrice.copy();
         this.totalCeilingPrice = other.totalCeilingPrice == null ? null : other.totalCeilingPrice.copy();
         this.deliveryDate = other.deliveryDate == null ? null : other.deliveryDate.copy();
@@ -69,6 +77,8 @@ public class MContractLineCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.contractId = other.contractId == null ? null : other.contractId.copy();
+        this.contractNo = other.contractNo == null ? null : other.contractNo.copy();
+        this.contractStatus = other.contractStatus == null ? null : other.contractStatus.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.costCenterId = other.costCenterId == null ? null : other.costCenterId.copy();
         this.productId = other.productId == null ? null : other.productId.copy();
@@ -102,6 +112,14 @@ public class MContractLineCriteria implements Serializable, Criteria {
 
     public void setQuantity(BigDecimalFilter quantity) {
         this.quantity = quantity;
+    }
+
+    public BigDecimalFilter getQuantityBalance() {
+        return quantityBalance;
+    }
+
+    public void setQuantityBalance(BigDecimalFilter quantityBalance) {
+        this.quantityBalance = quantityBalance;
     }
 
     public BigDecimalFilter getCeilingPrice() {
@@ -160,6 +178,22 @@ public class MContractLineCriteria implements Serializable, Criteria {
         this.contractId = contractId;
     }
 
+    public StringFilter getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(StringFilter contractNo) {
+        this.contractNo = contractNo;
+    }
+
+    public StringFilter getContractStatus() {
+        return contractStatus;
+    }
+
+    public void setContractStatus(StringFilter contractStatus) {
+        this.contractStatus = contractStatus;
+    }
+
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -193,6 +227,7 @@ public class MContractLineCriteria implements Serializable, Criteria {
     }
 
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -206,6 +241,7 @@ public class MContractLineCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(lineNo, that.lineNo) &&
             Objects.equals(quantity, that.quantity) &&
+            Objects.equals(quantityBalance, that.quantityBalance) &&
             Objects.equals(ceilingPrice, that.ceilingPrice) &&
             Objects.equals(totalCeilingPrice, that.totalCeilingPrice) &&
             Objects.equals(deliveryDate, that.deliveryDate) &&
@@ -213,6 +249,8 @@ public class MContractLineCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(contractId, that.contractId) &&
+            Objects.equals(contractNo, that.contractNo) &&
+            Objects.equals(contractStatus, that.contractStatus) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(costCenterId, that.costCenterId) &&
             Objects.equals(productId, that.productId) &&
@@ -225,6 +263,7 @@ public class MContractLineCriteria implements Serializable, Criteria {
         id,
         lineNo,
         quantity,
+        quantityBalance,
         ceilingPrice,
         totalCeilingPrice,
         deliveryDate,
@@ -232,6 +271,8 @@ public class MContractLineCriteria implements Serializable, Criteria {
         uid,
         active,
         contractId,
+            contractNo,
+            contractStatus,
         adOrganizationId,
         costCenterId,
         productId,
@@ -245,6 +286,7 @@ public class MContractLineCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (lineNo != null ? "lineNo=" + lineNo + ", " : "") +
                 (quantity != null ? "quantity=" + quantity + ", " : "") +
+                (quantityBalance != null ? "quantityBalance=" + quantityBalance + ", " : "") +
                 (ceilingPrice != null ? "ceilingPrice=" + ceilingPrice + ", " : "") +
                 (totalCeilingPrice != null ? "totalCeilingPrice=" + totalCeilingPrice + ", " : "") +
                 (deliveryDate != null ? "deliveryDate=" + deliveryDate + ", " : "") +
@@ -252,6 +294,8 @@ public class MContractLineCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (contractId != null ? "contractId=" + contractId + ", " : "") +
+                (contractNo != null ? "contractNo=" + contractNo + ", " : "") +
+                (contractStatus != null ? "contractStatus=" + contractStatus + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (costCenterId != null ? "costCenterId=" + costCenterId + ", " : "") +
                 (productId != null ? "productId=" + productId + ", " : "") +

@@ -123,6 +123,7 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
     let total = 0;
     await this.contractLine.forEach(line=>{
       line.totalCeilingPrice=line.ceilingPrice*line.quantity;
+      line.quantityBalance=line.quantity;
       total+=line.totalCeilingPrice;
     })
     await this.$set(this.contract, 'price', total);
@@ -137,6 +138,7 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
     var line = {
       lineNo : null,
       quantity : null,
+      quantityBalance : null,
       ceilingPrice : null,
       totalCeilingPrice : null,
       deliveryDate : null,
@@ -168,6 +170,10 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
         })
         .then(res => {
           this.contractLine=res.data
+        })
+        .catch(err => {
+          console.error('Failed getting the record. %O', err);
+          this.$message.error(err.detail || err.message);
         })
         .finally(() => this.loading = false);
     }catch (e) {}
@@ -210,8 +216,8 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
     this.generatePA=true;
   }
 
-  public save() {
-    (<ElForm>this.$refs.contractInfoForm).validate(passed => {
+  public async save() {
+    await (<ElForm>this.$refs.contractInfoForm).validate(passed => {
       if (passed) {
         const newRecord = !this.contract.id;
         this.$set(this.contract, 'lineDTOList', this.contractLine)
@@ -222,6 +228,7 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
             this.contract = {...this.contract, ...res}
             this.$message.success(`Contract has been ${newRecord ? 'created' : 'updated'} successfully`)
             this.$emit('saved', res)
+
           })
           .catch(err => {
             console.error('Failed to save the contract', err);
@@ -230,6 +237,8 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
           .finally(() => this.loading = false);
       }
     })
+
+    await this.retriveContracLine(this.contract.id)
   }
 
   public generatePo() {

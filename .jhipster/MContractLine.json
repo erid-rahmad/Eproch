@@ -13,6 +13,10 @@
             ]
         },
         {
+            "fieldName": "quantityBalance",
+            "fieldType": "BigDecimal"
+        },
+        {
             "fieldName": "ceilingPrice",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [

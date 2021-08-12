@@ -1,10 +1,9 @@
 package com.bhp.opusb.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.bhp.opusb.config.ApplicationProperties;
 import com.bhp.opusb.config.ApplicationProperties.Document;
@@ -13,7 +12,6 @@ import com.bhp.opusb.repository.*;
 import com.bhp.opusb.service.dto.*;
 import com.bhp.opusb.service.mapper.MContractLineMapper;
 import com.bhp.opusb.service.mapper.MContractMapper;
-import com.bhp.opusb.service.trigger.process.integration.MPurchaseOrderMessageDispatcher;
 import com.bhp.opusb.util.DocumentUtil;
 
 import org.slf4j.Logger;
@@ -40,7 +38,6 @@ public class MContractService {
     private final MContractRepository mContractRepository;
 
     private final MContractMapper mContractMapper;
-
 
 
     private final Document document;
@@ -131,7 +128,7 @@ public class MContractService {
         }
 
         MContractTeamDTO dto = mContractTeamService.findByContractId(mContract.getId());
-        if(dto==null){
+        if (dto == null) {
             dto = new MContractTeamDTO();
             dto.setAdOrganizationId(mContract.getAdOrganization().getId());
             dto.setContractId(mContract.getId());
@@ -143,45 +140,98 @@ public class MContractService {
         return mContractMapper.toDto(mContract);
     }
 
-    public void generateToPo(MContractToPoDTO mContractToPoDTO){
-        Long poId = 0L;
-        MPurchaseOrderDTO mPurchaseOrderDTO =new MPurchaseOrderDTO();
-        MPurchaseOrderDTO mPurchaseOrderDTO_ =new MPurchaseOrderDTO();
+    public void generateToPo(MContractToPoDTO mContractToPoDTO) {
+        Set<Long> contract = new HashSet<>();
 
-        mPurchaseOrderDTO.setAdOrganizationId(mContractToPoDTO.getmContractDTO().getAdOrganizationId());
-        mPurchaseOrderDTO.setDocumentTypeId(mContractToPoDTO.getmContractDTO().getDocumentTypeId());
-        mPurchaseOrderDTO.setVendorId(mContractToPoDTO.getmContractDTO().getVendorId());
-        mPurchaseOrderDTO.setCurrencyId(mContractToPoDTO.getmContractDTO().getCurrencyId());
-        mPurchaseOrderDTO.setWarehouseId(mContractToPoDTO.getmContractDTO().getWarehouseId());
-        mPurchaseOrderDTO.setCostCenterId(mContractToPoDTO.getmContractDTO().getCostCenterId());
-        mPurchaseOrderDTO.setPaymentTermId(mContractToPoDTO.getmContractDTO().getPaymentTermId());
-
-        mPurchaseOrderDTO.setGrandTotal(mContractToPoDTO.getmContractDTO().getPrice());
-
-        mPurchaseOrderDTO_ = mPurchaseOrderService.save(mPurchaseOrderDTO);
-        poId = mPurchaseOrderDTO_.getId();
-
-        MPurchaseOrderDTO finalMPurchaseOrderDTO_ = mPurchaseOrderDTO_;
         mContractToPoDTO.getmContractLineDTOS().forEach(mContractLineDTO -> {
-            MPurchaseOrderLineDTO mPurchaseOrderLineDTO = new MPurchaseOrderLineDTO();
 
-            mPurchaseOrderLineDTO.setOrderAmount(mContractLineDTO.getCeilingPrice());
-            mPurchaseOrderLineDTO.setQuantity(mContractLineDTO.getQuantity());
-            mPurchaseOrderLineDTO.setUnitPrice(mContractLineDTO.getCeilingPrice());
-
-            mPurchaseOrderLineDTO.setPurchaseOrderId(finalMPurchaseOrderDTO_.getId());
-            mPurchaseOrderLineDTO.setVendorId(finalMPurchaseOrderDTO_.getVendorId());
-            mPurchaseOrderLineDTO.setCostCenterId(mContractLineDTO.getCostCenterId());
-            mPurchaseOrderLineDTO.setAdOrganizationId(mContractLineDTO.getAdOrganizationId());
-            mPurchaseOrderLineDTO.setProductId(mContractLineDTO.getProductId());
-            mPurchaseOrderLineDTO.setUomId(mContractLineDTO.getUomId());
-
-            mPurchaseOrderLineService.save(mPurchaseOrderLineDTO);
+            if (!contract.contains(mContractLineDTO.getContractId())) {
+                contract.add(mContractLineDTO.getContractId());
+            }
         });
 
-        Map<String, Object> payload = new HashMap<>(1);
-        payload.put(MPurchaseOrderMessageDispatcher.KEY_ID, poId);
-        messageDispatcher.dispatch(MPurchaseOrderMessageDispatcher.BEAN_NAME, payload);
+        contract.forEach(contract_ -> {
+
+            Optional<MContract> mContract = mContractRepository.findById(contract_);
+
+
+            MContractDTO mContractDTO = mContractMapper.toDto(mContract.get());
+            MPurchaseOrderDTO mPurchaseOrderDTO = new MPurchaseOrderDTO();
+            MPurchaseOrderDTO mPurchaseOrderDTO_ = new MPurchaseOrderDTO();
+
+            mPurchaseOrderDTO.setAdOrganizationId(mContractDTO.getAdOrganizationId());
+            mPurchaseOrderDTO.setDocumentTypeId(mContractToPoDTO.getDocumentTypeId());
+            mPurchaseOrderDTO.setVendorId(mContractDTO.getVendorId());
+            mPurchaseOrderDTO.setCurrencyId(mContractDTO.getCurrencyId());
+            mPurchaseOrderDTO.setWarehouseId(mContractToPoDTO.getWarehouseId());
+            mPurchaseOrderDTO.setCostCenterId(mContractDTO.getCostCenterId());
+            mPurchaseOrderDTO.setPaymentTermId(mContractToPoDTO.getPaymentTermId());
+            mPurchaseOrderDTO.setGrandTotal(mContractDTO.getPrice());
+
+            mPurchaseOrderDTO_ = mPurchaseOrderService.save(mPurchaseOrderDTO);
+
+            BigDecimal x = BigDecimal.ZERO;
+
+            for (MContractLineDTO mContractLineDTO : mContractToPoDTO.getmContractLineDTOS()) {
+                if (mContractLineDTO.getContractId() == contract_.longValue()) {
+                    x = x.add(mContractLineDTO.getCeilingPrice());
+                    MPurchaseOrderLineDTO mPurchaseOrderLineDTO = new MPurchaseOrderLineDTO();
+
+                    mPurchaseOrderLineDTO.setOrderAmount(mContractLineDTO.getCeilingPrice());
+                    mPurchaseOrderLineDTO.setQuantity(mContractLineDTO.getQuantity());
+                    mPurchaseOrderLineDTO.setUnitPrice(mContractLineDTO.getCeilingPrice());
+
+                    mPurchaseOrderLineDTO.setPurchaseOrderId(mPurchaseOrderDTO_.getId());
+                    mPurchaseOrderLineDTO.setVendorId(mPurchaseOrderDTO_.getVendorId());
+                    mPurchaseOrderLineDTO.setCostCenterId(mContractLineDTO.getCostCenterId());
+                    mPurchaseOrderLineDTO.setAdOrganizationId(mContractLineDTO.getAdOrganizationId());
+                    mPurchaseOrderLineDTO.setProductId(mContractLineDTO.getProductId());
+                    mPurchaseOrderLineDTO.setUomId(mContractLineDTO.getUomId());
+
+                    mPurchaseOrderLineService.save(mPurchaseOrderLineDTO);
+                }
+            }
+            mPurchaseOrderDTO_.setGrandTotal(x);
+            log.info("this x{}", x);
+            mPurchaseOrderService.save(mPurchaseOrderDTO_);
+
+        });
+
+//        Long poId = 0L;
+//
+//        poId = mPurchaseOrderDTO_.getId();
+//
+//        MPurchaseOrderDTO finalMPurchaseOrderDTO_ = mPurchaseOrderDTO_;
+//        mContractToPoDTO.getmContractLineDTOS().forEach(mContractLineDTO -> {
+//            MPurchaseOrderLineDTO mPurchaseOrderLineDTO = new MPurchaseOrderLineDTO();
+//
+//            mPurchaseOrderLineDTO.setOrderAmount(mContractLineDTO.getCeilingPrice());
+//            mPurchaseOrderLineDTO.setQuantity(mContractLineDTO.getQuantity());
+//            mPurchaseOrderLineDTO.setUnitPrice(mContractLineDTO.getCeilingPrice());
+//
+//            mPurchaseOrderLineDTO.setPurchaseOrderId(finalMPurchaseOrderDTO_.getId());
+//            mPurchaseOrderLineDTO.setVendorId(finalMPurchaseOrderDTO_.getVendorId());
+//            mPurchaseOrderLineDTO.setCostCenterId(mContractLineDTO.getCostCenterId());
+//            mPurchaseOrderLineDTO.setAdOrganizationId(mContractLineDTO.getAdOrganizationId());
+//            mPurchaseOrderLineDTO.setProductId(mContractLineDTO.getProductId());
+//            mPurchaseOrderLineDTO.setUomId(mContractLineDTO.getUomId());
+//
+//            mPurchaseOrderLineService.save(mPurchaseOrderLineDTO);
+//        });
+//
+//        Map<String, Object> payload = new HashMap<>(1);
+//        payload.put(MPurchaseOrderMessageDispatcher.KEY_ID, poId);
+//        messageDispatcher.dispatch(MPurchaseOrderMessageDispatcher.BEAN_NAME, payload);
+    }
+
+    public void generatebalance( MContractToPoDTO mContractToPoDTO){
+        for(MContractLineDTO mContractLineDTO :  mContractToPoDTO.getmContractLineDTOS()){
+            Optional<MContractLineDTO> mContractLineDTO1 = mContractLineService.findOne(mContractLineDTO.getId());
+            log.info("this dataaa {} {} ",mContractLineDTO1,mContractLineDTO1.get().getContractNo());
+            mContractLineDTO1.get().setQuantityBalance(mContractLineDTO.getQuantityBalance());
+            mContractLineService.save(mContractLineDTO1.get());
+        }
+
     }
 
     /**
@@ -216,7 +266,7 @@ public class MContractService {
         mContractLineRepository.saveAll(mContractLines);
 
         MContractTeamDTO dto = mContractTeamService.findByContractId(mContract.getId());
-        if(dto==null){
+        if (dto == null) {
             dto = new MContractTeamDTO();
             dto.setAdOrganizationId(mContract.getAdOrganizationId());
             dto.setContractId(mContract.getId());

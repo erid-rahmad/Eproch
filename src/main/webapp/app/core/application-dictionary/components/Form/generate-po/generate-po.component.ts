@@ -119,6 +119,7 @@ export default class GeneratePo extends Vue {
       filterQuery.push(`vendorId.equals=${vendorId}`)
     }
 
+    console.log("this filter",filterQuery)
     this.commonService('/api/m-requisition-lines')
       .retrieve({
         criteriaQuery: filterQuery,
@@ -129,7 +130,9 @@ export default class GeneratePo extends Vue {
         }
       })
       .then(res => {
+
         const lines = res.data as any[];
+        console.log("this line",lines)
 
         if (lines.length) {
           if (lines.length == 1) {

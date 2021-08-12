@@ -88,6 +88,7 @@ public class MContractResource {
     @PostMapping("/m-contracts-generatePO")
     public ResponseEntity<String> generate(@Valid @RequestBody MContractToPoDTO mContractToPoDTO) throws URISyntaxException {
         log.info("generate PO {}",mContractToPoDTO);
+       mContractService.generatebalance(mContractToPoDTO);
        mContractService.generateToPo(mContractToPoDTO);
        return ResponseEntity.ok("Ok");
     }

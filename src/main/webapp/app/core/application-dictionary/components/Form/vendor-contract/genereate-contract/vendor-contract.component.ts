@@ -1,41 +1,38 @@
-import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
-import { AccountStoreModule } from '@/shared/config/store/account-store';
+import settings from '@/settings';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
+import { ElForm } from 'element-ui/types/form';
+import { ElInput } from 'element-ui/types/input';
 import { ElTable } from 'element-ui/types/table';
-import { Component, Inject, Mixins, Watch } from "vue-property-decorator";
+import { Component, Inject, Vue } from 'vue-property-decorator';
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
-import contractInfo from './contract-info.vue';
-
-
-
-const enum ContractPage {
-  MAIN = 'main',
-  DETAIL = 'detail',
-}
-
-const baseApiContract = 'api/m-contracts';
+import AdInputList from "@/shared/components/AdInput/ad-input-list.vue";
+import AdInputLookup from "@/shared/components/AdInput/ad-input-lookup.vue";
+const baseApiContractLine = 'api/m-contract-lines';
+const baseApiContractGeneratePo = 'api/m-contracts-generatePO';
 
 @Component({
   components: {
-    contractInfo,
-
+    AdInputList,
+    AdInputLookup
   }
 })
-export default class VendorContract extends Mixins(AccessLevelMixin) {
+export default class GeneratePo extends Vue {
 
   @Inject('dynamicWindowService')
-  private commonService: (baseApiUrl: string) => DynamicWindowService;
+  protected commonService: (baseApiUrl: string) => DynamicWindowService;
 
-  deleteConfirmationVisible: boolean = false;
-  terminationConfirmationVisible: boolean = false;
-  loading: boolean = false;
-  ApprovePA=false;
-  detailTabName: string = 'INF';
+  rowGutter = 24;
+  generating = false;
+  generatePA = false;
+  loadingPr = false;
+  loadingPrLines = false;
 
-  gridData: any[] = [];
-
-  selectedRow: any = {};
-
-  section: ContractPage = ContractPage.MAIN;
+  gridSchema = {
+    defaultSort: {},
+    emptyText: 'No Records Found',
+    maxHeight: 450,
+    height: 450
+  };
 
   itemsPerPage = 10;
   queryCount: number = null;
@@ -45,125 +42,169 @@ export default class VendorContract extends Mixins(AccessLevelMixin) {
   reverse = false;
   totalItems = 0;
 
-  docStatuses: any[] = [];
 
-  get isCanceled() {
-    return this.selectedRow.documentStatus === 'CNL';
+  dialogConfirmationVisible: boolean = false;
+  gridData: any[] = [];
+  currencyOptions: any[] = [];
+  vendorOptions: any[] = [];
+  warehouseOptions: any[] = [];
+  paymentTermOptions: any[] = [];
+
+  filter = {
+    contractNumber: null,
+    vendorId: null
+  };
+
+  form = {
+    adOrganizationId: accountStore.organizationInfo.id,
+    costCenterId: null,
+    currencyId: null,
+    datePromised: new Date(),
+    documentTypeId: null,
+    paymentTermId: null,
+    tax: false,
+    warehouseId: null,
+    mContractLineDTOS: []
   }
 
-  get isDraft() {
-    return ! this.selectedRow.id || this.selectedRow.documentStatus === 'DRF';
+  get formSettings() {
+    return settings.form;
   }
 
-  get isSubmit() {
-    return  this.selectedRow.documentStatus === 'DRF';
+  mainFormValidationSchema = {
+    datePromised: {
+      required: true,
+      message: 'Date Ordered is required'
+    },
+    paymentTermId: {
+      required: true,
+      message: 'Payment Term is required'
+    },
+    currencyId: {
+      required: true,
+      message: 'Currency is required'
+    },
+    warehouseId: {
+      required: true,
+      message: 'Warehouse is required'
+    }
+  };
+
+  get dateDisplayFormat() {
+    return settings.dateDisplayFormat;
   }
 
-  get isAction() {
-    return  this.selectedRow.documentStatus === 'SMT';
+  get dateValueFormat() {
+    return settings.dateValueFormat;
   }
 
-  get mainPage() {
-    return this.section === ContractPage.MAIN;
-  }
-
-  get detailPage() {
-    return this.section === ContractPage.DETAIL;
-  }
-
-  @Watch('page')
-  onPageChange(page: number) {
-    this.loadPage(page);
-  }
-
-  onCurrentRowChanged(row: any) {
-    this.selectedRow = row;
-  }
-
-  onCloseClicked() {
-    this.section = ContractPage.MAIN;
-    this.detailTabName = 'INF';
-    this.transition();
-  }
-
-  onDeleteClicked() {
-    this.deleteConfirmationVisible = true;
-  }
-
-
-
-  generatePO() {
-    (<any>this.$refs.contractInfo).generatePoAction();
-  }
-
-  onTerminateClicked() {
-    this.terminationConfirmationVisible = true;
+  private get mainTable() {
+    return this.$refs.mainTable as ElTable;
   }
 
   created() {
+    this.retrieveDropDownOptions('/api/c-vendors', 'vendorOptions');
+    this.retrieveDropDownOptions('/api/c-warehouses', 'warehouseOptions');
+    this.retrieveDropDownOptions('/api/c-currencies', 'currencyOptions');
+    this.retrieveDropDownOptions('/api/c-payment-terms', 'paymentTermOptions');
+  }
 
-    this.commonService(baseApiContract)
+  mounted() {
+    (<ElInput>this.$refs.contractNumber).focus();
+  }
+
+  retrievePurchaseRequisitionLines(contractNo?: number, vendorId?: number): void {
+    this.loadingPrLines = true;
+    // this.gridData=[]
+    this.mainTable.clearSelection();
+
+    const prNo = contractNo || this.filter.contractNumber;
+    const filterQuery = [
+      'active.equals=true',
+      'quantityBalance.greaterThan=0',
+      // 'contractStatus.equals=APV',
+
+    ];
+
+    if (prNo) {
+      filterQuery.push(`contractNo.contains=${prNo}`);
+    }
+
+    if (vendorId) {
+      filterQuery.push(`vendorId.equals=${vendorId}`)
+    }
+    console.log("this fileter query",filterQuery)
+
+    this.commonService(baseApiContractLine)
       .retrieve({
-        criteriaQuery: this.updateCriteria([
-          'active.equals=true',
-        ]),
+        criteriaQuery: filterQuery,
         paginationQuery: {
           page: 0,
-          size: 10,
-          sort: ['id']
+          size: 1000,
+          sort: this.sort()
         }
       })
       .then(res => {
-        console.log("res data adad",res.data)
+        const lines = res.data as any[];
+        console.log("this line",lines)
+
+        if (lines.length) {
+          if (lines.length == 1) {
+            this.$set(this.filter, 'requisitionNo', lines[0].requisitionName);
+          } else {
+            const line = lines[0];
+
+            if (! lines.some(l => l.requisitionName !== line.requisitionName)) {
+              this.$set(this.filter, 'requisitionNo', lines[0].requisitionName);
+            }
+          }
+        }
+
+        this.gridData = res.data.map((line: any) => {
+          line.quantityOrdered = line.quantityBalance;
+          line.quantityMax = line.quantityBalance;
+          line.quantityBalance = 0;
+          line.orderAmount = line.quantityOrdered * line.ceilingPrice;
+          return line;
+        });
+
+        this.mainTable.toggleAllSelection();
       })
       .catch(err => {
-
+        console.error('Failed getting the requisition lines. %O', err);
+        this.$message.error(err.detail || err.message);
       })
-      .finally(() => this.loading = false);
-
-
-    const query = this.$route.query;
-    this.retrieveDocStatuses();
-
-    console.log("this query",query);
-
-    if(query.id) {
-      this.commonService(baseApiContract)
-        .retrieve({
-          criteriaQuery: this.updateCriteria([
-            'active.equals=true',
-            `id.equals=${query.id}`
-          ]),
-          paginationQuery: {
-            page: 0,
-            size: 10,
-            sort: ['id']
-          }
-        })
-        .then(res => {
-          console.log("res,res"),res;
-          this.selectedRow = res.data[0];
-          this.section = ContractPage.DETAIL;
-        })
-    } else {
-      this.transition();
-    }
+      .finally(() => {
+        this.loadingPrLines = false;
+      });
   }
 
-  public changeOrder(propOrder): void {
+  /**
+   * Action to be performed upon quantity ordered change event.
+   * Update the quantityBalance1 by subtracting quantity and quantityOrdered.
+   * @param row Current row being edited.
+   * @param index The row index.
+   * @param value The ordered quantity.
+   */
+  onQuantityOrderedChanged(row: any, index: number, value: number) {
+    // const line = {...row};
+    console.log("this row",row)
+    row.quantityBalance = row.quantityMax- value;
+    row.orderAmount = value * row.ceilingPrice;
+  }
+
+  public onSelectionChanged(selection: any) {
+    this.form.mContractLineDTOS = selection;
+  }
+
+  onVendorChange(vendorId: number) {
+    this.retrievePurchaseRequisitionLines(this.filter.contractNumber, vendorId);
+  }
+
+  public changeOrder(propOrder: any): void {
     this.propOrder = propOrder.prop;
     this.reverse = propOrder.order === 'ascending';
-    const {propOrder: property, reverse} = this;
-    this.$emit('order-changed', { property, reverse });
     this.transition();
-  }
-
-  public changePageSize(size: number) {
-    this.itemsPerPage = size;
-    if(this.page!=1){
-      this.page = 0;
-    }
-    this.retrieveAllRecords();
   }
 
   public sort(): Array<any> {
@@ -174,113 +215,85 @@ export default class VendorContract extends Mixins(AccessLevelMixin) {
     return result;
   }
 
-  private loadPage(page: number): void {
-    if (page !== this.previousPage) {
-      this.previousPage = page;
-      this.transition();
-    }
+  public transition(): void {
+    this.retrievePurchaseRequisitionLines(this.filter.contractNumber, this.filter.vendorId);
   }
 
-  private transition(): void {
-    this.retrieveAllRecords();
-  }
 
-  public clear(): void {
-    this.page = 1;
-    this.retrieveAllRecords();
-  }
-
-  deleteRecord() {
-    this.commonService(baseApiContract)
-      .delete(this.selectedRow.id)
-      .then(() => {
-        this.$message.success(`Auction ${this.selectedRow.documentNo} has been deleted successfully`);
-        this.transition();
-        this.deleteConfirmationVisible = false;
-      })
-      .catch(err => {
-        console.error('Failed to delete the contract', err);
-        this.$message.error(`Failed to delete contract ${this.selectedRow.documentNo}`);
-      });
-  }
-
-  terminateContract(){
-    this.selectedRow.documentAction = 'TRM';
-    this.commonService(baseApiContract)
-      .update(this.selectedRow)
-      .then(() => {
-        this.$message.success(`Contract ${this.selectedRow.documentNo} has been terminated.`);
-        this.terminationConfirmationVisible = false;
-        this.retrieveAllRecords();
-      }).catch((err)=>{
-      console.log(err);
-      this.$message.success(`Unable to terminate bidding ${this.selectedRow.documentNo}.`);
-    });
-  }
-
-  printDocStatus(status: string) {
-    return this.docStatuses.find(item => item.value === status)?.name || status;
-  }
-
-  private retrieveDocStatuses() {
-    this.commonService(null).retrieveReferenceLists('docStatus')
-      .then(res => this.docStatuses = res)
-      .catch(err => this.$message.warning('Failed to get document statuses'));
-  }
-
-  private retrieveAllRecords(): void {
-    this.loading = true;
-    const paginationQuery = {
-      page: this.page - 1,
-      size: this.itemsPerPage,
-      sort: this.sort()
-    };
-
-    this.commonService(baseApiContract)
+  public retrieveDropDownOptions(baseApi: string, prop: string): void {
+    this.commonService(baseApi)
       .retrieve({
-        criteriaQuery: this.updateCriteria([
+        criteriaQuery: [
           'active.equals=true'
-        ]),
-        paginationQuery
+        ],
       })
       .then(res => {
-        this.gridData = res.data;
-        console.log("res data",res.data)
-        this.totalItems = Number(res.headers['x-total-count']);
-        this.queryCount = this.totalItems;
-        if (this.gridData.length) {
-          this.setRow(this.gridData[0]);
-        }
+        this[prop] = res.data.map((item: any) => {
+          return {
+            key: item.id,
+            value: item.name,
+            code: item.code
+          };
+        });
       })
       .catch(err => {
         console.error('Failed getting the record. %O', err);
-        this.$message.error(err.detail || err.message);
-      })
-      .finally(() => this.loading = false);
+        this.$message({
+          type: 'error',
+          message: err.detail || err.message
+        });
+      });
   }
 
-  private setRow(record: any) {
-    (<ElTable>this.$refs.mainGrid).setCurrentRow(record);
+  generatePurchaseOrder() {
+    console.log("this form",this.form)
+    this.generatePA=true;
+
+
+    // if (! this.form.requisitionLines.length) {
+    //   this.$message.error('Please select one or more lines');
+    //   return;
+    // }
+    //
+    // (<ElForm>this.$refs.mainForm).validate((passed, error) => {
+    //   if (passed) {
+    //     this.generating = true;
+    //     this.commonService('/api/m-purchase-orders/generate')
+    //       .create(this.form)
+    //       .then(res => {
+    //         console.log('PO generated. response: %O', res);
+    //         const count = res.length === 1 ? ` #${res[0].documentNo}` : '(s)';
+    //         this.$message.success(`Purchase Order${count} has been created successfully.`);
+    //       })
+    //       .catch(err => {
+    //         console.log('Failed generating purchase order(s). %O', err);
+    //         this.$message.error('Failed generating purchase order(s)');
+    //       })
+    //       .finally(() => {
+    //         this.generating = false;
+    //       })
+    //   }
+    // });
   }
 
-  viewDetails(row: any) {
-    if(this.mainPage){
-      if ( ! row) {
-        this.selectedRow = {
-          name: null,
-          description: null,
-          documentNo: null,
-          adOrganizationId: AccountStoreModule.organizationInfo.id,
-          currencyId: null,
-          costCenterId: null,
-          ownerUserId: null
-        };
-      } else {
-        this.selectedRow = row;
-      }
-      this.section = ContractPage.DETAIL;
-    } else {
-      (<any>(<any>this.$refs.detailPage).$refs.EVA[0]).viewDetails();
-    }
+  public generatePo() {
+    console.log("this form",this.form)
+        this.commonService(baseApiContractGeneratePo)
+          .create(this.form)
+          .then(res => {
+          })
+          .catch(err => {
+            console.error('Failed to save the contract', err);
+            this.$message.error('Failed to save the contract');
+          })
+          .finally();
+
+    this.generatePA=false;
+    this.gridData=[]
+   
+
   }
+
+
+
 }

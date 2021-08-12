@@ -13,10 +13,15 @@ import org.mapstruct.*;
 public interface MContractLineMapper extends EntityMapper<MContractLineDTO, MContractLine> {
 
     @Mapping(source = "contract.id", target = "contractId")
+    @Mapping(source = "contract.vendor.id", target = "vendorId")
+    @Mapping(source = "contract.documentNo", target = "contractNo")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "costCenter.id", target = "costCenterId")
     @Mapping(source = "product.id", target = "productId")
+    @Mapping(source = "product.name", target = "productName")
+
     @Mapping(source = "uom.id", target = "uomId")
+    @Mapping(source = "uom.name", target = "uomCode")
     MContractLineDTO toDto(MContractLine mContractLine);
 
     @Mapping(source = "contractId", target = "contract")
