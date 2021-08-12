@@ -1,7 +1,7 @@
 <template>
     <div class="app-container card-view vendor-evaluation">
         <div class="card">
-            <h5>Approval Activities</h5>
+            <h3>Approval Activities</h3>
             <el-row :gutter="24">
                 <el-col :span="24">
                     <el-table

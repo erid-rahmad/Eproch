@@ -47,7 +47,7 @@
               :data-id="tab.id"
               :data-index="index"
             >
-              {{ tab.name }}
+              <h3>{{ tab.name }}</h3>
             </el-breadcrumb-item>
           </transition-group>
         </el-breadcrumb>
