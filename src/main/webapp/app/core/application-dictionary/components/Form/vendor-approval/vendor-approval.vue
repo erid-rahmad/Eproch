@@ -72,14 +72,15 @@
                     >
                     </el-input>
                     <br/> -->
-                    <div v-if="showSummary">
+                    <div class="summary-detail" 
+                        v-loading="!showSummary">
                         <span v-html="formattedDate"></span>
                         <p v-html="summary"></p>
                     </div>
                     
                 </el-form-item>
                 <el-form-item label="Lookup Document">
-                    <el-col :span="6">
+                    <el-col :span="4">
                         <el-button 
                             icon="el-icon-view"
                             type="primary"
@@ -88,7 +89,7 @@
                         >View
                         </el-button>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="4">
                         <el-button
                             icon="el-icon-printer"
                             type="primary"
@@ -100,7 +101,7 @@
                     </el-col>
                 </el-form-item>
                 <el-form-item label="Do you want to Approve ?">
-                    <el-col :span="6">
+                    <el-col :span="4">
                         <el-button
                             type="danger"
                             size="small"
@@ -108,7 +109,7 @@
                         >Reject
                         </el-button>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="4">
                         <el-button
                             type="primary"
                             size="small"
@@ -122,3 +123,8 @@
     </div>
 </template>
 <script lang="ts" src="./vendor-approval.component.ts"></script>
+<style lang="scss">
+.summary-detail { 
+    min-height: 200px;
+}
+</style>
