@@ -52,7 +52,7 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
     {staticColor: '#11cdef', gradientColor: 'linear-gradient(87deg, rgb(17, 205, 239) 0px, rgb(17, 113, 239) 100%);'}
   ]
   
-  //@Watch('items', {deep: true})
+  @Watch('items', {deep: true})
   async onItemsChanged(items: IAdWatchListItem[]) {
     await items.forEach((item, index) => {
       this.retrieveChartData(item, index);
@@ -74,9 +74,9 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
   public refresh() {
     this.onItemsChanged(this.items);
 
-    setInterval(() => {
+    /*setInterval(() => {
       this.onItemsChanged(this.items);
-    }, 300000);
+    }, 60000);*/
   }
 
   retrieveChartItems(name: string) {
