@@ -1,9 +1,9 @@
 <template>
-    <div :id="id" class="accordion-wrapper">
-        <div class="accordion-expander">
-            <div class="accordion-expander__trigger" 
+    <div :id="id" class="accordion-wrapper" :style="open ? 'height: 100%;' : 'height:auto;'">
+        <div class="accordion-expander" :style="open ? 'height: 100%;' : 'height:auto;'">
+            <div :id="id + '-trigger'" class="accordion-expander__trigger" 
             :title="open ? 'Collapse' : 'Expand'"
-            @click="open=!open" 
+            @click="expandCollapsePanel" 
             :class="open?'accordion-active':'accordion-inactive'">
                 <div style="display: flex;justify-content: space-between;width: 100%;">
                     <div>
@@ -20,7 +20,7 @@
                 </div>
             </div>
             <transition :name="animation">
-                <div class="accordion-expander__body" v-show="open">
+                <div :id="id + '-body'" class="accordion-expander__body" v-show="open" style="height: calc(100% - 33px)">
                     <slot></slot>
                 </div>
             </transition>
@@ -28,36 +28,7 @@
     </div>
 </template>
 
-<script>
-
-export default {
-  name: 'Accordion',
-  props: {
-    id: {
-        type: String,
-        default: 'accordion'
-    },
-    title: {
-        type: String,
-        default: 'title'
-    },
-    animation: {
-        type: String,
-        default: 'bottomToTop'
-        // validator: prop => ['leftToRight', 'bounceIn', 'bottomToTop'].includes(prop)
-    },
-    expanded: {
-        type: Boolean,
-        default: false
-    }
-  },
-  data() {
-    return {
-        open: this.expanded
-    }
-  }
-}
-</script>
+<script lang="ts" src="./accordion.component.ts"></script>
 
 <style lang="scss">
     .accordion-title {
