@@ -1,6 +1,6 @@
 <template>
   <div class="app-container card-view bidding-negotiation">
-    <div id="innerToolbar" class="toolbar">
+    <div id="innerToolbar" class="form-toolbar">
       <el-button
         v-if="!index"
         icon="el-icon-close"
@@ -44,7 +44,7 @@
           ></el-table-column>
           <el-table-column
             label="Bidding Type"
-            min-width="100"
+            min-width="180"
             prop="biddingType"
           ></el-table-column>
           <el-table-column
@@ -69,13 +69,13 @@
           </el-table-column>
           <el-table-column
             label="Bidding Status"
-            min-width="100"
+            min-width="150"
           >
             <template slot-scope="{ row }">{{formatBiddingStatus(row.biddingStatus)}}</template>
           </el-table-column>
           <el-table-column
             label="Evaluation Status"
-            min-width="100"
+            min-width="200"
           >
             <template slot-scope="{ row }">{{formatEvalStatus(row.evaluationStatus)}}</template>
           </el-table-column>
@@ -91,25 +91,27 @@
               </el-button>
             </template>
           </el-table-column>
-          <el-table-column label="Action" min-width="100">
+          <el-table-column label="Action" min-width="240">
             <template slot-scope="{ row }">
-              <el-button
-                icon="el-icon-search"
-                size="mini"
-                type="primary"
-                @click="viewDetail(row)"
-              >
-                View
-              </el-button>
-              <el-button
-                icon="el-icon-search"
-                size="mini"
-                type="primary"
-                v-if="!isVendor&&(row.vendorCount==row.finishedCount && row.vendorCount>0)"
-                @click="viewSummary(row)"
-              >
-                Summary
-              </el-button>
+              <el-button-group>
+                <el-button
+                  icon="el-icon-search"
+                  size="mini"
+                  type="primary"
+                  @click="viewDetail(row)"
+                >
+                  View
+                </el-button>
+                <el-button
+                  icon="el-icon-search"
+                  size="mini"
+                  type="primary"
+                  v-if="!isVendor&&(row.vendorCount==row.finishedCount && row.vendorCount>0)"
+                  @click="viewSummary(row)"
+                >
+                  Summary
+                </el-button>
+              </el-button-group>
             </template>
           </el-table-column>
         </el-table>
