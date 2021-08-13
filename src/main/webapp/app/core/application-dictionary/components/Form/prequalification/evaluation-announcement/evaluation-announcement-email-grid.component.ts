@@ -184,6 +184,9 @@ export default class EvaluationAnnouncement extends mixins(ScheduleEventMixin, E
         if (data.length) {
           this.formData = {...this.formData, ...data[0]};
           console.log("this data retrieveapiAnnouncementResults ",this.formData)
+        } else {
+          this.formData.descriptionPass = '<p><br>Kepada Bapak/Ibu Pimpinan <br>#vendorName <br>Hal: Pengumuman Hasil Prekualifikasi <br>Dengan hormat </p><p>Sehubung dengan proses prekualifikasi sesuai judul di atas, kami memberitahukan mengenai hasil Prakualifikasi yang telah Bapak/Ibu ikutsertakan telah lolos tahap prekualifikasi. Silahkan Bapak/Ibu dapat melihat hasil terlampir. Demikian penyampaian ini kami dengan senang hati menerima bila ada yang hendak di komunikasikan silahkan sampaikan ke email eproc.berca.co.id </p><p>Hormat Kami<br>Berca.co.id</p>'
+          this.formData.descriptionFail = '<p><br>Kepada Bapak/Ibu Pimpinan <br>#vendorName <br>Hal: Pengumuman Hasil Prekualifikasi <br>Dengan hormat </p><p>Sehubung dengan proses prekualifikasi sesuai judul di atas, kami memberitahukan mengenai hasil Prakualifikasi yang telah Bapak/Ibu ikutsertakan tidak lolos tahap prekualifikasi. Silahkan Bapak/Ibu dapat melihat hasil terlampir. Demikian penyampaian ini kami dengan senang hati menerima bila ada yang hendak di komunikasikan silahkan sampaikan ke email eproc.berca.co.id </p><p>Hormat Kami<br>Berca.co.id</p>'
         }
         resolve(true);
       })
