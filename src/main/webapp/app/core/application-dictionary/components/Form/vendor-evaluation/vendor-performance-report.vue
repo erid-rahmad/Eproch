@@ -1,6 +1,6 @@
 <template>
   <div class="app-container card-view">
-    <div class="toolbar">
+    <div class="form-toolbar">
         <el-button
             icon="el-icon-close"
             size="mini"
@@ -10,20 +10,9 @@
         >
             close
         </el-button>
-      <el-button
-        icon="el-icon-search"
-        size="mini"
-        type="primary"
-        v-if="!viewDetail"
-        @click="refreshContent()"
-      >
-        Search
-      </el-button>
-
     </div>
 
-
-      <div class="card" v-if="!viewDetail">
+    <div class="card" v-if="!viewDetail">
     <el-form
       ref="filterForm"
       label-position="left"
@@ -35,7 +24,7 @@
         <el-col
           :xs="24"
           :sm="24"
-          :lg="12"
+          :lg="10"
           :xl="8"
         >
           <el-form-item label="Business Category">
@@ -72,7 +61,7 @@
         <el-col
           :xs="24"
           :sm="24"
-          :lg="12"
+          :lg="10"
           :xl="8"
         >
           <el-form-item label="Vendor">
@@ -90,6 +79,22 @@
               ></el-option>
             </el-select>
           </el-form-item>
+        </el-col>
+        <el-col
+          :xs="24"
+          :sm="24"
+          :lg="4"
+          :xl="8"
+        >
+          <el-button
+            icon="el-icon-search"
+            size="mini"
+            type="primary"
+            v-if="!viewDetail"
+            @click="refreshContent()"
+          >
+            Search
+          </el-button>
         </el-col>
       </el-row>
       <el-table
@@ -133,9 +138,10 @@
         ></el-table-column>
         <el-table-column
           label="Evaluation Score"
-          min-width="150"
+          min-width="170"
           prop="evaluationScore"
           sortable
+          :formatter="formatDecimal"
         ></el-table-column>
         <el-table-column
           label="Warning Letter Score"
@@ -146,6 +152,7 @@
           label="Rating"
           min-width="100"
           prop="rating"
+          :formatter="formatDecimal"
         ></el-table-column>
           <el-table-column
 
@@ -186,8 +193,11 @@
   grid-template-columns: 100%;
   grid-template-rows: 36px auto;
 
-  .toolbar {
-    padding: 4px;
-  }
+  
+}
+
+.toolbar {
+  padding: 5px;
+  margin-left: 10px;
 }
 </style>

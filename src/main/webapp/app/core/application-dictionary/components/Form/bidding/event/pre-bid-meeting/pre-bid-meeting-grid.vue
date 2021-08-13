@@ -1,6 +1,6 @@
 <template>
     <div class="app-container card-view pre-bid-meeting">
-        <div class="toolbar">
+        <div class="form-toolbar">
             <el-button
                 v-if="!index"
                 icon="el-icon-close"
@@ -27,27 +27,27 @@
                 <el-table-column align="center" label="Title" min-width="180" prop="biddingName" show-overflow-tooltip
                                 sortable>
                 </el-table-column>
-                <el-table-column align="center" label="Bidding No" min-width="150" prop="biddingNo" show-overflow-tooltip
+                <el-table-column align="center" label="Bidding No" min-width="180" prop="biddingNo" show-overflow-tooltip
                                 sortable>
                 </el-table-column>
                 <el-table-column align="center" label="Bidding Type" min-width="180" prop="biddingType" show-overflow-tooltip
                                 sortable>
                 </el-table-column>
-                <el-table-column align="center" label="Bidding Status" min-width="120" prop="biddingStatus" show-overflow-tooltip
+                <el-table-column align="center" label="Bidding Status" min-width="150" prop="biddingStatus" show-overflow-tooltip
                                 sortable>
                     <template slot-scope="{ row }">
                         {{ formatBiddingStatus(row.biddingStatus) }}
                     </template>
                 </el-table-column>
-                <el-table-column align="center" label="Modified Date" min-width="120" show-overflow-tooltip sortable>
+                <el-table-column align="center" label="Modified Date" min-width="150" show-overflow-tooltip sortable>
                     <template slot-scope="{row}">
                         {{ row.lastModifiedDate | formatDate }}
                     </template>
                 </el-table-column>
-                <el-table-column align="center" label="Modified By" min-width="120" prop="lastModifiedBy" show-overflow-tooltip
+                <el-table-column align="center" label="Modified By" min-width="150" prop="lastModifiedBy" show-overflow-tooltip
                                 sortable>
                 </el-table-column>
-                <el-table-column label="Action" align="center"  min-width="70">
+                <el-table-column label="Action" align="center"  min-width="70" >
                     <template slot-scope="{ row }">
                         <el-button  icon="el el-download-alt" :underline="false" size="mini" type="primary"
                         @click="openDetail(row)"

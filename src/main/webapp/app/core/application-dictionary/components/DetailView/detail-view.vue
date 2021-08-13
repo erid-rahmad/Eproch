@@ -27,7 +27,6 @@
             <el-switch
               v-if="isActivatorSwitch(col.field)"
               v-model="model.active"
-              active-text="Active"
               inactive-color="#ff4949"
               class="switch"
               @change="value => onInputChanged(col.field, value)"
