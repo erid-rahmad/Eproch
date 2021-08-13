@@ -110,10 +110,27 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
     label: 'Sub Agreement'
   }]
 
-  termType= [{
-    value: 'Fixed',
-    label: 'Fixed'
-  },]
+  termType= [
+    {
+      value: 'Immediate',
+      label: 'Immediate'
+    },
+    {
+      value: '30 Days',
+      label: '30 Days'
+    },
+    {
+      value: '45 Days',
+      label: '45 Days'
+    },
+    {
+      value: '60 Days',
+      label: '60 Days'
+    },
+    {
+      value: '90 Days',
+      label: '90 Days'
+    },]
 
   printStatus(status: string) {
     return this.documentStatuses[status];

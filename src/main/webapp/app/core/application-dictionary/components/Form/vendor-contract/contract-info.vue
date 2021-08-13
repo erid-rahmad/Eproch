@@ -111,10 +111,11 @@
                 </el-form-item>
                 <el-form-item
                     label="Contract Date"
-                    prop="startDate"
+                    prop="dateTrx"
                 >
                     <el-date-picker
-                        v-model="contract.startDate"
+                        disabled
+                        v-model="contract.dateTrx"
                         :format="dateDisplayFormat"
                         :value-format="dateValueFormat"
                         clearable
@@ -149,29 +150,6 @@
 
                     ></el-input>
                 </el-form-item>
-
-                <!--                <el-form-item label="Evaluation Type">-->
-                <!--                    <ad-input-lookup-->
-                <!--                        v-model="contract.vendorEvaluationId"-->
-                <!--                        placeholder="Select Evaluation Type"-->
-                <!--                        table-name="c_vendor_evaluation"-->
-                <!--                    ></ad-input-lookup>-->
-                <!--                </el-form-item>-->
-                <!--                <el-form-item label="Evaluation Period">-->
-                <!--                    <ad-input-list-->
-                <!--                        v-model="contract.evaluationPeriod"-->
-                <!--                        placeholder="Select Evaluation Period"-->
-                <!--                        reference-key="vendorEvaluationPeriod"-->
-                <!--                    ></ad-input-list>-->
-                <!--                </el-form-item>-->
-
-                <el-form-item
-                    label="Proses Status"
-                >
-
-                    {{ printStatus(contract.documentStatus) }}
-                </el-form-item>
-
             </el-col>
             <el-col
                 :lg="8"
@@ -241,34 +219,6 @@
 
                     ></el-input>
                 </el-form-item>
-                <!--                <el-form-item label="Evaluation Type">-->
-                <!--                    <ad-input-lookup-->
-                <!--                        v-model="contract.vendorEvaluationId"-->
-                <!--                        placeholder="Select Evaluation Type"-->
-                <!--                        table-name="c_vendor_evaluation"-->
-                <!--                    ></ad-input-lookup>-->
-                <!--                </el-form-item>-->
-                <!--                <el-form-item label="Evaluation Period">-->
-                <!--                    <ad-input-list-->
-                <!--                        v-model="contract.evaluationPeriod"-->
-                <!--                        placeholder="Select Evaluation Period"-->
-                <!--                        reference-key="vendorEvaluationPeriod"-->
-                <!--                    ></ad-input-list>-->
-                <!--                </el-form-item>-->
-                <!--                <el-form-item label="Total Price">-->
-                <!--                    <el-input-->
-                <!--                        v-model="contract.price"-->
-                <!--                        v-inputmask="{ alias: 'currency' }"-->
-                <!--                        clearable-->
-                <!--                        disabled-->
-                <!--                    ></el-input>-->
-                <!--                </el-form-item>-->
-                <!--                <el-form-item-->
-                <!--                    label="Document Status"-->
-                <!--                >-->
-
-                <!--                    {{ printStatus(contract.documentStatus) }}-->
-                <!--                </el-form-item>-->
             </el-col>
             <el-col>
                 <el-divider content-position="left">

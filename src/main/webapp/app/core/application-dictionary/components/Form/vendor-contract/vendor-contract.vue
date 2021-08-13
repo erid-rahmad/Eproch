@@ -64,13 +64,13 @@
             >
                 Reject
             </el-button>
-            <el-button
-                v-if=" detailPage && detailTabName === 'INF'"
-                size="mini"
-                title="Delete"
-                type="primary"
-                @click="generatePO"
-            >Generate PO</el-button>
+<!--            <el-button-->
+<!--                v-if=" detailPage && detailTabName === 'INF'"-->
+<!--                size="mini"-->
+<!--                title="Delete"-->
+<!--                type="primary"-->
+<!--                @click="generatePO"-->
+<!--            >Generate PO</el-button>-->
         </div>
 
         <div class="card">
