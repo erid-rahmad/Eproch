@@ -155,7 +155,7 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
   }
 
   retriveContracLine(ContracId){
-    try {
+    if (ContracId){
       this.loading = true;
       this.commonService(baseApiContractLine)
         .retrieve({
@@ -177,7 +177,7 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
           this.$message.error(err.detail || err.message);
         })
         .finally(() => this.loading = false);
-    }catch (e) {}
+    }
   }
 
   delleteContactLine(Id){
@@ -218,6 +218,7 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
   }
 
   public async save() {
+    await this.average();
     await (<ElForm>this.$refs.contractInfoForm).validate(passed => {
       if (passed) {
         const newRecord = !this.contract.id;
@@ -238,8 +239,7 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
           .finally(() => this.loading = false);
       }
     })
-
-    await this.retriveContracLine(this.contract.id)
+    await this.retriveContracLine(this.contract.id);
   }
 
   public generatePo() {
