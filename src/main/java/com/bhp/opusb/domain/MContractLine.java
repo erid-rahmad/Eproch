@@ -1,6 +1,5 @@
 package com.bhp.opusb.domain;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -83,6 +82,11 @@ public class MContractLine extends AbstractAuditingEntity {
     @NotNull
     @JsonIgnoreProperties("mContractLines")
     private CUnitOfMeasure uom;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mContractLines")
+    private CVendor vendor;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -273,6 +277,19 @@ public class MContractLine extends AbstractAuditingEntity {
 
     public void setUom(CUnitOfMeasure cUnitOfMeasure) {
         this.uom = cUnitOfMeasure;
+    }
+
+    public CVendor getVendor() {
+        return vendor;
+    }
+
+    public MContractLine vendor(CVendor cVendor) {
+        this.vendor = cVendor;
+        return this;
+    }
+
+    public void setVendor(CVendor cVendor) {
+        this.vendor = cVendor;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

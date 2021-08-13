@@ -2222,6 +2222,7 @@ relationship ManyToOne {
     MContractLine{costCenter required} to CCostCenter
     MContractLine{product required} to CProduct
     MContractLine{uom required} to CUnitOfMeasure
+    MContractLine{vendor required} to CVendor
 
 	/** documentType can be New Contract or Contract Renewal. */
 	MContract{documentType required} to CDocumentType

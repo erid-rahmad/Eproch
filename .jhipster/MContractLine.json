@@ -87,6 +87,14 @@
             "relationshipValidateRules": "required",
             "relationshipName": "uom",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "mContractLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "vendor",
+            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20210625061000",

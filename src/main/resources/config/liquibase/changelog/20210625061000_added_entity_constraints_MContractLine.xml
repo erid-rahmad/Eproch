@@ -7,7 +7,7 @@
         Added the constraints for entity MContractLine.
     -->
     <changeSet id="20210625061000-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="contract_id"
                                  baseTableName="m_contract_line"
                                  constraintName="fk_m_contract_line_contract_id"
@@ -38,5 +38,12 @@
                                  referencedColumnNames="id"
                                  referencedTableName="c_unit_of_measure"/>
 
+    </changeSet>
+    <changeSet id="20280813730123" author="erid">
+        <addForeignKeyConstraint baseColumnNames="vendor_id"
+                                 baseTableName="m_contract_line"
+                                 constraintName="fk_m_contract_line_vendor_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_vendor"/>
     </changeSet>
 </databaseChangeLog>

@@ -290,7 +290,7 @@ export default class GeneratePo extends Vue {
 
     this.generatePA=false;
     this.gridData=[]
-   
+
 
   }
 

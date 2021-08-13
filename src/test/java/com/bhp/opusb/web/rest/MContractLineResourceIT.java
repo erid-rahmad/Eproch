@@ -7,6 +7,7 @@ import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CCostCenter;
 import com.bhp.opusb.domain.CProduct;
 import com.bhp.opusb.domain.CUnitOfMeasure;
+import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.repository.MContractLineRepository;
 import com.bhp.opusb.service.MContractLineService;
 import com.bhp.opusb.service.dto.MContractLineDTO;
@@ -164,6 +165,16 @@ public class MContractLineResourceIT {
             cUnitOfMeasure = TestUtil.findAll(em, CUnitOfMeasure.class).get(0);
         }
         mContractLine.setUom(cUnitOfMeasure);
+        // Add required entity
+        CVendor cVendor;
+        if (TestUtil.findAll(em, CVendor.class).isEmpty()) {
+            cVendor = CVendorResourceIT.createEntity(em);
+            em.persist(cVendor);
+            em.flush();
+        } else {
+            cVendor = TestUtil.findAll(em, CVendor.class).get(0);
+        }
+        mContractLine.setVendor(cVendor);
         return mContractLine;
     }
     /**
@@ -233,6 +244,16 @@ public class MContractLineResourceIT {
             cUnitOfMeasure = TestUtil.findAll(em, CUnitOfMeasure.class).get(0);
         }
         mContractLine.setUom(cUnitOfMeasure);
+        // Add required entity
+        CVendor cVendor;
+        if (TestUtil.findAll(em, CVendor.class).isEmpty()) {
+            cVendor = CVendorResourceIT.createUpdatedEntity(em);
+            em.persist(cVendor);
+            em.flush();
+        } else {
+            cVendor = TestUtil.findAll(em, CVendor.class).get(0);
+        }
+        mContractLine.setVendor(cVendor);
         return mContractLine;
     }
 
@@ -1299,6 +1320,22 @@ public class MContractLineResourceIT {
 
         // Get all the mContractLineList where uom equals to uomId + 1
         defaultMContractLineShouldNotBeFound("uomId.equals=" + (uomId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMContractLinesByVendorIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CVendor vendor = mContractLine.getVendor();
+        mContractLineRepository.saveAndFlush(mContractLine);
+        Long vendorId = vendor.getId();
+
+        // Get all the mContractLineList where vendor equals to vendorId
+        defaultMContractLineShouldBeFound("vendorId.equals=" + vendorId);
+
+        // Get all the mContractLineList where vendor equals to vendorId + 1
+        defaultMContractLineShouldNotBeFound("vendorId.equals=" + (vendorId + 1));
     }
 
     /**

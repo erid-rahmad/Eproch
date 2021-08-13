@@ -43,8 +43,6 @@ public class MContractLineCriteria implements Serializable, Criteria {
 
     private StringFilter remark;
 
-
-
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -61,6 +59,8 @@ public class MContractLineCriteria implements Serializable, Criteria {
     private LongFilter productId;
 
     private LongFilter uomId;
+
+    private LongFilter vendorId;
 
     public MContractLineCriteria() {
     }
@@ -83,6 +83,7 @@ public class MContractLineCriteria implements Serializable, Criteria {
         this.costCenterId = other.costCenterId == null ? null : other.costCenterId.copy();
         this.productId = other.productId == null ? null : other.productId.copy();
         this.uomId = other.uomId == null ? null : other.uomId.copy();
+        this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
     }
 
     @Override
@@ -226,6 +227,13 @@ public class MContractLineCriteria implements Serializable, Criteria {
         this.uomId = uomId;
     }
 
+    public LongFilter getVendorId() {
+        return vendorId;
+    }
+
+    public void setVendorId(LongFilter vendorId) {
+        this.vendorId = vendorId;
+    }
 
 
     @Override
@@ -254,7 +262,8 @@ public class MContractLineCriteria implements Serializable, Criteria {
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(costCenterId, that.costCenterId) &&
             Objects.equals(productId, that.productId) &&
-            Objects.equals(uomId, that.uomId);
+            Objects.equals(uomId, that.uomId) &&
+            Objects.equals(vendorId, that.vendorId);
     }
 
     @Override
@@ -276,7 +285,8 @@ public class MContractLineCriteria implements Serializable, Criteria {
         adOrganizationId,
         costCenterId,
         productId,
-        uomId
+        uomId,
+        vendorId
         );
     }
 
@@ -300,6 +310,7 @@ public class MContractLineCriteria implements Serializable, Criteria {
                 (costCenterId != null ? "costCenterId=" + costCenterId + ", " : "") +
                 (productId != null ? "productId=" + productId + ", " : "") +
                 (uomId != null ? "uomId=" + uomId + ", " : "") +
+                (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
             "}";
     }
 

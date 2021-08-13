@@ -147,6 +147,10 @@ public class MContractLineQueryService extends QueryService<MContractLine> {
                 specification = specification.and(buildSpecification(criteria.getUomId(),
                     root -> root.join(MContractLine_.uom, JoinType.LEFT).get(CUnitOfMeasure_.id)));
             }
+            if (criteria.getVendorId() != null) {
+                specification = specification.and(buildSpecification(criteria.getVendorId(),
+                    root -> root.join(MContractLine_.vendor, JoinType.LEFT).get(CVendor_.id)));
+            }
         }
         return specification;
     }

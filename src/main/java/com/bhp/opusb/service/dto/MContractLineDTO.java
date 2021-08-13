@@ -37,7 +37,7 @@ public class MContractLineDTO extends AbstractAuditingDTO {
 
 
     private Long contractId;
-    private Long vendorId;
+
     private String contractNo;
 
     private Long adOrganizationId;
@@ -49,6 +49,8 @@ public class MContractLineDTO extends AbstractAuditingDTO {
 
     private Long uomId;
     private String uomCode;
+
+    private Long vendorId;
 
     public Long getId() {
         return id;
@@ -241,6 +243,7 @@ public class MContractLineDTO extends AbstractAuditingDTO {
             ", costCenterId=" + getCostCenterId() +
             ", productId=" + getProductId() +
             ", uomId=" + getUomId() +
+            ", vendorId=" + getVendorId() +
             "}";
     }
 }

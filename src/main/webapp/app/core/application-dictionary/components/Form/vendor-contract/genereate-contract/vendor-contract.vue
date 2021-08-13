@@ -33,7 +33,7 @@
                     :sm="12"
                     :xs="24"
                 >
-                    <el-form-item label="Requisition No">
+                    <el-form-item label="Contract No">
                         <el-input
                             ref="contractNumber"
                             v-model="filter.contractNumber"
@@ -231,6 +231,16 @@
                         placeholder="Select document Type"
                         table-name="c_document_type"
                     ></ad-input-lookup>
+                </el-form-item>
+                <el-form-item
+                    label="Date trx"
+
+                >
+                    <el-date-picker
+                        v-model="form.dateTrx"
+                        placeholder="Pick a day"
+                        type="date">
+                    </el-date-picker>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
