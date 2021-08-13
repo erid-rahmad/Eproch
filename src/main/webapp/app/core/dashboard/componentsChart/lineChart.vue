@@ -101,20 +101,48 @@ export default {
             mode: 'label',
             bodySpacing: 10,
             titleMarginBottom: 10,
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+                    if (label) {
+                        label += ': ';
+                    }
+
+                    if(typeof(tooltipItem.yLabel) == 'number')
+                      label += tooltipItem.yLabel.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                    else
+                      return label += tooltipItem.yLabel;
+                    
+                    return label;
+                }
+            }
           },
           scales: {
             yAxes: [
               {
                 ticks: {
                   beginAtZero: true,
-                  fontStyle: 'bold'
+                  fontStyle: 'bold',
+                  callback: function(value, index, values) {
+                    if(typeof(value) == 'number')
+                          return value.toFixed(0).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                        else
+                          return value;
+                  }
                 }
               }
             ],
             xAxes: [
                 {
                     ticks: {
-                        fontStyle: 'bold'
+                      fontStyle: 'bold',
+                      callback: function(value, index, values) {
+                        if(typeof(value) == 'number')
+                              return value.toFixed(0).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                            else
+                              return value;
+                      }
                     }
                 }
             ]

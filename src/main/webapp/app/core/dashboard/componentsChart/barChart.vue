@@ -33,6 +33,8 @@ export default {
     }
   },
   data(){
+    let type = this.chartType;
+
     return {
       chartData: {
         type: this.chartType, //bar / horizontalBar
@@ -90,21 +92,49 @@ export default {
             mode: 'label',
             bodySpacing: 10,
             titleMarginBottom: 10,
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+                    if (label) {
+                        label += ': ';
+                    }
+                    
+                    if(type == 'horizontalBar')
+                      label += tooltipItem.xLabel.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                    else
+                      label += tooltipItem.yLabel.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+
+                    return label;
+                }
+            }
           },
           scales: {
             yAxes: [
               {
                 ticks: {
                   beginAtZero: true,
-                  fontStyle: 'bold'
+                  fontStyle: 'bold',
+                  callback: function(value, index, values) {
+                    if(typeof(value) == 'number')
+                      return value.toFixed(0).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                    else
+                      return value;
+                  }
                 }
               }
             ],
             xAxes: [
                 {
                     ticks: {
-                        beginAtZero: true,
-                        fontStyle: 'bold'
+                      beginAtZero: true,
+                      fontStyle: 'bold',
+                      callback: function(value, index, values) {
+                        if(typeof(value) == 'number')
+                          return value.toFixed(0).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                        else
+                          return value;
+                      }
                     }
                 }
             ]
@@ -135,6 +165,7 @@ export default {
       if(x == null || x == '')
       {
         this.chartData.options.legend.display = false;
+        this.chartData.options.title.padding = 10;
         listColor.sort(() => Math.random() - 0.5).forEach(x => {
           data.backgroundColor.push(x);
           data.borderColor.push(x);
