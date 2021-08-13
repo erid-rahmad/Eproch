@@ -1207,6 +1207,19 @@ entity MPrequalAnnouncement{
 	uid UUID
 	active Boolean
 }
+entity MPrequalAnnouncementResult{
+	descriptionPass TextBlob required
+	descriptionFail TextBlob required
+	publishDate ZonedDateTime
+	documentNo String
+	uid UUID
+	active Boolean
+}
+
+entity MPrequalificationResult {
+	uid UUID
+	active Boolean
+}
 
 entity MPrequalRegistration {
 	registrationStatus String
@@ -2559,6 +2572,17 @@ relationship ManyToOne {
 	MPrequalAnnouncement{prequalification required} to MPrequalificationInformation
 	MPrequalAnnouncement{prequalificationSchedule required} to MPrequalificationSchedule
 	MPrequalAnnouncement{attachment} to CAttachment
+
+	MPrequalAnnouncementResult{adOrganization required} to ADOrganization
+	MPrequalAnnouncementResult{prequalification required} to MPrequalificationInformation
+	MPrequalAnnouncementResult{prequalificationSchedule required} to MPrequalificationSchedule
+	MPrequalAnnouncementResult{attachment} to CAttachment
+
+	MPrequalificationResult{adOrganization required} to ADOrganization
+	MPrequalificationResult{announcementResult required} to MPrequalAnnouncementResult
+	MPrequalificationResult{prequalification required} to MPrequalificationInformation
+	MPrequalificationResult{vendor required} to CVendor
+	MPrequalificationResult{submission required} to MPrequalificationSubmission
 
 	MPrequalRegistration{adOrganization required} to ADOrganization
 	MPrequalRegistration{announcement required} to MPrequalAnnouncement

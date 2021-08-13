@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity MPrequalificationResult.
+    -->
+    <changeSet id="20210812162900-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="m_prequalification_result"
+                                 constraintName="fk_m_prequalification_result_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="announcement_result_id"
+                                 baseTableName="m_prequalification_result"
+                                 constraintName="fk_m_prequalification_result_announcement_result_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_prequal_announcement_result"/>
+
+        <addForeignKeyConstraint baseColumnNames="prequalification_id"
+                                 baseTableName="m_prequalification_result"
+                                 constraintName="fk_m_prequalification_result_prequalification_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_prequalification_information"/>
+
+        <addForeignKeyConstraint baseColumnNames="vendor_id"
+                                 baseTableName="m_prequalification_result"
+                                 constraintName="fk_m_prequalification_result_vendor_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_vendor"/>
+
+        <addForeignKeyConstraint baseColumnNames="submission_id"
+                                 baseTableName="m_prequalification_result"
+                                 constraintName="fk_m_prequalification_result_submission_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_prequalification_submission"/>
+
+    </changeSet>
+</databaseChangeLog>
