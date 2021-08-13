@@ -120,7 +120,7 @@
     <changeSet id="20210813731" author="erid">
         <addColumn tableName="m_contract_line">
             <column name="vendor_id" type="bigint">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
             </column>
         </addColumn>
     </changeSet>

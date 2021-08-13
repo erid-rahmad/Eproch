@@ -124,6 +124,7 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
     await this.contractLine.forEach(line=>{
       line.totalCeilingPrice=line.ceilingPrice*line.quantity;
       line.quantityBalance=line.quantity;
+      line.vendorId=this.contract.vendorId;
       total+=line.totalCeilingPrice;
     })
     await this.$set(this.contract, 'price', total);

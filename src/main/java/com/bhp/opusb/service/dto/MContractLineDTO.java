@@ -51,6 +51,7 @@ public class MContractLineDTO extends AbstractAuditingDTO {
     private String uomCode;
 
     private Long vendorId;
+    private String vendorName;
 
     public Long getId() {
         return id;
@@ -202,6 +203,14 @@ public class MContractLineDTO extends AbstractAuditingDTO {
 
     public void setVendorId(Long vendorId) {
         this.vendorId = vendorId;
+    }
+
+    public String getVendorName() {
+        return vendorName;
+    }
+
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
     }
 
     @Override

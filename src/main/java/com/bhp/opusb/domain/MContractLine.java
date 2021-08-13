@@ -84,7 +84,7 @@ public class MContractLine extends AbstractAuditingEntity {
     private CUnitOfMeasure uom;
 
     @ManyToOne(optional = false)
-    @NotNull
+
     @JsonIgnoreProperties("mContractLines")
     private CVendor vendor;
 

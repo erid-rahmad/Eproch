@@ -21,6 +21,7 @@ public interface MContractLineMapper extends EntityMapper<MContractLineDTO, MCon
 
     @Mapping(source = "uom.id", target = "uomId")
     @Mapping(source = "vendor.id", target = "vendorId")
+    @Mapping(source = "vendor.name", target = "vendorName")
     @Mapping(source = "uom.name", target = "uomCode")
     MContractLineDTO toDto(MContractLine mContractLine);
 

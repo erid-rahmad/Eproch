@@ -122,7 +122,7 @@ export default class GeneratePo extends Vue {
     const filterQuery = [
       'active.equals=true',
       'quantityBalance.greaterThan=0',
-      // 'contractStatus.equals=APV',
+      'contractStatus.equals=APV',
 
     ];
 
