@@ -133,7 +133,7 @@
             <el-table-column
                 label="Contract Qty"
                 min-width="150"
-                prop="quantityMax"
+                prop="quantity"
                 sortable
             ></el-table-column>
             <el-table-column

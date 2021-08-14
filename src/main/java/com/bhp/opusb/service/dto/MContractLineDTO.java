@@ -20,11 +20,13 @@ public class MContractLineDTO extends AbstractAuditingDTO {
     private BigDecimal quantity;
 
     private BigDecimal quantityBalance;
+    private BigDecimal quantityOrdered;
 
     @NotNull
     private BigDecimal ceilingPrice;
 
     private BigDecimal totalCeilingPrice;
+    private BigDecimal orderAmount;
 
     @NotNull
     private LocalDate deliveryDate;
@@ -52,6 +54,22 @@ public class MContractLineDTO extends AbstractAuditingDTO {
 
     private Long vendorId;
     private String vendorName;
+
+    public BigDecimal getOrderAmount() {
+        return orderAmount;
+    }
+
+    public void setOrderAmount(BigDecimal orderAmount) {
+        this.orderAmount = orderAmount;
+    }
+
+    public BigDecimal getQuantityOrdered() {
+        return quantityOrdered;
+    }
+
+    public void setQuantityOrdered(BigDecimal quantityOrdered) {
+        this.quantityOrdered = quantityOrdered;
+    }
 
     public Long getId() {
         return id;
