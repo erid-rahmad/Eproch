@@ -66,7 +66,6 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
       required: true,
       message: 'Start currency is required'
     }
-
   }
 
   gutterSize: number = 24;

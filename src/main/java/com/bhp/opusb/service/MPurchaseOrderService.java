@@ -12,12 +12,8 @@ import com.bhp.opusb.config.ApplicationProperties;
 import com.bhp.opusb.config.ApplicationProperties.Document;
 import com.bhp.opusb.domain.*;
 import com.bhp.opusb.repository.*;
-import com.bhp.opusb.service.dto.MPurchaseOrderDTO;
-import com.bhp.opusb.service.dto.MPurchaseOrderLineDTO;
-import com.bhp.opusb.service.dto.MRequisitionLineDTO;
-import com.bhp.opusb.service.mapper.MPurchaseOrderLineMapper;
-import com.bhp.opusb.service.mapper.MPurchaseOrderMapper;
-import com.bhp.opusb.service.mapper.MRequisitionLineMapper;
+import com.bhp.opusb.service.dto.*;
+import com.bhp.opusb.service.mapper.*;
 import com.bhp.opusb.util.DocumentUtil;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -53,6 +49,12 @@ public class MPurchaseOrderService {
     private final CDocumentTypeRepository cDocumentTypeRepository;
     private final CPaymentTermRepository cPaymentTermRepository;
     private final CProductRepository cProductRepository;
+    private final MRfqLineMapper mRfqLineMapper;
+    private final MRfqRepository mRfqRepository;
+    private final MRfqService mRfqService;
+    private final MRfqMapper mRfqMapper;
+    private final CCostCenterRepository cCostCenterRepository;
+
 
 
     private final CVendorTaxRepository cVendorTaxRepository;
@@ -69,7 +71,7 @@ public class MPurchaseOrderService {
                                  CPaymentTermRepository cPaymentTermRepository,
                                  MRequisitionRepository mRequisitionRepository, MRequisitionLineRepository mRequisitionLineRepository, MPurchaseOrderLineRepository mPurchaseOrderLineRepository,
                                  CVendorTaxRepository cVendorTaxRepository, MPurchaseOrderMapper mPurchaseOrderMapper, MPurchaseOrderLineMapper mPurchaseOrderLineMapper,
-                                 MBiddingRepository mBiddingRepository, MRequisitionLineMapper mRequisitionLineMapper, DataSource dataSource, CProductRepository cProductRepository) {
+                                 MBiddingRepository mBiddingRepository, MRequisitionLineMapper mRequisitionLineMapper, DataSource dataSource, CProductRepository cProductRepository, MRfqLineMapper mRfqLineMapper, MRfqRepository mRfqRepository, MRfqService mRfqService, MRfqMapper mRfqMapper, CCostCenterRepository cCostCenterRepository) {
         this.mPurchaseOrderRepository = mPurchaseOrderRepository;
         this.mPurchaseOrderLineRepository = mPurchaseOrderLineRepository;
         this.mRequisitionRepository = mRequisitionRepository;
@@ -85,6 +87,11 @@ public class MPurchaseOrderService {
 
         document = applicationProperties.getDocuments().get("purchaseOrder");
         this.cProductRepository = cProductRepository;
+        this.mRfqLineMapper = mRfqLineMapper;
+        this.mRfqRepository = mRfqRepository;
+        this.mRfqService = mRfqService;
+        this.mRfqMapper = mRfqMapper;
+        this.cCostCenterRepository = cCostCenterRepository;
     }
 
     /**
@@ -121,43 +128,99 @@ public class MPurchaseOrderService {
      * @param mPurchaseOrderDTO the entity to save.
      * @return the persisted entity.
      */
-    public List<MPurchaseOrderDTO> saveFromRequisition(MPurchaseOrderDTO mPurchaseOrderDTO) {
-        log.debug("Request to generate MPurchaseOrder : {}", mPurchaseOrderDTO);
+//    public List<MPurchaseOrderDTO> saveFromRequisition(MPurchaseOrderDTO mPurchaseOrderDTO) {
+//        log.debug("Request to generate MPurchaseOrder : {}", mPurchaseOrderDTO);
+//
+//        // Map of vendorId and MPurchaseOrder entity.
+//        // Temporarily map the MPurchaseOrder entity for each vendor.
+//        Map<Long, MPurchaseOrder> purchaseOrders = new HashMap<>();
+//        List<MRfqLineDTO> mRfqLineDTOS = mPurchaseOrderDTO.getmRfqLine();
+//        List<MPurchaseOrderLine> purchaseOrderLines = new ArrayList<>(mRfqLineDTOS.size());
+//
+//        for (MRfqLineDTO mRfqLineDTO : mRfqLineDTOS) {
+//            log.info("requisitionLines {}  ",mRfqLineDTOS);
+//            MRfqLine mRfqLine = mRfqLineMapper.toEntity(mRfqLineDTO);
+//
+//            MPurchaseOrder mPurchaseOrder = purchaseOrders.computeIfAbsent(mRfqLineDTO.getQuotationId(),
+//                    key -> initPurchaseOrder(mPurchaseOrderDTO));
+//
+//            MPurchaseOrderLine mPurchaseOrderLine = initPurchaseOrderLine(mPurchaseOrder, mRfqLine,mRfqLineDTO);
+//            final BigDecimal grandTotal = mPurchaseOrder.getGrandTotal().add(mPurchaseOrderLine.getOrderAmount());
+//
+//            mPurchaseOrder.setGrandTotal(grandTotal);
+//            purchaseOrderLines.add(mPurchaseOrderLine);
+//        }
+//
+//        log.info("this PO {}",purchaseOrders.values());
+//        log.info("this PO Line {}",purchaseOrderLines);
+//
+//        List<MPurchaseOrderDTO> result = mPurchaseOrderMapper.toDto(mPurchaseOrderRepository.saveAll(purchaseOrders.values()));
+//        mPurchaseOrderLineRepository.saveAll(purchaseOrderLines);
+////        mRequisitionLineRepository.saveAll(mRequisitionLineMapper.toEntity(requisitionLines));
+//        return result;
+//    }
 
-        // Map of vendorId and MPurchaseOrder entity.
-        // Temporarily map the MPurchaseOrder entity for each vendor.
+    public void generatePoFromQuatation(MPurchaseOrderDTO mPurchaseOrderDTO) {
+        Set<Long> contract = new HashSet<>();
         Map<Long, MPurchaseOrder> purchaseOrders = new HashMap<>();
-        List<MRequisitionLineDTO> requisitionLines = mPurchaseOrderDTO.getRequisitionLines();
-        List<MPurchaseOrderLine> purchaseOrderLines = new ArrayList<>(requisitionLines.size());
+        List<MRfqLineDTO> mRfqLineDTOS = mPurchaseOrderDTO.getmRfqLine();
+        List<MPurchaseOrderLine> purchaseOrderLines = new ArrayList<>(mRfqLineDTOS.size());
 
-        for (MRequisitionLineDTO mRequisitionLineDTO : requisitionLines) {
-            MRequisitionLine mRequisitionLine = mRequisitionLineMapper.toEntity(mRequisitionLineDTO);
+        mRfqLineDTOS.forEach(mRfqLineDTO -> {
+            if (!contract.contains(mRfqLineDTO.getQuotationId())) {
+                contract.add(mRfqLineDTO.getQuotationId());
+            }
+        });
 
-            MPurchaseOrder mPurchaseOrder = purchaseOrders.computeIfAbsent(mRequisitionLineDTO.getVendorId(),
-                    key -> initPurchaseOrder(mPurchaseOrderDTO, mRequisitionLine));
+        contract.forEach(quatation -> {
+            Optional<MRfq> mRfq = mRfqRepository.findById(quatation);
+           MPurchaseOrder mPurchaseOrder =mPurchaseOrderRepository.save(initPurchaseOrder(mPurchaseOrderDTO,mRfq.get()));
+            BigDecimal x = BigDecimal.ZERO;
 
-            MPurchaseOrderLine mPurchaseOrderLine = initPurchaseOrderLine(mPurchaseOrder, mRequisitionLine);
-            final BigDecimal grandTotal = mPurchaseOrder.getGrandTotal().add(mPurchaseOrderLine.getOrderAmount());
+            for (MRfqLineDTO mRfqLineDTO  : mRfqLineDTOS) {
+                if (mRfqLineDTO.getQuotationId() == quatation.longValue()) {
 
-            mPurchaseOrder.setGrandTotal(grandTotal);
-            purchaseOrderLines.add(mPurchaseOrderLine);
-        }
 
-        List<MPurchaseOrderDTO> result = mPurchaseOrderMapper.toDto(mPurchaseOrderRepository.saveAll(purchaseOrders.values()));
-        mPurchaseOrderLineRepository.saveAll(purchaseOrderLines);
-        mRequisitionLineRepository.saveAll(mRequisitionLineMapper.toEntity(requisitionLines));
-        return result;
+                    log.info("this quotatoin {}",mRfq);
+                    log.info("this quotatoin1 {}",mRfq);
+                    log.info("this mRfqLineDTO {}",mRfqLineDTO);
+                    log.info("this mPurchaseOrder {}",mPurchaseOrder);
+                    x = x.add(mRfqLineDTO.getOrderAmount());
+                    MRfqLine mRfqLine = mRfqLineMapper.toEntity(mRfqLineDTO);
+                    final MPurchaseOrderLine mPurchaseOrderLine = new MPurchaseOrderLine();
+                    final BigDecimal orderAmount = mRfqLineDTO.getQuantityOrdered().multiply(mRfqLine.getUnitPrice());
+
+                    mPurchaseOrderLine.active(true)
+                        .adOrganization(mPurchaseOrder.getAdOrganization())
+                        .costCenter(mRfq.get().getCostCenter())
+                        .datePromised(mPurchaseOrder.getDatePromised())
+                        .dateTrx(mPurchaseOrder.getDateTrx())
+                        .orderAmount(orderAmount)
+                        .product(mRfqLine.getProduct())
+                        .purchaseOrder(mPurchaseOrder)
+                        .quantity(mRfqLineDTO.getQuantityOrdered())
+                        .remark(mRfqLine.getRemark())
+                        .unitPrice(mRfqLine.getUnitPrice())
+                        .uom(mRfqLine.getUom())
+                        .vendor(mPurchaseOrder.getVendor())
+                        .warehouse(mPurchaseOrder.getWarehouse());
+                }
+            }
+            mPurchaseOrder.setGrandTotal(x);
+            mPurchaseOrderRepository.save(mPurchaseOrder);
+        });
+
     }
 
     /**
      * First initialization of MPurchaseOrder entity.
      * @param mPurchaseOrderDTO
-     * @param mRequisitionLine
+
      * @return
      */
-    private MPurchaseOrder initPurchaseOrder(MPurchaseOrderDTO mPurchaseOrderDTO, MRequisitionLine mRequisitionLine) {
+    private MPurchaseOrder initPurchaseOrder(MPurchaseOrderDTO mPurchaseOrderDTO,MRfq mRfq) {
         MPurchaseOrder mPurchaseOrder = mPurchaseOrderMapper.toEntity(mPurchaseOrderDTO);
-        Optional<CVendorTax> vendorTaxInfo = cVendorTaxRepository.findFirstByVendor(mRequisitionLine.getVendor());
+        Optional<CVendorTax> vendorTaxInfo = cVendorTaxRepository.findFirstByVendor(mPurchaseOrder.getVendor());
         boolean taxable = false;
 
         if (vendorTaxInfo.isPresent()) {
@@ -170,18 +233,12 @@ public class MPurchaseOrderService {
                 .ifPresent(mPurchaseOrder::setDocumentType);
         }
 
-        // Set the requestor of the purchase order.
-        mRequisitionRepository.findById(mRequisitionLine.getRequisition().getId())
-                .ifPresent(mRequisition
-                    -> mPurchaseOrder
-                        .costCenter(mRequisition.getCostCenter())
-                        .setCreatedBy(mRequisition.getCreatedBy()));
-
         return mPurchaseOrder.active(true)
             .documentNo(initDocumentNumber())
             .grandTotal(new BigDecimal(0))
             .tax(taxable)
-            .vendor(mRequisitionLine.getVendor());
+            .costCenter(mRfq.getCostCenter())
+            .vendor(mPurchaseOrder.getVendor());
     }
 
     private String initDocumentNumber() {
@@ -214,9 +271,9 @@ public class MPurchaseOrderService {
      * @param
      * @return
      */
-    private MPurchaseOrderLine initPurchaseOrderLine(MPurchaseOrder mPurchaseOrder, MRequisitionLine mRequisitionLine) {
+    private MPurchaseOrderLine initPurchaseOrderLine(MPurchaseOrder mPurchaseOrder, MRfqLine mRfqLine,MRfqLineDTO mRfqLineDTO) {
         final MPurchaseOrderLine mPurchaseOrderLine = new MPurchaseOrderLine();
-        final BigDecimal orderAmount = mRequisitionLine.getQuantityOrdered().multiply(mRequisitionLine.getUnitPrice());
+        final BigDecimal orderAmount = mRfqLineDTO.getQuantityOrdered().multiply(mRfqLine.getUnitPrice());
 
         mPurchaseOrderLine.active(true)
             .adOrganization(mPurchaseOrder.getAdOrganization())
@@ -224,14 +281,13 @@ public class MPurchaseOrderService {
             .datePromised(mPurchaseOrder.getDatePromised())
             .dateTrx(mPurchaseOrder.getDateTrx())
             .orderAmount(orderAmount)
-            .product(mRequisitionLine.getProduct())
+            .product(mRfqLine.getProduct())
             .purchaseOrder(mPurchaseOrder)
-            .quantity(mRequisitionLine.getQuantityOrdered())
-            .remark(mRequisitionLine.getRemark())
-            .requisition(mRequisitionLine.getRequisition())
-            .unitPrice(mRequisitionLine.getUnitPrice())
-            .uom(mRequisitionLine.getUom())
-            .vendor(mRequisitionLine.getVendor())
+            .quantity(mRfqLineDTO.getQuantityOrdered())
+            .remark(mRfqLine.getRemark())
+            .unitPrice(mRfqLine.getUnitPrice())
+            .uom(mRfqLine.getUom())
+            .vendor(mPurchaseOrder.getVendor())
             .warehouse(mPurchaseOrder.getWarehouse());
 
         return mPurchaseOrderLine;

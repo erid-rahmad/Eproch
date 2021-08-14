@@ -54,7 +54,7 @@ export default class GeneratePo extends Vue {
     paymentTermId: null,
     tax: false,
     warehouseId: null,
-    requisitionLines: []
+    mRfqLine: []
   }
 
   mainFormValidationSchema = {
@@ -99,7 +99,7 @@ export default class GeneratePo extends Vue {
     (<ElInput>this.$refs.requisitionNo).focus();
   }
 
-  retrievePurchaseRequisitionLines(requisitionNo?: number, vendorId?: number): void {
+  retrievePurchaseRequisitionLines(requisitionNo?: number): void {
     this.loadingPrLines = true;
     this.mainTable.clearSelection();
 
@@ -107,20 +107,16 @@ export default class GeneratePo extends Vue {
     const filterQuery = [
       'active.equals=true',
       'quantityBalance.greaterThan=0',
-      'requisitionProcessed.equals=true',
-      'requisitionApproved.equals=true'
+      // 'requisitionProcessed.equals=true',
+      // 'requisitionApproved.equals=true'
     ];
 
     if (!!prNo) {
       filterQuery.push(`requisitionNo.contains=${prNo}`);
     }
 
-    if (!!vendorId) {
-      filterQuery.push(`vendorId.equals=${vendorId}`)
-    }
-
     console.log("this filter",filterQuery)
-    this.commonService('/api/m-requisition-lines')
+    this.commonService('/api/m-rfq-lines')
       .retrieve({
         criteriaQuery: filterQuery,
         paginationQuery: {
@@ -148,6 +144,7 @@ export default class GeneratePo extends Vue {
 
         this.gridData = res.data.map((line: any) => {
           line.quantityOrdered = line.quantityBalance;
+          line.quantityMax = line.quantityBalance;
           line.quantityBalance = 0;
           line.orderAmount = line.quantityOrdered * line.unitPrice;
           return line;
@@ -173,19 +170,16 @@ export default class GeneratePo extends Vue {
    */
   onQuantityOrderedChanged(row: any, index: number, value: number) {
     // const line = {...row};
-    row.quantityBalance = row.quantity - value;
+    row.quantityBalance = row.quantityMax - value;
     row.orderAmount = value * row.unitPrice;
 
     // this.$set(this.gridData, index, line);
   }
 
   public onSelectionChanged(selection: any) {
-    this.form.requisitionLines = selection;
+    this.form.mRfqLine = selection;
   }
 
-  onVendorChange(vendorId: number) {
-    this.retrievePurchaseRequisitionLines(this.filter.requisitionNo, vendorId);
-  }
 
   public changeOrder(propOrder: any): void {
     this.propOrder = propOrder.prop;
@@ -225,7 +219,7 @@ export default class GeneratePo extends Vue {
   } */
 
   public transition(): void {
-    this.retrievePurchaseRequisitionLines(this.filter.requisitionNo, this.filter.vendorId);
+    this.retrievePurchaseRequisitionLines(this.filter.requisitionNo);
   }
 
   /* public clear(): void {
@@ -259,13 +253,14 @@ export default class GeneratePo extends Vue {
   }
 
   generatePurchaseOrder() {
-    if (! this.form.requisitionLines.length) {
+    if (! this.form.mRfqLine.length) {
       this.$message.error('Please select one or more lines');
       return;
     }
 
     (<ElForm>this.$refs.mainForm).validate((passed, error) => {
       if (passed) {
+        console.log("this form",this.form)
         this.generating = true;
         this.commonService('/api/m-purchase-orders/generate')
           .create(this.form)

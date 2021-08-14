@@ -39,7 +39,7 @@ public class MPurchaseOrderDTO extends AbstractAuditingDTO {
     private Boolean approved = false;
 
     private Boolean processed = false;
-    
+
     private Boolean confirmed = false;
 
     private BigDecimal grandTotal;
@@ -88,9 +88,11 @@ public class MPurchaseOrderDTO extends AbstractAuditingDTO {
 
     private List<MRequisitionLineDTO> requisitionLines = new ArrayList<>();
 
+    private List<MRfqLineDTO> mRfqLine = new ArrayList<>();
+
     private List<MPurchaseOrderLineDTO> poLines = new ArrayList<>();
     private Long biddingId;
-    
+
     public Long getId() {
         return id;
     }
@@ -397,6 +399,14 @@ public class MPurchaseOrderDTO extends AbstractAuditingDTO {
 
     public void setPaymentTermName(String paymentTermName) {
         this.paymentTermName = paymentTermName;
+    }
+
+    public List<MRfqLineDTO> getmRfqLine() {
+        return mRfqLine;
+    }
+
+    public void setmRfqLine(List<MRfqLineDTO> mRfqLine) {
+        this.mRfqLine = mRfqLine;
     }
 
     @Override

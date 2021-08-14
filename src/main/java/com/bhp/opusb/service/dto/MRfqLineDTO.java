@@ -45,6 +45,7 @@ public class MRfqLineDTO extends AbstractAuditingDTO {
     private String remark;
 
     private Integer quantityBalance;
+    private BigDecimal quantityOrdered;
 
 
     private Long quotationId;
@@ -61,13 +62,21 @@ public class MRfqLineDTO extends AbstractAuditingDTO {
 
     private Long businessCategoryId;
     private String businessCategoryName;
-    
+
     private Long businessClassificationId;
 
     private Long warehouseId;
 
     private Long costCenterId;
-    
+
+    public BigDecimal getQuantityOrdered() {
+        return quantityOrdered;
+    }
+
+    public void setQuantityOrdered(BigDecimal quantityOrdered) {
+        this.quantityOrdered = quantityOrdered;
+    }
+
     public Long getId() {
         return id;
     }

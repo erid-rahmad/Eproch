@@ -142,19 +142,14 @@ public class MContractService {
 
     public void generateToPo(MContractToPoDTO mContractToPoDTO) {
         Set<Long> contract = new HashSet<>();
-
         mContractToPoDTO.getmContractLineDTOS().forEach(mContractLineDTO -> {
-
             if (!contract.contains(mContractLineDTO.getContractId())) {
                 contract.add(mContractLineDTO.getContractId());
             }
         });
 
         contract.forEach(contract_ -> {
-
             Optional<MContract> mContract = mContractRepository.findById(contract_);
-
-
             MContractDTO mContractDTO = mContractMapper.toDto(mContract.get());
             MPurchaseOrderDTO mPurchaseOrderDTO = new MPurchaseOrderDTO();
             MPurchaseOrderDTO mPurchaseOrderDTO_ = new MPurchaseOrderDTO();
@@ -192,36 +187,9 @@ public class MContractService {
                 }
             }
             mPurchaseOrderDTO_.setGrandTotal(x);
-            log.info("this x{}", x);
             mPurchaseOrderService.save(mPurchaseOrderDTO_);
-
         });
 
-//        Long poId = 0L;
-//
-//        poId = mPurchaseOrderDTO_.getId();
-//
-//        MPurchaseOrderDTO finalMPurchaseOrderDTO_ = mPurchaseOrderDTO_;
-//        mContractToPoDTO.getmContractLineDTOS().forEach(mContractLineDTO -> {
-//            MPurchaseOrderLineDTO mPurchaseOrderLineDTO = new MPurchaseOrderLineDTO();
-//
-//            mPurchaseOrderLineDTO.setOrderAmount(mContractLineDTO.getCeilingPrice());
-//            mPurchaseOrderLineDTO.setQuantity(mContractLineDTO.getQuantity());
-//            mPurchaseOrderLineDTO.setUnitPrice(mContractLineDTO.getCeilingPrice());
-//
-//            mPurchaseOrderLineDTO.setPurchaseOrderId(finalMPurchaseOrderDTO_.getId());
-//            mPurchaseOrderLineDTO.setVendorId(finalMPurchaseOrderDTO_.getVendorId());
-//            mPurchaseOrderLineDTO.setCostCenterId(mContractLineDTO.getCostCenterId());
-//            mPurchaseOrderLineDTO.setAdOrganizationId(mContractLineDTO.getAdOrganizationId());
-//            mPurchaseOrderLineDTO.setProductId(mContractLineDTO.getProductId());
-//            mPurchaseOrderLineDTO.setUomId(mContractLineDTO.getUomId());
-//
-//            mPurchaseOrderLineService.save(mPurchaseOrderLineDTO);
-//        });
-//
-//        Map<String, Object> payload = new HashMap<>(1);
-//        payload.put(MPurchaseOrderMessageDispatcher.KEY_ID, poId);
-//        messageDispatcher.dispatch(MPurchaseOrderMessageDispatcher.BEAN_NAME, payload);
     }
 
     public void generatebalance( MContractToPoDTO mContractToPoDTO){

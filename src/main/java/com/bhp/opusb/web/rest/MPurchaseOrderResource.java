@@ -97,15 +97,19 @@ public class MPurchaseOrderResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/m-purchase-orders/generate")
-    public ResponseEntity<List<MPurchaseOrderDTO>> generateMPurchaseOrders(@Valid @RequestBody MPurchaseOrderDTO mPurchaseOrderDTO) throws URISyntaxException {
+    public ResponseEntity<String> generateMPurchaseOrders(@Valid @RequestBody MPurchaseOrderDTO mPurchaseOrderDTO) throws URISyntaxException {
         log.debug("REST request to save MPurchaseOrder : {}", mPurchaseOrderDTO);
+
         if (mPurchaseOrderDTO.getRequisitionLines() == null) {
             throw new BadRequestAlertException("The submitted purchase order has no lines", ENTITY_NAME, "poNoLines");
         }
-        List<MPurchaseOrderDTO> result = mPurchaseOrderService.saveFromRequisition(mPurchaseOrderDTO);
-        String queryString = result.stream().map(po -> "id.equals=" + po.getId()).collect(Collectors.joining("&"));
-        return ResponseEntity.created(new URI("/api/m-purchase-orders/" + queryString))
-            .body(result);
+//        List<MPurchaseOrderDTO> result = mPurchaseOrderService.saveFromRequisition(mPurchaseOrderDTO);
+        mPurchaseOrderService.generatePoFromQuatation(mPurchaseOrderDTO);
+//        String queryString = result.stream().map(po -> "id.equals=" + po.getId()).collect(Collectors.joining("&"));
+
+        return ResponseEntity.ok("ok");
+//        return ResponseEntity.created(new URI("/api/m-purchase-orders/" + queryString))
+//            .body(result);
     }
 
     /**
