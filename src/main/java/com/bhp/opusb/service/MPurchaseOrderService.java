@@ -54,6 +54,7 @@ public class MPurchaseOrderService {
     private final MRfqService mRfqService;
     private final MRfqMapper mRfqMapper;
     private final CCostCenterRepository cCostCenterRepository;
+    private final MRfqLineRepository mRfqLineRepository;
 
 
 
@@ -71,7 +72,7 @@ public class MPurchaseOrderService {
                                  CPaymentTermRepository cPaymentTermRepository,
                                  MRequisitionRepository mRequisitionRepository, MRequisitionLineRepository mRequisitionLineRepository, MPurchaseOrderLineRepository mPurchaseOrderLineRepository,
                                  CVendorTaxRepository cVendorTaxRepository, MPurchaseOrderMapper mPurchaseOrderMapper, MPurchaseOrderLineMapper mPurchaseOrderLineMapper,
-                                 MBiddingRepository mBiddingRepository, MRequisitionLineMapper mRequisitionLineMapper, DataSource dataSource, CProductRepository cProductRepository, MRfqLineMapper mRfqLineMapper, MRfqRepository mRfqRepository, MRfqService mRfqService, MRfqMapper mRfqMapper, CCostCenterRepository cCostCenterRepository) {
+                                 MBiddingRepository mBiddingRepository, MRequisitionLineMapper mRequisitionLineMapper, DataSource dataSource, CProductRepository cProductRepository, MRfqLineMapper mRfqLineMapper, MRfqRepository mRfqRepository, MRfqService mRfqService, MRfqMapper mRfqMapper, CCostCenterRepository cCostCenterRepository, MRfqLineRepository mRfqLineRepository) {
         this.mPurchaseOrderRepository = mPurchaseOrderRepository;
         this.mPurchaseOrderLineRepository = mPurchaseOrderLineRepository;
         this.mRequisitionRepository = mRequisitionRepository;
@@ -92,6 +93,7 @@ public class MPurchaseOrderService {
         this.mRfqService = mRfqService;
         this.mRfqMapper = mRfqMapper;
         this.cCostCenterRepository = cCostCenterRepository;
+        this.mRfqLineRepository = mRfqLineRepository;
     }
 
     /**
@@ -179,14 +181,12 @@ public class MPurchaseOrderService {
 
             for (MRfqLineDTO mRfqLineDTO  : mRfqLineDTOS) {
                 if (mRfqLineDTO.getQuotationId() == quatation.longValue()) {
-
-
-                    log.info("this quotatoin {}",mRfq);
-                    log.info("this quotatoin1 {}",mRfq);
-                    log.info("this mRfqLineDTO {}",mRfqLineDTO);
-                    log.info("this mPurchaseOrder {}",mPurchaseOrder);
                     x = x.add(mRfqLineDTO.getOrderAmount());
                     MRfqLine mRfqLine = mRfqLineMapper.toEntity(mRfqLineDTO);
+                    Optional<MRfqLine> mRfqLine_ = mRfqLineRepository.findById(mRfqLineDTO.getId());
+                    mRfqLine_.get().setQuantityBalance(mRfqLineDTO.getQuantityBalance());
+                    mRfqLineRepository.save(mRfqLine_.get());
+
                     final MPurchaseOrderLine mPurchaseOrderLine = new MPurchaseOrderLine();
                     final BigDecimal orderAmount = mRfqLineDTO.getQuantityOrdered().multiply(mRfqLine.getUnitPrice());
 
@@ -204,6 +204,7 @@ public class MPurchaseOrderService {
                         .uom(mRfqLine.getUom())
                         .vendor(mPurchaseOrder.getVendor())
                         .warehouse(mPurchaseOrder.getWarehouse());
+                    mPurchaseOrderLineRepository.save(mPurchaseOrderLine);
                 }
             }
             mPurchaseOrder.setGrandTotal(x);

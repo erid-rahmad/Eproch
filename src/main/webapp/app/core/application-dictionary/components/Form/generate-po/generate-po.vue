@@ -40,8 +40,7 @@
                             v-loading="loadingPr"
                             clearable
                             placeholder="Please Enter Quotation No"
-                            @change="retrievePurchaseRequisitionLines"
-                            @clear="retrievePurchaseRequisitionLines()"
+                            @clear="retrievePurchaseRequisitionLines"
                         ></el-input>
                     </el-form-item>
                 </el-col>

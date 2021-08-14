@@ -60,6 +60,8 @@ public class MRfqLineCriteria implements Serializable, Criteria {
     private IntegerFilter quantityBalance;
 
     private LongFilter quotationId;
+    private StringFilter quotationNo;
+    private StringFilter quotationMethod;
 
     private LongFilter adOrganizationId;
 
@@ -96,6 +98,8 @@ public class MRfqLineCriteria implements Serializable, Criteria {
         this.remark = other.remark == null ? null : other.remark.copy();
         this.quantityBalance = other.quantityBalance == null ? null : other.quantityBalance.copy();
         this.quotationId = other.quotationId == null ? null : other.quotationId.copy();
+        this.quotationNo = other.quotationNo == null ? null : other.quotationNo.copy();
+        this.quotationMethod = other.quotationMethod == null ? null : other.quotationMethod.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.productId = other.productId == null ? null : other.productId.copy();
         this.uomId = other.uomId == null ? null : other.uomId.copy();
@@ -302,6 +306,21 @@ public class MRfqLineCriteria implements Serializable, Criteria {
         this.costCenterId = costCenterId;
     }
 
+    public StringFilter getQuotationNo() {
+        return quotationNo;
+    }
+
+    public void setQuotationNo(StringFilter quotationNo) {
+        this.quotationNo = quotationNo;
+    }
+
+    public StringFilter getQuotationMethod() {
+        return quotationMethod;
+    }
+
+    public void setQuotationMethod(StringFilter quotationMethod) {
+        this.quotationMethod = quotationMethod;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -330,6 +349,8 @@ public class MRfqLineCriteria implements Serializable, Criteria {
             Objects.equals(remark, that.remark) &&
             Objects.equals(quantityBalance, that.quantityBalance) &&
             Objects.equals(quotationId, that.quotationId) &&
+            Objects.equals(quotationNo, that.quotationNo) &&
+            Objects.equals(quotationMethod, that.quotationMethod) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(productId, that.productId) &&
             Objects.equals(uomId, that.uomId) &&
@@ -359,6 +380,8 @@ public class MRfqLineCriteria implements Serializable, Criteria {
         remark,
         quantityBalance,
         quotationId,
+            quotationNo,
+            quotationMethod,
         adOrganizationId,
         productId,
         uomId,
@@ -389,6 +412,8 @@ public class MRfqLineCriteria implements Serializable, Criteria {
                 (remark != null ? "remark=" + remark + ", " : "") +
                 (quantityBalance != null ? "quantityBalance=" + quantityBalance + ", " : "") +
                 (quotationId != null ? "quotationId=" + quotationId + ", " : "") +
+                (quotationNo != null ? "quotationNo=" + quotationNo + ", " : "") +
+                (quotationMethod != null ? "quotationMethod=" + quotationMethod + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (productId != null ? "productId=" + productId + ", " : "") +
                 (uomId != null ? "uomId=" + uomId + ", " : "") +

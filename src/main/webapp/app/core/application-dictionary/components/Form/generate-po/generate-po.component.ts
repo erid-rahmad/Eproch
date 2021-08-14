@@ -107,12 +107,11 @@ export default class GeneratePo extends Vue {
     const filterQuery = [
       'active.equals=true',
       'quantityBalance.greaterThan=0',
-      // 'requisitionProcessed.equals=true',
-      // 'requisitionApproved.equals=true'
+      'quotationMethod.contains=P'
     ];
 
     if (!!prNo) {
-      filterQuery.push(`requisitionNo.contains=${prNo}`);
+      filterQuery.push(`quotationNo.contains=${prNo}`);
     }
 
     console.log("this filter",filterQuery)
@@ -126,10 +125,7 @@ export default class GeneratePo extends Vue {
         }
       })
       .then(res => {
-
         const lines = res.data as any[];
-        console.log("this line",lines)
-
         if (lines.length) {
           if (lines.length == 1) {
             this.$set(this.filter, 'requisitionNo', lines[0].requisitionName);
@@ -268,6 +264,7 @@ export default class GeneratePo extends Vue {
             console.log('PO generated. response: %O', res);
             const count = res.length === 1 ? ` #${res[0].documentNo}` : '(s)';
             this.$message.success(`Purchase Order${count} has been created successfully.`);
+            this.gridData=null;
           })
           .catch(err => {
             console.log('Failed generating purchase order(s). %O', err);

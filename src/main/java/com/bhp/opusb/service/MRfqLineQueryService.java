@@ -140,6 +140,15 @@ public class MRfqLineQueryService extends QueryService<MRfqLine> {
                 specification = specification.and(buildSpecification(criteria.getQuotationId(),
                     root -> root.join(MRfqLine_.quotation, JoinType.LEFT).get(MRfq_.id)));
             }
+            if (criteria.getQuotationNo() != null) {
+                specification = specification.and(buildSpecification(criteria.getQuotationNo(),
+                    root -> root.join(MRfqLine_.quotation, JoinType.LEFT).get(MRfq_.documentNo)));
+            }
+
+            if (criteria.getQuotationMethod() != null) {
+                specification = specification.and(buildSpecification(criteria.getQuotationMethod(),
+                    root -> root.join(MRfqLine_.quotation, JoinType.LEFT).get(MRfq_.selectionMethod)));
+            }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(MRfqLine_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
