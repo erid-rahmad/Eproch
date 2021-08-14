@@ -1,0 +1,11 @@
+id;uid;active;date_required;quotation_id;business_classification_id;business_category_id;business_sub_category_id;vendor_id
+1;ab8b9b23-5ae4-4c5e-b5c2-b9430e9c12c7;false;2021-08-13;1;1;1;1;1
+2;9c1b2ae5-0ebe-4d72-a332-3b1814bfeb5e;false;2021-08-13;2;2;2;2;2
+3;262247a3-569a-4620-8d86-b7ff7f9dc254;true;2021-08-13;3;3;3;3;3
+4;bf9fad6d-c7ff-4824-abd1-ce3bd70c04de;false;2021-08-14;4;4;4;4;4
+5;38398d1e-1c79-4d8f-b5ba-ec124a1db58e;false;2021-08-13;5;5;5;5;5
+6;a177baac-c669-48cd-a6f4-61874cc7c123;true;2021-08-13;6;6;6;6;6
+7;4279be89-7b93-42c2-bc5f-0c31b66a7f20;true;2021-08-13;7;7;7;7;7
+8;60d983c9-d9d2-4c21-af3a-3814f7991116;false;2021-08-13;8;8;8;8;8
+9;01e7260b-32e7-4255-8aae-e12a571ec3db;false;2021-08-14;9;9;9;9;9
+10;f5e3277c-d647-4d74-bd5e-137cf9727901;false;2021-08-13;10;10;10;10;10

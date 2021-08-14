@@ -243,6 +243,7 @@ public class MRfqService {
             .releaseQty(mRequisitionLine.getQuantityOrdered().intValue())
             .remark(mRequisitionLine.getRemark())
             .orderAmount(orderAmount)
+            .quantityBalance(mPurchaseOrderLine.getReleaseQty())
             //.requisition(mRequisitionLine.getRequisition())
             .unitPrice(mRequisitionLine.getUnitPrice())
             .uom(mRequisitionLine.getUom())
