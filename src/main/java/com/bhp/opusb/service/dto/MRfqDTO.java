@@ -1,5 +1,9 @@
 package com.bhp.opusb.service.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+import java.time.LocalDate;
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -40,6 +44,11 @@ public class MRfqDTO extends AbstractAuditingDTO {
     private LocalDate datePromised;
 
     private String description;
+
+    private String title;
+
+    @Size(max = 10)
+    private String selectionMethod;
 
     private UUID uid;
 
@@ -161,6 +170,22 @@ public class MRfqDTO extends AbstractAuditingDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getSelectionMethod() {
+        return selectionMethod;
+    }
+
+    public void setSelectionMethod(String selectionMethod) {
+        this.selectionMethod = selectionMethod;
     }
 
     public UUID getUid() {
@@ -323,8 +348,11 @@ public class MRfqDTO extends AbstractAuditingDTO {
             ", documentStatus='" + getDocumentStatus() + "'" +
             ", approved='" + isApproved() + "'" +
             ", processed='" + isProcessed() + "'" +
+            ", grandTotal=" + getGrandTotal() +
             ", datePromised='" + getDatePromised() + "'" +
             ", description='" + getDescription() + "'" +
+            ", title='" + getTitle() + "'" +
+            ", selectionMethod='" + getSelectionMethod() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
@@ -333,6 +361,7 @@ public class MRfqDTO extends AbstractAuditingDTO {
             ", currencyId=" + getCurrencyId() +
             ", warehouseId=" + getWarehouseId() +
             ", costCenterId=" + getCostCenterId() +
+            ", documentTypeId=" + getDocumentTypeId() +
             "}";
     }
 

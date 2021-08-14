@@ -60,6 +60,13 @@ public class MRfq extends AbstractAuditingEntity implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "title")
+    private String title;
+
+    @Size(max = 10)
+    @Column(name = "selection_method", length = 10)
+    private String selectionMethod;
+
     @Column(name = "uid")
     private UUID uid;
 
@@ -253,6 +260,32 @@ public class MRfq extends AbstractAuditingEntity implements Serializable {
         this.description = description;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public MRfq title(String title) {
+        this.title = title;
+        return this;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getSelectionMethod() {
+        return selectionMethod;
+    }
+
+    public MRfq selectionMethod(String selectionMethod) {
+        this.selectionMethod = selectionMethod;
+        return this;
+    }
+
+    public void setSelectionMethod(String selectionMethod) {
+        this.selectionMethod = selectionMethod;
+    }
+
     public UUID getUid() {
         return uid;
     }
@@ -401,6 +434,8 @@ public class MRfq extends AbstractAuditingEntity implements Serializable {
             ", processed='" + isProcessed() + "'" +
             ", datePromised='" + getDatePromised() + "'" +
             ", description='" + getDescription() + "'" +
+            ", title='" + getTitle() + "'" +
+            ", selectionMethod='" + getSelectionMethod() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

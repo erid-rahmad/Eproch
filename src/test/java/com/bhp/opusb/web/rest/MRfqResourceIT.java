@@ -79,6 +79,12 @@ public class MRfqResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
+    private static final String DEFAULT_TITLE = "AAAAAAAAAA";
+    private static final String UPDATED_TITLE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_SELECTION_METHOD = "AAAAAAAAAA";
+    private static final String UPDATED_SELECTION_METHOD = "BBBBBBBBBB";
+
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
@@ -123,6 +129,8 @@ public class MRfqResourceIT {
             .grandTotal(DEFAULT_GRAND_TOTAL)
             .datePromised(DEFAULT_DATE_PROMISED)
             .description(DEFAULT_DESCRIPTION)
+            .title(DEFAULT_TITLE)
+            .selectionMethod(DEFAULT_SELECTION_METHOD)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -207,6 +215,8 @@ public class MRfqResourceIT {
             .grandTotal(UPDATED_GRAND_TOTAL)
             .datePromised(UPDATED_DATE_PROMISED)
             .description(UPDATED_DESCRIPTION)
+            .title(UPDATED_TITLE)
+            .selectionMethod(UPDATED_SELECTION_METHOD)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -305,6 +315,8 @@ public class MRfqResourceIT {
         assertThat(testMRfq.getGrandTotal()).isEqualTo(DEFAULT_GRAND_TOTAL);
         assertThat(testMRfq.getDatePromised()).isEqualTo(DEFAULT_DATE_PROMISED);
         assertThat(testMRfq.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testMRfq.getTitle()).isEqualTo(DEFAULT_TITLE);
+        assertThat(testMRfq.getSelectionMethod()).isEqualTo(DEFAULT_SELECTION_METHOD);
         assertThat(testMRfq.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testMRfq.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -389,6 +401,8 @@ public class MRfqResourceIT {
             .andExpect(jsonPath("$.[*].grandTotal").value(hasItem(DEFAULT_GRAND_TOTAL.intValue())))
             .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
+            .andExpect(jsonPath("$.[*].selectionMethod").value(hasItem(DEFAULT_SELECTION_METHOD)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -414,6 +428,8 @@ public class MRfqResourceIT {
             .andExpect(jsonPath("$.grandTotal").value(DEFAULT_GRAND_TOTAL.intValue()))
             .andExpect(jsonPath("$.datePromised").value(DEFAULT_DATE_PROMISED.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
+            .andExpect(jsonPath("$.selectionMethod").value(DEFAULT_SELECTION_METHOD))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -1276,6 +1292,162 @@ public class MRfqResourceIT {
 
     @Test
     @Transactional
+    public void getAllMRfqsByTitleIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqRepository.saveAndFlush(mRfq);
+
+        // Get all the mRfqList where title equals to DEFAULT_TITLE
+        defaultMRfqShouldBeFound("title.equals=" + DEFAULT_TITLE);
+
+        // Get all the mRfqList where title equals to UPDATED_TITLE
+        defaultMRfqShouldNotBeFound("title.equals=" + UPDATED_TITLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqsByTitleIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqRepository.saveAndFlush(mRfq);
+
+        // Get all the mRfqList where title not equals to DEFAULT_TITLE
+        defaultMRfqShouldNotBeFound("title.notEquals=" + DEFAULT_TITLE);
+
+        // Get all the mRfqList where title not equals to UPDATED_TITLE
+        defaultMRfqShouldBeFound("title.notEquals=" + UPDATED_TITLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqsByTitleIsInShouldWork() throws Exception {
+        // Initialize the database
+        mRfqRepository.saveAndFlush(mRfq);
+
+        // Get all the mRfqList where title in DEFAULT_TITLE or UPDATED_TITLE
+        defaultMRfqShouldBeFound("title.in=" + DEFAULT_TITLE + "," + UPDATED_TITLE);
+
+        // Get all the mRfqList where title equals to UPDATED_TITLE
+        defaultMRfqShouldNotBeFound("title.in=" + UPDATED_TITLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqsByTitleIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mRfqRepository.saveAndFlush(mRfq);
+
+        // Get all the mRfqList where title is not null
+        defaultMRfqShouldBeFound("title.specified=true");
+
+        // Get all the mRfqList where title is null
+        defaultMRfqShouldNotBeFound("title.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMRfqsByTitleContainsSomething() throws Exception {
+        // Initialize the database
+        mRfqRepository.saveAndFlush(mRfq);
+
+        // Get all the mRfqList where title contains DEFAULT_TITLE
+        defaultMRfqShouldBeFound("title.contains=" + DEFAULT_TITLE);
+
+        // Get all the mRfqList where title contains UPDATED_TITLE
+        defaultMRfqShouldNotBeFound("title.contains=" + UPDATED_TITLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqsByTitleNotContainsSomething() throws Exception {
+        // Initialize the database
+        mRfqRepository.saveAndFlush(mRfq);
+
+        // Get all the mRfqList where title does not contain DEFAULT_TITLE
+        defaultMRfqShouldNotBeFound("title.doesNotContain=" + DEFAULT_TITLE);
+
+        // Get all the mRfqList where title does not contain UPDATED_TITLE
+        defaultMRfqShouldBeFound("title.doesNotContain=" + UPDATED_TITLE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMRfqsBySelectionMethodIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqRepository.saveAndFlush(mRfq);
+
+        // Get all the mRfqList where selectionMethod equals to DEFAULT_SELECTION_METHOD
+        defaultMRfqShouldBeFound("selectionMethod.equals=" + DEFAULT_SELECTION_METHOD);
+
+        // Get all the mRfqList where selectionMethod equals to UPDATED_SELECTION_METHOD
+        defaultMRfqShouldNotBeFound("selectionMethod.equals=" + UPDATED_SELECTION_METHOD);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqsBySelectionMethodIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqRepository.saveAndFlush(mRfq);
+
+        // Get all the mRfqList where selectionMethod not equals to DEFAULT_SELECTION_METHOD
+        defaultMRfqShouldNotBeFound("selectionMethod.notEquals=" + DEFAULT_SELECTION_METHOD);
+
+        // Get all the mRfqList where selectionMethod not equals to UPDATED_SELECTION_METHOD
+        defaultMRfqShouldBeFound("selectionMethod.notEquals=" + UPDATED_SELECTION_METHOD);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqsBySelectionMethodIsInShouldWork() throws Exception {
+        // Initialize the database
+        mRfqRepository.saveAndFlush(mRfq);
+
+        // Get all the mRfqList where selectionMethod in DEFAULT_SELECTION_METHOD or UPDATED_SELECTION_METHOD
+        defaultMRfqShouldBeFound("selectionMethod.in=" + DEFAULT_SELECTION_METHOD + "," + UPDATED_SELECTION_METHOD);
+
+        // Get all the mRfqList where selectionMethod equals to UPDATED_SELECTION_METHOD
+        defaultMRfqShouldNotBeFound("selectionMethod.in=" + UPDATED_SELECTION_METHOD);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqsBySelectionMethodIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mRfqRepository.saveAndFlush(mRfq);
+
+        // Get all the mRfqList where selectionMethod is not null
+        defaultMRfqShouldBeFound("selectionMethod.specified=true");
+
+        // Get all the mRfqList where selectionMethod is null
+        defaultMRfqShouldNotBeFound("selectionMethod.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMRfqsBySelectionMethodContainsSomething() throws Exception {
+        // Initialize the database
+        mRfqRepository.saveAndFlush(mRfq);
+
+        // Get all the mRfqList where selectionMethod contains DEFAULT_SELECTION_METHOD
+        defaultMRfqShouldBeFound("selectionMethod.contains=" + DEFAULT_SELECTION_METHOD);
+
+        // Get all the mRfqList where selectionMethod contains UPDATED_SELECTION_METHOD
+        defaultMRfqShouldNotBeFound("selectionMethod.contains=" + UPDATED_SELECTION_METHOD);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqsBySelectionMethodNotContainsSomething() throws Exception {
+        // Initialize the database
+        mRfqRepository.saveAndFlush(mRfq);
+
+        // Get all the mRfqList where selectionMethod does not contain DEFAULT_SELECTION_METHOD
+        defaultMRfqShouldNotBeFound("selectionMethod.doesNotContain=" + DEFAULT_SELECTION_METHOD);
+
+        // Get all the mRfqList where selectionMethod does not contain UPDATED_SELECTION_METHOD
+        defaultMRfqShouldBeFound("selectionMethod.doesNotContain=" + UPDATED_SELECTION_METHOD);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMRfqsByUidIsEqualToSomething() throws Exception {
         // Initialize the database
         mRfqRepository.saveAndFlush(mRfq);
@@ -1507,6 +1679,8 @@ public class MRfqResourceIT {
             .andExpect(jsonPath("$.[*].grandTotal").value(hasItem(DEFAULT_GRAND_TOTAL.intValue())))
             .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
+            .andExpect(jsonPath("$.[*].selectionMethod").value(hasItem(DEFAULT_SELECTION_METHOD)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -1566,6 +1740,8 @@ public class MRfqResourceIT {
             .grandTotal(UPDATED_GRAND_TOTAL)
             .datePromised(UPDATED_DATE_PROMISED)
             .description(UPDATED_DESCRIPTION)
+            .title(UPDATED_TITLE)
+            .selectionMethod(UPDATED_SELECTION_METHOD)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         MRfqDTO mRfqDTO = mRfqMapper.toDto(updatedMRfq);
@@ -1589,6 +1765,8 @@ public class MRfqResourceIT {
         assertThat(testMRfq.getGrandTotal()).isEqualTo(UPDATED_GRAND_TOTAL);
         assertThat(testMRfq.getDatePromised()).isEqualTo(UPDATED_DATE_PROMISED);
         assertThat(testMRfq.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testMRfq.getTitle()).isEqualTo(UPDATED_TITLE);
+        assertThat(testMRfq.getSelectionMethod()).isEqualTo(UPDATED_SELECTION_METHOD);
         assertThat(testMRfq.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testMRfq.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

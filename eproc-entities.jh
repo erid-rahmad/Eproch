@@ -936,6 +936,8 @@ entity MRfq {
 
 	datePromised LocalDate
 	description String
+	title String
+	selectionMethod String maxlength(10)
 	uid UUID
 	active Boolean
 }
@@ -953,6 +955,7 @@ entity MRfqLine {
 	unitPrice BigDecimal
 	orderAmount BigDecimal
 	documentDate LocalDate
+	datePromised LocalDate
 	dateRequired LocalDate
 	remark String
 }

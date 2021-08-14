@@ -202,6 +202,7 @@ public class MRfqService {
                         .adOrganization(mRfq.getAdOrganization())
                         .warehouse(mRequisition.getWarehouse())
                         .documentAction("SMT").documentStatus("DRF")
+                        .title(mRfq.getTitle()).description(mRfq.getDescription())
                         .setCreatedBy(mRequisition.getCreatedBy()));
 
         return mRfq.active(true)

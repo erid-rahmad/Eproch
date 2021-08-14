@@ -101,6 +101,16 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet id="20210813120900-addcol-3" author="ricky-k">
+        <addColumn tableName="m_rfq">
+            <column name="title" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="selection_method" type="varchar(10)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
     <!--
@@ -127,6 +137,8 @@
             <column name="grand_total" type="numeric"/>
             <column name="date_promised" type="date"/>
             <column name="description" type="string"/>
+            <column name="title" type="string"/>
+            <column name="selection_method" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
