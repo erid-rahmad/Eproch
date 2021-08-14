@@ -961,6 +961,13 @@ entity MRfqLine {
 	quantityBalance Integer
 }
 
+entity MQuoteSupplier {
+	uid UUID
+	active Boolean
+
+	dateRequired LocalDate
+}
+
 entity CBiddingType {
 	name String required maxlength(30)
 	description String
@@ -2449,6 +2456,12 @@ relationship ManyToOne {
 	MRfqLine{businessClassification } to CBusinessCategory
 	MRfqLine{warehouse } to CWarehouse
 	MRfqLine{costCenter } to CCostCenter
+
+	MQuoteSupplier{quotation required} to MRfq
+	MQuoteSupplier{businessClassification required} to CBusinessCategory
+	MQuoteSupplier{businessCategory required} to CBusinessCategory
+	MQuoteSupplier{businessSubCategory required} to CBusinessCategory
+	MQuoteSupplier{vendor required} to CVendor
 
 	CAuctionPrerequisite{adOrganization required} to ADOrganization
 
