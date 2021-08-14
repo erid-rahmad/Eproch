@@ -338,6 +338,9 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
       });
     } else {
       this.negoPrice.line = this.negoPriceLine
+      if(this.negoPrice.negotiationPrice.totalNegotiationPrice) {
+        this.negoPrice.negotiationPrice = this.negoPrice.negotiationPrice.totalNegotiationPrice;
+      }
       this.commonService(this.negoPriceApi).update(this.negoPrice).then(
         (res)=>{
           console.log(res);
