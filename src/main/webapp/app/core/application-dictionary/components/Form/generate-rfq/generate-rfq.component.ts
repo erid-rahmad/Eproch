@@ -207,6 +207,8 @@ export default class GenerateRfq extends Vue {
 
         this.gridData = res.data.map((line: any) => {
           line.orderAmount = line.quantityBalance * line.unitPrice;
+          line.originalQuantity = line.quantity;
+          line.quantity = line.quantityBalance;
           return line;
         });
 
@@ -340,6 +342,9 @@ export default class GenerateRfq extends Vue {
 
   generate(){
     this.form = {...this.form, ...this.requestForm};
+    this.form.requisitionLines.forEach((el)=>{
+      el.quantity = el.originalQuantity;
+    })
     console.log(this.form);
     
     this.generating = true;

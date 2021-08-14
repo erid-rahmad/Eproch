@@ -1,0 +1,132 @@
+{
+    "name": "MRfqSubmission",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "documentAction",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "documentStatus",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "approved",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "processed",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "dateTrx",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dateRequired",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dateSubmitted",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "submissionGrandTotal",
+            "fieldType": "BigDecimal"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mRfq",
+            "otherEntityRelationshipName": "mRfqSubmission",
+            "relationshipValidateRules": "required",
+            "relationshipName": "quotation",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mQuoteSupplier",
+            "otherEntityRelationshipName": "mRfqSubmission",
+            "relationshipValidateRules": "required",
+            "relationshipName": "quoteSupplier",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mRfqSubmission",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cBusinessCategory",
+            "otherEntityRelationshipName": "mRfqSubmission",
+            "relationshipValidateRules": "required",
+            "relationshipName": "businessClassification",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cBusinessCategory",
+            "otherEntityRelationshipName": "mRfqSubmission",
+            "relationshipValidateRules": "required",
+            "relationshipName": "businessCategory",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCurrency",
+            "otherEntityRelationshipName": "mRfqSubmission",
+            "relationshipValidateRules": "required",
+            "relationshipName": "currency",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cWarehouse",
+            "otherEntityRelationshipName": "mRfqSubmission",
+            "relationshipValidateRules": "required",
+            "relationshipName": "warehouse",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCostCenter",
+            "otherEntityRelationshipName": "mRfqSubmission",
+            "relationshipName": "costCenter",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210814134800",
+    "entityTableName": "m_rfq_submission",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

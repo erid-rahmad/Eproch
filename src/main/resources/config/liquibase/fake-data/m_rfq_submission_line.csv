@@ -1,0 +1,11 @@
+id;uid;active;document_action;document_status;approved;processed;release_qty;submission_price;total_submission_price;remark;date_trx;date_required;date_submitted;submission_id;quotation_line_id;ad_organization_id;product_id;uom_id;business_category_id
+1;35409545-0de7-4999-bd20-af3076ab4adf;false;Product;pricing st;true;true;97639;93256;40343;Mill Wyoming;2021-08-14;2021-08-13;2021-08-14;1;1;1;1;1;1
+2;45355f7f-a517-490b-af40-99457714fd49;false;European U;Practical ;false;false;43455;96530;64574;Centralized;2021-08-13;2021-08-14;2021-08-14;2;2;2;2;2;2
+3;3b1976a6-a4bf-4a27-b9c0-c0027d0a41b0;false;input Movi;Industrial;true;true;91411;26979;27831;Danish Krone Tennessee;2021-08-14;2021-08-13;2021-08-13;3;3;3;3;3;3
+4;ea1af825-e20f-4b81-8531-b7cd9b431d0c;false;collaborat;Mauritius ;false;true;22928;83336;72800;XML;2021-08-13;2021-08-14;2021-08-14;4;4;4;4;4;4
+5;95f09cc0-3185-4941-866b-dbe2f9342e79;true;syndicate ;Car Incred;false;true;82356;13691;74011;Trinidad and Tobago Sudanese Pound;2021-08-13;2021-08-13;2021-08-14;5;5;5;5;5;5
+6;2a074a15-2991-47ad-b7bd-21ddc41c0c53;true;Legacy;Developer ;false;false;81835;14594;37758;Libyan Arab Jamahiriya open-source leverage;2021-08-14;2021-08-13;2021-08-14;6;6;6;6;6;6
+7;93d3d1b5-0011-4263-8b63-5d5728e56727;true;Extended;Small Rubb;false;false;27696;21133;43399;Graphical User Interface;2021-08-13;2021-08-14;2021-08-13;7;7;7;7;7;7
+8;f19077c3-1ad9-4a21-acd7-9a351016c97e;true;mindshare;niches;false;false;13583;25201;16525;Regional sensor;2021-08-13;2021-08-14;2021-08-13;8;8;8;8;8;8
+9;3506a0c9-4ab2-4b32-ab37-36240d36d61c;true;Cotton;Wooden;true;true;91332;64828;22737;Cheese Investment Account ADP;2021-08-13;2021-08-13;2021-08-14;9;9;9;9;9;9
+10;cd30c07c-4663-4185-a3bc-c7af6563719e;true;tan yellow;RSS Oregon;false;true;22640;41261;53027;PNG;2021-08-14;2021-08-14;2021-08-14;10;10;10;10;10;10

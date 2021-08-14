@@ -961,6 +961,39 @@ entity MRfqLine {
 	quantityBalance Integer
 }
 
+entity MRfqSubmission {
+	uid UUID
+	active Boolean
+
+	documentAction String required maxlength(10)
+	documentStatus String required maxlength(10)
+	approved Boolean
+	processed Boolean
+	dateTrx LocalDate
+	dateRequired LocalDate
+	dateSubmitted LocalDate
+
+	submissionGrandTotal BigDecimal
+}
+
+entity MRfqSubmissionLine {
+	uid UUID
+	active Boolean
+
+	documentAction String required maxlength(10)
+	documentStatus String required maxlength(10)
+	approved Boolean
+	processed Boolean
+	releaseQty Integer
+	submissionPrice BigDecimal
+	totalSubmissionPrice BigDecimal
+	remark String
+
+	dateTrx LocalDate
+	dateRequired LocalDate
+	dateSubmitted LocalDate
+}
+
 entity MQuoteSupplier {
 	uid UUID
 	active Boolean
@@ -2456,6 +2489,22 @@ relationship ManyToOne {
 	MRfqLine{businessClassification } to CBusinessCategory
 	MRfqLine{warehouse } to CWarehouse
 	MRfqLine{costCenter } to CCostCenter
+
+	MRfqSubmission{quotation required} to MRfq
+	MRfqSubmission{quoteSupplier required} to MQuoteSupplier
+	MRfqSubmission{adOrganization required} to ADOrganization
+	MRfqSubmission{businessClassification required} to CBusinessCategory
+	MRfqSubmission{businessCategory required} to CBusinessCategory
+	MRfqSubmission{currency required} to CCurrency
+	MRfqSubmission{warehouse required} to CWarehouse
+	MRfqSubmission{costCenter } to CCostCenter
+
+	MRfqSubmissionLine{submission required} to MRfqSubmission
+	MRfqSubmissionLine{quotationLine required} to MRfqLine
+	MRfqSubmissionLine{adOrganization required} to ADOrganization
+	MRfqSubmissionLine{product required} to CProduct
+	MRfqSubmissionLine{uom required} to CUnitOfMeasure
+	MRfqSubmissionLine{businessCategory required} to CBusinessCategory
 
 	MQuoteSupplier{quotation required} to MRfq
 	MQuoteSupplier{businessClassification required} to CBusinessCategory
