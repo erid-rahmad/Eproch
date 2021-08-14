@@ -1,18 +1,27 @@
 package com.bhp.opusb.service;
 
+import java.util.List;
 import java.util.Optional;
+
+import javax.annotation.PostConstruct;
 
 import com.bhp.opusb.config.ApplicationProperties;
 import com.bhp.opusb.config.ApplicationProperties.Document;
+import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.CDocumentType;
 import com.bhp.opusb.domain.MRequisition;
 import com.bhp.opusb.repository.CDocumentTypeRepository;
 import com.bhp.opusb.repository.MRequisitionRepository;
 import com.bhp.opusb.service.dto.MRequisitionDTO;
+import com.bhp.opusb.service.dto.MRequisitionPayloadDTO;
 import com.bhp.opusb.service.mapper.MRequisitionMapper;
 import com.bhp.opusb.util.DocumentUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,6 +44,11 @@ public class MRequisitionService {
 
     private final MRequisitionMapper mRequisitionMapper;
     private final Document document;
+
+    @Autowired
+    private ObjectMapper jsonMapper;
+
+    private CDocumentType docType;
 
     public MRequisitionService(ApplicationProperties applicationProperties, ADOrganizationService adOrganizationService,
             MRequisitionLineService mRequisitionLineService, MRequisitionRepository mRequisitionRepository,
@@ -133,5 +147,43 @@ public class MRequisitionService {
         }
 
         mRequisitionRepository.updateDocumentStatus(mRequisition.getId(), action, status, approved, processed);
+    }
+
+    public MRequisitionDTO synchronize(String input) throws JsonProcessingException {
+        log.debug("Request to synchronize MRequisition : {}", input);
+        MRequisitionPayloadDTO payload = jsonMapper.readValue(input, MRequisitionPayloadDTO.class);
+
+        String documentNo = payload.getDocumentNo();
+        List<MRequisition> requis = mRequisitionRepository.findByDocumentNo(documentNo);
+
+        MRequisitionDTO newReq;
+
+        if(requis.size()>0){
+            newReq = mRequisitionMapper.toDto(requis.get(0));
+        } else {
+            newReq = new MRequisitionDTO();
+            newReq.setDateTrx(payload.getDateTrx());
+            newReq.setDocumentNo(documentNo);
+            newReq.setDescription(payload.getDescription());
+            newReq.setDocumentStatus("APV");
+            newReq.setDocumentAction("APV");
+            newReq.setApproved(true);
+            newReq.setProcessed(true);
+            newReq.setDocumentTypeId(docType.getId());
+            newReq.setId(payload.getRequisitionHeaderId());
+
+            ADOrganization org = adOrganizationService.findOrCreate(payload.getOrganizationCode().toString(), payload.getOrganizationName());
+            newReq.setAdOrganizationId(org.getId());
+
+            MRequisition req = mRequisitionMapper.toEntity(newReq);
+            mRequisitionRepository.save(req);
+        }
+
+        return newReq;
+    }
+
+    @PostConstruct
+    private void postConstruct(){
+        docType = cDocumentTypeRepository.findFirstByName(document.getDocumentType()).orElse(new CDocumentType());
     }
 }

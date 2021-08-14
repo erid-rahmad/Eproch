@@ -225,7 +225,9 @@ export default class DetailView extends Mixins(CalloutMixin, ContextVariableAcce
   }
 
   public showLabel(field: IADField) {
-    return (!this.isBooleanField(field) && field.showLabel) ? field.name : '';
+    // console.log("show label ", field);
+    // return (!this.isBooleanField(field) && field.showLabel) ? field.name : '';
+    return field.name;
   }
 
   public exitEditMode() {

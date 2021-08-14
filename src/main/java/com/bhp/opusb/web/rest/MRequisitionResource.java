@@ -2,6 +2,7 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.service.MRequisitionService;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.bhp.opusb.service.dto.MRequisitionDTO;
 import com.bhp.opusb.service.dto.MRequisitionCriteria;
 import com.bhp.opusb.service.MRequisitionQueryService;
@@ -160,5 +161,30 @@ public class MRequisitionResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         mRequisitionService.updateDocumentStatus(mRequisitionDTO);
+    }
+
+    /**
+     * {@code POST  /m-match-pos/synchronize} : Synchronize MMatchPO with the external source (BHp EBS).
+     *
+     * @param message the JSON formatted message representing XXEPROC_PREQ_HEADERS_V record.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the created/updated MRequisitionDTO.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping(
+        path = "/m-requisitions/synchronize",
+        consumes = {
+            "application/octet-stream;charset=UTF-8",
+            "application/json;charset=UTF-8"
+        },
+        produces = {
+            "application/json;charset=UTF-8"
+        })
+    public ResponseEntity<MRequisitionDTO> syncReceiverFile(@RequestBody byte[] message) throws URISyntaxException, JsonProcessingException {
+        final String input = new String(message);
+        log.debug("REST request to synchronize MMatchPO : {}", input);
+
+        MRequisitionDTO result = mRequisitionService.synchronize(input);
+
+        return ResponseEntity.ok().body(result);
     }
 }

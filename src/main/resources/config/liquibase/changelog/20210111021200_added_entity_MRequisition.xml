@@ -133,4 +133,10 @@
         <dropNotNullConstraint tableName="m_requisition" columnName="date_required" />
     </changeSet>
 
+    <changeSet id="20210813042400-nullable1" author="ricky-k">
+        <dropNotNullConstraint tableName="m_requisition" columnName="currency_id" />
+        <dropNotNullConstraint tableName="m_requisition" columnName="warehouse_id" />
+        <dropNotNullConstraint tableName="m_requisition" columnName="cost_center_id" />
+    </changeSet>
+
 </databaseChangeLog>

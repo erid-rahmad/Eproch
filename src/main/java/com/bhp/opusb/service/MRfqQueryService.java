@@ -121,6 +121,12 @@ public class MRfqQueryService extends QueryService<MRfq> {
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), MRfq_.description));
             }
+            if (criteria.getTitle() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getTitle(), MRfq_.title));
+            }
+            if (criteria.getSelectionMethod() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getSelectionMethod(), MRfq_.selectionMethod));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), MRfq_.uid));
             }

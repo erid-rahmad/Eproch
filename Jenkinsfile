@@ -30,7 +30,7 @@ pipeline {
 	stage('Restart Eproc Demo') {
         steps {
                 script {
-						sh "chmod +x script/demoeproc"
+						sh "chmod 777 script/demoeproc"
        					sh "sudo /usr/bin/monit restart bhp-eproc-demo"
                     }
             }

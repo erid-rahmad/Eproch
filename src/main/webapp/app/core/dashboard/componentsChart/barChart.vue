@@ -1,5 +1,10 @@
 <template>
+  <div>
     <canvas :id="id"></canvas>
+    <div :id="id+'-none'" style="margin: 30px auto; text-align: center; display: none;">
+        <span style="font-size: 1rem; font-weight: bold; color: #8898aa;">No data to display</span>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -10,7 +15,10 @@ export default {
   props: {
     id: String,
     title: String,
-    chartType: String,
+    chartType: {
+        type: String,
+        default: 'bar'
+    },
     position: String,
     value: {type: Array, default: (() => []) },
     colors: {type: Array, default: (() => []) }
@@ -33,6 +41,7 @@ export default {
     }
   },
   data(){
+    let id = this.id;
     let type = this.chartType;
 
     return {
@@ -59,10 +68,30 @@ export default {
             }*/
           ]
         },
+        plugins: {
+          afterDraw: function(chart) {
+            let isEmpty = (chart.data.datasets.length == 0);
+            document.getElementById(id).style.display = (isEmpty ? 'none' : 'block');
+            document.getElementById(id + '-none').style.display = (isEmpty ? 'block' : 'none');
+
+            /*if (chart.data.datasets.length === 0) {
+              // No data is present
+              var ctx = chart.chart.ctx;
+              var width = chart.chart.width;
+              var height = chart.chart.height;
+              chart.clear();
+              chart.chart.height = 100;
+              
+              ctx.save();
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.font = "14px";
+              ctx.fillText('No data to display', width / 2, height / 2);
+              ctx.restore();
+            }*/
+          }
+        },
         options: {
-          decimation: {
-            enabled: true
-          },
           responsive: true,
           lineTension: 2,
           layout: {
@@ -76,7 +105,7 @@ export default {
           title: {
             display: ( this.title != null && this.title != ""),
             text: this.title,
-            fontSize: 20,
+            fontSize: 18,
             padding: 5
           },
           legend: {
@@ -144,43 +173,45 @@ export default {
     }
   },
   mounted(){
-    let listColor = this.colors;
-    let labels = this.groupBy(this.value, 'xAxisLabel');
-    this.chartData.data.labels = Object.keys(labels);
-
     let dataset = [];
-    this.value.forEach(x => {return x.legendLabel = ''; });
-    let legends = this.groupBy(this.value, 'legendLabel');
-    Object.keys(legends).forEach((x, index) => {
-      let data = {
-        label: x,
-        fill: false,
-        data: Object.values(legends)[index].map(y => parseFloat(y.dataValue)), //.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') ),
-        barThickness: this.chartType == 'bar' ? 50 : 25,
-        borderWidth: 2,
-        backgroundColor: [],
-        borderColor: []
-      }
+    if(this.value.length > 0) {
+      let listColor = this.colors;
+      let labels = this.groupBy(this.value, 'xAxisLabel');
+      this.chartData.data.labels = Object.keys(labels);
 
-      if(x == null || x == '')
-      {
-        this.chartData.options.legend.display = false;
-        this.chartData.options.title.padding = 10;
-        listColor.sort(() => Math.random() - 0.5).forEach(x => {
-          data.backgroundColor.push(x);
-          data.borderColor.push(x);
-        });
-      }
-      else{
-        let color = this.popRandom(listColor);
-        data.backgroundColor.push(color);
-        data.borderColor.push(color);
-      }
+      this.value.forEach(x => {return x.legendLabel = ''; });
+      let legends = this.groupBy(this.value, 'legendLabel');
+      Object.keys(legends).forEach((x, index) => {
+        let data = {
+          label: x,
+          fill: false,
+          data: Object.values(legends)[index].map(y => parseFloat(y.dataValue)), //.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') ),
+          barThickness: this.chartType == 'bar' ? 50 : 25,
+          borderWidth: 2,
+          backgroundColor: [],
+          borderColor: []
+        }
 
-      dataset.push(data);
-    });
+        if(x == null || x == '')
+        {
+          this.chartData.options.legend.display = false;
+          this.chartData.options.title.padding = 10;
+          listColor.sort(() => Math.random() - 0.5).forEach(x => {
+            data.backgroundColor.push(x);
+            data.borderColor.push(x);
+          });
+        }
+        else{
+          let color = this.popRandom(listColor);
+          data.backgroundColor.push(color);
+          data.borderColor.push(color);
+        }
+
+        dataset.push(data);
+      });
+    }
+    
     this.chartData.data.datasets = dataset;
-
     const ctx = document.getElementById(this.id);
     new Chart(ctx, this.chartData);
   }

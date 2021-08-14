@@ -82,6 +82,8 @@ class MRfqGatlingTest extends Simulation {
                 , "grandTotal":"0"
                 , "datePromised":"2020-01-01T00:00:00.000Z"
                 , "description":"SAMPLE_TEXT"
+                , "title":"SAMPLE_TEXT"
+                , "selectionMethod":"SAMPLE_TEXT"
                 , "uid":null
                 , "active":null
                 }""")).asJson

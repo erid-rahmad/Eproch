@@ -134,4 +134,11 @@ export default class VendorPerformanceReport extends mixins(AccessLevelMixin) {
     this.viewDetail = true
     this.selectedRow = row;
   }
+
+  formatDecimal(row: any, col: any): string{
+
+    let val= Math.round(Number(row[col.property]) * 100 ) / 100 ;
+
+    return `${val}`;
+  }
 }

@@ -1,5 +1,10 @@
 <template>
+  <div>
     <canvas :id="id"></canvas>
+    <div :id="id+'-none'" style="margin: 30px auto; text-align: center; display: none;">
+        <span style="font-size: 1rem; font-weight: bold; color: #8898aa;">No data to display</span>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -32,12 +37,14 @@ export default {
     }
   },
   data(){
+    let id = this.id;
+
     return {
       chartData: {
         type: "line",
         data: {
-          labels: ["April 2021", "May 2021", "June 2021", "July 2021"],
-          datasets: [
+          labels: [/*"April 2021", "May 2021", "June 2021", "July 2021"*/],
+          datasets: [/*
             {
               label: "Hand Sanitizer",
               fill: false,
@@ -53,24 +60,15 @@ export default {
               backgroundColor: "#4099ff",
               borderColor: "#4099ff",
               borderWidth: 2
-            },
-            {
-              label: "Face Shield",
-              fill: false,
-              data: [256, 568, 1002, 1590],
-              backgroundColor: "#2ed8b6",
-              borderColor: "#2ed8b6",
-              borderWidth: 2
-            },
-            {
-              label: "Disinfectant",
-              fill: false,
-              data: [157, 589, 1894, 3208],
-              backgroundColor: "#FFB64D",
-              borderColor: "#FFB64D",
-              borderWidth: 2
-            }
+            }*/
           ]
+        },
+        plugins: {
+          afterDraw: function(chart) {
+            let isEmpty = (chart.data.datasets.length == 0);
+            document.getElementById(id).style.display = (isEmpty ? 'none' : 'block');
+            document.getElementById(id + '-none').style.display = (isEmpty ? 'block' : 'none');
+          }
         },
         options: {
           responsive: true,
@@ -86,7 +84,7 @@ export default {
           title: {
             display: ( this.title != null && this.title != ""),
             text: this.title,
-            fontSize: 20,
+            fontSize: 18,
             padding: 5
           },
           legend: {
@@ -152,25 +150,28 @@ export default {
     }
   },
   mounted(){
-    let listColor = this.colors;
-    let labels = this.groupBy(this.value, 'xAxisLabel');
-    this.chartData.data.labels = Object.keys(labels);
-
     let dataset = [];
-    let legends = this.groupBy(this.value, 'legendLabel');
-    Object.keys(legends).forEach((x, index) => {
-      let color = this.popRandom(listColor);
-      let data = {
-        label: x,
-        fill: false,
-        data: Object.values(legends)[index].map(y => parseFloat(y.dataValue)), //.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') ),
-        backgroundColor: color,
-        borderColor: color,
-        borderWidth: 2
-      }
 
-      dataset.push(data);
-    });
+    if(this.value.length > 0) {
+      let listColor = this.colors;
+      let labels = this.groupBy(this.value, 'xAxisLabel');
+      this.chartData.data.labels = Object.keys(labels);
+
+      let legends = this.groupBy(this.value, 'legendLabel');
+      Object.keys(legends).forEach((x, index) => {
+        let color = this.popRandom(listColor);
+        let data = {
+          label: x,
+          fill: false,
+          data: Object.values(legends)[index].map(y => parseFloat(y.dataValue)), //.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') ),
+          backgroundColor: color,
+          borderColor: color,
+          borderWidth: 2
+        }
+
+        dataset.push(data);
+      });
+    }
 
     this.chartData.data.datasets = dataset;
     const ctx = document.getElementById(this.id);
