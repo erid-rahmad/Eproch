@@ -7,6 +7,8 @@ import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CProduct;
 import com.bhp.opusb.domain.CUnitOfMeasure;
 import com.bhp.opusb.domain.CBusinessCategory;
+import com.bhp.opusb.domain.CWarehouse;
+import com.bhp.opusb.domain.CCostCenter;
 import com.bhp.opusb.repository.MRfqLineRepository;
 import com.bhp.opusb.service.MRfqLineService;
 import com.bhp.opusb.service.dto.MRfqLineDTO;
@@ -82,6 +84,10 @@ public class MRfqLineResourceIT {
     private static final LocalDate UPDATED_DOCUMENT_DATE = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_DOCUMENT_DATE = LocalDate.ofEpochDay(-1L);
 
+    private static final LocalDate DEFAULT_DATE_PROMISED = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE_PROMISED = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_DATE_PROMISED = LocalDate.ofEpochDay(-1L);
+
     private static final LocalDate DEFAULT_DATE_REQUIRED = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DATE_REQUIRED = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_DATE_REQUIRED = LocalDate.ofEpochDay(-1L);
@@ -128,6 +134,7 @@ public class MRfqLineResourceIT {
             .unitPrice(DEFAULT_UNIT_PRICE)
             .orderAmount(DEFAULT_ORDER_AMOUNT)
             .documentDate(DEFAULT_DOCUMENT_DATE)
+            .datePromised(DEFAULT_DATE_PROMISED)
             .dateRequired(DEFAULT_DATE_REQUIRED)
             .remark(DEFAULT_REMARK);
         // Add required entity
@@ -201,6 +208,7 @@ public class MRfqLineResourceIT {
             .unitPrice(UPDATED_UNIT_PRICE)
             .orderAmount(UPDATED_ORDER_AMOUNT)
             .documentDate(UPDATED_DOCUMENT_DATE)
+            .datePromised(UPDATED_DATE_PROMISED)
             .dateRequired(UPDATED_DATE_REQUIRED)
             .remark(UPDATED_REMARK);
         // Add required entity
@@ -288,6 +296,7 @@ public class MRfqLineResourceIT {
         assertThat(testMRfqLine.getUnitPrice()).isEqualTo(DEFAULT_UNIT_PRICE);
         assertThat(testMRfqLine.getOrderAmount()).isEqualTo(DEFAULT_ORDER_AMOUNT);
         assertThat(testMRfqLine.getDocumentDate()).isEqualTo(DEFAULT_DOCUMENT_DATE);
+        assertThat(testMRfqLine.getDatePromised()).isEqualTo(DEFAULT_DATE_PROMISED);
         assertThat(testMRfqLine.getDateRequired()).isEqualTo(DEFAULT_DATE_REQUIRED);
         assertThat(testMRfqLine.getRemark()).isEqualTo(DEFAULT_REMARK);
     }
@@ -373,6 +382,7 @@ public class MRfqLineResourceIT {
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].orderAmount").value(hasItem(DEFAULT_ORDER_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
+            .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
             .andExpect(jsonPath("$.[*].dateRequired").value(hasItem(DEFAULT_DATE_REQUIRED.toString())))
             .andExpect(jsonPath("$.[*].remark").value(hasItem(DEFAULT_REMARK)));
     }
@@ -399,6 +409,7 @@ public class MRfqLineResourceIT {
             .andExpect(jsonPath("$.unitPrice").value(DEFAULT_UNIT_PRICE.intValue()))
             .andExpect(jsonPath("$.orderAmount").value(DEFAULT_ORDER_AMOUNT.intValue()))
             .andExpect(jsonPath("$.documentDate").value(DEFAULT_DOCUMENT_DATE.toString()))
+            .andExpect(jsonPath("$.datePromised").value(DEFAULT_DATE_PROMISED.toString()))
             .andExpect(jsonPath("$.dateRequired").value(DEFAULT_DATE_REQUIRED.toString()))
             .andExpect(jsonPath("$.remark").value(DEFAULT_REMARK));
     }
@@ -1314,6 +1325,111 @@ public class MRfqLineResourceIT {
 
     @Test
     @Transactional
+    public void getAllMRfqLinesByDatePromisedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where datePromised equals to DEFAULT_DATE_PROMISED
+        defaultMRfqLineShouldBeFound("datePromised.equals=" + DEFAULT_DATE_PROMISED);
+
+        // Get all the mRfqLineList where datePromised equals to UPDATED_DATE_PROMISED
+        defaultMRfqLineShouldNotBeFound("datePromised.equals=" + UPDATED_DATE_PROMISED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByDatePromisedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where datePromised not equals to DEFAULT_DATE_PROMISED
+        defaultMRfqLineShouldNotBeFound("datePromised.notEquals=" + DEFAULT_DATE_PROMISED);
+
+        // Get all the mRfqLineList where datePromised not equals to UPDATED_DATE_PROMISED
+        defaultMRfqLineShouldBeFound("datePromised.notEquals=" + UPDATED_DATE_PROMISED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByDatePromisedIsInShouldWork() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where datePromised in DEFAULT_DATE_PROMISED or UPDATED_DATE_PROMISED
+        defaultMRfqLineShouldBeFound("datePromised.in=" + DEFAULT_DATE_PROMISED + "," + UPDATED_DATE_PROMISED);
+
+        // Get all the mRfqLineList where datePromised equals to UPDATED_DATE_PROMISED
+        defaultMRfqLineShouldNotBeFound("datePromised.in=" + UPDATED_DATE_PROMISED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByDatePromisedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where datePromised is not null
+        defaultMRfqLineShouldBeFound("datePromised.specified=true");
+
+        // Get all the mRfqLineList where datePromised is null
+        defaultMRfqLineShouldNotBeFound("datePromised.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByDatePromisedIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where datePromised is greater than or equal to DEFAULT_DATE_PROMISED
+        defaultMRfqLineShouldBeFound("datePromised.greaterThanOrEqual=" + DEFAULT_DATE_PROMISED);
+
+        // Get all the mRfqLineList where datePromised is greater than or equal to UPDATED_DATE_PROMISED
+        defaultMRfqLineShouldNotBeFound("datePromised.greaterThanOrEqual=" + UPDATED_DATE_PROMISED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByDatePromisedIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where datePromised is less than or equal to DEFAULT_DATE_PROMISED
+        defaultMRfqLineShouldBeFound("datePromised.lessThanOrEqual=" + DEFAULT_DATE_PROMISED);
+
+        // Get all the mRfqLineList where datePromised is less than or equal to SMALLER_DATE_PROMISED
+        defaultMRfqLineShouldNotBeFound("datePromised.lessThanOrEqual=" + SMALLER_DATE_PROMISED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByDatePromisedIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where datePromised is less than DEFAULT_DATE_PROMISED
+        defaultMRfqLineShouldNotBeFound("datePromised.lessThan=" + DEFAULT_DATE_PROMISED);
+
+        // Get all the mRfqLineList where datePromised is less than UPDATED_DATE_PROMISED
+        defaultMRfqLineShouldBeFound("datePromised.lessThan=" + UPDATED_DATE_PROMISED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByDatePromisedIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where datePromised is greater than DEFAULT_DATE_PROMISED
+        defaultMRfqLineShouldNotBeFound("datePromised.greaterThan=" + DEFAULT_DATE_PROMISED);
+
+        // Get all the mRfqLineList where datePromised is greater than SMALLER_DATE_PROMISED
+        defaultMRfqLineShouldBeFound("datePromised.greaterThan=" + SMALLER_DATE_PROMISED);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMRfqLinesByDateRequiredIsEqualToSomething() throws Exception {
         // Initialize the database
         mRfqLineRepository.saveAndFlush(mRfqLine);
@@ -1574,6 +1690,66 @@ public class MRfqLineResourceIT {
         defaultMRfqLineShouldNotBeFound("businessCategoryId.equals=" + (businessCategoryId + 1));
     }
 
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByBusinessClassificationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+        CBusinessCategory businessClassification = CBusinessCategoryResourceIT.createEntity(em);
+        em.persist(businessClassification);
+        em.flush();
+        mRfqLine.setBusinessClassification(businessClassification);
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+        Long businessClassificationId = businessClassification.getId();
+
+        // Get all the mRfqLineList where businessClassification equals to businessClassificationId
+        defaultMRfqLineShouldBeFound("businessClassificationId.equals=" + businessClassificationId);
+
+        // Get all the mRfqLineList where businessClassification equals to businessClassificationId + 1
+        defaultMRfqLineShouldNotBeFound("businessClassificationId.equals=" + (businessClassificationId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByWarehouseIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+        CWarehouse warehouse = CWarehouseResourceIT.createEntity(em);
+        em.persist(warehouse);
+        em.flush();
+        mRfqLine.setWarehouse(warehouse);
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+        Long warehouseId = warehouse.getId();
+
+        // Get all the mRfqLineList where warehouse equals to warehouseId
+        defaultMRfqLineShouldBeFound("warehouseId.equals=" + warehouseId);
+
+        // Get all the mRfqLineList where warehouse equals to warehouseId + 1
+        defaultMRfqLineShouldNotBeFound("warehouseId.equals=" + (warehouseId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByCostCenterIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+        CCostCenter costCenter = CCostCenterResourceIT.createEntity(em);
+        em.persist(costCenter);
+        em.flush();
+        mRfqLine.setCostCenter(costCenter);
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+        Long costCenterId = costCenter.getId();
+
+        // Get all the mRfqLineList where costCenter equals to costCenterId
+        defaultMRfqLineShouldBeFound("costCenterId.equals=" + costCenterId);
+
+        // Get all the mRfqLineList where costCenter equals to costCenterId + 1
+        defaultMRfqLineShouldNotBeFound("costCenterId.equals=" + (costCenterId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1593,6 +1769,7 @@ public class MRfqLineResourceIT {
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].orderAmount").value(hasItem(DEFAULT_ORDER_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
+            .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
             .andExpect(jsonPath("$.[*].dateRequired").value(hasItem(DEFAULT_DATE_REQUIRED.toString())))
             .andExpect(jsonPath("$.[*].remark").value(hasItem(DEFAULT_REMARK)));
 
@@ -1653,6 +1830,7 @@ public class MRfqLineResourceIT {
             .unitPrice(UPDATED_UNIT_PRICE)
             .orderAmount(UPDATED_ORDER_AMOUNT)
             .documentDate(UPDATED_DOCUMENT_DATE)
+            .datePromised(UPDATED_DATE_PROMISED)
             .dateRequired(UPDATED_DATE_REQUIRED)
             .remark(UPDATED_REMARK);
         MRfqLineDTO mRfqLineDTO = mRfqLineMapper.toDto(updatedMRfqLine);
@@ -1677,6 +1855,7 @@ public class MRfqLineResourceIT {
         assertThat(testMRfqLine.getUnitPrice()).isEqualTo(UPDATED_UNIT_PRICE);
         assertThat(testMRfqLine.getOrderAmount()).isEqualTo(UPDATED_ORDER_AMOUNT);
         assertThat(testMRfqLine.getDocumentDate()).isEqualTo(UPDATED_DOCUMENT_DATE);
+        assertThat(testMRfqLine.getDatePromised()).isEqualTo(UPDATED_DATE_PROMISED);
         assertThat(testMRfqLine.getDateRequired()).isEqualTo(UPDATED_DATE_REQUIRED);
         assertThat(testMRfqLine.getRemark()).isEqualTo(UPDATED_REMARK);
     }

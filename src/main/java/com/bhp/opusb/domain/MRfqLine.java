@@ -65,6 +65,9 @@ public class MRfqLine extends AbstractAuditingEntity implements Serializable {
     @Column(name = "document_date")
     private LocalDate documentDate;
 
+    @Column(name = "date_promised")
+    private LocalDate datePromised;
+
     @Column(name = "date_required")
     private LocalDate dateRequired;
 
@@ -95,6 +98,18 @@ public class MRfqLine extends AbstractAuditingEntity implements Serializable {
     @NotNull
     @JsonIgnoreProperties("mRfqLines")
     private CBusinessCategory businessCategory;
+
+    @ManyToOne
+    @JsonIgnoreProperties("mRfqLines")
+    private CBusinessCategory businessClassification;
+
+    @ManyToOne
+    @JsonIgnoreProperties("mRfqLines")
+    private CWarehouse warehouse;
+
+    @ManyToOne
+    @JsonIgnoreProperties("mRfqLines")
+    private CCostCenter costCenter;
 
     @PrePersist
     public void assignUid(){
@@ -255,6 +270,19 @@ public class MRfqLine extends AbstractAuditingEntity implements Serializable {
         this.documentDate = documentDate;
     }
 
+    public LocalDate getDatePromised() {
+        return datePromised;
+    }
+
+    public MRfqLine datePromised(LocalDate datePromised) {
+        this.datePromised = datePromised;
+        return this;
+    }
+
+    public void setDatePromised(LocalDate datePromised) {
+        this.datePromised = datePromised;
+    }
+
     public LocalDate getDateRequired() {
         return dateRequired;
     }
@@ -345,6 +373,45 @@ public class MRfqLine extends AbstractAuditingEntity implements Serializable {
     public void setBusinessCategory(CBusinessCategory cBusinessCategory) {
         this.businessCategory = cBusinessCategory;
     }
+
+    public CBusinessCategory getBusinessClassification() {
+        return businessClassification;
+    }
+
+    public MRfqLine businessClassification(CBusinessCategory cBusinessCategory) {
+        this.businessClassification = cBusinessCategory;
+        return this;
+    }
+
+    public void setBusinessClassification(CBusinessCategory cBusinessCategory) {
+        this.businessClassification = cBusinessCategory;
+    }
+
+    public CWarehouse getWarehouse() {
+        return warehouse;
+    }
+
+    public MRfqLine warehouse(CWarehouse cWarehouse) {
+        this.warehouse = cWarehouse;
+        return this;
+    }
+
+    public void setWarehouse(CWarehouse cWarehouse) {
+        this.warehouse = cWarehouse;
+    }
+
+    public CCostCenter getCostCenter() {
+        return costCenter;
+    }
+
+    public MRfqLine costCenter(CCostCenter cCostCenter) {
+        this.costCenter = cCostCenter;
+        return this;
+    }
+
+    public void setCostCenter(CCostCenter cCostCenter) {
+        this.costCenter = cCostCenter;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -374,9 +441,11 @@ public class MRfqLine extends AbstractAuditingEntity implements Serializable {
             ", documentStatus='" + getDocumentStatus() + "'" +
             ", approved='" + isApproved() + "'" +
             ", processed='" + isProcessed() + "'" +
+            ", unitPrice=" + getUnitPrice() +
             ", orderAmount=" + getOrderAmount() +
             ", releaseQty=" + getReleaseQty() +
             ", documentDate='" + getDocumentDate() + "'" +
+            ", datePromised='" + getDatePromised() + "'" +
             ", dateRequired='" + getDateRequired() + "'" +
             ", remark='" + getRemark() + "'" +
             "}";

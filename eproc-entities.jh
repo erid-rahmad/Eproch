@@ -2445,6 +2445,9 @@ relationship ManyToOne {
 	MRfqLine{product required} to CProduct
 	MRfqLine{uom required} to CUnitOfMeasure
 	MRfqLine{businessCategory required} to CBusinessCategory
+	MRfqLine{businessClassification } to CBusinessCategory
+	MRfqLine{warehouse } to CWarehouse
+	MRfqLine{costCenter } to CCostCenter
 
 	CAuctionPrerequisite{adOrganization required} to ADOrganization
 

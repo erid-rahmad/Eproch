@@ -153,8 +153,13 @@ public class MRfqService {
             MRfq rfq = quotations.computeIfAbsent(mRequisitionLineDTO.getVendorId(),
                     key -> initQuotation(mRfqDTO, mRequisitionLine));
 
-            cDocumentTypeRepository.findFirstByName(document.getDocumentType())
+            if("A".contentEquals(rfq.getSelectionMethod()) || "S".contentEquals(rfq.getSelectionMethod()))
+                cDocumentTypeRepository.findFirstByName(document.getDocumentType())
                     .ifPresent(rfq::setDocumentType);
+            else if("P".contentEquals(rfq.getSelectionMethod()))
+                cDocumentTypeRepository.findFirstByName("Direct Purchase")
+                    .ifPresent(rfq::setDocumentType);
+            else cDocumentTypeRepository.findFirstByName("Tender").ifPresent(rfq::setDocumentType);
 
             MRfqLine mRfqLine = initPurchaseOrderLine(rfq, mRequisitionLine);
             final BigDecimal grandTotal = rfq.getGrandTotal().add(mRfqLine.getOrderAmount());
@@ -187,10 +192,13 @@ public class MRfqService {
         }
         */
         // Set the default Purchase Order document type.
-        if (mRfq.getDocumentType() == null) {
+        if("A".contentEquals(mRfq.getSelectionMethod()) || "S".contentEquals(mRfq.getSelectionMethod()))
             cDocumentTypeRepository.findFirstByName(document.getDocumentType())
                 .ifPresent(mRfq::setDocumentType);
-        }
+        else if("P".contentEquals(mRfq.getSelectionMethod()))
+            cDocumentTypeRepository.findFirstByName("Direct Purchase")
+                .ifPresent(mRfq::setDocumentType);
+        else cDocumentTypeRepository.findFirstByName("Tender").ifPresent(mRfq::setDocumentType);
 
         // Set the requestor of the purchase order.
         mRequisitionRepository.findById(mRequisitionLine.getRequisition().getId())
@@ -203,6 +211,7 @@ public class MRfqService {
                         .warehouse(mRequisition.getWarehouse())
                         .documentAction("SMT").documentStatus("DRF")
                         .title(mRfq.getTitle()).description(mRfq.getDescription())
+                        .dateTrx(mRfq.getDateTrx()).datePromised(mRfq.getDatePromised()).dateRequired(mRfq.getDateRequired())
                         .setCreatedBy(mRequisition.getCreatedBy()));
 
         return mRfq.active(true)
@@ -223,7 +232,9 @@ public class MRfqService {
         mPurchaseOrderLine.active(true)
             .adOrganization(mPurchaseOrder.getAdOrganization())
             .businessCategory(mPurchaseOrder.getBusinessCategory())
+            .businessClassification(mPurchaseOrder.getBusinessClassification())
             .documentDate(mPurchaseOrder.getDateTrx())
+            .datePromised(mPurchaseOrder.getDatePromised())
             .dateRequired(mPurchaseOrder.getDateRequired())
             .documentAction("SMT")
             .documentStatus("DRF")
@@ -234,9 +245,9 @@ public class MRfqService {
             .orderAmount(orderAmount)
             //.requisition(mRequisitionLine.getRequisition())
             .unitPrice(mRequisitionLine.getUnitPrice())
-            .uom(mRequisitionLine.getUom());
-            //.vendor(mRequisitionLine.getVendor())
-            //.warehouse(mPurchaseOrder.getWarehouse());
+            .uom(mRequisitionLine.getUom())
+            .costCenter(mRequisitionLine.getCostCenter())
+            .warehouse(mRequisitionLine.getWarehouse());
 
         return mPurchaseOrderLine;
     }

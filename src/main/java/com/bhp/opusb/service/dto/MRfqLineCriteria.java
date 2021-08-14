@@ -51,6 +51,8 @@ public class MRfqLineCriteria implements Serializable, Criteria {
 
     private LocalDateFilter documentDate;
 
+    private LocalDateFilter datePromised;
+
     private LocalDateFilter dateRequired;
 
     private StringFilter remark;
@@ -64,6 +66,12 @@ public class MRfqLineCriteria implements Serializable, Criteria {
     private LongFilter uomId;
 
     private LongFilter businessCategoryId;
+
+    private LongFilter businessClassificationId;
+
+    private LongFilter warehouseId;
+
+    private LongFilter costCenterId;
 
     public MRfqLineCriteria() {
     }
@@ -81,6 +89,7 @@ public class MRfqLineCriteria implements Serializable, Criteria {
         this.unitPrice = other.unitPrice == null ? null : other.unitPrice.copy();
         this.orderAmount = other.orderAmount == null ? null : other.orderAmount.copy();
         this.documentDate = other.documentDate == null ? null : other.documentDate.copy();
+        this.datePromised = other.datePromised == null ? null : other.datePromised.copy();
         this.dateRequired = other.dateRequired == null ? null : other.dateRequired.copy();
         this.remark = other.remark == null ? null : other.remark.copy();
         this.quotationId = other.quotationId == null ? null : other.quotationId.copy();
@@ -88,6 +97,9 @@ public class MRfqLineCriteria implements Serializable, Criteria {
         this.productId = other.productId == null ? null : other.productId.copy();
         this.uomId = other.uomId == null ? null : other.uomId.copy();
         this.businessCategoryId = other.businessCategoryId == null ? null : other.businessCategoryId.copy();
+        this.businessClassificationId = other.businessClassificationId == null ? null : other.businessClassificationId.copy();
+        this.warehouseId = other.warehouseId == null ? null : other.warehouseId.copy();
+        this.costCenterId = other.costCenterId == null ? null : other.costCenterId.copy();
     }
 
     @Override
@@ -191,6 +203,14 @@ public class MRfqLineCriteria implements Serializable, Criteria {
         this.documentDate = documentDate;
     }
 
+    public LocalDateFilter getDatePromised() {
+        return datePromised;
+    }
+
+    public void setDatePromised(LocalDateFilter datePromised) {
+        this.datePromised = datePromised;
+    }
+
     public LocalDateFilter getDateRequired() {
         return dateRequired;
     }
@@ -247,6 +267,30 @@ public class MRfqLineCriteria implements Serializable, Criteria {
         this.businessCategoryId = businessCategoryId;
     }
 
+    public LongFilter getBusinessClassificationId() {
+        return businessClassificationId;
+    }
+
+    public void setBusinessClassificationId(LongFilter businessClassificationId) {
+        this.businessClassificationId = businessClassificationId;
+    }
+
+    public LongFilter getWarehouseId() {
+        return warehouseId;
+    }
+
+    public void setWarehouseId(LongFilter warehouseId) {
+        this.warehouseId = warehouseId;
+    }
+
+    public LongFilter getCostCenterId() {
+        return costCenterId;
+    }
+
+    public void setCostCenterId(LongFilter costCenterId) {
+        this.costCenterId = costCenterId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -270,13 +314,17 @@ public class MRfqLineCriteria implements Serializable, Criteria {
             Objects.equals(unitPrice, that.unitPrice) &&
             Objects.equals(orderAmount, that.orderAmount) &&
             Objects.equals(documentDate, that.documentDate) &&
+            Objects.equals(datePromised, that.datePromised) &&
             Objects.equals(dateRequired, that.dateRequired) &&
             Objects.equals(remark, that.remark) &&
             Objects.equals(quotationId, that.quotationId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(productId, that.productId) &&
             Objects.equals(uomId, that.uomId) &&
-            Objects.equals(businessCategoryId, that.businessCategoryId);
+            Objects.equals(businessCategoryId, that.businessCategoryId) &&
+            Objects.equals(businessClassificationId, that.businessClassificationId) &&
+            Objects.equals(warehouseId, that.warehouseId) &&
+            Objects.equals(costCenterId, that.costCenterId);
     }
 
     @Override
@@ -294,13 +342,17 @@ public class MRfqLineCriteria implements Serializable, Criteria {
         unitPrice,
         orderAmount,
         documentDate,
+        datePromised,
         dateRequired,
         remark,
         quotationId,
         adOrganizationId,
         productId,
         uomId,
-        businessCategoryId
+        businessCategoryId,
+        businessClassificationId,
+        warehouseId,
+        costCenterId
         );
     }
 
@@ -319,6 +371,7 @@ public class MRfqLineCriteria implements Serializable, Criteria {
                 (unitPrice != null ? "unitPrice=" + unitPrice + ", " : "") +
                 (orderAmount != null ? "orderAmount=" + orderAmount + ", " : "") +
                 (documentDate != null ? "documentDate=" + documentDate + ", " : "") +
+                (datePromised != null ? "datePromised=" + datePromised + ", " : "") +
                 (dateRequired != null ? "dateRequired=" + dateRequired + ", " : "") +
                 (remark != null ? "remark=" + remark + ", " : "") +
                 (quotationId != null ? "quotationId=" + quotationId + ", " : "") +
@@ -326,6 +379,9 @@ public class MRfqLineCriteria implements Serializable, Criteria {
                 (productId != null ? "productId=" + productId + ", " : "") +
                 (uomId != null ? "uomId=" + uomId + ", " : "") +
                 (businessCategoryId != null ? "businessCategoryId=" + businessCategoryId + ", " : "") +
+                (businessClassificationId != null ? "businessClassificationId=" + businessClassificationId + ", " : "") +
+                (warehouseId != null ? "warehouseId=" + warehouseId + ", " : "") +
+                (costCenterId != null ? "costCenterId=" + costCenterId + ", " : "") +
             "}";
     }
 

@@ -99,6 +99,23 @@
             </column>
         </addColumn>
     </changeSet>
+
+    <changeSet id="20210814015000-addcol-3" author="ricky-k">
+        <addColumn tableName="m_rfq_line">
+            <column name="date_promised" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="business_classification_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="warehouse_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="cost_center_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
     <!--
@@ -126,6 +143,7 @@
             <column name="unit_price" type="numeric"/>
             <column name="order_amount" type="numeric"/>
             <column name="document_date" type="date"/>
+            <column name="date_promised" type="date"/>
             <column name="date_required" type="date"/>
             <column name="remark" type="string"/>
             <column name="quotation_id" type="numeric"/>
