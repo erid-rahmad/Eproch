@@ -1,11 +1,11 @@
-id;line_no;uid;active;document_action;document_status;approved;processed;release_qty;unit_price;order_amount;document_date;date_required;remark;quotation_id;ad_organization_id;product_id;uom_id;business_category_id
-1;70937;6fc874c1-9c86-4132-9dc6-bcd9175a1b90;false;convergenc;SQL;true;true;87028;26288;17362;2021-06-16;2021-06-16;Kentucky;1;1;1;1;1
-2;89905;f874298f-038a-4a05-ad0b-aa1e99c07ffa;false;deposit st;Cotton Gra;false;false;50225;52719;39742;2021-06-17;2021-06-17;invoice moratorium primary;2;2;2;2;2
-3;77060;917ce40a-9785-4911-bd71-1bbf17f7f535;true;Interactio;deposit ap;true;true;84333;47449;18533;2021-06-16;2021-06-17;withdrawal Configurable;3;3;3;3;3
-4;20705;47b831ca-8f64-4d67-9ecc-e4adf7d5e6f6;false;Auto Loan ;invoice;false;false;58852;49605;68701;2021-06-16;2021-06-17;cross-platform generating;4;4;4;4;4
-5;8208;6a3b0b05-fd41-4920-bcb2-147c1888fc76;false;digital Gr;PNG Reacti;false;false;35035;68754;39592;2021-06-17;2021-06-16;Indiana experiences;5;5;5;5;5
-6;86508;cb096ffc-017f-46d7-a958-a5c27b77dbff;true;SDD Direct;copying Av;true;true;82473;49724;8474;2021-06-16;2021-06-17;Rustic;6;6;6;6;6
-7;83195;487754a6-9c56-4db7-8f85-c16a5f3e679b;false;Money Mark;Borders;false;true;58893;49627;22563;2021-06-16;2021-06-16;Turnpike;7;7;7;7;7
-8;48778;5a5f1104-37af-4161-b29e-78f8ebae7f5a;true;turquoise;SQL;true;false;5990;28836;26885;2021-06-17;2021-06-17;online;8;8;8;8;8
-9;51686;dd287fc8-fb76-4e79-817c-766b6891c41e;false;Valley Nor;enhance pa;true;true;29377;19659;87554;2021-06-16;2021-06-16;Tasty Cotton Keyboard bandwidth leverage;9;9;9;9;9
-10;25728;8cd7c794-d35a-400f-b3ab-c90ea467e824;false;Towels;Shirt Cred;true;false;79766;61816;25161;2021-06-16;2021-06-16;driver;10;10;10;10;10
+id;line_no;uid;active;document_action;document_status;approved;processed;release_qty;unit_price;order_amount;document_date;date_required;remark;quantity_balance;quotation_id;ad_organization_id;product_id;uom_id;business_category_id
+1;70937;6fc874c1-9c86-4132-9dc6-bcd9175a1b90;false;convergenc;SQL;true;true;87028;26288;17362;2021-06-16;2021-06-16;Kentucky;89905;1;1;1;1;1
+2;98316;874298f0-38aa-405a-90ba-a1e99c07ffa2;true;black hack;back-end;false;false;48148;66724;40810;2021-06-17;2021-06-16;Hungary Mouse;77461;2;2;2;2;2
+3;66478;c5ac1c91-7ce4-40a9-b859-117d711bbf17;true;Identity g;Frozen Glo;true;false;29860;6180;96112;2021-06-16;2021-06-16;magenta Awesome Metal Shoes;23449;3;3;3;3;3
+4;10287;347b831c-a8f6-44d6-b9ec-ce4adf7d5e6f;false;alarm;Accounts p;true;false;46781;58852;49605;2021-06-16;2021-06-16;Guam;68505;4;4;4;4;4
+5;83473;916a3b0b-05fd-4419-a0fc-b2147c1888fc;false;Fish digit;Gardens;true;true;86559;78284;24587;2021-06-16;2021-06-16;Shirt cross-platform;39592;5;5;5;5;5
+6;8376;95946fdc-b096-4ffc-817f-6d7e958a5c27;true;applicatio;Technician;true;true;35443;50726;14837;2021-06-16;2021-06-16;SAS Avon;68316;6;6;6;6;6
+7;6818;412d4877-54a6-49c5-adb7-4f85c16a5f3e;false;Credit Car;disinterme;true;true;37085;58963;58893;2021-06-16;2021-06-17;Functionality Turnpike Berkshire;64187;7;7;7;7;7
+8;35799;f110437a-f161-4729-a78f-8ebae7f5a843;false;SQL;Center did;false;true;46560;51686;85165;2021-06-16;2021-06-17;methodologies quantify;93960;8;8;8;8;8
+9;71451;76e79417-c766-4b68-91c4-1e477eb6e63c;true;sexy copy;PCI;true;true;4720;99406;39331;2021-06-17;2021-06-16;leverage;25728;9;9;9;9;9
+10;56164;cd7c794d-35a0-40ff-babc-90ea467e8241;false;Solomon Is;engage;true;false;98539;54978;42050;2021-06-16;2021-06-16;payment;31453;10;10;10;10;10
