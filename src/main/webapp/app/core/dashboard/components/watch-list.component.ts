@@ -22,7 +22,8 @@ const WatchListProps = Vue.extend({
   props: {
     id: String,
     name: String,
-    title: String
+    title: String,
+    listColor: Array
   }
 })
 
@@ -43,17 +44,6 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
   //isVendor:boolean;
   screenWidth: number = window.outerWidth;
   items: IAdWatchListItem[] = [];
-  listColor=
-  [
-    //yellow
-    {staticColor: '#ecec04', gradientColor: 'linear-gradient(315deg, #fbb034 0%, #ffdd00 74%);'}, 
-    //red
-    {staticColor: '#f5365c', gradientColor: 'linear-gradient(45deg, rgb(255, 83, 112), rgb(255, 134, 154));'}, 
-    //green
-    {staticColor: '#2dce89', gradientColor: 'linear-gradient(87deg, rgb(45, 206, 137) 0px, rgb(45, 206, 204) 100%);'}, 
-    // blue
-    {staticColor: '#11cdef', gradientColor: 'linear-gradient(87deg, rgb(17, 205, 239) 0px, rgb(17, 113, 239) 100%);'}
-  ]
 
   getWidthClass(id: string){
     let defaultClass = 'md-large-size-20 md-medium-size-25 md-small-size-50';
@@ -117,7 +107,7 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
   }
 
   private getRandomColor(){
-    var randomNumber = Math.floor(Math.random() * 4);
+    var randomNumber = Math.floor(Math.random() * this.listColor.length);
     return this.listColor[randomNumber];
   }
 
@@ -139,7 +129,7 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
           const watchList: IAdWatchList = res.data[0];
           this.items = watchList.adWatchListItems;
           this.items.forEach((x) => {
-            if(!x.accentColor) x.accentColor = this.getRandomColor().gradientColor;
+            if(!x.accentColor) x.accentColor = this.getRandomColor()['gradientColor'];
           });
         }
       })

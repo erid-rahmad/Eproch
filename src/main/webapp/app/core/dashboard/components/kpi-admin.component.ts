@@ -21,7 +21,9 @@ const KPIDashboardProps = Vue.extend({
   props: {
     id: String,
     name: String,
-    title: String
+    title: String,
+    type: String,
+    listColor: Array
   }
 })
 
@@ -38,24 +40,13 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
 
   private dataPO:any=[];
   private dataMyDocument:any=[];
-  items: IAdWatchListItem[] = [];
+  chartItems: IAdWatchListItem[] = [];
+  gridItems: IAdWatchListItem[] = [];
 
-  listColor=
-  [
-    //yellow
-    {staticColor: '#ecec04', gradientColor: 'linear-gradient(315deg, #fbb034 0%, #ffdd00 74%);'}, 
-    //red
-    {staticColor: '#f5365c', gradientColor: 'linear-gradient(45deg, rgb(255, 83, 112), rgb(255, 134, 154));'}, 
-    //green
-    {staticColor: '#2dce89', gradientColor: 'linear-gradient(87deg, rgb(45, 206, 137) 0px, rgb(45, 206, 204) 100%);'}, 
-    // blue
-    {staticColor: '#11cdef', gradientColor: 'linear-gradient(87deg, rgb(17, 205, 239) 0px, rgb(17, 113, 239) 100%);'}
-  ]
-  
-  @Watch('items', {deep: true})
+  //@Watch('items', {deep: true})
   async onItemsChanged(items: IAdWatchListItem[]) {
     await items.forEach((item, index) => {
-      this.retrieveChartData(item, index);
+      this.retrieveKpiData(item, index);
     });
     /*await items.forEach(item=>{
       this.$set(this.data,item.code, item.count);
@@ -63,23 +54,18 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
     })*/
   }
 
-
   created() {
-    this.retrieveChartItems(this.name);
+    this.retrieveKpiItems(this.name);
 
    //this.retrievePO();
    //this.retrieveMyDocument();
   }
 
   public refresh() {
-    this.onItemsChanged(this.items);
-
-    /*setInterval(() => {
-      this.onItemsChanged(this.items);
-    }, 60000);*/
+    this.onItemsChanged(this.type == 'CHART' ? this.chartItems : this.gridItems);
   }
 
-  retrieveChartItems(name: string) {
+  retrieveKpiItems(name: string) {
     this.commonService('/api/ad-watch-lists')
       .retrieve({
         criteriaQuery: [
@@ -93,7 +79,12 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
         }
       })
       .then(res => {
-        this.items = res.data[0].adWatchListItems;
+        if(this.type == 'CHART'){
+          this.chartItems = res.data[0].adWatchListItems;
+        }
+        else {
+          this.gridItems = res.data[0].adWatchListItems;
+        }
       })
       .catch(err => {
         console.log('Failed to get the watch list.', err);
@@ -104,12 +95,65 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
       });
   }
 
-  
-  private retrieveChartData(item: IAdWatchListItem, index?: number) {
+  private retrieveKpiData(item: IAdWatchListItem, index?: number) {
+    
     this.commonService(item.restApiEndpoint)
-      .retrieve()
+      .retrieve(
+        {
+          criteriaQuery:  item.filterQuery
+        }
+      )
       .then(res => {
-        this.$set(this.items[index], 'chartData', res.data);
+        if(this.type == 'CHART'){
+          /*let arrData = [
+            { xAxisLabel: 'Jan 2021', legendLabel: 'CC Jakarta', dataValue: 5299708.30 },
+            { xAxisLabel: 'Feb 2021', legendLabel: 'CC Jakarta', dataValue: 1867992.00 },
+            { xAxisLabel: 'Mar 2021', legendLabel: 'CC Jakarta', dataValue: 3398798.74 },
+            { xAxisLabel: 'Apr 2021', legendLabel: 'CC Jakarta', dataValue: 2798790.96 },
+            { xAxisLabel: 'May 2021', legendLabel: 'CC Jakarta', dataValue: 1486886.53 },
+            { xAxisLabel: 'Jun 2021', legendLabel: 'CC Jakarta', dataValue: 1789097.26 },
+            { xAxisLabel: 'Jan 2021', legendLabel: 'CC Bandung', dataValue: 3982090.50 },
+            { xAxisLabel: 'Feb 2021', legendLabel: 'CC Bandung', dataValue: 7868548.21 },
+            { xAxisLabel: 'Mar 2021', legendLabel: 'CC Bandung', dataValue: 2356789.32 },
+            { xAxisLabel: 'Apr 2021', legendLabel: 'CC Bandung', dataValue: 6782450.85 },
+            { xAxisLabel: 'May 2021', legendLabel: 'CC Bandung', dataValue: 4674798.57 },
+            { xAxisLabel: 'Jun 2021', legendLabel: 'CC Bandung', dataValue: 3846374.28 },
+            { xAxisLabel: 'Jan 2021', legendLabel: 'CC Surabaya', dataValue: 2486589.62 },
+            { xAxisLabel: 'Feb 2021', legendLabel: 'CC Surabaya', dataValue: 3432558.29 },
+            { xAxisLabel: 'Mar 2021', legendLabel: 'CC Surabaya', dataValue: 4532467.36 },
+            { xAxisLabel: 'Apr 2021', legendLabel: 'CC Surabaya', dataValue: 4928902.76 },
+            { xAxisLabel: 'May 2021', legendLabel: 'CC Surabaya', dataValue: 7875898.48 },
+            { xAxisLabel: 'Jun 2021', legendLabel: 'CC Surabaya', dataValue: 5784789.32 }
+          ];
+          this.$set(this.chartItems[index], 'chartData', arrData);*/
+          this.$set(this.chartItems[index], 'chartData', res.data);
+        }
+        else {
+          let arrData = [];
+          let objModel = {};
+
+          item.serviceName.split('##').forEach((x) => {
+            objModel[x.replace(/ /g, '')] = null;
+          });
+
+          res.data.forEach(x => {
+            let objData = {};
+            Object.assign(objData, objModel);
+            Object.keys(objModel).forEach((y, yIdx) => {
+              if(typeof(x[yIdx]) == 'number'){
+                objData[y] = x[yIdx].toFixed(((x[yIdx] + '').indexOf('.') > -1) ? 2 : 0).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+              }
+              else{
+                objData[y] = x[yIdx];
+              }
+            })
+
+            arrData.push(objData);
+          });
+
+          this.$set(this.gridItems[index], 'gridData', arrData);
+        }
+
       });
   }
 

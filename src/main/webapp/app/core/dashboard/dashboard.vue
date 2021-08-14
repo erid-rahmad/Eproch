@@ -10,7 +10,7 @@
             @end="drag=false"
         >
             <div :class="getLayoutWidth(item)"
-                style="cursor: move !important;"
+                style="cursor: move;"
                 v-for="item in dashboardItems"
                 :key="item.id"
             >
@@ -24,12 +24,15 @@
                             ref="widget"
                             :id="item.paDashboardItem.adWatchListId + ''"
                             :name="item.paDashboardItem.adWatchListName"
+                            :listColor="listColor"
                         />
                         <kpi-admin
-                             v-if="item.paDashboardItem.type === 'CHART'"
+                             v-if="item.paDashboardItem.type === 'CHART' || item.paDashboardItem.type === 'CUSTOM'"
                             ref="widget"
                             :id="item.paDashboardItem.adWatchListId + ''"
                             :name="item.paDashboardItem.adWatchListName"
+                            :type="item.paDashboardItem.type"
+                            :listColor="listColor"
                         />
                     </div>
                 </accordion>

@@ -66,4 +66,40 @@ public interface PaDashboardRepository extends JpaRepository<PaDashboard, Long>,
     + " ORDER BY PA.totalAmount DESC ", nativeQuery = true)
     List<Object[]> getProdPurchaseAmount();
 
+    @Query(value = ""
+    + " WITH xTblVendor AS ( "
+    + " 	SELECT vendor_id, SUM(grand_total) totalAmount "
+    + " 	FROM m_purchase_order "
+    + " 	WHERE active = true "
+    + " 		AND document_status = 'APV' "
+    + " 		AND EXTRACT(YEAR FROM date_trx) = EXTRACT(YEAR FROM NOW()) "
+    + " 	GROUP BY vendor_id "
+    + " ) "
+    + " SELECT "
+    + " 	V.code, V.name, HD.totalAmount "
+    + " FROM xTblVendor HD "
+    + " INNER JOIN c_vendor V ON HD.vendor_id = V.id "
+    + " WHERE 1=1 "
+    + " ORDER BY HD.totalAmount DESC "
+    + " LIMIT ?1 ", nativeQuery = true)
+    List<Object[]> getTopVendorPurchase(Integer total);
+
+    @Query(value = ""
+    + " WITH xTblVendor AS ( "
+    + " 	SELECT vendor_id, SUM(price) totalAmount "
+    + " 	FROM m_contract "
+    + " 	WHERE active = true "
+    + " 		AND document_status = 'APV' "
+    + " 		AND EXTRACT(YEAR FROM date_trx) = EXTRACT(YEAR FROM NOW()) "
+    + " 	GROUP BY vendor_id "
+    + " ) "
+    + " SELECT "
+    + " 	V.code, V.name, HD.totalAmount "
+    + " FROM xTblVendor HD "
+    + " INNER JOIN c_vendor V ON HD.vendor_id = V.id "
+    + " WHERE 1=1 "
+    + " ORDER BY HD.totalAmount DESC "
+    + " LIMIT ?1 ", nativeQuery = true)
+    List<Object[]> getTopVendorContract(Integer total);
+
 }

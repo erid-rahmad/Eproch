@@ -45,6 +45,24 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
   private dataEvaluasi:any=[];
 
   dashboardItems: IPaDashboardPreference[] = [];
+
+  listColor=
+  [
+    //yellow
+    {staticColor: '#ecec04', gradientColor: 'linear-gradient(315deg, #fbb034 0%, #ffdd00 74%);'}, 
+    //red
+    {staticColor: '#f5365c', gradientColor: 'linear-gradient(45deg, rgb(255, 83, 112), rgb(255, 134, 154));'}, 
+    //green
+    {staticColor: '#2dce89', gradientColor: 'linear-gradient(87deg, rgb(45, 206, 137) 0px, rgb(45, 206, 204) 100%);'}, 
+    // blue
+    {staticColor: '#11cdef', gradientColor: 'linear-gradient(87deg, rgb(17, 205, 239) 0px, rgb(17, 113, 239) 100%);'}, 
+    // orange
+    {staticColor: '#FFAC1C', gradientColor: 'linear-gradient(87deg, rgb(17, 205, 239) 0px, rgb(17, 113, 239) 100%);'}, 
+    // pink
+    {staticColor: '#FF69B4', gradientColor: 'linear-gradient(87deg, rgb(17, 205, 239) 0px, rgb(17, 113, 239) 100%);'}, 
+    // brown
+    {staticColor: '#8B4513', gradientColor: 'linear-gradient(87deg, rgb(17, 205, 239) 0px, rgb(17, 113, 239) 100%);'}
+  ]
   
   get dashboards() {
     const list = [];

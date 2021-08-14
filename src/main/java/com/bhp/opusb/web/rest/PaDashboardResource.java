@@ -130,10 +130,15 @@ public class PaDashboardResource {
 
     }
 
+    @GetMapping("/pa-dashboards/topVendorAmount")
+    public ResponseEntity<List<Object[]>> topVendorPurchase(@RequestParam(value = "source") String source, @RequestParam(value = "total") Integer total) {
+        log.debug("REST request to get topVendorPurchase by source: " + source + ", total: " + total);
+        return ResponseEntity.ok().body(paDashboardQueryService.getTopVendorAmount(source, total));
+    }
+
     @GetMapping("/pa-dashboards/topVendorPurchase")
     public List<MPurchaseOrderDTO> topVendorPurchase() {
         return paDashboardService.topVendorPurchase();
-
     }
 
     /**
