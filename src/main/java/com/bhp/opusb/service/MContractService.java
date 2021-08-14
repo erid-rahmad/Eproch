@@ -174,11 +174,11 @@ public class MContractService {
 
             for (MContractLineDTO mContractLineDTO : mContractToPoDTO.getmContractLineDTOS()) {
                 if (mContractLineDTO.getContractId() == contract_.longValue()) {
-                    x = x.add(mContractLineDTO.getCeilingPrice());
+                    x = x.add(mContractLineDTO.getOrderAmount());
                     MPurchaseOrderLineDTO mPurchaseOrderLineDTO = new MPurchaseOrderLineDTO();
 
-                    mPurchaseOrderLineDTO.setOrderAmount(mContractLineDTO.getCeilingPrice());
-                    mPurchaseOrderLineDTO.setQuantity(mContractLineDTO.getQuantity());
+                    mPurchaseOrderLineDTO.setOrderAmount(mContractLineDTO.getOrderAmount());
+                    mPurchaseOrderLineDTO.setQuantity(mContractLineDTO.getQuantityOrdered());
                     mPurchaseOrderLineDTO.setUnitPrice(mContractLineDTO.getCeilingPrice());
 
                     mPurchaseOrderLineDTO.setPurchaseOrderId(mPurchaseOrderDTO_.getId());

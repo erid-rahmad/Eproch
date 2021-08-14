@@ -66,6 +66,10 @@
         {
             "fieldName": "remark",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "quantityBalance",
+            "fieldType": "Integer"
         }
     ],
     "relationships": [

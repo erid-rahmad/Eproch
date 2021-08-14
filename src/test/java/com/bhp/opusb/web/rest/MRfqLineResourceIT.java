@@ -95,6 +95,10 @@ public class MRfqLineResourceIT {
     private static final String DEFAULT_REMARK = "AAAAAAAAAA";
     private static final String UPDATED_REMARK = "BBBBBBBBBB";
 
+    private static final Integer DEFAULT_QUANTITY_BALANCE = 1;
+    private static final Integer UPDATED_QUANTITY_BALANCE = 2;
+    private static final Integer SMALLER_QUANTITY_BALANCE = 1 - 1;
+
     @Autowired
     private MRfqLineRepository mRfqLineRepository;
 
@@ -136,7 +140,8 @@ public class MRfqLineResourceIT {
             .documentDate(DEFAULT_DOCUMENT_DATE)
             .datePromised(DEFAULT_DATE_PROMISED)
             .dateRequired(DEFAULT_DATE_REQUIRED)
-            .remark(DEFAULT_REMARK);
+            .remark(DEFAULT_REMARK)
+            .quantityBalance(DEFAULT_QUANTITY_BALANCE);
         // Add required entity
         MRfq mRfq;
         if (TestUtil.findAll(em, MRfq.class).isEmpty()) {
@@ -210,7 +215,8 @@ public class MRfqLineResourceIT {
             .documentDate(UPDATED_DOCUMENT_DATE)
             .datePromised(UPDATED_DATE_PROMISED)
             .dateRequired(UPDATED_DATE_REQUIRED)
-            .remark(UPDATED_REMARK);
+            .remark(UPDATED_REMARK)
+            .quantityBalance(UPDATED_QUANTITY_BALANCE);
         // Add required entity
         MRfq mRfq;
         if (TestUtil.findAll(em, MRfq.class).isEmpty()) {
@@ -299,6 +305,7 @@ public class MRfqLineResourceIT {
         assertThat(testMRfqLine.getDatePromised()).isEqualTo(DEFAULT_DATE_PROMISED);
         assertThat(testMRfqLine.getDateRequired()).isEqualTo(DEFAULT_DATE_REQUIRED);
         assertThat(testMRfqLine.getRemark()).isEqualTo(DEFAULT_REMARK);
+        assertThat(testMRfqLine.getQuantityBalance()).isEqualTo(DEFAULT_QUANTITY_BALANCE);
     }
 
     @Test
@@ -384,7 +391,8 @@ public class MRfqLineResourceIT {
             .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
             .andExpect(jsonPath("$.[*].dateRequired").value(hasItem(DEFAULT_DATE_REQUIRED.toString())))
-            .andExpect(jsonPath("$.[*].remark").value(hasItem(DEFAULT_REMARK)));
+            .andExpect(jsonPath("$.[*].remark").value(hasItem(DEFAULT_REMARK)))
+            .andExpect(jsonPath("$.[*].quantityBalance").value(hasItem(DEFAULT_QUANTITY_BALANCE)));
     }
     
     @Test
@@ -411,7 +419,8 @@ public class MRfqLineResourceIT {
             .andExpect(jsonPath("$.documentDate").value(DEFAULT_DOCUMENT_DATE.toString()))
             .andExpect(jsonPath("$.datePromised").value(DEFAULT_DATE_PROMISED.toString()))
             .andExpect(jsonPath("$.dateRequired").value(DEFAULT_DATE_REQUIRED.toString()))
-            .andExpect(jsonPath("$.remark").value(DEFAULT_REMARK));
+            .andExpect(jsonPath("$.remark").value(DEFAULT_REMARK))
+            .andExpect(jsonPath("$.quantityBalance").value(DEFAULT_QUANTITY_BALANCE));
     }
 
 
@@ -1613,6 +1622,111 @@ public class MRfqLineResourceIT {
 
     @Test
     @Transactional
+    public void getAllMRfqLinesByQuantityBalanceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where quantityBalance equals to DEFAULT_QUANTITY_BALANCE
+        defaultMRfqLineShouldBeFound("quantityBalance.equals=" + DEFAULT_QUANTITY_BALANCE);
+
+        // Get all the mRfqLineList where quantityBalance equals to UPDATED_QUANTITY_BALANCE
+        defaultMRfqLineShouldNotBeFound("quantityBalance.equals=" + UPDATED_QUANTITY_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByQuantityBalanceIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where quantityBalance not equals to DEFAULT_QUANTITY_BALANCE
+        defaultMRfqLineShouldNotBeFound("quantityBalance.notEquals=" + DEFAULT_QUANTITY_BALANCE);
+
+        // Get all the mRfqLineList where quantityBalance not equals to UPDATED_QUANTITY_BALANCE
+        defaultMRfqLineShouldBeFound("quantityBalance.notEquals=" + UPDATED_QUANTITY_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByQuantityBalanceIsInShouldWork() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where quantityBalance in DEFAULT_QUANTITY_BALANCE or UPDATED_QUANTITY_BALANCE
+        defaultMRfqLineShouldBeFound("quantityBalance.in=" + DEFAULT_QUANTITY_BALANCE + "," + UPDATED_QUANTITY_BALANCE);
+
+        // Get all the mRfqLineList where quantityBalance equals to UPDATED_QUANTITY_BALANCE
+        defaultMRfqLineShouldNotBeFound("quantityBalance.in=" + UPDATED_QUANTITY_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByQuantityBalanceIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where quantityBalance is not null
+        defaultMRfqLineShouldBeFound("quantityBalance.specified=true");
+
+        // Get all the mRfqLineList where quantityBalance is null
+        defaultMRfqLineShouldNotBeFound("quantityBalance.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByQuantityBalanceIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where quantityBalance is greater than or equal to DEFAULT_QUANTITY_BALANCE
+        defaultMRfqLineShouldBeFound("quantityBalance.greaterThanOrEqual=" + DEFAULT_QUANTITY_BALANCE);
+
+        // Get all the mRfqLineList where quantityBalance is greater than or equal to UPDATED_QUANTITY_BALANCE
+        defaultMRfqLineShouldNotBeFound("quantityBalance.greaterThanOrEqual=" + UPDATED_QUANTITY_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByQuantityBalanceIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where quantityBalance is less than or equal to DEFAULT_QUANTITY_BALANCE
+        defaultMRfqLineShouldBeFound("quantityBalance.lessThanOrEqual=" + DEFAULT_QUANTITY_BALANCE);
+
+        // Get all the mRfqLineList where quantityBalance is less than or equal to SMALLER_QUANTITY_BALANCE
+        defaultMRfqLineShouldNotBeFound("quantityBalance.lessThanOrEqual=" + SMALLER_QUANTITY_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByQuantityBalanceIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where quantityBalance is less than DEFAULT_QUANTITY_BALANCE
+        defaultMRfqLineShouldNotBeFound("quantityBalance.lessThan=" + DEFAULT_QUANTITY_BALANCE);
+
+        // Get all the mRfqLineList where quantityBalance is less than UPDATED_QUANTITY_BALANCE
+        defaultMRfqLineShouldBeFound("quantityBalance.lessThan=" + UPDATED_QUANTITY_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRfqLinesByQuantityBalanceIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mRfqLineRepository.saveAndFlush(mRfqLine);
+
+        // Get all the mRfqLineList where quantityBalance is greater than DEFAULT_QUANTITY_BALANCE
+        defaultMRfqLineShouldNotBeFound("quantityBalance.greaterThan=" + DEFAULT_QUANTITY_BALANCE);
+
+        // Get all the mRfqLineList where quantityBalance is greater than SMALLER_QUANTITY_BALANCE
+        defaultMRfqLineShouldBeFound("quantityBalance.greaterThan=" + SMALLER_QUANTITY_BALANCE);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMRfqLinesByQuotationIsEqualToSomething() throws Exception {
         // Get already existing entity
         MRfq quotation = mRfqLine.getQuotation();
@@ -1771,7 +1885,8 @@ public class MRfqLineResourceIT {
             .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
             .andExpect(jsonPath("$.[*].dateRequired").value(hasItem(DEFAULT_DATE_REQUIRED.toString())))
-            .andExpect(jsonPath("$.[*].remark").value(hasItem(DEFAULT_REMARK)));
+            .andExpect(jsonPath("$.[*].remark").value(hasItem(DEFAULT_REMARK)))
+            .andExpect(jsonPath("$.[*].quantityBalance").value(hasItem(DEFAULT_QUANTITY_BALANCE)));
 
         // Check, that the count call also returns 1
         restMRfqLineMockMvc.perform(get("/api/m-rfq-lines/count?sort=id,desc&" + filter))
@@ -1832,7 +1947,8 @@ public class MRfqLineResourceIT {
             .documentDate(UPDATED_DOCUMENT_DATE)
             .datePromised(UPDATED_DATE_PROMISED)
             .dateRequired(UPDATED_DATE_REQUIRED)
-            .remark(UPDATED_REMARK);
+            .remark(UPDATED_REMARK)
+            .quantityBalance(UPDATED_QUANTITY_BALANCE);
         MRfqLineDTO mRfqLineDTO = mRfqLineMapper.toDto(updatedMRfqLine);
 
         restMRfqLineMockMvc.perform(put("/api/m-rfq-lines")
@@ -1858,6 +1974,7 @@ public class MRfqLineResourceIT {
         assertThat(testMRfqLine.getDatePromised()).isEqualTo(UPDATED_DATE_PROMISED);
         assertThat(testMRfqLine.getDateRequired()).isEqualTo(UPDATED_DATE_REQUIRED);
         assertThat(testMRfqLine.getRemark()).isEqualTo(UPDATED_REMARK);
+        assertThat(testMRfqLine.getQuantityBalance()).isEqualTo(UPDATED_QUANTITY_BALANCE);
     }
 
     @Test

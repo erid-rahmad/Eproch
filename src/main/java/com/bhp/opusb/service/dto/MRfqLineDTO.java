@@ -1,18 +1,17 @@
 package com.bhp.opusb.service.dto;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
+import javax.validation.constraints.*;
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MRfqLine} entity.
  */
 public class MRfqLineDTO extends AbstractAuditingDTO {
-    
+
     private Long id;
 
     private Integer lineNo;
@@ -34,7 +33,7 @@ public class MRfqLineDTO extends AbstractAuditingDTO {
     private Boolean processed;
 
     private BigDecimal orderAmount, unitPrice;
-    
+
     private Integer releaseQty;
 
     private LocalDate documentDate;
@@ -44,6 +43,8 @@ public class MRfqLineDTO extends AbstractAuditingDTO {
     private LocalDate dateRequired;
 
     private String remark;
+
+    private Integer quantityBalance;
 
 
     private Long quotationId;
@@ -211,6 +212,14 @@ public class MRfqLineDTO extends AbstractAuditingDTO {
         this.remark = remark;
     }
 
+    public Integer getQuantityBalance() {
+        return quantityBalance;
+    }
+
+    public void setQuantityBalance(Integer quantityBalance) {
+        this.quantityBalance = quantityBalance;
+    }
+
     public Long getQuotationId() {
         return quotationId;
     }
@@ -330,6 +339,7 @@ public class MRfqLineDTO extends AbstractAuditingDTO {
             ", datePromised='" + getDatePromised() + "'" +
             ", dateRequired='" + getDateRequired() + "'" +
             ", remark='" + getRemark() + "'" +
+            ", quantityBalance=" + getQuantityBalance() +
             ", quotationId=" + getQuotationId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", productId=" + getProductId() +

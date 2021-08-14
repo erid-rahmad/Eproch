@@ -246,34 +246,7 @@ export default class GeneratePo extends Vue {
   }
 
   generatePurchaseOrder() {
-    console.log("this form",this.form)
     this.generatePA=true;
-
-
-    // if (! this.form.requisitionLines.length) {
-    //   this.$message.error('Please select one or more lines');
-    //   return;
-    // }
-    //
-    // (<ElForm>this.$refs.mainForm).validate((passed, error) => {
-    //   if (passed) {
-    //     this.generating = true;
-    //     this.commonService('/api/m-purchase-orders/generate')
-    //       .create(this.form)
-    //       .then(res => {
-    //         console.log('PO generated. response: %O', res);
-    //         const count = res.length === 1 ? ` #${res[0].documentNo}` : '(s)';
-    //         this.$message.success(`Purchase Order${count} has been created successfully.`);
-    //       })
-    //       .catch(err => {
-    //         console.log('Failed generating purchase order(s). %O', err);
-    //         this.$message.error('Failed generating purchase order(s)');
-    //       })
-    //       .finally(() => {
-    //         this.generating = false;
-    //       })
-    //   }
-    // });
   }
 
   public generatePo() {

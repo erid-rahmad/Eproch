@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity MRfqLine.
     -->
@@ -146,6 +146,7 @@
             <column name="date_promised" type="date"/>
             <column name="date_required" type="date"/>
             <column name="remark" type="string"/>
+            <column name="quantity_balance" type="numeric"/>
             <column name="quotation_id" type="numeric"/>
             <column name="ad_organization_id" type="numeric"/>
             <column name="product_id" type="numeric"/>
@@ -153,6 +154,13 @@
             <column name="business_category_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+    <changeSet id="202108141229001" author="erid">
+        <addColumn tableName="m_rfq_line">
+            <column name="quantity_balance" type="integer">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

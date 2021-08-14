@@ -57,6 +57,8 @@ public class MRfqLineCriteria implements Serializable, Criteria {
 
     private StringFilter remark;
 
+    private IntegerFilter quantityBalance;
+
     private LongFilter quotationId;
 
     private LongFilter adOrganizationId;
@@ -92,6 +94,7 @@ public class MRfqLineCriteria implements Serializable, Criteria {
         this.datePromised = other.datePromised == null ? null : other.datePromised.copy();
         this.dateRequired = other.dateRequired == null ? null : other.dateRequired.copy();
         this.remark = other.remark == null ? null : other.remark.copy();
+        this.quantityBalance = other.quantityBalance == null ? null : other.quantityBalance.copy();
         this.quotationId = other.quotationId == null ? null : other.quotationId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.productId = other.productId == null ? null : other.productId.copy();
@@ -227,6 +230,14 @@ public class MRfqLineCriteria implements Serializable, Criteria {
         this.remark = remark;
     }
 
+    public IntegerFilter getQuantityBalance() {
+        return quantityBalance;
+    }
+
+    public void setQuantityBalance(IntegerFilter quantityBalance) {
+        this.quantityBalance = quantityBalance;
+    }
+
     public LongFilter getQuotationId() {
         return quotationId;
     }
@@ -317,6 +328,7 @@ public class MRfqLineCriteria implements Serializable, Criteria {
             Objects.equals(datePromised, that.datePromised) &&
             Objects.equals(dateRequired, that.dateRequired) &&
             Objects.equals(remark, that.remark) &&
+            Objects.equals(quantityBalance, that.quantityBalance) &&
             Objects.equals(quotationId, that.quotationId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(productId, that.productId) &&
@@ -345,6 +357,7 @@ public class MRfqLineCriteria implements Serializable, Criteria {
         datePromised,
         dateRequired,
         remark,
+        quantityBalance,
         quotationId,
         adOrganizationId,
         productId,
@@ -374,6 +387,7 @@ public class MRfqLineCriteria implements Serializable, Criteria {
                 (datePromised != null ? "datePromised=" + datePromised + ", " : "") +
                 (dateRequired != null ? "dateRequired=" + dateRequired + ", " : "") +
                 (remark != null ? "remark=" + remark + ", " : "") +
+                (quantityBalance != null ? "quantityBalance=" + quantityBalance + ", " : "") +
                 (quotationId != null ? "quotationId=" + quotationId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (productId != null ? "productId=" + productId + ", " : "") +

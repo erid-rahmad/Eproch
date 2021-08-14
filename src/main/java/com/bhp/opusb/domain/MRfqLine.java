@@ -8,8 +8,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Objects;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -73,6 +73,9 @@ public class MRfqLine extends AbstractAuditingEntity implements Serializable {
 
     @Column(name = "remark")
     private String remark;
+
+    @Column(name = "quantity_balance")
+    private Integer quantityBalance;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -309,6 +312,19 @@ public class MRfqLine extends AbstractAuditingEntity implements Serializable {
         this.remark = remark;
     }
 
+    public Integer getQuantityBalance() {
+        return quantityBalance;
+    }
+
+    public MRfqLine quantityBalance(Integer quantityBalance) {
+        this.quantityBalance = quantityBalance;
+        return this;
+    }
+
+    public void setQuantityBalance(Integer quantityBalance) {
+        this.quantityBalance = quantityBalance;
+    }
+
     public MRfq getQuotation() {
         return quotation;
     }
@@ -448,6 +464,7 @@ public class MRfqLine extends AbstractAuditingEntity implements Serializable {
             ", datePromised='" + getDatePromised() + "'" +
             ", dateRequired='" + getDateRequired() + "'" +
             ", remark='" + getRemark() + "'" +
+            ", quantityBalance=" + getQuantityBalance() +
             "}";
     }
 }

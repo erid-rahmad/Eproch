@@ -958,6 +958,7 @@ entity MRfqLine {
 	datePromised LocalDate
 	dateRequired LocalDate
 	remark String
+	quantityBalance Integer
 }
 
 entity CBiddingType {

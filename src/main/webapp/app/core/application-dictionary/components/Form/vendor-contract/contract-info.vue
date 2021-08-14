@@ -35,9 +35,9 @@
                     <el-input
                         v-model="contract.name"
                         clearable
+
                     ></el-input>
                 </el-form-item>
-
 
                 <el-form-item label="Purpose">
                     <el-radio-group v-model="contract.purpose">
@@ -90,6 +90,7 @@
                 <el-form-item
                     label="Currency"
                     prop="currencyId"
+
                 >
                     <ad-input-lookup
                         v-model="contract.currencyId"

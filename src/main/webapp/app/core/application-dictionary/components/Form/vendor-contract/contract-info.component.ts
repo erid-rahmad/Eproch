@@ -58,10 +58,15 @@ export default class ContractInfo extends Mixins(AccessLevelMixin, ContractInfoP
       required: true,
       message: 'Vendor Name is required'
     },
-    startDaet: {
+    startDate: {
       required: true,
       message: 'Start Date is required'
+    },
+    currencyId: {
+      required: true,
+      message: 'Start currency is required'
     }
+
   }
 
   gutterSize: number = 24;

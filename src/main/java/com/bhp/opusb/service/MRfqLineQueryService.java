@@ -133,6 +133,9 @@ public class MRfqLineQueryService extends QueryService<MRfqLine> {
             if (criteria.getRemark() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getRemark(), MRfqLine_.remark));
             }
+            if (criteria.getQuantityBalance() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getQuantityBalance(), MRfqLine_.quantityBalance));
+            }
             if (criteria.getQuotationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getQuotationId(),
                     root -> root.join(MRfqLine_.quotation, JoinType.LEFT).get(MRfq_.id)));
