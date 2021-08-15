@@ -2,7 +2,7 @@
   <div class="app-container card-view">
     <div class="form-toolbar">
       <el-button icon="el-icon-close" size="mini" type="danger" @click="viewDetail = false" v-if="viewDetail"> Close </el-button>
-      <el-button size="mini" type="primary" @click="showContract()" v-if="viewDetail" :disabled="generatingContract"> Generate Contract </el-button>
+      <el-button size="mini" type="primary" @click="showContract()" v-if="viewDetail" :disabled="generatingContract || (selectedRow.selectionMethod=='P'||selectedRow.selectionMethod=='T')"> Generate Contract </el-button>
     </div>
     <div class="card" v-if="!viewDetail">
       <el-form ref="filterForm" label-position="left" label-width="200px" :model="filter" size="mini">
