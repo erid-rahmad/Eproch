@@ -153,7 +153,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-
+        <!--
         <el-col
           :md="8"
           :sm="12"
@@ -172,6 +172,7 @@
             ></ad-input-lookup>
           </el-form-item>
         </el-col>
+        -->
       </el-row>
 
       <el-row
