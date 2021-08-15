@@ -45,11 +45,11 @@
                 <el-table-column align="center" fixed type="selection" width="48"/>
                 <el-table-column label="Vendor Name" min-width="180" prop="vendorName" sortable>
                 </el-table-column>
-                <el-table-column label="Date Submited" min-width="180" prop="dateSubmit" sortable>
-                    <template slot-scope="{row}">
-                        {{ row.dateSubmit | formatDate }}
-                    </template>
-                </el-table-column>
+<!--                <el-table-column label="Date Submited" min-width="180" prop="dateSubmit" sortable>-->
+<!--                    <template slot-scope="{row}">-->
+<!--                        {{ row.dateSubmit | formatDate }}-->
+<!--                    </template>-->
+<!--                </el-table-column>-->
 <!--                <el-table-column label="Evaluation Status" min-width="180" prop="biddingStatus" sortable>-->
 <!--                </el-table-column>-->
 
