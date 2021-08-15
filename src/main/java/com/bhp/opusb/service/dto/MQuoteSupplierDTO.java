@@ -21,6 +21,8 @@ public class MQuoteSupplierDTO extends AbstractAuditingDTO {
 
 
     private Long quotationId;
+    private String quotationNo, description, costCenterName, warehouseCode, currencyCode;
+    private LocalDate dateTrx;
 
     private Long businessClassificationId;
 
@@ -29,9 +31,67 @@ public class MQuoteSupplierDTO extends AbstractAuditingDTO {
     private Long businessSubCategoryId;
 
     private Long vendorId;
+
+    private String subDocStatus;
     
     public Long getId() {
         return id;
+    }
+
+    public String getSubDocStatus() {
+        return subDocStatus;
+    }
+
+    public void setSubDocStatus(String subDocStatus) {
+        this.subDocStatus = subDocStatus;
+    }
+
+    public LocalDate getDateTrx() {
+        return dateTrx;
+    }
+
+    public void setDateTrx(LocalDate dateTrx) {
+        this.dateTrx = dateTrx;
+    }
+
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
+
+    public void setCurrencyCode(String currencyCode) {
+        this.currencyCode = currencyCode;
+    }
+
+    public String getWarehouseCode() {
+        return warehouseCode;
+    }
+
+    public void setWarehouseCode(String warehouseCode) {
+        this.warehouseCode = warehouseCode;
+    }
+
+    public String getCostCenterName() {
+        return costCenterName;
+    }
+
+    public void setCostCenterName(String costCenterName) {
+        this.costCenterName = costCenterName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getQuotationNo() {
+        return quotationNo;
+    }
+
+    public void setQuotationNo(String quotationNo) {
+        this.quotationNo = quotationNo;
     }
 
     public void setId(Long id) {

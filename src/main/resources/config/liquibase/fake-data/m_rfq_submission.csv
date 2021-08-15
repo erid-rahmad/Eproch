@@ -1,0 +1,11 @@
+id;uid;active;document_action;document_status;approved;processed;date_trx;date_required;date_submitted;submission_grand_total;quotation_id;quote_supplier_id;ad_organization_id;business_classification_id;business_category_id;currency_id;warehouse_id
+1;a680767e-d6fb-4ae8-87ba-3e4582218e52;true;Manager Gr;primary Pr;false;true;2021-08-13;2021-08-14;2021-08-13;96880;1;1;1;1;1;1;1
+2;57e18389-39a1-4c38-9e66-49db3953fbf9;false;Associate ;West Virgi;false;true;2021-08-14;2021-08-13;2021-08-14;56941;2;2;2;2;2;2;2
+3;c42828b3-4931-4e82-80ef-f3be0036c77c;true;azure back;program pr;false;true;2021-08-13;2021-08-13;2021-08-13;33759;3;3;3;3;3;3;3
+4;920b0e67-1510-4247-a4ff-a4810209286a;true;grid-enabl;plug-and-p;true;true;2021-08-13;2021-08-13;2021-08-14;56227;4;4;4;4;4;4;4
+5;2203bf02-031d-423a-8bd6-6a244bf479e8;true;technologi;generate p;true;true;2021-08-14;2021-08-13;2021-08-13;85743;5;5;5;5;5;5;5
+6;911c02b5-bcf2-4c1d-b862-00b9f57a2525;true;Tactics pa;Chair Inve;true;true;2021-08-14;2021-08-13;2021-08-14;33525;6;6;6;6;6;6;6
+7;fabc75e5-d2b0-4c0f-bfb7-d657dc925c64;false;Home funct;Reactive;false;false;2021-08-13;2021-08-13;2021-08-13;90280;7;7;7;7;7;7;7
+8;6eb5de9d-316f-41bf-8fe3-2df3f748ef13;false;Wyoming;Mouse;true;false;2021-08-13;2021-08-14;2021-08-14;76012;8;8;8;8;8;8;8
+9;9071f5f6-84f8-4f5a-9930-7cee362493b6;false;payment;Automotive;true;true;2021-08-14;2021-08-14;2021-08-13;55782;9;9;9;9;9;9;9
+10;86f56b06-78ef-41db-984c-5ecfe7b473d8;false;Bedfordshi;Ergonomic ;true;true;2021-08-13;2021-08-14;2021-08-14;76912;10;10;10;10;10;10;10

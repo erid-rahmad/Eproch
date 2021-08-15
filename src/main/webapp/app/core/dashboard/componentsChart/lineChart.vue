@@ -100,20 +100,20 @@ export default {
             bodySpacing: 10,
             titleMarginBottom: 10,
             callbacks: {
-                label: function(tooltipItem, data) {
-                    var label = data.datasets[tooltipItem.datasetIndex].label || '';
+              label: function(tooltipItem, data) {
+                  var label = data.datasets[tooltipItem.datasetIndex].label || '';
 
-                    if (label) {
-                        label += ': ';
-                    }
+                  if (label) {
+                      label += ': ';
+                  }
 
-                    if(typeof(tooltipItem.yLabel) == 'number')
-                      label += tooltipItem.yLabel.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-                    else
-                      return label += tooltipItem.yLabel;
-                    
-                    return label;
-                }
+                  if(typeof(tooltipItem.yLabel) == 'number')
+                    label += tooltipItem.yLabel.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                  else
+                    return label += tooltipItem.yLabel;
+                  
+                  return label;
+              }
             }
           },
           scales: {
@@ -132,17 +132,18 @@ export default {
               }
             ],
             xAxes: [
-                {
-                    ticks: {
-                      fontStyle: 'bold',
-                      callback: function(value, index, values) {
-                        if(typeof(value) == 'number')
-                              return value.toFixed(0).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-                            else
-                              return value;
-                      }
-                    }
+              {
+                ticks: {
+                  beginAtZero: true,
+                  fontStyle: 'bold',
+                  callback: function(value, index, values) {
+                    if(typeof(value) == 'number')
+                          return value.toFixed(0).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                        else
+                          return value;
+                  }
                 }
+              }
             ]
           }
         }
@@ -173,6 +174,7 @@ export default {
       });
     }
 
+    console.log(dataset);
     this.chartData.data.datasets = dataset;
     const ctx = document.getElementById(this.id);
     new Chart(ctx, this.chartData);

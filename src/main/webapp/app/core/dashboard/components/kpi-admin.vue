@@ -1,25 +1,58 @@
 <template>
-    <div class=" md-layout md-gutter" style="margin: 10px 1px;">
-        <div :id="'LayoutItem-' + id + '-' + index" class="md-layout-item"
-            v-for="(item, index) in items"
-                :key="item.id"
-            style="padding: 0 10px !important;"
-        >
-            <line-chart :id="'LineChart-' + item.id" 
-                v-if="item.serviceName == 'line'"
-                :title="item.name" 
-                :value="JSON.parse(JSON.stringify(item.chartData))" 
-                :position="item.icon"
-                :colors="listColor.map((x) => { return x.staticColor; })"
-            />
-            <bar-chart :id="'BarChart-' + item.id" 
-                v-if="item.serviceName == 'bar' || item.serviceName == 'horizontalBar'"
-                :title="item.name" 
-                :chartType="item.serviceName"
-                :value="JSON.parse(JSON.stringify(item.chartData))" 
-                :position="item.icon"
-                :colors="listColor.map((x) => { return x.staticColor; })"
-            />
+    <div>
+        <div class=" md-layout md-gutter" v-if="type == 'CHART'" style="margin: 10px 1px;">
+            <div :id="'LayoutItem-' + id + '-' + index" 
+                class="md-layout-item"
+                v-for="(item, index) in chartItems"
+                    :key="item.id"
+                style="padding: 0 10px !important;"
+            >
+                <line-chart :id="'LineChart-' + item.id" 
+                    v-if="item.serviceName == 'line'"
+                    :title="item.name" 
+                    :value="JSON.parse(JSON.stringify(item.chartData))" 
+                    :position="item.icon"
+                    :colors="listColor.map((x) => { return x.staticColor; })"
+                />
+                <bar-chart :id="'BarChart-' + item.id" 
+                    v-if="item.serviceName == 'bar' || item.serviceName == 'horizontalBar'"
+                    :title="item.name" 
+                    :chartType="item.serviceName"
+                    :value="JSON.parse(JSON.stringify(item.chartData))" 
+                    :position="item.icon"
+                    :colors="listColor.map((x) => { return x.staticColor; })"
+                />
+                <!--<pie-chart :id="'PieChart-' + item.id" 
+                    :title="item.name" 
+                    :chartType="item.serviceName"
+                    :value="JSON.parse(JSON.stringify(item.chartData))" 
+                    :position="item.icon"
+                    :colors="listColor.map((x) => { return x.staticColor; })"
+                />-->
+            </div>
+        </div>
+        <div class=" md-layout md-gutter" v-if="type == 'CUSTOM'" style="margin: 10px 1px;">
+            <div :id="'LayoutItem-' + id + '-' + index" 
+                class="md-layout-item"
+                v-for="(item, index) in gridItems"
+                    :key="item.id"
+                style="padding: 0 10px !important;"
+            >
+                <el-table stripe border
+                    :data="JSON.parse(JSON.stringify(item.gridData != null ? item.gridData : []))"
+                    style="width: 100%; cursor: pointer;"
+                >
+                    <!--<el-table-column min-width="20" type="index" align="center" label=""></el-table-column>-->
+                    <el-table-column
+                        v-for="columnItem in item.serviceName.split('##')"
+                        :key="columnItem"
+                        :label="columnItem"
+                        :prop="columnItem.replace(/ /g, '')"
+                        :resizable="true"
+                    >
+                    </el-table-column>
+                </el-table>
+            </div>
         </div>
     </div>
 

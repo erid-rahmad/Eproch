@@ -31,6 +31,7 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['generatePo', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/generate-po/generate-po.vue')],
   ['generateQuotation', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/generate-rfq/generate-rfq.vue')],
   ['rfqSuppQuoteForm', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/rfq-quote-resp/quotation-form.vue')],
+  ['quotationResponse', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/rfq-quote-resp/quotation-response-grid.vue')],
 
   // Auction
   ['auction', () => import(/* webpackChunkName: "auction" */'@/core/application-dictionary/components/Form/auction/index.vue')],

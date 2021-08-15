@@ -13,6 +13,12 @@ import org.mapstruct.*;
 public interface MQuoteSupplierMapper extends EntityMapper<MQuoteSupplierDTO, MQuoteSupplier> {
 
     @Mapping(source = "quotation.id", target = "quotationId")
+    @Mapping(source = "quotation.documentNo", target = "quotationNo")
+    @Mapping(source = "quotation.description", target = "description")
+    @Mapping(source = "quotation.costCenter.name", target = "costCenterName")
+    @Mapping(source = "quotation.warehouse.name", target = "warehouseCode")
+    @Mapping(source = "quotation.currency.code", target = "currencyCode")
+    @Mapping(source = "quotation.dateTrx", target = "dateTrx")
     @Mapping(source = "businessClassification.id", target = "businessClassificationId")
     @Mapping(source = "businessCategory.id", target = "businessCategoryId")
     @Mapping(source = "businessSubCategory.id", target = "businessSubCategoryId")

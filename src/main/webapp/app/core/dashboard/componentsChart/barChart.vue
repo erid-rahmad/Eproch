@@ -154,18 +154,19 @@ export default {
               }
             ],
             xAxes: [
-                {
-                    ticks: {
-                      beginAtZero: true,
-                      fontStyle: 'bold',
-                      callback: function(value, index, values) {
-                        if(typeof(value) == 'number')
-                          return value.toFixed(0).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-                        else
-                          return value;
-                      }
-                    }
+              {
+                stacked: false,
+                ticks: {
+                  beginAtZero: true,
+                  fontStyle: 'bold',
+                  callback: function(value, index, values) {
+                    if(typeof(value) == 'number')
+                      return value.toFixed(0).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                    else
+                      return value;
+                  }
                 }
+              }
             ]
           }
         }
@@ -174,19 +175,19 @@ export default {
   },
   mounted(){
     let dataset = [];
+    this.value = this.value ? this.value : [];
     if(this.value.length > 0) {
       let listColor = this.colors;
       let labels = this.groupBy(this.value, 'xAxisLabel');
       this.chartData.data.labels = Object.keys(labels);
 
-      this.value.forEach(x => {return x.legendLabel = ''; });
       let legends = this.groupBy(this.value, 'legendLabel');
       Object.keys(legends).forEach((x, index) => {
         let data = {
           label: x,
           fill: false,
           data: Object.values(legends)[index].map(y => parseFloat(y.dataValue)), //.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') ),
-          barThickness: this.chartType == 'bar' ? 50 : 25,
+          //barThickness: this.chartType == 'bar' ? 50 : 25,
           borderWidth: 2,
           backgroundColor: [],
           borderColor: []
@@ -210,6 +211,8 @@ export default {
         dataset.push(data);
       });
     }
+
+    console.log(dataset);
     
     this.chartData.data.datasets = dataset;
     const ctx = document.getElementById(this.id);

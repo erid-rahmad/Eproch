@@ -91,6 +91,17 @@ public class PaDashboardQueryService extends QueryService<PaDashboard> {
     public List<DashboardChartDTO> getProdPurchaseAmount() {
         return convertToChartData(paDashboardRepository.getProdPurchaseAmount());
     }
+    
+    @Transactional(readOnly = true)
+    public List<Object[]> getTopVendorAmount(String source, Integer total) {
+        if(source == "purchase"){
+            return paDashboardRepository.getTopVendorPurchase(total);
+        }
+        else{   //contract
+            return paDashboardRepository.getTopVendorContract(total);
+        }
+    }
+
 
     private List<DashboardChartDTO> convertToChartData(List<Object[]> listObject)
     {

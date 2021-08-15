@@ -3,6 +3,7 @@ package com.bhp.opusb.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -61,9 +62,20 @@ public class MQuoteSupplier extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mQuoteSuppliers")
     private CVendor vendor;
 
+    @Formula("(select mrs.document_status from m_rfq_submission mrs where mrs.quotation_id = (select mqs.quotation_id from m_quote_supplier mqs where mqs.id = id) and mrs.quote_supplier_id = id)")
+    private String subDocStatus;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
+    }
+
+    public String getSubDocStatus() {
+        return subDocStatus;
+    }
+
+    public void setSubDocStatus(String subDocStatus) {
+        this.subDocStatus = subDocStatus;
     }
 
     public void setId(Long id) {
