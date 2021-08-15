@@ -510,7 +510,7 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
         }
       })
       .then(res => {
-        this.bidding.vendorSuggestions = (res.data as any[]).map(location => {
+        let sugs = (res.data as any[]).map(location => {
           let subCategory = {
             subCategoryId: null,
             subCategoryName: null
@@ -520,15 +520,28 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
             subCategory = subCategoryMap.get(location.vendorId);
           }
 
-          return {
-            vendorId: location.vendorId,
-            vendorName: location.vendorRegisteredName,
-            businessSubCategoryId: subCategory.subCategoryId,
-            businessSubCategoryName: subCategory.subCategoryName,
-            locationId: location.locationId,
-            address: location.locationName + ', ' + location.cityName
-          };
+          try{
+            return {
+              vendorId: location.vendorId,
+              vendorName: location.vendorRegisteredName,
+              businessSubCategoryId: subCategory.subCategoryId,
+              businessSubCategoryName: subCategory.subCategoryName,
+              locationId: location.locationId,
+              address: location.locationName + ', ' + location.cityName
+            };
+          } catch(e){
+            console.log(e);
+            return {};
+          }
         });
+        if(sugs.length>0){
+          sugs.forEach((elem)=>{
+            if(this.bidding.vendorSuggestions.length==0 || 
+              this.bidding.vendorSuggestions.findIndex(e=>elem.vendorId==e.vendorId)==-1){
+              this.bidding.vendorSuggestions.push(elem);
+            }
+          })
+        }
       })
       .catch(err => {
         console.log('Failed to get vendor suggestions. %O', err);

@@ -1,5 +1,10 @@
 <template>
+  <div>
     <canvas :id="id"></canvas>
+    <div :id="id+'-none'" style="margin: 30px auto; text-align: center; display: none;">
+        <span style="font-size: 1rem; font-weight: bold; color: #8898aa;">No data to display</span>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -9,16 +14,43 @@ export default {
   name: 'BarChart',
   props: {
     id: String,
-    title: String
+    title: String,
+    chartType: {
+        type: String,
+        default: 'bar'
+    },
+    position: String,
+    value: {type: Array, default: (() => []) },
+    colors: {type: Array, default: (() => []) }
+  },
+  methods: {
+    groupBy(array, key){
+      const result = {};
+      array.forEach(item => {
+        if (!result[item[key]]){
+          result[item[key]] = [];
+        }
+        result[item[key]].push(item);
+      })
+
+      return result;
+    },
+    popRandom (array) {
+      let i = (Math.random() * array.length) | 0
+      return array.splice(i, 1)[0];
+    }
   },
   data(){
+    let id = this.id;
+    let type = this.chartType;
+
     return {
       chartData: {
-        type: "bar", //bar / horizontalBar
+        type: this.chartType, //bar / horizontalBar
         data: {
-          labels: ["April 2021", "May 2021", "June 2021", "July 2021"],
+          labels: [/*"April 2021", "May 2021", "June 2021", "July 2021"*/],
           datasets: [
-            {
+            /*{
               label: "Hand Sanitizer",
               fill: false,
               data: [853, 1239, 2938, 1085],
@@ -33,49 +65,77 @@ export default {
               backgroundColor: "#4099ff",
               borderColor: "#4099ff",
               borderWidth: 2
-            },
-            {
-              label: "Face Shield",
-              fill: false,
-              data: [256, 568, 1002, 1590],
-              backgroundColor: "#2ed8b6",
-              borderColor: "#2ed8b6",
-              borderWidth: 2
-            },
-            {
-              label: "Disinfectant",
-              fill: false,
-              data: [157, 589, 1894, 3208],
-              backgroundColor: "#FFB64D",
-              borderColor: "#FFB64D",
-              borderWidth: 2
-            }
+            }*/
           ]
+        },
+        plugins: {
+          afterDraw: function(chart) {
+            let isEmpty = (chart.data.datasets.length == 0);
+            document.getElementById(id).style.display = (isEmpty ? 'none' : 'block');
+            document.getElementById(id + '-none').style.display = (isEmpty ? 'block' : 'none');
+
+            /*if (chart.data.datasets.length === 0) {
+              // No data is present
+              var ctx = chart.chart.ctx;
+              var width = chart.chart.width;
+              var height = chart.chart.height;
+              chart.clear();
+              chart.chart.height = 100;
+              
+              ctx.save();
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.font = "14px";
+              ctx.fillText('No data to display', width / 2, height / 2);
+              ctx.restore();
+            }*/
+          }
         },
         options: {
           responsive: true,
           lineTension: 2,
           layout: {
             padding: {
-              top: 10,
-              right: 10,
+              top: 0,
+              right: 0,
               bottom: 10,
-              left: 10
+              left: 0
             }
           },
           title: {
-            display: true,
+            display: ( this.title != null && this.title != ""),
             text: this.title,
-            fontSize: 20,
+            fontSize: 18,
             padding: 5
           },
           legend: {
-            position: 'top',
-            align: 'end',
+            display: true,
+            position: this.position,
             labels:{
               boxWidth: 15,
-              fontStyle: 'bold',
-              padding: 10
+              fontSize: 13,
+              fontStyle: 'bold'
+            }
+          },
+          tooltips: {
+            mode: 'label',
+            bodySpacing: 10,
+            titleMarginBottom: 10,
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+                    if (label) {
+                        label += ': ';
+                    }
+                    
+                    if(type == 'horizontalBar')
+                      label += tooltipItem.xLabel.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                    else
+                      label += tooltipItem.yLabel.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+
+                    return label;
+                }
             }
           },
           scales: {
@@ -83,16 +143,30 @@ export default {
               {
                 ticks: {
                   beginAtZero: true,
-                  padding: 20
+                  fontStyle: 'bold',
+                  callback: function(value, index, values) {
+                    if(typeof(value) == 'number')
+                      return value.toFixed(0).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                    else
+                      return value;
+                  }
                 }
               }
             ],
             xAxes: [
-                {
-                    ticks: {
-                        fontStyle: 'bold'
-                    }
+              {
+                stacked: false,
+                ticks: {
+                  beginAtZero: true,
+                  fontStyle: 'bold',
+                  callback: function(value, index, values) {
+                    if(typeof(value) == 'number')
+                      return value.toFixed(0).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                    else
+                      return value;
+                  }
                 }
+              }
             ]
           }
         }
@@ -100,6 +174,46 @@ export default {
     }
   },
   mounted(){
+    let dataset = [];
+    this.value = this.value ? this.value : [];
+    if(this.value.length > 0) {
+      let listColor = this.colors;
+      let labels = this.groupBy(this.value, 'xAxisLabel');
+      this.chartData.data.labels = Object.keys(labels);
+
+      let legends = this.groupBy(this.value, 'legendLabel');
+      Object.keys(legends).forEach((x, index) => {
+        let data = {
+          label: x,
+          fill: false,
+          data: Object.values(legends)[index].map(y => parseFloat(y.dataValue)), //.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') ),
+          //barThickness: this.chartType == 'bar' ? 50 : 25,
+          borderWidth: 2,
+          backgroundColor: [],
+          borderColor: []
+        }
+
+        if(x == null || x == '')
+        {
+          this.chartData.options.legend.display = false;
+          this.chartData.options.title.padding = 10;
+          listColor.sort(() => Math.random() - 0.5).forEach(x => {
+            data.backgroundColor.push(x);
+            data.borderColor.push(x);
+          });
+        }
+        else{
+          let color = this.popRandom(listColor);
+          data.backgroundColor.push(color);
+          data.borderColor.push(color);
+        }
+
+        dataset.push(data);
+      });
+    }
+
+    console.log('barChart: ' + JSON.stringify(dataset));
+    this.chartData.data.datasets = dataset;
     const ctx = document.getElementById(this.id);
     new Chart(ctx, this.chartData);
   }

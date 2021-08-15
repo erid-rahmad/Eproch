@@ -3,12 +3,10 @@ import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMi
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 import { Component, Inject, Mixins, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
-import BiddingInvitationResponse from './details-announcement.vue';
 
 @Component({
   components: {
     AnnouncementForm,
-    BiddingInvitationResponse,
   }
 })
 export default class EventAnnouncement extends Mixins(AccessLevelMixin) {
@@ -39,6 +37,8 @@ export default class EventAnnouncement extends Mixins(AccessLevelMixin) {
   public totalItems = 0;
 
   selectedRow: any = {};
+
+  disabled = false;
 
   onFormClosed() {
     this.page = 1;
@@ -109,11 +109,6 @@ export default class EventAnnouncement extends Mixins(AccessLevelMixin) {
   viewSchedule(row){
     console.log(row);
   }
-  
-  moreInfo(row) {
-    this.page = 2;
-    this.moreinfo = row;
-  }
 
   addAnnouncement() {
     this.newRecord = true;
@@ -133,4 +128,7 @@ export default class EventAnnouncement extends Mixins(AccessLevelMixin) {
     (<any>this.$refs.announcementForm).saveAsDraft();
   }
 
+  readOnly(boolean:boolean){
+    this.disabled = boolean;
+  }
 }

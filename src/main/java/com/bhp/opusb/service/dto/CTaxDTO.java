@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.bhp.opusb.domain.enumeration.CTransactionType;
 
@@ -20,6 +21,9 @@ public class CTaxDTO extends AbstractAuditingDTO {
 
     @NotNull
     private String name;
+
+    @Size(max = 30)
+    private String code;
 
     private String description;
 
@@ -55,6 +59,14 @@ public class CTaxDTO extends AbstractAuditingDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getDescription() {
@@ -163,6 +175,7 @@ public class CTaxDTO extends AbstractAuditingDTO {
         return "CTaxDTO{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
+            ", code='" + getCode() + "'" +
             ", description='" + getDescription() + "'" +
             ", rate=" + getRate() +
             ", validFrom='" + getValidFrom() + "'" +

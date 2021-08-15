@@ -1,6 +1,7 @@
 package com.bhp.opusb.service;
 
-import java.util.List;
+import java.math.*;
+import java.util.*;
 
 import javax.persistence.criteria.JoinType;
 
@@ -17,6 +18,7 @@ import io.github.jhipster.service.QueryService;
 import com.bhp.opusb.domain.PaDashboard;
 import com.bhp.opusb.domain.*; // for static metamodels
 import com.bhp.opusb.repository.PaDashboardRepository;
+import com.bhp.opusb.service.dto.DashboardChartDTO;
 import com.bhp.opusb.service.dto.PaDashboardCriteria;
 import com.bhp.opusb.service.dto.PaDashboardDTO;
 import com.bhp.opusb.service.mapper.PaDashboardMapper;
@@ -78,6 +80,42 @@ public class PaDashboardQueryService extends QueryService<PaDashboard> {
         log.debug("count by criteria : {}", criteria);
         final Specification<PaDashboard> specification = createSpecification(criteria);
         return paDashboardRepository.count(specification);
+    }
+
+    @Transactional(readOnly = true)
+    public List<DashboardChartDTO> getSpendByCostCtr() {
+        return convertToChartData(paDashboardRepository.getSpendByCostCtr());
+    }
+
+    @Transactional(readOnly = true)
+    public List<DashboardChartDTO> getProdPurchaseAmount() {
+        return convertToChartData(paDashboardRepository.getProdPurchaseAmount());
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Object[]> getTopVendorAmount(String source, Integer total) {
+        if(source.equals("purchase") ){
+            return paDashboardRepository.getTopVendorPurchase(total);
+        }
+        else{   //contract
+            return paDashboardRepository.getTopVendorContract(total);
+        }
+    }
+
+
+    private List<DashboardChartDTO> convertToChartData(List<Object[]> listObject)
+    {
+        List<DashboardChartDTO> listData = new ArrayList<>();
+        for(Object[] x: listObject){
+            DashboardChartDTO dto = new DashboardChartDTO();
+            dto.setLegendLabel((String)x[0]);
+            dto.setxAxisLabel((String)x[1]);
+            dto.setDataValue((BigDecimal)x[2]);
+            
+            listData.add(dto);
+        }
+
+        return listData;
     }
 
     /**

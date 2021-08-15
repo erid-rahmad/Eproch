@@ -2,7 +2,8 @@ package com.bhp.opusb.workflow;
 
 public class ProcessDefinitionDTO {
     private String id, category, name, key, description, resourceName, 
-        deploymentId, dgrmResourceName, tenantId, derivedFrom, derivedFromRoot;
+        deploymentId, dgrmResourceName, tenantId, derivedFrom, derivedFromRoot,
+        processInstanceId;
     private Integer version, derivedVersion, suspensionState;
     private Boolean hasStartFormKey, hasGraphicalNotation;
 
@@ -102,4 +103,12 @@ public class ProcessDefinitionDTO {
     public void setCategory(String category) {
         this.category = category;
     }
+	public String getProcessInstanceId() {
+		return processInstanceId;
+	}
+	public void setProcessInstanceId(String processInstanceId) {
+		this.processInstanceId = processInstanceId;
+	}
+	
+    
 }

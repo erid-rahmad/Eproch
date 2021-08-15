@@ -124,15 +124,30 @@ public class MRfqLineQueryService extends QueryService<MRfqLine> {
             if (criteria.getDocumentDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDocumentDate(), MRfqLine_.documentDate));
             }
+            if (criteria.getDatePromised() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDatePromised(), MRfqLine_.datePromised));
+            }
             if (criteria.getDateRequired() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDateRequired(), MRfqLine_.dateRequired));
             }
             if (criteria.getRemark() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getRemark(), MRfqLine_.remark));
             }
+            if (criteria.getQuantityBalance() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getQuantityBalance(), MRfqLine_.quantityBalance));
+            }
             if (criteria.getQuotationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getQuotationId(),
                     root -> root.join(MRfqLine_.quotation, JoinType.LEFT).get(MRfq_.id)));
+            }
+            if (criteria.getQuotationNo() != null) {
+                specification = specification.and(buildSpecification(criteria.getQuotationNo(),
+                    root -> root.join(MRfqLine_.quotation, JoinType.LEFT).get(MRfq_.documentNo)));
+            }
+
+            if (criteria.getQuotationMethod() != null) {
+                specification = specification.and(buildSpecification(criteria.getQuotationMethod(),
+                    root -> root.join(MRfqLine_.quotation, JoinType.LEFT).get(MRfq_.selectionMethod)));
             }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
@@ -149,6 +164,18 @@ public class MRfqLineQueryService extends QueryService<MRfqLine> {
             if (criteria.getBusinessCategoryId() != null) {
                 specification = specification.and(buildSpecification(criteria.getBusinessCategoryId(),
                     root -> root.join(MRfqLine_.businessCategory, JoinType.LEFT).get(CBusinessCategory_.id)));
+            }
+            if (criteria.getBusinessClassificationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getBusinessClassificationId(),
+                    root -> root.join(MRfqLine_.businessClassification, JoinType.LEFT).get(CBusinessCategory_.id)));
+            }
+            if (criteria.getWarehouseId() != null) {
+                specification = specification.and(buildSpecification(criteria.getWarehouseId(),
+                    root -> root.join(MRfqLine_.warehouse, JoinType.LEFT).get(CWarehouse_.id)));
+            }
+            if (criteria.getCostCenterId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCostCenterId(),
+                    root -> root.join(MRfqLine_.costCenter, JoinType.LEFT).get(CCostCenter_.id)));
             }
         }
         return specification;

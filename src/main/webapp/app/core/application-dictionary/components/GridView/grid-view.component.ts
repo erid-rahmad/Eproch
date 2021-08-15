@@ -865,6 +865,8 @@ export default class GridView extends Mixins(CalloutMixin, ContextVariableAccess
         this.$nextTick(() => {
           (<ElTable>this.$refs.grid).doLayout();
         })
+
+        
       })
       .catch(err => {
         console.error('Failed getting the record. %O', err);
@@ -1017,7 +1019,26 @@ export default class GridView extends Mixins(CalloutMixin, ContextVariableAccess
       return '96';
     }
 
-    return '256';
+    let fieldAdColumnName= field.adColumn ? field.adColumn.name || field.virtualColumnName : field.virtualColumnName;
+    const rullerCanvas= document.createElement('canvas');
+    const context= rullerCanvas.getContext("2d");
+    context.font= "16px Roboto";
+
+    let labelText= field.name;
+    
+    let columnWith: number= Math.ceil(context.measureText(labelText).width) + 50;
+
+    if(this.gridData.length){
+      
+      columnWith= this.gridData.map(g => g[fieldAdColumnName])
+        .reduce((acc, val) => {
+          let l= Math.ceil(context.measureText(`${val}`).width) + 20 ;
+          return l > acc ? l : acc ;
+        }, columnWith);
+    }
+
+    rullerCanvas.remove();
+    return `${columnWith}`;
   }
 
   public getMinLength(field: IADField) {

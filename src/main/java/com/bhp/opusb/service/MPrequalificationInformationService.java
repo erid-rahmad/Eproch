@@ -22,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import io.github.jhipster.service.filter.LongFilter;
 
@@ -122,10 +123,12 @@ public class MPrequalificationInformationService {
         MPrequalificationProcess step = mPrequalificationInformationDTO.getStep();
 
         if(MPrequalificationProcess.INFO.equals(step)){
-            if (preqInfo.getDocumentNo() == null) {
+            if (preqInfo.getDocumentNo() == null || preqInfo.getDocumentNo().isBlank()) {
                 preqInfo.setDocumentNo(DocumentUtil.buildDocumentNumber("PQ-", mPrequalificationInformationRepository));
-             }
- 
+            }
+            if (!StringUtils.hasLength(preqInfo.getStatus())) {
+                preqInfo.setStatus("N");
+            }
              // Set the default Purchase Order document type.
              /*
              if (preqInfo.getDocumentType() == null) {

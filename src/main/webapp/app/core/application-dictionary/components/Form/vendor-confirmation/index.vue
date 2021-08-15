@@ -1,33 +1,35 @@
 <template>
   <div class="app-container card-view vendor-confirmation">
-    <div class="toolbar">
-      <el-button
-        v-if="!index"
-        icon="el-icon-close"
-        size="mini"
-        type="danger"
-        @click="closeDetail"
-      >
-        Close
-      </el-button>
-      <el-button
-        v-if="!index && isVendor && selectedRow.status==='P'"
-        icon="el-icon-check"
-        size="mini"
-        type="primary"
-        @click="accept"
-      >
-        Accept
-      </el-button>
-      <el-button
-        v-if="!index && isVendor && selectedRow.status==='P'"
-        icon="el-icon-edit"
-        size="mini"
-        type="warning"
-        @click="revise"
-      >
-        Need Revision
-      </el-button>
+    <div class="form-toolbar">
+      <el-button-group>
+        <el-button
+          v-if="!index"
+          icon="el-icon-close"
+          size="mini"
+          type="danger"
+          @click="closeDetail"
+        >
+          Close
+        </el-button>
+        <el-button
+          v-if="!index && isVendor && selectedRow.status==='P'"
+          icon="el-icon-check"
+          size="mini"
+          type="primary"
+          @click="accept"
+        >
+          Accept
+        </el-button>
+        <el-button
+          v-if="!index && isVendor && selectedRow.status==='P'"
+          icon="el-icon-edit"
+          size="mini"
+          type="warning"
+          @click="revise"
+        >
+          Need Revision
+        </el-button>
+      </el-button-group>
     </div>
 
     <div class="card">
@@ -60,7 +62,7 @@
           ></el-table-column>
           <el-table-column
             label="Bidding Title"
-            min-width="200"
+            min-width="250"
             prop="biddingTitle"
             show-overflow-tooltip
             sortable
@@ -89,7 +91,7 @@
           </el-table-column>
           <el-table-column
             label="Currency"
-            min-width="100"
+            min-width="150"
             prop="currencyName"
             sortable
           ></el-table-column>

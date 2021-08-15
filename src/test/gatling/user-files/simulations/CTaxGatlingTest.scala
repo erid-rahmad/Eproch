@@ -73,6 +73,7 @@ class CTaxGatlingTest extends Simulation {
             .body(StringBody("""{
                 "id":null
                 , "name":"SAMPLE_TEXT"
+                , "code":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
                 , "rate":"0"
                 , "validFrom":"2020-01-01T00:00:00.000Z"

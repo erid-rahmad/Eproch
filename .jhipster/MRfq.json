@@ -56,6 +56,18 @@
             "fieldType": "String"
         },
         {
+            "fieldName": "title",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "selectionMethod",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
             "fieldName": "uid",
             "fieldType": "UUID"
         },

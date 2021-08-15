@@ -48,6 +48,10 @@ public class CPrequalificationStep extends AbstractAuditingEntity {
     @JsonIgnoreProperties("cPrequalificationSteps")
     private ADOrganization adOrganization;
 
+    @ManyToOne
+    @JsonIgnoreProperties("cPrequalificationSteps")
+    private AdForm adForm;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -133,6 +137,19 @@ public class CPrequalificationStep extends AbstractAuditingEntity {
 
     public void setAdOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
+    }
+
+    public AdForm getAdForm() {
+        return adForm;
+    }
+
+    public CPrequalificationStep adForm(AdForm adForm) {
+        this.adForm = adForm;
+        return this;
+    }
+
+    public void setAdForm(AdForm adForm) {
+        this.adForm = adForm;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

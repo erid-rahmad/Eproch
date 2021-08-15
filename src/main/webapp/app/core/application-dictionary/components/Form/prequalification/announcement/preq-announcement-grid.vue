@@ -24,6 +24,7 @@
                 size="mini"
                 type="primary"
                 @click="saveAsDraft"
+                :disabled="disabled"
             >
                 Save as Draft
             </el-button>
@@ -32,6 +33,7 @@
                 size="mini"
                 type="primary"
                 @click="openRecipientList"
+                :disabled="disabled"
             >
                 Publish
             </el-button>
@@ -81,13 +83,6 @@
                             >
                                 View
                             </el-button>
-                            <el-button
-                                size="mini"
-                                type="primary"
-                                @click="moreInfo(row)"
-                            >
-                                <svg-icon name="icomoo/269-info"></svg-icon> Invitation
-                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -103,16 +98,13 @@
                     @size-change="changePageSize"
                 />
             </div>
-            <bidding-invitation-response
-                v-if="page === 2"
-                :moreinfo="moreinfo"
-            ></bidding-invitation-response>
             <announcement-form
                 v-else-if="page === 3"
                 ref="announcementForm"
                 :new-record="newRecord"
                 :schedule-id="selectedRow.prequalificationScheduleId"
                 :is-prequalification="true"
+                @readOnly="readOnly"
             ></announcement-form>
         </div>
     </div>

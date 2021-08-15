@@ -49,6 +49,10 @@ public class MRfqCriteria implements Serializable, Criteria {
 
     private StringFilter description;
 
+    private StringFilter title;
+
+    private StringFilter selectionMethod;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -82,6 +86,8 @@ public class MRfqCriteria implements Serializable, Criteria {
         this.grandTotal = other.grandTotal == null ? null : other.grandTotal.copy();
         this.datePromised = other.datePromised == null ? null : other.datePromised.copy();
         this.description = other.description == null ? null : other.description.copy();
+        this.title = other.title == null ? null : other.title.copy();
+        this.selectionMethod = other.selectionMethod == null ? null : other.selectionMethod.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -186,6 +192,22 @@ public class MRfqCriteria implements Serializable, Criteria {
         this.description = description;
     }
 
+    public StringFilter getTitle() {
+        return title;
+    }
+
+    public void setTitle(StringFilter title) {
+        this.title = title;
+    }
+
+    public StringFilter getSelectionMethod() {
+        return selectionMethod;
+    }
+
+    public void setSelectionMethod(StringFilter selectionMethod) {
+        this.selectionMethod = selectionMethod;
+    }
+
     public UUIDFilter getUid() {
         return uid;
     }
@@ -280,6 +302,8 @@ public class MRfqCriteria implements Serializable, Criteria {
             Objects.equals(grandTotal, that.grandTotal) &&
             Objects.equals(datePromised, that.datePromised) &&
             Objects.equals(description, that.description) &&
+            Objects.equals(title, that.title) &&
+            Objects.equals(selectionMethod, that.selectionMethod) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
@@ -305,6 +329,8 @@ public class MRfqCriteria implements Serializable, Criteria {
         grandTotal,
         datePromised,
         description,
+        title,
+        selectionMethod,
         uid,
         active,
         adOrganizationId,
@@ -331,6 +357,8 @@ public class MRfqCriteria implements Serializable, Criteria {
                 (grandTotal != null ? "grandTotal=" + grandTotal + ", " : "") +
                 (datePromised != null ? "datePromised=" + datePromised + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
+                (title != null ? "title=" + title + ", " : "") +
+                (selectionMethod != null ? "selectionMethod=" + selectionMethod + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

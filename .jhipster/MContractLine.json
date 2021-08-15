@@ -13,6 +13,10 @@
             ]
         },
         {
+            "fieldName": "quantityBalance",
+            "fieldType": "BigDecimal"
+        },
+        {
             "fieldName": "ceilingPrice",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
@@ -82,6 +86,14 @@
             "otherEntityRelationshipName": "mContractLine",
             "relationshipValidateRules": "required",
             "relationshipName": "uom",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "mContractLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "vendor",
             "otherEntityField": "id"
         }
     ],

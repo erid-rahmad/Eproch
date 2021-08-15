@@ -110,6 +110,10 @@ public class CPrequalificationStepQueryService extends QueryService<CPrequalific
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(CPrequalificationStep_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
+            if (criteria.getAdFormId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdFormId(),
+                    root -> root.join(CPrequalificationStep_.adForm, JoinType.LEFT).get(AdForm_.id)));
+            }
         }
         return specification;
     }

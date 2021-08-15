@@ -168,7 +168,7 @@
               </el-table-column>
               <el-table-column
                 label="Generate Contract?"
-                width="140"
+                width="180"
               >
                 <template slot-scope="{ row }">
                   <el-button

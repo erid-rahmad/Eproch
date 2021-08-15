@@ -225,6 +225,7 @@ entity CTaxCategory {
 
 entity CTax {
 	name String required
+	code String maxlength(30)
 	description String
 	rate BigDecimal
 	validFrom LocalDate
@@ -935,6 +936,8 @@ entity MRfq {
 
 	datePromised LocalDate
 	description String
+	title String
+	selectionMethod String maxlength(10)
 	uid UUID
 	active Boolean
 }
@@ -952,8 +955,50 @@ entity MRfqLine {
 	unitPrice BigDecimal
 	orderAmount BigDecimal
 	documentDate LocalDate
+	datePromised LocalDate
 	dateRequired LocalDate
 	remark String
+	quantityBalance Integer
+}
+
+entity MRfqSubmission {
+	uid UUID
+	active Boolean
+
+	documentAction String required maxlength(10)
+	documentStatus String required maxlength(10)
+	approved Boolean
+	processed Boolean
+	dateTrx LocalDate
+	dateRequired LocalDate
+	dateSubmitted LocalDate
+
+	submissionGrandTotal BigDecimal
+}
+
+entity MRfqSubmissionLine {
+	uid UUID
+	active Boolean
+
+	documentAction String required maxlength(10)
+	documentStatus String required maxlength(10)
+	approved Boolean
+	processed Boolean
+	releaseQty Integer
+	submissionPrice BigDecimal
+	totalSubmissionPrice BigDecimal
+	remark String
+
+	dateTrx LocalDate
+	dateRequired LocalDate
+	dateSubmitted LocalDate
+}
+
+entity MQuoteSupplier {
+	uid UUID
+	active Boolean
+
+	dateRequired LocalDate
 }
 
 entity CBiddingType {
@@ -1187,6 +1232,12 @@ entity MPrequalificationEvent {
 	active Boolean
 }
 
+entity MPrequalificationCriteria {
+	requirement String required
+	uid UUID
+	active Boolean
+}
+
 entity MPrequalificationSchedule {
 	startDate ZonedDateTime
 	endDate ZonedDateTime
@@ -1197,6 +1248,19 @@ entity MPrequalificationSchedule {
 entity MPrequalAnnouncement{
 	description TextBlob required
 	publishDate ZonedDateTime
+	uid UUID
+	active Boolean
+}
+entity MPrequalAnnouncementResult{
+	descriptionPass TextBlob required
+	descriptionFail TextBlob required
+	publishDate ZonedDateTime
+	documentNo String
+	uid UUID
+	active Boolean
+}
+
+entity MPrequalificationResult {
 	uid UUID
 	active Boolean
 }
@@ -1557,6 +1621,7 @@ entity MContract {
 entity MContractLine{
     lineNo Integer
 	quantity BigDecimal required
+	quantityBalance BigDecimal
 	ceilingPrice BigDecimal required
 	totalCeilingPrice BigDecimal
 	deliveryDate LocalDate required
@@ -1975,6 +2040,14 @@ entity MVendorPerformanceReport {
 	complaints Integer
 }
 
+entity MRfqView {
+	documentNo String
+	title String
+	dateRequired LocalDate
+	selectionMethod String maxlength(10)
+	joinedVendorCount Integer
+}
+
 // Enums
 enum AdAccessLevel {
 	SYS, SYS_CLN, CLN, CLN_ORG, CLN_VND
@@ -2218,13 +2291,16 @@ relationship ManyToOne {
 
 	MContract{adOrganization required} to ADOrganization
 	MContract{bidding required} to MBidding
+	MContract{quotation } to MRfq
 	MContract{costCenter required} to CCostCenter
+	MContract{currency} to CCurrency
 
 	MContractLine{contract required} to MContract
 	MContractLine{adOrganization required} to ADOrganization
     MContractLine{costCenter required} to CCostCenter
     MContractLine{product required} to CProduct
     MContractLine{uom required} to CUnitOfMeasure
+    MContractLine{vendor required} to CVendor
 
 	/** documentType can be New Contract or Contract Renewal. */
 	MContract{documentType required} to CDocumentType
@@ -2431,6 +2507,31 @@ relationship ManyToOne {
 	MRfqLine{product required} to CProduct
 	MRfqLine{uom required} to CUnitOfMeasure
 	MRfqLine{businessCategory required} to CBusinessCategory
+	MRfqLine{businessClassification } to CBusinessCategory
+	MRfqLine{warehouse } to CWarehouse
+	MRfqLine{costCenter } to CCostCenter
+
+	MRfqSubmission{quotation required} to MRfq
+	MRfqSubmission{quoteSupplier required} to MQuoteSupplier
+	MRfqSubmission{adOrganization required} to ADOrganization
+	MRfqSubmission{businessClassification required} to CBusinessCategory
+	MRfqSubmission{businessCategory required} to CBusinessCategory
+	MRfqSubmission{currency required} to CCurrency
+	MRfqSubmission{warehouse required} to CWarehouse
+	MRfqSubmission{costCenter } to CCostCenter
+
+	MRfqSubmissionLine{submission required} to MRfqSubmission
+	MRfqSubmissionLine{quotationLine required} to MRfqLine
+	MRfqSubmissionLine{adOrganization required} to ADOrganization
+	MRfqSubmissionLine{product required} to CProduct
+	MRfqSubmissionLine{uom required} to CUnitOfMeasure
+	MRfqSubmissionLine{businessCategory required} to CBusinessCategory
+
+	MQuoteSupplier{quotation required} to MRfq
+	MQuoteSupplier{businessClassification required} to CBusinessCategory
+	MQuoteSupplier{businessCategory required} to CBusinessCategory
+	MQuoteSupplier{businessSubCategory required} to CBusinessCategory
+	MQuoteSupplier{vendor required} to CVendor
 
 	CAuctionPrerequisite{adOrganization required} to ADOrganization
 
@@ -2514,6 +2615,7 @@ relationship ManyToOne {
 	CPrequalMethodSubCriteria{prequalMethodCriteria required} to CPrequalMethodCriteria
 
 	CPrequalificationStep{adOrganization required} to ADOrganization
+	CPrequalificationStep{adForm} to AdForm
 
 	CPrequalificationEvent{adOrganization required} to ADOrganization
 
@@ -2546,6 +2648,12 @@ relationship ManyToOne {
 	MPrequalificationEvent{event required} to CPrequalificationEvent
 	MPrequalificationEvent{method required} to CPrequalificationMethod
 
+	MPrequalificationCriteria{adOrganization required} to ADOrganization
+	MPrequalificationCriteria{prequalification required} to MPrequalificationInformation
+	MPrequalificationCriteria{prequalMethodCriteria } to CPrequalMethodCriteria
+	MPrequalificationCriteria{prequalMethodSubCriteria } to CPrequalMethodSubCriteria
+	MPrequalificationCriteria{biddingSubCriteriaLine } to CBiddingSubCriteriaLine
+
 	MPrequalificationSchedule{prequalification required} to MPrequalificationInformation
 	MPrequalificationSchedule{adOrganization required} to ADOrganization
 	MPrequalificationSchedule{eventLine required} to CPrequalificationEventLine
@@ -2554,6 +2662,17 @@ relationship ManyToOne {
 	MPrequalAnnouncement{prequalification required} to MPrequalificationInformation
 	MPrequalAnnouncement{prequalificationSchedule required} to MPrequalificationSchedule
 	MPrequalAnnouncement{attachment} to CAttachment
+
+	MPrequalAnnouncementResult{adOrganization required} to ADOrganization
+	MPrequalAnnouncementResult{prequalification required} to MPrequalificationInformation
+	MPrequalAnnouncementResult{prequalificationSchedule required} to MPrequalificationSchedule
+	MPrequalAnnouncementResult{attachment} to CAttachment
+
+	MPrequalificationResult{adOrganization required} to ADOrganization
+	MPrequalificationResult{announcementResult required} to MPrequalAnnouncementResult
+	MPrequalificationResult{prequalification required} to MPrequalificationInformation
+	MPrequalificationResult{vendor required} to CVendor
+	MPrequalificationResult{submission required} to MPrequalificationSubmission
 
 	MPrequalRegistration{adOrganization required} to ADOrganization
 	MPrequalRegistration{announcement required} to MPrequalAnnouncement
@@ -2837,6 +2956,8 @@ relationship ManyToOne {
 
 	MVendorPerformanceReport{vendor required} to CVendor
 	MVendorPerformanceReport{businessCategory} to CBusinessCategory
+
+	MRfqView{quotation required} to MRfq
 }
 
 // Allow filtering to all entities.
@@ -2855,4 +2976,4 @@ service * with serviceClass
 skipClient * except CProduct, CProductCategory, MProductCatalog, CGallery, CGalleryItem, CAttachment, MShoppingCart, MShoppingCartItem
 
 // read-only for view based entities
-readOnly MVendorPerformanceReport
+readOnly MVendorPerformanceReport, MRfqView

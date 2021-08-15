@@ -403,9 +403,11 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
         .retrieve({
           criteriaQuery: this.updateCriteria([
             'active.equals=true',
-            'processed.equals=true',
-            'approved.equals=true',
-            `documentNo.equals=${referenceNo}`
+            'documentStatus.equals=APV',
+            //'processed.equals=true',
+            //'approved.equals=true',
+            `documentNo.equals=${referenceNo}`,
+            'selectionMethod.equals=T'
           ]),
           paginationQuery: {
             page: 0,

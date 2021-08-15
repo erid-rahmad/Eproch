@@ -91,6 +91,8 @@ export default class ContractTeam extends Mixins(AccessLevelMixin, ContractTeamP
     this.mainForm.deletedLines = []
     
     this.userOptions = this.users;
+
+    this.retrieveUsers("");
     if(this.fromGrid) {
       this.retrieveTeam(this.data.id)
     } else {

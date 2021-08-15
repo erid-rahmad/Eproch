@@ -8,6 +8,7 @@ import formatDuration from 'date-fns/formatDuration';
 import intervalToDuration from 'date-fns/intervalToDuration';
 import DynamicWindowService from "../../../DynamicWindow/dynamic-window.service";
 import settings from '@/settings';
+import axios from "axios";
 
 const RegistDetailProp = Vue.extend({
   props: {
@@ -32,6 +33,8 @@ export default class RegistDetailBuyer extends mixins(Vue2Filters.mixin, AccessL
   private accept: string = ".jpg, .jpeg, .png, .pdf";
 
   private registeredVendors: any = [];
+
+  private readOnly = false;
 
   passfail = [{
     value: 'pass',
@@ -65,9 +68,33 @@ export default class RegistDetailBuyer extends mixins(Vue2Filters.mixin, AccessL
         }
       })
       .then(res => {
-        this.registeredVendors= res.data.map((item)=>{
+        let regis = res.data.map((item)=>{
           item.pass = '';
           return item;
+        });
+        this.commonService('api/m-preq-regist-evaluations').retrieve({
+          criteriaQuery: this.updateCriteria([
+            `prequalificationId.equals=${this.mainForm.id}`
+          ]),
+          paginationQuery: {
+            page: 0,
+            size: 100,
+            sort: ['id']
+          }
+        })
+        .then(res => {
+          if(res.data.length){
+            this.readOnly=true;
+            res.data.forEach(element => {
+              regis.forEach(e2=>{
+                if(e2.vendorId == element.vendorId){
+                  e2.pass = element.evaluation
+                }
+              })
+            });
+          }
+        }).finally(()=>{
+          this.registeredVendors = regis;
         });
       });
   }
@@ -116,7 +143,11 @@ export default class RegistDetailBuyer extends mixins(Vue2Filters.mixin, AccessL
   }
 
   downloadFile(row){
-    window.open(row.file.downloadUrl, '_blank');
+    let downloadUrl:string = row.file.downloadUrl;
+    if(!downloadUrl.startsWith('https')){
+      downloadUrl = downloadUrl.replace('http','https');
+    }
+    window.open(downloadUrl, '_blank');
   }
 
   process(){

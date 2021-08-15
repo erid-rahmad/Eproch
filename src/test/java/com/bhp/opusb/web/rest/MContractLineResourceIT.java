@@ -7,6 +7,7 @@ import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CCostCenter;
 import com.bhp.opusb.domain.CProduct;
 import com.bhp.opusb.domain.CUnitOfMeasure;
+import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.repository.MContractLineRepository;
 import com.bhp.opusb.service.MContractLineService;
 import com.bhp.opusb.service.dto.MContractLineDTO;
@@ -51,6 +52,10 @@ public class MContractLineResourceIT {
     private static final BigDecimal DEFAULT_QUANTITY = new BigDecimal(1);
     private static final BigDecimal UPDATED_QUANTITY = new BigDecimal(2);
     private static final BigDecimal SMALLER_QUANTITY = new BigDecimal(1 - 1);
+
+    private static final BigDecimal DEFAULT_QUANTITY_BALANCE = new BigDecimal(1);
+    private static final BigDecimal UPDATED_QUANTITY_BALANCE = new BigDecimal(2);
+    private static final BigDecimal SMALLER_QUANTITY_BALANCE = new BigDecimal(1 - 1);
 
     private static final BigDecimal DEFAULT_CEILING_PRICE = new BigDecimal(1);
     private static final BigDecimal UPDATED_CEILING_PRICE = new BigDecimal(2);
@@ -103,6 +108,7 @@ public class MContractLineResourceIT {
         MContractLine mContractLine = new MContractLine()
             .lineNo(DEFAULT_LINE_NO)
             .quantity(DEFAULT_QUANTITY)
+            .quantityBalance(DEFAULT_QUANTITY_BALANCE)
             .ceilingPrice(DEFAULT_CEILING_PRICE)
             .totalCeilingPrice(DEFAULT_TOTAL_CEILING_PRICE)
             .deliveryDate(DEFAULT_DELIVERY_DATE)
@@ -159,6 +165,16 @@ public class MContractLineResourceIT {
             cUnitOfMeasure = TestUtil.findAll(em, CUnitOfMeasure.class).get(0);
         }
         mContractLine.setUom(cUnitOfMeasure);
+        // Add required entity
+        CVendor cVendor;
+        if (TestUtil.findAll(em, CVendor.class).isEmpty()) {
+            cVendor = CVendorResourceIT.createEntity(em);
+            em.persist(cVendor);
+            em.flush();
+        } else {
+            cVendor = TestUtil.findAll(em, CVendor.class).get(0);
+        }
+        mContractLine.setVendor(cVendor);
         return mContractLine;
     }
     /**
@@ -171,6 +187,7 @@ public class MContractLineResourceIT {
         MContractLine mContractLine = new MContractLine()
             .lineNo(UPDATED_LINE_NO)
             .quantity(UPDATED_QUANTITY)
+            .quantityBalance(UPDATED_QUANTITY_BALANCE)
             .ceilingPrice(UPDATED_CEILING_PRICE)
             .totalCeilingPrice(UPDATED_TOTAL_CEILING_PRICE)
             .deliveryDate(UPDATED_DELIVERY_DATE)
@@ -227,6 +244,16 @@ public class MContractLineResourceIT {
             cUnitOfMeasure = TestUtil.findAll(em, CUnitOfMeasure.class).get(0);
         }
         mContractLine.setUom(cUnitOfMeasure);
+        // Add required entity
+        CVendor cVendor;
+        if (TestUtil.findAll(em, CVendor.class).isEmpty()) {
+            cVendor = CVendorResourceIT.createUpdatedEntity(em);
+            em.persist(cVendor);
+            em.flush();
+        } else {
+            cVendor = TestUtil.findAll(em, CVendor.class).get(0);
+        }
+        mContractLine.setVendor(cVendor);
         return mContractLine;
     }
 
@@ -253,6 +280,7 @@ public class MContractLineResourceIT {
         MContractLine testMContractLine = mContractLineList.get(mContractLineList.size() - 1);
         assertThat(testMContractLine.getLineNo()).isEqualTo(DEFAULT_LINE_NO);
         assertThat(testMContractLine.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
+        assertThat(testMContractLine.getQuantityBalance()).isEqualTo(DEFAULT_QUANTITY_BALANCE);
         assertThat(testMContractLine.getCeilingPrice()).isEqualTo(DEFAULT_CEILING_PRICE);
         assertThat(testMContractLine.getTotalCeilingPrice()).isEqualTo(DEFAULT_TOTAL_CEILING_PRICE);
         assertThat(testMContractLine.getDeliveryDate()).isEqualTo(DEFAULT_DELIVERY_DATE);
@@ -352,6 +380,7 @@ public class MContractLineResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(mContractLine.getId().intValue())))
             .andExpect(jsonPath("$.[*].lineNo").value(hasItem(DEFAULT_LINE_NO)))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY.intValue())))
+            .andExpect(jsonPath("$.[*].quantityBalance").value(hasItem(DEFAULT_QUANTITY_BALANCE.intValue())))
             .andExpect(jsonPath("$.[*].ceilingPrice").value(hasItem(DEFAULT_CEILING_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].totalCeilingPrice").value(hasItem(DEFAULT_TOTAL_CEILING_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].deliveryDate").value(hasItem(DEFAULT_DELIVERY_DATE.toString())))
@@ -373,6 +402,7 @@ public class MContractLineResourceIT {
             .andExpect(jsonPath("$.id").value(mContractLine.getId().intValue()))
             .andExpect(jsonPath("$.lineNo").value(DEFAULT_LINE_NO))
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY.intValue()))
+            .andExpect(jsonPath("$.quantityBalance").value(DEFAULT_QUANTITY_BALANCE.intValue()))
             .andExpect(jsonPath("$.ceilingPrice").value(DEFAULT_CEILING_PRICE.intValue()))
             .andExpect(jsonPath("$.totalCeilingPrice").value(DEFAULT_TOTAL_CEILING_PRICE.intValue()))
             .andExpect(jsonPath("$.deliveryDate").value(DEFAULT_DELIVERY_DATE.toString()))
@@ -608,6 +638,111 @@ public class MContractLineResourceIT {
 
         // Get all the mContractLineList where quantity is greater than SMALLER_QUANTITY
         defaultMContractLineShouldBeFound("quantity.greaterThan=" + SMALLER_QUANTITY);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMContractLinesByQuantityBalanceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractLineRepository.saveAndFlush(mContractLine);
+
+        // Get all the mContractLineList where quantityBalance equals to DEFAULT_QUANTITY_BALANCE
+        defaultMContractLineShouldBeFound("quantityBalance.equals=" + DEFAULT_QUANTITY_BALANCE);
+
+        // Get all the mContractLineList where quantityBalance equals to UPDATED_QUANTITY_BALANCE
+        defaultMContractLineShouldNotBeFound("quantityBalance.equals=" + UPDATED_QUANTITY_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractLinesByQuantityBalanceIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractLineRepository.saveAndFlush(mContractLine);
+
+        // Get all the mContractLineList where quantityBalance not equals to DEFAULT_QUANTITY_BALANCE
+        defaultMContractLineShouldNotBeFound("quantityBalance.notEquals=" + DEFAULT_QUANTITY_BALANCE);
+
+        // Get all the mContractLineList where quantityBalance not equals to UPDATED_QUANTITY_BALANCE
+        defaultMContractLineShouldBeFound("quantityBalance.notEquals=" + UPDATED_QUANTITY_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractLinesByQuantityBalanceIsInShouldWork() throws Exception {
+        // Initialize the database
+        mContractLineRepository.saveAndFlush(mContractLine);
+
+        // Get all the mContractLineList where quantityBalance in DEFAULT_QUANTITY_BALANCE or UPDATED_QUANTITY_BALANCE
+        defaultMContractLineShouldBeFound("quantityBalance.in=" + DEFAULT_QUANTITY_BALANCE + "," + UPDATED_QUANTITY_BALANCE);
+
+        // Get all the mContractLineList where quantityBalance equals to UPDATED_QUANTITY_BALANCE
+        defaultMContractLineShouldNotBeFound("quantityBalance.in=" + UPDATED_QUANTITY_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractLinesByQuantityBalanceIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mContractLineRepository.saveAndFlush(mContractLine);
+
+        // Get all the mContractLineList where quantityBalance is not null
+        defaultMContractLineShouldBeFound("quantityBalance.specified=true");
+
+        // Get all the mContractLineList where quantityBalance is null
+        defaultMContractLineShouldNotBeFound("quantityBalance.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractLinesByQuantityBalanceIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractLineRepository.saveAndFlush(mContractLine);
+
+        // Get all the mContractLineList where quantityBalance is greater than or equal to DEFAULT_QUANTITY_BALANCE
+        defaultMContractLineShouldBeFound("quantityBalance.greaterThanOrEqual=" + DEFAULT_QUANTITY_BALANCE);
+
+        // Get all the mContractLineList where quantityBalance is greater than or equal to UPDATED_QUANTITY_BALANCE
+        defaultMContractLineShouldNotBeFound("quantityBalance.greaterThanOrEqual=" + UPDATED_QUANTITY_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractLinesByQuantityBalanceIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractLineRepository.saveAndFlush(mContractLine);
+
+        // Get all the mContractLineList where quantityBalance is less than or equal to DEFAULT_QUANTITY_BALANCE
+        defaultMContractLineShouldBeFound("quantityBalance.lessThanOrEqual=" + DEFAULT_QUANTITY_BALANCE);
+
+        // Get all the mContractLineList where quantityBalance is less than or equal to SMALLER_QUANTITY_BALANCE
+        defaultMContractLineShouldNotBeFound("quantityBalance.lessThanOrEqual=" + SMALLER_QUANTITY_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractLinesByQuantityBalanceIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mContractLineRepository.saveAndFlush(mContractLine);
+
+        // Get all the mContractLineList where quantityBalance is less than DEFAULT_QUANTITY_BALANCE
+        defaultMContractLineShouldNotBeFound("quantityBalance.lessThan=" + DEFAULT_QUANTITY_BALANCE);
+
+        // Get all the mContractLineList where quantityBalance is less than UPDATED_QUANTITY_BALANCE
+        defaultMContractLineShouldBeFound("quantityBalance.lessThan=" + UPDATED_QUANTITY_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMContractLinesByQuantityBalanceIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mContractLineRepository.saveAndFlush(mContractLine);
+
+        // Get all the mContractLineList where quantityBalance is greater than DEFAULT_QUANTITY_BALANCE
+        defaultMContractLineShouldNotBeFound("quantityBalance.greaterThan=" + DEFAULT_QUANTITY_BALANCE);
+
+        // Get all the mContractLineList where quantityBalance is greater than SMALLER_QUANTITY_BALANCE
+        defaultMContractLineShouldBeFound("quantityBalance.greaterThan=" + SMALLER_QUANTITY_BALANCE);
     }
 
 
@@ -1187,6 +1322,22 @@ public class MContractLineResourceIT {
         defaultMContractLineShouldNotBeFound("uomId.equals=" + (uomId + 1));
     }
 
+
+    @Test
+    @Transactional
+    public void getAllMContractLinesByVendorIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CVendor vendor = mContractLine.getVendor();
+        mContractLineRepository.saveAndFlush(mContractLine);
+        Long vendorId = vendor.getId();
+
+        // Get all the mContractLineList where vendor equals to vendorId
+        defaultMContractLineShouldBeFound("vendorId.equals=" + vendorId);
+
+        // Get all the mContractLineList where vendor equals to vendorId + 1
+        defaultMContractLineShouldNotBeFound("vendorId.equals=" + (vendorId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1197,6 +1348,7 @@ public class MContractLineResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(mContractLine.getId().intValue())))
             .andExpect(jsonPath("$.[*].lineNo").value(hasItem(DEFAULT_LINE_NO)))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY.intValue())))
+            .andExpect(jsonPath("$.[*].quantityBalance").value(hasItem(DEFAULT_QUANTITY_BALANCE.intValue())))
             .andExpect(jsonPath("$.[*].ceilingPrice").value(hasItem(DEFAULT_CEILING_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].totalCeilingPrice").value(hasItem(DEFAULT_TOTAL_CEILING_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].deliveryDate").value(hasItem(DEFAULT_DELIVERY_DATE.toString())))
@@ -1252,6 +1404,7 @@ public class MContractLineResourceIT {
         updatedMContractLine
             .lineNo(UPDATED_LINE_NO)
             .quantity(UPDATED_QUANTITY)
+            .quantityBalance(UPDATED_QUANTITY_BALANCE)
             .ceilingPrice(UPDATED_CEILING_PRICE)
             .totalCeilingPrice(UPDATED_TOTAL_CEILING_PRICE)
             .deliveryDate(UPDATED_DELIVERY_DATE)
@@ -1271,6 +1424,7 @@ public class MContractLineResourceIT {
         MContractLine testMContractLine = mContractLineList.get(mContractLineList.size() - 1);
         assertThat(testMContractLine.getLineNo()).isEqualTo(UPDATED_LINE_NO);
         assertThat(testMContractLine.getQuantity()).isEqualTo(UPDATED_QUANTITY);
+        assertThat(testMContractLine.getQuantityBalance()).isEqualTo(UPDATED_QUANTITY_BALANCE);
         assertThat(testMContractLine.getCeilingPrice()).isEqualTo(UPDATED_CEILING_PRICE);
         assertThat(testMContractLine.getTotalCeilingPrice()).isEqualTo(UPDATED_TOTAL_CEILING_PRICE);
         assertThat(testMContractLine.getDeliveryDate()).isEqualTo(UPDATED_DELIVERY_DATE);

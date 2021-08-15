@@ -39,4 +39,26 @@
                                  referencedTableName="c_business_category"/>
 
     </changeSet>
+    <changeSet id="20210814015000-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="business_classification_id"
+                                 baseTableName="m_rfq_line"
+                                 constraintName="fk_m_rfq_line_business_classification_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_business_category"/>
+
+        <addForeignKeyConstraint baseColumnNames="warehouse_id"
+                                 baseTableName="m_rfq_line"
+                                 constraintName="fk_m_rfq_line_warehouse_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_warehouse"/>
+
+        <addForeignKeyConstraint baseColumnNames="cost_center_id"
+                                 baseTableName="m_rfq_line"
+                                 constraintName="fk_m_rfq_line_cost_center_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_cost_center"/>
+
+    </changeSet> 
+
 </databaseChangeLog>

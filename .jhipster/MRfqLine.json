@@ -56,12 +56,20 @@
             "fieldType": "LocalDate"
         },
         {
+            "fieldName": "datePromised",
+            "fieldType": "LocalDate"
+        },
+        {
             "fieldName": "dateRequired",
             "fieldType": "LocalDate"
         },
         {
             "fieldName": "remark",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "quantityBalance",
+            "fieldType": "Integer"
         }
     ],
     "relationships": [
@@ -103,6 +111,27 @@
             "otherEntityRelationshipName": "mRfqLine",
             "relationshipValidateRules": "required",
             "relationshipName": "businessCategory",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cBusinessCategory",
+            "otherEntityRelationshipName": "mRfqLine",
+            "relationshipName": "businessClassification",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cWarehouse",
+            "otherEntityRelationshipName": "mRfqLine",
+            "relationshipName": "warehouse",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCostCenter",
+            "otherEntityRelationshipName": "mRfqLine",
+            "relationshipName": "costCenter",
             "otherEntityField": "id"
         }
     ],

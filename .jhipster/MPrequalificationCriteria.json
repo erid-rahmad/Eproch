@@ -1,0 +1,71 @@
+{
+    "name": "MPrequalificationCriteria",
+    "fields": [
+        {
+            "fieldName": "requirement",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mPrequalificationCriteria",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mPrequalificationInformation",
+            "otherEntityRelationshipName": "mPrequalificationCriteria",
+            "relationshipValidateRules": "required",
+            "relationshipName": "prequalification",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cPrequalMethodCriteria",
+            "otherEntityRelationshipName": "mPrequalificationCriteria",
+            "relationshipName": "prequalMethodCriteria",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cPrequalMethodSubCriteria",
+            "otherEntityRelationshipName": "mPrequalificationCriteria",
+            "relationshipName": "prequalMethodSubCriteria",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cBiddingSubCriteriaLine",
+            "otherEntityRelationshipName": "mPrequalificationCriteria",
+            "relationshipName": "biddingSubCriteriaLine",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210809071600",
+    "entityTableName": "m_prequalification_criteria",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

@@ -33,6 +33,7 @@ import AccountService from './account/account.service';
 import SystemService from './shared/service/system.service';
 
 import '@/styles/element-variables.scss';
+import '@/styles/theme_blue_light/theme/index.css';
 import '@/styles/index.scss';
 import '@/assets/icons/components';
 import AlertService from '@/shared/alert/alert.service';

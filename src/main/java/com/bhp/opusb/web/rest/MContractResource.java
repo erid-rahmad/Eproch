@@ -1,6 +1,7 @@
 package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.service.MContractService;
+import com.bhp.opusb.service.dto.MContractToPoDTO;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
 import com.bhp.opusb.service.dto.MContractDTO;
 import com.bhp.opusb.service.dto.MContractCriteria;
@@ -25,6 +26,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing {@link com.bhp.opusb.domain.MContract}.
@@ -84,6 +86,14 @@ public class MContractResource {
             .body(result);
     }
 
+    @PostMapping("/m-contracts-generatePO")
+    public ResponseEntity<String> generate(@Valid @RequestBody MContractToPoDTO mContractToPoDTO) throws URISyntaxException {
+        log.info("generate PO {}",mContractToPoDTO);
+       mContractService.generatebalance(mContractToPoDTO);
+       mContractService.generateToPo(mContractToPoDTO);
+       return ResponseEntity.ok("Ok");
+    }
+
     /**
      * {@code POST  /m-contracts/generate-from-vc} : Create a new mContract from MVendorConfirmation.
      *
@@ -102,6 +112,25 @@ public class MContractResource {
         return ResponseEntity.created(new URI("/api/m-contracts/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    /**
+     * {@code POST  /m-contracts/generate-from-rfq} : Create a new mContract from MVendorConfirmation.
+     *
+     * @param mContractDTO the mContractDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new mContractDTO, or with status {@code 400 (Bad Request)} if the mContract has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/m-contracts/generate-from-rfq")
+    public ResponseEntity<List<MContractDTO>> generateFromRfq(@Valid @RequestBody MContractDTO mContractDTO) throws URISyntaxException {
+        log.debug("REST request to generate MContract from MRfq : {}", mContractDTO);
+        if (mContractDTO.getId() != null) {
+            throw new BadRequestAlertException("A new mContract cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+
+        List<MContractDTO> result = mContractService.generateFromRfq(mContractDTO);
+        String queryString = result.stream().map(po -> "id.equals=" + po.getId()).collect(Collectors.joining("&"));
+        return ResponseEntity.created(new URI("/api/m-contracts/" + queryString)).body(result);
     }
 
     /**

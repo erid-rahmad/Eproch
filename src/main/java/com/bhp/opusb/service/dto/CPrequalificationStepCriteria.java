@@ -39,6 +39,8 @@ public class CPrequalificationStepCriteria implements Serializable, Criteria {
 
     private LongFilter adOrganizationId;
 
+    private LongFilter adFormId;
+
     public CPrequalificationStepCriteria() {
     }
 
@@ -50,6 +52,7 @@ public class CPrequalificationStepCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.adFormId = other.adFormId == null ? null : other.adFormId.copy();
     }
 
     @Override
@@ -113,6 +116,14 @@ public class CPrequalificationStepCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
+    public LongFilter getAdFormId() {
+        return adFormId;
+    }
+
+    public void setAdFormId(LongFilter adFormId) {
+        this.adFormId = adFormId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -130,7 +141,8 @@ public class CPrequalificationStepCriteria implements Serializable, Criteria {
             Objects.equals(type, that.type) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(adOrganizationId, that.adOrganizationId);
+            Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(adFormId, that.adFormId);
     }
 
     @Override
@@ -142,7 +154,8 @@ public class CPrequalificationStepCriteria implements Serializable, Criteria {
         type,
         uid,
         active,
-        adOrganizationId
+        adOrganizationId,
+        adFormId
         );
     }
 
@@ -156,6 +169,7 @@ public class CPrequalificationStepCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (adFormId != null ? "adFormId=" + adFormId + ", " : "") +
             "}";
     }
 

@@ -39,7 +39,7 @@ public class MPurchaseOrderDTO extends AbstractAuditingDTO {
     private Boolean approved = false;
 
     private Boolean processed = false;
-    
+
     private Boolean confirmed = false;
 
     private BigDecimal grandTotal;
@@ -66,33 +66,75 @@ public class MPurchaseOrderDTO extends AbstractAuditingDTO {
     @ApiModelProperty(value = "Purchase Order")
 
     private Long adOrganizationId;
-    private String adOrganizationName;
+    private String adOrganizationName, adOrganizationCode;
 
     private Long documentTypeId;
     private String documentTypeName;
 
     private Long vendorId;
-    private String vendorName;
+    private String vendorName, vendorCode;
 
     private Long currencyId;
     private String currencyName;
 
     private Long warehouseId;
-    private String warehouseName;
+    private String warehouseName, warehouseCode;
 
     private Long costCenterId;
-    private String costCenterName;
+    private String costCenterName, costCenterCode;
 
     private Long paymentTermId;
-    private String paymentTermName;
+    private String paymentTermName, paymentTermCode;
 
     private List<MRequisitionLineDTO> requisitionLines = new ArrayList<>();
 
+    private List<MRfqLineDTO> mRfqLine = new ArrayList<>();
+
     private List<MPurchaseOrderLineDTO> poLines = new ArrayList<>();
     private Long biddingId;
-    
+
     public Long getId() {
         return id;
+    }
+
+    public String getWarehouseCode() {
+        return warehouseCode;
+    }
+
+    public void setWarehouseCode(String warehouseCode) {
+        this.warehouseCode = warehouseCode;
+    }
+
+    public String getVendorCode() {
+        return vendorCode;
+    }
+
+    public void setVendorCode(String vendorCode) {
+        this.vendorCode = vendorCode;
+    }
+
+    public String getCostCenterCode() {
+        return costCenterCode;
+    }
+
+    public void setCostCenterCode(String costCenterCode) {
+        this.costCenterCode = costCenterCode;
+    }
+
+    public String getAdOrganizationCode() {
+        return adOrganizationCode;
+    }
+
+    public void setAdOrganizationCode(String adOrganizationCode) {
+        this.adOrganizationCode = adOrganizationCode;
+    }
+
+    public String getPaymentTermCode() {
+        return paymentTermCode;
+    }
+
+    public void setPaymentTermCode(String paymentTermCode) {
+        this.paymentTermCode = paymentTermCode;
     }
 
     public LocalDate getDateDelivered() {
@@ -357,6 +399,14 @@ public class MPurchaseOrderDTO extends AbstractAuditingDTO {
 
     public void setPaymentTermName(String paymentTermName) {
         this.paymentTermName = paymentTermName;
+    }
+
+    public List<MRfqLineDTO> getmRfqLine() {
+        return mRfqLine;
+    }
+
+    public void setmRfqLine(List<MRfqLineDTO> mRfqLine) {
+        this.mRfqLine = mRfqLine;
     }
 
     @Override

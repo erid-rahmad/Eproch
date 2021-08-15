@@ -9,6 +9,14 @@
             ]
         },
         {
+            "fieldName": "code",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "30"
+        },
+        {
             "fieldName": "description",
             "fieldType": "String"
         },

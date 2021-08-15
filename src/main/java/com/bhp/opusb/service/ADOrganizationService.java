@@ -92,6 +92,21 @@ public class ADOrganizationService {
     }
 
     /**
+     * Get an organization by the given code, or create a new one with specified name if it doesn't exist.
+     */
+    public ADOrganization findOrCreate(String code, String organizationName) {
+        return aDOrganizationRepository.findFirstByCode(code)
+            .orElseGet(() -> {
+                ADOrganization org = new ADOrganization();
+                org.active(true)
+                    .code(code)
+                    .name(organizationName);
+
+                return aDOrganizationRepository.save(org);
+            });
+    }
+
+    /**
      * Delete the aDOrganization by id.
      *
      * @param id the id of the entity.

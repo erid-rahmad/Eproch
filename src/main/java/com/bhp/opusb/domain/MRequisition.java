@@ -74,17 +74,17 @@ public class MRequisition extends AbstractAuditingEntity {
     private CDocumentType documentType;
 
     @ManyToOne(optional = false)
-    @NotNull
+    //@NotNull
     @JsonIgnoreProperties("mRequisitions")
     private CCurrency currency;
 
     @ManyToOne(optional = false)
-    @NotNull
+    //@NotNull
     @JsonIgnoreProperties("mRequisitions")
     private CWarehouse warehouse;
 
     @ManyToOne(optional = false)
-    @NotNull
+    //@NotNull
     @JsonIgnoreProperties("mRequisitions")
     private CCostCenter costCenter;
 

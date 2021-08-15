@@ -36,7 +36,7 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
   emailPreviewVisible = false;
   recipientListVisible = false;
 
-  public preqData: any = {};
+  public preqData: any[] = [];
   public value: any = {};
   public itemname: any = {};
   public emailList: any[] = [];
@@ -50,6 +50,8 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
   private dataForAnnouncment: any = {};
 
   private selectedRecipients = [];
+
+  currentDate = new Date();
 
   formData: any = {
     adOrganizationId: AccountStoreModule.organizationInfo.id,
@@ -96,8 +98,10 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
 
   created() {
     this.retrieveBiddings();
-    if(this.newRecord)
+    if(this.newRecord){
       this.formData.description='<p><br>Kepada Bapak/Ibu Pimpinan <br>#vendorName <br>Hal: Undangan #prequalificationTitle <br>Dengan hormat </p><p>Sehubung dengan proses prekualifikasi sesuai judul di atas,kami mengundang Ibu/Bapak untuk mengikuti proses tersebut. Silahkan Bapak/Ibu melakukan login di login.com untuk mendaftar pada bidding tersebut. Demikian penyampaian ini kami dengan senang hati menerima bila ada yang hendak di komunikasikan silahkan sampaikan ke email eproc.berca.co.id </p><p>Hormat Kami<br>Berca.co.id</p>';
+      this.$set(this.formData, 'description', '<p><br>Kepada Bapak/Ibu Pimpinan <br>#vendorName <br>Hal: Undangan #prequalificationTitle <br>Dengan hormat </p><p>Sehubung dengan proses prekualifikasi sesuai judul di atas,kami mengundang Ibu/Bapak untuk mengikuti proses tersebut. Silahkan Bapak/Ibu melakukan login di login.com untuk mendaftar pada bidding tersebut. Demikian penyampaian ini kami dengan senang hati menerima bila ada yang hendak di komunikasikan silahkan sampaikan ke email eproc.berca.co.id </p><p>Hormat Kami<br>Berca.co.id</p>');
+    }
   }
 
   changedata() {
@@ -138,6 +142,30 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
           this.formData = {...this.formData, ...data[0]};
           console.log(this.formData);
         }
+
+        this.commonService("api/m-prequalification-schedules")
+          .retrieve({
+            criteriaQuery: this.updateCriteria([
+              `prequalificationId.equals=${biddingId}`,
+            ]),
+            paginationQuery: {
+              page: 0,
+              size: 10,
+              sort: ['id']
+            }
+          })
+          .then(res1 =>{
+            let length = res1.data.length;
+            let i = 0;
+            for(i=0; i<length; i++){
+              if(res1.data[i].eventLineName.toLowerCase().search("announcement")>-1){
+                if(res1.data[i].status=='F' || this.currentDate >= new Date(res1.data[i].actualEndDate)){
+                  this.$emit("readOnly",true);
+                }
+                break;
+              }
+            }
+          });
       })
       .catch(err => {this.$message.error('Failed to get prequalification announcement'); console.log(err)})
       .finally(() => this.loading = false);
@@ -145,6 +173,7 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
 
   retrieveVendorSuggestions(biddingId: number) {
     this.loadingVendors = true;
+    this.formData.prequalificationName = this.preqData.find(el=>el.id==biddingId).name;
     this.retrieveBiddingScheduleByFormType(biddingId, 'AN');
     this.commonService(baseApiVendorSuggestion)
       .retrieve({
@@ -309,12 +338,14 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
             if (this.selectedRecipients.length == 0) {
               this.$message.error('Please select at least one recipient');
             } else {
+              this.formData.prequalificationName = this.preqData.find(el=>el.id==this.formData.prequalificationId).name;
+              this.formData.preqDocumentNo = this.preqData.find(el=>el.id==this.formData.prequalificationId).documentNo;
               const data = {
                 announcement: this.formData,
                 prequalification: {
-                  id: this.mainForm.prequalificationId,
+                  id: this.formData.prequalificationId,
                   name: this.formData.prequalificationName,
-                  documentNo: this.mainForm.preqDocumentNo
+                  documentNo: this.formData.preqDocumentNo
                 },
                 users: [],
                 vendor: this.vendorSuggestions,
@@ -339,7 +370,7 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
                   this.$message.success('Announcement has been published successfully');
                   this.recipientListVisible = false;
                 })
-                .catch(() => this.$message.error('Failed to publish bidding announcement'))
+                .catch(() => this.$message.error('Failed to publish prequalification announcement'))
                 .finally(() => this.loading = false);
             }
 

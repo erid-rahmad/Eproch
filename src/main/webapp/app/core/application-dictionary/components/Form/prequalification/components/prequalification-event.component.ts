@@ -41,6 +41,7 @@ export default class PreqEvent extends Mixins(AccessLevelMixin, PreqEventProp) {
   };
 
   loadingSchedules = false;
+  loadingDetails = false;
   processing = false;
   showDetail = false;
   showPic = false;
@@ -55,6 +56,8 @@ export default class PreqEvent extends Mixins(AccessLevelMixin, PreqEventProp) {
 
   evaluationMethodCriteria: any[] = [];
   members: any[] = [];
+
+  requirements: Map<number, any> = new Map();
 
   positions: any[] = [
     {name:'Evaluator Administrasi', id:'E'},
@@ -100,7 +103,8 @@ export default class PreqEvent extends Mixins(AccessLevelMixin, PreqEventProp) {
     return new Promise((resolve,reject)=>{
       this.commonService("/api/m-prequalification-events").retrieve({
         criteriaQuery: [
-          'active.equals=true'
+          'active.equals=true',
+          `prequalificationId.equals=${preqId}`
         ],
         paginationQuery: {
           page: 0,
@@ -228,7 +232,11 @@ export default class PreqEvent extends Mixins(AccessLevelMixin, PreqEventProp) {
     })
   }
 
+  // -----------------------------------------------------------
+
   loadDetail(){
+    this.showDetail = true;
+    this.loadingDetails = true;
     this.commonService("/api/c-prequal-method-lines").retrieve({
       criteriaQuery: [
         'active.equals=true',
@@ -308,11 +316,79 @@ export default class PreqEvent extends Mixins(AccessLevelMixin, PreqEventProp) {
           })
         })
       ).then((res)=>{
-        this.showDetail = true;
+        this.evaluationMethodCriteria.forEach((method)=>{
+          method.criteria.forEach((criteria) => {
+            criteria.subCriteria.forEach((subCriteria) => {
+              subCriteria.questions.forEach((question) => {
+                question.prequalMethodCriteriaId = criteria.id
+                question.prequalMethodSubCriteriaId = subCriteria.id
+                question.biddingSubCriteriaLineId = question.id
+                
+                question.requirement = null;
+                this.requirements.set(question.id, question);
+              });
+            });
+          });
+        });
+        this.loadingDetails = false;
         console.log(this.evaluationMethodCriteria)
+        this.loadRequirements(this.preq.id);
       });
     })
   }
+
+  saveRequirements(){
+    console.log(this.requirements);
+    let save: any[] = [];
+    this.requirements.forEach((value, key)=>{
+      save.push({
+        id: value.criteriaId,
+        active: true,
+        uid: value.criteriaUid,
+        requirement: value.requirement,
+        adOrganizationId: this.preq.adOrganizationId,
+        prequalificationId: this.preq.id,
+        prequalMethodCriteriaId: value.prequalMethodCriteriaId,
+        prequalMethodSubCriteriaId: value.prequalMethodSubCriteriaId,
+        biddingSubCriteriaLineId: value.biddingSubCriteriaLineId
+      })
+    })
+
+    console.log(save);
+    
+    this.commonService("/api/m-prequalification-criteria/requirements").create(save)
+    .then(_res => this.$message.success(`Requirements has been saved successfully`))
+    .catch(err => {
+      console.error('Failed to save the criteria. %O', err);
+      this.$message.error(`Failed to save prequalification criteria`);
+    })
+  }
+
+  loadRequirements(id: number){
+    this.commonService("/api/m-prequalification-criteria").retrieve({
+      criteriaQuery: [
+        'active.equals=true',
+        `prequalificationId.equals=${id}`
+      ],
+      paginationQuery: {
+        page: 0,
+        size: 1000,
+        sort:['id']
+      }
+    }).then((res)=>{
+      console.log(res.data);
+      res.data.forEach(element => {
+        let q = this.requirements.get(element.biddingSubCriteriaLineId)
+        if(q) {
+          q.criteriaId = element.id;
+          q.criteriaUid = element.uid;
+          q.requirement = element.requirement;
+        }
+      });
+    })
+  }
+
+  // -----------------------------------------------------------
 
   loadPic(){
     Promise.allSettled([

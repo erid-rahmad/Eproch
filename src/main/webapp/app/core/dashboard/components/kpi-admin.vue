@@ -1,5 +1,70 @@
 <template>
-  <div >
+    <div>
+        <div class="md-layout md-gutter" v-if="type == 'CHART'" style="margin: 10px 1px;">
+            <div :id="'LayoutItem-' + id + '-' + index" 
+                class="md-layout-item"
+                v-for="(item, index) in chartItems"
+                    :key="item.chartData"
+                style="padding: 0 10px !important;"
+            >
+                <md-card v-loading="item.isLoading" md-with-hover class="bg-pattern" style="width: 100%; border-radius: 6px; padding: 10px 12px;">
+                    <line-chart :id="'LineChart-' + item.id + '-' + index" 
+                        v-if="item.serviceName == 'line'"
+                        :title="item.name" 
+                        :value="JSON.parse(JSON.stringify(item.chartData))" 
+                        :position="item.icon"
+                        :colors="listColor.map((x) => { return x.staticColor; })"
+                    />
+                    <bar-chart :id="'BarChart-' + item.id + '-' + index" 
+                        v-if="item.serviceName == 'bar' || item.serviceName == 'horizontalBar'"
+                        :title="item.name" 
+                        :chartType="item.serviceName"
+                        :value="JSON.parse(JSON.stringify(item.chartData))" 
+                        :position="item.icon"
+                        :colors="listColor.map((x) => { return x.staticColor; })"
+                    />
+                    <!--<pie-chart :id="'PieChart-' + item.id + '-' + index" 
+                        :title="item.name" 
+                        :chartType="item.serviceName"
+                        :value="JSON.parse(JSON.stringify(item.chartData))" 
+                        :position="item.icon"
+                        :colors="listColor.map((x) => { return x.staticColor; })"
+                    />-->
+                </md-card>
+            </div>
+        </div>
+        <div class=" md-layout md-gutter" v-if="type == 'CUSTOM'" style="margin: 10px 1px;">
+            <div :id="'LayoutItem-' + id + '-' + index" 
+                class="md-layout-item"
+                v-for="(item, index) in gridItems"
+                    :key="item.id"
+                style="padding: 0 10px !important;"
+            >
+                <md-card v-loading="item.isLoading" md-with-hover class="bg-pattern" style="width: 100%; border-radius: 6px; padding: 10px 12px;">
+                    <el-table stripe border
+                        highlight-current-row
+                        size="mini"
+                        :data="JSON.parse(JSON.stringify(item.gridData))"
+                        style="width: 100%; cursor: pointer; border-radius: 5px;"
+                        :header-cell-class-name="'custom-table-hdr'"
+                        :header-cell-style="'background:'+ item.accentColor +' !important;'"
+                    >
+                        <!--<el-table-column min-width="20" type="index" align="center" label=""></el-table-column>-->
+                        <el-table-column
+                            v-for="columnItem in item.serviceName.split('##')"
+                            :key="columnItem"
+                            :label="columnItem"
+                            :prop="columnItem.replace(/ /g, '')"
+                            :resizable="true"
+                        >
+                        </el-table-column>
+                    </el-table>
+                </md-card>
+            </div>
+        </div>
+    </div>
+
+  <!-- <div>
 
       <div class="md-layout md-gutter">
           <div class="md-layout-item">
@@ -56,8 +121,8 @@
                     position: relative;
                     box-shadow: 0px 12px 20px -10px;"
               >
-                  <!--                    <circular-color-bar style="padding: 1px"></circular-color-bar>-->
-                  <echartpie style="padding: 1px"></echartpie>
+                                 <circular-color-bar style="padding: 1px"></circular-color-bar>-->
+                  <!--<echartpie style="padding: 1px"></echartpie>
               </md-card>
               <md-card md-with-hover style="
                     top: 1%;
@@ -91,7 +156,7 @@
                   </div>
               </md-card>
           </div>
-      </div>
+      </div>-->
 
 <!--      <div class="md-layout md-gutter">-->
 <!--          <div class="md-layout-item">-->
@@ -219,7 +284,7 @@
 <!--          </div>-->
 <!--      </div>-->
 
-      <div class=" md-layout md-gutter" style="padding-top: 25px">
+      <!--<div class=" md-layout md-gutter" style="padding-top: 25px">
           <div class="md-layout-item">
               <md-card md-with-hover style="
                     background: #26c6da;
@@ -282,7 +347,7 @@
                                   width="280px"
                               >
                                   <template slot-scope="{row}">
-                                      {{ row.grandTotal | formatCurre  }}
+                                     {{ row.grandTotal | formatCurre  }} 
                                   </template>
                               </el-table-column>
 
@@ -397,7 +462,7 @@
                   </div>
               </md-card>
           </div>
-      </div>
+      </div>-->
 
 <!--      <div class=" md-layout md-gutter" style="padding-top: 25px">-->
 <!--          <div class="md-layout-item">-->
@@ -500,64 +565,79 @@
 
 <!--      </div>-->
 
-  </div>
+ <!-- </div> -->
 </template>
 
 <script lang="ts" src="./kpi-admin.component.ts"></script>
+<style>
+    .custom-table-hdr{
+        color: white !important;
+    }
+
+</style>
+
 <style lang="scss" scoped>
+    .md-list-item:hover{
+        padding: 0px;
+        background-color: rgba(0,0,0,0.12) !important;
+        border-color: rgba(0,0,0,0.24);
+    }
 
+    .bg-pattern {
+        background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2z' fill='%23cccccc' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
+        background-position: center center;
+    }
 
-.md-title {
-    font-size: 16px;
-    opacity: 0.6;
-    letter-spacing: 0;
-    line-height: 49px;
-}
+    .md-title {
+        font-size: 16px;
+        opacity: 0.6;
+        letter-spacing: 0;
+        line-height: 49px;
+    }
 
-.md-title-chart {
-    font-size: 45px;
-    opacity: 1;
-    color: white;
-    letter-spacing: 0;
-    line-height: 49px;
-}
+    .md-title-chart {
+        font-size: 45px;
+        opacity: 1;
+        color: white;
+        letter-spacing: 0;
+        line-height: 49px;
+    }
 
-.md-layout {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
+    .md-layout {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
 
-.icon-media {
-    width: 43px;
-    margin-top: 26px;
-    margin-left: 23px;
-}
+    .icon-media {
+        width: 43px;
+        margin-top: 26px;
+        margin-left: 23px;
+    }
 
-.card-icon {
-    font-size: 40px !important;
-    color: white;
-    margin-top: 29px;
-    margin-left: 30px;
-}
+    .card-icon {
+        font-size: 40px !important;
+        color: white;
+        margin-top: 29px;
+        margin-left: 30px;
+    }
 
-.md-subhead {
-    opacity: 0.9;
-    font-size: 35px;
-    letter-spacing: 0.15em;
-    line-height: 21px;
-}
+    .md-subhead {
+        opacity: 0.9;
+        font-size: 35px;
+        letter-spacing: 0.15em;
+        line-height: 21px;
+    }
 
-.chart-size {
-    height: 352px;
-    width: 500px;
-}
+    .chart-size {
+        height: 352px;
+        width: 500px;
+    }
 
-body {
-    background: #35A9DB;
-    font-family: roboto;
-    text-align: center;
-    color: #fff;
-}
-
+    body {
+        background: #35A9DB;
+        font-family: roboto;
+        text-align: center;
+        color: #fff;
+    }
 
 </style>

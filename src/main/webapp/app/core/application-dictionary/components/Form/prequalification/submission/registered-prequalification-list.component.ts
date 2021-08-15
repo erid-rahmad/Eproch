@@ -6,6 +6,7 @@ import { ElTable } from 'element-ui/types/table';
 import { Component, Inject, Mixins, Watch } from "vue-property-decorator";
 import DynamicWindowService from "../../../DynamicWindow/dynamic-window.service";
 import SubmissionForm from './submission-form.vue';
+import SubmissionList from './submission-list.vue';
 //import AdministrationProposal from '../event/bidding-submission/administration-proposal.vue';
 //import PriceProposal from '../event/bidding-submission/price-proposal.vue';
 //import SubmissionForm from "../event/bidding-submission/submission-form.vue";
@@ -14,21 +15,23 @@ import SubmissionForm from './submission-form.vue';
 const enum SubmissionPage {
   MAIN = 'main',
   SUBMISSION = 'submission',
-  PROPOSAL = 'proposal'
+  PROPOSAL = 'proposal',
+  LIST = 'list'
 }
 
 const baseApiSubmission = 'api/m-prequalification-submissions';
+const baseApiInformation = 'api/m-prequalification-informations';
 const baseApiVendorScoringLine = 'api/m-vendor-scoring-lines';
 
 @Component({
   components: {
     //BiddingSchedule,
-    //SubmissionForm,
     //AdministrationProposal,
     //TechnicalProposal,
     //PriceProposal,
     //ProposalForm
-    SubmissionForm
+    SubmissionForm,
+    SubmissionList,
   }
 })
 export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
@@ -40,6 +43,7 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
   loading: boolean = false;
   formType: string = null;
   readonly:boolean=false;
+  display:boolean=true;
 
   gridData: any[] = [];
 
@@ -97,6 +101,10 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
     return this.section === SubmissionPage.SUBMISSION;
   }
 
+  get submissionList() {
+    return this.section === SubmissionPage.LIST;
+  }
+
   get proposalComponent() {
     if (this.proposalName === 'P') {
       return 'price-proposal';
@@ -132,14 +140,10 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
   }
 
   created() {
-    if (this.isVendor) {
-      this.retrieveBiddingStatuses();
-      this.retrieveDocStatuses();
-      this.retrieveEvaluationList();
-      this.transition();
-    } else {
-      this.section = SubmissionPage.SUBMISSION;
-    }
+    this.retrieveBiddingStatuses();
+    this.retrieveDocStatuses();
+    this.retrieveEvaluationList();
+    this.transition();
   }
 
   public changeOrder(propOrder): void {
@@ -237,7 +241,7 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
       sort: this.sort()
     };
 
-    this.commonService(baseApiSubmission)
+    this.commonService(this.isVendor ? baseApiSubmission : baseApiInformation)
       .retrieve({
         criteriaQuery: this.updateCriteria([
           'active.equals=true'
@@ -290,11 +294,13 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
   }
 
   saveProposal() {
-    (<any>this.$refs.submissionForm).save();
+    if(this.isVendor)(<any>this.$refs.submissionForm).save();
+    else (<any>this.$refs.submissionList).$children[0].save();
   }
 
   SubmmitProposal() {
-    (<any>this.$refs.submissionForm).save('SMT');
+    if(this.isVendor)(<any>this.$refs.submissionForm).save('SMT');
+    else (<any>this.$refs.submissionList).$children[0].save('SMT2');
   }
 
   submitProposals() {
@@ -308,7 +314,14 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
 
   viewDetails(row: any) {
     this.selectedRow = row;
-    this.section = SubmissionPage.SUBMISSION;
+    this.section = this.isVendor ? SubmissionPage.SUBMISSION : SubmissionPage.LIST;
   }
 
+  toggleDisplay(){
+    this.display = !this.display;
+  }
+
+  closeInner(){
+    (<any>this.$refs.submissionList).$children[0].back();
+  }
 }

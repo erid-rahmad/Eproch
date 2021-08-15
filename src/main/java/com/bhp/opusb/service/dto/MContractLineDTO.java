@@ -10,8 +10,8 @@ import java.util.UUID;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MContractLine} entity.
  */
-public class MContractLineDTO implements Serializable {
-    
+public class MContractLineDTO extends AbstractAuditingDTO {
+
     private Long id;
 
     private Integer lineNo;
@@ -19,10 +19,14 @@ public class MContractLineDTO implements Serializable {
     @NotNull
     private BigDecimal quantity;
 
+    private BigDecimal quantityBalance;
+    private BigDecimal quantityOrdered;
+
     @NotNull
     private BigDecimal ceilingPrice;
 
     private BigDecimal totalCeilingPrice;
+    private BigDecimal orderAmount;
 
     @NotNull
     private LocalDate deliveryDate;
@@ -36,14 +40,37 @@ public class MContractLineDTO implements Serializable {
 
     private Long contractId;
 
+    private String contractNo;
+
     private Long adOrganizationId;
 
     private Long costCenterId;
 
     private Long productId;
+    private String productName;
 
     private Long uomId;
-    
+    private String uomCode;
+
+    private Long vendorId;
+    private String vendorName;
+
+    public BigDecimal getOrderAmount() {
+        return orderAmount;
+    }
+
+    public void setOrderAmount(BigDecimal orderAmount) {
+        this.orderAmount = orderAmount;
+    }
+
+    public BigDecimal getQuantityOrdered() {
+        return quantityOrdered;
+    }
+
+    public void setQuantityOrdered(BigDecimal quantityOrdered) {
+        this.quantityOrdered = quantityOrdered;
+    }
+
     public Long getId() {
         return id;
     }
@@ -66,6 +93,14 @@ public class MContractLineDTO implements Serializable {
 
     public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
+    }
+
+    public BigDecimal getQuantityBalance() {
+        return quantityBalance;
+    }
+
+    public void setQuantityBalance(BigDecimal quantityBalance) {
+        this.quantityBalance = quantityBalance;
     }
 
     public BigDecimal getCeilingPrice() {
@@ -156,6 +191,46 @@ public class MContractLineDTO implements Serializable {
         this.uomId = cUnitOfMeasureId;
     }
 
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo;
+    }
+
+    public String getUomCode() {
+        return uomCode;
+    }
+
+    public void setUomCode(String uomCode) {
+        this.uomCode = uomCode;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public Long getVendorId() {
+        return vendorId;
+    }
+
+    public void setVendorId(Long vendorId) {
+        this.vendorId = vendorId;
+    }
+
+    public String getVendorName() {
+        return vendorName;
+    }
+
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -183,6 +258,7 @@ public class MContractLineDTO implements Serializable {
             "id=" + getId() +
             ", lineNo=" + getLineNo() +
             ", quantity=" + getQuantity() +
+            ", quantityBalance=" + getQuantityBalance() +
             ", ceilingPrice=" + getCeilingPrice() +
             ", totalCeilingPrice=" + getTotalCeilingPrice() +
             ", deliveryDate='" + getDeliveryDate() + "'" +
@@ -194,6 +270,7 @@ public class MContractLineDTO implements Serializable {
             ", costCenterId=" + getCostCenterId() +
             ", productId=" + getProductId() +
             ", uomId=" + getUomId() +
+            ", vendorId=" + getVendorId() +
             "}";
     }
 }

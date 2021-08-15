@@ -1,40 +1,42 @@
 <template>
     <div class="app-container card-view bidding-announcement">
-        <div class="toolbar">
-            <el-button
-                v-if="page === 1"
-                icon="el-icon-plus"
-                size="mini"
-                type="primary"
-                @click="addAnnouncement"
-            >
-                Add
-            </el-button>
-            <el-button
-                v-if="page > 1"
-                icon="el-icon-close"
-                size="mini"
-                type="danger"
-                @click="onFormClosed"
-            >
-                Close
-            </el-button>
-            <el-button
-                v-if="page === 3"
-                size="mini"
-                type="primary"
-                @click="saveAsDraft"
-            >
-                Save as Draft
-            </el-button>
-            <el-button
-                v-if="page === 3"
-                size="mini"
-                type="primary"
-                @click="openRecipientList"
-            >
-                Publish
-            </el-button>
+        <div class="form-toolbar">
+            <el-button-group>
+                <el-button
+                    v-if="page === 1"
+                    icon="el-icon-plus"
+                    size="mini"
+                    type="primary"
+                    @click="addAnnouncement"
+                >
+                    Add
+                </el-button>
+                <el-button
+                    v-if="page > 1"
+                    icon="el-icon-close"
+                    size="mini"
+                    type="danger"
+                    @click="onFormClosed"
+                >
+                    Close
+                </el-button>
+                <el-button
+                    v-if="page === 3"
+                    size="mini"
+                    type="primary"
+                    @click="saveAsDraft"
+                >
+                    Save as Draft
+                </el-button>
+                <el-button
+                    v-if="page === 3"
+                    size="mini"
+                    type="primary"
+                    @click="openRecipientList"
+                >
+                    Publish
+                </el-button>
+            </el-button-group>
         </div>
         <div class="card">
             <div v-if="page === 1">
@@ -66,28 +68,30 @@
                         prop="biddingName"
                         show-overflow-tooltip
                         sortable
-                        width="250"
+                        width="550"
                     ></el-table-column>
                     <el-table-column width="200">
                         <template slot="header">
                             &nbsp;
                         </template>
                         <template slot-scope="{ row }">
-                            <el-button
-                                icon="el-icon-search"
-                                size="mini"
-                                type="primary"
-                                @click="viewDetails(row)"
-                            >
-                                View
-                            </el-button>
-                            <el-button
-                                size="mini"
-                                type="primary"
-                                @click="moreInfo(row)"
-                            >
-                                <svg-icon name="icomoo/269-info"></svg-icon> Invitation
-                            </el-button>
+                            <el-button-group>
+                                <el-button
+                                    icon="el-icon-search"
+                                    size="mini"
+                                    type="primary"
+                                    @click="viewDetails(row)"
+                                >
+                                    View
+                                </el-button>
+                                <el-button
+                                    size="mini"
+                                    type="primary"
+                                    @click="moreInfo(row)"
+                                >
+                                    <svg-icon name="icomoo/269-info"></svg-icon> Invitation
+                                </el-button>
+                            </el-button-group>
                         </template>
                     </el-table-column>
                 </el-table>

@@ -11,6 +11,7 @@ import {AccountStoreModule as accountStore} from '@/shared/config/store/account-
 import ContextVariableAccessor from "../../../ContextVariableAccessor";
 import RegistDetail from "./regist-detail.vue";
 import RegistDetailBuyer from "./regist-detail-buyer.vue";
+import BiddingInvitationResponse from '../announcement/details-announcement.vue';
 
 const prequalificationRegistrationAPI= "api/m-prequal-registrations"
 const prequalificationInformationAPI = "api/m-prequalification-informations"
@@ -18,7 +19,8 @@ const prequalificationInformationAPI = "api/m-prequalification-informations"
 @Component({
   components:{
     RegistDetail,
-    RegistDetailBuyer
+    RegistDetailBuyer,
+    BiddingInvitationResponse
   }
 })
 export default class PrequalificationRegistration extends mixins(Vue2Filters.mixin, AccessLevelMixin, AlertMixin, ContextVariableAccessor) {
@@ -26,6 +28,7 @@ export default class PrequalificationRegistration extends mixins(Vue2Filters.mix
   reasonPA = false;
   acceptPA = false;
   accbutton = false;
+  moreInfoState = false;
   answerbutton = true;
   showemaildetail = false;
   thisemail: any = {};
@@ -90,6 +93,7 @@ export default class PrequalificationRegistration extends mixins(Vue2Filters.mix
 
   closeDetail(){
     this.acceptPA = false;
+    this.moreInfoState = false;
     this.biddingInvitations();
   }
 
@@ -194,5 +198,10 @@ export default class PrequalificationRegistration extends mixins(Vue2Filters.mix
       .update(this.selecrow)
       .then(res => {
       });
+  }
+
+  moreInfo(row) {
+    this.moreInfoState = true;
+    this.selecrow = row;
   }
 }

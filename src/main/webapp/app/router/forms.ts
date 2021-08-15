@@ -30,6 +30,9 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['bhinnekaCatalogImporter', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/marketplace/bhinneka-catalog-importer.vue')],
   ['generatePo', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/generate-po/generate-po.vue')],
   ['generateQuotation', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/generate-rfq/generate-rfq.vue')],
+  ['rfqSuppQuoteForm', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/rfq-quote-resp/quotation-form.vue')],
+  ['quotationResponse', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/rfq-quote-resp/quotation-response-grid.vue')],
+  ['rfqReport', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/rfq-quote-resp/report/rfq-report.vue')],
 
   // Auction
   ['auction', () => import(/* webpackChunkName: "auction" */'@/core/application-dictionary/components/Form/auction/index.vue')],
@@ -65,6 +68,7 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['vendorConfirmation', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/vendor-confirmation/index.vue')],
   ['biddingNegotiation', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-negotiation/index.vue')],
   ['eventAnnouncement', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/event-announcement/event-announcement.vue')],
+  ['vendorApproval', () => import(/* webpackChunkName: "vendorApproval" */'@/core/application-dictionary/components/Form/vendor-approval/vendor-approval.vue')],
 
   ['biddingRegistration', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/event-announcement/bidding-registration.vue')],
 
@@ -74,6 +78,7 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['preBidMeetingGrid', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding/event/pre-bid-meeting/pre-bid-meeting-grid.vue')],
 
   ['contract', () => import(/* webpackChunkName: "contract" */'@/core/application-dictionary/components/Form/vendor-contract/vendor-contract.vue')],
+  ['poGenerateFromContract', () => import(/* webpackChunkName: "contract" */'@/core/application-dictionary/components/Form/vendor-contract/genereate-contract/vendor-contract.vue')],
   ['contractTeam', () => import(/* webpackChunkName: "contract" */'@/core/application-dictionary/components/Form/vendor-contract/team-grid/contract-team-grid.vue')],
   ['contractMsgBoard', () => import(/* webpackChunkName: "contract" */'@/core/application-dictionary/components/Form/vendor-contract/msg-board-grid/msg-board-grid.vue')],
 
@@ -85,7 +90,8 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['prequalificationSubmission', () => import(/* webpackChunkName: "prequalification" */'@/core/application-dictionary/components/Form/prequalification/submission/registered-prequalification-list.vue')],
   ['prequalificationEvaluation', () => import(/* webpackChunkName: "prequalification" */'@/core/application-dictionary/components/Form/prequalification/evaluation/preq-evaluation-grid.vue')],
   ['preqEvalVendor', () => import(/* webpackChunkName: "prequalification" */'@/core/application-dictionary/components/Form/prequalification/evaluation/vendor/eval-vendor.vue')],
-  
+  ['preqEvalAnnouncement', () => import(/* webpackChunkName: "prequalification" */'@/core/application-dictionary/components/Form/prequalification/evaluation-announcement/evaluation-announcement.vue')],
+  ['preqEvalAnnVendor', () => import(/* webpackChunkName: "prequalification" */'@/core/application-dictionary/components/Form/prequalification/evaluation-announcement/evaluation-announcement-vendor.vue')],
 ]);
 
 export const blankForm = () => import(/* webpackChunckName: "blankForm" */'@/core/application-dictionary/components/Form/index.vue');

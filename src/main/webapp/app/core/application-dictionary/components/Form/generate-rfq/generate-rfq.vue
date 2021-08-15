@@ -152,7 +152,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-
+        <!--
         <el-col
           :md="8"
           :sm="12"
@@ -171,6 +171,7 @@
             ></ad-input-lookup>
           </el-form-item>
         </el-col>
+        -->
       </el-row>
 
       <el-row
@@ -359,6 +360,96 @@
       </el-table-column>
     </el-table>
 
+    <el-dialog
+      width="70%"
+      :visible.sync="submit"
+      title="Confirmation Request"
+      >
+      <el-form label-position="left" label-width="150px" :rules="reqFormValidationSchema" :model="requestForm" ref="reqForm">
+        <el-form-item label="Title" prop="title">
+          <el-input v-model="requestForm.title" class="form-input"></el-input>
+        </el-form-item>
+        <el-form-item label="Ordered Amount">
+          <el-input v-model="requestForm.totalAmount" disabled class="form-input" v-inputmask="{'alias': 'currency'}" ></el-input>
+        </el-form-item>
+        <el-form-item label="Selection Method" prop="selectionMethod">
+          <el-select v-model="requestForm.selectionMethod" :disabled="readOnly" placeholder="Selection Method">
+            <el-option v-for="item in pm" :key="item.value" :label="item.label" :value="item.value"/>
+          </el-select>
+        </el-form-item>
+        <el-row>
+          <el-col span="12">
+            <el-form-item label="Date Trx" prop="dateTrx">
+              <el-date-picker
+                v-model="requestForm.dateTrx"
+                :format="dateDisplayFormat"
+                size="mini"
+                type="date"
+                :value-format="dateValueFormat"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col span="12">
+            <el-form-item label="Date Required" prop="dateRequired">
+              <el-date-picker
+                v-model="requestForm.dateRequired"
+                :format="dateDisplayFormat"
+                size="mini"
+                type="date"
+                :value-format="dateValueFormat"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item label="Description" prop="description">
+          <el-input
+            v-model="requestForm.description"
+            :rows="7"
+            type="textarea"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button
+          icon="el-icon-check"
+          size="mini"
+          style="margin-left: 0px;"
+          type="primary"
+          @click="finalSubmitCheck()"
+        >
+          Confirm
+        </el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog
+      title="Confirm Request"
+      width="30%"
+      :visible.sync="finalSubmit"
+    >
+      <template>
+        <span>Are you sure to Submit the selected record?</span>
+        <div slot="footer">
+          <el-button
+            icon="el-icon-close"
+            size="mini"
+            style="margin-left: 0px;"
+            @click="finalSubmit = false"
+          >
+            Cancel
+          </el-button>
+          <el-button
+            icon="el-icon-check"
+            size="mini"
+            style="margin-left: 0px;"
+            type="primary"
+            @click="generate"
+          >
+            Yes
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
     <!-- <el-pagination
       ref="pagination"
       background

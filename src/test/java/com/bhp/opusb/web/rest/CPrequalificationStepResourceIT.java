@@ -3,6 +3,7 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.CPrequalificationStep;
 import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.AdForm;
 import com.bhp.opusb.repository.CPrequalificationStepRepository;
 import com.bhp.opusb.service.CPrequalificationStepService;
 import com.bhp.opusb.service.dto.CPrequalificationStepDTO;
@@ -617,6 +618,26 @@ public class CPrequalificationStepResourceIT {
 
         // Get all the cPrequalificationStepList where adOrganization equals to adOrganizationId + 1
         defaultCPrequalificationStepShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCPrequalificationStepsByAdFormIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cPrequalificationStepRepository.saveAndFlush(cPrequalificationStep);
+        AdForm adForm = AdFormResourceIT.createEntity(em);
+        em.persist(adForm);
+        em.flush();
+        cPrequalificationStep.setAdForm(adForm);
+        cPrequalificationStepRepository.saveAndFlush(cPrequalificationStep);
+        Long adFormId = adForm.getId();
+
+        // Get all the cPrequalificationStepList where adForm equals to adFormId
+        defaultCPrequalificationStepShouldBeFound("adFormId.equals=" + adFormId);
+
+        // Get all the cPrequalificationStepList where adForm equals to adFormId + 1
+        defaultCPrequalificationStepShouldNotBeFound("adFormId.equals=" + (adFormId + 1));
     }
 
     /**

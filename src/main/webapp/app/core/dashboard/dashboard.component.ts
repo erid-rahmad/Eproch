@@ -19,6 +19,7 @@ import PieChart from './componentsChart/pieChart.vue';
 import Accordion from './components/accordion.vue';
 import kpiAdmin from './components/kpi-admin.vue';
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
+import { PaDashboardItem } from '@/shared/model/pa-dashboard-item.model';
 
 const baseApiVendor ='api/c-vendors';
 const baseApiTopVendor ='api/pa-dashboards/topVendorPurchase';
@@ -44,6 +45,30 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
   private dataEvaluasi:any=[];
 
   dashboardItems: IPaDashboardPreference[] = [];
+
+  listColor=
+  [
+    //yellow
+    {staticColor: '#ecec04', gradientColor: 'linear-gradient(87deg, rgb(255,255,60) 0%, rgb(210,210,0) 100%);'}, 
+    //red
+    {staticColor: '#d80000', gradientColor: 'linear-gradient(87deg, rgb(255,105,97) 0px, rgb(255,20,20) 100%);'}, 
+    //green
+    {staticColor: '#2dce89', gradientColor: 'linear-gradient(87deg, rgb(139,225,182) 0px, rgb(46,181,114) 100%);'}, 
+    // blue
+    {staticColor: '#11cdef', gradientColor: 'linear-gradient(87deg, rgb(17, 205, 239) 0px, rgb(17, 113, 239) 100%);'}, 
+    // orange
+    {staticColor: '#FFAC1C', gradientColor: 'linear-gradient(87deg, rgb(255,200,98) 0px, rgb(255,165,0) 100%);'}, 
+    // pink
+    {staticColor: '#f5365c', gradientColor: 'linear-gradient(87deg, rgb(255, 83, 112), rgb(255, 134, 154) 100%);'}, 
+    // brown
+    {staticColor: '#8B4513', gradientColor: 'linear-gradient(87deg, rgb(205,133,63) 0px, rgb(134, 84, 34) 100%);'}, 
+    // grey
+    {staticColor: '#767676', gradientColor: 'linear-gradient(87deg, rgb(197,197,197) 0px, rgb(138,138,138) 100%);'}, 
+    // purple
+    {staticColor: '#9800eb', gradientColor: 'linear-gradient(87deg, rgb(220,157,255)0px, rgb(172,20,255) 100%);'}, 
+    // navy
+    {staticColor: '#000045', gradientColor: 'linear-gradient(87deg, rgb(148,148,255) 0px, rgb(30,30,255) 100%);'}
+  ]
   
   get dashboards() {
     const list = [];
@@ -60,10 +85,9 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
   }
 
   created() {
-    this.retrievePO();
+    //this.retrievePO();
     this.dashboardService = new DashboardService(this);
     this.debouncedRefresh = debounce(this.refresh, 5000);
-
 
     if (this.dashboards.length) {
       this.switchDashboard(this.dashboards[0].key);
@@ -118,19 +142,28 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
     });
   }
 
-  documentStatuses = {
-    APV: 'Approved',
-    DRF: 'Draft',
-    RJC: 'Rejected',
-    RVS: 'Revised',
-    SMT: 'Submitted',
-  }
-  printStatus(status: string) {
-    return this.documentStatuses[status];
-  }
-
   beforeDestroy() {
     this.dashboardService.unsubscribe();
+  }
+
+  getLayoutWidth(item: PaDashboardItem){
+    let defaultClass = 'md-layout-item dashboard-item ';
+    let totalItemRow = this.dashboardItems.filter(x => x.rowNo == item.rowNo);
+    
+    defaultClass += 'md-size-' + Math.round(100 / totalItemRow.length);
+    return defaultClass;
+  }
+
+  public refresh() {
+    const widgets: any[] = <any[]>this.$refs.widget;
+    widgets?.forEach((widget, index) => {
+      console.log('Attempt to refresh widget#%d', index);
+      widget.refresh();
+    });
+  }
+
+  checkMove(e) {
+    window.console.log(e.draggedContext);
   }
 
   switchDashboard(key: string) {
@@ -151,7 +184,7 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
           }
         })
         .then(res => {
-          this.dashboardItems = res.data;
+          this.dashboardItems = res.data.sort((a,b) => { return a.rowNo - b.rowNo || a.columnNo - b.columnNo });
         })
         .catch(err => {
           console.log('Dashboard error', err);
@@ -161,6 +194,18 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
           });
         });
     }
+  }
+
+  /*
+  documentStatuses = {
+    APV: 'Approved',
+    DRF: 'Draft',
+    RJC: 'Rejected',
+    RVS: 'Revised',
+    SMT: 'Submitted',
+  }
+  printStatus(status: string) {
+    return this.documentStatuses[status];
   }
 
   retrievePO(){
@@ -227,19 +272,6 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
       })
       .finally();
   }
-
-
-
-  public refresh() {
-    const widgets: any[] = <any[]>this.$refs.widget;
-    widgets?.forEach((widget, index) => {
-      console.log('Attempt to refresh widget#%d', index);
-      widget.refresh();
-    });
-  }
-
-  checkMove(e) {
-    window.console.log(e.draggedContext);
-  }
+  */
 }
 

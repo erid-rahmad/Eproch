@@ -1,5 +1,7 @@
 package com.bhp.opusb.repository;
 
+import java.util.List;
+
 import com.bhp.opusb.domain.MRequisition;
 
 import org.springframework.stereotype.Repository;
@@ -9,4 +11,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface MRequisitionRepository extends GenericDocumentRepository<MRequisition, Long> {
+    List<MRequisition> findByDocumentNo(String documentNo);
 }

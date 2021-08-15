@@ -159,10 +159,24 @@
         },
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "mRfq",
+            "otherEntityRelationshipName": "mContract",
+            "relationshipName": "quotation",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "cCostCenter",
             "otherEntityRelationshipName": "mContract",
             "relationshipValidateRules": "required",
             "relationshipName": "costCenter",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCurrency",
+            "otherEntityRelationshipName": "mContract",
+            "relationshipName": "currency",
             "otherEntityField": "id"
         },
         {

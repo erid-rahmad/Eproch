@@ -233,9 +233,9 @@ aside {
   }
 }
 
-.el-table thead {
-  color: #1f2d3d;
-}
+// .el-table thead {
+//   color: #1f2d3d;
+// }
 
 .table-container {
   border: 1px solid #ebebeb;
@@ -343,17 +343,17 @@ aside {
   }
 }
 
-.el-input {
-  &.is-disabled .el-input__inner {
-    color: #70707c;
-  }
-}
+// .el-input {
+//   &.is-disabled .el-input__inner {
+//     color: #70707c;
+//   }
+// }
 
-.el-textarea {
-  &.is-disabled .el-textarea__inner {
-    color: #70707c;
-  }
-}
+// .el-textarea {
+//   &.is-disabled .el-textarea__inner {
+//     color: #70707c;
+//   }
+// }
 
 .el-divider h4 {
   font-size: 1em;
@@ -367,6 +367,22 @@ aside {
 .el-table__fixed, .el-table__fixed-right{
   box-shadow: none;
   border-left: 1px solid #dfe6ec;
+}
+
+table.el-table__body {
+  font-size:14px;
+
+  .cell {
+    word-wrap: break-word;
+  }
+}
+table.el-table__header{
+  font-size:14px;
+}
+
+.form-toolbar {
+  padding: 5px;
+  margin-left: 10px;
 }
 /*
 //striped / 2nd child
@@ -387,30 +403,29 @@ aside {
   background-color: #fffafa;
 }
 */
-.el-table__body tr:nth-child(even) td {
-  background-color: #fafafa;
-}
+// .el-table__body tr:nth-child(even) td {
+//   background-color: #fafafa;
+// }
 
-//selected row
-.el-table__body tr.current-row > td {
-  background-color: #e0ffff;
-}
+// //selected row
+// .el-table__body tr.current-row > td {
+//   background-color: #e0ffff;
+// }
 
-.el-table--striped .el-table__body tr.el-table__row--striped.current-row td {
-  background-color: #e0ffff;
-}
+// .el-table--striped .el-table__body tr.el-table__row--striped.current-row td {
+//   background-color: #e0ffff;
+// }
 
-.el-table th > .cell {
-  color: #26c6da;
-  background-color: #fafafa;
-}
+// .el-table th > .cell {
+//   background-color: #fafafa;
+// }
 
-.el-table__body tr.hover-row.current-row > td {
-  background-color: #87cefa;
-}
+// .el-table__body tr.hover-row.current-row > td {
+//   background-color: #87cefa;
+// }
 
-.el-table__body tr.hover-row.current-row:nth-child(even) > td {
-  background-color: #87cefa;
-}
+// .el-table__body tr.hover-row.current-row:nth-child(even) > td {
+//   background-color: #87cefa;
+// }
 
 // #87cefa for selection

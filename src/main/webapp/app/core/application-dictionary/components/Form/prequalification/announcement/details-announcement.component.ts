@@ -59,11 +59,11 @@ export default class DetailsAnnouncement extends Mixins(DetailsAnnouncementProps
       .finally(() => this.retrivedata(this.invitationData.announcementId))
   }
 
-  retrivedata(announcementId: number) {
+  retrivedata(id: number) {
     this.commonService(baseApiUrl)
       .retrieve({
         criteriaQuery: this.updateCriteria([
-          `announcementId.equals=${announcementId}`,
+          `prequalificationId.equals=${id}`,
           `registrationStatus.equals=R`
         ]),
         paginationQuery: {
@@ -78,7 +78,7 @@ export default class DetailsAnnouncement extends Mixins(DetailsAnnouncementProps
     this.commonService(baseApiUrl)
       .retrieve({
         criteriaQuery: this.updateCriteria([
-          `announcementId.equals=${announcementId}`,
+          `prequalificationId.equals=${id}`,
           `registrationStatus.equals=N`
         ]),
         paginationQuery: {
@@ -94,7 +94,7 @@ export default class DetailsAnnouncement extends Mixins(DetailsAnnouncementProps
     this.commonService(baseApiUrl)
       .retrieve({
         criteriaQuery: this.updateCriteria([
-          `announcementId.equals=${announcementId}`,
+          `prequalificationId.equals=${id}`,
           `registrationStatus.equals=U`
         ]),
         paginationQuery: {
@@ -110,7 +110,7 @@ export default class DetailsAnnouncement extends Mixins(DetailsAnnouncementProps
     this.commonService('/api/m-prequal-registrations')
       .retrieve({
         criteriaQuery: this.updateCriteria([
-          `announcementId.equals=${announcementId}`,
+          `prequalificationId.equals=${id}`,
           `registrationStatus.in=D`,
           `registrationStatus.in=R`
         ]),

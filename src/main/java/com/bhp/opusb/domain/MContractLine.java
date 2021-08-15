@@ -19,7 +19,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "m_contract_line")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MContractLine implements Serializable {
+public class MContractLine extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,6 +34,9 @@ public class MContractLine implements Serializable {
     @NotNull
     @Column(name = "quantity", precision = 21, scale = 2, nullable = false)
     private BigDecimal quantity;
+
+    @Column(name = "quantity_balance", precision = 21, scale = 2)
+    private BigDecimal quantityBalance;
 
     @NotNull
     @Column(name = "ceiling_price", precision = 21, scale = 2, nullable = false)
@@ -80,6 +83,11 @@ public class MContractLine implements Serializable {
     @JsonIgnoreProperties("mContractLines")
     private CUnitOfMeasure uom;
 
+    @ManyToOne(optional = false)
+
+    @JsonIgnoreProperties("mContractLines")
+    private CVendor vendor;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -113,6 +121,19 @@ public class MContractLine implements Serializable {
 
     public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
+    }
+
+    public BigDecimal getQuantityBalance() {
+        return quantityBalance;
+    }
+
+    public MContractLine quantityBalance(BigDecimal quantityBalance) {
+        this.quantityBalance = quantityBalance;
+        return this;
+    }
+
+    public void setQuantityBalance(BigDecimal quantityBalance) {
+        this.quantityBalance = quantityBalance;
     }
 
     public BigDecimal getCeilingPrice() {
@@ -257,6 +278,19 @@ public class MContractLine implements Serializable {
     public void setUom(CUnitOfMeasure cUnitOfMeasure) {
         this.uom = cUnitOfMeasure;
     }
+
+    public CVendor getVendor() {
+        return vendor;
+    }
+
+    public MContractLine vendor(CVendor cVendor) {
+        this.vendor = cVendor;
+        return this;
+    }
+
+    public void setVendor(CVendor cVendor) {
+        this.vendor = cVendor;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -275,12 +309,19 @@ public class MContractLine implements Serializable {
         return 31;
     }
 
+    @PrePersist
+    public void prePersist() {
+        uid = UUID.randomUUID();
+    }
+
+
     @Override
     public String toString() {
         return "MContractLine{" +
             "id=" + getId() +
             ", lineNo=" + getLineNo() +
             ", quantity=" + getQuantity() +
+            ", quantityBalance=" + getQuantityBalance() +
             ", ceilingPrice=" + getCeilingPrice() +
             ", totalCeilingPrice=" + getTotalCeilingPrice() +
             ", deliveryDate='" + getDeliveryDate() + "'" +

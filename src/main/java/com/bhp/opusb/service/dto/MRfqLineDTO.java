@@ -1,18 +1,17 @@
 package com.bhp.opusb.service.dto;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
+import javax.validation.constraints.*;
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MRfqLine} entity.
  */
 public class MRfqLineDTO extends AbstractAuditingDTO {
-    
+
     private Long id;
 
     private Integer lineNo;
@@ -34,14 +33,19 @@ public class MRfqLineDTO extends AbstractAuditingDTO {
     private Boolean processed;
 
     private BigDecimal orderAmount, unitPrice;
-    
+
     private Integer releaseQty;
 
     private LocalDate documentDate;
 
+    private LocalDate datePromised;
+
     private LocalDate dateRequired;
 
     private String remark;
+
+    private Integer quantityBalance;
+    private BigDecimal quantityOrdered;
 
 
     private Long quotationId;
@@ -58,9 +62,47 @@ public class MRfqLineDTO extends AbstractAuditingDTO {
 
     private Long businessCategoryId;
     private String businessCategoryName;
-    
+
+    private Long businessClassificationId;
+
+    private Long warehouseId;
+
+    private Long costCenterId;
+
+    public BigDecimal getQuantityOrdered() {
+        return quantityOrdered;
+    }
+
+    public void setQuantityOrdered(BigDecimal quantityOrdered) {
+        this.quantityOrdered = quantityOrdered;
+    }
+
     public Long getId() {
         return id;
+    }
+
+    public Long getCostCenterId() {
+        return costCenterId;
+    }
+
+    public void setCostCenterId(Long costCenterId) {
+        this.costCenterId = costCenterId;
+    }
+
+    public Long getWarehouseId() {
+        return warehouseId;
+    }
+
+    public void setWarehouseId(Long warehouseId) {
+        this.warehouseId = warehouseId;
+    }
+
+    public Long getBusinessClassificationId() {
+        return businessClassificationId;
+    }
+
+    public void setBusinessClassificationId(Long businessClassificationId) {
+        this.businessClassificationId = businessClassificationId;
     }
 
     public BigDecimal getUnitPrice() {
@@ -155,6 +197,14 @@ public class MRfqLineDTO extends AbstractAuditingDTO {
         this.documentDate = documentDate;
     }
 
+    public LocalDate getDatePromised() {
+        return datePromised;
+    }
+
+    public void setDatePromised(LocalDate datePromised) {
+        this.datePromised = datePromised;
+    }
+
     public LocalDate getDateRequired() {
         return dateRequired;
     }
@@ -169,6 +219,14 @@ public class MRfqLineDTO extends AbstractAuditingDTO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Integer getQuantityBalance() {
+        return quantityBalance;
+    }
+
+    public void setQuantityBalance(Integer quantityBalance) {
+        this.quantityBalance = quantityBalance;
     }
 
     public Long getQuotationId() {
@@ -284,14 +342,21 @@ public class MRfqLineDTO extends AbstractAuditingDTO {
             ", approved='" + isApproved() + "'" +
             ", processed='" + isProcessed() + "'" +
             ", releaseQty=" + getReleaseQty() +
+            ", unitPrice=" + getUnitPrice() +
+            ", orderAmount=" + getOrderAmount() +
             ", documentDate='" + getDocumentDate() + "'" +
+            ", datePromised='" + getDatePromised() + "'" +
             ", dateRequired='" + getDateRequired() + "'" +
             ", remark='" + getRemark() + "'" +
+            ", quantityBalance=" + getQuantityBalance() +
             ", quotationId=" + getQuotationId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", productId=" + getProductId() +
             ", uomId=" + getUomId() +
             ", businessCategoryId=" + getBusinessCategoryId() +
+            ", businessClassificationId=" + getBusinessClassificationId() +
+            ", warehouseId=" + getWarehouseId() +
+            ", costCenterId=" + getCostCenterId() +
             "}";
     }
 }

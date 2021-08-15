@@ -22,6 +22,17 @@ export default class GenerateRfq extends Vue {
   loadingPr = false;
   loadingPrLines = false;
 
+  submit = false;
+  finalSubmit = false;
+  requestForm = {
+    title:"",
+    selectionMethod:"",
+    dateTrx:"",
+    dateRequired:"",
+    description:"",
+    totalAmount:0
+  }
+
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
@@ -53,13 +64,11 @@ export default class GenerateRfq extends Vue {
     documentTypeId: null
   };
 
-  form = {
+  form:any = {
     adOrganizationId: accountStore.organizationInfo.id,
     businessClassificationId: null,
     costCenterId: null,
     currencyId: null,
-    datePromised: new Date(),
-    dateTrx: new Date(),
     documentTypeId: null,
     documentAction: 'SMT',
     documentStatus: 'DRF',
@@ -89,6 +98,25 @@ export default class GenerateRfq extends Vue {
     }
   };
 
+  reqFormValidationSchema = {
+    title: {
+      required: true,
+      message: 'Title is required'
+    },
+    selectionMethod: {
+      required: true,
+      message: 'Selection Method is required'
+    },
+    dateTrx: {
+      required: true,
+      message: 'Date Trx is required'
+    },
+    dateRequired: {
+      required: true,
+      message: 'Date Required is required'
+    }
+  };
+
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
   }
@@ -100,6 +128,20 @@ export default class GenerateRfq extends Vue {
   private get mainTable() {
     return this.$refs.mainTable as ElTable;
   }
+
+  pm = [{
+    value: 'A',
+    label: 'Direct Appointment'
+  }, {
+    value: 'S',
+    label: 'Direct Selection'
+  }, {
+    value: 'P',
+    label: 'Direct Purchase'
+  }, {
+    value: 'T',
+    label: 'Tender'
+  }, ]
 
   created() {
     this.retrieveDropDownOptions('/api/c-vendors', 'vendorOptions');
@@ -114,10 +156,12 @@ export default class GenerateRfq extends Vue {
   }
 
   retrievePurchaseRequisitionLines(requisitionNo?: number, vendorId?: number): void {
+    console.log(this.form);
     this.loadingPrLines = true;
     this.mainTable.clearSelection();
 
     const prNo = requisitionNo || this.filter.requisitionNo;
+    const vendor = vendorId || this.filter.vendorId;
     const filterQuery = [
       'active.equals=true',
       'quantityBalance.greaterThan=0',
@@ -129,8 +173,8 @@ export default class GenerateRfq extends Vue {
       filterQuery.push(`requisitionNo.contains=${prNo}`);
     }
 
-    if (!!vendorId) {
-      filterQuery.push(`vendorId.equals=${vendorId}`)
+    if (!!vendor) {
+      filterQuery.push(`vendorId.equals=${vendor}`)
     }
 
     this.commonService('/api/m-requisition-lines')
@@ -161,6 +205,8 @@ export default class GenerateRfq extends Vue {
 
         this.gridData = res.data.map((line: any) => {
           line.orderAmount = line.quantityBalance * line.unitPrice;
+          line.originalQuantity = line.quantity;
+          line.quantity = line.quantityBalance;
           return line;
         });
 
@@ -277,23 +323,45 @@ export default class GenerateRfq extends Vue {
 
     (<ElForm>this.$refs.mainForm).validate((passed, error) => {
       if (passed) {
-        this.generating = true;
-        this.commonService('/api/m-rfqs/generate')
-          .create(this.form)
-          .then(res => {
-            console.log('Quotation generated. response: %O', res);
-            const count = res.length === 1 ? ` #${res[0].documentNo}` : '(s)';
-            this.$message.success(`Quotations${count} has been created successfully.`);
-          })
-          .catch(err => {
-            console.log('Failed generating quotation(s). %O', err);
-            this.$message.error('Failed generating quotation(s)');
-          })
-          .finally(() => {
-            this.generating = false;
-          })
+        this.requestForm.totalAmount=0;
+        this.form.requisitionLines.forEach((elem)=>{
+          this.requestForm.totalAmount+=elem.quantityOrdered*elem.unitPrice;
+        })
+        this.submit = true;
       }
     });
   }
 
+  finalSubmitCheck(){
+    (<ElForm>this.$refs.reqForm).validate((passed, error) => {
+      if(passed) this.finalSubmit = true;
+    });
+  }
+
+  generate(){
+    this.form = {...this.form, ...this.requestForm};
+    this.form.requisitionLines.forEach((el)=>{
+      el.quantity = el.originalQuantity;
+    })
+    console.log(this.form);
+    
+    this.generating = true;
+    this.commonService('/api/m-rfqs/generate')
+    .create(this.form)
+    .then(res => {
+      console.log('Quotation generated. response: %O', res);
+      const count = res.length === 1 ? ` #${res[0].documentNo}` : '(s)';
+      this.$message.success(`Quotations${count} has been created successfully.`);
+      this.finalSubmit = false;
+      this.submit = false;
+    })
+    .catch(err => {
+      console.log('Failed generating quotation(s). %O', err);
+      this.$message.error('Failed generating quotation(s)');
+    })
+    .finally(() => {
+      this.generating = false;
+    })
+    
+  }
 }

@@ -14,7 +14,7 @@
       <template v-if="device!=='mobile'">
         <header-search class="right-menu-item" />
         <error-log class="errLog-container right-menu-item hover-effect" />
-        <quick-cart class="right-menu-item hover-effect" />
+        <!-- <quick-cart class="right-menu-item hover-effect" /> -->
         <screenfull class="right-menu-item hover-effect" />
         <el-tooltip
           :content="$t('navbar.size')"
@@ -30,12 +30,13 @@
         trigger="click"
       >
         <div class="avatar-wrapper">
-          <img
+          <!-- <img
             alt="Avatar"
             class="user-avatar"
             :src="avatar+'?imageView2/1/w/80/h/80'"
-          >
-          <em class="el-icon-caret-bottom"></em>
+          > -->
+          <i class="el-icon-user-solid"><span style="font-family:roboto;">User</span></i>
+          <i class="el-icon-arrow-down"></i>
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/account">

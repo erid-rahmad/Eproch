@@ -36,16 +36,17 @@
 
                 <el-table-column align="center" fixed="right" width="200">
                     <template slot-scope="{ row }">
-                        <el-button :underline="false" icon="el-icon-search" size="mini" title="View" type="primary"
-                                   @click="viewBidding(row)"
-                        >View
-                        </el-button
-                        >
-                        <el-button :underline="false" size="mini" title="Terminate Bidding" type="danger"
-                                   @click="terminateBidding(row)">
-                            <svg-icon name="icomoo/183-switch"></svg-icon>
-                            Terminate
-                        </el-button>
+                        <el-button-group>
+                            <el-button :underline="false" icon="el-icon-search" size="mini" title="View" type="primary"
+                                    @click="viewBidding(row)"
+                            >View
+                            </el-button>
+                            <el-button :underline="false" size="mini" title="Terminate Bidding" type="danger"
+                                    @click="terminateBidding(row)">
+                                <svg-icon name="icomoo/183-switch"></svg-icon>
+                                Terminate
+                            </el-button>
+                        </el-button-group>
                     </template>
                 </el-table-column>
 

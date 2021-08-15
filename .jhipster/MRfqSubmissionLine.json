@@ -1,0 +1,129 @@
+{
+    "name": "MRfqSubmissionLine",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "documentAction",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "documentStatus",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "approved",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "processed",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "releaseQty",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "submissionPrice",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "totalSubmissionPrice",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "remark",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "dateTrx",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dateRequired",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dateSubmitted",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mRfqSubmission",
+            "otherEntityRelationshipName": "mRfqSubmissionLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "submission",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mRfqLine",
+            "otherEntityRelationshipName": "mRfqSubmissionLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "quotationLine",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mRfqSubmissionLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cProduct",
+            "otherEntityRelationshipName": "mRfqSubmissionLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "product",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cUnitOfMeasure",
+            "otherEntityRelationshipName": "mRfqSubmissionLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "uom",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cBusinessCategory",
+            "otherEntityRelationshipName": "mRfqSubmissionLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "businessCategory",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210814142000",
+    "entityTableName": "m_rfq_submission_line",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

@@ -99,10 +99,15 @@ public class MContractDTO extends AbstractAuditingDTO {
     private String biddingName;
     private String biddingNo;
 
+    private Long quotationId;
+
     private Long costCenterId;
     private String costCenterName;
 
 
+    private Long currencyId;
+    private Long warehouseId;
+    private Long paymentTermId;
 
     private List<MContractLineDTO> lineDTOList;
 
@@ -110,8 +115,32 @@ public class MContractDTO extends AbstractAuditingDTO {
         return lineDTOList;
     }
 
+    public List<MRfqSubmissionDTO> getRfqSubmissions() {
+        return rfqSubmissions;
+    }
+
+    public void setRfqSubmissions(List<MRfqSubmissionDTO> rfqSubmissions) {
+        this.rfqSubmissions = rfqSubmissions;
+    }
+
     public void setLineDTOList(List<MContractLineDTO> lineDTOList) {
         this.lineDTOList = lineDTOList;
+    }
+
+    public Long getWarehouseId() {
+        return warehouseId;
+    }
+
+    public void setWarehouseId(Long warehouseId) {
+        this.warehouseId = warehouseId;
+    }
+
+    public Long getPaymentTermId() {
+        return paymentTermId;
+    }
+
+    public void setPaymentTermId(Long paymentTermId) {
+        this.paymentTermId = paymentTermId;
     }
 
     /**
@@ -134,6 +163,8 @@ public class MContractDTO extends AbstractAuditingDTO {
     private List<MContractDocumentDTO> contractDocuments = new ArrayList<>();
 
     private long negoLineId;
+
+    private List<MRfqSubmissionDTO> rfqSubmissions;
 
     public long getNegoLineId() {
         return negoLineId;
@@ -415,6 +446,14 @@ public class MContractDTO extends AbstractAuditingDTO {
         this.biddingNo = biddingNo;
     }
 
+    public Long getQuotationId() {
+        return quotationId;
+    }
+    
+    public void setQuotationId(Long mRfqId) {
+        this.quotationId = mRfqId;
+    }
+
     public Long getCostCenterId() {
         return costCenterId;
     }
@@ -423,8 +462,15 @@ public class MContractDTO extends AbstractAuditingDTO {
         this.costCenterId = cCostCenterId;
     }
 
+    public Long getCurrencyId() {
+        return currencyId;
+    }
     public String getCostCenterName() {
         return costCenterName;
+    }
+
+    public void setCurrencyId(Long cCurrencyId) {
+        this.currencyId = cCurrencyId;
     }
 
     public void setCostCenterName(String costCenterName) {
@@ -563,6 +609,7 @@ public class MContractDTO extends AbstractAuditingDTO {
             ", biddingNo='" + biddingNo + '\'' +
             ", costCenterId=" + costCenterId +
             ", costCenterName='" + costCenterName + '\'' +
+            ", currencyId=" + currencyId +
             ", lineDTOList=" + lineDTOList +
             ", documentTypeId=" + documentTypeId +
             ", documentTypeName='" + documentTypeName + '\'' +

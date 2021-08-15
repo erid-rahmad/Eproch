@@ -63,10 +63,6 @@ export default class ContractDetail extends Mixins(AccessLevelMixin, ContractDet
       value: 'DOC',
     },
     {
-      id: 3,
-      name: 'Vendor Evaluations',
-      value: 'EVA',
-    },{
       id: 4,
       name: 'Task',
       value: 'TSK',
@@ -85,6 +81,10 @@ export default class ContractDetail extends Mixins(AccessLevelMixin, ContractDet
       id: 7,
       name: 'History',
       value: 'HRY',
+    },{
+      id: 3,
+      name: 'Vendor Evaluations',
+      value: 'EVA',
     }
   ];
 
@@ -153,6 +153,10 @@ export default class ContractDetail extends Mixins(AccessLevelMixin, ContractDet
 
   save() {
     (<any>this.$refs[this.activeTab][0]).save();
+  }
+
+  generatePO() {
+    (<any>this.$refs[this.activeTab][0]).generatePoAction();
   }
 
   submit() {

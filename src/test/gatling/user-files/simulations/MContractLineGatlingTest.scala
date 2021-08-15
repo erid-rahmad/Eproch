@@ -74,6 +74,7 @@ class MContractLineGatlingTest extends Simulation {
                 "id":null
                 , "lineNo":"0"
                 , "quantity":"0"
+                , "quantityBalance":"0"
                 , "ceilingPrice":"0"
                 , "totalCeilingPrice":"0"
                 , "deliveryDate":"2020-01-01T00:00:00.000Z"

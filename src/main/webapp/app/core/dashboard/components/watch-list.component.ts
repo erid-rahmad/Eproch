@@ -22,7 +22,8 @@ const WatchListProps = Vue.extend({
   props: {
     id: String,
     name: String,
-    title: String
+    title: String,
+    listColor: Array
   }
 })
 
@@ -43,29 +44,6 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
   //isVendor:boolean;
   screenWidth: number = window.outerWidth;
   items: IAdWatchListItem[] = [];
-  listColor=
-  [
-    //yellow
-    {staticColor: '#ecec04', gradientColor: 'linear-gradient(315deg, #fbb034 0%, #ffdd00 74%);'}, 
-    //red
-    {staticColor: '#f5365c', gradientColor: 'linear-gradient(45deg, rgb(255, 83, 112), rgb(255, 134, 154));'}, 
-    //green
-    {staticColor: '#2dce89', gradientColor: 'linear-gradient(87deg, rgb(45, 206, 137) 0px, rgb(45, 206, 204) 100%);'}, 
-    // blue
-    {staticColor: '#11cdef', gradientColor: 'linear-gradient(87deg, rgb(17, 205, 239) 0px, rgb(17, 113, 239) 100%);'}
-  ]
-
-  get isCard() {
-    return this.type === DisplayType.Card;
-  }
-
-  get isList() {
-    return this.type === DisplayType.List;
-  }
-
-  get type() {
-    return /*this.items.length > 4 ? DisplayType.List : */DisplayType.Card;
-  }
 
   getWidthClass(id: string){
     let defaultClass = 'md-large-size-20 md-medium-size-25 md-small-size-50';
@@ -86,7 +64,7 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
     //setInterval(() => {this.updateCountWatchList()}, 15000);
   }
 
-  @Watch('items', {deep: true})
+  /*@Watch('items', {deep: true})*/
   async onItemsChanged(items: IAdWatchListItem[]) {
     await items.forEach((item, index) => {
       this.retrieveWatchListCounter(item, index);
@@ -129,7 +107,7 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
   }
 
   private getRandomColor(){
-    var randomNumber = Math.floor(Math.random() * 4);
+    var randomNumber = Math.floor(Math.random() * this.listColor.length);
     return this.listColor[randomNumber];
   }
 
@@ -150,8 +128,9 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
         if (res.data.length > 0) {
           const watchList: IAdWatchList = res.data[0];
           this.items = watchList.adWatchListItems;
-          this.items.forEach((x) => {
-            if(!x.accentColor) x.accentColor = this.getRandomColor().gradientColor;
+          this.items.forEach((x, index) => {
+            if(!x.accentColor) x.accentColor = this.getRandomColor()['gradientColor'];
+            this.$set(this.items[index], 'isLoading', true);
           });
         }
       })
@@ -164,7 +143,33 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
       });
   }
 
-  /*retrieveVendor(){
+  private retrieveWatchListCounter(item: IAdWatchListItem, index?: number) {
+    this.commonService(item.restApiEndpoint)
+      .count([
+        item.filterQuery,
+        accountStore.userDetails.vendor ? `vendorId.equals=${accountStore.userDetails.cVendorId}` : null
+      ])
+      .then(count => {
+        this.$set(this.items[index], 'count', count);
+      });
+      
+    this.$set(this.items[index], 'isLoading', false);
+  }
+
+  /*
+  get isCard() {
+    return this.type === DisplayType.Card;
+  }
+
+  get isList() {
+    return this.type === DisplayType.List;
+  }
+
+  get type() {
+    return his.items.length > 4 ? DisplayType.List : DisplayType.Card;
+  }
+
+  retrieveVendor(){
     this.commonService(baseApiVendor)
       .retrieve({
         criteriaQuery: this.updateCriteria([
@@ -236,27 +241,4 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
       .finally();
   }*/
 
-  private retrieveWatchListCounter(item: IAdWatchListItem, index?: number) {
-    this.commonService(item.restApiEndpoint)
-      .count([
-        item.filterQuery,
-        accountStore.userDetails.vendor ? `vendorId.equals=${accountStore.userDetails.cVendorId}` : null
-      ])
-      .then(count => {
-        this.$set(this.items[index], 'count', count);
-      });
-      
-
-      /* KONDISI BARU
-      .retrieve({
-        criteriaQuery: [
-          item.filterQuery,
-          accountStore.userDetails.vendor ? `vendorId.equals=${accountStore.userDetails.cVendorId}` : null
-        ],
-      })
-      .then(res => {
-        this.$set(this.items[index], 'count', res.data.length);
-      });
-    */
-  }
 }

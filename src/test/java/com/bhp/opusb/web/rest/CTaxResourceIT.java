@@ -45,6 +45,9 @@ public class CTaxResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
+    private static final String DEFAULT_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_CODE = "BBBBBBBBBB";
+
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
@@ -94,6 +97,7 @@ public class CTaxResourceIT {
     public static CTax createEntity(EntityManager em) {
         CTax cTax = new CTax()
             .name(DEFAULT_NAME)
+            .code(DEFAULT_CODE)
             .description(DEFAULT_DESCRIPTION)
             .rate(DEFAULT_RATE)
             .validFrom(DEFAULT_VALID_FROM)
@@ -131,6 +135,7 @@ public class CTaxResourceIT {
     public static CTax createUpdatedEntity(EntityManager em) {
         CTax cTax = new CTax()
             .name(UPDATED_NAME)
+            .code(UPDATED_CODE)
             .description(UPDATED_DESCRIPTION)
             .rate(UPDATED_RATE)
             .validFrom(UPDATED_VALID_FROM)
@@ -182,6 +187,7 @@ public class CTaxResourceIT {
         assertThat(cTaxList).hasSize(databaseSizeBeforeCreate + 1);
         CTax testCTax = cTaxList.get(cTaxList.size() - 1);
         assertThat(testCTax.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testCTax.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testCTax.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testCTax.getRate()).isEqualTo(DEFAULT_RATE);
         assertThat(testCTax.getValidFrom()).isEqualTo(DEFAULT_VALID_FROM);
@@ -261,6 +267,7 @@ public class CTaxResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cTax.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].rate").value(hasItem(DEFAULT_RATE.intValue())))
             .andExpect(jsonPath("$.[*].validFrom").value(hasItem(DEFAULT_VALID_FROM.toString())))
@@ -281,6 +288,7 @@ public class CTaxResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cTax.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.rate").value(DEFAULT_RATE.intValue()))
             .andExpect(jsonPath("$.validFrom").value(DEFAULT_VALID_FROM.toString()))
@@ -384,6 +392,84 @@ public class CTaxResourceIT {
 
         // Get all the cTaxList where name does not contain UPDATED_NAME
         defaultCTaxShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCTaxesByCodeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cTaxRepository.saveAndFlush(cTax);
+
+        // Get all the cTaxList where code equals to DEFAULT_CODE
+        defaultCTaxShouldBeFound("code.equals=" + DEFAULT_CODE);
+
+        // Get all the cTaxList where code equals to UPDATED_CODE
+        defaultCTaxShouldNotBeFound("code.equals=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCTaxesByCodeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cTaxRepository.saveAndFlush(cTax);
+
+        // Get all the cTaxList where code not equals to DEFAULT_CODE
+        defaultCTaxShouldNotBeFound("code.notEquals=" + DEFAULT_CODE);
+
+        // Get all the cTaxList where code not equals to UPDATED_CODE
+        defaultCTaxShouldBeFound("code.notEquals=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCTaxesByCodeIsInShouldWork() throws Exception {
+        // Initialize the database
+        cTaxRepository.saveAndFlush(cTax);
+
+        // Get all the cTaxList where code in DEFAULT_CODE or UPDATED_CODE
+        defaultCTaxShouldBeFound("code.in=" + DEFAULT_CODE + "," + UPDATED_CODE);
+
+        // Get all the cTaxList where code equals to UPDATED_CODE
+        defaultCTaxShouldNotBeFound("code.in=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCTaxesByCodeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cTaxRepository.saveAndFlush(cTax);
+
+        // Get all the cTaxList where code is not null
+        defaultCTaxShouldBeFound("code.specified=true");
+
+        // Get all the cTaxList where code is null
+        defaultCTaxShouldNotBeFound("code.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCTaxesByCodeContainsSomething() throws Exception {
+        // Initialize the database
+        cTaxRepository.saveAndFlush(cTax);
+
+        // Get all the cTaxList where code contains DEFAULT_CODE
+        defaultCTaxShouldBeFound("code.contains=" + DEFAULT_CODE);
+
+        // Get all the cTaxList where code contains UPDATED_CODE
+        defaultCTaxShouldNotBeFound("code.contains=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCTaxesByCodeNotContainsSomething() throws Exception {
+        // Initialize the database
+        cTaxRepository.saveAndFlush(cTax);
+
+        // Get all the cTaxList where code does not contain DEFAULT_CODE
+        defaultCTaxShouldNotBeFound("code.doesNotContain=" + DEFAULT_CODE);
+
+        // Get all the cTaxList where code does not contain UPDATED_CODE
+        defaultCTaxShouldBeFound("code.doesNotContain=" + UPDATED_CODE);
     }
 
 
@@ -871,6 +957,7 @@ public class CTaxResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cTax.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].rate").value(hasItem(DEFAULT_RATE.intValue())))
             .andExpect(jsonPath("$.[*].validFrom").value(hasItem(DEFAULT_VALID_FROM.toString())))
@@ -925,6 +1012,7 @@ public class CTaxResourceIT {
         em.detach(updatedCTax);
         updatedCTax
             .name(UPDATED_NAME)
+            .code(UPDATED_CODE)
             .description(UPDATED_DESCRIPTION)
             .rate(UPDATED_RATE)
             .validFrom(UPDATED_VALID_FROM)
@@ -943,6 +1031,7 @@ public class CTaxResourceIT {
         assertThat(cTaxList).hasSize(databaseSizeBeforeUpdate);
         CTax testCTax = cTaxList.get(cTaxList.size() - 1);
         assertThat(testCTax.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testCTax.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testCTax.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testCTax.getRate()).isEqualTo(UPDATED_RATE);
         assertThat(testCTax.getValidFrom()).isEqualTo(UPDATED_VALID_FROM);

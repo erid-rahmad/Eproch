@@ -1,6 +1,7 @@
 package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.service.PaDashboardService;
+import com.bhp.opusb.service.dto.DashboardChartDTO;
 import com.bhp.opusb.service.dto.DashboardMyDocument;
 import com.bhp.opusb.service.dto.MPurchaseOrderDTO;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
@@ -112,10 +113,15 @@ public class PaDashboardResource {
         return ResponseEntity.ok().body(paDashboardService.findAllMyDocument());
     }
 
-    @GetMapping("/pa-dashboards/SpendByCostCenter")
-    public Map<String, Object> SpendByCostCenter() {
-        return paDashboardService.ContractSpendByCostCenter();
+    @GetMapping("/pa-dashboards/spendByCostCenter")
+    public ResponseEntity<List<DashboardChartDTO>> spendByCostCenter() {
+        //return paDashboardService.SpendByCostCenter();
+        return ResponseEntity.ok().body(paDashboardQueryService.getSpendByCostCtr());
+    }
 
+    @GetMapping("/pa-dashboards/prodPurchaseAmount")
+    public ResponseEntity<List<DashboardChartDTO>> prodPurchaseAmount() {
+        return ResponseEntity.ok().body(paDashboardQueryService.getProdPurchaseAmount());
     }
 
     @GetMapping("/pa-dashboards/vendorConfirmation")
@@ -124,10 +130,15 @@ public class PaDashboardResource {
 
     }
 
+    @GetMapping("/pa-dashboards/topVendorAmount")
+    public ResponseEntity<List<Object[]>> topVendorPurchase(@RequestParam(value = "source") String source, @RequestParam(value = "total") Integer total) {
+        log.debug("REST request to get topVendorPurchase by source: " + source + ", total: " + total);
+        return ResponseEntity.ok().body(paDashboardQueryService.getTopVendorAmount(source, total));
+    }
+
     @GetMapping("/pa-dashboards/topVendorPurchase")
     public List<MPurchaseOrderDTO> topVendorPurchase() {
         return paDashboardService.topVendorPurchase();
-
     }
 
     /**
