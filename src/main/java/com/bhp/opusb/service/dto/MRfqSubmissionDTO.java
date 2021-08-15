@@ -43,6 +43,7 @@ public class MRfqSubmissionDTO extends AbstractAuditingDTO {
     private Long quotationId;
 
     private Long quoteSupplierId;
+    private String vendorName;
 
     private Long adOrganizationId;
 
@@ -57,9 +58,26 @@ public class MRfqSubmissionDTO extends AbstractAuditingDTO {
     private Long costCenterId;
 
     private List<MRfqSubmissionLineDTO> line;
+    private String location;
     
     public Long getId() {
         return id;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getVendorName() {
+        return vendorName;
+    }
+
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
     }
 
     public List<MRfqSubmissionLineDTO> getLine() {

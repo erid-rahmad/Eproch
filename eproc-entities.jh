@@ -2028,6 +2028,14 @@ entity MVendorPerformanceReport {
 	complaints Integer
 }
 
+entity MRfqView {
+	documentNo String
+	title String
+	dateRequired LocalDate
+	selectionMethod String maxlength(10)
+	joinedVendorCount Integer
+}
+
 // Enums
 enum AdAccessLevel {
 	SYS, SYS_CLN, CLN, CLN_ORG, CLN_VND
@@ -2931,6 +2939,8 @@ relationship ManyToOne {
 
 	MVendorPerformanceReport{vendor required} to CVendor
 	MVendorPerformanceReport{businessCategory} to CBusinessCategory
+
+	MRfqView{quotation required} to MRfq
 }
 
 // Allow filtering to all entities.
@@ -2949,4 +2959,4 @@ service * with serviceClass
 skipClient * except CProduct, CProductCategory, MProductCatalog, CGallery, CGalleryItem, CAttachment, MShoppingCart, MShoppingCartItem
 
 // read-only for view based entities
-readOnly MVendorPerformanceReport
+readOnly MVendorPerformanceReport, MRfqView

@@ -14,6 +14,7 @@ public interface MRfqSubmissionMapper extends EntityMapper<MRfqSubmissionDTO, MR
 
     @Mapping(source = "quotation.id", target = "quotationId")
     @Mapping(source = "quoteSupplier.id", target = "quoteSupplierId")
+    @Mapping(source = "quoteSupplier.vendor.name", target = "vendorName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "businessClassification.id", target = "businessClassificationId")
     @Mapping(source = "businessCategory.id", target = "businessCategoryId")
