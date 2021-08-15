@@ -26,11 +26,11 @@
             <div class=" md-layout md-gutter" style="margin: 10px 1px;">
                 <div :id="'LayoutItem-' + id + '-' + index" :class="'md-layout-item ' + getWidthClass('Accordion-' + id)"  
                     v-for="(item, index) in items"
-                        :key="item.id"
+                        :key="item.id  + '-' + index"
                     style="margin: 5px 0 !important;"
                     @click="onCardClicked(item);"
                 >
-                    <md-card md-with-hover class="bg-pattern" style="width: 100%; border-radius: 6px; padding: 10px 12px;">
+                    <md-card v-loading="item.isLoading" md-with-hover class="bg-pattern" style="width: 100%; border-radius: 6px; padding: 10px 12px;">
                         <md-card-header style="padding: 0; margin: 0;">
                             <md-card-header-text align="left">
                                 <div class="wl-caption">{{ item.name }}</div>
