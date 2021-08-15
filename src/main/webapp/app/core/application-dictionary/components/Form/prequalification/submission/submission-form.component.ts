@@ -326,7 +326,11 @@ export default class SubmissionForm extends Mixins(AccessLevelMixin, Props) {
   }
 
   handleDownload(url) {
-    window.open(url, '_blank');
+    let downloadUrl:string =url;
+    if(!downloadUrl.startsWith('https')){
+      downloadUrl = downloadUrl.replace('http','https');
+    }
+    window.open(downloadUrl, '_blank');
   }
 
   cancelAttachment(biddingSubCriteria: any) {

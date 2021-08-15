@@ -123,7 +123,7 @@ public class MPrequalificationInformationService {
         MPrequalificationProcess step = mPrequalificationInformationDTO.getStep();
 
         if(MPrequalificationProcess.INFO.equals(step)){
-            if (preqInfo.getDocumentNo() == null) {
+            if (preqInfo.getDocumentNo() == null || preqInfo.getDocumentNo().isBlank()) {
                 preqInfo.setDocumentNo(DocumentUtil.buildDocumentNumber("PQ-", mPrequalificationInformationRepository));
             }
             if (!StringUtils.hasLength(preqInfo.getStatus())) {

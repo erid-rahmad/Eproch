@@ -234,6 +234,7 @@
     <include file="config/liquibase/changelog/20210814083500_added_entity_MQuoteSupplier.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210814134800_added_entity_MRfqSubmission.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210814142000_added_entity_MRfqSubmissionLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210815051300_added_entity_MRfqView.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
