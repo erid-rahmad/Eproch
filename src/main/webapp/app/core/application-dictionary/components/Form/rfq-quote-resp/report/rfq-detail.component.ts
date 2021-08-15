@@ -54,6 +54,8 @@ export default class RfqDetail extends Mixins(AccessLevelMixin, VendorEvaluation
   selectedWinner :any = {};
   selectedWinners:any[]=[];
 
+  contractParameter = {};
+
   created(){
     console.log(this.data);
 
@@ -154,6 +156,65 @@ export default class RfqDetail extends Mixins(AccessLevelMixin, VendorEvaluation
       this.$message.warning("Select at least 1 winner.");
     else {
       console.log(this.selectedWinners);
+      let quotation:any = {};
+      let contractCount = 0;
+      Promise.allSettled([
+        new Promise<boolean>((resolve, reject)=>{
+          this.commonService(`/api/m-rfqs/${this.data.quotationId}`).retrieve().then((res)=>{
+            quotation = res.data;
+            resolve(true);
+          }).catch((err)=>{
+            console.log(err);
+            reject(false);
+          })
+        }),
+        new Promise<boolean>((resolve, reject)=>{
+          this.commonService(`/api/m-contracts/count`).retrieve({
+            criteriaQuery: this.updateCriteria([
+            `quotationId.equals=${this.data.quotationId}`
+            ])
+          }).then((res)=>{
+            contractCount = res.data;
+            resolve(true);
+          }).catch((err)=>{
+            console.log(err);
+            reject(false);
+          })
+        })
+      ]).then((res)=>{
+        if(quotation.id){
+          if(contractCount==0){
+            this.$emit('generatingContract', true)
+            this.contractParameter = {
+              adOrganizationId: quotation.adOrganizationId,
+              quotationId: this.data.quotationId,
+              name: this.data.title,
+              costCenterId: quotation.costCenterId,
+              //picUserId: row.vendorConfirmationPicId,
+              //vendorId: row.vendorId,
+              startDate: quotation.dateTrx,
+              expirationDate: quotation.dateRequired,
+              vendorEvaluationId: null,
+              evaluationPeriod: null,
+              currencyId: quotation.currencyId,
+              price: this.data.grandTotal,
+              rfqSubmissions: this.joinedSuppliers
+            };
+
+            console.log(this.contractParameter);
+
+            this.commonService("/api/m-contracts/generate-from-rfq").create(this.contractParameter)
+            .then(res => this.$message.success(`Contract(s) has been generated successfully`))
+            .catch(err => {
+              console.error('Failed to generate contract', err);
+              this.$message.error('Failed to generate contract');
+              //this.contractParameterFormVisible = false;
+            })
+            .finally(() => this.$emit('generatingContract', false));
+          } else this.$message.error("Contract already generated");
+        } else this.$message.error("Cannot find Quotation");
+      })
+      
     }
   }
 }

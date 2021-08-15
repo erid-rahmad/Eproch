@@ -2,7 +2,7 @@
   <div class="app-container card-view">
     <div class="form-toolbar">
       <el-button icon="el-icon-close" size="mini" type="danger" @click="viewDetail = false" v-if="viewDetail"> Close </el-button>
-      <el-button size="mini" type="primary" @click="showContract()" v-if="viewDetail"> Generate Contract </el-button>
+      <el-button size="mini" type="primary" @click="showContract()" v-if="viewDetail" :disabled="generatingContract"> Generate Contract </el-button>
     </div>
     <div class="card" v-if="!viewDetail">
       <el-form ref="filterForm" label-position="left" label-width="200px" :model="filter" size="mini">
@@ -46,7 +46,7 @@
           <el-table-column label="Title" min-width="200" prop="title" show-overflow-tooltip sortable></el-table-column>
           <el-table-column label="Date Required" min-width="150" show-overflow-tooltip>
             <template slot-scope="{ row }">
-              {{ formatTimeRemaining(row.dateRequired) }}
+              {{ formatTimeRemaining(row) }}
             </template>
           </el-table-column>
           <el-table-column label="Type" min-width="170" sortable>
@@ -79,7 +79,7 @@
       </el-form>
     </div>
     <div class="card" v-if="viewDetail">
-      <rfq-detail ref="rfqDetail" :data="selectedRow"></rfq-detail>
+      <rfq-detail ref="rfqDetail" :data="selectedRow" @generatingContract="toggleContract"></rfq-detail>
     </div>
 
     <el-dialog :visible.sync="showJoinedVendors" class="joined-vendor-dialog" title="Joined Vendors" width="70%">

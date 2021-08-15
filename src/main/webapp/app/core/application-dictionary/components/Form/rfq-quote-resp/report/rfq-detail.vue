@@ -42,9 +42,13 @@
             highlight-current-row @current-change="onCurrentRowChanged" @selection-change="onSelectionChanged">
             <el-table-column align="center" fixed type="selection" width="48"/>
             <el-table-column label="Symbol" min-width="75"> </el-table-column>
+            <el-table-column label="Ranking" min-width="100" show-overflow-tooltip> 
+              <template slot-scope="{ $index }">
+                {{ $index + 1 }}
+              </template>
+            </el-table-column>
             <el-table-column label="Supplier" min-width="150" prop="vendorName" show-overflow-tooltip> </el-table-column>
             <el-table-column label="Quote" min-width="100" prop="quoteSupplierId" show-overflow-tooltip> </el-table-column>
-            <el-table-column label="Online" min-width="100" show-overflow-tooltip> </el-table-column>
           </el-table>
         </div>
       </el-col>

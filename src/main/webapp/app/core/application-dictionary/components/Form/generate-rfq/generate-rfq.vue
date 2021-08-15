@@ -116,7 +116,6 @@
               clearable
               filterable
               placeholder="Select Organization"
-              @change="retrievePurchaseRequisitionLines"
             >
               <el-option
                 v-for="item in organizationOptions"

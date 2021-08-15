@@ -40,6 +40,8 @@ export default class VendorPerformanceReport extends mixins(AccessLevelMixin) {
   loadingJoinedVendors = false;
   joinedVendors: any[] = [];
 
+  generatingContract = false;
+
   onCurrentRowChanged(row: any) {
     this.selectedRow = row;
   }
@@ -146,18 +148,18 @@ export default class VendorPerformanceReport extends mixins(AccessLevelMixin) {
     return `${val}`;
   }
 
-  formatTimeRemaining(date) {
-    if (!date) {
+  formatTimeRemaining(row) {
+    if (!row.dateRequired || (row.selectionMethod=='P'||row.selectionMethod=='T')) {
       return '-';
     }
 
-    if (this.currentDate >= new Date(date)) {
+    if (this.currentDate >= new Date(row.dateRequired)) {
       return '-';
     }
 
     const duration = intervalToDuration({
       start: this.currentDate,
-      end: new Date(date)
+      end: new Date(row.dateRequired)
     });
 
     return formatDuration(duration, {
@@ -186,5 +188,9 @@ export default class VendorPerformanceReport extends mixins(AccessLevelMixin) {
 
   showContract(){
     (<any>this.$refs.rfqDetail).createContract();
+  }
+
+  toggleContract(bool: boolean){
+    this.generatingContract = bool;
   }
 }

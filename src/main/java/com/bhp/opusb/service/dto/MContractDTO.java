@@ -99,6 +99,8 @@ public class MContractDTO extends AbstractAuditingDTO {
     private String biddingName;
     private String biddingNo;
 
+    private Long quotationId;
+
     private Long costCenterId;
     private String costCenterName;
 
@@ -111,6 +113,14 @@ public class MContractDTO extends AbstractAuditingDTO {
 
     public List<MContractLineDTO> getLineDTOList() {
         return lineDTOList;
+    }
+
+    public List<MRfqSubmissionDTO> getRfqSubmissions() {
+        return rfqSubmissions;
+    }
+
+    public void setRfqSubmissions(List<MRfqSubmissionDTO> rfqSubmissions) {
+        this.rfqSubmissions = rfqSubmissions;
     }
 
     public void setLineDTOList(List<MContractLineDTO> lineDTOList) {
@@ -153,6 +163,8 @@ public class MContractDTO extends AbstractAuditingDTO {
     private List<MContractDocumentDTO> contractDocuments = new ArrayList<>();
 
     private long negoLineId;
+
+    private List<MRfqSubmissionDTO> rfqSubmissions;
 
     public long getNegoLineId() {
         return negoLineId;
@@ -432,6 +444,14 @@ public class MContractDTO extends AbstractAuditingDTO {
 
     public void setBiddingNo(String biddingNo) {
         this.biddingNo = biddingNo;
+    }
+
+    public Long getQuotationId() {
+        return quotationId;
+    }
+    
+    public void setQuotationId(Long mRfqId) {
+        this.quotationId = mRfqId;
     }
 
     public Long getCostCenterId() {

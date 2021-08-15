@@ -9,7 +9,7 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link MContract} and its DTO {@link MContractDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, MBiddingMapper.class, CCostCenterMapper.class, CCurrencyMapper.class, CDocumentTypeMapper.class, AdUserMapper.class, CVendorMapper.class, CVendorEvaluationMapper.class})
+@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, MBiddingMapper.class, MRfqMapper.class, CCostCenterMapper.class, CCurrencyMapper.class, CDocumentTypeMapper.class, AdUserMapper.class, CVendorMapper.class, CVendorEvaluationMapper.class})
 public interface MContractMapper extends EntityMapper<MContractDTO, MContract> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
@@ -17,6 +17,7 @@ public interface MContractMapper extends EntityMapper<MContractDTO, MContract> {
     @Mapping(source = "bidding.id", target = "biddingId")
     @Mapping(source = "bidding.name", target = "biddingName")
     @Mapping(source = "bidding.documentNo", target = "biddingNo")
+    @Mapping(source = "quotation.id", target = "quotationId")
     @Mapping(source = "costCenter.id", target = "costCenterId")
     @Mapping(source = "currency.id", target = "currencyId")
     @Mapping(source = "costCenter.name", target = "costCenterName")
@@ -32,6 +33,7 @@ public interface MContractMapper extends EntityMapper<MContractDTO, MContract> {
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "biddingId", target = "bidding")
+    @Mapping(source = "quotationId", target = "quotation")
     @Mapping(source = "costCenterId", target = "costCenter")
     @Mapping(source = "currencyId", target = "currency")
     @Mapping(source = "documentTypeId", target = "documentType")
