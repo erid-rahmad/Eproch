@@ -27,6 +27,15 @@ public class MRfqViewDTO implements Serializable {
 
     private Long quotationId;
     private BigDecimal grandTotal;
+    private LocalDate dateTrx;
+
+    public LocalDate getDateTrx() {
+        return dateTrx;
+    }
+
+    public void setDateTrx(LocalDate dateTrx) {
+        this.dateTrx = dateTrx;
+    }
     
     public Long getId() {
         return id;

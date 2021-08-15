@@ -32,27 +32,68 @@ export default class RfqDetail extends Mixins(AccessLevelMixin, VendorEvaluation
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
 
-  private chart:any;
+  private chart:any[] = [];
   private chartConfig: any= {
     type : "bar",
     data : {
       labels: [""],
       datasets : [{
-        label: "",
+        label: "Saved Value (Rp. )",
         data: [],
         backgroundColor : '#b0d5ed',
         borderColor : "#FF5370"
       }]
+    },
+    options:{
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            // Include a dollar sign in the ticks
+            callback: function(value, index, values) {
+                return 'Rp. ' + value;
+            }
+          }
+        }
+      }
+    }
+  };
+  private chartConfig2: any= {
+    type: 'scatter',
+    data: {datasets: [{
+      label: 'Best Quotes By Time',
+      data: [],
+      backgroundColor: 'rgb(255, 99, 132)'
+    }]},
+    options: {
+      scales: {
+        x: {
+          type: 'linear',
+          position: 'bottom'
+        },
+        y: {
+          ticks: {
+              // Include a dollar sign in the ticks
+              callback: function(value, index, values) {
+                  return 'Rp. ' + value;
+              }
+          }
+        }
+      }
     }
   };
 
-  chartId= "performanceChart";
+  chartId = "bestQuotesByTime";
+  chartId2= "bestSavesBySupplier";
   currentDate = new Date();
 
   private processing: boolean= false;
 
   selectedWinner :any = {};
   selectedWinners:any[]=[];
+
+  colors: any = [];
+  borderColors: any = [];
 
   contractParameter = {};
 
@@ -80,18 +121,18 @@ export default class RfqDetail extends Mixins(AccessLevelMixin, VendorEvaluation
   }
 
   mounted(){
-    /*
     this.$nextTick(()=>{
       this.initChart();
     });
-    */
   }
 
   initChart(){
     try{
-      const context= document.getElementById(this.chartId);
-      console.log("context : " , context);
-      this.chart= new Chart(context, this.chartConfig);
+      let context= document.getElementById(this.chartId);
+      this.chart.push(new Chart(context, this.chartConfig));
+
+      context= document.getElementById(this.chartId2);
+      this.chart.push(new Chart(context, this.chartConfig2));
     }catch(e){
       console.log(e);
     }
@@ -113,25 +154,43 @@ export default class RfqDetail extends Mixins(AccessLevelMixin, VendorEvaluation
       (res)=>{
         console.log(res.data);
         this.joinedSuppliers = res.data;
-        /*
-        this.analis = res.data;
-        let contractPerformanceLabel: any[]= [];
-        let contractPerformanceData: any[]= [];
+        
+        let savingsLabel: any[]= [];
+        let savingsData: any[]= [];
 
-        this.analis.performanceProjectAnalysis.forEach(el => {
-          contractPerformanceLabel.push(el.documentNo);
-          contractPerformanceData.push(el.totalScore);
+        let quotesData: any[] = [];
+
+        this.joinedSuppliers.forEach(el => {
+          let colorString = '#'+Math.random().toString(16).substr(2,6);
+          this.colors.push(colorString+'40');
+          this.borderColors.push(colorString);
+
+          savingsLabel.push(el.vendorName);
+          savingsData.push(el.submissionGrandTotal - this.data.grandTotal);
+
+          let timeDiff= Math.abs(new Date(el.dateSubmitted).getTime() - new Date(this.data.dateTrx).getTime());
+          let dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+          quotesData.push({x:dayDiff, y:el.submissionGrandTotal});
         });
 
-        if(this.chart){
-
+        if(this.chart[0]){
           console.log("refreshing chart data ");
-          this.chartConfig.data.labels= contractPerformanceLabel;
-          this.chartConfig.data.datasets[0].data= contractPerformanceData;
+          this.chartConfig.data.labels= savingsLabel;
+          this.chartConfig.data.datasets[0].data= savingsData;
+          this.chartConfig.data.datasets[0].backgroundColor= this.colors;
+          this.chartConfig.data.datasets[0].borderColor= this.borderColors;
           
-          this.chart.update();
+          this.chart[0].update();
         }
-        */
+
+        if(this.chart[1]){
+          console.log("refreshing chart data ");
+          this.chartConfig2.data.datasets[0].data = quotesData;
+          this.chartConfig2.data.datasets[0].backgroundColor= this.colors;
+          
+          this.chart[1].update();
+        }
+        
         this.processing= false;
       })
     .catch(

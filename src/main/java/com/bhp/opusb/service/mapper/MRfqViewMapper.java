@@ -13,6 +13,7 @@ import org.mapstruct.*;
 public interface MRfqViewMapper extends EntityMapper<MRfqViewDTO, MRfqView> {
 
     @Mapping(source = "quotation.id", target = "quotationId")
+    @Mapping(source = "quotation.dateTrx", target = "dateTrx")
     @Mapping(source = "quotation.grandTotal", target = "grandTotal")
     MRfqViewDTO toDto(MRfqView mRfqView);
 
