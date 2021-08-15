@@ -210,6 +210,7 @@ public class MRfqService {
                         .adOrganization(mRfq.getAdOrganization())
                         .warehouse(mRequisition.getWarehouse())
                         .documentAction("SMT").documentStatus("DRF")
+                        .approved(false).processed(false)
                         .title(mRfq.getTitle()).description(mRfq.getDescription())
                         .dateTrx(mRfq.getDateTrx()).datePromised(mRfq.getDatePromised()).dateRequired(mRfq.getDateRequired())
                         .setCreatedBy(mRequisition.getCreatedBy()));
@@ -238,6 +239,7 @@ public class MRfqService {
             .dateRequired(mPurchaseOrder.getDateRequired())
             .documentAction("SMT")
             .documentStatus("DRF")
+            .approved(false).processed(false)
             .product(mRequisitionLine.getProduct())
             .quotation(mPurchaseOrder)
             .releaseQty(mRequisitionLine.getQuantityOrdered().intValue())
