@@ -1265,6 +1265,10 @@ entity MAuction {
 	name String required maxlength(30)
 	description String
 
+	lastStartDate Instant
+	estEndDate Instant
+	remainingTime Duration
+
 	// Common transactional fields.
 	dateTrx ZonedDateTime
 	documentNo String maxlength(30)
@@ -1324,6 +1328,14 @@ entity MAuctionItem {
 	active Boolean
 }
 
+entity MAuctionEventLog {
+	action String required maxlength(10)
+	dateTrx Instant required
+	username String required
+	price BigDecimal
+	note String
+}
+
 entity MAuctionSubmission {
 	uid UUID
 	active Boolean
@@ -1340,7 +1352,7 @@ entity MAuctionSubmissionLog {
 	action String required maxlength(10)
 	userName String required
 	price BigDecimal
-	dateTrx ZonedDateTime required
+	dateTrx Instant required
 	message String
 }
 
@@ -2593,6 +2605,10 @@ relationship ManyToOne {
 	MAuctionItem{auction required} to MAuction
 	MAuctionItem{product required} to CProduct
 	MAuctionItem{uom required} to CUnitOfMeasure
+
+	MAuctionEventLog{auction required} to MAuction
+	MAuctionEventLog{auctionItem} to MAuctionItem
+	MAuctionEventLog{vendor} to CVendor
 
 	MAuctionContent{adOrganization required} to ADOrganization
 

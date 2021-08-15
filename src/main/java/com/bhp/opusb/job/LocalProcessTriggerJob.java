@@ -1,7 +1,5 @@
 package com.bhp.opusb.job;
 
-import java.util.HashMap;
-
 import com.bhp.opusb.service.AdTriggerService;
 
 import org.quartz.Job;
@@ -20,8 +18,7 @@ public class LocalProcessTriggerJob implements Job {
     JobDataMap jobDataMap = executionContext.getMergedJobDataMap();
     String serviceName = jobDataMap.getString("serviceName");
 
-    // TODO Should be able to pass the trigger parameters.
-    triggerService.executeProcess(serviceName, new HashMap<>(1));
+    triggerService.executeProcess(serviceName, jobDataMap.getWrappedMap());
   }
   
 }

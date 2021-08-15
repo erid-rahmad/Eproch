@@ -112,6 +112,16 @@
               >
                 <svg-icon name="link"></svg-icon> View
               </el-button>
+
+              <el-button
+                class="button"
+                :disabled="row.documentStatus !== 'ACC'"
+                size="mini"
+                type="primary"
+                @click="viewSubmission(row)"
+              >
+                <svg-icon name="link"></svg-icon> Bid
+              </el-button>
             </template>
           </el-table-column>
 
@@ -137,6 +147,11 @@
         :tab.sync="setupTabName"
       ></auction-invitation-detail>
 
+      <bid-submission
+        v-else-if="submissionPage"
+        ref="submissionPage"
+        :data="auction"
+      ></bid-submission>
     </div>
   </div>
 </template>

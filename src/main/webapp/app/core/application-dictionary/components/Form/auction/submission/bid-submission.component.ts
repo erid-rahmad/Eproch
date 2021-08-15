@@ -1,27 +1,27 @@
 import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
+import AdTriggerService from '@/entities/ad-trigger/ad-trigger.service';
+import CountdownTimer from "@/shared/components/CountdownTimer/index.vue";
 import { AccountStoreModule } from '@/shared/config/store/account-store';
-import { intervalToDuration } from 'date-fns';
-import dayjs from 'dayjs';
-import duration from "dayjs/plugin/duration";
 import { isEmpty } from 'lodash';
 import { Component, Inject, Mixins, Vue, Watch } from 'vue-property-decorator';
 import AuctionService from '../auction.service';
 
-dayjs.extend(duration);
-
 const baseApiAuctionItem = 'api/m-auction-items';
-const baseApiAuctionRule = 'api/m-auction-rules';
+const baseApiAuctionSubmissionItem = 'api/m-auction-submission-items';
+const baseApiAuctionEventLog = 'api/m-auction-event-logs';
 
-const durationFormats = new Map([
-  ['years', ['years', 'months']],
-  ['months', ['months', 'days']],
-  ['days', ['days', 'hours', 'minutes']],
-  ['hours', ['hours', 'minutes', 'seconds']],
-])
+const auctionStatuses = {
+  'FIN': 'Finished',
+  'PAS': 'Paused',
+  'STR': 'Started',
+  'STP': 'Stopped'
+};
 
 const BidSubmissionProp = Vue.extend({
   props: {
+    auctionStatus: String,
+    activeLotId: Number,
     data: {
       type: Object,
       default: () => {
@@ -31,46 +31,59 @@ const BidSubmissionProp = Vue.extend({
   }
 });
 
-@Component
+@Component({
+  components: {
+    CountdownTimer
+  }
+})
 export default class BidSubmission extends Mixins(AccessLevelMixin, BidSubmissionProp) {
 
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
-  private auctionWsService: AuctionService = new AuctionService();
+  @Inject('adTriggerService')
+  private adTriggerService: () => AdTriggerService;
 
-  // These props are used to show the remainingTime.
-  private timerId;
-  private intervalId;
-  private currentDate = new Date();
+  private auctionWsService: AuctionService = new AuctionService();
 
   gutterSize = 24;
 
-  auction: any = {
-    currencyName: 'IDR',
-    leadingBid: null,
-    decrement: 1000,
-    actualEndDate: '2021-05-31T23:59:59'
-  };
+  auction: any = {};
 
   auctionRule: any = {};
-
   auctionItems: any[] = [];
+  submissionItems: any[] = [];
 
   bidForm: any = {
-    amount: this.auction.decrement
+    amount: 0
   };
 
-  bidLogs: any[] = [];
-
-  selectedItem: any = {};
+  eventLog: any[] = [];
   selectedItemId: number = null;
 
   rank: string | number = null;
+  leadingBidPrice: number = null;
+  
+  originalPrice: number = null;
+  tmpPrice: number = null;
 
+  bidConfirmationVisible: boolean = false;
   loadingAuctionItems: boolean = false;
+  loadingEventLog: boolean = false;
 
   timerRefreshInterval: number = 60000;
+
+  get isOngoing() {
+    return this.auctionItems.some(item => item.auctionStatus === 'STR');
+  }
+
+  get isPaused() {
+    return this.auctionItems.some(item => item.auctionStatus === 'PAS');
+  }
+
+  get isVendor() {
+    return AccountStoreModule.isVendor;
+  }
 
   get rankType() {
     if (this.rank === 3) {
@@ -88,60 +101,112 @@ export default class BidSubmission extends Mixins(AccessLevelMixin, BidSubmissio
     return 'info';
   }
 
-  get selectedItemGrid() {
-    return isEmpty(this.selectedItem) ? [] : [ this.selectedItem ];
+  get selectedItem() {
+    return this.auctionItems.find(item => item.id === this.selectedItemId) || {};
   }
 
-  get timeRemaining() {
-    if (!this.auction.actualEndDate) {
-      return '';
-    }
-/*
-    if (this.currentDate >= new Date(this.auction.actualEndDate)) {
-      return 'Event has been ended';
-    }
- */
-    return dayjs.duration({
-      hours: 0,
-      minutes: 10,
-      seconds: 0,
-    }).format('HH:mm:ss');
+  get selectedItemGrid() {
+    console.log('Compute selectedItemGrid... data:', this.selectedItem);
+    return isEmpty(this.selectedItem) ? [] : [ this.selectedItem ];
   }
 
   @Watch('data')
   onDataChanged(data: any) {
+    this.auction = {...data};
     this.retrieveAuctionItems(data.id);
   }
 
-  onItemSelected(itemId: number) {
-    this.selectedItem = this.auctionItems.find(item => item.id === itemId);
+  onBidDecrementChanged(value: number) {
+    const bidPrice = this.selectedItem.ceilingPrice - value;
+    this.updateExtendedPrice(this.selectedItem.id, bidPrice);
   }
 
-  created() {
+  onItemSelected(itemId: number) {
+    this.$emit('update:activeLotId', this.selectedItem.id);
+    this.$emit('update:auctionStatus', this.selectedItem.auctionStatus);
+
+    const decrement = this.selectedItem.bidDecrement || 0;
+
+    this.$set(this.bidForm, 'amount', decrement === null ? 0 : decrement);
+    this.retrieveLowestPrice(itemId);
+    this.retrieveEventLog(this.auction.id, itemId);
+  }
+
+  async created() {
     this.onDataChanged(this.data);
-    this.updateTimer();
   }
 
   mounted() {
     this.auctionWsService.connect();
     this.auctionWsService.subscribe(this.data.id);
     this.auctionWsService.receive().subscribe(data => {
-      console.log('Auction info has been updated.', data);
+      const log = data.log;
+
+      // Update auctionStatus to determine available actions for the auction.
+      // This will delegate up to parent component.
+      const item = data.lot;
+      if (item?.auctionStatus) {
+        this.$emit('update:auctionStatus', item.auctionStatus);
+      }
+
+      // Update the respective item in the item list.
+      const itemIndex = this.auctionItems.findIndex(el => el.id === item.id);
+      const currentItem = this.auctionItems[itemIndex];
+      item.watched = currentItem.watched;  // Retain the watched property.
+      item.bidPrice = currentItem.bidPrice;  // Retain the bidPrice property.
+      item.amount = currentItem.quantity * item.bidPrice;
+      this.auctionItems.splice(itemIndex, 1, item);
+      console.log('Item updated.', this.auctionItems);
+
+      this.auction = data.auction;
+      const action: string = log.action;
+      const timer: any = this.$refs.countdownTimer;
+
+      if (['TRM', 'PAS', 'FIN'].includes(action)) {
+        timer.stop();
+      } else if (action === 'STR') {
+        timer.start();
+      } else if (action === 'BID') {
+        // Update the proposed price of the respective lot.
+        if (this.leadingBidPrice > data.bid.price) {
+          this.updateLowestPrice(item.id, data.bid.price);
+        }
+
+        log.username = data.bid.vendorName;
+      }
+
+      // Append the new log into eventLog.
+      this.eventLog.unshift(log);
     });
   }
 
   beforeDestroy() {
-    clearInterval(this.intervalId);
-    clearTimeout(this.timerId);
     this.auctionWsService.unsubscribe();
     this.auctionWsService.disconnect();
   }
 
-  private retrieveRule(auctionId: number) {
-    // abc
+  confirmResponse(extendedPrice: number) {
+    this.tmpPrice = extendedPrice;
+    this.bidConfirmationVisible = true;
+  }
+
+  getItemClassNames(item: any) {
+    const status = item.auctionStatus;
+
+    return {
+      'is-watched': item.watched,
+      'is-done': status === 'FIN',
+      'is-ongoing': status === 'STR',
+      'is-paused': status === 'PAS'
+    };
+  }
+
+  printStatus(value: string) {
+    return auctionStatuses[value];
   }
 
   private retrieveAuctionItems(auctionId: number) {
+    this.loadingAuctionItems = true;
     this.commonService(baseApiAuctionItem)
       .retrieve({
         criteriaQuery: [
@@ -151,75 +216,141 @@ export default class BidSubmission extends Mixins(AccessLevelMixin, BidSubmissio
         paginationQuery: {
           page: 0,
           size: 1000,
-          sort: ['id,desc']
+          sort: ['id']
         }
       })
       .then(res => {
-        this.auctionItems = (res.data as any[]).map((item, idx) => {
-          item.status = idx === 0 ? 'P' : 'N';
+        this.auctionItems = res.data.map(item => {
+          item.lowestPrice = item.ceilingPrice;
           return item;
         });
-        if (this.auctionItems.length) {
-          this.selectedItemId = this.auctionItems[0].id;
-          this.onItemSelected(this.selectedItemId);
+
+        if (this.isOngoing) {
+          this.$nextTick(() => (this.$refs.countdownTimer as any).start());
         }
-      });
+
+        if (this.auctionItems.length) {
+          const activeItem = this.auctionItems.find(item => ['STR', 'PAS'].includes(item.auctionStatus) || item.auctionStatus === null);
+
+          this.selectedItemId = activeItem?.id || this.auctionItems[0].id;
+          console.log('Auction items retrieved. selected ID:', this.selectedItemId);
+          this.onItemSelected(this.selectedItemId);
+          
+          if (this.isVendor) {
+            this.retrieveSubmissionItems(this.auction.id);
+          }
+        }
+      })
+      .finally(() => this.loadingAuctionItems = false);
   }
 
-  submitBid(amount: number) {
-    let price: number;
+  private retrieveSubmissionItems(auctionId: number) {
+    this.loadingAuctionItems = true;
+    this.commonService(baseApiAuctionSubmissionItem)
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          `auctionId.equals=${auctionId}`,
+          `vendorId.equals=${this.vendorInfo.id}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 1000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.submissionItems = res.data;
 
-    if (this.auction.leadingBid === null) {
-      price = this.selectedItem.ceilingPrice - amount;
-    } else {
-      price = this.auction.leadingBid - amount;
-    }
+        this.auctionItems = this.auctionItems.map(item => {
+          const mappedItem = {...item};
+          const watchedItem = this.submissionItems.find(submissionItem => submissionItem.auctionItemId === item.id);
 
-    this.$set(this.auction, 'leadingBid', price);
-    this.rank = 1;
+          mappedItem.bidPrice = watchedItem?.price || 0;
+          mappedItem.watched = watchedItem || false;
 
-    this.bidLogs.push({
-      vendorName: AccountStoreModule.vendorInfo.name,
-      price,
-      dateSubmit: new Date().toISOString()
-    })
+          if (mappedItem.bidPrice) {
+            mappedItem.amount = mappedItem.quantity * mappedItem.bidPrice;
+          }
+          return mappedItem;
+        });
+        console.log('Extended price applied. items:', this.auctionItems);
+      })
+      .finally(() => this.loadingAuctionItems = false);
   }
 
-  private updateCurrentDate() {
-    this.currentDate = new Date();
-
-    const duration = intervalToDuration({
-      start: this.currentDate,
-      end: new Date(this.auction.actualEndDate)
-    });
-
-    let refreshInterval;
-
-    if (duration.months) {
-      refreshInterval = 1440000;
-    } else if (duration.days) {
-      refreshInterval = 60000;
-    } else {
-      refreshInterval = 1000;
-    }
-
-    if (refreshInterval !== this.timerRefreshInterval) {
-      this.timerRefreshInterval = refreshInterval;
-      this.updateTimer();
-    }
+  private retrieveEventLog(auctionId: number, itemId: number) {
+    this.loadingEventLog = true;
+    this.commonService(baseApiAuctionEventLog)
+      .retrieve({
+        criteriaQuery: [
+          `auctionId.equals=${auctionId}`,
+          `auctionItemId.equals=${itemId}`,
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['dateTrx,desc']
+        }
+      })
+      .then(res => this.eventLog = res.data)
+      .finally(() => this.loadingEventLog = false);
   }
 
-  private updateTimer() {
-    clearInterval(this.intervalId);
-    clearTimeout(this.timerId);
-    this.timerId = setTimeout(() => {
-      this.intervalId = setInterval(this.updateCurrentDate, this.timerRefreshInterval);
-      this.updateCurrentDate();
+  private retrieveLowestPrice(itemId: number) {
+    this.loadingAuctionItems = true;
+    this.commonService(`${baseApiAuctionEventLog}/min-price`)
+      .find(itemId)
+      .then(res => this.updateLowestPrice(itemId, res?.minPrice))
+      .finally(() => this.loadingAuctionItems = false);
+  }
 
-      if (this.currentDate >= new Date(this.auction.actualEndDate)) {
-        clearInterval(this.intervalId);
-        clearInterval(this.timerId);
+  private updateExtendedPrice(itemId: number, extendedPrice: number) {
+    if (extendedPrice === null || extendedPrice === undefined) {
+      return;
+    }
+
+    const currentItemIdx = this.auctionItems.findIndex(item => item.id === itemId);
+    const currentItem = this.auctionItems[currentItemIdx];
+    currentItem.bidPrice = extendedPrice || 0;
+    currentItem.amount = currentItem.quantity * extendedPrice;
+    this.auctionItems.splice(currentItemIdx, 1, currentItem);
+  }
+
+  private updateLowestPrice(itemId: number, lowestPrice: number) {
+    if (lowestPrice === null || lowestPrice === undefined) {
+      return;
+    }
+
+    this.leadingBidPrice = lowestPrice;
+  }
+
+  spanEventLogColumns({ row, column, rowIndex, columnIndex }) {
+    if (['STR', 'STP', 'PAS', 'FIN'].includes(row.action)) {
+      if (columnIndex === 0) {
+        return { rowspan: 1, colspan: 2 };
+      } else if (columnIndex === 1) {
+        return [0, 0];
       }
-    }, (60 - this.currentDate.getSeconds()) * 1000);
+    }
+  }
+
+  submitBid() {
+    const params = {
+      action: 'BID',
+      auctionId: this.auction.id,
+      itemId: this.selectedItem.id,
+      price: `${this.selectedItem.ceilingPrice - this.tmpPrice}`
+    }
+
+    this.adTriggerService().runService('mAuctionProcessTrigger', params)
+      .then(res => {
+        this.$message.success('Bid has been successfully submitted');
+        this.bidConfirmationVisible = false;
+      })
+      .catch(err => {
+        console.error('Failed to place bid', err);
+        this.$message.error('Failed to place a bid for the current lot');
+      })
   }
 }

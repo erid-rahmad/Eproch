@@ -1,12 +1,11 @@
 <template>
-  <div class="app-container bid-submission">
+  <div class="bid-submission">
     <el-container>
       <el-aside
         class="auction-info"
-        width="256px"
+        width="320px"
       >
         <ul>
-          <li>Information</li>
           <li>
             Select Line
             <div class="item-list">
@@ -17,7 +16,7 @@
                 <el-radio
                   v-for="item in auctionItems"
                   :key="item.id"
-                  :disabled="item.status !== 'P'"
+                  :class="getItemClassNames(item)"
                   :label="item.id"
                 >
                   {{ item.productCode }} {{ item.productName }}
@@ -35,21 +34,28 @@
               :sm="12"
             >
               <el-tag
+                v-if="isVendor"
                 class="bid-rank"
                 effect="dark"
                 :type="rankType"
               >
                 My Bid Rank: {{ rank }}
               </el-tag>
+              <template v-else>&nbsp;</template>
             </el-col>
             <el-col
               :xs="24"
               :sm="12"
             >
-              <div class="bid-timer">
-                <div class="timer-label">Time Remaining</div>
-                <div class="timer-value">{{ timeRemaining }}</div>
-              </div>
+              <countdown-timer
+                v-if="auctionItems.length"
+                ref="countdownTimer"
+                align-right
+                :auto-start="false"
+                :duration="auction.remainingTime"
+                :paused="isPaused"
+                :to-date="auction.estEndDate"
+              ></countdown-timer>
             </el-col>
           </el-row>
         </el-header>
@@ -68,24 +74,38 @@
                 :lg="12"
                 :xl="8"
               >
-                <el-form-item label="Leading Bid">
-                  {{ auction.currencyName }} {{ auction.leadingBid | formatCurrency }}
+                <template v-if="leadingBidPrice === null">&nbsp;</template>
+                <el-form-item
+                  v-else
+                  label="Leading Bid"
+                >
+                  {{ auction.currencyName }} {{ leadingBidPrice | formatCurrency }}
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col
+                :xs="24"
+                :sm="18"
+                :lg="12"
+                :xl="8"
+              >
                 <el-form-item label="Decrement">
                   <el-button
+                    :disabled="!isVendor || (!isOngoing && selectedItem.auctionStatus !== 'STR')"
                     size="mini"
                     title="Quick Bid"
-                    type="primary"
-                    @click="submitBid(auction.decrement)"
+                    plain
+                    @click="confirmResponse(selectedItem.bidDecrement)"
                   >
-                    <svg-icon name="tick"></svg-icon> {{ auction.decrement | formatCurrency }}
+                    <svg-icon
+                      v-if="isVendor"
+                      name="tick"
+                    ></svg-icon> {{ selectedItem.bidDecrement | formatCurrency }}
                   </el-button>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-table
+              v-loading="loadingAuctionItems"
               ref="mainGrid"
               border
               :data="selectedItemGrid"
@@ -93,12 +113,6 @@
               size="mini"
               style="margin-bottom: 8px;margin-top: 8px"
             >
-              <el-table-column width="50" label="No">
-                <template slot-scope="row">
-                  {{ row.$index + 1 }}
-                </template>
-              </el-table-column>
-
               <el-table-column
                 label="Item ID"
                 width="100"
@@ -125,78 +139,98 @@
               ></el-table-column>
 
               <el-table-column
-                label="Price"
-                width="200"
+                label="Ceiling Price"
+                min-width="150"
               >
-                <template slot-scope="{ row }">
+                <template v-slot="{ row }">
                   {{ row.ceilingPrice | formatCurrency }}
                 </template>
               </el-table-column>
 
               <el-table-column
-                label="Total"
-                width="200"
+                v-if="isVendor"
+                label="Ext. Price"
+                min-width="150"
               >
-                <template slot-scope="{ row }">
-                  {{ row.amount | formatCurrency }}
-                </template>
-              </el-table-column>
-            </el-table>
-            <el-row :gutter="gutterSize">
-              <el-col
-                :xs="24"
-                :sm="18"
-                :lg="12"
-                :xl="8"
-              >
-                <el-form-item label="Decrement Bid">
-                  <el-input-number
-                    v-model="bidForm.amount"
-                    :min="auction.decrement"
-                    :step="auction.decrement"
-                    step-strictly
-                  ></el-input-number>
-                </el-form-item>
-                <el-form-item label="">
-                  <el-button
-                    size="mini"
-                    type="primary"
-                    @click="submitBid(bidForm.amount)"
-                  >
-                    <svg-icon name="tick"></svg-icon> Bid
-                  </el-button>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-divider content-position="left">
-              Bid Logs
-            </el-divider>
-            <el-table
-              ref="logsGrid"
-              border
-              :data="bidLogs"
-              size="mini"
-              style="margin-top: 8px"
-            >
-              <el-table-column width="50" label="No">
-                <template slot-scope="row">
-                  {{ row.$index + 1 }}
+                <template v-slot="{ row }">
+                  {{ row.bidPrice | formatCurrency }}
                 </template>
               </el-table-column>
 
               <el-table-column
+                label="Total"
+                min-width="200"
+              >
+                <template v-slot="{ row }">
+                  {{ row.amount | formatCurrency }}
+                </template>
+              </el-table-column>
+            </el-table>
+
+            <el-row :gutter="gutterSize">
+              <el-col
+                :xs="24"
+                :sm="24"
+                :lg="12"
+                :xl="8"
+              >
+                <el-form-item
+                  v-if="isVendor"
+                  label="Decrement Bid"
+                >
+                  <el-input-number
+                    v-model="bidForm.amount"
+                    :disabled="!isOngoing && selectedItem.auctionStatus !== 'STR'"
+                    :min="0"
+                    size="mini"
+                    :step="selectedItem.bidDecrement || 1"
+                    step-strictly
+                    @change="onBidDecrementChanged"
+                  ></el-input-number>
+                  <el-button
+                    :disabled="!isOngoing && selectedItem.auctionStatus !== 'STR'"
+                    size="mini"
+                    type="primary"
+                    @click="confirmResponse(bidForm.amount)"
+                  >
+                    <svg-icon name="tick"></svg-icon> Submit Bid
+                  </el-button>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-divider content-position="left">
+              Event Log
+            </el-divider>
+            <el-table
+              v-loading="loadingEventLog"
+              ref="logsGrid"
+              border
+              :data="eventLog"
+              :fit="false"
+              :max-height="320"
+              size="mini"
+              style="margin-top: 8px"
+              :span-method="spanEventLogColumns"
+            >
+              <el-table-column
                 label="Participant"
-                width="200"
-                prop="vendorName"
                 show-overflow-tooltip
-              ></el-table-column>
+                min-width="200"
+              >
+                <template v-slot="{ row }">
+                  {{ ['FIN', 'STR', 'STP', 'PAS'].includes(row.action) ? printStatus(row.action) : row.vendorName }}
+                </template>
+              </el-table-column>
 
               <el-table-column
                 label="Price"
                 min-width="200"
               >
-                <template slot-scope="{ row }">
-                  {{ row.price | formatCurrency }}
+                <template v-slot="{ row }">
+                  <span v-if="row.action === 'BID'">
+                    {{ row.price | formatCurrency }}
+                  </span>
                 </template>
               </el-table-column>
 
@@ -204,8 +238,8 @@
                 label="Submission Time"
                 width="200"
               >
-                <template slot-scope="{ row }">
-                  {{ row.dateSubmit | formatDateTime }}
+                <template v-slot="{ row }">
+                  {{ row.dateTrx | formatDateTime }}
                 </template>
               </el-table-column>
             </el-table>
@@ -213,6 +247,33 @@
         </el-main>
       </el-container>
     </el-container>
+    <el-dialog
+      width="40%"
+      :visible.sync="bidConfirmationVisible"
+      title=""
+    >
+      <template>
+        <p>Are you sure to submit the response?</p>
+        <div slot="footer">
+          <el-button
+            size="mini"
+            icon="el-icon-close"
+            @click="bidConfirmationVisible = false"
+          >
+            {{ $t('entity.action.cancel') }}
+          </el-button>
+          <el-button
+            style="margin-left: 0px;"
+            size="mini"
+            icon="el-icon-check"
+            type="primary"
+            @click="submitBid"
+          >
+            Submit
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 <script lang="ts" src="./bid-submission.component.ts"></script>
@@ -220,11 +281,22 @@
 .bid-submission {
   .auction-info {
     .item-list {
-      .el-radio__input.is-checked .el-radio__inner {
-        animation: blink 2s infinite;
+      .el-radio {
 
-        @media (prefers-reduced-motion: reduce) {
-          animation: none;
+        .el-radio__label {
+          color: #c0c0c0;
+        }
+
+        &.is-watched .el-radio__label {
+          color: #1f2d3d;
+        }
+
+        &.is-ongoing .el-radio__input .el-radio__inner {
+          animation: blink 2s infinite;
+
+          @media (prefers-reduced-motion: reduce) {
+            animation: none;
+          }
         }
       }
     }
@@ -233,8 +305,8 @@
 
 @keyframes blink {
   0%, 100% {
-    border-color: #db4000;
-    background: #db4000;
+    border-color: #ff5252;
+    background: #ff5252;
   }
 
   50% {
@@ -251,13 +323,9 @@
     padding-left: 0;
   }
 
-  .bid-timer {
-    text-align: right;
-
-    .timer-value{
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
+  .el-header,
+  .el-main {
+    padding-right: 0;
   }
 }
 </style>

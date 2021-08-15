@@ -1,17 +1,21 @@
 package com.bhp.opusb.service;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.bhp.opusb.domain.AdTask;
 import com.bhp.opusb.domain.AdTaskScheduler;
 import com.bhp.opusb.domain.AdTaskSchedulerGroup;
 import com.bhp.opusb.domain.AdTrigger;
+import com.bhp.opusb.domain.AdTriggerParam;
 import com.bhp.opusb.domain.enumeration.AdSchedulerTrigger;
 import com.bhp.opusb.job.JobScheduleCreator;
 import com.bhp.opusb.repository.AdTaskRepository;
 import com.bhp.opusb.repository.AdTaskSchedulerGroupRepository;
 import com.bhp.opusb.repository.AdTaskSchedulerRepository;
+import com.bhp.opusb.repository.AdTriggerParamRepository;
 import com.bhp.opusb.repository.AdTriggerRepository;
 import com.bhp.opusb.service.dto.AdTaskSchedulerDTO;
 import com.bhp.opusb.service.mapper.AdTaskSchedulerMapper;
@@ -45,6 +49,7 @@ public class AdTaskSchedulerService {
 
     private final AdTaskRepository adTaskRepository;
     private final AdTriggerRepository adTriggerRepository;
+    private final AdTriggerParamRepository adTriggerParamRepository;
 
     private final AdTaskSchedulerMapper adTaskSchedulerMapper;
 
@@ -54,16 +59,15 @@ public class AdTaskSchedulerService {
 
     @Autowired
     public AdTaskSchedulerService(AdTaskSchedulerRepository adTaskSchedulerRepository,
-            AdTaskSchedulerGroupRepository adTaskSchedulerGroupRepository,
-            AdTaskRepository adTaskRepository,
-            AdTriggerRepository adTriggerRepository,
-            AdTaskSchedulerMapper adTaskSchedulerMapper, Scheduler scheduler,
-            JobScheduleCreator scheduleCreator) {
+            AdTaskSchedulerGroupRepository adTaskSchedulerGroupRepository, AdTaskRepository adTaskRepository,
+            AdTriggerRepository adTriggerRepository, AdTriggerParamRepository adTriggerParamRepository,
+            AdTaskSchedulerMapper adTaskSchedulerMapper, Scheduler scheduler, JobScheduleCreator scheduleCreator) {
 
         this.adTaskSchedulerRepository = adTaskSchedulerRepository;
         this.adTaskSchedulerGroupRepository = adTaskSchedulerGroupRepository;
         this.adTaskRepository = adTaskRepository;
         this.adTriggerRepository = adTriggerRepository;
+        this.adTriggerParamRepository = adTriggerParamRepository;
         this.adTaskSchedulerMapper = adTaskSchedulerMapper;
         this.scheduler = scheduler;
         this.scheduleCreator = scheduleCreator;
@@ -101,8 +105,13 @@ public class AdTaskSchedulerService {
 
         try {
             if (newRecord) {
-                // TODO Should be able to pass the trigger parameters for local process, 
-                JobDetail jobDetail = scheduleCreator.createJob(jobName, groupName, false, remote);
+                Map<String, Object> jobParams = null;
+                
+                if (adTaskSchedulerDTO.getAdTriggerId() != null) {
+                    jobParams = buildAdTriggerParams(adTaskSchedulerDTO.getAdTriggerId());
+                }
+                
+                JobDetail jobDetail = scheduleCreator.createJob(jobName, groupName, false, remote, jobParams);
                 Trigger trigger = createTrigger(adTaskScheduler, groupName);
                 scheduler.scheduleJob(jobDetail, trigger);
                 log.info("Job with key - {} scheduled sucessfully", jobDetail.getKey());
@@ -187,18 +196,18 @@ public class AdTaskSchedulerService {
      */
     public void delete(Long id) {
         log.debug("Request to delete AdTaskScheduler : {}", id);
-        Optional<AdTaskScheduler> taskScheduler = adTaskSchedulerRepository.findById(id);
+        Optional<AdTaskScheduler> adSchedulerRecord = adTaskSchedulerRepository.findById(id);
 
-        if (! taskScheduler.isPresent())
+        if (! adSchedulerRecord.isPresent())
             throw new IllegalArgumentException("There is no scheduler with ID " + id);
 
-        AdTaskScheduler record = taskScheduler.get();
+        AdTaskScheduler adTaskScheduler = adSchedulerRecord.get();
 
         // Whether to invoke task or trigger.
-        boolean invokeTask = record.getAdTask() != null;
+        boolean invokeTask = adTaskScheduler.getAdTask() != null;
 
-        AdTaskSchedulerGroup group = record.getGroup();
-        String triggerName = getJobName(invokeTask ? record.getAdTask().getId() : record.getAdTrigger().getId(), invokeTask);
+        AdTaskSchedulerGroup group = adTaskScheduler.getGroup();
+        String triggerName = getJobName(invokeTask ? adTaskScheduler.getAdTask().getId() : adTaskScheduler.getAdTrigger().getId(), invokeTask);
         String groupName = getGroupName(group == null ? null : group.getId());
 
         try {
@@ -236,11 +245,11 @@ public class AdTaskSchedulerService {
 
     private String getJobName(Long id, boolean invokeTask) {
         if (invokeTask) {
-            Optional<AdTask> record = adTaskRepository.findById(id);
-            return record.isPresent() ? record.get().getValue() : null;
+            Optional<AdTask> adTaskRecord = adTaskRepository.findById(id);
+            return adTaskRecord.isPresent() ? adTaskRecord.get().getValue() : null;
         } else {
-            Optional<AdTrigger> record = adTriggerRepository.findById(id);
-            return record.isPresent() ? record.get().getValue() : null;
+            Optional<AdTrigger> adTriggerRecord = adTriggerRepository.findById(id);
+            return adTriggerRecord.isPresent() ? adTriggerRecord.get().getValue() : null;
         }
     }
 
@@ -269,5 +278,11 @@ public class AdTaskSchedulerService {
         }
 
         return trigger;
+    }
+
+    private Map<String, Object> buildAdTriggerParams(Long adTriggerId) {
+        return adTriggerParamRepository.findByAdTrigger_IdAndActiveTrue(adTriggerId)
+            .stream()
+            .collect(Collectors.toMap(AdTriggerParam::getValue, AdTriggerParam::getDefaultValue));
     }
 }

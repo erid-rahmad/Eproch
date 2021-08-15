@@ -1,21 +1,25 @@
 package com.bhp.opusb.service;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import com.bhp.opusb.domain.MAuctionSubmissionItem;
 import com.bhp.opusb.repository.MAuctionSubmissionItemRepository;
 import com.bhp.opusb.service.dto.MAuctionSubmissionDTO;
+import com.bhp.opusb.service.dto.MAuctionSubmissionItemCriteria;
 import com.bhp.opusb.service.dto.MAuctionSubmissionItemDTO;
 import com.bhp.opusb.service.mapper.MAuctionSubmissionItemMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import io.github.jhipster.service.filter.LongFilter;
 
 /**
  * Service Implementation for managing {@link MAuctionSubmissionItem}.
@@ -26,11 +30,16 @@ public class MAuctionSubmissionItemService {
 
     private final Logger log = LoggerFactory.getLogger(MAuctionSubmissionItemService.class);
 
+    private final MAuctionSubmissionItemQueryService mAuctionSubmissionItemQueryService;
+
     private final MAuctionSubmissionItemRepository mAuctionSubmissionItemRepository;
 
     private final MAuctionSubmissionItemMapper mAuctionSubmissionItemMapper;
 
-    public MAuctionSubmissionItemService(MAuctionSubmissionItemRepository mAuctionSubmissionItemRepository, MAuctionSubmissionItemMapper mAuctionSubmissionItemMapper) {
+    public MAuctionSubmissionItemService(MAuctionSubmissionItemQueryService mAuctionSubmissionItemQueryService,
+            MAuctionSubmissionItemRepository mAuctionSubmissionItemRepository,
+            MAuctionSubmissionItemMapper mAuctionSubmissionItemMapper) {
+        this.mAuctionSubmissionItemQueryService = mAuctionSubmissionItemQueryService;
         this.mAuctionSubmissionItemRepository = mAuctionSubmissionItemRepository;
         this.mAuctionSubmissionItemMapper = mAuctionSubmissionItemMapper;
     }
@@ -46,6 +55,30 @@ public class MAuctionSubmissionItemService {
         MAuctionSubmissionItem mAuctionSubmissionItem = mAuctionSubmissionItemMapper.toEntity(mAuctionSubmissionItemDTO);
         mAuctionSubmissionItem = mAuctionSubmissionItemRepository.save(mAuctionSubmissionItem);
         return mAuctionSubmissionItemMapper.toDto(mAuctionSubmissionItem);
+    }
+
+    public Optional<MAuctionSubmissionItemDTO> submitBid(Long auctionId, Long vendorId, Long itemId, BigDecimal price) {
+        MAuctionSubmissionItemCriteria criteria = new MAuctionSubmissionItemCriteria();
+        LongFilter auctionIdFilter = new LongFilter();
+        LongFilter vendorIdFilter = new LongFilter();
+        LongFilter itemIdFilter = new LongFilter();
+        MAuctionSubmissionItemDTO submissionItemDTO = null;
+        
+        auctionIdFilter.setEquals(auctionId);
+        vendorIdFilter.setEquals(vendorId);
+        itemIdFilter.setEquals(itemId);
+        criteria.setAuctionId(auctionIdFilter);
+        criteria.setVendorId(vendorIdFilter);
+        criteria.setAuctionItemId(itemIdFilter);
+        List<MAuctionSubmissionItemDTO> items = mAuctionSubmissionItemQueryService.findByCriteria(criteria);
+
+        if ( ! items.isEmpty()) {
+            MAuctionSubmissionItemDTO submittedItem = items.get(0);
+            submittedItem.setPrice(price);
+            submissionItemDTO = save(submittedItem);
+        }
+
+        return Optional.ofNullable(submissionItemDTO);
     }
 
     /**

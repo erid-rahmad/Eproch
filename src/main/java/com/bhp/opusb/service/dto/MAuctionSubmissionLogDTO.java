@@ -1,7 +1,7 @@
 package com.bhp.opusb.service.dto;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
@@ -24,7 +24,7 @@ public class MAuctionSubmissionLogDTO extends AbstractAuditingDTO {
     private BigDecimal price;
 
     @NotNull
-    private ZonedDateTime dateTrx = ZonedDateTime.now();
+    private Instant dateTrx = Instant.now();
 
     private String message;
 
@@ -63,11 +63,11 @@ public class MAuctionSubmissionLogDTO extends AbstractAuditingDTO {
         this.price = price;
     }
 
-    public ZonedDateTime getDateTrx() {
+    public Instant getDateTrx() {
         return dateTrx;
     }
 
-    public void setDateTrx(ZonedDateTime dateTrx) {
+    public void setDateTrx(Instant dateTrx) {
         this.dateTrx = dateTrx;
     }
 

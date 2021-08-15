@@ -5,7 +5,9 @@ import java.util.Objects;
 
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DurationFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.InstantFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
@@ -29,6 +31,12 @@ public class MAuctionCriteria implements Serializable, Criteria {
     private StringFilter name;
 
     private StringFilter description;
+
+    private InstantFilter lastStartDate;
+
+    private InstantFilter estEndDate;
+
+    private DurationFilter remainingTime;
 
     private ZonedDateTimeFilter dateTrx;
 
@@ -75,6 +83,9 @@ public class MAuctionCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.description = other.description == null ? null : other.description.copy();
+        this.lastStartDate = other.lastStartDate == null ? null : other.lastStartDate.copy();
+        this.estEndDate = other.estEndDate == null ? null : other.estEndDate.copy();
+        this.remainingTime = other.remainingTime == null ? null : other.remainingTime.copy();
         this.dateTrx = other.dateTrx == null ? null : other.dateTrx.copy();
         this.documentNo = other.documentNo == null ? null : other.documentNo.copy();
         this.documentAction = other.documentAction == null ? null : other.documentAction.copy();
@@ -123,6 +134,30 @@ public class MAuctionCriteria implements Serializable, Criteria {
 
     public void setDescription(StringFilter description) {
         this.description = description;
+    }
+
+    public InstantFilter getLastStartDate() {
+        return lastStartDate;
+    }
+
+    public void setLastStartDate(InstantFilter lastStartDate) {
+        this.lastStartDate = lastStartDate;
+    }
+
+    public InstantFilter getEstEndDate() {
+        return estEndDate;
+    }
+
+    public void setEstEndDate(InstantFilter estEndDate) {
+        this.estEndDate = estEndDate;
+    }
+
+    public DurationFilter getRemainingTime() {
+        return remainingTime;
+    }
+
+    public void setRemainingTime(DurationFilter remainingTime) {
+        this.remainingTime = remainingTime;
     }
 
     public ZonedDateTimeFilter getDateTrx() {
@@ -291,6 +326,9 @@ public class MAuctionCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
+            Objects.equals(lastStartDate, that.lastStartDate) &&
+            Objects.equals(estEndDate, that.estEndDate) &&
+            Objects.equals(remainingTime, that.remainingTime) &&
             Objects.equals(dateTrx, that.dateTrx) &&
             Objects.equals(documentNo, that.documentNo) &&
             Objects.equals(documentAction, that.documentAction) &&
@@ -318,6 +356,9 @@ public class MAuctionCriteria implements Serializable, Criteria {
         id,
         name,
         description,
+        lastStartDate,
+        estEndDate,
+        remainingTime,
         dateTrx,
         documentNo,
         documentAction,
@@ -346,6 +387,9 @@ public class MAuctionCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
+                (lastStartDate != null ? "lastStartDate=" + lastStartDate + ", " : "") +
+                (estEndDate != null ? "estEndDate=" + estEndDate + ", " : "") +
+                (remainingTime != null ? "remainingTime=" + remainingTime + ", " : "") +
                 (dateTrx != null ? "dateTrx=" + dateTrx + ", " : "") +
                 (documentNo != null ? "documentNo=" + documentNo + ", " : "") +
                 (documentAction != null ? "documentAction=" + documentAction + ", " : "") +

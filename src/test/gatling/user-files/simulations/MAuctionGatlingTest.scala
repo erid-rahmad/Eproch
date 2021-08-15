@@ -74,6 +74,9 @@ class MAuctionGatlingTest extends Simulation {
                 "id":null
                 , "name":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
+                , "lastStartDate":"2020-01-01T00:00:00.000Z"
+                , "estEndDate":"2020-01-01T00:00:00.000Z"
+                , "remainingTime":null
                 , "dateTrx":"2020-01-01T00:00:00.000Z"
                 , "documentNo":"SAMPLE_TEXT"
                 , "documentAction":"SAMPLE_TEXT"

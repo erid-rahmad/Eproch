@@ -1,10 +1,11 @@
 package com.bhp.opusb.service.mapper;
 
 
-import com.bhp.opusb.domain.*;
+import com.bhp.opusb.domain.MAuction;
 import com.bhp.opusb.service.dto.MAuctionDTO;
 
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * Mapper for the entity {@link MAuction} and its DTO {@link MAuctionDTO}.
@@ -14,6 +15,7 @@ public interface MAuctionMapper extends EntityMapper<MAuctionDTO, MAuction> {
 
     @Mapping(source = "rule.id", target = "ruleId")
     @Mapping(source = "rule.startDate", target = "ruleStartDate")
+    @Mapping(source = "rule.firstLotRunTime", target = "ruleFirstLotRunTime")
     @Mapping(source = "rule.bidImprovementUnit", target = "ruleBidImprovementUnit")
     @Mapping(source = "rule.tieBidsRule", target = "ruleTieBidsRule")
     @Mapping(source = "content.id", target = "contentId")

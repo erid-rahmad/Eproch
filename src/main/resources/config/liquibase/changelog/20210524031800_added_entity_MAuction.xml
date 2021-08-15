@@ -162,4 +162,18 @@
         <addNotNullConstraint tableName="m_auction" columnName="cost_center_id" />
     </changeSet>
 
+    <changeSet id="20210807112500" author="Ananta Aryadewa">
+        <addColumn tableName="m_auction">
+            <column name="last_start_date" type="datetime">
+                <constraints nullable="true" />
+            </column>
+            <column name="est_end_date" type="datetime">
+                <constraints nullable="true" />
+            </column>
+            <column name="remaining_time" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

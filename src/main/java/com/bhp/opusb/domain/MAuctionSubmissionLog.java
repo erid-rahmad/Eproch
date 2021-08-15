@@ -1,7 +1,7 @@
 package com.bhp.opusb.domain;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,7 +46,7 @@ public class MAuctionSubmissionLog extends AbstractAuditingEntity {
 
     @NotNull
     @Column(name = "date_trx", nullable = false)
-    private ZonedDateTime dateTrx;
+    private Instant dateTrx;
 
     @Column(name = "message")
     private String message;
@@ -104,16 +104,16 @@ public class MAuctionSubmissionLog extends AbstractAuditingEntity {
         this.price = price;
     }
 
-    public ZonedDateTime getDateTrx() {
+    public Instant getDateTrx() {
         return dateTrx;
     }
 
-    public MAuctionSubmissionLog dateTrx(ZonedDateTime dateTrx) {
+    public MAuctionSubmissionLog dateTrx(Instant dateTrx) {
         this.dateTrx = dateTrx;
         return this;
     }
 
-    public void setDateTrx(ZonedDateTime dateTrx) {
+    public void setDateTrx(Instant dateTrx) {
         this.dateTrx = dateTrx;
     }
 

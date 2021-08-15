@@ -27,10 +27,12 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.ZoneOffset;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,6 +56,16 @@ public class MAuctionResourceIT {
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+
+    private static final Instant DEFAULT_LAST_START_DATE = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_LAST_START_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
+    private static final Instant DEFAULT_EST_END_DATE = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_EST_END_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
+    private static final Duration DEFAULT_REMAINING_TIME = Duration.ofHours(6);
+    private static final Duration UPDATED_REMAINING_TIME = Duration.ofHours(12);
+    private static final Duration SMALLER_REMAINING_TIME = Duration.ofHours(5);
 
     private static final ZonedDateTime DEFAULT_DATE_TRX = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_DATE_TRX = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
@@ -121,6 +133,9 @@ public class MAuctionResourceIT {
         MAuction mAuction = new MAuction()
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
+            .lastStartDate(DEFAULT_LAST_START_DATE)
+            .estEndDate(DEFAULT_EST_END_DATE)
+            .remainingTime(DEFAULT_REMAINING_TIME)
             .dateTrx(DEFAULT_DATE_TRX)
             .documentNo(DEFAULT_DOCUMENT_NO)
             .documentAction(DEFAULT_DOCUMENT_ACTION)
@@ -194,6 +209,9 @@ public class MAuctionResourceIT {
         MAuction mAuction = new MAuction()
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
+            .lastStartDate(UPDATED_LAST_START_DATE)
+            .estEndDate(UPDATED_EST_END_DATE)
+            .remainingTime(UPDATED_REMAINING_TIME)
             .dateTrx(UPDATED_DATE_TRX)
             .documentNo(UPDATED_DOCUMENT_NO)
             .documentAction(UPDATED_DOCUMENT_ACTION)
@@ -281,6 +299,9 @@ public class MAuctionResourceIT {
         MAuction testMAuction = mAuctionList.get(mAuctionList.size() - 1);
         assertThat(testMAuction.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testMAuction.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testMAuction.getLastStartDate()).isEqualTo(DEFAULT_LAST_START_DATE);
+        assertThat(testMAuction.getEstEndDate()).isEqualTo(DEFAULT_EST_END_DATE);
+        assertThat(testMAuction.getRemainingTime()).isEqualTo(DEFAULT_REMAINING_TIME);
         assertThat(testMAuction.getDateTrx()).isEqualTo(DEFAULT_DATE_TRX);
         assertThat(testMAuction.getDocumentNo()).isEqualTo(DEFAULT_DOCUMENT_NO);
         assertThat(testMAuction.getDocumentAction()).isEqualTo(DEFAULT_DOCUMENT_ACTION);
@@ -385,6 +406,9 @@ public class MAuctionResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(mAuction.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].lastStartDate").value(hasItem(DEFAULT_LAST_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].estEndDate").value(hasItem(DEFAULT_EST_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].remainingTime").value(hasItem(DEFAULT_REMAINING_TIME.toString())))
             .andExpect(jsonPath("$.[*].dateTrx").value(hasItem(sameInstant(DEFAULT_DATE_TRX))))
             .andExpect(jsonPath("$.[*].documentNo").value(hasItem(DEFAULT_DOCUMENT_NO)))
             .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
@@ -411,6 +435,9 @@ public class MAuctionResourceIT {
             .andExpect(jsonPath("$.id").value(mAuction.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.lastStartDate").value(DEFAULT_LAST_START_DATE.toString()))
+            .andExpect(jsonPath("$.estEndDate").value(DEFAULT_EST_END_DATE.toString()))
+            .andExpect(jsonPath("$.remainingTime").value(DEFAULT_REMAINING_TIME.toString()))
             .andExpect(jsonPath("$.dateTrx").value(sameInstant(DEFAULT_DATE_TRX)))
             .andExpect(jsonPath("$.documentNo").value(DEFAULT_DOCUMENT_NO))
             .andExpect(jsonPath("$.documentAction").value(DEFAULT_DOCUMENT_ACTION))
@@ -597,6 +624,215 @@ public class MAuctionResourceIT {
 
         // Get all the mAuctionList where description does not contain UPDATED_DESCRIPTION
         defaultMAuctionShouldBeFound("description.doesNotContain=" + UPDATED_DESCRIPTION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMAuctionsByLastStartDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mAuctionRepository.saveAndFlush(mAuction);
+
+        // Get all the mAuctionList where lastStartDate equals to DEFAULT_LAST_START_DATE
+        defaultMAuctionShouldBeFound("lastStartDate.equals=" + DEFAULT_LAST_START_DATE);
+
+        // Get all the mAuctionList where lastStartDate equals to UPDATED_LAST_START_DATE
+        defaultMAuctionShouldNotBeFound("lastStartDate.equals=" + UPDATED_LAST_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMAuctionsByLastStartDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mAuctionRepository.saveAndFlush(mAuction);
+
+        // Get all the mAuctionList where lastStartDate not equals to DEFAULT_LAST_START_DATE
+        defaultMAuctionShouldNotBeFound("lastStartDate.notEquals=" + DEFAULT_LAST_START_DATE);
+
+        // Get all the mAuctionList where lastStartDate not equals to UPDATED_LAST_START_DATE
+        defaultMAuctionShouldBeFound("lastStartDate.notEquals=" + UPDATED_LAST_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMAuctionsByLastStartDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        mAuctionRepository.saveAndFlush(mAuction);
+
+        // Get all the mAuctionList where lastStartDate in DEFAULT_LAST_START_DATE or UPDATED_LAST_START_DATE
+        defaultMAuctionShouldBeFound("lastStartDate.in=" + DEFAULT_LAST_START_DATE + "," + UPDATED_LAST_START_DATE);
+
+        // Get all the mAuctionList where lastStartDate equals to UPDATED_LAST_START_DATE
+        defaultMAuctionShouldNotBeFound("lastStartDate.in=" + UPDATED_LAST_START_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMAuctionsByLastStartDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mAuctionRepository.saveAndFlush(mAuction);
+
+        // Get all the mAuctionList where lastStartDate is not null
+        defaultMAuctionShouldBeFound("lastStartDate.specified=true");
+
+        // Get all the mAuctionList where lastStartDate is null
+        defaultMAuctionShouldNotBeFound("lastStartDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMAuctionsByEstEndDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mAuctionRepository.saveAndFlush(mAuction);
+
+        // Get all the mAuctionList where estEndDate equals to DEFAULT_EST_END_DATE
+        defaultMAuctionShouldBeFound("estEndDate.equals=" + DEFAULT_EST_END_DATE);
+
+        // Get all the mAuctionList where estEndDate equals to UPDATED_EST_END_DATE
+        defaultMAuctionShouldNotBeFound("estEndDate.equals=" + UPDATED_EST_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMAuctionsByEstEndDateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mAuctionRepository.saveAndFlush(mAuction);
+
+        // Get all the mAuctionList where estEndDate not equals to DEFAULT_EST_END_DATE
+        defaultMAuctionShouldNotBeFound("estEndDate.notEquals=" + DEFAULT_EST_END_DATE);
+
+        // Get all the mAuctionList where estEndDate not equals to UPDATED_EST_END_DATE
+        defaultMAuctionShouldBeFound("estEndDate.notEquals=" + UPDATED_EST_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMAuctionsByEstEndDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        mAuctionRepository.saveAndFlush(mAuction);
+
+        // Get all the mAuctionList where estEndDate in DEFAULT_EST_END_DATE or UPDATED_EST_END_DATE
+        defaultMAuctionShouldBeFound("estEndDate.in=" + DEFAULT_EST_END_DATE + "," + UPDATED_EST_END_DATE);
+
+        // Get all the mAuctionList where estEndDate equals to UPDATED_EST_END_DATE
+        defaultMAuctionShouldNotBeFound("estEndDate.in=" + UPDATED_EST_END_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMAuctionsByEstEndDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mAuctionRepository.saveAndFlush(mAuction);
+
+        // Get all the mAuctionList where estEndDate is not null
+        defaultMAuctionShouldBeFound("estEndDate.specified=true");
+
+        // Get all the mAuctionList where estEndDate is null
+        defaultMAuctionShouldNotBeFound("estEndDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMAuctionsByRemainingTimeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mAuctionRepository.saveAndFlush(mAuction);
+
+        // Get all the mAuctionList where remainingTime equals to DEFAULT_REMAINING_TIME
+        defaultMAuctionShouldBeFound("remainingTime.equals=" + DEFAULT_REMAINING_TIME);
+
+        // Get all the mAuctionList where remainingTime equals to UPDATED_REMAINING_TIME
+        defaultMAuctionShouldNotBeFound("remainingTime.equals=" + UPDATED_REMAINING_TIME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMAuctionsByRemainingTimeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mAuctionRepository.saveAndFlush(mAuction);
+
+        // Get all the mAuctionList where remainingTime not equals to DEFAULT_REMAINING_TIME
+        defaultMAuctionShouldNotBeFound("remainingTime.notEquals=" + DEFAULT_REMAINING_TIME);
+
+        // Get all the mAuctionList where remainingTime not equals to UPDATED_REMAINING_TIME
+        defaultMAuctionShouldBeFound("remainingTime.notEquals=" + UPDATED_REMAINING_TIME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMAuctionsByRemainingTimeIsInShouldWork() throws Exception {
+        // Initialize the database
+        mAuctionRepository.saveAndFlush(mAuction);
+
+        // Get all the mAuctionList where remainingTime in DEFAULT_REMAINING_TIME or UPDATED_REMAINING_TIME
+        defaultMAuctionShouldBeFound("remainingTime.in=" + DEFAULT_REMAINING_TIME + "," + UPDATED_REMAINING_TIME);
+
+        // Get all the mAuctionList where remainingTime equals to UPDATED_REMAINING_TIME
+        defaultMAuctionShouldNotBeFound("remainingTime.in=" + UPDATED_REMAINING_TIME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMAuctionsByRemainingTimeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mAuctionRepository.saveAndFlush(mAuction);
+
+        // Get all the mAuctionList where remainingTime is not null
+        defaultMAuctionShouldBeFound("remainingTime.specified=true");
+
+        // Get all the mAuctionList where remainingTime is null
+        defaultMAuctionShouldNotBeFound("remainingTime.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMAuctionsByRemainingTimeIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mAuctionRepository.saveAndFlush(mAuction);
+
+        // Get all the mAuctionList where remainingTime is greater than or equal to DEFAULT_REMAINING_TIME
+        defaultMAuctionShouldBeFound("remainingTime.greaterThanOrEqual=" + DEFAULT_REMAINING_TIME);
+
+        // Get all the mAuctionList where remainingTime is greater than or equal to UPDATED_REMAINING_TIME
+        defaultMAuctionShouldNotBeFound("remainingTime.greaterThanOrEqual=" + UPDATED_REMAINING_TIME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMAuctionsByRemainingTimeIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mAuctionRepository.saveAndFlush(mAuction);
+
+        // Get all the mAuctionList where remainingTime is less than or equal to DEFAULT_REMAINING_TIME
+        defaultMAuctionShouldBeFound("remainingTime.lessThanOrEqual=" + DEFAULT_REMAINING_TIME);
+
+        // Get all the mAuctionList where remainingTime is less than or equal to SMALLER_REMAINING_TIME
+        defaultMAuctionShouldNotBeFound("remainingTime.lessThanOrEqual=" + SMALLER_REMAINING_TIME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMAuctionsByRemainingTimeIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mAuctionRepository.saveAndFlush(mAuction);
+
+        // Get all the mAuctionList where remainingTime is less than DEFAULT_REMAINING_TIME
+        defaultMAuctionShouldNotBeFound("remainingTime.lessThan=" + DEFAULT_REMAINING_TIME);
+
+        // Get all the mAuctionList where remainingTime is less than UPDATED_REMAINING_TIME
+        defaultMAuctionShouldBeFound("remainingTime.lessThan=" + UPDATED_REMAINING_TIME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMAuctionsByRemainingTimeIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mAuctionRepository.saveAndFlush(mAuction);
+
+        // Get all the mAuctionList where remainingTime is greater than DEFAULT_REMAINING_TIME
+        defaultMAuctionShouldNotBeFound("remainingTime.greaterThan=" + DEFAULT_REMAINING_TIME);
+
+        // Get all the mAuctionList where remainingTime is greater than SMALLER_REMAINING_TIME
+        defaultMAuctionShouldBeFound("remainingTime.greaterThan=" + SMALLER_REMAINING_TIME);
     }
 
 
@@ -1584,6 +1820,9 @@ public class MAuctionResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(mAuction.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].lastStartDate").value(hasItem(DEFAULT_LAST_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].estEndDate").value(hasItem(DEFAULT_EST_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].remainingTime").value(hasItem(DEFAULT_REMAINING_TIME.toString())))
             .andExpect(jsonPath("$.[*].dateTrx").value(hasItem(sameInstant(DEFAULT_DATE_TRX))))
             .andExpect(jsonPath("$.[*].documentNo").value(hasItem(DEFAULT_DOCUMENT_NO)))
             .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
@@ -1644,6 +1883,9 @@ public class MAuctionResourceIT {
         updatedMAuction
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
+            .lastStartDate(UPDATED_LAST_START_DATE)
+            .estEndDate(UPDATED_EST_END_DATE)
+            .remainingTime(UPDATED_REMAINING_TIME)
             .dateTrx(UPDATED_DATE_TRX)
             .documentNo(UPDATED_DOCUMENT_NO)
             .documentAction(UPDATED_DOCUMENT_ACTION)
@@ -1668,6 +1910,9 @@ public class MAuctionResourceIT {
         MAuction testMAuction = mAuctionList.get(mAuctionList.size() - 1);
         assertThat(testMAuction.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testMAuction.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testMAuction.getLastStartDate()).isEqualTo(UPDATED_LAST_START_DATE);
+        assertThat(testMAuction.getEstEndDate()).isEqualTo(UPDATED_EST_END_DATE);
+        assertThat(testMAuction.getRemainingTime()).isEqualTo(UPDATED_REMAINING_TIME);
         assertThat(testMAuction.getDateTrx()).isEqualTo(UPDATED_DATE_TRX);
         assertThat(testMAuction.getDocumentNo()).isEqualTo(UPDATED_DOCUMENT_NO);
         assertThat(testMAuction.getDocumentAction()).isEqualTo(UPDATED_DOCUMENT_ACTION);

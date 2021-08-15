@@ -20,20 +20,20 @@
                                  referencedColumnNames="id"
                                  referencedTableName="m_contract_task"/>
 
-        <addForeignKeyConstraint baseColumnNames="pic_id"
+        <!-- <addForeignKeyConstraint baseColumnNames="pic_id"
                                  baseTableName="m_contract_task_reviewers"
                                  constraintName="fk_m_contract_task_reviewers_pic_id"
                                  referencedColumnNames="user_id"
-                                 referencedTableName="ad_user"/>
+                                 referencedTableName="ad_user"/> -->
 
     </changeSet>
-<!--    <changeSet id="20210729107001" author="erid">-->
-<!--        <dropForeignKeyConstraint baseColumnNames="pic_id"-->
-<!--                                  baseTableName="m_contract_task_reviewers"-->
-<!--                                  constraintName="fk_m_contract_task_reviewers_pic_id"-->
-<!--                                  referencedColumnNames="user_id"-->
-<!--                                  referencedTableName="ad_user"/>-->
-<!--    </changeSet>-->
+    <!-- <changeSet id="20210729107001" author="erid">
+        <dropForeignKeyConstraint baseColumnNames="pic_id"
+                                  baseTableName="m_contract_task_reviewers"
+                                  constraintName="fk_m_contract_task_reviewers_pic_id"
+                                  referencedColumnNames="user_id"
+                                  referencedTableName="ad_user"/>
+    </changeSet> -->
     <changeSet id="20210729107002" author="erid">
         <addForeignKeyConstraint baseColumnNames="pic_user_id"
                                  baseTableName="m_contract_task_reviewers"

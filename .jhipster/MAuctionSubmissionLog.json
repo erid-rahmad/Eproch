@@ -23,7 +23,7 @@
         },
         {
             "fieldName": "dateTrx",
-            "fieldType": "ZonedDateTime",
+            "fieldType": "Instant",
             "fieldValidateRules": [
                 "required"
             ]
