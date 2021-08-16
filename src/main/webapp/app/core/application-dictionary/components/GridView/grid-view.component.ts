@@ -1018,7 +1018,7 @@ export default class GridView extends Mixins(CalloutMixin, ContextVariableAccess
     if (this.isActivatorSwitch(field)) {
       return '96';
     }
-
+    
     let fieldAdColumnName= field.adColumn ? field.adColumn.name || field.virtualColumnName : field.virtualColumnName;
     const rullerCanvas= document.createElement('canvas');
     const context= rullerCanvas.getContext("2d");
@@ -1096,6 +1096,11 @@ export default class GridView extends Mixins(CalloutMixin, ContextVariableAccess
   public downloadAttachment(row: any, field: IADField) {
     const fileName = `${row[field.adColumn.name]}-${this.getFileName(row, field)}`;
     window.open(`/api/c-attachments/download/${fileName}`, '_blank');
+  }
+
+  public isCurrencyValue(field: IADField): boolean{
+    if(!field.adColumn) return false ;
+    return field.adColumn.referenceTypeName == 'currency';
   }
 
 }

@@ -4,7 +4,7 @@
             <div :id="'LayoutItem-' + id + '-' + index" 
                 class="md-layout-item"
                 v-for="(item, index) in chartItems"
-                    :key="item.chartData"
+                    :key="JSON.stringify(item.chartData)"
                 style="padding: 0 10px !important;"
             >
                 <md-card v-loading="item.isLoading" md-with-hover class="bg-pattern" style="width: 100%; border-radius: 6px; padding: 10px 12px;">
@@ -16,20 +16,22 @@
                         :colors="listColor.map((x) => { return x.staticColor; })"
                     />
                     <bar-chart :id="'BarChart-' + item.id + '-' + index" 
-                        v-if="item.serviceName == 'bar' || item.serviceName == 'horizontalBar'"
+                        v-if="(item.serviceName.toLowerCase().indexOf('bar') > -1)"
+                        :title="item.name" 
+                        :chartType="item.serviceName.replace('stacked', '')"
+                        :stacked="(item.serviceName.indexOf('stacked') > -1)"
+                        :value="JSON.parse(JSON.stringify(item.chartData))" 
+                        :position="item.icon"
+                        :colors="listColor.map((x) => { return x.staticColor; })"
+                    />
+                    <pie-chart :id="'PieChart-' + item.id + '-' + index" 
+                        v-if="item.serviceName == 'pie' || item.serviceName == 'doughnut'"
                         :title="item.name" 
                         :chartType="item.serviceName"
                         :value="JSON.parse(JSON.stringify(item.chartData))" 
                         :position="item.icon"
                         :colors="listColor.map((x) => { return x.staticColor; })"
                     />
-                    <!--<pie-chart :id="'PieChart-' + item.id + '-' + index" 
-                        :title="item.name" 
-                        :chartType="item.serviceName"
-                        :value="JSON.parse(JSON.stringify(item.chartData))" 
-                        :position="item.icon"
-                        :colors="listColor.map((x) => { return x.staticColor; })"
-                    />-->
                 </md-card>
             </div>
         </div>
@@ -46,9 +48,9 @@
                         size="mini"
                         ref="table"
                         :data="JSON.parse(JSON.stringify(item.gridData))"
-                        :style="'width: 100%; cursor: pointer; border-radius: 5px; box-shadow: 0px 0px 3px ' + item.accentColor + ' !important;'"
-                        cell-style="color: #8898aa !important; font-size: 13px; font-weight: bold; "
-                        :header-cell-style="'color: white !important; background:'+ item.accentColor +' !important; '"
+                        :style="getTableStyle('table', item)"
+                        :cell-style="getTableStyle('cell', item)"
+                        :header-cell-style="getTableStyle('header', item)"
                     >
                         <!--<el-table-column min-width="20" type="index" align="center" label=""></el-table-column>-->
                         <el-table-column

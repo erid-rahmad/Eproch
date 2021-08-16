@@ -225,7 +225,7 @@ export default class PreqEvent extends Mixins(AccessLevelMixin, PreqEventProp) {
     paginationQuery: {
       page: 0,
       size: 1000,
-      sort:['id','sequence']
+      sort:['sequence','id']
     }
     }).then((res)=>{
       this.eventSteps = res.data;

@@ -109,6 +109,22 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
     return this.listColor[randomNumber];
   }
 
+  private getTableStyle(element: string, item: IAdWatchListItem)
+  {
+    let objStyle = {};
+    if(element == 'table'){
+      objStyle = JSON.parse('{ "width": "100%", "cursor": "pointer", "border-radius": "5px", "box-shadow": "0px 0px 3px ' + item.accentColor + ' !important" }');
+    }
+    else if(element == 'cell'){
+      objStyle = JSON.parse('{ "color": "#8898aa !important", "font-size": "13px", "font-weight": "bold" }');
+    }
+    else if(element == 'header'){
+      objStyle = JSON.parse('{ "color": "#FFF !important", "background": "'+ item.accentColor +' !important" }');
+    }
+
+    return objStyle;
+  }
+
   private retrieveKpiData(item: IAdWatchListItem, index?: number) {
     //console.log(item.restApiEndpoint);
     this.commonService(item.restApiEndpoint)
@@ -120,27 +136,7 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
       .then(res => {
         //console.log('apiResult: ' + JSON.stringify(res.data));
         if(this.type == 'CHART'){
-          /*let arrData = [
-            { xAxisLabel: 'Jan 2021', legendLabel: 'CC Jakarta', dataValue: 5299708.30 },
-            { xAxisLabel: 'Feb 2021', legendLabel: 'CC Jakarta', dataValue: 1867992.00 },
-            { xAxisLabel: 'Mar 2021', legendLabel: 'CC Jakarta', dataValue: 3398798.74 },
-            { xAxisLabel: 'Apr 2021', legendLabel: 'CC Jakarta', dataValue: 2798790.96 },
-            { xAxisLabel: 'May 2021', legendLabel: 'CC Jakarta', dataValue: 1486886.53 },
-            { xAxisLabel: 'Jun 2021', legendLabel: 'CC Jakarta', dataValue: 1789097.26 },
-            { xAxisLabel: 'Jan 2021', legendLabel: 'CC Bandung', dataValue: 3982090.50 },
-            { xAxisLabel: 'Feb 2021', legendLabel: 'CC Bandung', dataValue: 7868548.21 },
-            { xAxisLabel: 'Mar 2021', legendLabel: 'CC Bandung', dataValue: 2356789.32 },
-            { xAxisLabel: 'Apr 2021', legendLabel: 'CC Bandung', dataValue: 6782450.85 },
-            { xAxisLabel: 'May 2021', legendLabel: 'CC Bandung', dataValue: 4674798.57 },
-            { xAxisLabel: 'Jun 2021', legendLabel: 'CC Bandung', dataValue: 3846374.28 },
-            { xAxisLabel: 'Jan 2021', legendLabel: 'CC Surabaya', dataValue: 2486589.62 },
-            { xAxisLabel: 'Feb 2021', legendLabel: 'CC Surabaya', dataValue: 3432558.29 },
-            { xAxisLabel: 'Mar 2021', legendLabel: 'CC Surabaya', dataValue: 4532467.36 },
-            { xAxisLabel: 'Apr 2021', legendLabel: 'CC Surabaya', dataValue: 4928902.76 },
-            { xAxisLabel: 'May 2021', legendLabel: 'CC Surabaya', dataValue: 7875898.48 },
-            { xAxisLabel: 'Jun 2021', legendLabel: 'CC Surabaya', dataValue: 5784789.32 }
-          ];
-          this.$set(this.chartItems[index], 'chartData', arrData);*/
+          this.$set(this.chartItems[index], 'isLoading', false);
           this.$set(this.chartItems[index], 'chartData', res.data);
         }
         else {
@@ -166,6 +162,7 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
             arrData.push(objData);
           });
 
+          this.$set(this.gridItems[index], 'isLoading', false);
           this.$set(this.gridItems[index], 'gridData', arrData);
         }
       })

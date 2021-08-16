@@ -32,19 +32,19 @@
             >
               <el-form-item label="Bidding Number">
                 <el-input
-                  v-model="negotiation.biddingNo"
+                  v-model="negotiation.prequalificationNo"
                   disabled
                 ></el-input>
               </el-form-item>
               <el-form-item label="Bidding Title">
                 <el-input
-                  v-model="negotiation.biddingTitle"
+                  v-model="negotiation.prequalificationName"
                   disabled
                 ></el-input>
               </el-form-item>
-              <el-form-item label="Bidding Type">
+              <el-form-item label="Prequalification Type">
                 <el-input
-                  v-model="negotiation.biddingType"
+                  v-model="negotiation.type"
                   disabled
                 ></el-input>
               </el-form-item>
@@ -86,16 +86,7 @@
             </template>
           </el-table-column>
           <el-table-column property="vendorName" label="Vendor" min-width="300"></el-table-column>
-          <el-table-column label="Proposed Price" min-width="300">
-            <template slot-scope="{row}">
-              {{ row.proposedPrice | formatCurrency }}
-            </template>
-          </el-table-column>
-          <el-table-column label="Negotiation Price" min-width="300">
-            <template slot-scope="{row}">
-              {{ row.negotiationPrice | formatCurrency }}
-            </template>
-          </el-table-column>
+          <el-table-column label="Final Result" property="result" min-width="300"></el-table-column>
           <el-table-column min-width="160" label="Action">
           <template slot-scope="{ row }">
             <el-button class="button" icon="el-icon-caret-right" size="mini" type="primary" @click="viewNegotiationWindow(row)">
@@ -113,6 +104,7 @@
           </template>
         </el-table-column>
         <el-table-column property="vendorName" label="Vendor" width="400"></el-table-column>
+        <!--
         <el-table-column label="Proposed Price" min-width="300">
           <template slot-scope="{row}">
             {{ row.proposedPrice | formatCurrency }}
@@ -123,6 +115,7 @@
             {{ row.negotiationPrice | formatCurrency }}
           </template>
         </el-table-column>
+        -->
         <el-table-column min-width="160" label="Action">
           <template slot-scope="{ row }">
             <div v-if="allowNegotiation">
@@ -142,41 +135,7 @@
             </template>
           </el-table-column>
           <el-table-column property="vendorName" label="Vendor" min-width="400"></el-table-column>
-          <el-table-column label="Proposed Price" min-width="400">
-            <template slot-scope="{row}">
-              {{ row.proposedPrice | formatCurrency }}
-            </template>
-          </el-table-column>
-          <el-table-column label="Negotiation Price" min-width="400">
-            <template slot-scope="{row}">
-              {{ row.negotiationPrice | formatCurrency }}
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-      <div v-if="!isVendor">
-        Negotiation not started
-        <el-table border :data="notStarted" size="mini" v-loading="loading">
-          <el-table-column min-width="100" label="No">
-            <template slot-scope="row">
-              {{ row.$index + 1 }}
-            </template>
-          </el-table-column>
-          <el-table-column property="vendorName" label="Vendor" min-width="400"></el-table-column>
-          <el-table-column label="Proposed Price" min-width="400">
-            <template slot-scope="{row}">
-              {{ row.proposedPrice | formatCurrency }}
-            </template>
-          </el-table-column>
-          <el-table-column min-width="400" label="Action">
-            <template slot-scope="{ row }">
-              <div v-if="allowNegotiation">
-                <el-button class="button" icon="el-icon-caret-right" size="mini" type="primary" @click="viewNegotiationWindow(row)">
-                  Negotiate
-                </el-button>
-              </div>
-            </template>
-          </el-table-column>
+          <el-table-column label="Final Result" property="result" min-width="300"></el-table-column>
         </el-table>
       </div>
     </div>
