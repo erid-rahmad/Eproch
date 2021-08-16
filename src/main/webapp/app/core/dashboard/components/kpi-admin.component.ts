@@ -141,6 +141,7 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
             { xAxisLabel: 'Jun 2021', legendLabel: 'CC Surabaya', dataValue: 5784789.32 }
           ];
           this.$set(this.chartItems[index], 'chartData', arrData);*/
+          this.$set(this.chartItems[index], 'isLoading', false);
           this.$set(this.chartItems[index], 'chartData', res.data);
         }
         else {
@@ -166,6 +167,7 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
             arrData.push(objData);
           });
 
+          this.$set(this.gridItems[index], 'isLoading', false);
           this.$set(this.gridItems[index], 'gridData', arrData);
         }
       })
