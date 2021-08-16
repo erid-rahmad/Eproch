@@ -1,0 +1,267 @@
+<template>
+  <div class="app-container card-view bidding-negotiation">
+    <div id="innerToolbar" class="form-toolbar">
+      <el-button
+        v-if="!index"
+        icon="el-icon-close"
+        size="mini"
+        type="danger"
+        @click="closeDetail"
+      >
+        Close
+      </el-button>
+    </div>
+    <div class="card" id="innerCard">
+      <div v-if="index && displayTable">
+        <el-table
+          ref="mainGrid"
+          border
+          max-height="600"
+          :data="biddingNegotiations"
+          v-loading="loading"
+          highlight-current-row
+          size="mini"
+          stripe
+          style="width: 100%"
+        >
+          <el-table-column
+            label="No."
+            width="50"
+          >
+            <template slot-scope="{ $index }">
+              {{ ((page-1) * itemsPerPage) + $index + 1 }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="Prequalification No."
+            min-width="100"
+            prop="prequalificationNo"
+          ></el-table-column>
+          <el-table-column
+            label="Title"
+            min-width="200"
+            prop="prequalificationName"
+          ></el-table-column>
+          <el-table-column
+            label="Prequalification Type"
+            min-width="100"
+            prop="type"
+          ></el-table-column>
+          <el-table-column
+            label="Schedule"
+            min-width="150"
+          >
+            <template slot-scope="{ row }">
+              <el-button
+                icon="el-icon-search"
+                size="mini"
+                type="primary"
+                @click="viewSchedule(row)"
+              >
+                View Schedule
+              </el-button>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="Bidding Status"
+            min-width="150"
+          >
+            <template slot-scope="{ row }">{{formatBiddingStatus(row.prequalificationStatus)}}</template>
+          </el-table-column>
+          <el-table-column
+            label="Evaluation Status"
+            min-width="200"
+          >
+            <template slot-scope="{ row }">{{formatEvalStatus(row.evaluationStatus)}}</template>
+          </el-table-column>
+          <el-table-column
+            label="Vendor"
+            min-width="100"
+            v-if="!isVendor"
+          >
+            <template slot-scope="{ row }">
+              <el-button class="button" size="mini" style="width: 100%" @click="viewJoinVendor(row.id)">
+                <svg-icon name="icomoo/115-users"></svg-icon>
+                {{ row.vendorCount }}
+              </el-button>
+            </template>
+          </el-table-column>
+          <el-table-column label="Action" min-width="240">
+            <template slot-scope="{ row }">
+              <el-button-group>
+                <el-button
+                  icon="el-icon-search"
+                  size="mini"
+                  type="primary"
+                  @click="viewDetail(row)"
+                >
+                  View
+                </el-button>
+                <el-button
+                  icon="el-icon-search"
+                  size="mini"
+                  type="primary"
+                  v-if="!isVendor&&(row.vendorCount==row.finishedCount && row.vendorCount>0)"
+                  @click="viewSummary(row)"
+                >
+                  Summary
+                </el-button>
+              </el-button-group>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          ref="pagination"
+          :current-page.sync="page"
+          :page-size="itemsPerPage"
+          :page-sizes="[10, 20, 50, 100]"
+          :total="queryCount"
+          background
+          layout="sizes, prev, pager, next"
+          small
+          @size-change="changePageSize"
+        />
+      </div>
+      <template v-else>
+        <bidding-negotiation-line
+          :data="selectedRow"
+          :outerIndex="index"
+        ></bidding-negotiation-line>
+      </template>
+    </div>
+    <el-dialog
+      class="bidding-schedule-dialog"
+      width="80%"
+      :visible.sync="showSchedule"
+      title="Bidding Schedule"
+    >
+      <bidding-schedule
+        :bidding-id="selectedRow.biddingId"
+        :bidding-name="selectedRow.biddingTitle"
+        :bidding-no="selectedRow.biddingNo"
+        :submission-id="selectedRow.id"
+        @form-open="showSchedule = false"
+      ></bidding-schedule>
+    </el-dialog>
+
+    <el-dialog title="Joined Vendors" :visible.sync="showVendor" width="60%" :before-close="closeVendorScreen">
+      <el-table border :data="negoSummary" size="mini">
+        <el-table-column width="60" label="No">
+          <template slot-scope="row">
+            {{ row.$index + 1 }}
+          </template>
+        </el-table-column>
+        <el-table-column property="vendorName" sortable label="Vendor" min-width="200" show-overflow-tooltip></el-table-column>
+        <el-table-column property="vendorAddress" label="Address" min-width="200" show-overflow-tooltip></el-table-column>
+      </el-table>
+    </el-dialog>
+
+    <el-dialog title="Negotiation Summary" :visible.sync="showSummary" width="90%" :before-close="clearSummary">
+      <el-form
+        ref="negotiation"
+        label-position="left"
+        label-width="200px"
+        :model="selectedRow"
+        size="mini"
+      >
+        <el-row
+          :gutter="24"
+          style="margin-top: 16px"
+        >
+          <el-col
+            :xs="24"
+            :sm="12"
+            :lg="12"
+            :xl="8"
+          >
+            <el-form-item label="Bidding Number">
+              <el-input
+                v-model="selectedRow.biddingNo"
+                disabled
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="Bidding Title">
+              <el-input
+                v-model="selectedRow.biddingTitle"
+                disabled
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="Bidding Type">
+              <el-input
+                v-model="selectedRow.biddingType"
+                disabled
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col
+            :xs="24"
+            :sm="12"
+            :lg="12"
+            :xl="8"
+          >
+            <el-form-item label="Start Date">
+              <el-input
+                v-model="selectedRow.startDate"
+                disabled
+              ></el-input>
+            </el-form-item>
+            <el-form-item label="End Date">
+              <el-input
+                v-model="selectedRow.endDate"
+                disabled
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <el-table border :data="negoSummary" v-loading="loadingSummary" size="mini">
+        <el-table-column width="60" label="No">
+          <template slot-scope="row">
+            {{ row.$index + 1 }}
+          </template>
+        </el-table-column>
+        <el-table-column property="vendorName" label="Vendor" min-width="200" show-overflow-tooltip></el-table-column>
+        <el-table-column label="Status" min-width="200">
+          <template slot-scope="{row}">
+            <el-checkbox
+              v-if="row.negotiationStatus==='agreed'"
+              v-model="row.checkmark"
+              :disabled="vcExist"
+            >{{row.negotiationStatus}}</el-checkbox>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div slot="footer">
+        <el-button
+          icon="el-icon-close"
+          size="mini"
+          @click="clearSummary"
+        >
+          {{ $t('entity.action.cancel') }}
+        </el-button>
+        <el-button
+          icon="el-icon-check"
+          size="mini"
+          type="primary"
+          v-if="!vcExist && !loadingSummary"
+          @click="createConfirmation"
+        >
+          Submit
+        </el-button>
+      </div>
+    </el-dialog>
+  </div>
+</template>
+
+<script lang="ts" src="./index.component.ts"></script>
+
+<style lang="scss" scoped>
+.bidding-negotiation {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 36px auto;
+}
+.compact .el-table tbody .el-button {
+  margin: 5px 0;
+}
+</style>

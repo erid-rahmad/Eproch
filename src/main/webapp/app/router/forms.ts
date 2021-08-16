@@ -90,6 +90,7 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['prequalificationSubmission', () => import(/* webpackChunkName: "prequalification" */'@/core/application-dictionary/components/Form/prequalification/submission/registered-prequalification-list.vue')],
   ['prequalificationEvaluation', () => import(/* webpackChunkName: "prequalification" */'@/core/application-dictionary/components/Form/prequalification/evaluation/preq-evaluation-grid.vue')],
   ['preqEvalVendor', () => import(/* webpackChunkName: "prequalification" */'@/core/application-dictionary/components/Form/prequalification/evaluation/vendor/eval-vendor.vue')],
+  ['preqNegotiation', () => import(/* webpackChunkName: "prequalification" */'@/core/application-dictionary/components/Form/prequalification/negotiation/index.vue')],
   ['preqEvalAnnouncement', () => import(/* webpackChunkName: "prequalification" */'@/core/application-dictionary/components/Form/prequalification/evaluation-announcement/evaluation-announcement.vue')],
   ['preqEvalAnnVendor', () => import(/* webpackChunkName: "prequalification" */'@/core/application-dictionary/components/Form/prequalification/evaluation-announcement/evaluation-announcement-vendor.vue')],
 ]);
