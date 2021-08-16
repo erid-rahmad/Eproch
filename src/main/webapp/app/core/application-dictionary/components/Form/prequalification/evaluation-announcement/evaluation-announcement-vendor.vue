@@ -120,7 +120,6 @@
                         label="Action"
                         min-width="200"
                     >
-                        <!--
                         <template slot-scope="{ row }">
                             <el-button
                                 v-if="row.status && row.status !== 'N'"
@@ -131,7 +130,6 @@
                                 <svg-icon name="link"></svg-icon> View
                             </el-button>
                         </template>
-                        -->
                     </el-table-column>
 
                     </el-table>

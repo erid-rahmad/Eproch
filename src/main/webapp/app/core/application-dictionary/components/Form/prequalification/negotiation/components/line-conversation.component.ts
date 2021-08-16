@@ -36,7 +36,7 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
     {vendorText: '...'}
   ];
   showChatForm = false;
-  showNegoForm = false;
+  showDetail = false;
   submitting = false;
   isPercentage = false;
 
@@ -48,11 +48,20 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   private fileList: any[] = [];
   private fileList2: any[] = [];
 
-  negoPrice: any = {};
-  negoPriceLine: any[] = [];
+  evaluationMethodCriteria: any = {};
+  passfail = [{
+    value: 'pass',
+    label: 'Pass'
+  }, {
+    value: 'fail',
+    label: 'Fail'
+  },];
+
+  answers: Map<number, any> = new Map();
+  attachmentHandler: Map<number, any> = new Map();
 
   loading = false;
-  detailLoading = true;
+  loadingDetails = true;
 
   chatFormValidationSchema = {
     text: {
@@ -68,6 +77,7 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
   created() {
     console.log(this.data);
     this.line = {...this.data};
+    this.line.prequalificationId = 2146553;
     //this.refreshChat();
   }
 
@@ -118,19 +128,6 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
     this.chatForm.attachmentId = null;
   }
 
-  handleRemoveN(files, fileList) {
-    this.fileList2 = [];
-    this.negoPrice.attachmentId = null;
-    this.commonService(this.negoPriceApi).update(this.negoPrice).then(
-      (res)=>{
-        console.log(res);
-        this.$message.success("File removed to negotiation.");
-      }
-    ).catch((error)=>{
-      this.$message.error("Failed to remove uploaded file.");
-    });
-  }
-
   onUploadError(err: any) {
     console.log('Failed uploading a file ', err);
     this.$notify({
@@ -146,22 +143,6 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
       this.chatForm.attachmentId = response.attachment.id;
       this.fileList = [file];
       //(this.$refs.company as ElForm).clearValidate('file');
-  }
-
-  onUploadSuccessN(response: any, file) {
-    console.log('File uploaded successfully ', response);
-    this.negoPrice.attachmentId = response.attachment.id;
-    this.fileList2 = [file];
-
-    this.commonService(this.negoPriceApi).update(this.negoPrice).then(
-      (res)=>{
-        console.log(res);
-        this.$message.success("File saved to negotiation.");
-      }
-    ).catch((error)=>{
-      this.$message.error("Failed to save uploaded file.");
-    });
-    //(this.$refs.company as ElForm).clearValidate('file');
   }
 
   handleExceed(files, fileList) {
@@ -236,74 +217,6 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
     });
   }
 
-  viewNegoDetail(){
-    this.showNegoForm=true;
-    this.commonService(this.negoPriceApi).retrieve({
-      criteriaQuery: this.updateCriteria([
-        'active.equals=true',
-        `negotiationLineId.equals=${this.line.id}`
-      ]),
-      paginationQuery: {
-        page: 0,
-        size: 10000,
-        sort: ['id']
-      }
-    }).then((res)=>{
-      console.log(res.data);
-      this.negoPrice=res.data[0];
-      this.negoPrice.percentDiff=((this.line.proposedPrice-this.negoPrice.negotiationPrice)/this.line.proposedPrice)*100;
-      this.negoPrice.percentDiff = this.truncateDecimals(this.negoPrice.percentDiff,2);
-
-      if(this.negoPrice.attachmentId){
-        this.fileList2 = [{"name":this.negoPrice.fileName, "url":this.negoPrice.downloadUrl}];
-      }
-      this.commonService(this.negoPriceLineApi).retrieve({
-        criteriaQuery: this.updateCriteria([
-          'active.equals=true',
-          `bidNegoPriceId.equals=${this.negoPrice.id}`
-        ]),
-        paginationQuery: {
-          page: 0,
-          size: 10000,
-          sort: ['id']
-        }
-      }).then((res)=>{
-        console.log(res.data);
-        this.negoPriceLine=res.data;
-      }).finally(()=>{this.detailLoading=false});
-    })
-  }
-
-  updateTotal(row){
-    console.log(row);
-    row.priceNegotiation = parseInt(row.priceNegotiation);
-    if(Object.is(row.priceNegotiation,NaN)){
-      row.priceNegotiation = row.proposedPrice;
-    }
-    row.totalNegotiationPrice = row.quantity * row.priceNegotiation;
-    row.negotiationPercentage = this.truncateDecimals(((row.proposedPrice-row.priceNegotiation)/row.proposedPrice)*100,2);
-    this.reCalcTotal();
-  }
-
-  updateTotalByPercentage(row){
-    console.log(row);
-    row.negotiationPercentage = parseFloat(row.negotiationPercentage);
-    if(Object.is(row.negotiationPercentage,NaN)){
-      row.negotiationPercentage = 0;
-    }
-    row.priceNegotiation = row.proposedPrice*(100-row.negotiationPercentage)/100;
-    row.totalNegotiationPrice = row.quantity * row.priceNegotiation;
-    this.reCalcTotal();
-  }
-
-  reCalcTotal(){
-    this.negoPrice.negotiationPrice = this.negoPriceLine.reduce((a,b)=>{
-      return (a.totalNegotiationPrice?a.totalNegotiationPrice:a)+b.totalNegotiationPrice;
-    });
-    this.negoPrice.percentDiff=((this.line.proposedPrice-this.negoPrice.negotiationPrice)/this.line.proposedPrice)*100;
-    this.negoPrice.percentDiff = this.truncateDecimals(this.negoPrice.percentDiff,2);
-  }
-
   declineNegotiation(){
     this.submitting=true;
     this.line.negotiationStatus = 'disagreed';
@@ -312,7 +225,7 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
       (res)=>{
         console.log(res);
         this.$message.success("Negotiation agreed.");
-        this.showNegoForm=false;
+        this.showDetail=false;
         this.refreshChat();
       }
     ).catch((error)=>{
@@ -331,24 +244,7 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
         (res)=>{
           console.log(res);
           this.$message.success("Negotiation agreed.");
-          this.showNegoForm=false;
-          this.refreshChat();
-        }
-      ).catch((error)=>{
-        this.$message.error("Failed to submit negotiation.");
-      }).finally(()=>{
-        this.submitting = false;
-      });
-    } else {
-      this.negoPrice.line = this.negoPriceLine
-      if(this.negoPrice.negotiationPrice.totalNegotiationPrice) {
-        this.negoPrice.negotiationPrice = this.negoPrice.negotiationPrice.totalNegotiationPrice;
-      }
-      this.commonService(this.negoPriceApi).update(this.negoPrice).then(
-        (res)=>{
-          console.log(res);
-          this.$message.success("Negotiation submitted.");
-          this.showNegoForm=false;
+          this.showDetail=false;
           this.refreshChat();
         }
       ).catch((error)=>{
@@ -357,6 +253,205 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
         this.submitting = false;
       });
     }
+  }
+
+  viewEvalDetail(){
+    this.showDetail = true;
+    this.retrieveCriteria(2111651);
+  }
+
+  closeEvalDetail(){
+    this.showDetail = false;
+    this.answers.clear();
+    this.attachmentHandler.clear();
+    this.evaluationMethodCriteria=[];
+  }
+
+  retrieveCriteria(methodId: number){
+    this.loadingDetails = true;
+    this.commonService("/api/c-prequal-method-lines").retrieve({
+      criteriaQuery: [
+        'active.equals=true',
+        `prequalMethodId.equals=${methodId}`
+      ],
+      paginationQuery: {
+        page: 0,
+        size: 1000,
+        sort:['id']
+      }
+    }).then((res)=>{
+      this.evaluationMethodCriteria = res.data;
+      Promise.allSettled(
+        this.evaluationMethodCriteria.map((row)=>{
+          return new Promise<boolean>((resolve,reject)=>{
+            this.commonService("/api/c-prequal-method-criteria").retrieve({
+              criteriaQuery: [
+                'active.equals=true',
+                `prequalMethodLineId.equals=${row.id}`
+              ],
+              paginationQuery: {
+                page: 0,
+                size: 1000,
+                sort:['id']
+              }
+            }).then((res)=>{
+              row.criteria = res.data;
+              Promise.allSettled(row.criteria.map((row)=>{
+                return new Promise<boolean>((resolve,reject)=>{
+                  this.commonService("/api/c-prequal-method-sub-criteria").retrieve({
+                    criteriaQuery: [
+                      'active.equals=true',
+                      `prequalMethodCriteriaId.equals=${row.id}`
+                    ],
+                    paginationQuery: {
+                      page: 0,
+                      size: 1000,
+                      sort:['id']
+                    }
+                  }).then((res)=>{
+                    row.subCriteria = res.data;
+                    Promise.allSettled(row.subCriteria.map((row)=>{
+                      return new Promise<boolean>((resolve,reject)=>{
+                        this.commonService("/api/c-bidding-sub-criteria-lines").retrieve({
+                          criteriaQuery: [
+                            'active.equals=true',
+                            `biddingSubCriteriaId.equals=${row.biddingSubCriteriaId}`
+                          ],
+                          paginationQuery: {
+                            page: 0,
+                            size: 1000,
+                            sort:['id']
+                          }
+                        }).then((res)=>{
+                          row.questions = res.data;
+                          resolve(true);
+                        }).catch((err)=>{
+                          console.log(err);
+                          reject(false);
+                        })
+                      })
+                    })).then((res)=>{
+                      resolve(true);
+                    })
+                  }).catch((err)=>{
+                    console.log(err);
+                    reject(false);
+                  })
+                });
+              })).then((res)=>{
+                resolve(true);
+              });
+            }).catch((err)=>{
+              console.log(err);
+              reject(false);
+            });
+          })
+        })
+      ).then((res)=>{
+        console.log(this.evaluationMethodCriteria);
+        this.evaluationMethodCriteria.forEach((method)=>{
+          method.criteria.forEach((criteria) => {
+            criteria.subCriteria.forEach((subCriteria) => {
+              subCriteria.attachmentId=null;
+              subCriteria.attachmentName=null;
+              subCriteria.attachmentUrl=null;
+              this.attachmentHandler.set(subCriteria.biddingSubCriteriaId,subCriteria);
+
+              subCriteria.questions.forEach((question) => {
+                //question.requirement = this.requirements.get(subCriteriaLine.id)
+                question.answer = null;
+                question.documentEvaluation = false;
+
+                // List of answers will be submitted later.
+                this.answers.set(question.id, question);
+              });
+            });
+          });
+        });
+        console.log(this.attachmentHandler);
+        this.retrieveProposalData(2147253);
+      });
+    })
+  }
+
+  private retrieveProposalData(submissionId: number) {
+    const baseApiUrl = "/api/m-prequalification-evals";
+    this.commonService("/api/m-prequalification-criteria").retrieve({
+      criteriaQuery: [
+        'active.equals=true',
+        `prequalificationId.equals=${this.line.prequalificationId}`
+      ],
+      paginationQuery: {
+        page: 0,
+        size: 1000,
+        sort:['id']
+      }
+    }).then((res)=>{
+      console.log(res.data);
+      res.data.forEach(element => {
+        let q = this.answers.get(element.biddingSubCriteriaLineId)
+        if(q) {
+          q.requirement = element.requirement;
+        }
+      });
+    })
+    this.commonService(baseApiUrl)
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          `prequalificationSubmissionId.equals=${submissionId}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        for (const proposal of res.data) {
+          try {
+            const item = this.answers.get(proposal.biddingSubCriteriaLineId);
+            item.answer = proposal.answer;
+            item.passFail = proposal.passFail;
+            item.documentStatus=proposal.documentStatus;
+            item.documentAction=proposal.documentAction;
+            item.answerId=proposal.id;
+            item.documentEvaluation = proposal.documentEvaluation;
+          }catch (e) {}
+        };
+        this.retrieveAttachment(2147253);
+      })
+  }
+
+  retrieveAttachment(submissionId){
+    this.commonService("/api/m-prequalification-eval-files")
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          `prequalificationSubmissionId.equals=${submissionId}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        for (const proposal of res.data) {
+          try {
+            const item = this.attachmentHandler.get(proposal.biddingSubCriteriaId);
+            item.attachmentId = proposal.attachmentId;
+            item.attachmentName = proposal.attachmentName;
+            item.attachmentUrl = proposal.attachmentUrl;
+            item.technicalfileId=proposal.id;
+          }catch (e) {}
+        }
+      })
+      .catch(err => {
+        console.error('Failed',err);
+        this.$message.error(`Failed reload attachment `);
+      })
+      .finally(()=>this.loadingDetails=false);
   }
 
   downloadAttachment(row){

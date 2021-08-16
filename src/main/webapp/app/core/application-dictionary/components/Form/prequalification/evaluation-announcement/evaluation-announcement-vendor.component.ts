@@ -166,11 +166,12 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Acces
 
     if (url) {
       const timestamp = Date.now();
+      this.ScheduleListVisible = false;
       this.$router.push({
         path: url,
         query: {
           t: `${timestamp}`,
-          biddingScheduleId: `${event.id}`
+          prequalificationId: `${this.pickRow.prequalificationId}`
         }
       });
     }
