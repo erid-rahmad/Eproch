@@ -1710,7 +1710,6 @@ entity MProposalPrice {
 	documentStatus String  maxlength(12)
 	proposedPrice BigDecimal required
 	ceilingPrice BigDecimal required
-
 	uid UUID
 	active Boolean
 }

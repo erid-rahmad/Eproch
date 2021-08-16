@@ -72,6 +72,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     console.log("read only",this.readOnly)
     this.evaluationResult=this.data.evaluationResult;
     this.evaluationFormProp.biddingSubmission=this.data.pickrow;
+    this.evaluationFormProp.scheduleId=this.data.scheduleId;
     this.evaluation=this.data.pickrow;
     this.handleButton();
     this.retrieveVendorScoring(this.evaluation.biddingId);

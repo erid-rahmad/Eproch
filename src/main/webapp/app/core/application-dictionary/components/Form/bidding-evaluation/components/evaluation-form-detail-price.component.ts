@@ -42,6 +42,8 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
   private evaluationResultLine:any={};
   private biddingSubmission:any={};
   created(){
+    console.log("this clue dua",this.evaluationFormProp.scheduleId)
+    console.log("this clue dua",this.evaluationFormProp)
     this.$emit('event', false);
     this.$emit('approve', false);
     this.retrieveProposal(this.evaluationFormProp.biddingSubmission.id);
@@ -157,6 +159,35 @@ export default class DetailPrice extends Mixins( DetailPriceProp) {
     this.readOnly=true;
     this.$emit('approve', false);
     this.$emit('event', true);
+    this.changeStatusSubmissionLine(this.evaluationFormProp.biddingSubmission.id)
+
+
+  }
+
+  changeStatusSubmissionLine(submissionId){
+    if (this.evaluationFormProp.scheduleId!=123132){
+       this.commonService(baseApiProposal)
+      .retrieve({
+        criteriaQuery: [
+          `biddingSubmissionId.equals=${submissionId}`
+        ]
+      })
+      .then(res => {
+        let proposalLine = res.data[0];
+        proposalLine.documentStatus="DFR";
+        proposalLine.documentAction="DFR";
+        console.log("line",res.data)
+        this.commonService(`${baseApiProposal}`)
+          .update(proposalLine)
+          .then(_res => {
+          })
+          .catch(err => {
+            console.error('Failed to save the proposal. %O', err);
+            this.$message.error(`Failed saving the price proposal`);
+          })
+          .finally(() => this.$emit('update:loading', false));
+      });
+    }
   }
 
   approveEvaluation(){

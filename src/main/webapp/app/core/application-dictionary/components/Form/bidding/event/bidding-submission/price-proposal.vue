@@ -1,5 +1,8 @@
 <template>
     <div class="price-proposal">
+        <el-button  @click="changeDataInEvaluationLine">
+            <svg-icon name="icomoo/206-attachment"></svg-icon> just for Test
+        </el-button>
         <h3 style="margin-top: 0">Price Proposal</h3>
 
         <el-form

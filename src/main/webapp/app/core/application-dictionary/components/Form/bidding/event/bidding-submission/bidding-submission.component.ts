@@ -46,6 +46,12 @@ export default class BiddingSubmissionEvent extends SubmissionProps {
   proposalName: string = null;
   selectedProposal: number = null;
   submission: any = {};
+  scheduleIdCode:number=null
+  proposalIdCode:number=null
+
+  scheduleId(value){
+    this.scheduleIdCode=value;
+  }
 
   setReadOnly (param){
     console.log("this param",param)
@@ -96,6 +102,8 @@ export default class BiddingSubmissionEvent extends SubmissionProps {
   }
 
   created() {
+    console.log("this scheduleFromGrid",this.scheduleFromGrid)
+
     if (this.scheduleFromGrid){
       this.retrieveVendorScoringLines(this.scheduleFromGrid.biddingId,this.scheduleFromGrid.formType);
     }
@@ -115,6 +123,8 @@ export default class BiddingSubmissionEvent extends SubmissionProps {
   }
 
   openProposalForm(data: any) {
+    console.log("this apa",data)
+    this.proposalIdCode=data.evaluationMethodLineId;
     this.proposalName = data.evaluationMethodLineName;
     this.selectedProposal = data;
     this.section = SubmissionPage.PROPOSAL;

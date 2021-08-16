@@ -13,6 +13,8 @@ const baseApiLines = 'api/m-bidding-lines';
 const baseApiSubmission = 'api/m-bidding-submissions';
 const baseApiProposal = 'api/m-proposal-prices';
 const baseApiProposalLine = 'api/m-proposal-price-lines';
+const baseApiEvalResultLine='api/m-bidding-eval-result-lines';
+const baseApiEvalResults ='api/m-bidding-eval-results';
 
 const PriceProposalProp = Vue.extend({
   props: {
@@ -27,9 +29,9 @@ const PriceProposalProp = Vue.extend({
 
     },
     scheduleFromGrid:Object,
-
+    scheduleIdCode:Number,
+    proposalIdCode:Number,
     loading: Boolean,
-
     schedule: {
       type: Object,
       default: () => {
@@ -267,6 +269,9 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
   }
 
   created() {
+    console.log("this schedule Id code scheduleIdCode",this.scheduleIdCode)
+    console.log("this schedule Id code proposalIdCode",this.proposalIdCode)
+
     this.proposalStatus='';
     this.$emit('setReadOnly',false);
     if (this.isVendor){
@@ -344,6 +349,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
         .find(submissionId)
         .then(res => {
           this.mainForm = {...this.mainForm, ...res};
+          console.log("this schedule Id code mainForm ",this.mainForm)
           resolve(true);
         })
         .catch(err => {
@@ -485,10 +491,12 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
   save(status) {
     if(status) {
       if (status === 'SMT') {
+        this.changeDataInEvaluationLine()
         this.isVendor ? this.mainForm.documentStatus="SMT":null;
         this.isVendor ? this.mainForm.documentAction="DRF":null;
       }
       if (status === 'SMT2') {
+        this.changeDataInEvaluationLine()
         !this.isVendor ? this.mainForm.documentAction = 'SMT':null;
       }
     }
@@ -537,6 +545,46 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
           .finally(() => this.$emit('update:loading', false));
       }
     });
+  }
+
+
+  changeDataInEvaluationLine(){
+    if(this.submissionId!=123123) {
+      this.commonService(baseApiEvalResults)
+        .retrieve({
+          criteriaQuery: [
+            `biddingSubmissionId.equals=${this.submissionId}`,
+          ],
+          paginationQuery: {
+            page: 0,
+            size: 10000,
+            sort: ['id']
+          }
+        })
+        .then(res => {
+          let result = res.data[0]
+          this.commonService(baseApiEvalResultLine)
+            .retrieve({
+              criteriaQuery: [
+                `evaluationMethodLineId.equals=${this.proposalIdCode}`,
+                `biddingEvalResultId.equals=${result.id}`,
+              ],
+              paginationQuery: {
+                page: 0,
+                size: 10000,
+                sort: ['id']
+              }
+            })
+            .then(res => {
+              let LineUpdate = res.data[0];
+              LineUpdate.documentStatus = "DRF"
+              this.commonService(baseApiEvalResultLine)
+                .update(LineUpdate)
+                .then(res => {
+                })
+            })
+        })
+    }
   }
 
   private validateLines(lines: any[]) {

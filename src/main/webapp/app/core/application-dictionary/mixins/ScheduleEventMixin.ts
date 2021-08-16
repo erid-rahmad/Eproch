@@ -27,7 +27,7 @@ export default class ScheduleEventMixin extends Mixins(AccessLevelMixin, Schedul
    * Optional method that can be overriden by classes that uses this mixin.
    * @param mainForm the resulted MBiddingSchedule data.
    */
-  protected onMainFormUpdated(mainForm: any) {
+  protected onMainFormUpdated(mainForm: any,id) {
     // No default behavior.
   }
   protected onMainFormUpdatedtes(mainForm: any) {
@@ -36,7 +36,7 @@ export default class ScheduleEventMixin extends Mixins(AccessLevelMixin, Schedul
   protected onMainFormUpdatedevaluation(mainForm: any) {
     // No default behavior.
   }
-  protected onMainFormUpdateInEvaluation(mainForm: any) {
+  protected onMainFormUpdateInEvaluation(mainForm: any,id) {
     // No default behavior.
   }
   created() {
@@ -57,10 +57,10 @@ export default class ScheduleEventMixin extends Mixins(AccessLevelMixin, Schedul
       .then(res => {
         this.mainForm = res;
         this.$emit('data-loaded', {...this.mainForm});
-        this.onMainFormUpdated(this.mainForm);
+        this.onMainFormUpdated(this.mainForm,id);
         this.onMainFormUpdatedtes(this.mainForm);
         this.onMainFormUpdatedevaluation(this.mainForm)
-        this.onMainFormUpdateInEvaluation(this.mainForm)
+        this.onMainFormUpdateInEvaluation(this.mainForm,id)
 
       })
       .catch(err => {
@@ -76,10 +76,10 @@ export default class ScheduleEventMixin extends Mixins(AccessLevelMixin, Schedul
       .then(res => {
         this.mainForm = res;
         this.$emit('data-loaded', {...this.mainForm});
-        this.onMainFormUpdated(this.mainForm);
+        this.onMainFormUpdated(this.mainForm,id);
         this.onMainFormUpdatedtes(this.mainForm);
         this.onMainFormUpdatedevaluation(this.mainForm)
-        this.onMainFormUpdateInEvaluation(this.mainForm)
+        this.onMainFormUpdateInEvaluation(this.mainForm,id)
 
       })
       .catch(err => {

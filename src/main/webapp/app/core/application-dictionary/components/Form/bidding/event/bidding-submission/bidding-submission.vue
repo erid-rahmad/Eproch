@@ -72,6 +72,7 @@
                 :scheduleFromGrid="scheduleFromGrid"
                 @data-loaded="onSubmissionFormLoaded"
                 @setReadOnly="setReadOnly"
+                @scheduleId="scheduleId"
             ></submission-form>
 
             <component
@@ -81,6 +82,8 @@
                 v-else
                 ref="proposalForm"
                 :data="selectedProposal"
+                :scheduleIdCode="scheduleIdCode"
+                :proposalIdCode="proposalIdCode"
                 :disabled="submitted"
                 :loading.sync="loading"
                 :schedule="schedule"

@@ -2,6 +2,10 @@
     <div class="container">
         <div>
             <el-col :span="12">
+                <el-button class="button" icon="el-icon-search" size="mini" type="primary"
+                           @click="saveSubmit">
+                    for tes only
+                </el-button>
                 <div>
                     <el-form ref="productCatalog" label-position="left" label-width="130px"
                              size="mini">

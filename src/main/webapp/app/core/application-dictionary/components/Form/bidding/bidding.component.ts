@@ -224,10 +224,10 @@ export default class BiddingProcess extends mixins(AccessLevelMixin,BiddingProp)
       })
       .catch(err => {
         console.error('Failed getting the record. %O', err);
-        // this.$message({
-        //   type: 'error',
-        //   message: err.detail || err.message
-        // });
+        this.$message({
+          type: 'error',
+          message: err.detail || err.message
+        });
       })
       .finally(() => {
         this.processing = false;

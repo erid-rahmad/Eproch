@@ -54,7 +54,8 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
     });
   }
 
-  protected onMainFormUpdated(_mainForm: any) {
+  protected onMainFormUpdated(_mainForm: any,scheduleId) {
+    this.$emit('scheduleId',scheduleId)
     if (this.isVendor) {
       this.retrieveSubmission(AccountStoreModule.vendorInfo.id);
     }

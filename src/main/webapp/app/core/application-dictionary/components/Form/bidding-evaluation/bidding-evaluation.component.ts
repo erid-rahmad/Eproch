@@ -45,8 +45,9 @@ export default class BiddingEvaluationts extends mixins(Vue2Filters.mixin,Schedu
     this.data.fromGrid=this.pickRow;
   }
 
-  onMainFormUpdateInEvaluation(mainForm: any){
-    console.log("this main form",mainForm)
+  onMainFormUpdateInEvaluation(mainForm: any,scheduleId){
+    this.data.scheduleId=scheduleId;
+    console.log("this clue",scheduleId)
     this.getbiddingSubmission(mainForm.biddingId);
     this.data.formType=mainForm.formType;
 
