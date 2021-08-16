@@ -34,10 +34,18 @@ public class CAnnouncementResultDTO extends AbstractAuditingDTO {
     private Long biddingScheduleId;
 
     private Long attachmentId;
-    private String attachmentName;
+    private String attachmentName, attachmentUrl;
 
     public String getAttachmentName() {
         return attachmentName;
+    }
+
+    public String getAttachmentUrl() {
+        return attachmentUrl;
+    }
+
+    public void setAttachmentUrl(String attachmentUrl) {
+        this.attachmentUrl = attachmentUrl;
     }
 
     public void setAttachmentName(String attachmentName) {

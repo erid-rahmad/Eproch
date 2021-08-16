@@ -38,10 +38,18 @@ public class MPrequalAnnouncementResultDTO extends AbstractAuditingDTO {
     private Long prequalificationScheduleId;
 
     private Long attachmentId;
-    private String attachmentName;
+    private String attachmentName, attachmentUrl;
     
     public Long getId() {
         return id;
+    }
+
+    public String getAttachmentUrl() {
+        return attachmentUrl;
+    }
+
+    public void setAttachmentUrl(String attachmentUrl) {
+        this.attachmentUrl = attachmentUrl;
     }
 
     public String getAttachmentName() {

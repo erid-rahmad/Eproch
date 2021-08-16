@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -109,6 +110,9 @@ public class MPrequalificationResultService {
 
     public MPrequalResultPublish publish(@Valid MPrequalResultPublish mPrequalResultPublish) {
         for(MPrequalificationSubmissionDTO mPrequalificationSubmission_:mPrequalResultPublish.getmPrequalificationSubmission()){
+            List<MPrequalificationResult> mpr = mPrequalificationResultRepository.findExistingResult(mPrequalResultPublish.getmPrequalAnnouncementResultDTO().getId(), mPrequalificationSubmission_.getVendorId());
+            if(mpr.size()>0) continue;
+            
             MPrequalificationResultDTO mPrequalificationResultDTO = new MPrequalificationResultDTO();
             mPrequalificationResultDTO.setPrequalificationId(mPrequalificationSubmission_.getPrequalificationId());
             mPrequalificationResultDTO.setVendorId(mPrequalificationSubmission_.getVendorId());

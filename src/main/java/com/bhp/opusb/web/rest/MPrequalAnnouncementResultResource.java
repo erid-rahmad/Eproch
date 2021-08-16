@@ -6,6 +6,7 @@ import com.bhp.opusb.service.dto.MPrequalAnnouncementResultDTO;
 import com.bhp.opusb.service.dto.MPrequalAnnouncementResultCriteria;
 import com.bhp.opusb.service.MPrequalAnnouncementResultQueryService;
 
+import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -63,6 +64,13 @@ public class MPrequalAnnouncementResultResource {
             updateMPrequalAnnouncementResult(mPrequalAnnouncementResultDTO);
             return ResponseEntity.ok(mPrequalAnnouncementResultDTO);
         }
+        MPrequalAnnouncementResultCriteria criteria = new MPrequalAnnouncementResultCriteria();
+        StringFilter filter = new StringFilter();
+        filter.setEquals(mPrequalAnnouncementResultDTO.getDocumentNo());
+        criteria.setDocumentNo(filter);
+        Long count = mPrequalAnnouncementResultQueryService.countByCriteria(criteria);
+        if(count>0) throw new BadRequestAlertException("Document No. "+mPrequalAnnouncementResultDTO.getDocumentNo()+" already existed.", ENTITY_NAME, "idexists");
+
         MPrequalAnnouncementResultDTO result = mPrequalAnnouncementResultService.save(mPrequalAnnouncementResultDTO);
         return ResponseEntity.created(new URI("/api/m-prequal-announcement-results/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
