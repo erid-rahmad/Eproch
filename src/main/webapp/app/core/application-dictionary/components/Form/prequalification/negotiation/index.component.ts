@@ -42,7 +42,7 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
 
   biddingStates: any[] = [];
   biddingSchedule: any[] = [];
-  negoSummary: any[] = [];
+  negoSummary: any[] = [{vendorName:'PT. Buana',vendorAddress:'PT. Buana'},{vendorName:'PT. Cakra',vendorAddress:'PT. Cakra'}];
 
   negotiationsApi = '/api/m-bidding-negotiations';
   scheduleApi = '/api/m-bidding-schedules';
@@ -273,6 +273,7 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
   }
 
   viewJoinVendor(negoId:number){
+    /*
     this.commonService(this.negotiationLineApi).retrieve({
       criteriaQuery: this.updateCriteria([
         'active.equals=true',
@@ -286,11 +287,12 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
     }).then((res)=>{
       this.negoSummary = res.data;
     });
+    */
     this.showVendor=true;
   }
 
   closeVendorScreen(){
-    this.negoSummary = [];
+    //this.negoSummary = [];
     this.showVendor = false;
     //this.refreshHeader();
   }
