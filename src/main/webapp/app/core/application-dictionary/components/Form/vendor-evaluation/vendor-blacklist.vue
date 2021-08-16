@@ -73,7 +73,7 @@
         </el-table-column>
         <el-table-column
           label="Blacklisted Personal"
-          min-width="150"
+          min-width="180"
           prop="blacklistedPersonalCount"
           sortable
         ></el-table-column>
