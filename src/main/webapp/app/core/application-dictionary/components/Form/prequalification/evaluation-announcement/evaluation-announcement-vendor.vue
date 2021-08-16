@@ -39,27 +39,104 @@
                 </el-table-column>
             </el-table>
         </el-row>
-        <el-dialog :visible.sync="ScheduleListVisible" title="Bidding Schedule" width="90%">
-            <el-table :data="BiddingSchedule" border size="mini">
-                <el-table-column label="No" width="60">
-                    <template slot-scope="row">
+        <el-dialog :visible.sync="ScheduleListVisible" title="Bidding Schedule" width="60%">
+            <el-form
+            disabled
+            label-position="left"
+            label-width="150px"
+            size="mini"
+            >
+                <el-row :gutter="24">
+                    <el-col
+                    :xs="24"
+                    :sm="24"
+                    :lg="12"
+                    :xl="8"
+                    >
+                        <el-form-item label="Title">
+                            {{ pickRow.prequalificationName }}
+                        </el-form-item>
+                        <el-form-item label="Prequalification No">
+                            {{ pickRow.prequalificationNo }}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <el-row>
+                <el-col
+                    :xs="24"
+                    :sm="24"
+                    :xl="18"
+                >
+                    <el-table
+                    v-loading="loading"
+                    ref="biddingSchedules"
+                    border
+                    :data="biddingSchedules"
+                    :default-sort="gridSchema.defaultSort"
+                    :empty-text="gridSchema.emptyText"
+                    highlight-current-row
+                    size="mini"
+                    stripe
+                    style="width: 100%"
+                    >
+                    <el-table-column
+                        label="No"
+                        width="50"
+                    >
+                        <template slot-scope="row">
                         {{ row.$index + 1 }}
-                    </template>
-                </el-table-column>
-                <el-table-column label="Event" property="event" show-overflow-tooltip width="200"></el-table-column>
-                <el-table-column label="Start Date" min-width="200" property="startdate"
-                                 show-overflow-tooltip></el-table-column>
-                <el-table-column label="Finish Date" min-width="200" property="finisdate"
-                                 show-overflow-tooltip></el-table-column>
-                <el-table-column label="Action" min-width="100">
-                    <template slot-scope="{ row }">
-                        <el-button class="button" icon="el-icon-caret-right" size="mini" type="primary"
-                                   @click="index=false;ScheduleListVisible=false">
-                            Action
-                        </el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column
+                        label="Event"
+                        min-width="200"
+                        prop="eventLineName"
+                        show-overflow-tooltip
+                    ></el-table-column>
+
+                    <el-table-column
+                        width="422"
+                        prop="actual"
+                        label="Schedule"
+                    >
+                        <template slot-scope="{ row }">
+                        <el-date-picker
+                            v-model="row.actual"
+                            disabled
+                            :format="dateDisplayFormat"
+                            end-placeholder="End Datetime"
+                            range-separator="To"
+                            size="mini"
+                            start-placeholder="Start Datetime"
+                            type="datetimerange"
+                        ></el-date-picker>
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column
+                        fixed="right"
+                        label="Action"
+                        min-width="200"
+                    >
+                        <!--
+                        <template slot-scope="{ row }">
+                            <el-button
+                                v-if="row.status && row.status !== 'N'"
+                                size="mini"
+                                type="primary"
+                                @click="viewEvent(row)"
+                            >
+                                <svg-icon name="link"></svg-icon> View
+                            </el-button>
+                        </template>
+                        -->
+                    </el-table-column>
+
+                    </el-table>
+                </el-col>
+            </el-row>
         </el-dialog>
         <el-row v-if="!index" class="main">
             <announcementDetail :pickRow="pickRow" @back="back"></announcementDetail>

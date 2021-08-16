@@ -31,10 +31,15 @@ export default class DetailsAnnouncementForm extends  mixins(EventAnnouncement, 
   created(){
     this.getemail(this.pickRow.id);
     this.getSchedule(this.pickRow.biddingId);
+    console.log(this.pickRow);
   }
 
   downloadAttachment() {
-    window.open(this.email.attachmentUrl, '_blank');
+    let downloadUrl = this.pickRow.attachmentUrl;
+    if(!downloadUrl.startsWith('https')){
+      downloadUrl = downloadUrl.replace('http','https');
+    }
+    window.open(downloadUrl, '_blank');
   }
 
   getemail(id) {

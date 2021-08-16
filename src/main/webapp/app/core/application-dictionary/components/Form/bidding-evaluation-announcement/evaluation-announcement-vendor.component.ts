@@ -91,7 +91,8 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
     this.commonService("api/m-bidding-results")
       .retrieve({
         criteriaQuery: [
-          'active.equals=true'
+          'active.equals=true',
+          `vendorId.equals=${accountStore.vendorInfo.id}`
         ],
         paginationQuery: {
           page: 0,
