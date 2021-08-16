@@ -38,24 +38,26 @@
                 class="md-layout-item"
                 v-for="(item, index) in gridItems"
                     :key="item.id"
-                style="padding: 0 10px !important;"
+                style="padding: 0 10px !important; max-width: 100%;"
             >
                 <md-card v-loading="item.isLoading" md-with-hover class="bg-pattern" style="width: 100%; border-radius: 6px; padding: 10px 12px;">
                     <el-table stripe border
                         highlight-current-row
                         size="mini"
+                        ref="table"
                         :data="JSON.parse(JSON.stringify(item.gridData))"
-                        style="width: 100%; cursor: pointer; border-radius: 5px;"
-                        :header-cell-class-name="'custom-table-hdr'"
-                        :header-cell-style="'background:'+ item.accentColor +' !important;'"
+                        :style="'width: 100%; cursor: pointer; border-radius: 5px; box-shadow: 0px 0px 3px ' + item.accentColor + ' !important;'"
+                        cell-style="color: #8898aa !important; font-size: 13px; font-weight: bold; "
+                        :header-cell-style="'color: white !important; background:'+ item.accentColor +' !important; '"
                     >
                         <!--<el-table-column min-width="20" type="index" align="center" label=""></el-table-column>-->
                         <el-table-column
-                            v-for="columnItem in item.serviceName.split('##')"
+                            v-for="(columnItem, columnIdx) in item.serviceName.split('##')"
                             :key="columnItem"
                             :label="columnItem"
                             :prop="columnItem.replace(/ /g, '')"
                             :resizable="true"
+                            :min-width="item.websocketEndpoint.split('##')[columnIdx]"
                         >
                         </el-table-column>
                     </el-table>
@@ -569,13 +571,6 @@
 </template>
 
 <script lang="ts" src="./kpi-admin.component.ts"></script>
-<style>
-    .custom-table-hdr{
-        color: white !important;
-    }
-
-</style>
-
 <style lang="scss" scoped>
     .md-list-item:hover{
         padding: 0px;

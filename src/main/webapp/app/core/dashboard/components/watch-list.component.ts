@@ -151,9 +151,10 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
       ])
       .then(count => {
         this.$set(this.items[index], 'count', count);
+      }).
+      finally(() => {
+        this.$set(this.items[index], 'isLoading', false);
       });
-      
-    this.$set(this.items[index], 'isLoading', false);
   }
 
   /*
