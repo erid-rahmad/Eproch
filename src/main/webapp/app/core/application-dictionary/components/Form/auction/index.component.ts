@@ -1,4 +1,5 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
+import AdTriggerService from '@/entities/ad-trigger/ad-trigger.service';
 import { AccountStoreModule } from '@/shared/config/store/account-store';
 import { ElTable } from 'element-ui/types/table';
 import { Component, Inject, Mixins, Watch } from "vue-property-decorator";
@@ -26,8 +27,15 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
+  @Inject('adTriggerService')
+  private adTriggerService: () => AdTriggerService;
+
   biddingScheduleVisible: boolean = false;
   deleteConfirmationVisible: boolean = false;
+  extraTimeDialogVisible: boolean = false;
+  finishConfirmationVisible: boolean = false;
+  stopConfirmationVisible: boolean = false;
+
   loading: boolean = false;
   publishing: boolean = false;
   formType: string = null;
@@ -59,13 +67,25 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
   biddingStatuses: any[] = [];
   docStatuses: any[] = [];
 
+  /**
+   * This is synced with the child component "bid-submission".
+   */
+  auctionStatus: string = null;
+
+  /**
+   * 
+   */
+  activeLotId: number = 0;
+
+  extraTime: number = 0;
+
   get actions() {
-    let keySeq = 0;
+    let keySeq = 1;
     const list = [];
 
-    if (this.isPublished) {
+    if (this.isPublished || this.auctionStatus === null || this.isPaused) {
       list.push({
-        id: ++keySeq,
+        id: keySeq,
         name: 'Start',
         tooltip: 'Start the auction',
         type: 'T',
@@ -89,24 +109,26 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
       },
       {
         id: ++keySeq,
-        name: 'Cancel',
-        tooltip: 'Cancel the auction',
-        type: 'T',
-        serviceName: processName,
-        params: {
-          auctionId: this.selectedRow.id,
-          action: 'CNL'
-        }
-      });
+        name: 'Stop',
+        tooltip: 'Stop the auction',
+        type: 'P',
+        popup: 'stopConfirmationVisible'
+      },
+      {
+        id: keySeq + 1,
+        name: 'Finish Lot',
+        tooltip: 'Finish current lot',
+        type: 'P',
+        popup: 'finishConfirmationVisible'
+      },
+      /* {
+        id: keySeq + 1,
+        name: 'Extra Time',
+        tooltip: 'Add extra time',
+        type: 'P',
+        popup: 'extraTimeDialogVisible'
+      } */);
     }
-
-    list.push({
-      id: keySeq + 1,
-      name: 'Overtime',
-      tooltip: 'Make overtime',
-      type: 'P',
-      popup: 'adjustScheduleForm'
-    });
 
     return list;
   }
@@ -120,7 +142,7 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
   }
 
   get isPaused() {
-    return this.selectedRow.documentStatus === 'PAS';
+    return this.auctionStatus === 'PAS';
   }
 
   get isPublished() {
@@ -128,7 +150,7 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
   }
 
   get isStarted() {
-    return this.selectedRow.documentStatus === 'STR';
+    return this.auctionStatus === 'STR';
   }
 
   get isVendor() {
@@ -145,6 +167,16 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
 
   get submissionPage() {
     return this.section === AuctionPage.SUBMISSION;
+  }
+
+  @Watch('auctionStatus')
+  onAuctionStatusChanged(status: string) {
+    console.log('auctionStatus changed to:', status);
+  }
+
+  @Watch('activeLotId')
+  onActiveLotIdChanged(id: number) {
+    console.log('activeLotId changed to:', id);
   }
 
   @Watch('page')
@@ -300,11 +332,39 @@ export default class AuctionList extends Mixins(AccessLevelMixin) {
   }
 
   runAction(command: any) {
-    console.log('Run action. command:', command);
     if (command.type === 'T') {
-      this.commonService(`api/ad-triggers/process/${command.serviceName}`)
-        .create(command.params)
+      this.adTriggerService().runService(command.serviceName, command.params);
+    } else if (command.type === 'P') {
+      this[command.popup] = true;
     }
+  }
+
+  finishCurrentLot() {
+    const serviceName = 'mAuctionStopperProcessTrigger';
+    this.adTriggerService()
+      .runService(serviceName, {
+        lotId: this.activeLotId
+      })
+      .then(() => this.finishConfirmationVisible = false);
+  }
+
+  stopAuction() {
+    this.adTriggerService()
+      .runService(processName, {
+        action: 'STP',
+        auctionId: this.activeLotId
+      })
+      .then(() => this.stopConfirmationVisible = false);
+  }
+
+  submitExtraTime() {
+    this.adTriggerService()
+      .runService(processName, {
+        auctionId: this.selectedRow.id,
+        action: 'XTM',
+        extraTime: this.extraTime
+      })
+      .then(() => this.extraTimeDialogVisible = false);
   }
 
   private setRow(record: any) {

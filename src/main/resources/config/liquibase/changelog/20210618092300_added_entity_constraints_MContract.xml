@@ -59,4 +59,14 @@
                                  referencedTableName="m_bidding"/>
 
     </changeSet>
+
+    <changeSet id="20210815062700-quotation-ref" author="ricky-k">
+
+        <addForeignKeyConstraint baseColumnNames="quotation_id"
+                                 baseTableName="m_contract"
+                                 constraintName="fk_m_contract_quotation_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_rfq"/>
+
+    </changeSet>
 </databaseChangeLog>

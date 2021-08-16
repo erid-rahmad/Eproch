@@ -15,6 +15,18 @@
             "fieldType": "String"
         },
         {
+            "fieldName": "lastStartDate",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "estEndDate",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "remainingTime",
+            "fieldType": "Duration"
+        },
+        {
             "fieldName": "dateTrx",
             "fieldType": "ZonedDateTime"
         },

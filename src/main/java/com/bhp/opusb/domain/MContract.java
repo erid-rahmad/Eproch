@@ -133,6 +133,10 @@ public class MContract extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mContracts")
     private MBidding bidding;
 
+    @ManyToOne
+    @JsonIgnoreProperties("mContracts")
+    private MRfq quotation;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mContracts")
@@ -561,6 +565,19 @@ public class MContract extends AbstractAuditingEntity {
 
     public void setBidding(MBidding mBidding) {
         this.bidding = mBidding;
+    }
+
+    public MRfq getQuotation() {
+        return quotation;
+    }
+
+    public MContract quotation(MRfq mRfq) {
+        this.quotation = mRfq;
+        return this;
+    }
+
+    public void setQuotation(MRfq mRfq) {
+        this.quotation = mRfq;
     }
 
     public CCostCenter getCostCenter() {

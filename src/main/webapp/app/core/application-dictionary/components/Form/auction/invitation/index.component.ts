@@ -1,15 +1,19 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import { AccountStoreModule } from '@/shared/config/store/account-store';
+import SystemService from '@/shared/service/system.service';
 import { ElTable } from 'element-ui/types/table';
 import { Component, Inject, Mixins, Watch } from "vue-property-decorator";
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
+import BidSubmission from '../submission/bid-submission.vue';
 import AuctionInvitationDetail from './auction-invitation-detail.vue';
 
 const enum AuctionPage {
   MAIN = 'main',
-  REVIEW = 'review'
+  REVIEW = 'review',
+  LIVE = 'live'
 }
 
+const baseApiAuction = 'api/m-auctions'
 const baseApiAuctionInvitation = 'api/m-auction-invitations';
 const baseApiAuctionSubmission = 'api/m-auction-submissions';
 const baseApiDocType = 'api/c-document-types';
@@ -18,9 +22,13 @@ const baseApiReferenceList = 'api/ad-reference-lists';
 @Component({
   components: {
     AuctionInvitationDetail,
+    BidSubmission
   }
 })
 export default class AuctionInvitation extends Mixins(AccessLevelMixin) {
+
+  @Inject('systemService')
+  private systemService: () => SystemService;
 
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
@@ -30,6 +38,7 @@ export default class AuctionInvitation extends Mixins(AccessLevelMixin) {
 
   gridData: any[] = [];
 
+  auction: any = {};
   selectedRow: any = {};
   selectedItems: any[] = [];
 
@@ -106,6 +115,10 @@ export default class AuctionInvitation extends Mixins(AccessLevelMixin) {
     return this.section === AuctionPage.REVIEW;
   }
 
+  get submissionPage() {
+    return this.section === AuctionPage.LIVE;
+  }
+
   get selectedAction() {
     return this.documentActions.find(action => action.value === this.documentAction)?.name || this.documentAction;
   }
@@ -147,7 +160,7 @@ export default class AuctionInvitation extends Mixins(AccessLevelMixin) {
       .finally(() => this.loading = false);
   }
 
-  created() {
+  async created() {
     this.retrieveDocumentType('Auction Invitation');
     this.retrieveDocStatuses();
     this.transition();
@@ -281,6 +294,16 @@ export default class AuctionInvitation extends Mixins(AccessLevelMixin) {
   viewDetails(row: any) {
     this.selectedRow = row;
     this.section = AuctionPage.REVIEW;
+  }
+
+  viewSubmission(row: any) {
+    this.selectedRow = row;
+    this.commonService(baseApiAuction)
+      .find(row.auctionId)
+      .then(res => {
+        this.auction = res;
+        this.section = AuctionPage.LIVE;
+      })
   }
 
 }

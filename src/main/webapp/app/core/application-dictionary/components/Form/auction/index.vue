@@ -181,10 +181,108 @@
       <bid-submission
         v-else
         ref="bidSubmission"
+        :auction-status.sync="auctionStatus"
+        :active-lot-id.sync="activeLotId"
         :data="selectedRow"
       ></bid-submission>
 
     </div>
+
+    <el-dialog
+      ref="extraTimeDialog"
+      width="30%"
+      :visible.sync="extraTimeDialogVisible"
+      title="Add Extra Time"
+    >
+      <template>
+        <p>Please enter extra time?</p>
+        <el-input-number
+          v-model="extraTime"
+          :min="1"
+          size="mini"
+        ></el-input-number>
+        <span>Minutes</span>
+        <div slot="footer">
+          <el-button
+            style="margin-left: 0px;"
+            size="mini"
+            icon="el-icon-close"
+            @click="extraTimeDialogVisible = false"
+          >
+            {{ $t('entity.action.cancel') }}
+          </el-button>
+          <el-button
+            style="margin-left: 0px;"
+            size="mini"
+            icon="el-icon-check"
+            type="primary"
+            @click="submitExtraTime"
+          >
+            Apply
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+    <el-dialog
+      ref="stopConfirmation"
+      width="30%"
+      :visible.sync="finishConfirmationVisible"
+      title="Stop Auction"
+    >
+      <template>
+        <p>Are you sure to finish current lot?</p>
+        <div slot="footer">
+          <el-button
+            style="margin-left: 0px;"
+            size="mini"
+            icon="el-icon-close"
+            @click="finishConfirmationVisible = false"
+          >
+            {{ $t('entity.action.cancel') }}
+          </el-button>
+          <el-button
+            style="margin-left: 0px;"
+            size="mini"
+            icon="el-icon-check"
+            type="danger"
+            @click="finishCurrentLot"
+          >
+            Stop
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
+
+    <el-dialog
+      ref="stopConfirmation"
+      width="30%"
+      :visible.sync="stopConfirmationVisible"
+      title="Stop Auction"
+    >
+      <template>
+        <p>Are you sure to stop the auction?</p>
+        <div slot="footer">
+          <el-button
+            style="margin-left: 0px;"
+            size="mini"
+            icon="el-icon-close"
+            @click="stopConfirmationVisible = false"
+          >
+            {{ $t('entity.action.cancel') }}
+          </el-button>
+          <el-button
+            style="margin-left: 0px;"
+            size="mini"
+            icon="el-icon-check"
+            type="danger"
+            @click="stopAuction"
+          >
+            Stop
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
 
     <el-dialog
       width="30%"

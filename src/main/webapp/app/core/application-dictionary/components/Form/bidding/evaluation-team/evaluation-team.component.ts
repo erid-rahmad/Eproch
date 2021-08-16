@@ -101,7 +101,7 @@ export default class EvaluationTeam extends mixins(AccessLevelMixin, EvaluationT
         criteriaQuery: this.updateCriteria([
         'active.equals=true']),
         paginationQuery: {
-          page: this.page-1,
+          page: this.gridPage-1,
           size: this.itemsPerPage,
           sort: ['id']
         }

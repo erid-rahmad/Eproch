@@ -97,6 +97,15 @@ public class MAuctionQueryService extends QueryService<MAuction> {
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), MAuction_.description));
             }
+            if (criteria.getLastStartDate() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getLastStartDate(), MAuction_.lastStartDate));
+            }
+            if (criteria.getEstEndDate() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getEstEndDate(), MAuction_.estEndDate));
+            }
+            if (criteria.getRemainingTime() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getRemainingTime(), MAuction_.remainingTime));
+            }
             if (criteria.getDateTrx() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDateTrx(), MAuction_.dateTrx));
             }

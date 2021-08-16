@@ -22,12 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.ZonedDateTime;
-import java.time.ZoneOffset;
-import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import static com.bhp.opusb.web.rest.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -52,9 +49,8 @@ public class MAuctionSubmissionLogResourceIT {
     private static final BigDecimal UPDATED_PRICE = new BigDecimal(2);
     private static final BigDecimal SMALLER_PRICE = new BigDecimal(1 - 1);
 
-    private static final ZonedDateTime DEFAULT_DATE_TRX = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
-    private static final ZonedDateTime UPDATED_DATE_TRX = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
-    private static final ZonedDateTime SMALLER_DATE_TRX = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
+    private static final Instant DEFAULT_DATE_TRX = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_DATE_TRX = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     private static final String DEFAULT_MESSAGE = "AAAAAAAAAA";
     private static final String UPDATED_MESSAGE = "BBBBBBBBBB";
@@ -250,7 +246,7 @@ public class MAuctionSubmissionLogResourceIT {
             .andExpect(jsonPath("$.[*].action").value(hasItem(DEFAULT_ACTION)))
             .andExpect(jsonPath("$.[*].userName").value(hasItem(DEFAULT_USER_NAME)))
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.intValue())))
-            .andExpect(jsonPath("$.[*].dateTrx").value(hasItem(sameInstant(DEFAULT_DATE_TRX))))
+            .andExpect(jsonPath("$.[*].dateTrx").value(hasItem(DEFAULT_DATE_TRX.toString())))
             .andExpect(jsonPath("$.[*].message").value(hasItem(DEFAULT_MESSAGE)));
     }
     
@@ -268,7 +264,7 @@ public class MAuctionSubmissionLogResourceIT {
             .andExpect(jsonPath("$.action").value(DEFAULT_ACTION))
             .andExpect(jsonPath("$.userName").value(DEFAULT_USER_NAME))
             .andExpect(jsonPath("$.price").value(DEFAULT_PRICE.intValue()))
-            .andExpect(jsonPath("$.dateTrx").value(sameInstant(DEFAULT_DATE_TRX)))
+            .andExpect(jsonPath("$.dateTrx").value(DEFAULT_DATE_TRX.toString()))
             .andExpect(jsonPath("$.message").value(DEFAULT_MESSAGE));
     }
 
@@ -607,59 +603,6 @@ public class MAuctionSubmissionLogResourceIT {
 
     @Test
     @Transactional
-    public void getAllMAuctionSubmissionLogsByDateTrxIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        mAuctionSubmissionLogRepository.saveAndFlush(mAuctionSubmissionLog);
-
-        // Get all the mAuctionSubmissionLogList where dateTrx is greater than or equal to DEFAULT_DATE_TRX
-        defaultMAuctionSubmissionLogShouldBeFound("dateTrx.greaterThanOrEqual=" + DEFAULT_DATE_TRX);
-
-        // Get all the mAuctionSubmissionLogList where dateTrx is greater than or equal to UPDATED_DATE_TRX
-        defaultMAuctionSubmissionLogShouldNotBeFound("dateTrx.greaterThanOrEqual=" + UPDATED_DATE_TRX);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMAuctionSubmissionLogsByDateTrxIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        mAuctionSubmissionLogRepository.saveAndFlush(mAuctionSubmissionLog);
-
-        // Get all the mAuctionSubmissionLogList where dateTrx is less than or equal to DEFAULT_DATE_TRX
-        defaultMAuctionSubmissionLogShouldBeFound("dateTrx.lessThanOrEqual=" + DEFAULT_DATE_TRX);
-
-        // Get all the mAuctionSubmissionLogList where dateTrx is less than or equal to SMALLER_DATE_TRX
-        defaultMAuctionSubmissionLogShouldNotBeFound("dateTrx.lessThanOrEqual=" + SMALLER_DATE_TRX);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMAuctionSubmissionLogsByDateTrxIsLessThanSomething() throws Exception {
-        // Initialize the database
-        mAuctionSubmissionLogRepository.saveAndFlush(mAuctionSubmissionLog);
-
-        // Get all the mAuctionSubmissionLogList where dateTrx is less than DEFAULT_DATE_TRX
-        defaultMAuctionSubmissionLogShouldNotBeFound("dateTrx.lessThan=" + DEFAULT_DATE_TRX);
-
-        // Get all the mAuctionSubmissionLogList where dateTrx is less than UPDATED_DATE_TRX
-        defaultMAuctionSubmissionLogShouldBeFound("dateTrx.lessThan=" + UPDATED_DATE_TRX);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMAuctionSubmissionLogsByDateTrxIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        mAuctionSubmissionLogRepository.saveAndFlush(mAuctionSubmissionLog);
-
-        // Get all the mAuctionSubmissionLogList where dateTrx is greater than DEFAULT_DATE_TRX
-        defaultMAuctionSubmissionLogShouldNotBeFound("dateTrx.greaterThan=" + DEFAULT_DATE_TRX);
-
-        // Get all the mAuctionSubmissionLogList where dateTrx is greater than SMALLER_DATE_TRX
-        defaultMAuctionSubmissionLogShouldBeFound("dateTrx.greaterThan=" + SMALLER_DATE_TRX);
-    }
-
-
-    @Test
-    @Transactional
     public void getAllMAuctionSubmissionLogsByMessageIsEqualToSomething() throws Exception {
         // Initialize the database
         mAuctionSubmissionLogRepository.saveAndFlush(mAuctionSubmissionLog);
@@ -762,7 +705,7 @@ public class MAuctionSubmissionLogResourceIT {
             .andExpect(jsonPath("$.[*].action").value(hasItem(DEFAULT_ACTION)))
             .andExpect(jsonPath("$.[*].userName").value(hasItem(DEFAULT_USER_NAME)))
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.intValue())))
-            .andExpect(jsonPath("$.[*].dateTrx").value(hasItem(sameInstant(DEFAULT_DATE_TRX))))
+            .andExpect(jsonPath("$.[*].dateTrx").value(hasItem(DEFAULT_DATE_TRX.toString())))
             .andExpect(jsonPath("$.[*].message").value(hasItem(DEFAULT_MESSAGE)));
 
         // Check, that the count call also returns 1

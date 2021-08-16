@@ -24,6 +24,7 @@
                 size="mini"
                 type="primary"
                 @click="saveAsDraft"
+                :disabled="disabled"
             >
                 Save as Draft
             </el-button>
@@ -32,6 +33,7 @@
                 size="mini"
                 type="primary"
                 @click="openRecipientList"
+                :disabled="disabled"
             >
                 Publish
             </el-button>
@@ -102,6 +104,7 @@
                 :new-record="newRecord"
                 :schedule-id="selectedRow.prequalificationScheduleId"
                 :is-prequalification="true"
+                @readOnly="readOnly"
             ></announcement-form>
         </div>
     </div>

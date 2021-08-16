@@ -3,6 +3,7 @@ package com.bhp.opusb.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -101,9 +102,22 @@ public class MRfqSubmission extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mRfqSubmissions")
     private CCostCenter costCenter;
 
+    @Formula("(select concat(cl.address_1,' ',cl.address_2,' ',cl.address_3,' ',cl.address_4) from c_location cl where cl.id = ("+
+    "select cvl.location_id from c_vendor_location cvl where cvl.vendor_id = ("+
+    "select mqs.vendor_id from m_quote_supplier mqs where mqs.id = (select mrs.quote_supplier_id from m_rfq_submission mrs where mrs.id = id)) order by cvl.tax_invoice_address desc limit 1))")
+    private String location;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public void setId(Long id) {

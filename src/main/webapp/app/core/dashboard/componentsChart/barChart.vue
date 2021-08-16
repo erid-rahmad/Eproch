@@ -212,8 +212,7 @@ export default {
       });
     }
 
-    console.log(dataset);
-    
+    console.log('barChart: ' + JSON.stringify(dataset));
     this.chartData.data.datasets = dataset;
     const ctx = document.getElementById(this.id);
     new Chart(ctx, this.chartData);

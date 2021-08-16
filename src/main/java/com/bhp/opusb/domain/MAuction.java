@@ -1,5 +1,7 @@
 package com.bhp.opusb.domain;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -42,6 +44,15 @@ public class MAuction extends AbstractAuditingEntity {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "last_start_date")
+    private Instant lastStartDate;
+
+    @Column(name = "est_end_date")
+    private Instant estEndDate;
+
+    @Column(name = "remaining_time")
+    private Duration remainingTime;
 
     @Column(name = "date_trx")
     private ZonedDateTime dateTrx;
@@ -151,6 +162,45 @@ public class MAuction extends AbstractAuditingEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Instant getLastStartDate() {
+        return lastStartDate;
+    }
+
+    public MAuction lastStartDate(Instant lastStartDate) {
+        this.lastStartDate = lastStartDate;
+        return this;
+    }
+
+    public void setLastStartDate(Instant lastStartDate) {
+        this.lastStartDate = lastStartDate;
+    }
+
+    public Instant getEstEndDate() {
+        return estEndDate;
+    }
+
+    public MAuction estEndDate(Instant estEndDate) {
+        this.estEndDate = estEndDate;
+        return this;
+    }
+
+    public void setEstEndDate(Instant estEndDate) {
+        this.estEndDate = estEndDate;
+    }
+
+    public Duration getRemainingTime() {
+        return remainingTime;
+    }
+
+    public MAuction remainingTime(Duration remainingTime) {
+        this.remainingTime = remainingTime;
+        return this;
+    }
+
+    public void setRemainingTime(Duration remainingTime) {
+        this.remainingTime = remainingTime;
     }
 
     public ZonedDateTime getDateTrx() {
@@ -428,6 +478,9 @@ public class MAuction extends AbstractAuditingEntity {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", lastStartDate='" + getLastStartDate() + "'" +
+            ", estEndDate='" + getEstEndDate() + "'" +
+            ", remainingTime='" + getRemainingTime() + "'" +
             ", dateTrx='" + getDateTrx() + "'" +
             ", documentNo='" + getDocumentNo() + "'" +
             ", documentAction='" + getDocumentAction() + "'" +

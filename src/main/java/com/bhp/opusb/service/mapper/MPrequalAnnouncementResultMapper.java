@@ -17,6 +17,7 @@ public interface MPrequalAnnouncementResultMapper extends EntityMapper<MPrequalA
     @Mapping(source = "prequalificationSchedule.id", target = "prequalificationScheduleId")
     @Mapping(source = "attachment.id", target = "attachmentId")
     @Mapping(source = "attachment.fileName", target = "attachmentName")
+    @Mapping(source = "attachment.downloadUrl", target = "attachmentUrl")
     MPrequalAnnouncementResultDTO toDto(MPrequalAnnouncementResult mPrequalAnnouncementResult);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")

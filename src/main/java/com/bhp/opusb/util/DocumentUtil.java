@@ -7,12 +7,19 @@ import com.bhp.opusb.repository.GenericDocumentRepository;
 
 public class DocumentUtil {
 
+  public static final String ACTION_CANCEL = "CNL";
+  public static final String ACTION_PAUSE = "PAS";
+  public static final String ACTION_START = "STR";
+  public static final String ACTION_STOP = "STP";
+
   public static final String STATUS_APPROVE = "APV";
   public static final String STATUS_ACCEPT = "ACC";
   public static final String STATUS_DECLINE = "DCL";
   public static final String STATUS_DRAFT = "DRF";
+  public static final String STATUS_FINISH = "FIN";
   public static final String STATUS_REOPEN = "ROP";
   public static final String STATUS_REJECT = "RJC";
+  public static final String STATUS_STOP = "STP";
   public static final String STATUS_SUBMIT = "SMT";
   public static final String STATUS_VOID = "CNL";
   public static final String STATUS_PUBLISH = "PUB";

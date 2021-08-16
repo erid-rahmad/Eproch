@@ -1,6 +1,8 @@
 package com.bhp.opusb.job;
 
 import java.time.ZoneId;
+import java.util.Date;
+import java.util.Map;
 import java.util.TimeZone;
 
 import org.quartz.CalendarIntervalScheduleBuilder;
@@ -30,10 +32,14 @@ public class JobScheduleCreator {
      * @param taskName SCDF task name to execute.
      * @return JobDetail object
      */
-    public JobDetail createJob(String name, String group, boolean isDurable, boolean remote) {
+    public JobDetail createJob(String name, String group, boolean isDurable, boolean remote, Map<String, Object> params) {
         String suffix = remote ? "task_" : "trigger_";
         JobDataMap jobDataMap = new JobDataMap();
         jobDataMap.put(remote ? "taskName" : "serviceName", name);
+
+        if (params != null && !params.isEmpty()) {
+            jobDataMap.putAll(params);
+        }
 
         JobBuilder jobBuilder;
 
@@ -104,6 +110,17 @@ public class JobScheduleCreator {
         return TriggerBuilder.newTrigger()
             .withIdentity(name, group)
             .withSchedule(scheduleBuilder)
+            .build();
+    }
+
+    public Trigger createNonRepeatTrigger(String name, String group, Date startTime) {
+        ScheduleBuilder<?> scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
+            .withRepeatCount(0);
+
+        return TriggerBuilder.newTrigger()
+            .withIdentity(name, group)
+            .withSchedule(scheduleBuilder)
+            .startAt(startTime)
             .build();
     }
 }

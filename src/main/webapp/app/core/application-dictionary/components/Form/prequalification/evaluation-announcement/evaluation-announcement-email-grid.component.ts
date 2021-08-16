@@ -229,6 +229,10 @@ export default class EvaluationAnnouncement extends mixins(ScheduleEventMixin, E
   }
 
   handlePreview() {
+    let downloadUrl = this.formData.attachmentUrl;
+    if(!downloadUrl.startsWith('https')){
+      downloadUrl = downloadUrl.replace('http','https');
+    }
     window.open(this.formData.attachmentUrl, '_blank');
   }
 

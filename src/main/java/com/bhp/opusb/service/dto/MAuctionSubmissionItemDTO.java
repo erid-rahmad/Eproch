@@ -27,6 +27,8 @@ public class MAuctionSubmissionItemDTO extends AbstractAuditingDTO {
     private Long auctionSubmissionId;
 
     private Long auctionItemId;
+
+    private String vendorName;
     
     public Long getId() {
         return id;
@@ -90,6 +92,14 @@ public class MAuctionSubmissionItemDTO extends AbstractAuditingDTO {
 
     public void setAuctionItemId(Long mAuctionItemId) {
         this.auctionItemId = mAuctionItemId;
+    }
+
+    public String getVendorName() {
+        return vendorName;
+    }
+
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
     }
 
     @Override

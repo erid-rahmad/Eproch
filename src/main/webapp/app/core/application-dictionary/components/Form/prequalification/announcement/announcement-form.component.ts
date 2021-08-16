@@ -51,6 +51,8 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
 
   private selectedRecipients = [];
 
+  currentDate = new Date();
+
   formData: any = {
     adOrganizationId: AccountStoreModule.organizationInfo.id,
     biddingId: null,
@@ -140,6 +142,30 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
           this.formData = {...this.formData, ...data[0]};
           console.log(this.formData);
         }
+
+        this.commonService("api/m-prequalification-schedules")
+          .retrieve({
+            criteriaQuery: this.updateCriteria([
+              `prequalificationId.equals=${biddingId}`,
+            ]),
+            paginationQuery: {
+              page: 0,
+              size: 10,
+              sort: ['id']
+            }
+          })
+          .then(res1 =>{
+            let length = res1.data.length;
+            let i = 0;
+            for(i=0; i<length; i++){
+              if(res1.data[i].eventLineName.toLowerCase().search("announcement")>-1){
+                if(res1.data[i].status=='F' || this.currentDate >= new Date(res1.data[i].actualEndDate)){
+                  this.$emit("readOnly",true);
+                }
+                break;
+              }
+            }
+          });
       })
       .catch(err => {this.$message.error('Failed to get prequalification announcement'); console.log(err)})
       .finally(() => this.loading = false);

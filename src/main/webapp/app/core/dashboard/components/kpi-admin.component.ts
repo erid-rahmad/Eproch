@@ -43,25 +43,22 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
   chartItems: IAdWatchListItem[] = [];
   gridItems: IAdWatchListItem[] = [];
 
-  //@Watch('items', {deep: true})
-  async onItemsChanged(items: IAdWatchListItem[]) {
-    await items.forEach((item, index) => {
+  /*@Watch('chartItems', {deep: true})
+  @Watch('gridItems', {deep: true})*/
+  onItemsChanged(items: IAdWatchListItem[]) {
+    items.forEach((item, index) => {
       this.retrieveKpiData(item, index);
     });
-    /*await items.forEach(item=>{
-      this.$set(this.data,item.code, item.count);
-      this.$set(this.data,item.code+"data", item);
-    })*/
   }
 
-  created() {
+  async created() {
     this.retrieveKpiItems(this.name);
 
    //this.retrievePO();
    //this.retrieveMyDocument();
   }
 
-  public refresh() {
+  refresh(){
     this.onItemsChanged(this.type == 'CHART' ? this.chartItems : this.gridItems);
   }
 
@@ -79,12 +76,24 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
         }
       })
       .then(res => {
+        //console.log(res.data[0].adWatchListItems);
         if(this.type == 'CHART'){
           this.chartItems = res.data[0].adWatchListItems;
+          this.chartItems.forEach((x, index) => {
+            this.$set(this.chartItems[index], 'chartData', []);
+            this.$set(this.chartItems[index], 'isLoading', true);
+          });
         }
         else {
           this.gridItems = res.data[0].adWatchListItems;
+          this.gridItems.forEach((x, index) => {
+            this.$set(this.gridItems[index], 'gridData', []);
+            this.$set(this.gridItems[index], 'isLoading', true);
+            if(!x.accentColor) this.$set(this.gridItems[index], 'accentColor', this.getRandomColor()['staticColor']);
+          });
         }
+
+        this.onItemsChanged(this.type == 'CHART' ? this.chartItems : this.gridItems);
       })
       .catch(err => {
         console.log('Failed to get the watch list.', err);
@@ -94,9 +103,14 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
         });
       });
   }
+  
+  private getRandomColor(){
+    var randomNumber = Math.floor(Math.random() * this.listColor.length);
+    return this.listColor[randomNumber];
+  }
 
   private retrieveKpiData(item: IAdWatchListItem, index?: number) {
-    
+    //console.log(item.restApiEndpoint);
     this.commonService(item.restApiEndpoint)
       .retrieve(
         {
@@ -104,6 +118,7 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
         }
       )
       .then(res => {
+        //console.log('apiResult: ' + JSON.stringify(res.data));
         if(this.type == 'CHART'){
           /*let arrData = [
             { xAxisLabel: 'Jan 2021', legendLabel: 'CC Jakarta', dataValue: 5299708.30 },
@@ -153,7 +168,14 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
 
           this.$set(this.gridItems[index], 'gridData', arrData);
         }
-
+      })
+      .finally(() => {
+        if(this.type == 'CHART'){
+          this.$set(this.chartItems[index], 'isLoading', false);
+        }
+        else{
+          this.$set(this.gridItems[index], 'isLoading', false);
+        }
       });
   }
 

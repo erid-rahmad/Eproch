@@ -49,19 +49,25 @@ export default class DashBoard extends  Mixins(AccessLevelMixin) {
   listColor=
   [
     //yellow
-    {staticColor: '#ecec04', gradientColor: 'linear-gradient(315deg, #fbb034 0%, #ffdd00 74%);'}, 
+    {staticColor: '#ecec04', gradientColor: 'linear-gradient(87deg, rgb(255,255,60) 0%, rgb(210,210,0) 100%);'}, 
     //red
-    {staticColor: '#f5365c', gradientColor: 'linear-gradient(45deg, rgb(255, 83, 112), rgb(255, 134, 154));'}, 
+    {staticColor: '#d80000', gradientColor: 'linear-gradient(87deg, rgb(255,105,97) 0px, rgb(255,20,20) 100%);'}, 
     //green
-    {staticColor: '#2dce89', gradientColor: 'linear-gradient(87deg, rgb(45, 206, 137) 0px, rgb(45, 206, 204) 100%);'}, 
+    {staticColor: '#2dce89', gradientColor: 'linear-gradient(87deg, rgb(139,225,182) 0px, rgb(46,181,114) 100%);'}, 
     // blue
     {staticColor: '#11cdef', gradientColor: 'linear-gradient(87deg, rgb(17, 205, 239) 0px, rgb(17, 113, 239) 100%);'}, 
     // orange
-    {staticColor: '#FFAC1C', gradientColor: 'linear-gradient(87deg, rgb(17, 205, 239) 0px, rgb(17, 113, 239) 100%);'}, 
+    {staticColor: '#FFAC1C', gradientColor: 'linear-gradient(87deg, rgb(255,200,98) 0px, rgb(255,165,0) 100%);'}, 
     // pink
-    {staticColor: '#FF69B4', gradientColor: 'linear-gradient(87deg, rgb(17, 205, 239) 0px, rgb(17, 113, 239) 100%);'}, 
+    {staticColor: '#f5365c', gradientColor: 'linear-gradient(87deg, rgb(255, 83, 112), rgb(255, 134, 154) 100%);'}, 
     // brown
-    {staticColor: '#8B4513', gradientColor: 'linear-gradient(87deg, rgb(17, 205, 239) 0px, rgb(17, 113, 239) 100%);'}
+    {staticColor: '#8B4513', gradientColor: 'linear-gradient(87deg, rgb(205,133,63) 0px, rgb(134, 84, 34) 100%);'}, 
+    // grey
+    {staticColor: '#767676', gradientColor: 'linear-gradient(87deg, rgb(197,197,197) 0px, rgb(138,138,138) 100%);'}, 
+    // purple
+    {staticColor: '#9800eb', gradientColor: 'linear-gradient(87deg, rgb(220,157,255)0px, rgb(172,20,255) 100%);'}, 
+    // navy
+    {staticColor: '#000045', gradientColor: 'linear-gradient(87deg, rgb(148,148,255) 0px, rgb(30,30,255) 100%);'}
   ]
   
   get dashboards() {

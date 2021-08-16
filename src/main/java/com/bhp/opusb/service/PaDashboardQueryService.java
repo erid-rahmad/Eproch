@@ -94,7 +94,7 @@ public class PaDashboardQueryService extends QueryService<PaDashboard> {
     
     @Transactional(readOnly = true)
     public List<Object[]> getTopVendorAmount(String source, Integer total) {
-        if(source == "purchase"){
+        if(source.equals("purchase") ){
             return paDashboardRepository.getTopVendorPurchase(total);
         }
         else{   //contract

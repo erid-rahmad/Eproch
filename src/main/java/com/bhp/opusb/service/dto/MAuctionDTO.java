@@ -1,5 +1,7 @@
 package com.bhp.opusb.service.dto;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -19,6 +21,12 @@ public class MAuctionDTO extends AbstractAuditingDTO {
     private String name;
 
     private String description;
+
+    private Instant lastStartDate;
+
+    private Instant estEndDate;
+
+    private Duration remainingTime;
 
     private ZonedDateTime dateTrx = ZonedDateTime.now();
 
@@ -50,6 +58,7 @@ public class MAuctionDTO extends AbstractAuditingDTO {
 
     private Long ruleId;
     private ZonedDateTime ruleStartDate;
+    private Integer ruleFirstLotRunTime;
     private String ruleBidImprovementUnit;
     private String ruleTieBidsRule;
 
@@ -94,6 +103,30 @@ public class MAuctionDTO extends AbstractAuditingDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Instant getLastStartDate() {
+        return lastStartDate;
+    }
+
+    public void setLastStartDate(Instant lastStartDate) {
+        this.lastStartDate = lastStartDate;
+    }
+
+    public Instant getEstEndDate() {
+        return estEndDate;
+    }
+
+    public void setEstEndDate(Instant estEndDate) {
+        this.estEndDate = estEndDate;
+    }
+
+    public Duration getRemainingTime() {
+        return remainingTime;
+    }
+
+    public void setRemainingTime(Duration remainingTime) {
+        this.remainingTime = remainingTime;
     }
 
     public ZonedDateTime getDateTrx() {
@@ -198,6 +231,14 @@ public class MAuctionDTO extends AbstractAuditingDTO {
 
     public void setRuleStartDate(ZonedDateTime ruleStartDate) {
         this.ruleStartDate = ruleStartDate;
+    }
+
+    public Integer getRuleFirstLotRunTime() {
+        return ruleFirstLotRunTime;
+    }
+
+    public void setRuleFirstLotRunTime(Integer ruleFirstLotRunTime) {
+        this.ruleFirstLotRunTime = ruleFirstLotRunTime;
     }
 
     public String getRuleBidImprovementUnit() {
@@ -339,6 +380,9 @@ public class MAuctionDTO extends AbstractAuditingDTO {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", lastStartDate='" + getLastStartDate() + "'" +
+            ", estEndDate='" + getEstEndDate() + "'" +
+            ", remainingTime='" + getRemainingTime() + "'" +
             ", dateTrx='" + getDateTrx() + "'" +
             ", documentNo='" + getDocumentNo() + "'" +
             ", documentAction='" + getDocumentAction() + "'" +

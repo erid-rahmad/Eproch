@@ -20,9 +20,10 @@
                          <el-table-column min-width="80" sortable align="center" prop="biddingTypeName" label="Bidding Type" />
                         <el-table-column min-width="50" label="Bidding Schedule">
                             <template slot-scope="{ row }">
-                                    <el-button class="button" size="mini" style="width: 100%" @click="openSchedule(row)" >
+                                    <el-button class="button" size="mini" style="width: 100%" >
                                         <svg-icon name="icomoo/084-calendar"></svg-icon> View Schedule
                                     </el-button>
+
                             </template>
                         </el-table-column>
                          <el-table-column min-width="70" sortable align="center"  label="Bidding Status" >
@@ -50,6 +51,42 @@
         <div v-if="page===5">
             <bidding :jumpToSchedule="jumpToSchedule"></bidding>
         </div>
+        <el-dialog title="View Schedule" :visible.sync="displaySchedule">
+            <el-row :gutter="10">
+                <el-col :span="24">
+                    <el-form
+                        label-position="left"
+                        label-width="200px"
+                        :model="biddingSchedule"
+                        size="mini"
+                    >
+                        <el-form-item label="Bidding Title">
+                            <el-input v-model="biddingSchedule.biddingTitle" disabled></el-input>
+                        </el-form-item>
+                        <el-form-item label="Bidding No">
+                            <el-input v-model="biddingSchedule.biddingNo" disabled></el-input>
+                        </el-form-item>
+                        <el-form-item label="Type">
+                            <el-input v-model="biddingSchedule.biddingType" disabled></el-input>
+                        </el-form-item>
+                        <el-form-item label="Schedule">
+                            <el-date-picker
+                                v-model="biddingSchedule.schedule"
+                                type="datetimerange"
+                                range-separator="T"
+                                start-placeholder="Start date"
+                                end-placeholder="End date"
+                                disabled
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-form>
+                </el-col>
+            </el-row>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="displaySchedule= false">Close</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 

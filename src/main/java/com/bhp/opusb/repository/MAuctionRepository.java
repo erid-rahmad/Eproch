@@ -2,7 +2,6 @@ package com.bhp.opusb.repository;
 
 import com.bhp.opusb.domain.MAuction;
 
-import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
 /**

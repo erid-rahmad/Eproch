@@ -14,7 +14,7 @@ import {AccountStoreModule as accountStore} from "@/shared/config/store/account-
     announcementDetail,
   }
 })
-export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,AccessLevelMixin, ContextVariableAccessor) {
+export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, AccessLevelMixin, ContextVariableAccessor) {
 
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
@@ -93,7 +93,8 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
     this.commonService("api/m-prequalification-results")
       .retrieve({
         criteriaQuery: [
-          'active.equals=true'
+          'active.equals=true',
+          `vendorId.equals=${accountStore.vendorInfo.id}`
         ],
         paginationQuery: {
           page: 0,

@@ -6,9 +6,9 @@ import java.util.Objects;
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.InstantFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-import io.github.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
  * Criteria class for the {@link com.bhp.opusb.domain.MAuctionSubmissionLog} entity. This class is used
@@ -31,7 +31,7 @@ public class MAuctionSubmissionLogCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter price;
 
-    private ZonedDateTimeFilter dateTrx;
+    private InstantFilter dateTrx;
 
     private StringFilter message;
 
@@ -87,11 +87,11 @@ public class MAuctionSubmissionLogCriteria implements Serializable, Criteria {
         this.price = price;
     }
 
-    public ZonedDateTimeFilter getDateTrx() {
+    public InstantFilter getDateTrx() {
         return dateTrx;
     }
 
-    public void setDateTrx(ZonedDateTimeFilter dateTrx) {
+    public void setDateTrx(InstantFilter dateTrx) {
         this.dateTrx = dateTrx;
     }
 

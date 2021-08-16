@@ -16,6 +16,7 @@ public interface MAuctionSubmissionItemMapper extends EntityMapper<MAuctionSubmi
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "auctionSubmission.id", target = "auctionSubmissionId")
+    @Mapping(source = "auctionSubmission.vendor.name", target = "vendorName")
     @Mapping(source = "auctionItem.id", target = "auctionItemId")
     MAuctionSubmissionItemDTO toDto(MAuctionSubmissionItem mAuctionSubmissionItem);
 

@@ -10,15 +10,16 @@
                     style="margin-left: 0px"
                     type="primary"
                     @click="saveDraft"
+                    :disabled="pickRow.status=='F'"
                 >
                     Save Draft
                 </el-button>
                 <el-button
-
                     size="mini"
                     style="margin-left: 0px"
                     type="primary"
                     @click="recipientListVisible = true"
+                    :disabled="pickRow.status=='F'"
                 >
                     Publish <em class="el-icon-arrow-right"></em>
                 </el-button>

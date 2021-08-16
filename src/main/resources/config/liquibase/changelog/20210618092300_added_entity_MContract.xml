@@ -227,4 +227,15 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20210815062700-quotation" author="erid">
+        <addColumn tableName="m_contract">
+            <column name="quotation_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="20210815062700-quotation-2" author="ricky-k">
+        <dropNotNullConstraint tableName="m_contract" columnName="bidding_id" />
+    </changeSet>
+
 </databaseChangeLog>

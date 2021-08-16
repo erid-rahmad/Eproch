@@ -38,6 +38,8 @@ export default class EventAnnouncement extends Mixins(AccessLevelMixin) {
 
   selectedRow: any = {};
 
+  disabled = false;
+
   onFormClosed() {
     this.page = 1;
     this.newRecord = false;
@@ -126,4 +128,7 @@ export default class EventAnnouncement extends Mixins(AccessLevelMixin) {
     (<any>this.$refs.announcementForm).saveAsDraft();
   }
 
+  readOnly(boolean:boolean){
+    this.disabled = boolean;
+  }
 }

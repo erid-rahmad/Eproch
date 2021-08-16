@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity MAuctionEventLog.
+    -->
+    <changeSet id="20210807094300-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="auction_id"
+                                 baseTableName="m_auction_event_log"
+                                 constraintName="fk_m_auction_event_log_auction_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_auction"/>
+
+        <addForeignKeyConstraint baseColumnNames="auction_item_id"
+                                 baseTableName="m_auction_event_log"
+                                 constraintName="fk_m_auction_event_log_auction_item_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_auction_item"/>
+
+        <addForeignKeyConstraint baseColumnNames="vendor_id"
+                                 baseTableName="m_auction_event_log"
+                                 constraintName="fk_m_auction_event_log_vendor_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_vendor"/>
+
+    </changeSet>
+</databaseChangeLog>

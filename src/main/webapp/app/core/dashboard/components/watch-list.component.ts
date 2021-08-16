@@ -64,7 +64,7 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
     //setInterval(() => {this.updateCountWatchList()}, 15000);
   }
 
-  @Watch('items', {deep: true})
+  /*@Watch('items', {deep: true})*/
   async onItemsChanged(items: IAdWatchListItem[]) {
     await items.forEach((item, index) => {
       this.retrieveWatchListCounter(item, index);
@@ -128,8 +128,9 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
         if (res.data.length > 0) {
           const watchList: IAdWatchList = res.data[0];
           this.items = watchList.adWatchListItems;
-          this.items.forEach((x) => {
+          this.items.forEach((x, index) => {
             if(!x.accentColor) x.accentColor = this.getRandomColor()['gradientColor'];
+            this.$set(this.items[index], 'isLoading', true);
           });
         }
       })
@@ -139,6 +140,20 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
           message: 'Failed to get the watch list',
           type: 'warning'
         });
+      });
+  }
+
+  private retrieveWatchListCounter(item: IAdWatchListItem, index?: number) {
+    this.commonService(item.restApiEndpoint)
+      .count([
+        item.filterQuery,
+        accountStore.userDetails.vendor ? `vendorId.equals=${accountStore.userDetails.cVendorId}` : null
+      ])
+      .then(count => {
+        this.$set(this.items[index], 'count', count);
+      }).
+      finally(() => {
+        this.$set(this.items[index], 'isLoading', false);
       });
   }
 
@@ -227,14 +242,4 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
       .finally();
   }*/
 
-  private retrieveWatchListCounter(item: IAdWatchListItem, index?: number) {
-    this.commonService(item.restApiEndpoint)
-      .count([
-        item.filterQuery,
-        accountStore.userDetails.vendor ? `vendorId.equals=${accountStore.userDetails.cVendorId}` : null
-      ])
-      .then(count => {
-        this.$set(this.items[index], 'count', count);
-      });
-  }
 }

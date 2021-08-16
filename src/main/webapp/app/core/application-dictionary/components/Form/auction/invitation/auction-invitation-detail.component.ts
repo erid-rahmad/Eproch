@@ -11,6 +11,7 @@ const tabPaneComponent = new Map<string, string>([
   ['INF', 'auction-info'],
   ['ITM', 'auction-item'],
   ['PRQ', 'auction-prerequisite'],
+  ['BID', 'auction-bid'],
 ])
 
 const AuctionInvitationDetailProps = Vue.extend({
@@ -124,6 +125,12 @@ export default class AuctionInvitationDetail extends Mixins(AccessLevelMixin, Au
         name: 'Content',
         value: 'CTN',
         disabled: this.data.documentStatus === 'DRF'
+      },
+      {
+        id: 1040,
+        name: 'Bid',
+        value: 'BID',
+        hidden: this.data.documentStatus !== 'STR'
       },
     ].filter(tab => ! tab.hidden);
   }

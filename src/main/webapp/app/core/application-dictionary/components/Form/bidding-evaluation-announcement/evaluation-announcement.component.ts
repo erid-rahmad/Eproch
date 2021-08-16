@@ -28,6 +28,9 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin,AccessLe
   private loading:boolean=false;
   private Schedule:boolean=false;
   private jumpToSchedule:any={}
+  displaySchedule: boolean= false;
+  biddingSchedule: any={};
+  biddingSchedules: any[]=[];
 
 
   created() {
@@ -80,8 +83,10 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin,AccessLe
             })
             .then(res1 =>{
               const data1 = { ...res1.data[0]};
+              data1.biddingId= item.id;
               if (data1.actualStartDate){
                 data.push(item);
+                this.biddingSchedules.push(data1);
               }
             });
         });
@@ -101,7 +106,16 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin,AccessLe
   }
 
   viewSchedule(row){
+    this.biddingSchedule= this.biddingSchedules.reduce((acc, val) => {
+      return (val.biddingId == row.id) ? val : acc;
+    }, {});
 
+    this.biddingSchedule.schedule = [
+      new Date(this.biddingSchedule.startDate),
+      new Date(this.biddingSchedule.endDate)
+    ];
+
+    this.displaySchedule= true;
   }
 
   view(row, stepIndex: number = 0) {

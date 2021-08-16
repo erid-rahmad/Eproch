@@ -156,10 +156,12 @@ export default class GenerateRfq extends Vue {
   }
 
   retrievePurchaseRequisitionLines(requisitionNo?: number, vendorId?: number): void {
+    console.log(this.form);
     this.loadingPrLines = true;
     this.mainTable.clearSelection();
 
     const prNo = requisitionNo || this.filter.requisitionNo;
+    const vendor = vendorId || this.filter.vendorId;
     const filterQuery = [
       'active.equals=true',
       'quantityBalance.greaterThan=0',
@@ -171,12 +173,8 @@ export default class GenerateRfq extends Vue {
       filterQuery.push(`requisitionNo.contains=${prNo}`);
     }
 
-    if (!!vendorId) {
-      filterQuery.push(`vendorId.equals=${vendorId}`)
-    }
-
-    if (this.form.adOrganizationId>1) {
-      filterQuery.push(`adOrganizationId.equals=${this.form.adOrganizationId}`);
+    if (!!vendor) {
+      filterQuery.push(`vendorId.equals=${vendor}`)
     }
 
     this.commonService('/api/m-requisition-lines')

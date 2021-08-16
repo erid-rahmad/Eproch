@@ -4,6 +4,7 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MContract;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.MBidding;
+import com.bhp.opusb.domain.MRfq;
 import com.bhp.opusb.domain.CCostCenter;
 import com.bhp.opusb.domain.CCurrency;
 import com.bhp.opusb.domain.CDocumentType;
@@ -2930,6 +2931,26 @@ public class MContractResourceIT {
 
         // Get all the mContractList where bidding equals to biddingId + 1
         defaultMContractShouldNotBeFound("biddingId.equals=" + (biddingId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMContractsByQuotationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mContractRepository.saveAndFlush(mContract);
+        MRfq quotation = MRfqResourceIT.createEntity(em);
+        em.persist(quotation);
+        em.flush();
+        mContract.setQuotation(quotation);
+        mContractRepository.saveAndFlush(mContract);
+        Long quotationId = quotation.getId();
+
+        // Get all the mContractList where quotation equals to quotationId
+        defaultMContractShouldBeFound("quotationId.equals=" + quotationId);
+
+        // Get all the mContractList where quotation equals to quotationId + 1
+        defaultMContractShouldNotBeFound("quotationId.equals=" + (quotationId + 1));
     }
 
 

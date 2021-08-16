@@ -5,6 +5,8 @@ import java.math.BigInteger;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.validation.Valid;
+
 import com.bhp.opusb.config.ApplicationProperties;
 import com.bhp.opusb.config.ApplicationProperties.Document;
 import com.bhp.opusb.domain.*;
@@ -34,6 +36,7 @@ public class MContractService {
     private final MContractDocumentService mContractDocumentService;
 
     private final CDocumentTypeRepository cDocumentTypeRepository;
+    private final CCostCenterRepository cCostCenterRepository;
 
     private final MContractRepository mContractRepository;
 
@@ -51,12 +54,14 @@ public class MContractService {
     private final MPurchaseOrderLineRepository mPurchaseOrderLineRepository;
     private final MPurchaseOrderLineService mPurchaseOrderLineService;
 
+    private final MRfqSubmissionLineRepository mRfqSubmissionLineRepository;
+
     private final AiMessageDispatcher messageDispatcher;
 
-    public MContractService(ApplicationProperties properties, MContractDocumentService mContractDocumentService,
+    public MContractService(ApplicationProperties properties, MContractDocumentService mContractDocumentService, CCostCenterRepository cCostCenterRepository,
                             CDocumentTypeRepository cDocumentTypeRepository, MContractRepository mContractRepository,
                             MContractMapper mContractMapper, MailService mailService, AdUserRepository adUserRepository, MContractTeamService mContractTeamService, MPurchaseOrderRepository mPurchaseOrderRepository, MPurchaseOrderService mPurchaseOrderService, MPurchaseOrderLineRepository mPurchaseOrderLineRepository, MPurchaseOrderLineService mPurchaseOrderLineService,
-                            AiMessageDispatcher messageDispatcher) {
+                            AiMessageDispatcher messageDispatcher, MRfqSubmissionLineRepository mRfqSubmissionLineRepository) {
         this.mContractDocumentService = mContractDocumentService;
         this.cDocumentTypeRepository = cDocumentTypeRepository;
         this.mContractRepository = mContractRepository;
@@ -70,6 +75,8 @@ public class MContractService {
         this.mPurchaseOrderLineRepository = mPurchaseOrderLineRepository;
         this.mPurchaseOrderLineService = mPurchaseOrderLineService;
         this.messageDispatcher = messageDispatcher;
+        this.mRfqSubmissionLineRepository = mRfqSubmissionLineRepository;
+        this.cCostCenterRepository = cCostCenterRepository;
     }
 
     @Autowired
@@ -281,6 +288,49 @@ public class MContractService {
     public void delete(Long id) {
         log.debug("Request to delete MContract : {}", id);
         mContractRepository.deleteById(id);
+    }
+
+    public List<MContractDTO> generateFromRfq(@Valid MContractDTO mContractDTO) {
+        log.debug("Request to generate MContract from MRfq : {}", mContractDTO);
+        List<MContractDTO> newContracts = new ArrayList<>();
+        List<MContractLine> mContractLines = new ArrayList<>();
+        
+        for(MRfqSubmissionDTO subs: mContractDTO.getRfqSubmissions()) {
+            final MContractDTO mc = new MContractDTO();
+            mc.setAdOrganizationId(mContractDTO.getAdOrganizationId());
+            mc.setQuotationId(mContractDTO.getQuotationId());
+            mc.setName(mContractDTO.getName());
+            mc.setCostCenterId(mContractDTO.getCostCenterId());
+            mc.setVendorId(subs.getVendorId());
+            mc.setPicUserId(adUserRepository.findByUserLogin(subs.getCreatedBy()).get().getId());
+            mc.setStartDate(mContractDTO.getStartDate());
+            mc.setExpirationDate(mContractDTO.getExpirationDate());
+            mc.setPrice(subs.getSubmissionGrandTotal());
+            mc.setCurrencyId(mContractDTO.getCurrencyId());
+
+            MContractDTO mc2 = save(mc);
+            mc.setId(mc2.getId());
+
+            List<MRfqSubmissionLine> mRfqSubmissionLine = mRfqSubmissionLineRepository.findbyHeader(subs.getId());
+            mRfqSubmissionLine.forEach(data -> {
+                MContractLine mContractLine = new MContractLine()
+                    .product(data.getQuotationLine().getProduct())
+                    .quantity(new BigDecimal(data.getQuotationLine().getReleaseQty()))
+                    .uom(data.getQuotationLine().getUom())
+                    .costCenter(data.getQuotationLine().getCostCenter()==null?cCostCenterRepository.findById(mContractDTO.getCostCenterId()).get() : data.getQuotationLine().getCostCenter())
+                    .ceilingPrice(data.getSubmissionPrice())
+                    .totalCeilingPrice(data.getTotalSubmissionPrice())
+                    .deliveryDate(mc.getExpirationDate())
+                    .remark(data.getQuotationLine().getRemark())
+                    .adOrganization(data.getQuotationLine().getAdOrganization())
+                    .contract(mContractMapper.toEntity(mc))
+                    .active(true);
+                mContractLines.add(mContractLine);
+            });
+        }
+        mContractLineRepository.saveAll(mContractLines);
+
+        return newContracts;
     }
 
 //    @Scheduled(cron = "0 0 0 * * *",zone = "Indian/Maldives")

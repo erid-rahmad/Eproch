@@ -30,6 +30,7 @@ import UserManagementService from '@/admin/user-management/user-management.servi
 
 import LoginService from './account/login.service';
 import AccountService from './account/account.service';
+import SystemService from './shared/service/system.service';
 
 import '@/styles/element-variables.scss';
 import '@/styles/theme_blue_light/theme/index.css';
@@ -46,6 +47,7 @@ import DynamicWindowService from '@/core/application-dictionary/components/Dynam
 import ADColumnService from '@/entities/ad-column/ad-column.service';
 import ADWindowService from '@/entities/ad-window/ad-window.service';
 import ADTabService from '@/entities/ad-tab/ad-tab.service';
+import AdTriggerService from './entities/ad-trigger/ad-trigger.service';
 import RouterValidation from './permission';
 import VueRouter, { Route } from 'vue-router';
 import AdMenuService from './core/application-dictionary/components/Menu/menu.service';
@@ -155,8 +157,10 @@ accountServiceInitiator(store, windowService, translationService, trackerService
         aDColumnService: () => new ADColumnService(),
         aDWindowService: () => new ADWindowService(),
         aDTabService: () => new ADTabService(),
+        adTriggerService: () => new AdTriggerService(),
         // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
-        accountService: () => accountService
+        accountService: () => accountService,
+        systemService: () => new SystemService()
       },
       i18n,
       store
