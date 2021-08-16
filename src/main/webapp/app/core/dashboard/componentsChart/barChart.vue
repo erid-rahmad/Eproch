@@ -19,6 +19,10 @@ export default {
         type: String,
         default: 'bar'
     },
+    stacked: {
+        type: Boolean,
+        default: false
+    },
     position: String,
     value: {type: Array, default: (() => []) },
     colors: {type: Array, default: (() => []) }
@@ -46,7 +50,7 @@ export default {
 
     return {
       chartData: {
-        type: this.chartType, //bar / horizontalBar
+        type: this.chartType, //bar / horizontalBar 
         data: {
           labels: [/*"April 2021", "May 2021", "June 2021", "July 2021"*/],
           datasets: [
@@ -73,22 +77,6 @@ export default {
             let isEmpty = (chart.data.datasets.length == 0);
             document.getElementById(id).style.display = (isEmpty ? 'none' : 'block');
             document.getElementById(id + '-none').style.display = (isEmpty ? 'block' : 'none');
-
-            /*if (chart.data.datasets.length === 0) {
-              // No data is present
-              var ctx = chart.chart.ctx;
-              var width = chart.chart.width;
-              var height = chart.chart.height;
-              chart.clear();
-              chart.chart.height = 100;
-              
-              ctx.save();
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'middle';
-              ctx.font = "14px";
-              ctx.fillText('No data to display', width / 2, height / 2);
-              ctx.restore();
-            }*/
           }
         },
         options: {
@@ -129,10 +117,18 @@ export default {
                         label += ': ';
                     }
                     
-                    if(type == 'horizontalBar')
-                      label += tooltipItem.xLabel.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-                    else
-                      label += tooltipItem.yLabel.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                    if(type == 'horizontalBar'){
+                      if(typeof(tooltipItem.xLabel) == 'number')
+                        label += tooltipItem.xLabel.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                      else
+                        label += tooltipItem.xLabel;
+                    }
+                    else{
+                      if(typeof(tooltipItem.yLabel) == 'number')
+                        label += tooltipItem.yLabel.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                      else
+                        label += tooltipItem.yLabel;
+                    }
 
                     return label;
                 }
@@ -141,6 +137,7 @@ export default {
           scales: {
             yAxes: [
               {
+                stacked: this.stacked,
                 ticks: {
                   beginAtZero: true,
                   fontStyle: 'bold',
@@ -155,7 +152,7 @@ export default {
             ],
             xAxes: [
               {
-                stacked: false,
+                stacked: this.stacked,
                 ticks: {
                   beginAtZero: true,
                   fontStyle: 'bold',
@@ -204,15 +201,17 @@ export default {
         }
         else{
           let color = this.popRandom(listColor);
-          data.backgroundColor.push(color);
-          data.borderColor.push(color);
+          Object.keys(labels).forEach(y => {
+            data.backgroundColor.push(color);
+            data.borderColor.push(color);
+          });
         }
 
         dataset.push(data);
       });
     }
 
-    console.log('barChart: ' + JSON.stringify(dataset));
+    //console.log('barChart: ' + JSON.stringify(dataset));
     this.chartData.data.datasets = dataset;
     const ctx = document.getElementById(this.id);
     new Chart(ctx, this.chartData);

@@ -72,7 +72,6 @@ export default {
         },
         options: {
           responsive: true,
-          lineTension: 2,
           layout: {
             padding: {
               top: 0,
@@ -153,6 +152,7 @@ export default {
   mounted(){
     let dataset = [];
 
+    this.value = this.value ? this.value : [];
     if(this.value.length > 0) {
       let listColor = this.colors;
       let labels = this.groupBy(this.value, 'xAxisLabel');
@@ -174,7 +174,7 @@ export default {
       });
     }
 
-    console.log('lineChart: ' + JSON.stringify(dataset));
+    //console.log('lineChart: ' + JSON.stringify(dataset));
     this.chartData.data.datasets = dataset;
     const ctx = document.getElementById(this.id);
     new Chart(ctx, this.chartData);
