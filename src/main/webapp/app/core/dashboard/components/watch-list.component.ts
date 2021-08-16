@@ -132,6 +132,8 @@ export default class WatchList extends  Mixins(AccessLevelMixin,WatchListProps) 
             if(!x.accentColor) x.accentColor = this.getRandomColor()['gradientColor'];
             this.$set(this.items[index], 'isLoading', true);
           });
+
+          this.onItemsChanged(this.items);
         }
       })
       .catch(err => {
