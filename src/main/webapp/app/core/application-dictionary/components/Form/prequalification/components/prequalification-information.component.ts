@@ -90,7 +90,7 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Prequal
   }
 
   @Watch('preq', { deep: true })
-  onBiddingChanged(_bidding: Record<string, any>) {
+  onBiddingChanged(_preq: Record<string, any>) {
     if (this.editMode && this.recordsLoaded && ! this.updated) {
       this.updated = true;
       this.$emit('change');
@@ -247,6 +247,14 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Prequal
             this.$set(this.preq, 'adOrganizationId', document.adOrganizationId);
             this.$set(this.preq, 'adOrganizationName', document.adOrganizationName);
             this.$set(this.preq, 'quotationId', document.id);
+            this.$set(this.preq, 'name', document.title);
+
+            this.preq.adOrganizationId = document.adOrganizationId;
+            this.preq.adOrganizationName = document.adOrganizationName;
+            this.preq.quotationId = document.id;
+            this.preq.name = document.title;
+
+            this.$message.success("Quotation found.")
           } else {
             this.$message.warning('No document found for the given reference no.');
           }
