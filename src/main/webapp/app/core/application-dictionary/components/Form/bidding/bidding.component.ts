@@ -148,10 +148,10 @@ export default class BiddingProcess extends mixins(AccessLevelMixin,BiddingProp)
       });
 
     this.transition();
-    if(this.jumpToSchedule){
-      console.log("this jump",this.jumpToSchedule)
-      this.viewBidding(this.jumpToSchedule,1)
-    }
+    // if(this.jumpToSchedule){
+    //   console.log("this jump",this.jumpToSchedule)
+    //   this.viewBidding(this.jumpToSchedule,1)
+    // }
   }
 
   public changeOrder(propOrder): void {
