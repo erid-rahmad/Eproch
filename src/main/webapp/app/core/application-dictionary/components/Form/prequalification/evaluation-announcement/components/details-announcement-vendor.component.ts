@@ -34,7 +34,11 @@ export default class DetailsAnnouncementForm extends  mixins(EventAnnouncement, 
   }
 
   downloadAttachment() {
-    window.open(this.email.attachmentUrl, '_blank');
+    let downloadUrl = this.email.attachmentUrl;
+    if(!downloadUrl.startsWith('https')){
+      downloadUrl = downloadUrl.replace('http','https');
+    }
+    window.open(downloadUrl, '_blank');
   }
 
   getemail(id) {

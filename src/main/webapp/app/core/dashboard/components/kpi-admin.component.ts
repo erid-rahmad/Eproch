@@ -58,7 +58,7 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
    //this.retrieveMyDocument();
   }
 
-  mounted(){
+  refresh(){
     this.onItemsChanged(this.type == 'CHART' ? this.chartItems : this.gridItems);
   }
 
@@ -76,7 +76,7 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
         }
       })
       .then(res => {
-        console.log(res.data[0].adWatchListItems);
+        //console.log(res.data[0].adWatchListItems);
         if(this.type == 'CHART'){
           this.chartItems = res.data[0].adWatchListItems;
           this.chartItems.forEach((x, index) => {
@@ -110,7 +110,7 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
   }
 
   private retrieveKpiData(item: IAdWatchListItem, index?: number) {
-    console.log(item.restApiEndpoint);
+    //console.log(item.restApiEndpoint);
     this.commonService(item.restApiEndpoint)
       .retrieve(
         {
@@ -118,7 +118,7 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
         }
       )
       .then(res => {
-        console.log('apiResult: ' + JSON.stringify(res.data));
+        //console.log('apiResult: ' + JSON.stringify(res.data));
         if(this.type == 'CHART'){
           /*let arrData = [
             { xAxisLabel: 'Jan 2021', legendLabel: 'CC Jakarta', dataValue: 5299708.30 },
@@ -142,7 +142,6 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
           ];
           this.$set(this.chartItems[index], 'chartData', arrData);*/
           this.$set(this.chartItems[index], 'chartData', res.data);
-          this.$set(this.chartItems[index], 'isLoading', false);
         }
         else {
           let arrData = [];
@@ -168,6 +167,13 @@ export default class KPIDashboard extends  Mixins(AccessLevelMixin, KPIDashboard
           });
 
           this.$set(this.gridItems[index], 'gridData', arrData);
+        }
+      })
+      .finally(() => {
+        if(this.type == 'CHART'){
+          this.$set(this.chartItems[index], 'isLoading', false);
+        }
+        else{
           this.$set(this.gridItems[index], 'isLoading', false);
         }
       });
