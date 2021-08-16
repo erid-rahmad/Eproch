@@ -6,6 +6,7 @@ import ContextVariableAccessor from "../../ContextVariableAccessor";
 import EmailGrid from './evaluation-announcement-email-grid.vue';
 import DynamicWindowService from "@/core/application-dictionary/components/DynamicWindow/dynamic-window.service";
 import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
+import bidding from '../bidding/bidding.vue';
 
 const baseApiBiddingSchedule = 'api/m-bidding-schedules'
 
@@ -13,6 +14,7 @@ const baseApiBiddingSchedule = 'api/m-bidding-schedules'
 @Component({
   components: {
     EmailGrid,
+    bidding
   }
 })
 export default class EventAnnouncement extends mixins(Vue2Filters.mixin,AccessLevelMixin, AlertMixin, ContextVariableAccessor) {
@@ -24,6 +26,8 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin,AccessLe
   private pickRow:any={};
   biddingStatuses: any[] = [];
   private loading:boolean=false;
+  private Schedule:boolean=false;
+  private jumpToSchedule:any={}
 
 
   created() {
@@ -112,6 +116,14 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin,AccessLe
 
   back() {
     this.page = 1;
+
+  }
+
+  openSchedule(row){
+   this.page=5;
+    this.jumpToSchedule=row;
+
+
 
   }
 

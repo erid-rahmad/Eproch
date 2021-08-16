@@ -20,7 +20,7 @@
                          <el-table-column min-width="80" sortable align="center" prop="biddingTypeName" label="Bidding Type" />
                         <el-table-column min-width="50" label="Bidding Schedule">
                             <template slot-scope="{ row }">
-                                    <el-button class="button" size="mini" style="width: 100%" >
+                                    <el-button class="button" size="mini" style="width: 100%" @click="openSchedule(row)" >
                                         <svg-icon name="icomoo/084-calendar"></svg-icon> View Schedule
                                     </el-button>
                             </template>
@@ -46,6 +46,9 @@
         <div v-if="page===3">
             <!-- <AddAnnouncementForm @back="back"></AddAnnouncementForm> -->
              <EmailGrid  @back="back" :pickRow="pickRow" ></EmailGrid>
+        </div>
+        <div v-if="page===5">
+            <bidding :jumpToSchedule="jumpToSchedule"></bidding>
         </div>
     </div>
 </template>

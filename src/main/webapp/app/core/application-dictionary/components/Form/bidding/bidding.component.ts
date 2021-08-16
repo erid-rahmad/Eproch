@@ -7,10 +7,22 @@ import { mixins } from 'vue-class-component';
 import { Component, Inject, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import StepForm from '../bidding/steps-form.vue';
+import Vue from "vue";
 
 const baseApiUrl = 'api/m-biddings';
 const baseWorkflowUrl = 'api/workflows';
 const baseApiInvitation = 'api/m-bidding-invitations';
+
+const BiddingProp = Vue.extend({
+  props: {
+    jumpToSchedule: {
+      type: Object,
+      default: () => {
+        return {};
+      }
+    }
+  }
+});
 
 @Component({
   components: {
@@ -19,7 +31,7 @@ const baseApiInvitation = 'api/m-bidding-invitations';
     StepForm
   }
 })
-export default class BiddingProcess extends mixins(AccessLevelMixin) {
+export default class BiddingProcess extends mixins(AccessLevelMixin,BiddingProp) {
 
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
@@ -136,6 +148,10 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
       });
 
     this.transition();
+    if(this.jumpToSchedule){
+      console.log("this jump",this.jumpToSchedule)
+      this.viewBidding(this.jumpToSchedule,1)
+    }
   }
 
   public changeOrder(propOrder): void {
@@ -208,10 +224,10 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
       })
       .catch(err => {
         console.error('Failed getting the record. %O', err);
-        this.$message({
-          type: 'error',
-          message: err.detail || err.message
-        });
+        // this.$message({
+        //   type: 'error',
+        //   message: err.detail || err.message
+        // });
       })
       .finally(() => {
         this.processing = false;
@@ -224,6 +240,7 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
   }
 
   viewBidding(row: any, stepIndex: number = 0) {
+    console.log(row)
     this.stepIndex = stepIndex;
     this.editMode = true;
     this.selectedRow = row;
