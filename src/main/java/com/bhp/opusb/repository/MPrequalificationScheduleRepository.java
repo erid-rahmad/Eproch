@@ -17,4 +17,7 @@ public interface MPrequalificationScheduleRepository extends JpaRepository<MPreq
     @Modifying
     @Query("DELETE FROM MPrequalificationSchedule s WHERE s.eventLine.id NOT IN (?1) AND s.prequalification.id = ?2")
     void deleteByEventTypeLineIdNotIn(List<Long> lineIds, Long id);
+
+    @Query("select mps from MPrequalificationSchedule mps where mps.prequalification.id=?1")
+    List<MPrequalificationSchedule> findByHeaderId(Long prequalificationId);
 }

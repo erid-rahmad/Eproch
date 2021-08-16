@@ -5,8 +5,10 @@ import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.domain.MPrequalAnnouncement;
 import com.bhp.opusb.domain.MPrequalRegistration;
 import com.bhp.opusb.domain.MPrequalificationInformation;
+import com.bhp.opusb.domain.MPrequalificationSchedule;
 import com.bhp.opusb.repository.MPrequalAnnouncementRepository;
 import com.bhp.opusb.repository.MPrequalRegistrationRepository;
+import com.bhp.opusb.repository.MPrequalificationScheduleRepository;
 import com.bhp.opusb.service.dto.AdUserDTO;
 import com.bhp.opusb.service.dto.MPrequalAnnouncementDTO;
 import com.bhp.opusb.service.dto.MPrequalAnnouncementPublishDTO;
@@ -44,6 +46,8 @@ public class MPrequalAnnouncementService {
     private final MPrequalAnnouncementMapper mPrequalAnnouncementMapper;
     private final MPrequalificationInformationMapper mPrequalificationInformationMapper;
     private final AdUserMapper adUserMapper;
+
+    private final MPrequalificationScheduleRepository mPrequalificationScheduleRepository;
     
     private final ApplicationProperties properties;
     
@@ -53,7 +57,8 @@ public class MPrequalAnnouncementService {
         MPrequalAnnouncementMapper mPrequalAnnouncementMapper, AdUserMapper adUserMapper,
         MPrequalificationInformationMapper mPrequalificationInformationMapper,
         ApplicationProperties properties, MailService mailService,
-        MPrequalRegistrationRepository mPrequalRegistrationRepository) {
+        MPrequalRegistrationRepository mPrequalRegistrationRepository,
+        MPrequalificationScheduleRepository mPrequalificationScheduleRepository) {
         this.mPrequalAnnouncementRepository = mPrequalAnnouncementRepository;
         this.mPrequalAnnouncementMapper = mPrequalAnnouncementMapper;
         this.mPrequalificationInformationMapper = mPrequalificationInformationMapper;
@@ -61,6 +66,7 @@ public class MPrequalAnnouncementService {
         this.mailService = mailService;
         this.adUserMapper = adUserMapper;
         this.mPrequalRegistrationRepository = mPrequalRegistrationRepository;
+        this.mPrequalificationScheduleRepository = mPrequalificationScheduleRepository;
     }
 
     /**
@@ -72,6 +78,15 @@ public class MPrequalAnnouncementService {
     public MPrequalAnnouncementDTO save(MPrequalAnnouncementDTO mPrequalAnnouncementDTO) {
         log.debug("Request to save MPrequalAnnouncement : {}", mPrequalAnnouncementDTO);
         MPrequalAnnouncement mPrequalAnnouncement = mPrequalAnnouncementMapper.toEntity(mPrequalAnnouncementDTO);
+
+        List<MPrequalificationSchedule> schedules = mPrequalificationScheduleRepository.findByHeaderId(mPrequalAnnouncementDTO.getPrequalificationId());
+        for(MPrequalificationSchedule s: schedules){
+            if(s.getEventLine().getPrequalificationStep().getName().toLowerCase().contains("registration")){
+                mPrequalAnnouncement.setPrequalificationSchedule(s);
+                break;
+            }
+        }
+
         mPrequalAnnouncement = mPrequalAnnouncementRepository.save(mPrequalAnnouncement);
         return mPrequalAnnouncementMapper.toDto(mPrequalAnnouncement);
     }

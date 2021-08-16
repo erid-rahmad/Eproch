@@ -45,6 +45,10 @@ public class MRfqSubmissionService {
     public MRfqSubmissionDTO save(MRfqSubmissionDTO mRfqSubmissionDTO) {
         log.debug("Request to save MRfqSubmission : {}", mRfqSubmissionDTO);
         MRfqSubmission mRfqSubmission = mRfqSubmissionMapper.toEntity(mRfqSubmissionDTO);
+        
+        Optional<MRfqSubmission> hdrDupeCheck = mRfqSubmissionRepository.findByQuoteSupplier_Id(mRfqSubmissionDTO.getQuoteSupplierId());
+        if(hdrDupeCheck.isPresent()) mRfqSubmission.setId(hdrDupeCheck.get().getId());
+
         mRfqSubmission = mRfqSubmissionRepository.save(mRfqSubmission);
 
         if(mRfqSubmissionDTO.getLine()!=null) {

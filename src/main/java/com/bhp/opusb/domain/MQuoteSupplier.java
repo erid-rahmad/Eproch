@@ -62,7 +62,7 @@ public class MQuoteSupplier extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mQuoteSuppliers")
     private CVendor vendor;
 
-    @Formula("(select mrs.document_status from m_rfq_submission mrs where mrs.quotation_id = (select mqs.quotation_id from m_quote_supplier mqs where mqs.id = id) and mrs.quote_supplier_id = id)")
+    @Formula("(select mrs.document_status from m_rfq_submission mrs where mrs.quotation_id = (select mqs.quotation_id from m_quote_supplier mqs where mqs.id = id) and mrs.quote_supplier_id = id limit 1)")
     private String subDocStatus;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
