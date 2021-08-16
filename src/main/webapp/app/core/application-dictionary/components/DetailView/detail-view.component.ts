@@ -433,4 +433,9 @@ export default class DetailView extends Mixins(CalloutMixin, ContextVariableAcce
     
     return ! this.tab.writable || ! field.writable || notUpdatable || conditionallyReadonly;
   }
+
+  public isCurrencyField(field: IADField): boolean {
+    if(!field.adColumn) return false ;
+    return field.adColumn.referenceTypeName == 'currency';
+  }
 }

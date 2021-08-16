@@ -117,6 +117,7 @@
               :max="getMaxValue(col.field)"
               :disabled="isReadonly(col.field)"
               :precision="hasPrecision(col.field) ? 2 : 0"
+              v-inputmask="isCurrencyField(col.field) ? { alias: 'currency' } : {}"
               class="numeric"
               @change="value => onInputChanged(col.field, value)"
             ></el-input-number>

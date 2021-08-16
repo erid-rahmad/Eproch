@@ -98,7 +98,8 @@
             v-show="displayed(row, field)"
             :class="column.property"
           >
-            {{ getFieldValue(row, field) }}
+            <span v-if="isCurrencyValue(field)">{{ getFieldValue(row, field) | formatCurrency }}</span>
+            <span v-else>{{ getFieldValue(row, field) }}</span>
           </span>
           <el-tooltip
             v-else
@@ -192,6 +193,7 @@
               :min="getMinValue(field)"
               :max="getMaxValue(field)"
               :disabled="isReadonly(row, field)"
+              v-inputmask="isCurrencyValue(field) ? { alias: 'currency' } : {}"
               @change="value => onInputChanged(field, value)"
             ></el-input-number>
             <el-date-picker
