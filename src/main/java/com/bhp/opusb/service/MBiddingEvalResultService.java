@@ -83,6 +83,7 @@ public class MBiddingEvalResultService {
                         x=x+5;
                     }
                     log.info("mBiddingScheduleDTO.getFormType() total {}",x);
+                    log.info("ini bidding nomor ny {}",mBiddingScheduleDTO.getBiddingNo());
                 }catch (Exception e){}
             }
 
@@ -100,11 +101,15 @@ public class MBiddingEvalResultService {
                     mBiddingDTO.setFormType("S3");
                     mBiddingDTOS_.add(mBiddingDTO);
                 }
-                else if (x == 24) {
+                else if (x == 26) {
                     mBiddingDTO.setFormType("S3");
                     mBiddingDTOS_.add(mBiddingDTO);
                 }
-                else if (x == 32) {
+                else if (x == 31) {
+                    mBiddingDTO.setFormType("S3");
+                    mBiddingDTOS_.add(mBiddingDTO);
+                }
+                else if (x == 36) {
                     mBiddingDTO.setFormType("S3");
                     mBiddingDTOS_.add(mBiddingDTO);
                 }
@@ -130,7 +135,7 @@ public class MBiddingEvalResultService {
                     mBiddingDTO.setFormType("S3");
                     mBiddingDTOS_.add(mBiddingDTO);
                 }
-                else if (x == 24) {
+                else if (x == 26) {
                     mBiddingDTO.setFormType("S3");
                     mBiddingDTOS_.add(mBiddingDTO);
                 }
