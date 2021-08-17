@@ -154,7 +154,8 @@ export default class EvaluationAnnouncement extends mixins(ScheduleEventMixin, E
                 id:el.biddingEvalResultId,
                 vendorId:el.vendorId,
                 vendorName:el.vendorName,
-                status:el.status
+                status:el.status,
+                biddingId:this.pickRow.id
               }
             });
             this.biddingEvalResultLoading = false;
