@@ -109,6 +109,13 @@ export default class EvaluationAnnouncement extends mixins(ScheduleEventMixin, E
       })
       .then(res => {
         this.biddingEvalResult = res.data;
+        // FOR DEMO
+        this.biddingEvalResult.forEach((item)=>{
+          if((<string> item.vendorName).toLowerCase().search("buana")>1){
+            item.passFail = 'pass';
+          }
+        })
+        // FOR DEMO
         console.log("biddingEvalResult",this.biddingEvalResult);
         resolve(true);
       })
