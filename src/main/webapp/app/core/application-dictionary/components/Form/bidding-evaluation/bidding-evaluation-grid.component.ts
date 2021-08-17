@@ -47,7 +47,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
 
   private moreInformationData() {
     this.loading=true;
-    this.dynamicWindowService("/api/m-bidding-eval-results/grid")
+    this.dynamicWindowService("/api/m-biddings")
       .retrieve({
         paginationQuery: {
           page: 0,
@@ -56,19 +56,6 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
         }
       })
       .then(async res => {
-        function compare(a, b) {
-          // Use toUpperCase() to ignore character casing
-          const bandA = a.id;
-          const bandB = b.id;
-          let comparison = 0;
-          if (bandA < bandB) {
-            comparison = 1;
-          } else if (bandA > bandB) {
-            comparison = -1;
-          }
-          return comparison;
-        }
-        await res.data.sort(compare);
         this.bidding = res.data
       })
       .finally(()=> this.loading=false);
