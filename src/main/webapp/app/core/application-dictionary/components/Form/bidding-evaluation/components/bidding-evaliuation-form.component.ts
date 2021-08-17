@@ -137,12 +137,13 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       .then(res => {
         let AllEvalResultLine =res.data;
         let average=0,loop=0,status,evaluationStatus;
+        status="Pass"
         AllEvalResultLine.forEach(data=>{
             average=average+data.score*data.evaluationMethodLineWeight/100;
             ++loop;
           if(data.status==="Fail"){
             status="Fail";
-          }{status="Pass"}
+          }
           if(data.documentStatus===null){
             evaluationStatus="DRF";
           }{evaluationStatus="SMT"}
