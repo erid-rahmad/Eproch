@@ -99,7 +99,16 @@ public class MBiddingEvalResultService {
                 } else if (x == 16) {
                     mBiddingDTO.setFormType("S3");
                     mBiddingDTOS_.add(mBiddingDTO);
-                } else {
+                }
+                else if (x == 24) {
+                    mBiddingDTO.setFormType("S3");
+                    mBiddingDTOS_.add(mBiddingDTO);
+                }
+                else if (x == 32) {
+                    mBiddingDTO.setFormType("S3");
+                    mBiddingDTOS_.add(mBiddingDTO);
+                }
+                else {
                 }
             }else if(menu.contains("SUBMISSION")){
                 if (x == 1) {
@@ -120,7 +129,15 @@ public class MBiddingEvalResultService {
                 } else if (x == 16) {
                     mBiddingDTO.setFormType("S3");
                     mBiddingDTOS_.add(mBiddingDTO);
-                }  else { }
+                }
+                else if (x == 24) {
+                    mBiddingDTO.setFormType("S3");
+                    mBiddingDTOS_.add(mBiddingDTO);
+                }
+                else if (x == 32) {
+                    mBiddingDTO.setFormType("S3");
+                    mBiddingDTOS_.add(mBiddingDTO);
+                }else { }
             }
         });
         return mBiddingDTOS_;
