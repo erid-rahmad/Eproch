@@ -39,7 +39,17 @@ public class MBiddingNegotiationLineCriteria implements Serializable, Criteria {
 
     private LongFilter biddingEvalResultId;
 
+    private LongFilter biddingId;
+
     public MBiddingNegotiationLineCriteria() {
+    }
+
+    public LongFilter getBiddingId() {
+        return biddingId;
+    }
+
+    public void setBiddingId(LongFilter biddingId) {
+        this.biddingId = biddingId;
     }
 
     public MBiddingNegotiationLineCriteria(MBiddingNegotiationLineCriteria other) {
@@ -50,6 +60,7 @@ public class MBiddingNegotiationLineCriteria implements Serializable, Criteria {
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.negotiationId = other.negotiationId == null ? null : other.negotiationId.copy();
         this.biddingEvalResultId = other.biddingEvalResultId == null ? null : other.biddingEvalResultId.copy();
+        this.biddingId = other.biddingId == null ? null : other.biddingId.copy();
     }
 
     @Override
@@ -130,7 +141,8 @@ public class MBiddingNegotiationLineCriteria implements Serializable, Criteria {
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(negotiationId, that.negotiationId) &&
-            Objects.equals(biddingEvalResultId, that.biddingEvalResultId);
+            Objects.equals(biddingEvalResultId, that.biddingEvalResultId) &&
+            Objects.equals(biddingId, that.biddingId);
     }
 
     @Override
@@ -142,7 +154,8 @@ public class MBiddingNegotiationLineCriteria implements Serializable, Criteria {
         active,
         adOrganizationId,
         negotiationId,
-        biddingEvalResultId
+        biddingEvalResultId,
+        biddingId
         );
     }
 
@@ -156,6 +169,7 @@ public class MBiddingNegotiationLineCriteria implements Serializable, Criteria {
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (negotiationId != null ? "negotiationId=" + negotiationId + ", " : "") +
                 (biddingEvalResultId != null ? "biddingEvalResultId=" + biddingEvalResultId + ", " : "") +
+                (biddingId != null ? "biddingId=" + biddingId + ", " : "") +
             "}";
     }
 

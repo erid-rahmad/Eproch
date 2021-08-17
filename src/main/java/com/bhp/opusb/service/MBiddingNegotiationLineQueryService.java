@@ -112,6 +112,13 @@ public class MBiddingNegotiationLineQueryService extends QueryService<MBiddingNe
                 specification = specification.and(buildSpecification(criteria.getBiddingEvalResultId(),
                     root -> root.join(MBiddingNegotiationLine_.biddingEvalResult, JoinType.LEFT).get(MBiddingEvalResult_.id)));
             }
+            if (criteria.getBiddingId() != null) {
+                specification = specification.and(buildSpecification(criteria.getBiddingId(),
+                    root -> root.join(MBiddingNegotiationLine_.negotiation, JoinType.LEFT)
+                    .join(MBiddingNegotiation_.biddingSchedule, JoinType.LEFT)
+                    .join(MBiddingSchedule_.bidding, JoinType.LEFT)
+                    .get(MBidding_.id)));
+            }
         }
         return specification;
     }

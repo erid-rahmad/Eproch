@@ -77,6 +77,7 @@ export default class EvaluationAnnouncement extends mixins(ScheduleEventMixin, E
 
    retrieveBiddingEvalResult(biddingId) {
     this.biddingEvalResultLoading=true;
+    /*
     this.commonService(baseApiBiddingEvalResult)
       .retrieve({
         criteriaQuery: this.updateCriteria([
@@ -100,6 +101,69 @@ export default class EvaluationAnnouncement extends mixins(ScheduleEventMixin, E
       })
       .catch(err => this.$message.error('Failed to retrieveBiddingEvalResult'))
       .finally(()=>this.biddingEvalResultLoading=false);
+    */
+    this.commonService('/api/m-bidding-negotiation-lines').retrieve({
+      criteriaQuery: this.updateCriteria([
+        'active.equals=true',
+        `biddingId.equals=${this.pickRow.id}`
+      ]),
+      paginationQuery: {
+        page: 0,
+        size: 10000,
+        sort: ['id']
+      }
+    }).then((res)=>{
+      console.log(res.data);
+      this.biddingEvalResult = res.data;
+      this.commonService('/api/m-vendor-confirmations').retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `biddingId.equals=${this.pickRow.id}`
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      }).then((res)=>{
+        console.log(res.data);
+        if(res.data.length) {
+          this.commonService('/api/m-vendor-confirmation-lines').retrieve({
+            criteriaQuery: this.updateCriteria([
+              'active.equals=true',
+              `vendorConfirmationId.equals=${res.data[0].id}`
+            ]),
+            paginationQuery: {
+              page: 0,
+              size: 10000,
+              sort: ['id']
+            }
+          }).then((res)=>{
+          console.log(res.data);
+            res.data.forEach(line => {
+              this.biddingEvalResult.forEach((e)=>{
+                if(e.vendorId == line.vendorId){
+                  e.status = 'Pass';
+                } else e.status = 'Fail';
+              })
+            });
+          }).finally(()=>{
+            console.log(this.biddingEvalResult);
+            this.biddingEvalResult = this.biddingEvalResult.map((el)=>{
+              return{
+                id:el.biddingEvalResultId,
+                vendorId:el.vendorId,
+                vendorName:el.vendorName,
+                status:el.status
+              }
+            });
+            this.biddingEvalResultLoading = false;
+          })
+        } else {
+          this.biddingEvalResultLoading = false;
+        }
+      })
+    })
   }
 
     retrieveBiddingSchedules(biddingId) {
