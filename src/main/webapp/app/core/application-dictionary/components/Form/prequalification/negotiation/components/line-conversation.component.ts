@@ -33,7 +33,7 @@ export default class BiddingNegotiationLineConversation extends mixins(AccessLev
 
   chatHistory: any[] = [
     {buyerText: 'Memulai proses perundingan hasil evaluasi.'},
-    {vendorText: '...'}
+    {vendorText: 'Kami telah merevisi beberapa dokumen. Harap diperiksa kembali.'}
   ];
   showChatForm = false;
   showDetail = false;
