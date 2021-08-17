@@ -50,6 +50,18 @@ export default class BiddingNegotiation extends mixins(AccessLevelMixin) {
     startDate:'2021-08-16',
     endDate:'2021-08-22',
     finishedCount:0
+  },
+  {
+    id:2157652,
+    prequalificationNo:'PQ-21080534',
+    prequalificationName:'Kontrak payung untuk 1 Juta Buku Agenda',
+    type:'Open',
+    prequalificationStatus:'F',
+    evaluationStatus:'APP',
+    vendorCount:2,
+    startDate:'2021-08-16',
+    endDate:'2021-08-22',
+    finishedCount:0
   }];
 
   biddingStates: any[] = [];
